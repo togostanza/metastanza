@@ -12,7 +12,11 @@ export default async function barchart(stanza, params) {
     };
   });
 
-  draw(stanza.root.querySelector('main'), dataset);
+  stanza.render({
+    template: 'stanza.html.hbs'
+  });
+
+  draw(stanza.root.querySelector('#chart'), dataset);
 }
 
 function draw(el, dataset) {
