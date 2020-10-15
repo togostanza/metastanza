@@ -1,1 +1,3 @@
-<p class="greeting">{{greeting}}</p>
+{{#each items as |item|}}
+  {{item.label}}: {{item.value}}<br>
+{{/each}}
