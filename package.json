@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": "https://github.com/togostanza/metastanza.git",
   "dependencies": {
-    "togostanza": "github:togostanza/togostanza"
+    "togostanza": "^3.0.0-beta.1"
   },
   "engines": {
     "node": ">=14"
