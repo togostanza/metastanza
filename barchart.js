@@ -11711,7 +11711,9 @@ function draw(el, dataset) {
     .call(axisBottom(xScale))
     .selectAll("text")
     .style("text-anchor", "end")
-    .attr("transform", "rotate(-65)");
+    .attr("transform", "rotate(-90)")
+    .attr("dx", "-0.8em")
+    .attr("dy", "-0.6em");
 
   svg.append("g")
     .attr("transform", "translate(" + pad_left + "," + 0 + ")")
