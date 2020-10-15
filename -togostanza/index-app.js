@@ -53,7 +53,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 script.render = render;
 script.__file = "node_modules/togostanza/src/components/Index.vue";
 
-var allMetadata = [];
+var allMetadata = [{"@context":{"stanza":"http://togostanza.org/resource/stanza#"},"@id":"barchart","stanza:label":"Barchart","stanza:definition":"","stanza:type":"MetaStanza","stanza:context":"Meta","stanza:display":"Chart","stanza:provider":"TogoStanza","stanza:license":"MIT","stanza:author":"TogoStanza","stanza:address":"admin@biohackathon.org","stanza:contributor":[],"stanza:created":"2020-10-15","stanza:updated":"2020-10-15","stanza:parameter":[{"stanza:key":"say-to","stanza:example":"world","stanza:description":"who to say hello to","stanza:required":false}],"stanza:about-link-placement":"bottom-right","stanza:style":[{"stanza:key":"--greeting-color","stanza:type":"color","stanza:default":"#eb7900","stanza:description":"text color of greeting"},{"stanza:key":"--greeting-align","stanza:type":"single-choice","stanza:choice":["left","center","right"],"stanza:default":"center","stanza:description":"text align of greeting"}]}];
 
 createApp(script, {allMetadata}).mount('body');
 //# sourceMappingURL=index-app.js.map
