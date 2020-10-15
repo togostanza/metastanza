@@ -12,7 +12,7 @@ export default async function barchart(stanza, params) {
     };
   });
 
-  draw(stanza.root, dataset);
+  draw(stanza.root.querySelector('main'), dataset);
 }
 
 function draw(el, dataset) {
