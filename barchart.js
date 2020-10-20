@@ -3712,8 +3712,8 @@ var metastanza = {
   },
 
   showApiError: function(targetElement){
-    const removeApiError = function(){ select(targetElement).remove(); };
-    select(targetElement).append("p").text("API error");
+    const removeApiError = function(){ select(targetElement).select("#error_message").remove(); };
+    select(targetElement).append("p").attr("id", "error_message").text("API error");
     setTimeout(removeApiError, 3000);
   }
 
