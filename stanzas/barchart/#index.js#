@@ -12,11 +12,7 @@ export default async function barchart(stanza, params) {
     };
   });
 
-  stanza.render({
-    template: 'stanza.html.hbs'
-  });
-
-  draw(stanza.root.querySelector('#chart'), dataset);
+  draw(stanza.root.querySelector('main'), dataset);
 }
 
 function draw(el, dataset) {
@@ -64,5 +60,5 @@ function draw(el, dataset) {
     .attr("y", function(d) { return yScale(d.value); })
     .attr("width", xScale.bandwidth())
     .attr("height", function(d) { return height - pad_bottom - yScale(d.value); })
-    .attr("class", "bar");
+    .attr("fill", "steelblue");
 }
