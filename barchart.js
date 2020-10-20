@@ -3659,6 +3659,9 @@ var metastanza = {
 
     // loading icon img
     if(targetElement) select(targetElement).append("img").attr("id", "icon").attr("width", "50px").attr("src", "http://togostanza.org/img/logotype.svg");
+
+    // fetch options
+    if(!method) method = "get";
     let options = {method: method};
     if(params){
       if(method.toLowerCase() == "post"){ // post
