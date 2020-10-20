@@ -3655,7 +3655,7 @@ function linear$1() {
 
 var metastanza = {
   
-  fetchReq: async function (url, targetElement, params, method){ // targetElement: element for loding icon, params: key-value json, method: get(default), post
+  fetchReq: async function(url, targetElement, params, method){ // targetElement: element for loding icon, params: key-value json, method: get(default), post
 
     // loading icon img
     if(targetElement) select(targetElement).append("img").attr("id", "icon").attr("width", "50px").attr("src", "http://togostanza.org/img/logotype.svg");
