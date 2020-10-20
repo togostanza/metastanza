@@ -1,17 +1,10 @@
 import * as d3 from 'd3';
-
-const url = "http://togostanza.org/sparqlist/api/d3sparql_barchart";
+import metastanza from '@/lib/metastanza_utils.js';
 
 export default async function barchart(stanza, params) {
-  const json = await fetch(url).then(res => res.json());
-
-  const dataset = json.results.bindings.map((row) => {
-    return {
-      label: row.pref.value,
-      value: parseFloat(row.area.value)
-    };
-  });
-
+  
+  const dataset = await metastanza.getJsonFromSparql(params.api, false, "get", stanza.root.querySelector('#chart'), params.label_var_name, params.value_var_name);
+  
   stanza.render({
     template: 'stanza.html.hbs'
   });
