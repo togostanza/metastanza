@@ -3653,18 +3653,63 @@ function linear$1() {
   return linearish(scale);
 }
 
-const url = "http://togostanza.org/sparqlist/api/d3sparql_barchart";
+var metastanza = {
+  
+  fetchReq: async function(url, params, method, targetElement){
+    const el = select(targetElement);
+    
+    if(targetElement){
+      el.append("img").attr("id", "icon").attr("width", "50px").attr("href", "http://togostanza.org/img/logotype.svg");
+    }
+    
+    let options = {method: method};
+    if(method == "get" && params[0]){
+      url += "?" + params.join("&");
+    }else if(method == "post"){
+      if(params[0]) options.body = params("&");
+      options.headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'};
+      options.mode = 'cors';
+    }
+    
+    // set timeout of fetch
+    let fetch_timeout = function(ms, promise) {
+      return new Promise(function(resolve, reject) {
+	setTimeout(function() {
+          reject(new Error("timeout"));
+	}, ms);
+	promise.then(resolve, reject);
+      })
+    };
+    
+    try{
+      let res = await fetch_timeout(600000, fetch(url, options)).then(res=>{
+	el.select("#icon").remove();
+	if(res.ok) return res.json();
+	else return false;
+      });
+      return res;
+    }catch(error){
+      console.log(error);
+    }
+  },
+
+  getJsonFromSparql: async function(url, params, method, targetElement, label_var_name, value_var_name){
+    const json = await this.fetchReq(url, params, method, targetElement);
+  
+    return json.results.bindings.map((row) => {
+      return {
+	label: row[label_var_name].value,
+	value: parseFloat(row[value_var_name].value)
+      };
+    });
+  }
+
+};
 
 async function barchart(stanza, params) {
-  const json = await fetch(url).then(res => res.json());
-
-  const dataset = json.results.bindings.map((row) => {
-    return {
-      label: row.pref.value,
-      value: parseFloat(row.area.value)
-    };
-  });
-
+  
+  const dataset = await metastanza.getJsonFromSparql(params.api, false, "get", stanza.root.querySelector('#chart'), params.label_var_name, params.value_var_name);
+  
   stanza.render({
     template: 'stanza.html.hbs'
   });
@@ -3740,10 +3785,22 @@ var metadata = {
 	"stanza:updated": "2020-10-15",
 	"stanza:parameter": [
 	{
-		"stanza:key": "say-to",
-		"stanza:example": "world",
-		"stanza:description": "who to say hello to",
-		"stanza:required": false
+		"stanza:key": "api",
+		"stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_barchart",
+		"stanza:description": "URL of API",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "label_var_name",
+		"stanza:example": "pref",
+		"stanza:description": "label var name",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value_var_name",
+		"stanza:example": "area",
+		"stanza:description": "value var name",
+		"stanza:required": true
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",

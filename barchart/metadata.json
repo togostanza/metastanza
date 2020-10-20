@@ -17,10 +17,22 @@
   "stanza:updated": "2020-10-15",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
-      "stanza:required": false
+      "stanza:key": "api",
+      "stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_barchart",
+      "stanza:description": "URL of API",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "label_var_name",
+      "stanza:example": "pref",
+      "stanza:description": "label var name",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "value_var_name",
+      "stanza:example": "area",
+      "stanza:description": "value var name",
+      "stanza:required": true
     }
   ],
   "stanza:about-link-placement": "bottom-right",
