@@ -3717,7 +3717,7 @@ function draw(el, dataset) {
     .attr("y", function(d) { return yScale(d.value); })
     .attr("width", xScale.bandwidth())
     .attr("height", function(d) { return height - pad_bottom - yScale(d.value); })
-    .attr("fill", "steelblue");
+    .attr("class", "bar");
 }
 
 var metadata = {
