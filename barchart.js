@@ -3655,24 +3655,25 @@ function linear$1() {
 
 var metastanza = {
   
-  fetchReq: async function(url, params, method, targetElement){
-    const el = select(targetElement);
-    
-    if(targetElement){
-      el.append("img").attr("id", "icon").attr("width", "50px").attr("href", "http://togostanza.org/img/logotype.svg");
-    }
-    
+  fetchReq: async function (url, targetElement, params, method){ // targetElement: element for loding icon, params: key-value json, method: get(default), post
+
+    // loading icon img
+    if(targetElement) select(targetElement).append("img").attr("id", "icon").attr("width", "50px").attr("src", "http://togostanza.org/img/logotype.svg");
+
+    // fetch options
     let options = {method: method};
-    if(method == "get" && params[0]){
-      url += "?" + params.join("&");
-    }else if(method == "post"){
-      if(params[0]) options.body = params("&");
-      options.headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'};
-      options.mode = 'cors';
+    if(params){
+      if(method.toLowerCase() == "post"){ // post
+	options.body = JSON.stringify(params);
+	options.headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'};
+	options.mode = 'cors';
+      }else { // get
+	url += "?" + Object.keys(params).map(key => key + "=" + params[key]).join("&");
+      }
     }
     
     // set timeout of fetch
-    let fetch_timeout = function(ms, promise) {
+    let fetchTimeout = function(ms, promise) {
       return new Promise(function(resolve, reject) {
 	setTimeout(function() {
           reject(new Error("timeout"));
@@ -3680,10 +3681,11 @@ var metastanza = {
 	promise.then(resolve, reject);
       })
     };
-    
+
+    // fetch request
     try{
-      let res = await fetch_timeout(600000, fetch(url, options)).then(res=>{
-	el.select("#icon").remove();
+      let res = await fetchTimeout(600000, fetch(url, options)).then(res=>{
+	select(targetElement).select("#icon").remove();
 	if(res.ok) return res.json();
 	else return false;
       });
@@ -3693,22 +3695,33 @@ var metastanza = {
     }
   },
 
-  getJsonFromSparql: async function(url, params, method, targetElement, label_var_name, value_var_name){
-    const json = await this.fetchReq(url, params, method, targetElement);
-  
-    return json.results.bindings.map((row) => {
-      return {
-	label: row[label_var_name].value,
-	value: parseFloat(row[value_var_name].value)
-      };
-    });
+  getJsonFromSparql: async function(url, targetElement, params, method, label_var_name, value_var_name){
+    const json = await this.fetchReq(url, targetElement, params, method);
+
+    if(json){
+      return json.results.bindings.map((row) => {
+	return {
+	  label: row[label_var_name].value,
+	  value: parseFloat(row[value_var_name].value)
+	};
+      });
+    }else {
+      this.showApiError(targetElement);
+    }
+  },
+
+  showApiError: function(targetElement){
+    const removeApiError = function(){ select(targetElement).remove(); };
+    select(targetElement).append("p").text("API error");
+    setTimeout(removeApiError, 3000);
   }
 
 };
 
 async function barchart(stanza, params) {
-  
-  const dataset = await metastanza.getJsonFromSparql(params.api, false, "get", stanza.root.querySelector('#chart'), params.label_var_name, params.value_var_name);
+
+  const element = stanza.root.querySelector('#chart');
+  const dataset = await metastanza.getJsonFromSparql(params.api, element, false, "post", params.label_var_name, params.value_var_name);
   
   stanza.render({
     template: 'stanza.html.hbs'
@@ -3716,6 +3729,7 @@ async function barchart(stanza, params) {
 
   draw(stanza.root.querySelector('#chart'), dataset);
 }
+
 
 function draw(el, dataset) {
   let width = 800;
