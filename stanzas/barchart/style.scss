@@ -13,3 +13,7 @@ p.greeting {
   color: var(--greeting-color);
   text-align: var(--greeting-align);
 }
+
+rect.bar {
+    fill: var(--greeting-color);
+}
