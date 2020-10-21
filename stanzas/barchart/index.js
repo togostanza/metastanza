@@ -2,15 +2,17 @@ import * as d3 from 'd3';
 import metastanza from '@/lib/metastanza_utils.js';
 
 export default async function barchart(stanza, params) {
-
-  const element = stanza.root.querySelector('#chart');
-  const dataset = await metastanza.getJsonFromSparql(params.api, element, false, "post", params.label_var_name, params.value_var_name);
   
   stanza.render({
-    template: 'stanza.html.hbs'
+    template: 'stanza.html.hbs',
+    parameters: {
+      title: params.title
+    }
   });
-
-  draw(stanza.root.querySelector('#chart'), dataset);
+  
+  const element = stanza.root.querySelector('#chart');
+  const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
 }
 
 
