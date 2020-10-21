@@ -3657,12 +3657,13 @@ var metastanza = {
 
   fetchReq: async function(url, element, post_params) {
     //// url:     API URL
-    //// element: target element for loding icon
+    //// element: target element for loding icon, error message
     //// params:  API parameters for the POST method
     
     // loading icon img
-    if (element) select(element).append("img")
-      .attr("id", "loading_icon").attr("src", "http://togostanza.org/img/loading.gif");
+    if (element) select(element)
+      .append("div").attr("class", "metastanza-loading-icon-div").attr("id", "metastanza-loading-icon-div")
+      .append("img").attr("class", "metastanza-loading-icon").attr("src", "http://togostanza.org/img/loading.gif");
 
     // fetch options
     let options = {
@@ -3695,20 +3696,20 @@ var metastanza = {
     try {
       return await fetchTimeout(fetch(url, options)).then(res=>{
 	if (res.ok){
-	  if (element) select(element).select("#loading_icon").remove();
+	  if (element) select(element).select("#metastanza-loading-icon-div").remove();
 	  return res.json();
 	} else {
-	  this.showApiError(element, res.status + " " + res.statusText);
+	  this.displayApiError(element, res.status + " " + res.statusText);
 	}
       })
     } catch (error) {
-      this.showApiError(element, error);
+      this.displayApiError(element, error);
     }
   },
 
   getJsonFromSparql: async function(url, element, post_params, label_var_name, value_var_name) {
     //// url:     API URL
-    //// element: target element for loding icon
+    //// element: target element for loding icon, error message
     //// params:  API parameters for the POST method
     
     const json = await this.fetchReq(url, element, post_params);
@@ -3723,14 +3724,16 @@ var metastanza = {
 	})
       }
     } catch (error) {
-      this.showApiError(element, error);
+      this.displayApiError(element, error);
     }
       
   },
 
-  showApiError: function(element, error) {
-    if (element) select(element).select("#icon").remove();
-    select(element).append("p").attr("class", "error_message").html("MetaStanza API error:<br>" + error);
+  displayApiError: function(element, error) {
+    if (element) select(element).select("#metastanza-loading-icon-div").remove();
+    select(element)
+      .append("div").attr("class", "metastanza-error-message-div")
+      .append("p").attr("class", "metastanza-error-message").html("MetaStanza API error:<br>" + error);
     console.log(error);
   }
 
