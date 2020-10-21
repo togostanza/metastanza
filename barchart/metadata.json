@@ -18,19 +18,31 @@
   "stanza:parameter": [
     {
       "stanza:key": "api",
-      "stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_barchart",
+      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_cahrt_test",
       "stanza:description": "URL of API",
       "stanza:required": true
     },
     {
+      "stanza:key": "post_params",
+      "stanza:example": "type=species",
+      "stanza:description": "API parameters for POST method",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "title",
+      "stanza:example": "Species",
+      "stanza:description": "Chart title",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "label_var_name",
-      "stanza:example": "pref",
+      "stanza:example": "label",
       "stanza:description": "label var name",
       "stanza:required": true
     },
     {
       "stanza:key": "value_var_name",
-      "stanza:example": "area",
+      "stanza:example": "count",
       "stanza:description": "value var name",
       "stanza:required": true
     }
@@ -40,7 +52,7 @@
     {
       "stanza:key": "--greeting-color",
       "stanza:type": "color",
-      "stanza:default": "#eb7900",
+      "stanza:default": "#4ca99e",
       "stanza:description": "text color of greeting"
     },
     {

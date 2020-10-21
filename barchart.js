@@ -3654,81 +3654,94 @@ function linear$1() {
 }
 
 var metastanza = {
-  
-  fetchReq: async function(url, targetElement, params, method){ // targetElement: element for loding icon, params: key-value json, method: get(default), post
+
+  // fetch
+  //// url: API URL
+  //// element: target element for loding icon
+  //// params: API parameters for POST method (stringified key-value json)
+  fetchReq: async function(url, element, post_params) {
 
     // loading icon img
-    if(targetElement) select(targetElement).append("img").attr("id", "icon").attr("width", "50px").attr("src", "http://togostanza.org/img/logotype.svg");
+    if (element) select(element).append("img")
+      .attr("id", "icon").attr("src", "http://togostanza.org/img/loading.gif");
 
     // fetch options
-    if(!method) method = "get";
-    let options = {method: method};
-    if(params){
-      if(method.toLowerCase() == "post"){ // post
-	options.body = JSON.stringify(params);
-	options.headers = { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'};
-	options.mode = 'cors';
-      }else { // get
-	url += "?" + Object.keys(params).map(key => key + "=" + params[key]).join("&");
-      }
+    let options = {
+      method: "get",
+      headers: {'Accept': 'application/json'}
+    };
+    if (post_params) { // post
+      options = {
+	method: "post",
+	body: post_params,
+	headers: {
+	  'Content-Type': 'application/x-www-form-urlencoded',
+	  'Accept': 'application/json'
+	}
+      };
     }
     
     // set timeout of fetch
-    let fetchTimeout = function(ms, promise) {
+    let fetchTimeout = function(promise, time) {
+      if (!time) time = 600000; // default: 10 min
       return new Promise(function(resolve, reject) {
 	setTimeout(function() {
-          reject(new Error("timeout"));
-	}, ms);
+          reject(new Error("API timeout - " + time + " ms"));
+	}, time);
 	promise.then(resolve, reject);
       })
     };
-
+    
     // fetch request
-    try{
-      let res = await fetchTimeout(600000, fetch(url, options)).then(res=>{
-	select(targetElement).select("#icon").remove();
-	if(res.ok) return res.json();
-	else return false;
-      });
-      return res;
-    }catch(error){
-      console.log(error);
+    try {
+      return await fetchTimeout(fetch(url, options)).then(res=>{
+	if (element) select(element).select("#icon").remove();
+	if (res.ok) return res.json();
+	else this.showApiError(element, res.status + " " + res.statusText);
+      })
+    } catch (error) {
+      this.showApiError(element, error);
     }
   },
 
-  getJsonFromSparql: async function(url, targetElement, params, method, label_var_name, value_var_name){
-    const json = await this.fetchReq(url, targetElement, params, method);
+  getJsonFromSparql: async function(url, element, post_params, label_var_name, value_var_name) {
+    const json = await this.fetchReq(url, element, post_params);
 
-    if(json){
-      return json.results.bindings.map((row) => {
-	return {
-	  label: row[label_var_name].value,
-	  value: parseFloat(row[value_var_name].value)
-	};
-      });
-    }else {
-      this.showApiError(targetElement);
+    try {
+      if (typeof(json) === "object") {
+	return json.results.bindings.map(row => {
+	  return {
+	    label: row[label_var_name].value,
+	    value: parseFloat(row[value_var_name].value)
+	  }
+	})
+      }
+    } catch (error) {
+      this.showApiError(element, error);
     }
+      
   },
 
-  showApiError: function(targetElement){
-    const removeApiError = function(){ select(targetElement).select("#error_message").remove(); };
-    select(targetElement).append("p").attr("id", "error_message").text("API error");
-    setTimeout(removeApiError, 3000);
+  showApiError: function(element, error) {
+    if (element) select(element).select("#icon").remove();
+    select(element).append("p").attr("class", "error_message").html("MetaStanza API error:<br>" + error);
+    console.log(error);
   }
 
 };
 
 async function barchart(stanza, params) {
-
-  const element = stanza.root.querySelector('#chart');
-  const dataset = await metastanza.getJsonFromSparql(params.api, element, false, "post", params.label_var_name, params.value_var_name);
   
   stanza.render({
-    template: 'stanza.html.hbs'
+    template: 'stanza.html.hbs',
+    parameters: {
+      title: params.title
+    }
   });
-
-  draw(stanza.root.querySelector('#chart'), dataset);
+  
+  const element = stanza.root.querySelector('#chart');
+  const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
 }
 
 
@@ -3801,19 +3814,31 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "api",
-		"stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_barchart",
+		"stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_cahrt_test",
 		"stanza:description": "URL of API",
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "post_params",
+		"stanza:example": "type=species",
+		"stanza:description": "API parameters for POST method",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "title",
+		"stanza:example": "Species",
+		"stanza:description": "Chart title",
+		"stanza:required": false
+	},
+	{
 		"stanza:key": "label_var_name",
-		"stanza:example": "pref",
+		"stanza:example": "label",
 		"stanza:description": "label var name",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "value_var_name",
-		"stanza:example": "area",
+		"stanza:example": "count",
 		"stanza:description": "value var name",
 		"stanza:required": true
 	}
@@ -3823,7 +3848,7 @@ var metadata = {
 	{
 		"stanza:key": "--greeting-color",
 		"stanza:type": "color",
-		"stanza:default": "#eb7900",
+		"stanza:default": "#4ca99e",
 		"stanza:description": "text color of greeting"
 	},
 	{
@@ -3842,7 +3867,16 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<h1>Barchart</h1>\n\n<div id=\"chart\"></div>\n";
+    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<h1>"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"title","hash":{},"data":data,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":13}}}) : helper)))
+    + "</h1>\n\n<div id=\"chart\"></div>\n";
 },"useData":true}]
 ];
 
