@@ -3655,15 +3655,14 @@ function linear$1() {
 
 var metastanza = {
 
-  // fetch
-  //// url: API URL
-  //// element: target element for loding icon
-  //// params: API parameters for POST method (stringified key-value json)
   fetchReq: async function(url, element, post_params) {
-
+    //// url:     API URL
+    //// element: target element for loding icon
+    //// params:  API parameters for the POST method
+    
     // loading icon img
     if (element) select(element).append("img")
-      .attr("id", "icon").attr("src", "http://togostanza.org/img/loading.gif");
+      .attr("id", "loading_icon").attr("src", "http://togostanza.org/img/loading.gif");
 
     // fetch options
     let options = {
@@ -3695,9 +3694,12 @@ var metastanza = {
     // fetch request
     try {
       return await fetchTimeout(fetch(url, options)).then(res=>{
-	if (element) select(element).select("#icon").remove();
-	if (res.ok) return res.json();
-	else this.showApiError(element, res.status + " " + res.statusText);
+	if (res.ok){
+	  if (element) select(element).select("#loading_icon").remove();
+	  return res.json();
+	} else {
+	  this.showApiError(element, res.status + " " + res.statusText);
+	}
       })
     } catch (error) {
       this.showApiError(element, error);
@@ -3705,6 +3707,10 @@ var metastanza = {
   },
 
   getJsonFromSparql: async function(url, element, post_params, label_var_name, value_var_name) {
+    //// url:     API URL
+    //// element: target element for loding icon
+    //// params:  API parameters for the POST method
+    
     const json = await this.fetchReq(url, element, post_params);
 
     try {
