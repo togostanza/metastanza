@@ -11,7 +11,8 @@ export default async function barchart(stanza, params) {
   });
   
   const element = stanza.root.querySelector('#chart');
-  const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  //const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  const dataset = await metastanza.getFormatedJson(params.api, element, params.post_params);
   if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
 }
 
@@ -29,14 +30,18 @@ function draw(el, dataset) {
 
   // axis scale
   let xScale = d3.scaleBand()
-    .rangeRound([pad_left, width - pad_right])
-    .padding(0.1)
-    .domain(dataset.map(function(d) { return d.label; }));
-
+      .rangeRound([pad_left, width - pad_right])
+      .padding(0.1)
+      .domain(dataset.data.map(function(d) { return d.label; }));
+  
   let yScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, function(d) { return d.value; })])
-    .range([height - pad_bottom, pad_top]);
-
+      .domain( [0, d3.max(dataset.data, function(d) {
+	let sum  = 0;
+	Object.keys(d).forEach(key => { if(key != "label") sum += d[key]; })
+	return sum;
+      }) ])
+      .range([height - pad_bottom, pad_top]);
+  
   // render axis
   svg.append("g")
     .attr("transform", "translate(" + 0 + "," + (height - pad_bottom) + ")")
@@ -46,20 +51,31 @@ function draw(el, dataset) {
     .attr("transform", "rotate(-90)")
     .attr("dx", "-0.8em")
     .attr("dy", "-0.6em");
-
+  
   svg.append("g")
     .attr("transform", "translate(" + pad_left + "," + 0 + ")")
     .call(d3.axisLeft(yScale));
+  
+  let stack = d3.stack().keys(dataset.series).order(d3.stackOrderDescending);
+  let series = stack(dataset.data);
 
+  console.log(series);
+  
   // render bar
-  svg.append("g")
-    .selectAll("rect")
-    .data(dataset)
+  let data_bar_g = svg.append("g");
+  let series_g = data_bar_g.selectAll(".series")
+      .data(series)
+      .enter()
+      .append("g")
+      .attr("class", function(d, i){ return "series series_" + i; });
+  series_g.selectAll(".bar")
+    .data(function(d) { return d; })
     .enter()
     .append("rect")
-    .attr("x", function(d) { return xScale(d.label); })
-    .attr("y", function(d) { return yScale(d.value); })
+    .attr("class", "bar")
+    .attr("x", function(d) { return xScale(d.data.label); })
+    .attr("y", function(d) { return yScale(d[1]); })
     .attr("width", xScale.bandwidth())
-    .attr("height", function(d) { return height - pad_bottom - yScale(d.value); })
-    .attr("class", "bar");
+    .attr("height", function(d) { return yScale(d[0]) - yScale(d[1]); }); 
+
 }
