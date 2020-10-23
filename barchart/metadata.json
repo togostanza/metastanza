@@ -18,31 +18,31 @@
   "stanza:parameter": [
     {
       "stanza:key": "api",
-      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_cahrt_test",
+      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test",
       "stanza:description": "URL of API",
       "stanza:required": true
     },
     {
       "stanza:key": "post_params",
-      "stanza:example": "type=species",
-      "stanza:description": "API parameters for POST method",
+      "stanza:example": "type=instrument",
+      "stanza:description": "API parameters for the POST method",
       "stanza:required": false
     },
     {
       "stanza:key": "title",
-      "stanza:example": "Species",
+      "stanza:example": "Instrument",
       "stanza:description": "Chart title",
       "stanza:required": false
     },
     {
       "stanza:key": "label_var_name",
-      "stanza:example": "label",
+      "stanza:example": "",
       "stanza:description": "label var name",
       "stanza:required": true
     },
     {
       "stanza:key": "value_var_name",
-      "stanza:example": "count",
+      "stanza:example": "",
       "stanza:description": "value var name",
       "stanza:required": true
     }
@@ -50,10 +50,40 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--greeting-color",
+      "stanza:key": "--series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#4ca99e",
-      "stanza:description": "text color of greeting"
+      "stanza:default": "#a8a8e0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#a8e0e0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#a8e0a8",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#e0e0a8",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#e0a8d3",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#d3a8e0",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--greeting-align",

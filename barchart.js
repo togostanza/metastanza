@@ -3653,6 +3653,103 @@ function linear$1() {
   return linearish(scale);
 }
 
+function constant$2(x) {
+  return function constant() {
+    return x;
+  };
+}
+
+function array$1(x) {
+  return typeof x === "object" && "length" in x
+    ? x // Array, TypedArray, NodeList, array-like
+    : Array.from(x); // Map, Set, iterable, string, or anything else
+}
+
+function none$1(series, order) {
+  if (!((n = series.length) > 1)) return;
+  for (var i = 1, j, s0, s1 = series[order[0]], n, m = s1.length; i < n; ++i) {
+    s0 = s1, s1 = series[order[i]];
+    for (j = 0; j < m; ++j) {
+      s1[j][1] += s1[j][0] = isNaN(s0[j][1]) ? s0[j][0] : s0[j][1];
+    }
+  }
+}
+
+function none$2(series) {
+  var n = series.length, o = new Array(n);
+  while (--n >= 0) o[n] = n;
+  return o;
+}
+
+function stackValue(d, key) {
+  return d[key];
+}
+
+function stackSeries(key) {
+  const series = [];
+  series.key = key;
+  return series;
+}
+
+function stack() {
+  var keys = constant$2([]),
+      order = none$2,
+      offset = none$1,
+      value = stackValue;
+
+  function stack(data) {
+    var sz = Array.from(keys.apply(this, arguments), stackSeries),
+        i, n = sz.length, j = -1,
+        oz;
+
+    for (const d of data) {
+      for (i = 0, ++j; i < n; ++i) {
+        (sz[i][j] = [0, +value(d, sz[i].key, j, data)]).data = d;
+      }
+    }
+
+    for (i = 0, oz = array$1(order(sz)); i < n; ++i) {
+      sz[oz[i]].index = i;
+    }
+
+    offset(sz, oz);
+    return sz;
+  }
+
+  stack.keys = function(_) {
+    return arguments.length ? (keys = typeof _ === "function" ? _ : constant$2(Array.from(_)), stack) : keys;
+  };
+
+  stack.value = function(_) {
+    return arguments.length ? (value = typeof _ === "function" ? _ : constant$2(+_), stack) : value;
+  };
+
+  stack.order = function(_) {
+    return arguments.length ? (order = _ == null ? none$2 : typeof _ === "function" ? _ : constant$2(Array.from(_)), stack) : order;
+  };
+
+  stack.offset = function(_) {
+    return arguments.length ? (offset = _ == null ? none$1 : _, stack) : offset;
+  };
+
+  return stack;
+}
+
+function ascending$2(series) {
+  var sums = series.map(sum);
+  return none$2(series).sort(function(a, b) { return sums[a] - sums[b]; });
+}
+
+function sum(series) {
+  var s = 0, i = -1, n = series.length, v;
+  while (++i < n) if (v = +series[i][1]) s += v;
+  return s;
+}
+
+function descending(series) {
+  return ascending$2(series).reverse();
+}
+
 var metastanza = {
 
   fetchReq: async function(url, element, post_params) {
@@ -3708,27 +3805,41 @@ var metastanza = {
   },
 
   getJsonFromSparql: async function(url, element, post_params, label_var_name, value_var_name) {
-    //// url:     API URL
-    //// element: target element for loding icon, error message
-    //// params:  API parameters for the POST method
     
     const json = await this.fetchReq(url, element, post_params);
-
+    if(!label_var_name) label_var_name = "label";
+    if(!value_var_name) value_var_name = "value";
+    
     try {
       if (typeof(json) === "object") {
-	return json.results.bindings.map(row => {
-	  return {
-	    label: row[label_var_name].value,
-	    value: parseFloat(row[value_var_name].value)
-	  }
-	})
+	return {
+	  series: ["value"],
+	  data: json.results.bindings.map(row => {
+	    return {
+	      label: row[label_var_name].value,
+	      value: parseFloat(row[value_var_name].value)
+	    }
+	  })
+	}
       }
     } catch (error) {
       this.displayApiError(element, error);
-    }
-      
+    }     
   },
 
+  getFormatedJson: async function(url, element, post_params) {
+    
+    const json = await this.fetchReq(url, element, post_params);
+    
+    try {
+      if (typeof(json) === "object") {
+	return json;
+      }
+    } catch (error) {
+      this.displayApiError(element, error);
+    }     
+  },
+  
   displayApiError: function(element, error) {
     if (element) select(element).select("#metastanza-loading-icon-div").remove();
     select(element)
@@ -3749,7 +3860,8 @@ async function barchart(stanza, params) {
   });
   
   const element = stanza.root.querySelector('#chart');
-  const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  //const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
+  const dataset = await metastanza.getFormatedJson(params.api, element, params.post_params);
   if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
 }
 
@@ -3767,14 +3879,18 @@ function draw(el, dataset) {
 
   // axis scale
   let xScale = band()
-    .rangeRound([pad_left, width - pad_right])
-    .padding(0.1)
-    .domain(dataset.map(function(d) { return d.label; }));
-
+      .rangeRound([pad_left, width - pad_right])
+      .padding(0.1)
+      .domain(dataset.data.map(function(d) { return d.label; }));
+  
   let yScale = linear$1()
-    .domain([0, max(dataset, function(d) { return d.value; })])
-    .range([height - pad_bottom, pad_top]);
-
+      .domain( [0, max(dataset.data, function(d) {
+	let sum  = 0;
+	Object.keys(d).forEach(key => { if(key != "label") sum += d[key]; });
+	return sum;
+      }) ])
+      .range([height - pad_bottom, pad_top]);
+  
   // render axis
   svg.append("g")
     .attr("transform", "translate(" + 0 + "," + (height - pad_bottom) + ")")
@@ -3784,22 +3900,33 @@ function draw(el, dataset) {
     .attr("transform", "rotate(-90)")
     .attr("dx", "-0.8em")
     .attr("dy", "-0.6em");
-
+  
   svg.append("g")
     .attr("transform", "translate(" + pad_left + "," + 0 + ")")
     .call(axisLeft(yScale));
+  
+  let stack$1 = stack().keys(dataset.series).order(descending);
+  let series = stack$1(dataset.data);
 
+  console.log(series);
+  
   // render bar
-  svg.append("g")
-    .selectAll("rect")
-    .data(dataset)
+  let data_bar_g = svg.append("g");
+  let series_g = data_bar_g.selectAll(".series")
+      .data(series)
+      .enter()
+      .append("g")
+      .attr("class", function(d, i){ return "series series_" + i; });
+  series_g.selectAll(".bar")
+    .data(function(d) { return d; })
     .enter()
     .append("rect")
-    .attr("x", function(d) { return xScale(d.label); })
-    .attr("y", function(d) { return yScale(d.value); })
+    .attr("class", "bar")
+    .attr("x", function(d) { return xScale(d.data.label); })
+    .attr("y", function(d) { return yScale(d[1]); })
     .attr("width", xScale.bandwidth())
-    .attr("height", function(d) { return height - pad_bottom - yScale(d.value); })
-    .attr("class", "bar");
+    .attr("height", function(d) { return yScale(d[0]) - yScale(d[1]); }); 
+
 }
 
 var metadata = {
@@ -3823,31 +3950,31 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "api",
-		"stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_cahrt_test",
+		"stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test",
 		"stanza:description": "URL of API",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "post_params",
-		"stanza:example": "type=species",
-		"stanza:description": "API parameters for POST method",
+		"stanza:example": "type=instrument",
+		"stanza:description": "API parameters for the POST method",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "title",
-		"stanza:example": "Species",
+		"stanza:example": "Instrument",
 		"stanza:description": "Chart title",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "label_var_name",
-		"stanza:example": "label",
+		"stanza:example": "",
 		"stanza:description": "label var name",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "value_var_name",
-		"stanza:example": "count",
+		"stanza:example": "",
 		"stanza:description": "value var name",
 		"stanza:required": true
 	}
@@ -3855,10 +3982,40 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--greeting-color",
+		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#4ca99e",
-		"stanza:description": "text color of greeting"
+		"stanza:default": "#a8a8e0",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-1-color",
+		"stanza:type": "color",
+		"stanza:default": "#a8e0e0",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-2-color",
+		"stanza:type": "color",
+		"stanza:default": "#a8e0a8",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-3-color",
+		"stanza:type": "color",
+		"stanza:default": "#e0e0a8",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-4-color",
+		"stanza:type": "color",
+		"stanza:default": "#e0a8d3",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-5-color",
+		"stanza:type": "color",
+		"stanza:default": "#d3a8e0",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--greeting-align",
@@ -3889,7 +4046,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nrect.bar {\n  fill: var(--greeting-color);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ng.series_0 {\n  fill: var(--series-0-color);\n}\n\ng.series_1 {\n  fill: var(--series-1-color);\n}\n\ng.series_2 {\n  fill: var(--series-2-color);\n}\n\ng.series_3 {\n  fill: var(--series-3-color);\n}\n\ng.series_4 {\n  fill: var(--series-4-color);\n}\n\ng.series_5 {\n  fill: var(--series-5-color);\n}";
 
 defineStanzaElement(barchart, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=barchart.js.map
