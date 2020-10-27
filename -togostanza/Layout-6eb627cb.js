@@ -114,7 +114,7 @@ const replacer = (_key, val) => {
     return val;
 };
 const EMPTY_OBJ =  {};
-const EMPTY_ARR = [];
+const EMPTY_ARR =  [];
 const NOOP = () => { };
 /**
  * Always return false.
@@ -139,6 +139,7 @@ const isPromise = (val) => {
 const objectToString = Object.prototype.toString;
 const toTypeString = (value) => objectToString.call(value);
 const toRawType = (value) => {
+    // extract "RawType" from strings like "[object RawType]"
     return toTypeString(value).slice(8, -1);
 };
 const isPlainObject = (val) => toTypeString(val) === '[object Object]';
@@ -146,7 +147,9 @@ const isIntegerKey = (key) => isString(key) &&
     key !== 'NaN' &&
     key[0] !== '-' &&
     '' + parseInt(key, 10) === key;
-const isReservedProp = /*#__PURE__*/ makeMap('key,ref,' +
+const isReservedProp = /*#__PURE__*/ makeMap(
+// the leading comma is intentional so empty string "" is also included
+',key,ref,' +
     'onVnodeBeforeMount,onVnodeMounted,' +
     'onVnodeBeforeUpdate,onVnodeUpdated,' +
     'onVnodeBeforeUnmount,onVnodeUnmounted');
@@ -168,15 +171,15 @@ const hyphenateRE = /\B([A-Z])/g;
 /**
  * @private
  */
-const hyphenate = cacheStringFunction((str) => {
-    return str.replace(hyphenateRE, '-$1').toLowerCase();
-});
+const hyphenate = cacheStringFunction((str) => str.replace(hyphenateRE, '-$1').toLowerCase());
 /**
  * @private
  */
-const capitalize = cacheStringFunction((str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-});
+const capitalize = cacheStringFunction((str) => str.charAt(0).toUpperCase() + str.slice(1));
+/**
+ * @private
+ */
+const toHandlerKey = cacheStringFunction((str) => (str ? `on${capitalize(str)}` : ``));
 // compare whether a value has changed, accounting for NaN.
 const hasChanged = (value, oldValue) => value !== oldValue && (value === value || oldValue === oldValue);
 const invokeArrayFns = (fns, arg) => {
@@ -190,6 +193,10 @@ const def = (obj, key, value) => {
         enumerable: false,
         value
     });
+};
+const toNumber = (val) => {
+    const n = parseFloat(val);
+    return isNaN(n) ? val : n;
 };
 
 const targetMap = new WeakMap();
@@ -241,6 +248,7 @@ function createReactiveEffect(fn, options) {
         }
     };
     effect.id = uid++;
+    effect.allowRecurse = !!options.allowRecurse;
     effect._isEffect = true;
     effect.active = true;
     effect.raw = fn;
@@ -298,7 +306,7 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
     const add = (effectsToAdd) => {
         if (effectsToAdd) {
             effectsToAdd.forEach(effect => {
-                if (effect !== activeEffect || effect.options.allowRecurse) {
+                if (effect !== activeEffect || effect.allowRecurse) {
                     effects.add(effect);
                 }
             });
@@ -392,7 +400,7 @@ const arrayInstrumentations = {};
     arrayInstrumentations[key] = function (...args) {
         pauseTracking();
         const res = method.apply(this, args);
-        enableTracking();
+        resetTracking();
         return res;
     };
 });
@@ -413,8 +421,7 @@ function createGetter(isReadonly = false, shallow = false) {
             return Reflect.get(arrayInstrumentations, key, receiver);
         }
         const res = Reflect.get(target, key, receiver);
-        const keyIsSymbol = isSymbol(key);
-        if (keyIsSymbol
+        if (isSymbol(key)
             ? builtInSymbols.has(key)
             : key === `__proto__` || key === `__v_isRef`) {
             return res;
@@ -484,7 +491,7 @@ function has(target, key) {
     return result;
 }
 function ownKeys(target) {
-    track(target, "iterate" /* ITERATE */, ITERATE_KEY);
+    track(target, "iterate" /* ITERATE */, isArray(target) ? 'length' : ITERATE_KEY);
     return Reflect.ownKeys(target);
 }
 const mutableHandlers = {
@@ -1061,7 +1068,7 @@ function handleError(err, instance, type, throwInDev = true) {
             const errorCapturedHooks = cur.ec;
             if (errorCapturedHooks) {
                 for (let i = 0; i < errorCapturedHooks.length; i++) {
-                    if (errorCapturedHooks[i](err, exposedInstance, errorInfo)) {
+                    if (errorCapturedHooks[i](err, exposedInstance, errorInfo) === false) {
                         return;
                     }
                 }
@@ -1100,7 +1107,7 @@ let currentPreFlushParentJob = null;
 const RECURSION_LIMIT = 100;
 function nextTick(fn) {
     const p = currentFlushPromise || resolvedPromise;
-    return fn ? p.then(fn) : p;
+    return fn ? p.then(this ? fn.bind(this) : fn) : p;
 }
 function queueJob(job) {
     // the dedupe search uses the startIndex argument of Array.includes()
@@ -1235,42 +1242,55 @@ function checkRecursiveUpdates(seen, fn) {
     }
 }
 
-function emit(instance, event, ...args) {
+function emit(instance, event, ...rawArgs) {
     const props = instance.vnode.props || EMPTY_OBJ;
-    let handlerName = `on${capitalize(event)}`;
+    let args = rawArgs;
+    const isModelListener = event.startsWith('update:');
+    // for v-model update:xxx events, apply modifiers on args
+    const modelArg = isModelListener && event.slice(7);
+    if (modelArg && modelArg in props) {
+        const modifiersKey = `${modelArg === 'modelValue' ? 'model' : modelArg}Modifiers`;
+        const { number, trim } = props[modifiersKey] || EMPTY_OBJ;
+        if (trim) {
+            args = rawArgs.map(a => a.trim());
+        }
+        else if (number) {
+            args = rawArgs.map(toNumber);
+        }
+    }
+    // convert handler name to camelCase. See issue #2249
+    let handlerName = toHandlerKey(camelize(event));
     let handler = props[handlerName];
     // for v-model update:xxx events, also trigger kebab-case equivalent
     // for props passed via kebab-case
-    if (!handler && event.startsWith('update:')) {
-        handlerName = `on${capitalize(hyphenate(event))}`;
+    if (!handler && isModelListener) {
+        handlerName = toHandlerKey(hyphenate(event));
         handler = props[handlerName];
     }
-    if (!handler) {
-        handler = props[handlerName + `Once`];
+    if (handler) {
+        callWithAsyncErrorHandling(handler, instance, 6 /* COMPONENT_EVENT_HANDLER */, args);
+    }
+    const onceHandler = props[handlerName + `Once`];
+    if (onceHandler) {
         if (!instance.emitted) {
             (instance.emitted = {})[handlerName] = true;
         }
         else if (instance.emitted[handlerName]) {
             return;
         }
-    }
-    if (handler) {
-        callWithAsyncErrorHandling(handler, instance, 6 /* COMPONENT_EVENT_HANDLER */, args);
+        callWithAsyncErrorHandling(onceHandler, instance, 6 /* COMPONENT_EVENT_HANDLER */, args);
     }
 }
 function normalizeEmitsOptions(comp, appContext, asMixin = false) {
-    const appId = appContext.app ? appContext.app._uid : -1;
-    const cache = comp.__emits || (comp.__emits = {});
-    const cached = cache[appId];
-    if (cached !== undefined) {
-        return cached;
+    if (!appContext.deopt && comp.__emits !== undefined) {
+        return comp.__emits;
     }
     const raw = comp.emits;
     let normalized = {};
     // apply mixin/extends props
     let hasExtends = false;
     if (!raw && !hasExtends) {
-        return (cache[appId] = null);
+        return (comp.__emits = null);
     }
     if (isArray(raw)) {
         raw.forEach(key => (normalized[key] = null));
@@ -1278,7 +1298,7 @@ function normalizeEmitsOptions(comp, appContext, asMixin = false) {
     else {
         extend(normalized, raw);
     }
-    return (cache[appId] = normalized);
+    return (comp.__emits = normalized);
 }
 // Check if an incoming prop key is a declared emit event listener.
 // e.g. With `emits: { click: null }`, props named `onClick` and `onclick` are
@@ -1366,7 +1386,7 @@ function renderComponentRoot(instance) {
         // inherit directives
         if (vnode.dirs) {
             if (("production" !== 'production') && !isElementRoot(root)) ;
-            root.dirs = vnode.dirs;
+            root.dirs = root.dirs ? root.dirs.concat(vnode.dirs) : vnode.dirs;
         }
         // inherit transition data
         if (vnode.transition) {
@@ -1405,11 +1425,13 @@ const getChildRoot = (vnode) => {
     const dynamicIndex = dynamicChildren ? dynamicChildren.indexOf(childRoot) : -1;
     const setRoot = (updatedRoot) => {
         rawChildren[index] = updatedRoot;
-        if (dynamicIndex > -1) {
-            dynamicChildren[dynamicIndex] = updatedRoot;
-        }
-        else if (dynamicChildren && updatedRoot.patchFlag > 0) {
-            dynamicChildren.push(updatedRoot);
+        if (dynamicChildren) {
+            if (dynamicIndex > -1) {
+                dynamicChildren[dynamicIndex] = updatedRoot;
+            }
+            else if (updatedRoot.patchFlag > 0) {
+                vnode.dynamicChildren = [...dynamicChildren, updatedRoot];
+            }
         }
     };
     return [normalizeVNode(childRoot), setRoot];
@@ -1645,397 +1667,6 @@ function withScopeId(id) {
     }));
 }
 
-const isTeleport = (type) => type.__isTeleport;
-
-const COMPONENTS = 'components';
-/**
- * @private
- */
-function resolveComponent(name) {
-    return resolveAsset(COMPONENTS, name) || name;
-}
-const NULL_DYNAMIC_COMPONENT = Symbol();
-// implementation
-function resolveAsset(type, name, warnMissing = true) {
-    const instance = currentRenderingInstance || currentInstance;
-    if (instance) {
-        const Component = instance.type;
-        // self name has highest priority
-        if (type === COMPONENTS) {
-            const selfName = Component.displayName || Component.name;
-            if (selfName &&
-                (selfName === name ||
-                    selfName === camelize(name) ||
-                    selfName === capitalize(camelize(name)))) {
-                return Component;
-            }
-        }
-        const res = 
-        // local registration
-        // check instance[type] first for components with mixin or extends.
-        resolve(instance[type] || Component[type], name) ||
-            // global registration
-            resolve(instance.appContext[type], name);
-        return res;
-    }
-}
-function resolve(registry, name) {
-    return (registry &&
-        (registry[name] ||
-            registry[camelize(name)] ||
-            registry[capitalize(camelize(name))]));
-}
-
-const Fragment = Symbol( undefined);
-const Text = Symbol( undefined);
-const Comment = Symbol( undefined);
-const Static = Symbol( undefined);
-// Since v-if and v-for are the two possible ways node structure can dynamically
-// change, once we consider v-if branches and each v-for fragment a block, we
-// can divide a template into nested blocks, and within each block the node
-// structure would be stable. This allows us to skip most children diffing
-// and only worry about the dynamic nodes (indicated by patch flags).
-const blockStack = [];
-let currentBlock = null;
-/**
- * Open a block.
- * This must be called before `createBlock`. It cannot be part of `createBlock`
- * because the children of the block are evaluated before `createBlock` itself
- * is called. The generated code typically looks like this:
- *
- * ```js
- * function render() {
- *   return (openBlock(),createBlock('div', null, [...]))
- * }
- * ```
- * disableTracking is true when creating a v-for fragment block, since a v-for
- * fragment always diffs its children.
- *
- * @private
- */
-function openBlock(disableTracking = false) {
-    blockStack.push((currentBlock = disableTracking ? null : []));
-}
-function closeBlock() {
-    blockStack.pop();
-    currentBlock = blockStack[blockStack.length - 1] || null;
-}
-/**
- * Create a block root vnode. Takes the same exact arguments as `createVNode`.
- * A block root keeps track of dynamic nodes within the block in the
- * `dynamicChildren` array.
- *
- * @private
- */
-function createBlock(type, props, children, patchFlag, dynamicProps) {
-    const vnode = createVNode(type, props, children, patchFlag, dynamicProps, true /* isBlock: prevent a block from tracking itself */);
-    // save current block children on the block vnode
-    vnode.dynamicChildren = currentBlock || EMPTY_ARR;
-    // close block
-    closeBlock();
-    // a block is always going to be patched, so track it as a child of its
-    // parent block
-    if ( currentBlock) {
-        currentBlock.push(vnode);
-    }
-    return vnode;
-}
-function isVNode(value) {
-    return value ? value.__v_isVNode === true : false;
-}
-function isSameVNodeType(n1, n2) {
-    return n1.type === n2.type && n1.key === n2.key;
-}
-const InternalObjectKey = `__vInternal`;
-const normalizeKey = ({ key }) => key != null ? key : null;
-const normalizeRef = ({ ref }) => {
-    return (ref != null
-        ? isArray(ref)
-            ? ref
-            : { i: currentRenderingInstance, r: ref }
-        : null);
-};
-const createVNode = ( _createVNode);
-function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
-    if (!type || type === NULL_DYNAMIC_COMPONENT) {
-        type = Comment;
-    }
-    if (isVNode(type)) {
-        // createVNode receiving an existing vnode. This happens in cases like
-        // <component :is="vnode"/>
-        // #2078 make sure to merge refs during the clone instead of overwriting it
-        const cloned = cloneVNode(type, props, true /* mergeRef: true */);
-        if (children) {
-            normalizeChildren(cloned, children);
-        }
-        return cloned;
-    }
-    // class component normalization.
-    if (isClassComponent(type)) {
-        type = type.__vccOpts;
-    }
-    // class & style normalization.
-    if (props) {
-        // for reactive or proxy objects, we need to clone it to enable mutation.
-        if (isProxy(props) || InternalObjectKey in props) {
-            props = extend({}, props);
-        }
-        let { class: klass, style } = props;
-        if (klass && !isString(klass)) {
-            props.class = normalizeClass(klass);
-        }
-        if (isObject(style)) {
-            // reactive state objects need to be cloned since they are likely to be
-            // mutated
-            if (isProxy(style) && !isArray(style)) {
-                style = extend({}, style);
-            }
-            props.style = normalizeStyle(style);
-        }
-    }
-    // encode the vnode type information into a bitmap
-    const shapeFlag = isString(type)
-        ? 1 /* ELEMENT */
-        :  isSuspense(type)
-            ? 128 /* SUSPENSE */
-            : isTeleport(type)
-                ? 64 /* TELEPORT */
-                : isObject(type)
-                    ? 4 /* STATEFUL_COMPONENT */
-                    : isFunction(type)
-                        ? 2 /* FUNCTIONAL_COMPONENT */
-                        : 0;
-    const vnode = {
-        __v_isVNode: true,
-        ["__v_skip" /* SKIP */]: true,
-        type,
-        props,
-        key: props && normalizeKey(props),
-        ref: props && normalizeRef(props),
-        scopeId: currentScopeId,
-        children: null,
-        component: null,
-        suspense: null,
-        ssContent: null,
-        ssFallback: null,
-        dirs: null,
-        transition: null,
-        el: null,
-        anchor: null,
-        target: null,
-        targetAnchor: null,
-        staticCount: 0,
-        shapeFlag,
-        patchFlag,
-        dynamicProps,
-        dynamicChildren: null,
-        appContext: null
-    };
-    normalizeChildren(vnode, children);
-    // normalize suspense children
-    if ( shapeFlag & 128 /* SUSPENSE */) {
-        const { content, fallback } = normalizeSuspenseChildren(vnode);
-        vnode.ssContent = content;
-        vnode.ssFallback = fallback;
-    }
-    if (
-        // avoid a block node from tracking itself
-        !isBlockNode &&
-        // has current parent block
-        currentBlock &&
-        // presence of a patch flag indicates this node needs patching on updates.
-        // component nodes also should always be patched, because even if the
-        // component doesn't need to update, it needs to persist the instance on to
-        // the next vnode so that it can be properly unmounted later.
-        (patchFlag > 0 || shapeFlag & 6 /* COMPONENT */) &&
-        // the EVENTS flag is only for hydration and if it is the only flag, the
-        // vnode should not be considered dynamic due to handler caching.
-        patchFlag !== 32 /* HYDRATE_EVENTS */) {
-        currentBlock.push(vnode);
-    }
-    return vnode;
-}
-function cloneVNode(vnode, extraProps, mergeRef = false) {
-    // This is intentionally NOT using spread or extend to avoid the runtime
-    // key enumeration cost.
-    const { props, ref, patchFlag } = vnode;
-    const mergedProps = extraProps ? mergeProps(props || {}, extraProps) : props;
-    return {
-        __v_isVNode: true,
-        ["__v_skip" /* SKIP */]: true,
-        type: vnode.type,
-        props: mergedProps,
-        key: mergedProps && normalizeKey(mergedProps),
-        ref: extraProps && extraProps.ref
-            ? // #2078 in the case of <component :is="vnode" ref="extra"/>
-                // if the vnode itself already has a ref, cloneVNode will need to merge
-                // the refs so the single vnode can be set on multiple refs
-                mergeRef && ref
-                    ? isArray(ref)
-                        ? ref.concat(normalizeRef(extraProps))
-                        : [ref, normalizeRef(extraProps)]
-                    : normalizeRef(extraProps)
-            : ref,
-        scopeId: vnode.scopeId,
-        children: vnode.children,
-        target: vnode.target,
-        targetAnchor: vnode.targetAnchor,
-        staticCount: vnode.staticCount,
-        shapeFlag: vnode.shapeFlag,
-        // if the vnode is cloned with extra props, we can no longer assume its
-        // existing patch flag to be reliable and need to add the FULL_PROPS flag.
-        // note: perserve flag for fragments since they use the flag for children
-        // fast paths only.
-        patchFlag: extraProps && vnode.type !== Fragment
-            ? patchFlag === -1 // hoisted node
-                ? 16 /* FULL_PROPS */
-                : patchFlag | 16 /* FULL_PROPS */
-            : patchFlag,
-        dynamicProps: vnode.dynamicProps,
-        dynamicChildren: vnode.dynamicChildren,
-        appContext: vnode.appContext,
-        dirs: vnode.dirs,
-        transition: vnode.transition,
-        // These should technically only be non-null on mounted VNodes. However,
-        // they *should* be copied for kept-alive vnodes. So we just always copy
-        // them since them being non-null during a mount doesn't affect the logic as
-        // they will simply be overwritten.
-        component: vnode.component,
-        suspense: vnode.suspense,
-        ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
-        ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
-        el: vnode.el,
-        anchor: vnode.anchor
-    };
-}
-/**
- * @private
- */
-function createTextVNode(text = ' ', flag = 0) {
-    return createVNode(Text, null, text, flag);
-}
-/**
- * @private
- */
-function createCommentVNode(text = '', 
-// when used as the v-else branch, the comment node must be created as a
-// block to ensure correct updates.
-asBlock = false) {
-    return asBlock
-        ? (openBlock(), createBlock(Comment, null, text))
-        : createVNode(Comment, null, text);
-}
-function normalizeVNode(child) {
-    if (child == null || typeof child === 'boolean') {
-        // empty placeholder
-        return createVNode(Comment);
-    }
-    else if (isArray(child)) {
-        // fragment
-        return createVNode(Fragment, null, child);
-    }
-    else if (typeof child === 'object') {
-        // already vnode, this should be the most common since compiled templates
-        // always produce all-vnode children arrays
-        return child.el === null ? child : cloneVNode(child);
-    }
-    else {
-        // strings and numbers
-        return createVNode(Text, null, String(child));
-    }
-}
-// optimized normalization for template-compiled render fns
-function cloneIfMounted(child) {
-    return child.el === null ? child : cloneVNode(child);
-}
-function normalizeChildren(vnode, children) {
-    let type = 0;
-    const { shapeFlag } = vnode;
-    if (children == null) {
-        children = null;
-    }
-    else if (isArray(children)) {
-        type = 16 /* ARRAY_CHILDREN */;
-    }
-    else if (typeof children === 'object') {
-        if (shapeFlag & 1 /* ELEMENT */ || shapeFlag & 64 /* TELEPORT */) {
-            // Normalize slot to plain children for plain element and Teleport
-            const slot = children.default;
-            if (slot) {
-                // _c marker is added by withCtx() indicating this is a compiled slot
-                slot._c && setCompiledSlotRendering(1);
-                normalizeChildren(vnode, slot());
-                slot._c && setCompiledSlotRendering(-1);
-            }
-            return;
-        }
-        else {
-            type = 32 /* SLOTS_CHILDREN */;
-            const slotFlag = children._;
-            if (!slotFlag && !(InternalObjectKey in children)) {
-                children._ctx = currentRenderingInstance;
-            }
-            else if (slotFlag === 3 /* FORWARDED */ && currentRenderingInstance) {
-                // a child component receives forwarded slots from the parent.
-                // its slot type is determined by its parent's slot type.
-                if (currentRenderingInstance.vnode.patchFlag & 1024 /* DYNAMIC_SLOTS */) {
-                    children._ = 2 /* DYNAMIC */;
-                    vnode.patchFlag |= 1024 /* DYNAMIC_SLOTS */;
-                }
-                else {
-                    children._ = 1 /* STABLE */;
-                }
-            }
-        }
-    }
-    else if (isFunction(children)) {
-        children = { default: children, _ctx: currentRenderingInstance };
-        type = 32 /* SLOTS_CHILDREN */;
-    }
-    else {
-        children = String(children);
-        // force teleport children to array so it can be moved around
-        if (shapeFlag & 64 /* TELEPORT */) {
-            type = 16 /* ARRAY_CHILDREN */;
-            children = [createTextVNode(children)];
-        }
-        else {
-            type = 8 /* TEXT_CHILDREN */;
-        }
-    }
-    vnode.children = children;
-    vnode.shapeFlag |= type;
-}
-function mergeProps(...args) {
-    const ret = extend({}, args[0]);
-    for (let i = 1; i < args.length; i++) {
-        const toMerge = args[i];
-        for (const key in toMerge) {
-            if (key === 'class') {
-                if (ret.class !== toMerge.class) {
-                    ret.class = normalizeClass([ret.class, toMerge.class]);
-                }
-            }
-            else if (key === 'style') {
-                ret.style = normalizeStyle([ret.style, toMerge.style]);
-            }
-            else if (isOn(key)) {
-                const existing = ret[key];
-                const incoming = toMerge[key];
-                if (existing !== incoming) {
-                    ret[key] = existing
-                        ? [].concat(existing, toMerge[key])
-                        : incoming;
-                }
-            }
-            else {
-                ret[key] = toMerge[key];
-            }
-        }
-    }
-    return ret;
-}
-
 function initProps(instance, rawProps, isStateful, // result of bitwise flag comparison
 isSSR = false) {
     const props = {};
@@ -2063,7 +1694,9 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
     const rawCurrentProps = toRaw(props);
     const [options] = instance.propsOptions;
     if (
-    // always force full diff if hmr is enabled
+    // always force full diff in dev
+    // - #1942 if hmr is enabled with sfc component
+    // - vite#872 non-sfc component used by sfc component
     
         (optimized || patchFlag > 0) &&
         !(patchFlag & 16 /* FULL_PROPS */)) {
@@ -2193,11 +1826,8 @@ function resolvePropValue(options, props, key, value, instance) {
     return value;
 }
 function normalizePropsOptions(comp, appContext, asMixin = false) {
-    const appId = appContext.app ? appContext.app._uid : -1;
-    const cache = comp.__props || (comp.__props = {});
-    const cached = cache[appId];
-    if (cached) {
-        return cached;
+    if (!appContext.deopt && comp.__props) {
+        return comp.__props;
     }
     const raw = comp.props;
     const normalized = {};
@@ -2205,7 +1835,7 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
     // apply mixin/extends props
     let hasExtends = false;
     if (!raw && !hasExtends) {
-        return (cache[appId] = EMPTY_ARR);
+        return (comp.__props = EMPTY_ARR);
     }
     if (isArray(raw)) {
         for (let i = 0; i < raw.length; i++) {
@@ -2236,7 +1866,13 @@ function normalizePropsOptions(comp, appContext, asMixin = false) {
             }
         }
     }
-    return (cache[appId] = [normalized, needCastKeys]);
+    return (comp.__props = [normalized, needCastKeys]);
+}
+function validatePropName(key) {
+    if (key[0] !== '$') {
+        return true;
+    }
+    return false;
 }
 // use function string name to check type constructors
 // so that it works across vms / iframes.
@@ -2259,15 +1895,6 @@ function getTypeIndex(type, expectedTypes) {
         return isSameType(expectedTypes, type) ? 0 : -1;
     }
     return -1;
-}
-/**
- * dev only
- */
-function validatePropName(key) {
-    if (key[0] !== '$') {
-        return true;
-    }
-    return false;
 }
 
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
@@ -2858,6 +2485,7 @@ function baseCreateRenderer(options, createHydrationFns) {
     const patchProps = (el, vnode, oldProps, newProps, parentComponent, parentSuspense, isSVG) => {
         if (oldProps !== newProps) {
             for (const key in newProps) {
+                // empty string is not valid prop
                 if (isReservedProp(key))
                     continue;
                 const next = newProps[key];
@@ -3029,12 +2657,12 @@ function baseCreateRenderer(options, createHydrationFns) {
                 let originNext = next;
                 let vnodeHook;
                 if (next) {
+                    next.el = vnode.el;
                     updateComponentPreRender(instance, next, optimized);
                 }
                 else {
                     next = vnode;
                 }
-                next.el = vnode.el;
                 // beforeUpdate hook
                 if (bu) {
                     invokeArrayFns(bu);
@@ -3046,11 +2674,6 @@ function baseCreateRenderer(options, createHydrationFns) {
                 const nextTree = renderComponentRoot(instance);
                 const prevTree = instance.subTree;
                 instance.subTree = nextTree;
-                // reset refs
-                // only needed if previous patch had refs
-                if (instance.refs !== EMPTY_OBJ) {
-                    instance.refs = {};
-                }
                 patch(prevTree, nextTree, 
                 // parent may have changed if it's in a teleport
                 hostParentNode(prevTree.el), 
@@ -3156,7 +2779,7 @@ function baseCreateRenderer(options, createHydrationFns) {
         }
         if (oldLength > newLength) {
             // remove old
-            unmountChildren(c1, parentComponent, parentSuspense, true, commonLength);
+            unmountChildren(c1, parentComponent, parentSuspense, true, false, commonLength);
         }
         else {
             // mount new
@@ -3385,7 +3008,7 @@ function baseCreateRenderer(options, createHydrationFns) {
             hostInsert(el, container, anchor);
         }
     };
-    const unmount = (vnode, parentComponent, parentSuspense, doRemove = false) => {
+    const unmount = (vnode, parentComponent, parentSuspense, doRemove = false, optimized = false) => {
         const { type, props, ref, children, dynamicChildren, shapeFlag, patchFlag, dirs } = vnode;
         // unset ref
         if (ref != null && parentComponent) {
@@ -3416,13 +3039,17 @@ function baseCreateRenderer(options, createHydrationFns) {
                 (type !== Fragment ||
                     (patchFlag > 0 && patchFlag & 64 /* STABLE_FRAGMENT */))) {
                 // fast path for block nodes: only need to unmount dynamic children.
-                unmountChildren(dynamicChildren, parentComponent, parentSuspense);
+                unmountChildren(dynamicChildren, parentComponent, parentSuspense, false, true);
             }
-            else if (shapeFlag & 16 /* ARRAY_CHILDREN */) {
+            else if ((type === Fragment &&
+                (patchFlag & 128 /* KEYED_FRAGMENT */ ||
+                    patchFlag & 256 /* UNKEYED_FRAGMENT */)) ||
+                (!optimized && shapeFlag & 16 /* ARRAY_CHILDREN */)) {
                 unmountChildren(children, parentComponent, parentSuspense);
             }
-            // an unmounted teleport should always remove its children
-            if (shapeFlag & 64 /* TELEPORT */) {
+            // an unmounted teleport should always remove its children if not disabled
+            if (shapeFlag & 64 /* TELEPORT */ &&
+                (doRemove || !isTeleportDisabled(vnode.props))) {
                 vnode.type.remove(vnode, internals);
             }
             if (doRemove) {
@@ -3516,9 +3143,9 @@ function baseCreateRenderer(options, createHydrationFns) {
             }
         }
     };
-    const unmountChildren = (children, parentComponent, parentSuspense, doRemove = false, start = 0) => {
+    const unmountChildren = (children, parentComponent, parentSuspense, doRemove = false, optimized = false, start = 0) => {
         for (let i = start; i < children.length; i++) {
-            unmount(children[i], parentComponent, parentSuspense, doRemove);
+            unmount(children[i], parentComponent, parentSuspense, doRemove, optimized);
         }
     };
     const getNextHostNode = vnode => {
@@ -3529,36 +3156,6 @@ function baseCreateRenderer(options, createHydrationFns) {
             return vnode.suspense.next();
         }
         return hostNextSibling((vnode.anchor || vnode.el));
-    };
-    /**
-     * #1156
-     * When a component is HMR-enabled, we need to make sure that all static nodes
-     * inside a block also inherit the DOM element from the previous tree so that
-     * HMR updates (which are full updates) can retrieve the element for patching.
-     *
-     * #2080
-     * Inside keyed `template` fragment static children, if a fragment is moved,
-     * the children will always moved so that need inherit el form previous nodes
-     * to ensure correct moved position.
-     */
-    const traverseStaticChildren = (n1, n2, shallow = false) => {
-        const ch1 = n1.children;
-        const ch2 = n2.children;
-        if (isArray(ch1) && isArray(ch2)) {
-            for (let i = 0; i < ch1.length; i++) {
-                // this is only called in the optimized path so array children are
-                // guaranteed to be vnodes
-                const c1 = ch1[i];
-                const c2 = (ch2[i] = cloneIfMounted(ch2[i]));
-                if (c2.shapeFlag & 1 /* ELEMENT */ && !c2.dynamicChildren) {
-                    if (c2.patchFlag <= 0 || c2.patchFlag === 32 /* HYDRATE_EVENTS */) {
-                        c2.el = c1.el;
-                    }
-                    if (!shallow)
-                        traverseStaticChildren(c1, c2);
-                }
-            }
-        }
     };
     const render = (vnode, container) => {
         if (vnode == null) {
@@ -3600,6 +3197,37 @@ function invokeVNodeHook(hook, instance, vnode, prevVNode = null) {
         vnode,
         prevVNode
     ]);
+}
+/**
+ * #1156
+ * When a component is HMR-enabled, we need to make sure that all static nodes
+ * inside a block also inherit the DOM element from the previous tree so that
+ * HMR updates (which are full updates) can retrieve the element for patching.
+ *
+ * #2080
+ * Inside keyed `template` fragment static children, if a fragment is moved,
+ * the children will always moved so that need inherit el form previous nodes
+ * to ensure correct moved position.
+ */
+function traverseStaticChildren(n1, n2, shallow = false) {
+    const ch1 = n1.children;
+    const ch2 = n2.children;
+    if (isArray(ch1) && isArray(ch2)) {
+        for (let i = 0; i < ch1.length; i++) {
+            // this is only called in the optimized path so array children are
+            // guaranteed to be vnodes
+            const c1 = ch1[i];
+            let c2 = ch2[i];
+            if (c2.shapeFlag & 1 /* ELEMENT */ && !c2.dynamicChildren) {
+                if (c2.patchFlag <= 0 || c2.patchFlag === 32 /* HYDRATE_EVENTS */) {
+                    c2 = ch2[i] = cloneIfMounted(ch2[i]);
+                    c2.el = c1.el;
+                }
+                if (!shallow)
+                    traverseStaticChildren(c1, c2);
+            }
+        }
+    }
 }
 // https://en.wikipedia.org/wiki/Longest_increasing_subsequence
 function getSequence(arr) {
@@ -3644,6 +3272,398 @@ function getSequence(arr) {
     return result;
 }
 
+const isTeleport = (type) => type.__isTeleport;
+const isTeleportDisabled = (props) => props && (props.disabled || props.disabled === '');
+
+const COMPONENTS = 'components';
+/**
+ * @private
+ */
+function resolveComponent(name) {
+    return resolveAsset(COMPONENTS, name) || name;
+}
+const NULL_DYNAMIC_COMPONENT = Symbol();
+// implementation
+function resolveAsset(type, name, warnMissing = true) {
+    const instance = currentRenderingInstance || currentInstance;
+    if (instance) {
+        const Component = instance.type;
+        // self name has highest priority
+        if (type === COMPONENTS) {
+            const selfName = Component.displayName || Component.name;
+            if (selfName &&
+                (selfName === name ||
+                    selfName === camelize(name) ||
+                    selfName === capitalize(camelize(name)))) {
+                return Component;
+            }
+        }
+        const res = 
+        // local registration
+        // check instance[type] first for components with mixin or extends.
+        resolve(instance[type] || Component[type], name) ||
+            // global registration
+            resolve(instance.appContext[type], name);
+        return res;
+    }
+}
+function resolve(registry, name) {
+    return (registry &&
+        (registry[name] ||
+            registry[camelize(name)] ||
+            registry[capitalize(camelize(name))]));
+}
+
+const Fragment = Symbol( undefined);
+const Text = Symbol( undefined);
+const Comment = Symbol( undefined);
+const Static = Symbol( undefined);
+// Since v-if and v-for are the two possible ways node structure can dynamically
+// change, once we consider v-if branches and each v-for fragment a block, we
+// can divide a template into nested blocks, and within each block the node
+// structure would be stable. This allows us to skip most children diffing
+// and only worry about the dynamic nodes (indicated by patch flags).
+const blockStack = [];
+let currentBlock = null;
+/**
+ * Open a block.
+ * This must be called before `createBlock`. It cannot be part of `createBlock`
+ * because the children of the block are evaluated before `createBlock` itself
+ * is called. The generated code typically looks like this:
+ *
+ * ```js
+ * function render() {
+ *   return (openBlock(),createBlock('div', null, [...]))
+ * }
+ * ```
+ * disableTracking is true when creating a v-for fragment block, since a v-for
+ * fragment always diffs its children.
+ *
+ * @private
+ */
+function openBlock(disableTracking = false) {
+    blockStack.push((currentBlock = disableTracking ? null : []));
+}
+function closeBlock() {
+    blockStack.pop();
+    currentBlock = blockStack[blockStack.length - 1] || null;
+}
+/**
+ * Create a block root vnode. Takes the same exact arguments as `createVNode`.
+ * A block root keeps track of dynamic nodes within the block in the
+ * `dynamicChildren` array.
+ *
+ * @private
+ */
+function createBlock(type, props, children, patchFlag, dynamicProps) {
+    const vnode = createVNode(type, props, children, patchFlag, dynamicProps, true /* isBlock: prevent a block from tracking itself */);
+    // save current block children on the block vnode
+    vnode.dynamicChildren = currentBlock || EMPTY_ARR;
+    // close block
+    closeBlock();
+    // a block is always going to be patched, so track it as a child of its
+    // parent block
+    if ( currentBlock) {
+        currentBlock.push(vnode);
+    }
+    return vnode;
+}
+function isVNode(value) {
+    return value ? value.__v_isVNode === true : false;
+}
+function isSameVNodeType(n1, n2) {
+    return n1.type === n2.type && n1.key === n2.key;
+}
+const InternalObjectKey = `__vInternal`;
+const normalizeKey = ({ key }) => key != null ? key : null;
+const normalizeRef = ({ ref }) => {
+    return (ref != null
+        ? isArray(ref)
+            ? ref
+            : { i: currentRenderingInstance, r: ref }
+        : null);
+};
+const createVNode = ( _createVNode);
+function _createVNode(type, props = null, children = null, patchFlag = 0, dynamicProps = null, isBlockNode = false) {
+    if (!type || type === NULL_DYNAMIC_COMPONENT) {
+        type = Comment;
+    }
+    if (isVNode(type)) {
+        // createVNode receiving an existing vnode. This happens in cases like
+        // <component :is="vnode"/>
+        // #2078 make sure to merge refs during the clone instead of overwriting it
+        const cloned = cloneVNode(type, props, true /* mergeRef: true */);
+        if (children) {
+            normalizeChildren(cloned, children);
+        }
+        return cloned;
+    }
+    // class component normalization.
+    if (isClassComponent(type)) {
+        type = type.__vccOpts;
+    }
+    // class & style normalization.
+    if (props) {
+        // for reactive or proxy objects, we need to clone it to enable mutation.
+        if (isProxy(props) || InternalObjectKey in props) {
+            props = extend({}, props);
+        }
+        let { class: klass, style } = props;
+        if (klass && !isString(klass)) {
+            props.class = normalizeClass(klass);
+        }
+        if (isObject(style)) {
+            // reactive state objects need to be cloned since they are likely to be
+            // mutated
+            if (isProxy(style) && !isArray(style)) {
+                style = extend({}, style);
+            }
+            props.style = normalizeStyle(style);
+        }
+    }
+    // encode the vnode type information into a bitmap
+    const shapeFlag = isString(type)
+        ? 1 /* ELEMENT */
+        :  isSuspense(type)
+            ? 128 /* SUSPENSE */
+            : isTeleport(type)
+                ? 64 /* TELEPORT */
+                : isObject(type)
+                    ? 4 /* STATEFUL_COMPONENT */
+                    : isFunction(type)
+                        ? 2 /* FUNCTIONAL_COMPONENT */
+                        : 0;
+    const vnode = {
+        __v_isVNode: true,
+        ["__v_skip" /* SKIP */]: true,
+        type,
+        props,
+        key: props && normalizeKey(props),
+        ref: props && normalizeRef(props),
+        scopeId: currentScopeId,
+        children: null,
+        component: null,
+        suspense: null,
+        ssContent: null,
+        ssFallback: null,
+        dirs: null,
+        transition: null,
+        el: null,
+        anchor: null,
+        target: null,
+        targetAnchor: null,
+        staticCount: 0,
+        shapeFlag,
+        patchFlag,
+        dynamicProps,
+        dynamicChildren: null,
+        appContext: null
+    };
+    normalizeChildren(vnode, children);
+    // normalize suspense children
+    if ( shapeFlag & 128 /* SUSPENSE */) {
+        const { content, fallback } = normalizeSuspenseChildren(vnode);
+        vnode.ssContent = content;
+        vnode.ssFallback = fallback;
+    }
+    if (
+        // avoid a block node from tracking itself
+        !isBlockNode &&
+        // has current parent block
+        currentBlock &&
+        // presence of a patch flag indicates this node needs patching on updates.
+        // component nodes also should always be patched, because even if the
+        // component doesn't need to update, it needs to persist the instance on to
+        // the next vnode so that it can be properly unmounted later.
+        (patchFlag > 0 || shapeFlag & 6 /* COMPONENT */) &&
+        // the EVENTS flag is only for hydration and if it is the only flag, the
+        // vnode should not be considered dynamic due to handler caching.
+        patchFlag !== 32 /* HYDRATE_EVENTS */) {
+        currentBlock.push(vnode);
+    }
+    return vnode;
+}
+function cloneVNode(vnode, extraProps, mergeRef = false) {
+    // This is intentionally NOT using spread or extend to avoid the runtime
+    // key enumeration cost.
+    const { props, ref, patchFlag } = vnode;
+    const mergedProps = extraProps ? mergeProps(props || {}, extraProps) : props;
+    return {
+        __v_isVNode: true,
+        ["__v_skip" /* SKIP */]: true,
+        type: vnode.type,
+        props: mergedProps,
+        key: mergedProps && normalizeKey(mergedProps),
+        ref: extraProps && extraProps.ref
+            ? // #2078 in the case of <component :is="vnode" ref="extra"/>
+                // if the vnode itself already has a ref, cloneVNode will need to merge
+                // the refs so the single vnode can be set on multiple refs
+                mergeRef && ref
+                    ? isArray(ref)
+                        ? ref.concat(normalizeRef(extraProps))
+                        : [ref, normalizeRef(extraProps)]
+                    : normalizeRef(extraProps)
+            : ref,
+        scopeId: vnode.scopeId,
+        children: vnode.children,
+        target: vnode.target,
+        targetAnchor: vnode.targetAnchor,
+        staticCount: vnode.staticCount,
+        shapeFlag: vnode.shapeFlag,
+        // if the vnode is cloned with extra props, we can no longer assume its
+        // existing patch flag to be reliable and need to add the FULL_PROPS flag.
+        // note: perserve flag for fragments since they use the flag for children
+        // fast paths only.
+        patchFlag: extraProps && vnode.type !== Fragment
+            ? patchFlag === -1 // hoisted node
+                ? 16 /* FULL_PROPS */
+                : patchFlag | 16 /* FULL_PROPS */
+            : patchFlag,
+        dynamicProps: vnode.dynamicProps,
+        dynamicChildren: vnode.dynamicChildren,
+        appContext: vnode.appContext,
+        dirs: vnode.dirs,
+        transition: vnode.transition,
+        // These should technically only be non-null on mounted VNodes. However,
+        // they *should* be copied for kept-alive vnodes. So we just always copy
+        // them since them being non-null during a mount doesn't affect the logic as
+        // they will simply be overwritten.
+        component: vnode.component,
+        suspense: vnode.suspense,
+        ssContent: vnode.ssContent && cloneVNode(vnode.ssContent),
+        ssFallback: vnode.ssFallback && cloneVNode(vnode.ssFallback),
+        el: vnode.el,
+        anchor: vnode.anchor
+    };
+}
+/**
+ * @private
+ */
+function createTextVNode(text = ' ', flag = 0) {
+    return createVNode(Text, null, text, flag);
+}
+/**
+ * @private
+ */
+function createCommentVNode(text = '', 
+// when used as the v-else branch, the comment node must be created as a
+// block to ensure correct updates.
+asBlock = false) {
+    return asBlock
+        ? (openBlock(), createBlock(Comment, null, text))
+        : createVNode(Comment, null, text);
+}
+function normalizeVNode(child) {
+    if (child == null || typeof child === 'boolean') {
+        // empty placeholder
+        return createVNode(Comment);
+    }
+    else if (isArray(child)) {
+        // fragment
+        return createVNode(Fragment, null, child);
+    }
+    else if (typeof child === 'object') {
+        // already vnode, this should be the most common since compiled templates
+        // always produce all-vnode children arrays
+        return child.el === null ? child : cloneVNode(child);
+    }
+    else {
+        // strings and numbers
+        return createVNode(Text, null, String(child));
+    }
+}
+// optimized normalization for template-compiled render fns
+function cloneIfMounted(child) {
+    return child.el === null ? child : cloneVNode(child);
+}
+function normalizeChildren(vnode, children) {
+    let type = 0;
+    const { shapeFlag } = vnode;
+    if (children == null) {
+        children = null;
+    }
+    else if (isArray(children)) {
+        type = 16 /* ARRAY_CHILDREN */;
+    }
+    else if (typeof children === 'object') {
+        if (shapeFlag & 1 /* ELEMENT */ || shapeFlag & 64 /* TELEPORT */) {
+            // Normalize slot to plain children for plain element and Teleport
+            const slot = children.default;
+            if (slot) {
+                // _c marker is added by withCtx() indicating this is a compiled slot
+                slot._c && setCompiledSlotRendering(1);
+                normalizeChildren(vnode, slot());
+                slot._c && setCompiledSlotRendering(-1);
+            }
+            return;
+        }
+        else {
+            type = 32 /* SLOTS_CHILDREN */;
+            const slotFlag = children._;
+            if (!slotFlag && !(InternalObjectKey in children)) {
+                children._ctx = currentRenderingInstance;
+            }
+            else if (slotFlag === 3 /* FORWARDED */ && currentRenderingInstance) {
+                // a child component receives forwarded slots from the parent.
+                // its slot type is determined by its parent's slot type.
+                if (currentRenderingInstance.vnode.patchFlag & 1024 /* DYNAMIC_SLOTS */) {
+                    children._ = 2 /* DYNAMIC */;
+                    vnode.patchFlag |= 1024 /* DYNAMIC_SLOTS */;
+                }
+                else {
+                    children._ = 1 /* STABLE */;
+                }
+            }
+        }
+    }
+    else if (isFunction(children)) {
+        children = { default: children, _ctx: currentRenderingInstance };
+        type = 32 /* SLOTS_CHILDREN */;
+    }
+    else {
+        children = String(children);
+        // force teleport children to array so it can be moved around
+        if (shapeFlag & 64 /* TELEPORT */) {
+            type = 16 /* ARRAY_CHILDREN */;
+            children = [createTextVNode(children)];
+        }
+        else {
+            type = 8 /* TEXT_CHILDREN */;
+        }
+    }
+    vnode.children = children;
+    vnode.shapeFlag |= type;
+}
+function mergeProps(...args) {
+    const ret = extend({}, args[0]);
+    for (let i = 1; i < args.length; i++) {
+        const toMerge = args[i];
+        for (const key in toMerge) {
+            if (key === 'class') {
+                if (ret.class !== toMerge.class) {
+                    ret.class = normalizeClass([ret.class, toMerge.class]);
+                }
+            }
+            else if (key === 'style') {
+                ret.style = normalizeStyle([ret.style, toMerge.style]);
+            }
+            else if (isOn(key)) {
+                const existing = ret[key];
+                const incoming = toMerge[key];
+                if (existing !== incoming) {
+                    ret[key] = existing
+                        ? [].concat(existing, toMerge[key])
+                        : incoming;
+                }
+            }
+            else if (key !== '') {
+                ret[key] = toMerge[key];
+            }
+        }
+    }
+    return ret;
+}
+
 const publicPropertiesMap = extend(Object.create(null), {
     $: i => i,
     $el: i => i.vnode.el,
@@ -3657,7 +3677,7 @@ const publicPropertiesMap = extend(Object.create(null), {
     $emit: i => i.emit,
     $options: i => ( i.type),
     $forceUpdate: i => () => queueJob(i.update),
-    $nextTick: () => nextTick,
+    $nextTick: i => nextTick.bind(i.proxy),
     $watch: i => ( NOOP)
 });
 const PublicInstanceProxyHandlers = {
@@ -3876,7 +3896,7 @@ function setupComponent(instance, isSSR = false) {
 function setupStatefulComponent(instance, isSSR) {
     const Component = instance.type;
     // 0. create render proxy property access cache
-    instance.accessCache = {};
+    instance.accessCache = Object.create(null);
     // 1. create public instance / render proxy
     // also mark it raw so it's never observed
     instance.proxy = new Proxy(instance.ctx, PublicInstanceProxyHandlers);
@@ -4031,7 +4051,7 @@ function renderList(source, renderItem) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.0.0";
+const version = "3.0.2";
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
@@ -8395,7 +8415,7 @@ var license = "MIT";
 var repository = "https://github.com/togostanza/metastanza.git";
 var dependencies = {
 	d3: "^6.2.0",
-	togostanza: "^3.0.0-beta.1"
+	togostanza: "^3.0.0-beta.5"
 };
 var engines = {
 	node: ">=14"
@@ -8546,4 +8566,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, createTextVNode as g, ref as h, octicons as i, computed$1 as j, withScopeId as k, popScopeId as l, mergeProps as m, n, openBlock as o, pushScopeId as p, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-7c163899.js.map
+//# sourceMappingURL=Layout-6eb627cb.js.map

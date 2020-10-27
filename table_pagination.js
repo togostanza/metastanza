@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-3f5d326f.js';
+import { d as defineStanzaElement } from './stanza-element-46541929.js';
 import './table_body.js';
 
 function tablePagination(stanza, params) {
