@@ -33,7 +33,6 @@
   ],
   "stanza:usage": "<togostanza-table_body></togostanza-table_body>",
   "stanza:type": "Stanza",
-  "stanza:context": "",
   "stanza:display": "",
   "stanza:provider": "provider of this stanza",
   "stanza:license": "",
