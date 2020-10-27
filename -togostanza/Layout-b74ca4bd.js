@@ -8415,7 +8415,7 @@ var license = "MIT";
 var repository = "https://github.com/togostanza/metastanza.git";
 var dependencies = {
 	d3: "^6.2.0",
-	togostanza: "^3.0.0-beta.5"
+	togostanza: "^3.0.0-beta.6"
 };
 var engines = {
 	node: ">=14"
@@ -8566,4 +8566,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, createTextVNode as g, ref as h, octicons as i, computed$1 as j, withScopeId as k, popScopeId as l, mergeProps as m, n, openBlock as o, pushScopeId as p, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-6eb627cb.js.map
+//# sourceMappingURL=Layout-b74ca4bd.js.map

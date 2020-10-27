@@ -1,4 +1,4 @@
-import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, k as withScopeId, p as pushScopeId, l as popScopeId, n, f as createApp } from './Layout-6eb627cb.js';
+import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, k as withScopeId, p as pushScopeId, l as popScopeId, n, f as createApp } from './Layout-b74ca4bd.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -3157,41 +3157,40 @@ const _hoisted_7 = {
   role: "tabpanel"
 };
 const _hoisted_8 = { class: "table table-borderless border mb-1" };
-const _hoisted_9 = /*#__PURE__*/createVNode("th", null, "Context", -1 /* HOISTED */);
-const _hoisted_10 = /*#__PURE__*/createVNode("th", null, "Display", -1 /* HOISTED */);
-const _hoisted_11 = /*#__PURE__*/createVNode("th", null, "Type", -1 /* HOISTED */);
-const _hoisted_12 = /*#__PURE__*/createVNode("th", null, "Provider", -1 /* HOISTED */);
-const _hoisted_13 = /*#__PURE__*/createVNode("th", null, "Author", -1 /* HOISTED */);
-const _hoisted_14 = { class: "mb-0" };
-const _hoisted_15 = /*#__PURE__*/createTextVNode(" <");
-const _hoisted_16 = /*#__PURE__*/createTextVNode("> ");
-const _hoisted_17 = /*#__PURE__*/createVNode("th", null, "Contributors", -1 /* HOISTED */);
-const _hoisted_18 = {
+const _hoisted_9 = /*#__PURE__*/createVNode("th", null, "Display", -1 /* HOISTED */);
+const _hoisted_10 = /*#__PURE__*/createVNode("th", null, "Type", -1 /* HOISTED */);
+const _hoisted_11 = /*#__PURE__*/createVNode("th", null, "Provider", -1 /* HOISTED */);
+const _hoisted_12 = /*#__PURE__*/createVNode("th", null, "Author", -1 /* HOISTED */);
+const _hoisted_13 = { class: "mb-0" };
+const _hoisted_14 = /*#__PURE__*/createTextVNode(" <");
+const _hoisted_15 = /*#__PURE__*/createTextVNode("> ");
+const _hoisted_16 = /*#__PURE__*/createVNode("th", null, "Contributors", -1 /* HOISTED */);
+const _hoisted_17 = {
   key: 0,
   class: "list-unstyled mb-0"
 };
-const _hoisted_19 = /*#__PURE__*/createTextVNode(" - ");
-const _hoisted_20 = /*#__PURE__*/createVNode("th", null, "License", -1 /* HOISTED */);
-const _hoisted_21 = /*#__PURE__*/createVNode("th", null, "Created", -1 /* HOISTED */);
-const _hoisted_22 = /*#__PURE__*/createVNode("th", null, "Updated", -1 /* HOISTED */);
-const _hoisted_23 = { class: "text-right" };
-const _hoisted_24 = {
+const _hoisted_18 = /*#__PURE__*/createTextVNode(" - ");
+const _hoisted_19 = /*#__PURE__*/createVNode("th", null, "License", -1 /* HOISTED */);
+const _hoisted_20 = /*#__PURE__*/createVNode("th", null, "Created", -1 /* HOISTED */);
+const _hoisted_21 = /*#__PURE__*/createVNode("th", null, "Updated", -1 /* HOISTED */);
+const _hoisted_22 = { class: "text-right" };
+const _hoisted_23 = {
   class: "tab-pane",
   id: "customize",
   role: "tabpanel"
 };
-const _hoisted_25 = /*#__PURE__*/createVNode("h2", null, "Parameters", -1 /* HOISTED */);
-const _hoisted_26 = { class: "row mt-3" };
-const _hoisted_27 = { class: "col-sm-6 col-lg-12 col-xl-6 mb-3" };
-const _hoisted_28 = /*#__PURE__*/createVNode("hr", null, null, -1 /* HOISTED */);
-const _hoisted_29 = /*#__PURE__*/createVNode("h2", null, "Styles", -1 /* HOISTED */);
-const _hoisted_30 = { class: "row mt-3" };
-const _hoisted_31 = {
+const _hoisted_24 = /*#__PURE__*/createVNode("h2", null, "Parameters", -1 /* HOISTED */);
+const _hoisted_25 = { class: "row mt-3" };
+const _hoisted_26 = { class: "col-sm-6 col-lg-12 col-xl-6 mb-3" };
+const _hoisted_27 = /*#__PURE__*/createVNode("hr", null, null, -1 /* HOISTED */);
+const _hoisted_28 = /*#__PURE__*/createVNode("h2", null, "Styles", -1 /* HOISTED */);
+const _hoisted_29 = { class: "row mt-3" };
+const _hoisted_30 = {
   key: 0,
   class: "font-italic"
 };
-const _hoisted_32 = { class: "col-lg-6" };
-const _hoisted_33 = /*#__PURE__*/createVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
+const _hoisted_31 = { class: "col-lg-6" };
+const _hoisted_32 = /*#__PURE__*/createVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
 popScopeId();
 
 const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3212,66 +3211,62 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                 createVNode("tbody", null, [
                   createVNode("tr", null, [
                     _hoisted_9,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:context'] || '-'), 1 /* TEXT */)
-                  ]),
-                  createVNode("tr", null, [
-                    _hoisted_10,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:display'] || '-'), 1 /* TEXT */)
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_11,
+                    _hoisted_10,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:type'] || '-'), 1 /* TEXT */)
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_12,
+                    _hoisted_11,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:provider'] || '-'), 1 /* TEXT */)
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_13,
+                    _hoisted_12,
                     createVNode("td", null, [
-                      createVNode("address", _hoisted_14, [
+                      createVNode("address", _hoisted_13, [
                         createTextVNode(toDisplayString(_ctx.metadata['stanza:author'] || '-') + " ", 1 /* TEXT */),
                         (_ctx.metadata['stanza:address'])
                           ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                              _hoisted_15,
+                              _hoisted_14,
                               createVNode("a", {
                                 href: `mailto:${_ctx.metadata['stanza:address']}`
                               }, toDisplayString(_ctx.metadata['stanza:address']), 9 /* TEXT, PROPS */, ["href"]),
-                              _hoisted_16
+                              _hoisted_15
                             ], 64 /* STABLE_FRAGMENT */))
                           : createCommentVNode("v-if", true)
                       ])
                     ])
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_17,
+                    _hoisted_16,
                     createVNode("td", null, [
                       (_ctx.metadata['stanza:contributor'] && _ctx.metadata['stanza:contributor'].length > 0)
-                        ? (openBlock(), createBlock("ul", _hoisted_18, [
+                        ? (openBlock(), createBlock("ul", _hoisted_17, [
                             (openBlock(true), createBlock(Fragment, null, renderList(_ctx.metadata['stanza:contributor'], (contributor) => {
                               return (openBlock(), createBlock("li", { key: contributor }, toDisplayString(contributor), 1 /* TEXT */))
                             }), 128 /* KEYED_FRAGMENT */))
                           ]))
                         : (openBlock(), createBlock(Fragment, { key: 1 }, [
-                            _hoisted_19
+                            _hoisted_18
                           ], 64 /* STABLE_FRAGMENT */))
                     ])
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_20,
+                    _hoisted_19,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:license'] || '-'), 1 /* TEXT */)
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_21,
+                    _hoisted_20,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:created'] || '-'), 1 /* TEXT */)
                   ]),
                   createVNode("tr", null, [
-                    _hoisted_22,
+                    _hoisted_21,
                     createVNode("td", null, toDisplayString(_ctx.metadata['stanza:updated'] || '-'), 1 /* TEXT */)
                   ])
                 ])
               ]),
-              createVNode("div", _hoisted_23, [
+              createVNode("div", _hoisted_22, [
                 createVNode("a", {
                   href: `./${_ctx.metadata['@id']}/metadata.json`
                 }, "Download JSON", 8 /* PROPS */, ["href"])
@@ -3281,10 +3276,10 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                 class: "mt-4"
               }, null, 8 /* PROPS */, ["innerHTML"])
             ]),
-            createVNode("div", _hoisted_24, [
+            createVNode("div", _hoisted_23, [
               createVNode("section", null, [
-                _hoisted_25,
-                createVNode("div", _hoisted_26, [
+                _hoisted_24,
+                createVNode("div", _hoisted_25, [
                   (openBlock(true), createBlock(Fragment, null, renderList(_ctx.paramFields, ({param, input}) => {
                     return (openBlock(), createBlock("div", {
                       key: param['stanza:key'],
@@ -3298,7 +3293,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                       }, null, 8 /* PROPS */, ["input", "label", "required", "help-text"])
                     ]))
                   }), 128 /* KEYED_FRAGMENT */)),
-                  createVNode("div", _hoisted_27, [
+                  createVNode("div", _hoisted_26, [
                     createVNode(_component_FormField, {
                       input: _ctx.aboutLinkPlacement,
                       label: 'togostanza-about-link-placement',
@@ -3309,10 +3304,10 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                   ])
                 ])
               ]),
-              _hoisted_28,
+              _hoisted_27,
               createVNode("section", null, [
-                _hoisted_29,
-                createVNode("div", _hoisted_30, [
+                _hoisted_28,
+                createVNode("div", _hoisted_29, [
                   (openBlock(true), createBlock(Fragment, null, renderList(_ctx.styleFields, ({style, input}) => {
                     return (openBlock(), createBlock("div", {
                       key: style['stanza:key'],
@@ -3329,14 +3324,14 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                   }), 128 /* KEYED_FRAGMENT */))
                 ]),
                 (_ctx.styleFields.length === 0)
-                  ? (openBlock(), createBlock("p", _hoisted_31, " No styles defined. "))
+                  ? (openBlock(), createBlock("p", _hoisted_30, " No styles defined. "))
                   : createCommentVNode("v-if", true)
               ])
             ])
           ])
         ]),
-        createVNode("div", _hoisted_32, [
-          _hoisted_33,
+        createVNode("div", _hoisted_31, [
+          _hoisted_32,
           createVNode(_component_StanzaPreviewer, {
             metadata: _ctx.metadata,
             params: _ctx.params,

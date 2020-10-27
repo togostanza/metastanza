@@ -370,7 +370,6 @@ var metadata = {
 ],
 	"stanza:usage": "<togostanza-table_pagination></togostanza-table_pagination>",
 	"stanza:type": "MetaStanza",
-	"stanza:context": "Meta",
 	"stanza:display": "Table",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",

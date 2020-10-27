@@ -341,7 +341,6 @@ var metadata = {
 ],
 	"stanza:usage": "<togostanza-table_pagination_at_once></togostanza-table_pagination_at_once>",
 	"stanza:type": "MetaStanza",
-	"stanza:context": "",
 	"stanza:display": "",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",

@@ -3937,7 +3937,6 @@ var metadata = {
 	"stanza:label": "Barchart",
 	"stanza:definition": "",
 	"stanza:type": "MetaStanza",
-	"stanza:context": "Meta",
 	"stanza:display": "Chart",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",

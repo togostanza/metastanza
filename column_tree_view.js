@@ -281,7 +281,6 @@ var metadata = {
 ],
 	"stanza:usage": "<togostanza-column_tree_view endpoint='https://integbio.jp/rdf/sparql' root='http://identifiers.org/taxonomy/131567'></togostanza-column_tree_view>",
 	"stanza:type": "MetaStanza",
-	"stanza:context": "",
 	"stanza:display": "",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",
