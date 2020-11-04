@@ -14,6 +14,9 @@ p.greeting {
   text-align: var(--greeting-align);
 }
 
+.bar-style-na {
+    fill: #dddddd;
+}
 .bar-style-0 {
     fill: var(--series-0-color);
 }
