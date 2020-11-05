@@ -1792,7 +1792,7 @@ var metastanza = {
       if (element.offsetHeight < 30) select(element).transition().duration(100).style("min-height", "30px");
       select(element)
 	.append("div").attr("class", "metastanza-loading-icon-div").attr("id", "metastanza-loading-icon-div")
-	.style("position", "absolute").style("top", "10px").style("left", Math.floor(element.offsetWidth / 2) - 10 + "px")
+	.style("position", "absolute").style("top", "10px").style("left", Math.floor(element.offsetWidth / 2) - 30 + "px")
 	.append("img").attr("class", "metastanza-loading-icon").attr("src", "http://togostanza.org/img/loading.gif");
     }
     
@@ -1885,4 +1885,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-2ef18c49.js.map
+//# sourceMappingURL=metastanza_utils-962e7f54.js.map

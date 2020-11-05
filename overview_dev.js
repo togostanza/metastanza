@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-46541929.js';
 import './timer-a7d16713.js';
-import { m as metastanza, s as select } from './metastanza_utils-2ef18c49.js';
+import { m as metastanza, s as select } from './metastanza_utils-962e7f54.js';
 
 function sourceEvent(event) {
   let sourceEvent;
