@@ -123,7 +123,7 @@ async function draw(element, apis, body) {
       // reset-render
       body = [];
       for (let api of apis) {
-	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
+	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin, true);
 	reRender(element, dataset[api]);
       }
     });
@@ -172,7 +172,7 @@ async function draw(element, apis, body) {
     return [data, total];
   };
   
-  function changeData(dataset, newData, width, height, labelMargin){
+  function changeData(dataset, newData, width, height, labelMargin, initFlag){
     let data = dataset.data;
     let label2data = {};
     if (!newData[0]) {
@@ -196,6 +196,7 @@ async function draw(element, apis, body) {
       let targetBarWidth =  width * parseFloat(data[i].count) / dataset.total;
       if (data.length - 1 == i) targetBarWidth = width - start + labelMargin;
       data[i].targetBarWidth = targetBarWidth;
+      if (initFlag) data[i].targetBarWidth = 0;
       start += targetBarWidth;
     }
     return data;
