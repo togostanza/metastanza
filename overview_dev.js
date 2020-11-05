@@ -48,59 +48,73 @@ async function draw(element, apis, body) {
     dataset[api] = await metastanza.getFormatedJson(api, element, body.join("&"));
   }
   
-  // first render
-  if (!element.querySelector("div")) {
-    for (let api of apis) {
-      let div = select(element).append("div").attr("id", api);
-      let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
-      svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
 
-      dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
-
-      svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
-      svg.selectAll("rect")
-	.data(dataset[api].data)
-	.enter()
-	.append("rect")
-	.attr("x", function(d){ return d.barStart }).attr("y", 0)
-	.attr("width", function(d){ return d.barWidth }).attr("height", height)
-	.attr("id", function(d){ return d.onclick_list[0].id })
-	.attr("class", function(d, i){
-	  if (d.label != "None") return "bar-style-" + i;
-	  return "bar-style-na";
-	})
-	.on("mouseover", function(e, d){
-	  let mouse = pointer(e);
-	  svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count)
-	    .attr("x", function(d){
-	      if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
-	      return mouse[0] + 10;
-	    })
-	    .attr("y", height / 2)
-	    .attr("alignment-baseline", "central")
-	    .attr("text-anchor", function(){
-	      if (mouse[0] > width / 2 + labelMargin) return "end";
-	    });
-	})
-	.on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove(); })
-	.on("click", async function(e, d){
-	  body.push(dataset[api].type + "=" + d.onclick_list[0].id);
-	  for (let api of apis) {
-	    let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
-	    dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
-	    let svg = select(element).select("#svg_" + dataset[api].type.replace(/\s/g, "_"));
-	    svg.selectAll("rect")
-	      .data(dataset[api].data)
-	      .transition()
-              .delay(500)
-              .duration(1000)
-	      .attr("x", function(d){ return d.barStart })
-	      .attr("width", function(d){ return d.barWidth });
-	  }
-	});
-    }
+  for (let api of apis) {
+    // first render
+    let div = select(element).append("div").attr("id", api);
+    let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
+    svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
+    
+    dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
+    
+    svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
+    svg.selectAll("rect")
+      .data(dataset[api].data)
+      .enter()
+      .append("rect")
+      .attr("x", function(d){ return d.barStart }).attr("y", 0)
+      .attr("width", function(d){ return d.barWidth }).attr("height", height)
+      .attr("id", function(d){ return d.onclick_list[0].id })
+      .attr("class", function(d, i){
+	if (d.label != "None") return "bar-style-" + i;
+	return "bar-style-na";
+      })
+      .on("mouseover", function(e, d){
+	let mouse = pointer(e);
+	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count)
+	  .attr("x", function(d){
+	    if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
+	    return mouse[0] + 10;
+	  })
+	  .attr("y", height / 2)
+	  .attr("alignment-baseline", "central")
+	  .attr("text-anchor", function(){
+	    if (mouse[0] > width / 2 + labelMargin) return "end";
+	  });
+      })
+      .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove(); })
+      .on("click", async function(e, d){
+	// re-render
+	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	for (let api of apis) {
+	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
+	  dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
+	  reRender(element, dataset[api]);
+	}
+      });
   }
 
+  let initDataset = JSON.parse(JSON.stringify(dataset));
+  select(element).append("p").html("reset").style("cursor", "pointer")
+    .on("click", function(){
+      // reset-render
+      body = [];
+      for (let api of apis) {
+	dataset[api].data = changeData(dataset[api].data, JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
+	reRender(element, dataset[api]);
+      }
+    });
+
+  function reRender(element, dataset){
+    let svg = select(element).select("#svg_" + dataset.type.replace(/\s/g, "_"));
+    svg.selectAll("rect")
+      .data(dataset.data)
+      .transition()
+      .delay(200)
+      .duration(1000)
+      .attr("x", function(d){ return d.barStart })
+      .attr("width", function(d){ return d.barWidth });
+  }  
   function setData(data, width, height, labelMargin){
     let total = 0;
     for (let category of data) {
@@ -122,10 +136,8 @@ async function draw(element, apis, body) {
       barWidth: 0,
       onclick_list: [{id: "n-a"}]
     });
-    console.log(data);
     return data;
-  }
-  
+  }  
   function changeData(data, newData, width, height, labelMargin){
     let total = 0;
     let label2data = {};
@@ -150,10 +162,8 @@ async function draw(element, apis, body) {
       data[i].barWidth = barWidth;
       start += barWidth;
     }
-    console.log(data);
     return data;
-  }
-}
+  }}
 
 var metadata = {
 	"@context": {
