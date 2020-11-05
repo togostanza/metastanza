@@ -23,13 +23,15 @@ async function draw(element, apis, body) {
   }
   
 
-  for (let api of apis) {
+  for (let id = 0; id < apis.length; id++) {
+    let api = apis[id];
     // first render
-    let div = d3.select(element).append("div").attr("id", api);
+    let div = d3.select(element).append("div").attr("id", "div_" + id).attr("class", "bar");
     let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
     svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
     
     dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
+    dataset[api].id = id;
     
     svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
     svg.selectAll("rect")
@@ -62,9 +64,10 @@ async function draw(element, apis, body) {
 	// re-render
 	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
-	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
+	  getDataAndRender(element, api, body, dataset);
+/*	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
 	  dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
-	  reRender(element, dataset[api]);
+	  reRender(element, dataset[api]); */
 	}
       });
   }
@@ -80,6 +83,12 @@ async function draw(element, apis, body) {
       }
     });
 
+  async function getDataAndRender(element, api, body, dataset){
+    let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
+    dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
+    reRender(element, dataset[api]);
+  };
+  
   function reRender(element, dataset){
     let svg = d3.select(element).select("#svg_" + dataset.type.replace(/\s/g, "_"));
     svg.selectAll("rect")
