@@ -1786,12 +1786,16 @@ var metastanza = {
     //// url:     API URL
     //// element: target element for loding icon, error message
     //// params:  API parameters for the POST method
-    
-    // loading icon img
-    if (element) select(element)
-      .append("div").attr("class", "metastanza-loading-icon-div").attr("id", "metastanza-loading-icon-div")
-      .append("img").attr("class", "metastanza-loading-icon").attr("src", "http://togostanza.org/img/loading.gif");
 
+    // loading icon img
+    if (element){
+      if (element.offsetHeight < 30) select(element).transition().duration(100).style("min-height", "30px");
+      select(element)
+	.append("div").attr("class", "metastanza-loading-icon-div").attr("id", "metastanza-loading-icon-div")
+	.style("position", "absolute").style("top", "10px").style("left", Math.floor(element.offsetWidth / 2) - 10 + "px")
+	.append("img").attr("class", "metastanza-loading-icon").attr("src", "http://togostanza.org/img/loading.gif");
+    }
+    
     // fetch options
     let options = {
       method: "get",
@@ -1803,7 +1807,7 @@ var metastanza = {
 	body: post_params,
 	headers: {
 	  'Content-Type': 'application/x-www-form-urlencoded',
-	  'Accept': 'application/json'
+	  'Accept': 'application/json',
 	}
       };
     }
@@ -1881,4 +1885,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-280c63af.js.map
+//# sourceMappingURL=metastanza_utils-2ef18c49.js.map

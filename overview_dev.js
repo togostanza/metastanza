@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-46541929.js';
 import './timer-a7d16713.js';
-import { m as metastanza, s as select } from './metastanza_utils-280c63af.js';
+import { m as metastanza, s as select } from './metastanza_utils-2ef18c49.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -49,13 +49,15 @@ async function draw(element, apis, body) {
   }
   
 
-  for (let api of apis) {
+  for (let id = 0; id < apis.length; id++) {
+    let api = apis[id];
     // first render
-    let div = select(element).append("div").attr("id", api);
+    let div = select(element).append("div").attr("id", "div_" + id).attr("class", "bar");
     let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
     svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
     
     dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
+    dataset[api].id = id;
     
     svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
     svg.selectAll("rect")
@@ -87,9 +89,10 @@ async function draw(element, apis, body) {
 	// re-render
 	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
-	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
+	  getDataAndRender(element, api, body, dataset);
+/*	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
 	  dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
-	  reRender(element, dataset[api]);
+	  reRender(element, dataset[api]); */
 	}
       });
   }
@@ -105,6 +108,11 @@ async function draw(element, apis, body) {
       }
     });
 
+  async function getDataAndRender(element, api, body, dataset){
+    let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
+    dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
+    reRender(element, dataset[api]);
+  }  
   function reRender(element, dataset){
     let svg = select(element).select("#svg_" + dataset.type.replace(/\s/g, "_"));
     svg.selectAll("rect")
@@ -261,7 +269,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}";
 
 defineStanzaElement(overviewDev, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=overview_dev.js.map
