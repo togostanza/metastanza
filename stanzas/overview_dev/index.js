@@ -28,7 +28,7 @@ async function draw(element, apis, body) {
     // first render
     let div = d3.select(element).append("div").attr("id", "div_" + id).attr("class", "bar");
     let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
-    svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
+    svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type.charAt(0).toUpperCase() + dataset[api].type.slice(1));
     
     dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
     dataset[api].id = id;
