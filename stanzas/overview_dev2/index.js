@@ -59,7 +59,14 @@ async function draw(element, apis, body) {
       .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove() })
       .on("click", async function(e, d){
 	// re-render
-	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	let flag = true;
+	for (let i = 0; i < body.length; i++) {
+	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type) {
+	    body[i] += "," + d.onclick_list[0].id;
+	    flag = false;
+	  }
+	}
+	if (flag) body.push(dataset[api].type + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
 	  getDataAndRender(element, api, body, dataset);
 	}
@@ -93,7 +100,14 @@ async function draw(element, apis, body) {
       .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove() })
       .on("click", async function(e, d){
 	// re-render
-	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	let flag = true;
+	for (let i = 0; i < body.length; i++) {
+	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type) {
+	    body[i] += "," + d.onclick_list[0].id;
+	    flag = false;
+	  }
+	}
+	if (flag) body.push(dataset[api].type + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
 	  getDataAndRender(element, api, body, dataset);
 /*	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
@@ -115,6 +129,7 @@ async function draw(element, apis, body) {
     });
 
   async function getDataAndRender(element, api, body, dataset){
+    	  console.log(body);
     let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
     dataset[api].data = changeData(dataset[api], newData.data, width, height, labelMargin);
     reRender(element, dataset[api]);
