@@ -129,7 +129,6 @@ async function draw(element, apis, body) {
     });
 
   async function getDataAndRender(element, api, body, dataset){
-    	  console.log(body);
     let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
     dataset[api].data = changeData(dataset[api], newData.data, width, height, labelMargin);
     reRender(element, dataset[api]);
@@ -160,7 +159,7 @@ async function draw(element, apis, body) {
       data[i].origCount = data[i].count;
       data[i].barStart = start;
       data[i].barWidth = barWidth;
-      data[i].targetBarWidth = barWidth;
+      data[i].targetBarWidth = 0;
       start += barWidth;
     }
     data.push({
