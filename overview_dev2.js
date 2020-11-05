@@ -3,7 +3,7 @@ import './timer-a7d16713.js';
 import { m as metastanza, s as select } from './metastanza_utils-962e7f54.js';
 import { p as pointer } from './pointer-be8dd836.js';
 
-async function overviewDev(stanza, params) {
+async function overviewDev2(stanza, params) {
   stanza.render({
     template: 'stanza.html.hbs',
     parameters: {
@@ -32,24 +32,54 @@ async function draw(element, apis, body) {
     let svg = div.append("svg").attr("width", width + labelMargin).attr("height", height);
     svg.append("text").attr("x", 0).attr("y", height / 2).attr("alignment-baseline", "central").text(dataset[api].type);
     
-    dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
+    [dataset[api].data, dataset[api].total] = setData(dataset[api].data, width, height, labelMargin);
     dataset[api].id = id;
     
     svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
-    svg.selectAll("rect")
+    svg.selectAll(".na-bar")
       .data(dataset[api].data)
       .enter()
       .append("rect")
       .attr("x", function(d){ return d.barStart }).attr("y", 0)
-      .attr("width", function(d){ return d.barWidth }).attr("height", height)
+      .attr("width", function(d){ return d.targetBarWidth }).attr("height", height)
+      .attr("width", width + labelMargin).attr("height", height)
+      .attr("class", "na-bar")
+      .on("mouseover", function(e, d){
+	let mouse = pointer(e);
+	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count + "/" + d.origCount)
+	  .attr("x", function(d){
+	    if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
+	    return mouse[0] + 10;
+	  })
+	  .attr("y", height / 2)
+	  .attr("alignment-baseline", "central")
+	  .attr("text-anchor", function(){
+	    if (mouse[0] > width / 2 + labelMargin) return "end";
+	  });
+      })
+      .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove(); })
+      .on("click", async function(e, d){
+	// re-render
+	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	for (let api of apis) {
+	  getDataAndRender(element, api, body, dataset);
+	}
+      });
+    
+    svg.selectAll(".target-bar")
+      .data(dataset[api].data)
+      .enter()
+      .append("rect")
+      .attr("x", function(d){ return d.barStart }).attr("y", 0)
+      .attr("width", function(d){ return d.targetBarWidth }).attr("height", height)
       .attr("id", function(d){ return d.onclick_list[0].id })
       .attr("class", function(d, i){
-	if (d.label != "None") return "bar-style-" + i;
+	if (d.label != "None") return "target-bar bar-style-" + i;
 	return "bar-style-na";
       })
       .on("mouseover", function(e, d){
 	let mouse = pointer(e);
-	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count)
+	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count + "/" + d.origCount)
 	  .attr("x", function(d){
 	    if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
 	    return mouse[0] + 10;
@@ -79,25 +109,26 @@ async function draw(element, apis, body) {
       // reset-render
       body = [];
       for (let api of apis) {
-	dataset[api].data = changeData(dataset[api].data, JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
+	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
 	reRender(element, dataset[api]);
       }
     });
 
   async function getDataAndRender(element, api, body, dataset){
     let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
-    dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
+    dataset[api].data = changeData(dataset[api], newData.data, width, height, labelMargin);
     reRender(element, dataset[api]);
   }  
   function reRender(element, dataset){
+    console.log(dataset.data);
     let svg = select(element).select("#svg_" + dataset.type.replace(/\s/g, "_"));
-    svg.selectAll("rect")
+    svg.selectAll(".target-bar")
       .data(dataset.data)
       .transition()
       .delay(200)
       .duration(1000)
       .attr("x", function(d){ return d.barStart })
-      .attr("width", function(d){ return d.barWidth });
+      .attr("width", function(d){ return d.targetBarWidth });
   }  
   function setData(data, width, height, labelMargin){
     let total = 0;
@@ -109,8 +140,10 @@ async function draw(element, apis, body) {
     for (let i = 0; i < data.length; i++) {
       let barWidth =  width * parseFloat(data[i].count) / total;
       if (data.length - 1 == i) barWidth = width - start + labelMargin;
+      data[i].origCount = data[i].count;
       data[i].barStart = start;
       data[i].barWidth = barWidth;
+      data[i].targetBarWidth = barWidth;
       start += barWidth;
     }
     data.push({
@@ -120,10 +153,10 @@ async function draw(element, apis, body) {
       barWidth: 0,
       onclick_list: [{id: "n-a"}]
     });
-    return data;
+    return [data, total];
   }  
-  function changeData(data, newData, width, height, labelMargin){
-    let total = 0;
+  function changeData(dataset, newData, width, height, labelMargin){
+    let data = dataset.data;
     let label2data = {};
     if (!newData[0]) {
       newData = [{
@@ -132,19 +165,21 @@ async function draw(element, apis, body) {
 	onclick_list: [{id: "n-a"}]
       }];
     }
-    for (let category of newData) {
+    let total = 0;
+    for (let category of data) {
       total += parseFloat(category.count);
+    }
+    for (let category of newData) {
       label2data[category.label] = category;
     }
     let start = labelMargin;
     for (let i = 0; i < data.length; i++) {
-      if (label2data[data[i].label]) data[i] = label2data[data[i].label];
+      if (label2data[data[i].label]) data[i].count = label2data[data[i].label].count;
       else data[i].count = 0;
-      let barWidth =  width * parseFloat(data[i].count) / total;
-      if (data.length - 1 == i) barWidth = width - start + labelMargin;
-      data[i].barStart = start;
-      data[i].barWidth = barWidth;
-      start += barWidth;
+      let targetBarWidth =  width * parseFloat(data[i].count) / dataset.total;
+      if (data.length - 1 == i) targetBarWidth = width - start + labelMargin;
+      data[i].targetBarWidth = targetBarWidth;
+      start += targetBarWidth;
     }
     return data;
   }}
@@ -153,8 +188,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "overview_dev",
-	"stanza:label": "Overview dev",
+	"@id": "overview_dev2",
+	"stanza:label": "Overview dev2",
 	"stanza:definition": "",
 	"stanza:type": "MetaStanza",
 	"stanza:display": "Chart",
@@ -245,7 +280,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}\n\n.na-bar {\n  fill: #dddddd;\n  stroke: #888888;\n  stroke-width: 1px;\n}";
 
-defineStanzaElement(overviewDev, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=overview_dev.js.map
+defineStanzaElement(overviewDev2, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=overview_dev2.js.map
