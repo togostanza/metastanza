@@ -291,7 +291,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<h1>overview</h1>\n<div id=\"chart\"></div>\n";
+    return "<h1>Overview 2</h1>\n<div id=\"chart\"></div>\n";
 },"useData":true}]
 ];
 
