@@ -73,7 +73,7 @@ async function draw(element, apis, body) {
   }
 
   let initDataset = JSON.parse(JSON.stringify(dataset));
-  d3.select(element).append("p").html("reset").style("cursor", "pointer")
+  d3.select(element).append("p").html("&gt; Reset").style("cursor", "pointer")
     .on("click", function(){
       // reset-render
       body = [];
