@@ -62,12 +62,9 @@ async function draw(element, apis, body) {
       .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove() })
       .on("click", async function(e, d){
 	// re-render
-	body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	body.push(dataset[api].type.replace(/\s/g, "_") + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
 	  getDataAndRender(element, api, body, dataset);
-/*	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
-	  dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
-	  reRender(element, dataset[api]); */
 	}
       });
   }
