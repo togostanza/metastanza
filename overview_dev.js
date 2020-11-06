@@ -74,7 +74,7 @@ async function draw(element, apis, body) {
   }
 
   let initDataset = JSON.parse(JSON.stringify(dataset));
-  select(element).append("p").html("reset").style("cursor", "pointer")
+  select(element).append("p").html("&gt; Reset").style("cursor", "pointer")
     .on("click", function(){
       // reset-render
       body = [];
