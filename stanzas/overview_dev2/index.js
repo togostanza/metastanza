@@ -104,6 +104,7 @@ async function draw(element, apis, body) {
 	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin, true);
 	reRender(element, dataset[api]);
       }
+      d3.select(element).selectAll("rect.selected-sign").style("display", "none");
     });
 
   async function getDataAndRender(element, api, body, dataset){
