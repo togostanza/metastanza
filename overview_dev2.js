@@ -11,7 +11,7 @@ async function overviewDev2(stanza, params) {
   });
   
   let apis = JSON.parse(params.apis);
-  if (typeof apis == "object") draw(stanza.root.querySelector('#chart'), apis, []);
+  if (typeof apis == "object") draw(stanza.root.querySelector('#chart'), apis, {});
 }
 
 async function draw(element, apis, body) {
@@ -21,7 +21,7 @@ async function draw(element, apis, body) {
   
   let dataset = {};
   for (let api of apis) {
-    dataset[api] = await metastanza.getFormatedJson(api, element, body.join("&"));
+    dataset[api] = await metastanza.getFormatedJson(api, element, mkBody(body));
   }
   
 
@@ -59,18 +59,30 @@ async function draw(element, apis, body) {
       .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove(); })
       .on("click", async function(e, d){
 	// re-render
-	let flag = true;
-	for (let i = 0; i < body.length; i++) {
-	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type.replace(/\s/g, "_")) {
-	    body[i] += "," + d.onclick_list[0].id;
-	    flag = false;
+	const key = dataset[api].type.replace(/\s/g, "_");
+	const value = d.onclick_list[0].id;
+	if (select(e.currentTarget).select("#selected-sign-" + d.onclick_list[0].id).style("display") == "none"){
+	  if (body[key]) body[key].push(value);
+	  else body[key] = [value];
+	  for (let api of apis) {
+	    getDataAndRender(element, api, body, dataset);
 	  }
+	  select(e.currentTarget).select("#selected-sign-" + d.onclick_list[0].id).style("display", "block");
+	} else {
+	  if (body[key].length == 1) delete body[key];
+	  else {
+	    for (let i = 0; i < body[key].length; i++) {
+	      if (body[key][i] == value) {
+		body[key].splice(i, 1);
+		break;
+	      }
+	    }
+	  }
+	  for (let api of apis) {
+	    getDataAndRender(element, api, body, dataset);
+	  }
+	  select(e.currentTarget).select("#selected-sign-" + d.onclick_list[0].id).style("display", "none");
 	}
-	if (flag) body.push(dataset[api].type.replace(/\s/g, "_") + "=" + d.onclick_list[0].id);
-	for (let api of apis) {
-	  getDataAndRender(element, api, body, dataset);
-	}
-	select(e.currentTarget).select("#selected-sign-" + d.onclick_list[0].id).style("display", "block");
       });
 
     // bg bar
@@ -100,7 +112,7 @@ async function draw(element, apis, body) {
   select(element).append("p").html("&gt; Reset").style("cursor", "pointer")
     .on("click", function(){
       // reset-render
-      body = [];
+      body = {};
       for (let api of apis) {
 	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
 	reRender(element, dataset[api]);
@@ -109,7 +121,7 @@ async function draw(element, apis, body) {
     });
 
   async function getDataAndRender(element, api, body, dataset){
-    let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), body.join("&"));
+    let newData = await metastanza.getFormatedJson(api, element.querySelector('#div_' + dataset[api].id), mkBody(body));
     dataset[api].data = changeData(dataset[api], newData.data, width, height, labelMargin);
     reRender(element, dataset[api]);
   }  
@@ -175,7 +187,17 @@ async function draw(element, apis, body) {
       start += targetBarWidth;
     }
     return data;
-  }}
+  }
+  function mkBody(body){
+    let params = [];
+    for (let key in body) {
+      params.push(key + "=" + body[key].join(","));
+    }
+    console.log(params.join("&"));
+    
+    return params.join("&");
+  }
+}
 
 var metadata = {
 	"@context": {
