@@ -60,12 +60,12 @@ async function draw(element, apis, body) {
 	// re-render
 	let flag = true;
 	for (let i = 0; i < body.length; i++) {
-	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type) {
+	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type.replace(/\s/g, "_")) {
 	    body[i] += "," + d.onclick_list[0].id;
 	    flag = false;
 	  }
 	}
-	if (flag) body.push(dataset[api].type + "=" + d.onclick_list[0].id);
+	if (flag) body.push(dataset[api].type.replace(/\s/g, "_") + "=" + d.onclick_list[0].id);
 	for (let api of apis) {
 	  getDataAndRender(element, api, body, dataset);
 	}
@@ -114,7 +114,6 @@ async function draw(element, apis, body) {
   };
   
   function reRender(element, dataset){
-    console.log(dataset.data);
     let svg = d3.select(element).select("#svg_" + dataset.type.replace(/\s/g, "_"));
     svg.selectAll(".target-bar")
       .data(dataset.data)
