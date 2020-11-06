@@ -36,14 +36,13 @@ async function draw(element, apis, body) {
     dataset[api].id = id;
     
     svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
-    svg.selectAll(".na-bar")
+
+    // bar group
+    let bar_g = svg.selectAll(".bar-g")
       .data(dataset[api].data)
       .enter()
-      .append("rect")
-      .attr("x", function(d){ return d.barStart }).attr("y", 0)
-      .attr("width", function(d){ return d.targetBarWidth }).attr("height", height)
-      .attr("width", width + labelMargin).attr("height", height)
-      .attr("class", "na-bar")
+      .append("g")
+      .attr("class", "bar-g")
       .on("mouseover", function(e, d){
 	let mouse = pointer(e);
 	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count + "/" + d.origCount)
@@ -71,50 +70,30 @@ async function draw(element, apis, body) {
 	for (let api of apis) {
 	  getDataAndRender(element, api, body, dataset);
 	}
+	select(e.currentTarget).select("#selected-sign-" + d.onclick_list[0].id).style("display", "block");
       });
-    
-    svg.selectAll(".target-bar")
-      .data(dataset[api].data)
-      .enter()
-      .append("rect")
+
+    // bg bar
+    bar_g.append("rect").attr("class", "na-bar")
+      .attr("x", function(d){ return d.barStart }).attr("y", 0)
+      .attr("width", function(d){ return d.barWidth }).attr("height", height);
+
+    // ratio bar
+    bar_g.append("rect")
       .attr("x", function(d){ return d.barStart }).attr("y", 0)
       .attr("width", function(d){ return d.targetBarWidth }).attr("height", height)
       .attr("id", function(d){ return d.onclick_list[0].id })
       .attr("class", function(d, i){
 	if (d.label != "None") return "target-bar bar-style-" + i;
 	return "bar-style-na";
-      })
-      .on("mouseover", function(e, d){
-	let mouse = pointer(e);
-	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count + "/" + d.origCount)
-	  .attr("x", function(d){
-	    if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
-	    return mouse[0] + 10;
-	  })
-	  .attr("y", height / 2)
-	  .attr("alignment-baseline", "central")
-	  .attr("text-anchor", function(){
-	    if (mouse[0] > width / 2 + labelMargin) return "end";
-	  });
-      })
-      .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove(); })
-      .on("click", async function(e, d){
-	// re-render
-	let flag = true;
-	for (let i = 0; i < body.length; i++) {
-	  if (body[i].match(/(\w+)=/)[1] == dataset[api].type) {
-	    body[i] += "," + d.onclick_list[0].id;
-	    flag = false;
-	  }
-	}
-	if (flag) body.push(dataset[api].type + "=" + d.onclick_list[0].id);
-	for (let api of apis) {
-	  getDataAndRender(element, api, body, dataset);
-/*	  let newData = await metastanza.getFormatedJson(api, element, body.join("&"));
-	  dataset[api].data = changeData(dataset[api].data, newData.data, width, height, labelMargin);
-	  reRender(element, dataset[api]); */
-	}
       });
+
+    // selected sign
+    bar_g.append("rect")
+      .attr("x", function(d){ return d.barStart }).attr("y", height - 10)
+      .attr("width", function(d){ return d.barWidth }).attr("height", 10)
+      .attr("id", function(d){ return "selected-sign-" + d.onclick_list[0].id })
+      .attr("class", "selected-sign");
   }
 
   let initDataset = JSON.parse(JSON.stringify(dataset));
@@ -295,7 +274,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}\n\n.na-bar {\n  fill: #dddddd;\n  stroke: #888888;\n  stroke-width: 2px;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}\n\n.na-bar {\n  fill: #dddddd;\n  stroke: #888888;\n  stroke-width: 2px;\n}\n\n.selected-sign {\n  display: none;\n  fill: #e33512;\n}";
 
 defineStanzaElement(overviewDev2, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=overview_dev2.js.map
