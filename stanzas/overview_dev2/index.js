@@ -80,7 +80,7 @@ async function draw(element, apis, body) {
     // ratio bar
     bar_g.append("rect")
       .attr("x", function(d){ return d.barStart }).attr("y", 0)
-      .attr("width", function(d){ return d.targetBarWidth }).attr("height", height)
+      .attr("width", function(d){ return d.barWidth }).attr("height", height)
       .attr("id", function(d){ return d.onclick_list[0].id })
       .attr("class", function(d, i){
 	if (d.label != "None") return "target-bar bar-style-" + i;
@@ -101,7 +101,7 @@ async function draw(element, apis, body) {
       // reset-render
       body = [];
       for (let api of apis) {
-	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin, true);
+	dataset[api].data = changeData(dataset[api], JSON.parse(JSON.stringify(initDataset[api].data)), width, height, labelMargin);
 	reRender(element, dataset[api]);
       }
       d3.select(element).selectAll("rect.selected-sign").style("display", "none");
@@ -150,7 +150,7 @@ async function draw(element, apis, body) {
     return [data, total];
   };
   
-  function changeData(dataset, newData, width, height, labelMargin, initFlag){
+  function changeData(dataset, newData, width, height, labelMargin){
     let data = dataset.data;
     let label2data = {};
     if (!newData[0]) {
@@ -174,7 +174,6 @@ async function draw(element, apis, body) {
       let targetBarWidth =  width * parseFloat(data[i].count) / dataset.total;
       if (data.length - 1 == i) targetBarWidth = width - start + labelMargin;
       data[i].targetBarWidth = targetBarWidth;
-      if (initFlag) data[i].targetBarWidth = 0;
       start += targetBarWidth;
     }
     return data;
