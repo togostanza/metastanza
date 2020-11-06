@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-46541929.js';
 import './timer-a7d16713.js';
-import { m as metastanza, s as select } from './metastanza_utils-962e7f54.js';
+import { m as metastanza, s as select } from './metastanza_utils-45dc80dd.js';
 import { p as pointer } from './pointer-be8dd836.js';
 
 async function overviewDev2(stanza, params) {
