@@ -46,18 +46,24 @@ async function draw(element, apis, body) {
 	return "bar-style-na";
       })
       .on("mouseover", function(e, d){
-	let rect = this;
-	let mouse = d3.pointer(e);
-	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count)
-	  .attr("x", function(d){
-	    if (mouse[0] > width / 2 + labelMargin) return mouse[0] - 10;
-	    return mouse[0] + 10;
-	  })
-	  .attr("y", height / 2)
-	  .attr("alignment-baseline", "central")
-	  .attr("text-anchor", function(){
-	    if (mouse[0] > width / 2 + labelMargin) return "end";
-	  });
+	svg.append("text").attr("id", d.onclick_list[0].id).text(d.label + ": " + d.count + "/" + d.origCount)
+	    .attr("x", function(){
+	      let x = d.barStart + d.barWidth / 2;
+	      let left = x - this.getBBox().width / 2;
+	      let right = x + this.getBBox().width / 2;
+	      if (left > labelMargin + 10 && right < labelMargin + width - 10) {
+		d.textAnchor = "middle";
+		return x;
+	      } else if (left < labelMargin + 10){
+		d.textAnchor = "start";
+		return labelMargin + 10;
+	      }
+	      d.textAnchor = "end";
+	      return labelMargin + width - 10;
+	    })
+	    .attr("y", height / 2)
+	    .attr("text-anchor", d.textAnchor)
+	  .attr("dominant-baseline", "central");
       })
       .on("mouseout", function(e, d){ svg.select("text#" + d.onclick_list[0].id).remove() })
       .on("click", async function(e, d){
