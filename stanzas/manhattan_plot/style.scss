@@ -11,11 +11,8 @@ div#chart {
   position: relative;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+text.xLabel {
+  font-size: 8px;
 }
 
 circle.ch_1 {

@@ -55,10 +55,11 @@ async function draw(dataset, element, p_thresh) {
   const max = Object.values(chromosomeNtLength.hg38).reduce((sum, value) => sum +value);
   
   let svg = d3.select(element).append("svg").attr("width", width).attr("height", height);
-
+  let plot_g = svg.append("g").attr("id", "plot_group");
+  
   let max_log_p = 0;
   
-  svg.selectAll(".plot")
+  plot_g.selectAll(".plot")
     .data(dataset)
     .enter()
     .filter(function(d){ return Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) > 0.5 } )
@@ -67,7 +68,7 @@ async function draw(dataset, element, p_thresh) {
     .attr("cx", function(d){
       let start = 0;
       for(let ch of chromosomes){
-	if( ch == d.Chromosome) break;
+	if (ch == d.Chromosome) break;
 	start += chromosomeNtLength.hg38[ch];
       }
       return (parseInt(d.Physical_position) + start) / max * width })
@@ -88,9 +89,26 @@ async function draw(dataset, element, p_thresh) {
     });
 
   let max_log_p_int = Math.floor(max_log_p) + 1;
-  console.log(max_log_p);
   
-  svg.selectAll(".plot")
+  plot_g.selectAll(".plot")
     .attr("cy", function(d){ return height - Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) * height  / max_log_p_int});
+
+  let xlabel_g = svg.append("g").attr("id", "x_label");
+  xlabel_g.selectAll(".xLabel")
+    .data(chromosomes)
+    .enter()
+    .append("text")
+    .attr("class", "xLabel")
+    .text(function(d){ return d; })
+    .attr("x", function(d){
+      let pos = chromosomeNtLength.hg38[d] / 2;
+      for(let ch of chromosomes){
+	if (ch == d) break;
+	pos += chromosomeNtLength.hg38[ch];
+      }
+      return pos / max * width;
+    })
+    .attr("y", height - 10)
+    .attr("text-anchor", "middle");
 
 }
