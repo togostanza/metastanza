@@ -6,7 +6,14 @@ export default async function vegaAreachart(stanza, params) {
   // カラースキームを定義しようとしたけれどできない
   // vega.scheme('basic', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff']);
   // spec.scales[2].range = {"scheme": "var(--color-scheme)"}
-  spec.scales[2].range = {"scheme": "pastel1"}
+  spec.scales[2].range = [
+    'var(--series-0-color)',
+    'var(--series-1-color)',
+    'var(--series-2-color)',
+    'var(--series-3-color)',
+    'var(--series-4-color)',
+    'var(--series-5-color)',
+  ]
   // spec.marks[0].marks[0].encode.enter.strokeWidth.value = "var(--stroke-width)"
 
   stanza.render({
