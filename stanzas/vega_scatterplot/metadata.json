@@ -1,0 +1,82 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "vega_scatterplot",
+  "stanza:label": "Vega scatterplot",
+  "stanza:definition": "vega_wrapping_scatterplot",
+  "stanza:type": "Stanza",
+  "stanza:display": "Graph",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c-nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2020-11-06",
+  "stanza:updated": "2020-11-06",
+  "stanza:parameter": [
+    {
+      "stanza:key": "say-to",
+      "stanza:example": "world",
+      "stanza:description": "who to say hello to",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "your-data",
+      "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
+      "stanza:description": "JSON data url which you want to draw",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "xaxes-title",
+      "stanza:example": "Horsepower",
+      "stanza:description": "title of x-axes",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "yaxes-title",
+      "stanza:example": "Miles_per_Gallon",
+      "stanza:description": "title of y-axes",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "legends-title",
+      "stanza:example": "Acceleration",
+      "stanza:description": "title of legends",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "--symbol-type",
+      "stanza:type": "string",
+      "stanza:example": "circle",
+      "stanza:description":"symbol type of plot."
+    }
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--plot-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "color of plot"
+    },
+    {
+      "stanza:key": "--plot-frame-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "color of plot frame"
+    },
+    {
+      "stanza:key": "--opacity",
+      "stanza:type": "opacity",
+      "stanza:default": "0.5",
+      "stanza:description": "opacity of plot"
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "stroke-width",
+      "stanza:default": "2",
+      "stanza:description": "stroke width of plot"
+    }
+  ]
+}

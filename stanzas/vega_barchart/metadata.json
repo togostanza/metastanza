@@ -1,0 +1,87 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "vega_barchart",
+  "stanza:label": "Vega barchart",
+  "stanza:definition": "vega_wrapping_barchart",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c_nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2020-11-06",
+  "stanza:updated": "2020-11-06",
+  "stanza:parameter": [
+    {
+      "stanza:key": "say-to",
+      "stanza:example": "world",
+      "stanza:description": "who to say hello to",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "src-url",
+      "stanza:example": "https://vega.github.io/vega/examples/bar-chart.vg.json",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "fontsize-of-value",
+      "stanza:type": "number",
+      "stanza:example": "18",
+      "stanza:description": "font size of each value"
+    },
+    {
+      "stanza:key": "font-of-value",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "serif",
+        "sans-serif",
+        "arial"
+      ],
+      "stanza:example": "serif",
+      "stanza:description": "font of each value"
+    },
+    {
+      "stanza:key": "fontweight-of-value",
+      "stanza:type": "string",
+      "stanza:example": "bold",
+      "stanza:description": "font weight of each value"
+    }
+    
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--bar-color",
+      "stanza:type": "color",
+      "stanza:default": "#cdcdc0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--hover-bar-color",
+      "stanza:type": "color",
+      "stanza:default": "#ddbc95",
+      "stanza:description": "bar color when you hover"
+    },
+    {
+      "stanza:key": "--hover-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#ddbc95",
+      "stanza:description": "font color when you hover"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ]
+}

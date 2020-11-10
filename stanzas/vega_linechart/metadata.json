@@ -1,0 +1,68 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "vega_linechart",
+  "stanza:label": "Vega linechart",
+  "stanza:definition": "vega_wrapping_linechart",
+  "stanza:type": "Stanza",
+  "stanza:display": "Text",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c-nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2020-11-07",
+  "stanza:updated": "2020-11-07",
+  "stanza:parameter": [
+    {
+      "stanza:key": "src-url",
+      "stanza:example": "https://vega.github.io/vega/examples/line-chart.vg.json",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "title",
+      "stanza:example": "Example",
+      "stanza:description": "title",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "color-scheme",
+      "stanza:example": "pastel2",
+      "stanza:description": "pastel2",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "pastel1",
+        "pastel2",
+        "set1"
+      ]
+    }
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "2",
+      "stanza:description": "Width of stroke"
+    },
+    {
+      "stanza:key": "--greeting-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "text color of greeting"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ]
+}
