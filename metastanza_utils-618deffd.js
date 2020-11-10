@@ -1793,7 +1793,6 @@ var metastanza = {
       select(element)
 	.append("div").attr("class", "metastanza-loading-icon-div").attr("id", "metastanza-loading-icon-div")
 	.style("position", "absolute").style("top", "10px").style("left", Math.floor(element.offsetWidth / 2) - 30 + "px")
-//	.append("img").attr("class", "metastanza-loading-icon").attr("src", "http://togostanza.org/img/loading.gif");
         .append("img").attr("class", "metastanza-loading-icon").attr("src", "./assets/loading.gif");
     }
     
@@ -1828,8 +1827,10 @@ var metastanza = {
     try {
       return await fetchTimeout(fetch(url, options)).then(res=>{
 	if (res.ok){
-	  if (element) select(element).select("#metastanza-loading-icon-div").remove();
-	  return res.json();
+	  return res.json().then(json => {
+	    select(element).select("#metastanza-loading-icon-div").remove();
+	    return json;
+	  });
 	} else {
 	  this.displayApiError(element, res.status + " " + res.statusText);
 	}
@@ -1886,4 +1887,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-45dc80dd.js.map
+//# sourceMappingURL=metastanza_utils-618deffd.js.map
