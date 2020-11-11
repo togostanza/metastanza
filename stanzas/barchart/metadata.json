@@ -16,33 +16,21 @@
   "stanza:updated": "2020-10-15",
   "stanza:parameter": [
     {
-      "stanza:key": "api",
-      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test",
-      "stanza:description": "URL of API",
+      "stanza:key": "src-url",
+      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test?type=instrument",
+      "stanza:description": "URL of data source",
       "stanza:required": true
     },
     {
-      "stanza:key": "post_params",
-      "stanza:example": "type=instrument",
-      "stanza:description": "API parameters for the POST method",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "title",
+      "stanza:key": "chart-title",
       "stanza:example": "Instrument",
       "stanza:description": "Chart title",
       "stanza:required": false
     },
     {
-      "stanza:key": "label_var_name",
-      "stanza:example": "",
-      "stanza:description": "label var name",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "value_var_name",
-      "stanza:example": "",
-      "stanza:description": "value var name",
+      "stanza:key": "show-legend",
+      "stanza:example": "show-legend",
+      "stanza:description": "Whether or not to the legend",
       "stanza:required": true
     }
   ],
