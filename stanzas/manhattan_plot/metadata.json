@@ -28,10 +28,22 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "p_thresh",
-      "stanza:example": "1e-4",
-      "stanza:description": "hoge",
-      "stanza:required": true
+      "stanza:key": "low_thresh",
+      "stanza:example": "0.5",
+      "stanza:description": "filtering threshold. =log10(p-value) default: 0.5",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "high_thresh",
+      "stanza:example": "4",
+      "stanza:description": "highlight shreshold. =log10(p-value)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "even_and_odd",
+      "stanza:example": false,
+      "stanza:description": "color type",
+      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -43,147 +55,159 @@
       "stanza:description": "chromosome plot"
     },
     {
-      "stanza:key": "--ch-1-color",
+      "stanza:key": "--ch-even-color",
       "stanza:type": "color",
       "stanza:default": "#888888",
+      "stanza:description": "chromosome plot"
+    },
+    {
+      "stanza:key": "--ch-odd-color",
+      "stanza:type": "color",
+      "stanza:default": "#444444",
+      "stanza:description": "chromosome plot"
+    },
+    {
+      "stanza:key": "--ch-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#ffb6b9",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-2-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#fae3d9",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-3-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#bbded6",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-4-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#8ac6d1",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-5-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#a39391",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-6-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#716e77",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-7-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#ecd6c7",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-8-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#e79686",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-9-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#cff09e",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-10-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#a8dba8",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-11-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#79bd9a",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-12-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#3b8686",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-13-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#a1bd93",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-14-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#e1dda1",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-15-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#90a9c6",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-16-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#1794ac",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-17-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#B9A7C2",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-18-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#B6D0C9",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-19-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#C2DFEA",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-20-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#8C95AA",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-21-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#C7AFBD",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-22-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#a4bf5b",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-X-color",
       "stanza:type": "color",
-      "stanza:default": "#888888",
+      "stanza:default": "#79a2a6",
       "stanza:description": "chromosome plot"
     },
     {
       "stanza:key": "--ch-Y-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
+      "stanza:default": "#CCCC99",
       "stanza:description": "chromosome plot"
     },
     {

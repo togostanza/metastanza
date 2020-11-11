@@ -11,8 +11,32 @@ div#chart {
   position: relative;
 }
 
+path.axis-line {
+    stroke: black;
+    stroke-width: 2px;
+}
+
+text.axisLabel {
+  font-size: 10px;
+}
+
 text.xLabel {
-  font-size: 8px;
+    text-anchor: middle;
+    user-select: none;
+}
+
+text.yLabel {
+    text-anchor: end;
+    dominant-alignment: center;
+    user-select: none;
+}
+
+circle.ch_even {
+    fill: var(--ch-even-color);
+}
+
+circle.ch_odd {
+    fill: var(--ch-odd-color);
 }
 
 circle.ch_1 {
