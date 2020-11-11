@@ -1,4 +1,14 @@
-import { T as Timer, d as dispatch, t as timer, i as interpolateNumber, c as color, a as interpolateRgb, b as interpolateString, e as interpolateTransformSvg, f as interpolateTransformCss, n as now } from './timer-a7d16713.js';
+import { T as Timer, w as dispatch, v as timer, i as interpolateNumber, f as color, g as interpolateRgb, h as interpolateString, p as interpolateTransformSvg, o as interpolateTransformCss, u as now } from './timer-be811b16.js';
+
+function timeout(callback, delay, time) {
+  var t = new Timer;
+  delay = delay == null ? 0 : +delay;
+  t.restart(elapsed => {
+    t.stop();
+    callback(elapsed + delay);
+  }, delay, time);
+  return t;
+}
 
 var xhtml = "http://www.w3.org/1999/xhtml";
 
@@ -899,16 +909,6 @@ function select(selector) {
   return typeof selector === "string"
       ? new Selection([[document.querySelector(selector)]], [document.documentElement])
       : new Selection([[selector]], root);
-}
-
-function timeout(callback, delay, time) {
-  var t = new Timer;
-  delay = delay == null ? 0 : +delay;
-  t.restart(elapsed => {
-    t.stop();
-    callback(elapsed + delay);
-  }, delay, time);
-  return t;
 }
 
 var emptyOn = dispatch("start", "end", "cancel", "interrupt");
@@ -1887,4 +1887,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-618deffd.js.map
+//# sourceMappingURL=metastanza_utils-aa9e4d2c.js.map

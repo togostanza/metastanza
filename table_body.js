@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-46541929.js';
+import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
 
 function tableBody(stanza, params) {
     let formBody = [];

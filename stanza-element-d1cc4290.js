@@ -8017,5 +8017,5 @@ function ensureAboutLinkElementDefined() {
   }
 }
 
-export { defineStanzaElement as d };
-//# sourceMappingURL=stanza-element-46541929.js.map
+export { createCommonjsModule as c, defineStanzaElement as d };
+//# sourceMappingURL=stanza-element-d1cc4290.js.map
