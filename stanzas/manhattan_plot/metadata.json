@@ -8,7 +8,7 @@
   "stanza:type": "MetaStanza",
   "stanza:display": "Graph",
   "stanza:provider": "TogoStanza",
-  "stanza:license": "MIT",`
+  "stanza:license": "MIT",
   "stanza:author": "TogoStanza",
   "stanza:address": "admin@biohackathon.org",
   "stanza:contributor": [],
