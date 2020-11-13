@@ -5,7 +5,7 @@
   },
   "@id": "table_pagination_on_memory",
   "stanza:label": "Table pagination metastanza - on memory",
-  "stanza:definition": "Metastanza for table pagination with slider for table data on memory. ,
+  "stanza:definition": "Metastanza for table pagination with slider for table data on memory.",
   "stanza:parameter": [
      {
        "stanza:key": "table_stanza",
