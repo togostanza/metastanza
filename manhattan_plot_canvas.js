@@ -357,7 +357,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "api",
-		"stanza:example": "http://localhost:8080/assets/gwas_test.json",
+		"stanza:example": "https://db-dev.jpostdb.org/test/gwas_test.json",
 		"stanza:description": "api (https://db-dev.jpostdb.org/test/gwas_test.json)",
 		"stanza:required": true
 	},
