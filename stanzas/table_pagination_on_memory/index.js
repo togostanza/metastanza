@@ -1,6 +1,6 @@
 import '@/stanzas/table_body'
 
-export default function tablePagination(stanza, params) {
+export default function tablePaginationOnMemory(stanza, params) {
 
     let page_size_list = [10, 20, 50]
     if(params.page_opt) page_size_list = params.page_opt.split(/,/)

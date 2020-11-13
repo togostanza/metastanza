@@ -3,9 +3,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_pagination_at_once",
-  "stanza:label": "Table pagination metastanza - at once data loading",
-  "stanza:definition": "Metastanza for table pagination with slider, for API with slow response times that you don't want to run repeatedly. First, child-table-stanza gets all data (limit: endpoint limit rows) at once by API and renders all table rows, then hides rows by pagination.",
+  "@id": "table_pagination_on_memory",
+  "stanza:label": "Table pagination metastanza - on memory",
+  "stanza:definition": "Metastanza for table pagination with slider for table data on memory.",
   "stanza:parameter": [
      {
        "stanza:key": "table_stanza",
