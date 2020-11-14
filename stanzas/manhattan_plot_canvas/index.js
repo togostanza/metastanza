@@ -160,6 +160,7 @@ async function draw(dataset, stanza, params) {
 	    let move = delta / areaWidth * total;
 	   // renderCanvas([range[0] + move, range[1] + move]);
 	    canvas.style("left", ((range[0] + move) / (range[0] - range[1]) * areaWidth) + "px").style("display", "block");
+	    setRange([range[0] + move, range[1] + move]);
 	    plot_g.html("");
 	    xlabel_g.html("");
 	  }
@@ -197,13 +198,14 @@ async function draw(dataset, stanza, params) {
       range = [begin, end];
       reRender();
     });
-  ctrl_button.append("input").attr("type", "button").attr("value","+")
+  ctrl_button.append("input").attr("type", "button").attr("value", "+")
     .on("click", function(){
       let begin = range[0] + (range[1] - range[0]) / 4;
       let end = range[1] - (range[1] - range[0]) / 4;
       range = [begin, end];
       reRender();
     });
+  ctrl_button.append("span").attr("id", "range_text");
   ctrl_button.append("input").attr("type", "button").attr("value","reset")
     .on("click", function(){
       range = [];
@@ -323,6 +325,7 @@ async function draw(dataset, stanza, params) {
       .attr("width", (range[1] - range[0]) / total * areaWidth)
       .attr("transform", "translate(0, 0)");
 
+    setRange(range);
   }
   
   function renderCanvas(range){
@@ -332,8 +335,15 @@ async function draw(dataset, stanza, params) {
       ctx.clearRect(0, 0, areaWidth, areaHeight);
       for (let d of dataset) {
 	ctx.beginPath();
-	if (Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh) ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
-	else ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d[chromosome_key] + "-color");
+	if (Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh) {
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
+	} else if (even_and_odd) {
+	  let tmp = "even";
+	  if (d[chromosome_key] == "X" || parseInt(d[chromosome_key]) % 2 == 1) tmp = "odd";
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + tmp + "-color");
+	} else {
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d[chromosome_key] + "-color");
+	}
 	ctx.arc(d.pos / (range[1] - range[0]) * areaWidth, areaHeight  - (Math.log10(parseFloat(d[p_value_key])) * (-1) - low_thresh) * areaHeight  / max_log_p_int, 2 ,0 ,Math.PI * 2);
         ctx.fill();
       }
@@ -341,5 +351,19 @@ async function draw(dataset, stanza, params) {
     }
     canvas.style("display", "none");
   }
+
+  function setRange(range){
+    let start = 0;
+    let text = "";
+    for (let ch of chromosomes) {
+      if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) text += " Ch." + ch + ":" + Math.floor(range[0]);
+      if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
+	text += " - Ch." + ch + ":" + Math.floor(range[1] - start);
+	break;
+      }
+      start +=  chromosomeNtLength.hg38[ch];
+      console.log(start + chromosomeNtLength.hg38[ch])    }
+    ctrl_button.select("#range_text").html(text);
+  }   
   
 }
