@@ -332,8 +332,15 @@ async function draw(dataset, stanza, params) {
       ctx.clearRect(0, 0, areaWidth, areaHeight);
       for (let d of dataset) {
 	ctx.beginPath();
-	if (Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh) ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
-	else ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d[chromosome_key] + "-color");
+	if (Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh) {
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
+	} else if (even_and_odd) {
+	  let tmp = "even";
+	  if (d[chromosome_key] == "X" || parseInt(d[chromosome_key]) % 2 == 1) tmp = "odd";
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + tmp + "-color");
+	} else {
+	  ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d[chromosome_key] + "-color");
+	}
 	ctx.arc(d.pos / (range[1] - range[0]) * areaWidth, areaHeight  - (Math.log10(parseFloat(d[p_value_key])) * (-1) - low_thresh) * areaHeight  / max_log_p_int, 2 ,0 ,Math.PI * 2);
         ctx.fill();
       }
