@@ -160,6 +160,7 @@ async function draw(dataset, stanza, params) {
 	    let move = delta / areaWidth * total;
 	   // renderCanvas([range[0] + move, range[1] + move]);
 	    canvas.style("left", ((range[0] + move) / (range[0] - range[1]) * areaWidth) + "px").style("display", "block");
+	    setRange([range[0] + move, range[1] + move]);
 	    plot_g.html("");
 	    xlabel_g.html("");
 	  }
@@ -197,13 +198,14 @@ async function draw(dataset, stanza, params) {
       range = [begin, end];
       reRender();
     });
-  ctrl_button.append("input").attr("type", "button").attr("value","+")
+  ctrl_button.append("input").attr("type", "button").attr("value", "+")
     .on("click", function(){
       let begin = range[0] + (range[1] - range[0]) / 4;
       let end = range[1] - (range[1] - range[0]) / 4;
       range = [begin, end];
       reRender();
     });
+  ctrl_button.append("span").attr("id", "range_text");
   ctrl_button.append("input").attr("type", "button").attr("value","reset")
     .on("click", function(){
       range = [];
@@ -323,6 +325,7 @@ async function draw(dataset, stanza, params) {
       .attr("width", (range[1] - range[0]) / total * areaWidth)
       .attr("transform", "translate(0, 0)");
 
+    setRange(range);
   }
   
   function renderCanvas(range){
@@ -348,5 +351,19 @@ async function draw(dataset, stanza, params) {
     }
     canvas.style("display", "none");
   }
+
+  function setRange(range){
+    let start = 0;
+    let text = "";
+    for (let ch of chromosomes) {
+      if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) text += " Ch." + ch + ":" + Math.floor(range[0]);
+      if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
+	text += " - Ch." + ch + ":" + Math.floor(range[1] - start);
+	break;
+      }
+      start +=  chromosomeNtLength.hg38[ch];
+      console.log(start + chromosomeNtLength.hg38[ch])    }
+    ctrl_button.select("#range_text").html(text);
+  }   
   
 }
