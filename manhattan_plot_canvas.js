@@ -29,10 +29,18 @@ async function draw(dataset, stanza, params) {
 
   if (params.low_thresh == "") params.low_thresh = 0.5;
   if (params.high_thresh == "") params.high_thresh = Infinity;
+  if (params.chromosome_key == "") params.chromosome_key = "chromosome";
+  if (params.position_key == "") params.position_key = "position";
+  if (params.p_value_key == "") params.p_value__key = "p-value";
+  if (params.label_key == "") params.label_key = "label";
   const low_thresh = parseFloat(params.low_thresh);
   const high_thresh = parseFloat(params.high_thresh);
   const even_and_odd = (params.even_and_odd == 'true');
-
+  const chromosome_key = params.chromosome_key;
+  const position_key = params.position_key;
+  const p_value_key = params.p_value_key;
+  const label_key = params.label_key;
+  
   const chromosomes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20","21", "22", "X", "Y"];
   const chromosomeNtLength = {
     hg38: {
@@ -227,37 +235,37 @@ async function draw(dataset, stanza, params) {
 	  // calculate  accumulated position
 	  let pos = 0;
 	  for(let ch of chromosomes){
-	    if (ch == d.Chromosome) break;
+	    if (ch == d[chromosome_key]) break;
 	    pos += chromosomeNtLength.hg38[ch];
 	  }
-	  d.pos = pos + parseInt(d.Physical_position);
+	  d.pos = pos + parseInt(d[position_key]);
 	}
 	return range[0] <= d.pos && d.pos <= range[1];
       })
     // filter: low p-value
-      .filter(function(d){ return Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) > low_thresh })
+      .filter(function(d){ return Math.log10(parseFloat(d[p_value_key])) * (-1) > low_thresh })
       .append("circle")
       .attr("class", function(d, i){
 	if (even_and_odd) {
 	  let tmp = "even";
-	  if (d.Chromosome == "X" || parseInt(d.Chromosome) % 2 == 1) tmp = "odd";
+	  if (d[chromosome_key] == "X" || parseInt(d[chromosome_key]) % 2 == 1) tmp = "odd";
 	  return "plot ch_" + tmp;
 	}
-	return "plot ch_" + d.Chromosome
+	return "plot ch_" + d[chromosome_key]
       })
       .attr("cx", function(d){
 	return (d.pos - range[0]) / (range[1] - range[0]) * areaWidth + marginLeft})
       .attr("cy",function(d){
 	// set max log(p-value)
-	if (max_log_p < Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1)) max_log_p = Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1);
+	if (max_log_p < Math.log10(parseFloat(d[p_value_key])) * (-1)) max_log_p = Math.log10(parseFloat(d[p_value_key])) * (-1);
 	return areaHeight;
       })
       .attr("r", 2)
     // filter: high p-value
-      .filter(function(d){return Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) > high_thresh })
+      .filter(function(d){return Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh })
       .classed("over-thresh-plot", true)
       .on("mouseover", function(e, d){
-	svg.append("text").text(d.dbSNP_RS_ID + ", " + d.Symbol)
+	svg.append("text").text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
 	  .attr("x", pointer(e)[0] + 10).attr("y", pointer(e)[1]).attr("id", "popup_text");
       })
       .on("mouseout", function(e, d){
@@ -267,7 +275,7 @@ async function draw(dataset, stanza, params) {
     // set 'cy' from max log(p-value) (int)
     if (max_log_p_int == undefined) max_log_p_int = Math.floor(max_log_p);
     plot_g.selectAll(".plot")
-      .attr("cy", function(d){ return areaHeight  - (Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) - low_thresh) * areaHeight  / max_log_p_int});
+      .attr("cy", function(d){ return areaHeight  - (Math.log10(parseFloat(d[p_value_key])) * (-1) - low_thresh) * areaHeight  / max_log_p_int});
 
     renderCanvas(range);
     
@@ -325,9 +333,9 @@ async function draw(dataset, stanza, params) {
       ctx.clearRect(0, 0, areaWidth, areaHeight);
       for (let d of dataset) {
 	ctx.beginPath();
-	if (Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) > high_thresh) ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
-	else ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d.Chromosome + "-color");
-	ctx.arc(d.pos / (range[1] - range[0]) * areaWidth, areaHeight  - (Math.log10(parseFloat(d.CLR_C_BMI_pv)) * (-1) - low_thresh) * areaHeight  / max_log_p_int, 2 ,0 ,Math.PI * 2);
+	if (Math.log10(parseFloat(d[p_value_key])) * (-1) > high_thresh) ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--over-thresh-color");
+	else ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue("--ch-" + d[chromosome_key] + "-color");
+	ctx.arc(d.pos / (range[1] - range[0]) * areaWidth, areaHeight  - (Math.log10(parseFloat(d[p_value_key])) * (-1) - low_thresh) * areaHeight  / max_log_p_int, 2 ,0 ,Math.PI * 2);
         ctx.fill();
       }
       canvas.style("left", (range[0] / (range[0] - range[1]) * areaWidth) + "px");
@@ -364,7 +372,31 @@ var metadata = {
 	{
 		"stanza:key": "title",
 		"stanza:example": "Manhattan plot",
-		"stanza:description": "hoge",
+		"stanza:description": "title",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "chromosome_key",
+		"stanza:example": "Chromosome",
+		"stanza:description": "key to a chromosome in data frame. default: 'chromosome'",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "position_key",
+		"stanza:example": "Physical_position",
+		"stanza:description": "key to a position on chromosome in data frame. default: 'position'",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "p_value_key",
+		"stanza:example": "CLR_C_BMI_pv",
+		"stanza:description": "key to a p-value in data frame. default: 'p-value'",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "label_key",
+		"stanza:example": "dbSNP_RS_ID",
+		"stanza:description": "key to a label in data frame. default: 'label'",
 		"stanza:required": false
 	},
 	{

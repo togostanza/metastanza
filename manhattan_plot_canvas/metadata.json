@@ -24,7 +24,31 @@
     {
       "stanza:key": "title",
       "stanza:example": "Manhattan plot",
-      "stanza:description": "hoge",
+      "stanza:description": "title",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "chromosome_key",
+      "stanza:example": "Chromosome",
+      "stanza:description": "key to a chromosome in data frame. default: 'chromosome'",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "position_key",
+      "stanza:example": "Physical_position",
+      "stanza:description": "key to a position on chromosome in data frame. default: 'position'",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "p_value_key",
+      "stanza:example": "CLR_C_BMI_pv",
+      "stanza:description": "key to a p-value in data frame. default: 'p-value'",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label_key",
+      "stanza:example": "dbSNP_RS_ID",
+      "stanza:description": "key to a label in data frame. default: 'label'",
       "stanza:required": false
     },
     {
