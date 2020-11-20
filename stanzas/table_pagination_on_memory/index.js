@@ -151,7 +151,7 @@ export default function tablePaginationOnMemory(stanza, params) {
 	    dragF = true;
 	    startX = e.pageX;
 	};
-	window.onmousemove = (e)=>{
+	div.onmousemove = (e)=>{
 	    if(dragF){
 		let width = slider.offsetWidth - knob.offsetWidth;
 		let dragX = knobX + e.pageX - startX;
@@ -174,7 +174,7 @@ export default function tablePaginationOnMemory(stanza, params) {
 		}
 	    }
 	};
-	window.onmouseup = (e)=>{
+	div.onmouseup = (e)=>{
 	    if(dragF){
 		knobX += e.pageX - startX;
 		current_page = parseInt(knob.innerHTML) - 1;
