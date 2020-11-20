@@ -11,6 +11,10 @@ div#chart {
   position: relative;
 }
 
+div#chart svg {
+    cursor: crosshair;
+}
+
 path.axis-line {
     stroke: black;
     stroke-width: 2px;
@@ -137,4 +141,5 @@ circle.ch_Y {
 
 circle.over-thresh-plot {
     fill: var(--over-thresh-color);
+    cursor: default;
 }
