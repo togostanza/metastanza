@@ -94,10 +94,10 @@
       "stanza:description": "title of Yaxis"
     },
     {
-      "stanza:key": "xtitle-size",
+      "stanza:key": "title-size",
       "stanza:type": "number",
       "stanza:example": "12",
-      "stanza:description": "font size of labels"
+      "stanza:description": "font size of titles"
     },
     {
       "stanza:key": "axis-color",

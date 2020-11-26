@@ -47,7 +47,7 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
-        "fontSize": {"value": params["xtitle-size"]}
+        "fontSize": {"value": params["title-size"]}
       }
     },
     "domain": {
@@ -76,7 +76,7 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
-        "fontSize": {"value": params["ytitle-size"]}
+        "fontSize": {"value": params["title-size"]}
       }
     },
     "domain": {
