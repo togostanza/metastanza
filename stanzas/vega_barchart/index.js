@@ -3,38 +3,130 @@ import vegaEmbed from "vega-embed";
 export default async function vegaBarchart(stanza, params) {
   let spec = await fetch(params["src-url"]).then((res) => res.json());
   spec.data[0].values = [
-    {"category": "a", "amount": 128},
-    {"category": "b", "amount": 5},
-    {"category": "c", "amount": 43},
-    {"category": "d", "amount": 91},
-    {"category": "e", "amount": 81},
-    {"category": "f", "amount": 53},
-    {"category": "g", "amount": 19},
-    {"category": "h", "amount": 87}
+    {"category": "value1", "amount": 1},
+    {"category": "value2", "amount": 7},
+    {"category": "value3", "amount": 5},
+    {"category": "value4", "amount": 9},
   ]
 
-  // signalにtextのプロパティの選択肢を追加することもできる
-  spec.signals[1] = { 
-    "name": "font",
-    "value": "sans-serif",
-    "bind": {"input": "select", "options": ["sans-serif", "serif", "monospace","arial"]}
+  //stanza（描画範囲）のwidth・height
+  spec.width = params["width"]; 
+  spec.height = params["width"];
+  
+  //stanzaのpadding
+  spec.padding = params["padding"];
+
+  //イベントなど設定できるかと思ったができない
+  // spec.signals[0].on[0].events = "click"
+  // spec.signals[0].on[1].events = "click"
+
+  //棒・スケールに関する設定
+  spec.scales[0].paddingInner = params["padding-inner"]
+  spec.scales[0].paddingOuter = params["padding-outer"]
+
+  //軸に関する設定
+  spec.axes[0].orient = params["orient-of-xscale"]
+  spec.axes[1].orient = params["orient-of-yscale"]
+  spec.axes[0].title = params["title-of-xaxis"]
+  spec.axes[1].title = params["title-of-yaxis"]
+  spec.axes[0].encode = {
+    "ticks": {
+      "update": {
+      "stroke": {"value": params["tick-color"]}
+      }
+    },
+    "labels": {
+      "interactive": true,
+      "update": {
+        "fill": {"value": params["label-color"]},
+        "fontSize": {"value": params["label-size"]},
+      },
+      "hover": {
+        "fill": {"value": "var(--emphasized-color)"}
+      }
+    },
+    "title": {
+      "update": {
+        "fontSize": {"value": params["xtitle-size"]}
+      }
+    },
+    "domain": {
+      "update": {
+        "stroke": {"value": params["axis-color"]},
+        "strokeWidth": {"value": params["axis-width"]}
+      }
+    }
   }
 
-  // spec.signals[2] = { 
-  //   "name": "fontSize",
-  //   "value": 18,
-  //   "bind": {"input": "range", "min": 0, "max": 150, "step": 1}
-  // }
+  spec.axes[1].encode = {
+    "ticks": {
+      "update": {
+      "stroke": {"value": params["tick-color"]}
+      }
+    },
+    "labels": {
+      "interactive": true,
+      "update": {
+        "fill": {"value": params["label-color"]},
+        "fontSize": {"value": params["label-size"]},
+      },
+      "hover": {
+        "fill": {"value": "var(--emphasized-color)"}
+      }
+    },
+    "title": {
+      "update": {
+        "fontSize": {"value": params["ytitle-size"]}
+      }
+    },
+    "domain": {
+      "update": {
+        "stroke": {"value": params["axis-color"]},
+        "strokeWidth": {"value": params["axis-width"]}
+      }
+    }
+  }
 
-  spec.marks[1].encode.enter.font = {signal: "font"}
-  // spec.marks[1].encode.enter.fontSize = {signal: "fontSize"}
+  //rect（棒）の描画について
+  spec.marks[0].encode ={
+    "enter": {
+      "x": {"scale": "xscale", "field": "category"},
+      "width": {"scale": "xscale", "band": params["bar-width"]},
+      "y": {"scale": "yscale", "field": "amount"},
+      "y2": {"scale": "yscale", "value": 0},
+    },
+    "update": {
+      "fill": {"value": "var(--bar-color)"}
+    },
+    "hover": {
+      "fill": {"value": "var(--emphasized-color)"}
+    }
+  }
 
-  spec.marks[0].encode.update.fill.value = "var(--bar-color)"
-  spec.marks[0].encode.hover.fill.value = "var(--hover-bar-color)"
-  spec.marks[1].encode.enter.fill.value = "var(--hover-font-color)"
-  // spec.marks[1].encode.enter.font = {value: params["font-of-value"]}
-  spec.marks[1].encode.enter.fontSize = {value: params["fontsize-of-value"]}
-  spec.marks[1].encode.enter.fontWeight = {value: params["fontweight-of-value"]}
+  spec.marks[1].encode ={
+    "enter": {
+      "align": {"value": "center"},
+      "baseline": {"value": "bottom"},
+      "fill": {"value": "var(--emphasized-color)"},
+      "fontSize": {value: params["fontsize-of-value"]}
+    },
+    "update": {
+      "x": {"scale": "xscale", "signal": "tooltip.category", "band": 0.5},
+      "y": {"scale": "yscale", "signal": "tooltip.amount", "offset": -1},
+      "text": {"signal": "tooltip.amount"},
+      "fillOpacity": [
+        {"test": "datum === tooltip", "value": 0},
+        {"value": 1}
+      ]
+    }
+  }
+
+
+  // spec.marks[0].encode.update.fill.value = "var(--bar-color)"
+  // spec.marks[0].encode.hover.fill.value = "var(--emphasized-color)"
+  // spec.marks[1].encode.enter.fill.value = "var(--emphasized-color)"
+  // spec.marks[1].encode.enter.fontSize = {value: params["fontsize-of-value"]}
+  // spec.marks[1].encode.enter.fontWeight = {value: params["fontweight-of-value"]}
 
   const el = stanza.root.querySelector("main");
   const opts = {

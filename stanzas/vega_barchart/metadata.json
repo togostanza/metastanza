@@ -16,16 +16,106 @@
   "stanza:updated": "2020-11-06",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "src-url",
       "stanza:example": "https://vega.github.io/vega/examples/bar-chart.vg.json",
       "stanza:description": "source url which returns Vega specification compliant JSON",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "width of your stanza"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "height of your stanza"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": "20",
+      "stanza:description": "padding around your stanza"
+    },
+    {
+      "stanza:key": "padding-inner",
+      "stanza:type": "range",
+      "stanza:example": "0.1",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "padding-outer",
+      "stanza:type": "range",
+      "stanza:example": "0.2",
+      "stanza:description": "padding outside a set of bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "orient-of-xscale",
+      "stanza:type": "string",
+      "stanza:example": "bottom",
+      "stanza:description": "orient of xscale.(please select top or bottom)"
+    },
+    {
+      "stanza:key": "orient-of-yscale",
+      "stanza:type": "string",
+      "stanza:example": "left",
+      "stanza:description": "orient of yscale.(please select left or right)"
+    },
+    {
+      "stanza:key": "tick-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "tick color"
+    },
+    {
+      "stanza:key": "label-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "label color"
+    },
+    {
+      "stanza:key": "label-size",
+      "stanza:type": "number",
+      "stanza:example": "12",
+      "stanza:description": "font size of labels"
+    },
+    {
+      "stanza:key": "title-of-xaxis",
+      "stanza:type": "string",
+      "stanza:example": "title of Xaxis",
+      "stanza:description": "title of Xaxis"
+    },
+    {
+      "stanza:key": "title-of-yaxis",
+      "stanza:type": "string",
+      "stanza:example": "title of Yaxis",
+      "stanza:description": "title of Yaxis"
+    },
+    {
+      "stanza:key": "xtitle-size",
+      "stanza:type": "number",
+      "stanza:example": "12",
+      "stanza:description": "font size of labels"
+    },
+    {
+      "stanza:key": "axis-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "color of axis"
+    },
+    {
+      "stanza:key": "axis-width",
+      "stanza:type": "number",
+      "stanza:example": "1",
+      "stanza:description": "width of axis"
+    },
+    {
+      "stanza:key": "bar-width",
+      "stanza:type": "number",
+      "stanza:example": "0.8",
+      "stanza:description": "width of bars.This mast be in the range[0,1]"
     },
     {
       "stanza:key": "fontsize-of-value",
@@ -57,31 +147,14 @@
     {
       "stanza:key": "--bar-color",
       "stanza:type": "color",
-      "stanza:default": "#cdcdc0",
+      "stanza:default": "#94d0da",
       "stanza:description": "bar color"
     },
     {
-      "stanza:key": "--hover-bar-color",
+      "stanza:key": "--emphasized-color",
       "stanza:type": "color",
-      "stanza:default": "#ddbc95",
-      "stanza:description": "bar color when you hover"
-    },
-    {
-      "stanza:key": "--hover-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#ddbc95",
-      "stanza:description": "font color when you hover"
-    },
-    {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:default": "#ec7d8d",
+      "stanza:description": "emphasized color when you hover on labels and rects"
     }
   ]
 }
