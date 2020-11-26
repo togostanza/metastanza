@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default function vegaScatterplot(stanza, params) {
-  //let spec = await fetch(params["src-url"]).then((res) => res.json());
+  // let spec = await fetch(params["src-url"]).then((res) => res.json());
   let spec = {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
     "description": "A basic scatter plot example depicting automobile statistics.",
