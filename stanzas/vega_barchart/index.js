@@ -12,6 +12,8 @@ export default async function vegaBarchart(stanza, params) {
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"]; 
   spec.height = params["height"];
+  // spec.width = "var(--width)"
+  // spec.height = "var(--height)"
   
   //stanzaのpadding
   spec.padding = params["padding"];

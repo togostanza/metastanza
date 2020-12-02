@@ -145,7 +145,7 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "basic-fill-color",
+      "stanza:key": "--basic-fill-color",
       "stanza:type": "color",
       "stanza:default": "#94d0da",
       "stanza:description": "bar color"
@@ -154,6 +154,12 @@
       "stanza:key": "--emphasized-color",
       "stanza:type": "color",
       "stanza:default": "#ec7d8d",
+      "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
       "stanza:description": "emphasized color when you hover on labels and rects"
     }
   ]
