@@ -12,8 +12,8 @@ export default async function vegaBarchart(stanza, params) {
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"];
   spec.height = params["height"];
-  // spec.width = "var(--width)"
-  // spec.height = "var(--height)"
+  // spec.width = getComputedStyle(stanza.root.host).getPropertyValue("var(--width)")
+  // spec.height = getComputedStyle(stanza.root.host).getPropertyValue("var(--height)")
 
   //stanzaのpadding
   spec.padding = params["padding"];
@@ -23,24 +23,28 @@ export default async function vegaBarchart(stanza, params) {
   // spec.signals[0].on[1].events = "click"
 
   //棒・スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"]
-  spec.scales[0].paddingOuter = params["padding-outer"]
-
+  spec.scales[0].paddingInner = 0.1
+  spec.scales[0].paddingOuter = 0.1
+  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner")
+  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer")
+  
   //軸に関する設定
   spec.axes[0].orient = params["orient-of-xscale"]
   spec.axes[1].orient = params["orient-of-yscale"]
+  // spec.axes[0].orient = getComputedStyle(stanza.root.host).getPropertyValue("--orient-of-xscale")
+  // spec.axes[1].orient = getComputedStyle(stanza.root.host).getPropertyValue("--orient-of-yscale")
   spec.axes[0].title = params["title-of-xaxis"]
   spec.axes[1].title = params["title-of-yaxis"]
   spec.axes[0].encode = {
     "ticks": {
       "update": {
-      "stroke": {"value": params["tick-color"]}
+      "stroke": {"value": "var(--tick-color)"}
       }
     },
     "labels": {
       "interactive": true,
       "update": {
-        "fill": {"value": params["label-color"]},
+        "fill": {"value": "var(--label-color)"},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -49,13 +53,13 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
-        "fontSize": {"value": params["title-size"]}
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
     "domain": {
       "update": {
-        "stroke": {"value": params["axis-color"]},
-        "strokeWidth": {"value": params["axis-width"]}
+        "stroke": {"value": "var(--axis-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
       }
     }
   }
@@ -63,13 +67,13 @@ export default async function vegaBarchart(stanza, params) {
   spec.axes[1].encode = {
     "ticks": {
       "update": {
-      "stroke": {"value": params["tick-color"]}
+      "stroke": {"value": "var(--tick-color)"}
       }
     },
     "labels": {
       "interactive": true,
       "update": {
-        "fill": {"value": params["label-color"]},
+        "fill": {"value": "var(--label-color)"},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -78,13 +82,13 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
-        "fontSize": {"value": params["title-size"]}
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
     "domain": {
       "update": {
-        "stroke": {"value": params["axis-color"]},
-        "strokeWidth": {"value": params["axis-width"]}
+        "stroke": {"value": "var(--axis-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
       }
     }
   }
@@ -110,7 +114,8 @@ export default async function vegaBarchart(stanza, params) {
       "align": {"value": "center"},
       "baseline": {"value": "bottom"},
       "fill": {"value": "var(--emphasized-color)"},
-      "fontSize": {value: params["fontsize-of-value"]}
+      "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
+      "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
     },
     "update": {
       "x": {"scale": "xscale", "signal": "tooltip.category", "band": 0.5},

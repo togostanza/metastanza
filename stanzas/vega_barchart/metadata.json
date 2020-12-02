@@ -40,18 +40,6 @@
       "stanza:description": "padding around your stanza"
     },
     {
-      "stanza:key": "padding-inner",
-      "stanza:type": "range",
-      "stanza:example": "0.1",
-      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
-    },
-    {
-      "stanza:key": "padding-outer",
-      "stanza:type": "range",
-      "stanza:example": "0.2",
-      "stanza:description": "padding outside a set of bars.This mast be in the range[0,1]"
-    },
-    {
       "stanza:key": "orient-of-xscale",
       "stanza:type": "string",
       "stanza:example": "bottom",
@@ -62,18 +50,6 @@
       "stanza:type": "string",
       "stanza:example": "left",
       "stanza:description": "orient of yscale.(please select left or right)"
-    },
-    {
-      "stanza:key": "tick-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "tick color"
-    },
-    {
-      "stanza:key": "label-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "label color"
     },
     {
       "stanza:key": "label-size",
@@ -94,53 +70,11 @@
       "stanza:description": "title of Yaxis"
     },
     {
-      "stanza:key": "title-size",
-      "stanza:type": "number",
-      "stanza:example": "12",
-      "stanza:description": "font size of titles"
-    },
-    {
-      "stanza:key": "axis-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "color of axis"
-    },
-    {
-      "stanza:key": "axis-width",
-      "stanza:type": "number",
-      "stanza:example": "1",
-      "stanza:description": "width of axis"
-    },
-    {
       "stanza:key": "bar-width",
       "stanza:type": "number",
       "stanza:example": "0.8",
       "stanza:description": "width of bars.This mast be in the range[0,1]"
-    },
-    {
-      "stanza:key": "fontsize-of-value",
-      "stanza:type": "number",
-      "stanza:example": "18",
-      "stanza:description": "font size of each value"
-    },
-    {
-      "stanza:key": "font-of-value",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "serif",
-        "sans-serif",
-        "arial"
-      ],
-      "stanza:example": "serif",
-      "stanza:description": "font of each value"
-    },
-    {
-      "stanza:key": "fontweight-of-value",
-      "stanza:type": "string",
-      "stanza:example": "bold",
-      "stanza:description": "font weight of each value"
     }
-    
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
@@ -157,10 +91,64 @@
       "stanza:description": "emphasized color when you hover on labels and rects"
     },
     {
+      "stanza:key": "--padding-inner",
+      "stanza:type": "number",
+      "stanza:dafault": "0.1",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "--padding-outer",
+      "stanza:type": "number",
+      "stanza:dafault": "0.1",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "--tick-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "tick color"
+    },
+    {
+      "stanza:key": "--label-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "label color"
+    },
+    {
+      "stanza:key": "--axis-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "color of axis"
+    },
+    {
+      "stanza:key": "--title-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
+      "stanza:description": "font size of titles"
+    },
+    {
       "stanza:key": "--label-size",
       "stanza:type": "number",
       "stanza:default": "12",
       "stanza:description": "emphasized color when you hover on labels and rects"
-    }
+    },
+    {
+      "stanza:key": "--axis-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "width of axis"
+    },
+    {
+      "stanza:key": "--fontsize-of-value",
+      "stanza:type": "number",
+      "stanza:default": "18",
+      "stanza:description": "font size of each value"
+    },
+    {
+      "stanza:key": "--fontweight-of-value",
+      "stanza:type": "string",
+      "stanza:default": "bold",
+      "stanza:description": "font weight of each value"
+    }  
   ]
 }
