@@ -145,7 +145,7 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--bar-color",
+      "stanza:key": "basic-fill-color",
       "stanza:type": "color",
       "stanza:default": "#94d0da",
       "stanza:description": "bar color"

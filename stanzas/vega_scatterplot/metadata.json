@@ -16,10 +16,10 @@
   "stanza:updated": "2020-11-06",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
-      "stanza:required": false
+      "stanza:key": "src-url",
+      "stanza:example": "https://vega.github.io/vega/examples/scatter-plot.vg.json",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
     },
     {
       "stanza:key": "your-data",
@@ -28,25 +28,121 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "xaxes-title",
-      "stanza:example": "Horsepower",
-      "stanza:description": "title of x-axes",
-      "stanza:required": true
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "width of your stanza"
     },
     {
-      "stanza:key": "yaxes-title",
-      "stanza:example": "Miles_per_Gallon",
-      "stanza:description": "title of y-axes",
-      "stanza:required": true
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "height of your stanza"
     },
     {
-      "stanza:key": "legends-title",
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": "20",
+      "stanza:description": "padding around your stanza"
+    },
+    {
+      "stanza:key": "orient-of-xscale",
+      "stanza:type": "string",
+      "stanza:example": "bottom",
+      "stanza:description": "orient of xscale.(please select top or bottom)"
+    },
+    {
+      "stanza:key": "orient-of-yscale",
+      "stanza:type": "string",
+      "stanza:example": "left",
+      "stanza:description": "orient of yscale.(please select left or right)"
+    },
+    {
+      "stanza:key": "tick-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "tick color"
+    },
+    {
+      "stanza:key": "label-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "label color"
+    },
+    {
+      "stanza:key": "label-size",
+      "stanza:type": "number",
+      "stanza:example": "12",
+      "stanza:description": "font size of labels"
+    },
+    {
+      "stanza:key": "title-of-xaxis",
+      "stanza:type": "string",
+      "stanza:example": "title of Xaxis",
+      "stanza:description": "title of Xaxis"
+    },
+    {
+      "stanza:key": "title-of-yaxis",
+      "stanza:type": "string",
+      "stanza:example": "title of Yaxis",
+      "stanza:description": "title of Yaxis"
+    },
+    {
+      "stanza:key": "title-of-legend",
+      "stanza:type": "string",
       "stanza:example": "Acceleration",
-      "stanza:description": "title of legends",
-      "stanza:required": true
+      "stanza:description": "title of legends"
     },
     {
-      "stanza:key": "--symbol-type",
+      "stanza:key": "title-size",
+      "stanza:type": "number",
+      "stanza:example": "12",
+      "stanza:description": "font size of titles"
+    },
+    {
+      "stanza:key": "axis-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description": "color of axis"
+    },
+    {
+      "stanza:key": "axis-width",
+      "stanza:type": "number",
+      "stanza:example": "1",
+      "stanza:description": "width of axis"
+    },
+    {
+      "stanza:key": "xgrid",
+      "stanza:type": "Boolean",
+      "stanza:example": false,
+      "stanza:description": "display of x grids"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:type": "Boolean",
+      "stanza:example": false,
+      "stanza:description": "display of y grids"
+    },
+    {
+      "stanza:key": "stroke-color",
+      "stanza:type": "color",
+      "stanza:example": "#333",
+      "stanza:description":"symbol type of plot."
+    },
+    {
+      "stanza:key": "stroke-width",
+      "stanza:type": "number",
+      "stanza:example": "1",
+      "stanza:description":"stroke width"
+    }, 
+    {
+      "stanza:key": "opacity",
+      "stanza:type": "number",
+      "stanza:example": "0.7",
+      "stanza:description":"opacity of each plots"
+    }, 
+    {
+      "stanza:key": "symbol-type",
       "stanza:type": "string",
       "stanza:example": "circle",
       "stanza:description":"symbol type of plot."
@@ -55,28 +151,16 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--plot-color",
+      "stanza:key": "--basic-fill-color",
       "stanza:type": "color",
-      "stanza:default": "#eb7900",
+      "stanza:default": "#4682b4",
       "stanza:description": "color of plot"
     },
     {
-      "stanza:key": "--plot-frame-color",
+      "stanza:key": "--emphasized-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
-      "stanza:description": "color of plot frame"
-    },
-    {
-      "stanza:key": "--opacity",
-      "stanza:type": "opacity",
-      "stanza:default": "0.5",
-      "stanza:description": "opacity of plot"
-    },
-    {
-      "stanza:key": "--stroke-width",
-      "stanza:type": "stroke-width",
-      "stanza:default": "2",
-      "stanza:description": "stroke width of plot"
+      "stanza:default": "#ec7d8d",
+      "stanza:description": "emphasized color when you hover on labels and rects"
     }
   ]
 }

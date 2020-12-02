@@ -23,10 +23,22 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "title",
-      "stanza:example": "Example",
-      "stanza:description": "title",
-      "stanza:required": true
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "width of your stanza"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "height of your stanza"
+    },
+    {
+      "stanza:key": "autosize",
+      "stanza:type": "number",
+      "stanza:example": "none",
+      "stanza:description": ""
     },
     {
       "stanza:key": "color-scheme",
@@ -39,26 +51,27 @@
         "set1"
       ],
       "stanza:required": false
+    },
+    {
+      "stanza:key": "inner-padding-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of inner padding.(0-0.1)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "inner-radius",
+      "stanza:example": "0",
+      "stanza:description": "inner radius of your pie.(0-99)",
+      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--greeting-color",
+      "stanza:key": "--emphasized-color",
       "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
-    },
-    {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:default": "#ec7d8d",
+      "stanza:description": "emphasized color when you hover on labels and rects"
     }
   ]
 }
