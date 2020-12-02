@@ -41,7 +41,8 @@ export default async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": params["label-color"]},
-        "fontSize": {"value": params["label-size"]},
+        // "fontSize": {"value": params["label-size"]},
+        "fontSize": {"value": "var(--label-size)"}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
