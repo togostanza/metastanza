@@ -23,8 +23,8 @@ export default async function vegaBarchart(stanza, params) {
   // spec.signals[0].on[1].events = "click"
 
   //棒・スケールに関する設定
-  spec.scales[0].paddingInner = 0.1
-  spec.scales[0].paddingOuter = 0.1
+  spec.scales[0].paddingInner = params["padding-inner"]
+  spec.scales[0].paddingOuter = params["padding-outer"]
   // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner")
   // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer")
   
@@ -127,8 +127,6 @@ export default async function vegaBarchart(stanza, params) {
       ]
     }
   }
-
-
   // spec.marks[0].encode.update.fill.value = "var(--bar-color)"
   // spec.marks[0].encode.hover.fill.value = "var(--emphasized-color)"
   // spec.marks[1].encode.enter.fill.value = "var(--emphasized-color)"

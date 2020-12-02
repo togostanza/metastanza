@@ -58,24 +58,6 @@
       "stanza:description": "orient of yscale.(please select left or right)"
     },
     {
-      "stanza:key": "tick-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "tick color"
-    },
-    {
-      "stanza:key": "label-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "label color"
-    },
-    {
-      "stanza:key": "label-size",
-      "stanza:type": "number",
-      "stanza:example": "12",
-      "stanza:description": "font size of labels"
-    },
-    {
       "stanza:key": "title-of-xaxis",
       "stanza:type": "string",
       "stanza:example": "title of Xaxis",
@@ -94,24 +76,6 @@
       "stanza:description": "title of legends"
     },
     {
-      "stanza:key": "title-size",
-      "stanza:type": "number",
-      "stanza:example": "12",
-      "stanza:description": "font size of titles"
-    },
-    {
-      "stanza:key": "axis-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description": "color of axis"
-    },
-    {
-      "stanza:key": "axis-width",
-      "stanza:type": "number",
-      "stanza:example": "1",
-      "stanza:description": "width of axis"
-    },
-    {
       "stanza:key": "xgrid",
       "stanza:type": "Boolean",
       "stanza:example": false,
@@ -122,24 +86,6 @@
       "stanza:type": "Boolean",
       "stanza:example": false,
       "stanza:description": "display of y grids"
-    },
-    {
-      "stanza:key": "stroke-color",
-      "stanza:type": "color",
-      "stanza:example": "#333",
-      "stanza:description":"symbol type of plot."
-    },
-    {
-      "stanza:key": "stroke-width",
-      "stanza:type": "number",
-      "stanza:example": "1",
-      "stanza:description":"stroke width"
-    }, 
-    {
-      "stanza:key": "opacity",
-      "stanza:type": "number",
-      "stanza:example": "0.7",
-      "stanza:description":"opacity of each plots"
     }, 
     {
       "stanza:key": "symbol-type",
@@ -161,6 +107,60 @@
       "stanza:type": "color",
       "stanza:default": "#ec7d8d",
       "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--tick-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "tick color"
+    },
+    {
+      "stanza:key": "--label-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "label color"
+    },
+    {
+      "stanza:key": "--axis-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "color of axis"
+    },
+    {
+      "stanza:key": "--title-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
+      "stanza:description": "font size of titles"
+    },
+    {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
+      "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--axis-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "width of axis"
+    },
+    {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description":"symbol type of plot."
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width"
+    }, 
+    {
+      "stanza:key": "--opacity",
+      "stanza:type": "text",
+      "stanza:default": "0.7",
+      "stanza:description":"opacity of each plots"
     }
   ]
 }

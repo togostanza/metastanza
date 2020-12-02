@@ -1,1 +1,0 @@
-import vegaEmbed from"vega-embed";export default async function piechart(e,a){let d=await fetch(a["src-url"]).then(e=>e.json());console.log(d.marks),d.data[0].values=[{id:1,field:1},{id:2,field:1},{id:3,field:1},{id:4,field:5},{id:5,field:8},{id:6,field:10}],d.scales[0].range.scheme="pastel1";const i=e.root.querySelector("main");await vegaEmbed(i,d,{renderer:"svg"})}

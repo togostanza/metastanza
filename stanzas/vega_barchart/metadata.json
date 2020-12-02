@@ -52,12 +52,6 @@
       "stanza:description": "orient of yscale.(please select left or right)"
     },
     {
-      "stanza:key": "label-size",
-      "stanza:type": "number",
-      "stanza:example": "12",
-      "stanza:description": "font size of labels"
-    },
-    {
       "stanza:key": "title-of-xaxis",
       "stanza:type": "string",
       "stanza:example": "title of Xaxis",
