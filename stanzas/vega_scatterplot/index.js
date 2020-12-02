@@ -34,6 +34,7 @@ export default async function vegaScatterplot(stanza, params) {
             "interactive": true,
             "update": {
               "fill": {"value": "var(--label-color)"},
+              "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
               "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
             },
             "hover": {
@@ -42,6 +43,7 @@ export default async function vegaScatterplot(stanza, params) {
           },
           "title": {
             "update": {
+              "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
               "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
             }
           },
@@ -70,6 +72,7 @@ export default async function vegaScatterplot(stanza, params) {
           "interactive": true,
           "update": {
             "fill": {"value": "var(--label-color)"},
+            "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
           },
           "hover": {
@@ -78,6 +81,7 @@ export default async function vegaScatterplot(stanza, params) {
         },
         "title": {
           "update": {
+            "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
           }
         },
@@ -100,7 +104,10 @@ export default async function vegaScatterplot(stanza, params) {
       "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
       "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
       "symbolType": params["symbol-type"],
-      "symbolFillColor": {"value": "var(--basic-fill-color)"}
+      "symbolFillColor": {"value": "var(--basic-fill-color)"},
+      "labelFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+      "labelFontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+      "titleFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")}
     }
   ]
 

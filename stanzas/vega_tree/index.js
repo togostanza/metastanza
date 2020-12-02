@@ -13,13 +13,20 @@ export default async function vegaTree(stanza, params) {
 
   //scales
   spec.scales[0].range = {"scheme": params["color-scheme"]}
-
+  // spec.scales[0].range = [
+  //   'var(--series-0-color)',
+  //   'var(--series-1-color)',
+  //   'var(--series-2-color)',
+  //   'var(--series-3-color)',
+  //   'var(--series-4-color)',
+  //   'var(--series-5-color)'
+  // ]
 
   //Marks:描画について
   spec.marks[0].encode ={
     "update": {
       "path": {"field": "path"},
-      "stroke": {"value": params["branch-color"]}
+      "stroke": {"value": "var(--branch-color)"}
     },
     "hover": {
       "stroke": {"value": "var(--emphasized-color)"}
@@ -28,8 +35,8 @@ export default async function vegaTree(stanza, params) {
 
   spec.marks[1].encode ={
     "enter": {
-      "size": {"value": params["node-size"]},
-      "stroke": {"value": params["stroke-color"]}
+      "size": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--node-size")},
+      "stroke": {"value": "var(--stroke-color)"}
     },
     "update": {
       "x": {"field": "x"},
@@ -44,7 +51,7 @@ export default async function vegaTree(stanza, params) {
   spec.marks[2].encode ={
     "enter": {
       "text": {"field": "name"},
-      "font":{"value": params["label-font"]},
+      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "fontSize": {"value": params["label-size"]},
       "baseline": {"value": "middle"},
     },

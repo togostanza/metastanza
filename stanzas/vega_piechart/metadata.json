@@ -72,6 +72,42 @@
       "stanza:type": "color",
       "stanza:default": "#ec7d8d",
       "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFC39E",
+      "stanza:description": "second color"
+    },
+    {
+      "stanza:key": "--series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#FF8DB8",
+      "stanza:description": "third color"
+    },
+    {
+      "stanza:key": "--series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#C690C6",
+      "stanza:description": "forth color"
+    },
+    {
+      "stanza:key": "--series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#6992D1",
+      "stanza:description": "fifth color"
+    },
+    {
+      "stanza:key": "--series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#71B093",
+      "stanza:description": "fifth color"
+    },
+    {
+      "stanza:key": "--series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#94BC8A",
+      "stanza:description": "first color"
     }
   ]
 }

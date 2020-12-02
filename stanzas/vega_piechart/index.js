@@ -11,7 +11,15 @@ export default async function vegaPiechart(stanza, params) {
 // カラースキームを独自で作成したい
   // vega.scheme('metastabasic', ['#AB3F61', '#F7EF8D', '#F7749E', '#5CD5F7', '#4895AB', '#4895AB']);
   // spec.scales[0].range.scheme = 'pastel1';
-  spec.scales[0].range.scheme = params["color-scheme"];
+  // spec.scales[0].range.scheme = params["color-scheme"];
+  spec.scales[0].range = [
+    'var(--series-0-color)',
+    'var(--series-1-color)',
+    'var(--series-2-color)',
+    'var(--series-3-color)',
+    'var(--series-4-color)',
+    'var(--series-5-color)'
+  ]
 
 //legendを出す
   spec.legend =[

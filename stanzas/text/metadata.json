@@ -46,6 +46,12 @@
       "stanza:type": "string",
       "stanza:default": "1px solid #333",
       "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--label-font",
+      "stanza:type": "text",
+      "stanza:default": "serif",
+      "stanza:description": "font(e.g: serif,san serif,fantasy)"
     }
   ]
 }

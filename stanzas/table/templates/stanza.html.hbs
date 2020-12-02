@@ -1,6 +1,6 @@
 <style>
   *{
-    font-family: "Helvetica Nune";
+    font-family: var(--label-font);
     box-sizing: border-box;
   }
   table{
@@ -12,14 +12,18 @@
     background-color :var(--basic-fill-color);
     font-weight: bold;
     font-size: 12px;
-    border:1px solid #999;
+    border-width: var(--stroke-width);
+    border-style: solid; 
+    border-color: var(--stroke-color);
   }
   tbody,td,tr{
     font-size: 10px;
     padding:8px 5px;
   }
   td{
-    border:1px solid #999;
+    border-width: var(--stroke-width);
+    border-style: solid; 
+    border-color: var(--stroke-color);
     border-collapse: collapse;
   }
 

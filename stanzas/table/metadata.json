@@ -31,6 +31,24 @@
       "stanza:description": "basic fill color"
     },
     {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#999",
+      "stanza:description": "border color"
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "text",
+      "stanza:default": "0.5px",
+      "stanza:description": "stroke wodth"
+    },
+    {
+      "stanza:key": "--label-font",
+      "stanza:type": "text",
+      "stanza:default": "serif",
+      "stanza:description": "font(e.g: serif,san serif,fantasy)"
+    },
+    {
       "stanza:key": "--greeting-align",
       "stanza:type": "single-choice",
       "stanza:choice": [

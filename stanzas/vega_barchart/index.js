@@ -45,6 +45,7 @@ export default async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -53,6 +54,7 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
@@ -74,6 +76,7 @@ export default async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -82,6 +85,7 @@ export default async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
@@ -114,6 +118,7 @@ export default async function vegaBarchart(stanza, params) {
       "align": {"value": "center"},
       "baseline": {"value": "bottom"},
       "fill": {"value": "var(--emphasized-color)"},
+      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
       "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
     },
