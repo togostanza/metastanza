@@ -10,11 +10,11 @@ export default async function vegaBarchart(stanza, params) {
   ]
 
   //stanza（描画範囲）のwidth・height
-  spec.width = params["width"]; 
+  spec.width = params["width"];
   spec.height = params["height"];
   // spec.width = "var(--width)"
   // spec.height = "var(--height)"
-  
+
   //stanzaのpadding
   spec.padding = params["padding"];
 
@@ -41,8 +41,7 @@ export default async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": params["label-color"]},
-        // "fontSize": {"value": params["label-size"]},
-        "fontSize": {"value": "var(--label-size)"}
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
@@ -71,7 +70,7 @@ export default async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": params["label-color"]},
-        "fontSize": {"value": params["label-size"]},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
