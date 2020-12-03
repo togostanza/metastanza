@@ -8,7 +8,7 @@
   "stanza:parameter": [
      {
        "stanza:key": "table_data_api",
-       "stanza:example": "https://sparql-support.dbcls.jp/rest/api/protein_list",
+       "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example",
        "stanza:description": "table data api",
        "stanza:required": true
      },
@@ -26,17 +26,17 @@
      },
      {
        "stanza:key": "params",
-       "stanza:example": "dataset='DS801_1'",
+       "stanza:example": "taxonomy='9606'",
        "stanza:description": "parameters for table data api",
        "stanza:required": false
      }
   ],
   "stanza:usage": "<togostanza-table_body></togostanza-table_body>",
-  "stanza:type": "Stanza",
+  "stanza:type": "Metastanza",
   "stanza:display": "",
   "stanza:provider": "provider of this stanza",
-  "stanza:license": "",
-  "stanza:author": "author name",
+  "stanza:license": "MIT",
+  "stanza:author": "Togostanza",
   "stanza:address": "name@example.org",
   "stanza:contributor": [
   ],
