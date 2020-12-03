@@ -284,7 +284,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "table_data_count_api",
-		"stanza:example": "https://sparql-support.dbcls.jp/rest/api/protein_list?count=1",
+		"stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example?count=1",
 		"stanza:description": "table row count api",
 		"stanza:required": true
 	},
@@ -302,7 +302,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "table_stanza_params",
-		"stanza:example": "params='dataset=DS801_1' table_data_api='https://sparql-support.dbcls.jp/rest/api/protein_list'",
+		"stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example'",
 		"stanza:description": "parameters for table stanza (except 'limit' and 'offset')",
 		"stanza:required": false
 	},
