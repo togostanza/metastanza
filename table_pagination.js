@@ -296,7 +296,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "params",
-		"stanza:example": "dataset=DS801_1",
+		"stanza:example": "taxonomy=9606",
 		"stanza:description": "parameters for count api",
 		"stanza:required": false
 	},
