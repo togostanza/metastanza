@@ -25,17 +25,23 @@ function draw(dataset, stanza, element) {
   table.appendChild(thead);
   table.appendChild(tbody);
   
-  let order = [];
-  for (let i = 0;  i < dataset.head.order.length; i++) {
-    if (parseInt(dataset.head.order[i]) >= 0) {
-      order[parseInt(dataset.head.order[i])] = i;
+  let orderedVar = [];
+  if (dataset.head.order) {
+    for (let i = 0;  i < dataset.head.order.length; i++) {
+      if (parseInt(dataset.head.order[i]) >= 0) {
+	orderedVar[parseInt(dataset.head.order[i])] = dataset.head.vars[i];
+      }
     }
+  } else {
+    order = [...Array(dataset.head.vars.length).keys()];
   }
   
   let tr = document.createElement("tr");
   thead.appendChild(tr);
   for(let i of order){
     let th = document.createElement("th");
+    let label = dataset.head.vars[i];
+    if (dataset.head.labels) label = dataset.head.labels[i];
     th.innerHTML = dataset.head.labels[i];
     tr.appendChild(th);
   }
