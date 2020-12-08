@@ -12,16 +12,16 @@ export default async function tableBody(stanza, params) {
   }
 
   let api = params.table_data_api;
-  let dataset = await metastanza.getFormatedJson(api, stanza.root.querySelector('#renderDiv'), formBody.join("&"));
-  if (typeof dataset == "object") draw(dataset, stanza);
+  let element = stanza.root.querySelector('#renderDiv');
+  let dataset = await metastanza.getFormatedJson(api, element, formBody.join("&"));
+  if (typeof dataset == "object") draw(dataset, stanza, element);
 }
   
-function draw(dataset, stanza) {
-  let div = stanza.select("#renderDiv");
+function draw(dataset, stanza, element) {
   let table = document.createElement("table");
   let thead = document.createElement("thead");
   let tbody = document.createElement("tbody");	
-  div.appendChild(table);
+  element.appendChild(table);
   table.appendChild(thead);
   table.appendChild(tbody);
   
