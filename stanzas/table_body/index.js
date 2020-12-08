@@ -25,11 +25,11 @@ function draw(dataset, stanza, element) {
   table.appendChild(thead);
   table.appendChild(tbody);
   
-  let orderedVar = [];
+  let order = [];
   if (dataset.head.order) {
     for (let i = 0;  i < dataset.head.order.length; i++) {
       if (parseInt(dataset.head.order[i]) >= 0) {
-	orderedVar[parseInt(dataset.head.order[i])] = dataset.head.vars[i];
+	order[parseInt(dataset.head.order[i])] = i;
       }
     }
   } else {
@@ -42,7 +42,7 @@ function draw(dataset, stanza, element) {
     let th = document.createElement("th");
     let label = dataset.head.vars[i];
     if (dataset.head.labels) label = dataset.head.labels[i];
-    th.innerHTML = dataset.head.labels[i];
+    th.innerHTML = label;
     tr.appendChild(th);
   }
   for(let row of dataset.body){
