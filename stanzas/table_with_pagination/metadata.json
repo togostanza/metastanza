@@ -1,0 +1,99 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "table_with_pagination",
+  "stanza:label": "Table with pagination",
+  "stanza:definition": "metastanza table with pagination",
+  "stanza:type": "Stanza",
+  "stanza:display": "Table",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c-nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2020-12-09",
+  "stanza:updated": "2020-12-09",
+  "stanza:parameter": [
+    {
+      "stanza:key": "say-to",
+      "stanza:example": "world",
+      "stanza:description": "who to say hello to",
+      "stanza:required": false
+    }
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--basic-fill-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "basic fill color"
+    },
+    {
+      "stanza:key": "--emphasized-color",
+      "stanza:type": "color",
+      "stanza:default": "#44b8cc",
+      "stanza:description": "emphasized color"
+    },
+    {
+      "stanza:key": "--background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description": "background color"
+    },
+    {
+      "stanza:key": "--title-size",
+      "stanza:type": "number",
+      "stanza:default": "12px",
+      "stanza:description": "font size of titles"
+    },
+    {
+      "stanza:key": "--ruled-line",
+      "stanza:type": "text",
+      "stanza:default": "0.5px solid #eee",
+      "stanza:description": "style of ruled line"
+    },
+    {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#999",
+      "stanza:description": "border color"
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "text",
+      "stanza:default": "0.5px",
+      "stanza:description": "stroke wodth"
+    },
+    {
+      "stanza:key": "--label-color",
+      "stanza:type": "color",
+      "stanza:default": "#555",
+      "stanza:description": "font color of labels"
+    },
+    {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "10px",
+      "stanza:description": "font size of labels"
+    },
+    {
+      "stanza:key": "--label-font",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica",
+      "stanza:description": "font(e.g: serif,san serif,fantasy)"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ]
+}

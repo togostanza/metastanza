@@ -14,6 +14,7 @@ p.greeting {
   text-align: var(--greeting-align);
 }
 
+
 *{
   font-family: var(--label-font);
   box-sizing: border-box;
@@ -24,7 +25,6 @@ p.greeting {
 
 .container{
   width: 800px;
-  // margin: 200px;
 }
 
 .infomation{
@@ -122,9 +122,6 @@ tbody{
   font-size: var(--label-size);
   color: var(--label-color);
   padding: 0px 8px 0px 8px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  height: 250px;
 }
 
 thead, tbody {
