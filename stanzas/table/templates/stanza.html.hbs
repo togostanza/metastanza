@@ -1,75 +1,84 @@
-<style>
-  *{
-    font-family: var(--label-font);
-    box-sizing: border-box;
-  }
-  table{
-    width: 800px;
-    align: left;
-    border-collapse: collapse;
-  }
-  thead{
-    background-color :var(--basic-fill-color);
-    font-weight: bold;
-    font-size: 12px;
-    border-width: 1px;
-    border-style: solid; 
-    border-color: var(--stroke-color);
-  }
-  tbody,td,tr{
-    font-size: 10px;
-    padding:8px 5px;
-  }
-  td{
-    border-width: 1px;
-    border-style: solid; 
-    border-color: var(--stroke-color);
-    border-collapse: collapse;
-  }
+  <div class="container">
+    <div class="infomation">
+      <form class="search-form" action="#">
+        <input class="search-box" type="text" placeholder="Serch for keywords...">
+        <button class="search-btn" type="submit">
+          <img src="../../../assets/white-search1.svg" alt="search">
+        </button>
+      </form>
+      <a class="dl-btn" href="#" download="#"><img src="../../../assets/key-download1.svg" alt=""></a>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <td class="stack">Original source<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
+          <td>Organism name<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
+          <td>Taxonomy ID<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
+          <td>Isolation<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
+          <td>Environments<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
+        </tr>    
+      </thead>
+      <tbody>
+        <tr>
+          <td class="stack" rowspan="2">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <!-- <td class="stack">NBRC 14436</td> -->
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+        <tr>
+          <td class="stack">NBRC 14436</td>
+          <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
+          <td>NBRC 14436</td>
+          <td>Hot spring sediments in Nozawa, Japan</td>
+          <td>hot spring,  spring sediment</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
 
-</style>
-
-<table>
-  <thead>
-    <tr>
-      <td>Original source</td>
-      <td>Organism name</td>
-      <td>Taxonomy ID</td>
-      <td>Isolation</td>
-      <td>Environments</td>
-    </tr>    
-  </thead>
-  <tbody>
-    <tr>
-      <td>NBRC 14436</td>
-      <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
-      <td>NBRC 14436</td>
-      <td>Hot spring sediments in Nozawa, Japan</td>
-      <td>hot spring,  spring sediment</td>
-    </tr>
-    <tr>
-      <td>NBRC 14436</td>
-      <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
-      <td>NBRC 14436</td>
-      <td>Hot spring sediments in Nozawa, Japan</td>
-      <td>hot spring,  spring sediment</td>
-    </tr>
-    <tr>
-      <td>NBRC 14436</td>
-      <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
-      <td>NBRC 14436</td>
-      <td>Hot spring sediments in Nozawa, Japan</td>
-      <td>hot spring,  spring sediment</td>
-    </tr>
-    <tr>
-      <td>NBRC 14436</td>
-      <td>"Thermoanaerobacter cellulolyticus" Taya et al.</td>
-      <td>NBRC 14436</td>
-      <td>Hot spring sediments in Nozawa, Japan</td>
-      <td>hot spring,  spring sediment</td>
-    </tr>
-  </tbody>
-</table>
 
 {{!-- // stanza.html.bhs --}}
 {{!-- <p>{{greeting}}</p> --}}

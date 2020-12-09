@@ -4,7 +4,7 @@
   },
   "@id": "table",
   "stanza:label": "Table",
-  "stanza:definition": "table",
+  "stanza:definition": "metastanza table with scroll",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",
@@ -27,8 +27,32 @@
     {
       "stanza:key": "--basic-fill-color",
       "stanza:type": "color",
-      "stanza:default": "#94d0da",
+      "stanza:default": "#256d80",
       "stanza:description": "basic fill color"
+    },
+    {
+      "stanza:key": "--emphasized-color",
+      "stanza:type": "color",
+      "stanza:default": "#44b8cc",
+      "stanza:description": "emphasized color"
+    },
+    {
+      "stanza:key": "--background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description": "background color"
+    },
+    {
+      "stanza:key": "--title-size",
+      "stanza:type": "number",
+      "stanza:default": "12px",
+      "stanza:description": "font size of titles"
+    },
+    {
+      "stanza:key": "--ruled-line",
+      "stanza:type": "text",
+      "stanza:default": "0.5px solid #eee",
+      "stanza:description": "style of ruled line"
     },
     {
       "stanza:key": "--stroke-color",
@@ -43,9 +67,21 @@
       "stanza:description": "stroke wodth"
     },
     {
+      "stanza:key": "--label-color",
+      "stanza:type": "color",
+      "stanza:default": "#555",
+      "stanza:description": "font color of labels"
+    },
+    {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "10px",
+      "stanza:description": "font size of labels"
+    },
+    {
       "stanza:key": "--label-font",
       "stanza:type": "text",
-      "stanza:default": "serif",
+      "stanza:default": "Helvetica",
       "stanza:description": "font(e.g: serif,san serif,fantasy)"
     },
     {
