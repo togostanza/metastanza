@@ -12,8 +12,6 @@ export default async function vegaBarchart(stanza, params) {
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"];
   spec.height = params["height"];
-  // spec.width = getComputedStyle(stanza.root.host).getPropertyValue("var(--width)")
-  // spec.height = getComputedStyle(stanza.root.host).getPropertyValue("var(--height)")
 
   //stanzaのpadding
   spec.padding = params["padding"];
@@ -25,14 +23,12 @@ export default async function vegaBarchart(stanza, params) {
   //棒・スケールに関する設定
   spec.scales[0].paddingInner = params["padding-inner"]
   spec.scales[0].paddingOuter = params["padding-outer"]
-  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner")
-  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer")
   
   //軸に関する設定
-  spec.axes[0].orient = params["orient-of-xscale"]
-  spec.axes[1].orient = params["orient-of-yscale"]
-  // spec.axes[0].orient = getComputedStyle(stanza.root.host).getPropertyValue("--orient-of-xscale")
-  // spec.axes[1].orient = getComputedStyle(stanza.root.host).getPropertyValue("--orient-of-yscale")
+  spec.axes[0].orient = params["orient-of-xaxis"]
+  // gridを表示させたいが、できない
+  // spec.axis[0].grid = true;
+  spec.axes[1].orient = params["orient-of-yaxis"]
   spec.axes[0].title = params["title-of-xaxis"]
   spec.axes[1].title = params["title-of-yaxis"]
   spec.axes[0].encode = {
@@ -69,7 +65,7 @@ export default async function vegaBarchart(stanza, params) {
   spec.axes[1].encode = {
     "ticks": {
       "update": {
-      "stroke": {"value": "var(--tick-color)"}
+      "stroke": {"value": "var(--axis-color)"}
       }
     },
     "labels": {
@@ -104,10 +100,11 @@ export default async function vegaBarchart(stanza, params) {
       "width": {"scale": "xscale", "band": params["bar-width"]},
       "y": {"scale": "yscale", "field": "amount"},
       "y2": {"scale": "yscale", "value": 0},
+      // "stroke": {"value": "#652c90"}   
     },
     "update": {
-      "fill": {"value": "var(--basic-fill-color)"}
-    },
+      "fill": {"value": "var(--series-0-color)"},
+      },
     "hover": {
       "fill": {"value": "var(--emphasized-color)"}
     }

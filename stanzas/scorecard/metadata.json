@@ -36,7 +36,7 @@
       "stanza:description": "text align of greeting"
     },    
     {
-      "stanza:key": "--basic-fill-color",
+      "stanza:key": "--series-0-color",
       "stanza:type": "color",
       "stanza:default": "#94d0da",
       "stanza:description": "basic fill color"

@@ -25,7 +25,25 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--basic-fill-color",
+      "stanza:key": "--general-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica",
+      "stanza:description": "general font family"
+    },
+    {
+      "stanza:key": "--general-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#707070",
+      "stanza:description": "general font color"
+    },
+    {
+      "stanza:key": "--general-font-size",
+      "stanza:type": "number",
+      "stanza:default": "12px",
+      "stanza:description": "general font size"
+    },
+    {
+      "stanza:key": "--series-0-color",
       "stanza:type": "color",
       "stanza:default": "#256d80",
       "stanza:description": "basic fill color"
@@ -43,40 +61,34 @@
       "stanza:description": "background color"
     },
     {
-      "stanza:key": "--title-size",
-      "stanza:type": "number",
-      "stanza:default": "12px",
-      "stanza:description": "font size of titles"
-    },
-    {
       "stanza:key": "--ruled-line",
       "stanza:type": "text",
       "stanza:default": "0.5px solid #eee",
       "stanza:description": "style of ruled line"
     },
     {
-      "stanza:key": "--stroke-color",
-      "stanza:type": "color",
-      "stanza:default": "#999",
-      "stanza:description": "border color"
-    },
-    {
-      "stanza:key": "--stroke-width",
+      "stanza:key": "--stack-line",
       "stanza:type": "text",
-      "stanza:default": "0.5px",
-      "stanza:description": "stroke wodth"
+      "stanza:default": "1px solid #333",
+      "stanza:description": "style of stack line"
     },
     {
-      "stanza:key": "--label-color",
-      "stanza:type": "color",
-      "stanza:default": "#555",
-      "stanza:description": "font color of labels"
+      "stanza:key": "--thead-font-size",
+      "stanza:type": "number",
+      "stanza:default": "12px",
+      "stanza:description": "font size of labels"
     },
     {
-      "stanza:key": "--label-size",
+      "stanza:key": "--tbody-font-size",
       "stanza:type": "number",
       "stanza:default": "10px",
       "stanza:description": "font size of labels"
+    },
+    {
+      "stanza:key": "--thead-font-color",
+      "stanza:type": "color",
+      "stanza:default": "--series-0-color",
+      "stanza:description": "font color of table header"
     },
     {
       "stanza:key": "--label-font",

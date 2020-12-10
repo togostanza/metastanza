@@ -7,20 +7,13 @@ main {
   padding: 1rem 2rem;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
-}
-
-
 *{
-  font-family: var(--label-font);
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  color: var(--label-color);
+  font-family: var(--general-font-family);
+  color: var(--general-font-color);
+  font-size: var(--general-font-size);
 }
 
 .container{
@@ -45,7 +38,7 @@ p.greeting {
   margin-right: 5px;
   height: 20px;
   width: 164px;
-  border: 1px solid var(--basic-fill-color);
+  border: 1px solid var(--series-0-color);
   border-radius: 3px;
   font-size: 10px;
   color: #c1c0c0;
@@ -59,9 +52,9 @@ p.greeting {
   margin-right: 2px;
   height: 20px;
   width: 20px;
-  border: 1px solid var(--basic-fill-color);
+  border: 1px solid var(--series-0-color);
   border-radius: 3px;
-  background-color:var(--basic-fill-color);
+  background-color:var(--series-0-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,14 +81,14 @@ table{
 }
 
 thead{
-  font-size: var(--title-size);
-  border-bottom: 1px solid var(--stroke-color);
+  font-size: var(--thead-font-size);
+  border-bottom: var(--stack-line);
   margin-bottom: 0;
   padding: 8px 8px 0 8px;
 }
 
 thead>tr>td{
-  color: var(--basic-fill-color);
+  color: var(--series-0-color);
 }
 
 thead>tr>td>.icon{
@@ -119,9 +112,9 @@ thead>tr>td>.icon{
 }
 
 tbody{
-  font-size: var(--label-size);
-  color: var(--label-color);
-  padding: 0px 8px 0px 8px;
+  font-size: var(--tbody-font-size);
+  color: var(--thead-font-color);
+  padding: 0px 8px;
 }
 
 thead, tbody {
@@ -143,7 +136,7 @@ tbody td{
 }
 
 .stack{
-  border-right: 1px solid var(--stroke-color);
+  border-right: var(--stack-line);
 }
 
 #pagenation{
@@ -154,8 +147,8 @@ tbody td{
 
 #pagenation ul{
   display: flex;
-  font-size: var(--label-size);
-  padding:0 0 8px 0;
+  font-size: var(--general-font-size);
+  padding:0;
 }
 
 #pagenation li{
@@ -174,7 +167,7 @@ tbody td{
   width: 7px;
   height: 7px;
   border: 1px solid;
-  border-color:  transparent transparent var(--basic-fill-color) var(--basic-fill-color);
+  border-color:  transparent transparent var(--series-0-color) var(--series-0-color);
   transform: rotate(45deg);
 }
 
@@ -183,18 +176,16 @@ tbody td{
   width: 7px;
   height: 7px;
   border: 1px solid;
-  border-color:var(--basic-fill-color) var(--basic-fill-color) transparent transparent;
+  border-color:var(--series-0-color) var(--series-0-color) transparent transparent;
   transform: rotate(45deg);
 }
 
 #pagenation .current-btn{
-  color: var(--basic-fill-color);
-  border-bottom: 1px solid var(--basic-fill-color);
+  color: var(--series-0-color);
+  border-bottom: 1px solid var(--series-0-color);
 }
 
 .show-info{
   display: flex;
   justify-content: center;
-  font-size: var(--label-size);
-  color:  var(--basic-fill-color);
 }

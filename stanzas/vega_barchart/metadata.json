@@ -73,7 +73,7 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--basic-fill-color",
+      "stanza:key": "--series-0-color",
       "stanza:type": "color",
       "stanza:default": "#94d0da",
       "stanza:description": "bar color"

@@ -19,15 +19,16 @@ export default async function vegaScatterplot(stanza, params) {
   spec.axes =[
     {
       "scale": "x",
-      "grid": params["xgrid"],
+      "grid" : true,
+      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["xgrid"]),
       "domain": false,
-      "orient": params["orient-of-xscale"],
+      "orient": params["orient-of-xaxis"],
       "tickCount": 5,
       "title": params["title-of-xaxis"],
       "encode": {
           "ticks": {
             "update": {
-            "stroke": {"value": "var(--tick-color)"}
+            "stroke": {"value": "var(--axis-color)"}
             }
           },
           "labels": {
@@ -57,9 +58,10 @@ export default async function vegaScatterplot(stanza, params) {
     },
     {
       "scale": "y",
-      "grid": params["ygrid"],
+      "grid" : true,
+      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["ygrid"]),
       "domain": false,
-      "orient": params["orient-of-yscale"],
+      "orient": params["orient-of-yaxis"],
       "titlePadding": 5,
       "title": params["title-of-yaxis"],
       "encode": {
@@ -104,7 +106,7 @@ export default async function vegaScatterplot(stanza, params) {
       "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
       "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
       "symbolType": params["symbol-type"],
-      "symbolFillColor": {"value": "var(--basic-fill-color)"},
+      "symbolFillColor": {"value": "var(--series-0-color)"},
       "labelFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "labelFontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
       "titleFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")}
@@ -125,7 +127,7 @@ export default async function vegaScatterplot(stanza, params) {
         "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
         "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
         "stroke": {"value": "var(--stroke-color)"},
-        "fill": {"value": "var(--basic-fill-color)"}
+        "fill": {"value": "var(--series-0-color)"}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"},
