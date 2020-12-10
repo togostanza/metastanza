@@ -63,6 +63,12 @@
       "stanza:example": "0",
       "stanza:description": "inner radius of your pie.(0-99)",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "title-of-legend",
+      "stanza:type": "string",
+      "stanza:example": "Title of this legend",
+      "stanza:description": "title of legends"
     }
   ],
   "stanza:about-link-placement": "bottom-right",

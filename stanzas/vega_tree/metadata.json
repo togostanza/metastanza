@@ -40,10 +40,10 @@
       "stanza:description": "padding around your stanza"
     },
     {
-      "stanza:key": "color-scheme",
-      "stanza:type": "color",
-      "stanza:example": "pastel1",
-      "stanza:description": "input name of color scheme from https://vega.github.io/vega/docs/schemes/"
+      "stanza:key": "title-of-legend",
+      "stanza:type": "string",
+      "stanza:example": "Title of this legend",
+      "stanza:description": "title of legends"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
