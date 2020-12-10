@@ -84,12 +84,9 @@ table{
 thead{
   font-size: var(--thead-font-size);
   border-bottom: var(--stack-line);
+  color: var(--thead-font-color);
   margin-bottom: 0;
   padding: 8px 8px 0 8px;
-}
-
-thead>tr>td{
-  color: var(--series-0-color);
 }
 
 thead>tr>td>.icon{
