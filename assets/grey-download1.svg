@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="801" height="332" viewBox="0 0 801 332">
+  <defs>
+    <filter id="長方形_9" x="-9" y="-6" width="819" height="350" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-opacity="0.306"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-path">
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#長方形_9)">
+        <rect id="長方形_9-2" data-name="長方形 9" width="801" height="332" transform="translate(45 21)" fill="#fff"/>
+      </g>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="長方形_177" data-name="長方形 177" width="12" height="15.441" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="マスクグループ_2" data-name="マスクグループ 2" transform="translate(-45 -21)" clip-path="url(#clip-path)">
+    <g id="アートワーク_1" data-name="アートワーク 1" transform="translate(911.5 167)">
+      <g id="グループ_191" data-name="グループ 191" transform="translate(-93.75 -120.635)" clip-path="url(#clip-path-2)">
+        <path id="パス_200" data-name="パス 200" d="M27.774,12.686A.716.716,0,0,1,27,12.028V.647a.779.779,0,0,1,1.548,0V12.028a.716.716,0,0,1-.774.658" transform="translate(-21.774 0.011)" fill="#c1c0c0"/>
+        <path id="パス_201" data-name="パス 201" d="M11.758,73.477a.658.658,0,0,1-.619.677H.377a.677.677,0,0,1,0-1.355H11.139a.658.658,0,0,1,.619.677" transform="translate(0.242 -58.71)" fill="#c1c0c0"/>
+        <path id="パス_202" data-name="パス 202" d="M9.023,40.96c-.271.271-.6.348-.774.194L3.371,36.238c-.155-.155-.077-.5.194-.755s.6-.348.774-.194l4.877,4.9c.155.155.077.5-.194.755" transform="translate(-2.655 -28.399)" fill="#c1c0c0"/>
+        <path id="パス_203" data-name="パス 203" d="M27.565,40.96c.271.271.6.348.755.194l4.916-4.916c.155-.155.077-.5-.194-.755s-.6-.348-.755-.194l-4.916,4.9c-.155.155-.077.5.194.755" transform="translate(-22.01 -28.399)" fill="#c1c0c0"/>
+      </g>
+    </g>
+  </g>
+</svg>
