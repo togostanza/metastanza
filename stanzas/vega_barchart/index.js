@@ -99,8 +99,7 @@ export default async function vegaBarchart(stanza, params) {
       "x": {"scale": "xscale", "field": "category"},
       "width": {"scale": "xscale", "band": params["bar-width"]},
       "y": {"scale": "yscale", "field": "amount"},
-      "y2": {"scale": "yscale", "value": 0},
-      // "stroke": {"value": "#652c90"}   
+      "y2": {"scale": "yscale", "value": 0}  
     },
     "update": {
       "fill": {"value": "var(--series-0-color)"},
