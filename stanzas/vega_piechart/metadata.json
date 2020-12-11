@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "vega_piechart",
-  "stanza:label": "Vega Piechart",
+  "stanza:label": "PENQE_Vega Piechart",
   "stanza:definition": "vega_wrapping",
   "stanza:type": "Stanza",
   "stanza:context": "Environment",

@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "vega_barchart",
-  "stanza:label": "Vega barchart",
+  "stanza:label": "PENQE_Vega barchart",
   "stanza:definition": "vega_wrapping_barchart",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",

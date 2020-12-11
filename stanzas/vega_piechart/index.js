@@ -48,7 +48,28 @@ export default async function vegaPiechart(stanza, params) {
       "fill": {"value": "var(--emphasized-color)"}
     }
   }
-  
+
+  // // hover時にvalueを出したい・・・
+  // spec.marks[1].encode = {
+  //   "enter": {
+  //     // "align": {"value": "center"},
+  //     // "baseline": {"value": "bottom"},
+  //     "fill": {"value": "var(--emphasized-color)"},
+  //     // "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+  //     // "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
+  //     // "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
+  //   },
+  //   "update": {
+  //     "x": {"signal": "tooltip.category", "band": 0.5},
+  //     "y": {"signal": "tooltip.amount", "offset": -1},
+  //     "text": {"signal": "tooltip.id"},
+  //     "fillOpacity": [
+  //       {"test": "datum === tooltip", "value": 0},
+  //       {"value": 1}
+  //     ]
+  //   }
+  // }
+
   //legendを出す
   spec.legends =
   [
