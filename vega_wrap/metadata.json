@@ -2,35 +2,30 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "barchart",
-  "stanza:label": "Barchart",
+  "@id": "vega_wrap",
+  "stanza:label": "Vega wrap",
   "stanza:definition": "",
-  "stanza:type": "MetaStanza",
-  "stanza:display": "Chart",
-  "stanza:provider": "TogoStanza",
+  "stanza:type": "Stanza",
+  "stanza:context": "Environment",
+  "stanza:display": "Text",
+  "stanza:provider": "",
   "stanza:license": "MIT",
-  "stanza:author": "TogoStanza",
-  "stanza:address": "admin@biohackathon.org",
+  "stanza:author": "moriya-dbcls",
+  "stanza:address": "",
   "stanza:contributor": [],
-  "stanza:created": "2020-10-15",
-  "stanza:updated": "2020-10-15",
+  "stanza:created": "2020-10-27",
+  "stanza:updated": "2020-10-27",
   "stanza:parameter": [
     {
-      "stanza:key": "src-url",
-      "stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test?type=instrument",
-      "stanza:description": "URL of data source",
+      "stanza:key": "vega-json",
+      "stanza:example": "https://vega.github.io/vega/examples/stacked-bar-chart.vg.json",
+      "stanza:description": "json api",
       "stanza:required": true
     },
     {
-      "stanza:key": "chart-title",
-      "stanza:example": "Instrument",
-      "stanza:description": "Chart title",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "show-legend",
-      "stanza:example": "show-legend",
-      "stanza:description": "Whether or not to the legend",
+      "stanza:key": "title",
+      "stanza:example": "Example",
+      "stanza:description": "title",
       "stanza:required": true
     }
   ],
@@ -71,17 +66,6 @@
       "stanza:type": "color",
       "stanza:default": "#d3a8e0",
       "stanza:description": "bar color"
-    },
-    {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
     }
   ]
 }

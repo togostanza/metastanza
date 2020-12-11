@@ -112,10 +112,12 @@ var metadata = {
 };
 
 var templates = [
-  
+  ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<style>\n  table {\n      width: 100%;\n  }\n  td {\n      padding: 5px 20px 5px 20px;;\n  }\n  th {\n      border-bottom: solid 2px #000000;\n  }\n</style>\n\n<div id=\"renderDiv\"></div>\n";
+},"useData":true}]
 ];
 
-var css = null;
+var css = "";
 
 defineStanzaElement(tableBody, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table_body.js.map
