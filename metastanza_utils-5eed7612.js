@@ -1897,6 +1897,10 @@ var metastanza = {
 	.on("click", function(){
 	  if (dlListDiv.style("display") == "none") dlListDiv.style("display", "block");
 	  else dlListDiv.style("display", "none");
+	}).on("mouseover", function(){
+	  this.classList.add("hover");
+	}).on("mouseout", function(){
+	  this.classList.remove("hover");
 	});
     g.append("circle")
       .attr("cx", 16).attr("cy", 16).attr("r", 15)
@@ -1913,9 +1917,9 @@ var metastanza = {
 	downloadImg(select(svg), "svg", filename, stanza);
 	dlListDiv.style("display", "none");
       }).on("mouseover", function(){
-	this.classList.add("select");
+	this.classList.add("hover");
       }).on("mouseout", function(){
-	this.classList.remove("select");
+	this.classList.remove("hover");
       });
     
     dlListUl.append("li")
@@ -1924,9 +1928,9 @@ var metastanza = {
 	downloadImg(select(svg), "png", filename, stanza);
       	dlListDiv.style("display", "none");
       }).on("mouseover", function(){
-	this.classList.add("select");
+	this.classList.add("hover");
       }).on("mouseout", function(){
-	this.classList.remove("select");
+	this.classList.remove("hover");
       });  
 
     let downloadImg = function(svg, format, filename, stanza){
@@ -1993,4 +1997,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-3433d3ff.js.map
+//# sourceMappingURL=metastanza_utils-5eed7612.js.map
