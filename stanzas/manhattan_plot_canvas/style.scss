@@ -143,3 +143,34 @@ circle.over-thresh-plot {
     fill: var(--over-thresh-color);
     cursor: default;
 }
+
+svg#dl_button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+svg#dl_button .circle_g {
+    cursor: pointer;
+}
+
+div#dl_list {
+    border: solid 1px #000000;
+    position: absolute;
+    top: 35px;
+    right: 6px;
+    width: fir-content;
+}
+
+div#dl_list ul {
+    list-style-type: none;
+    padding: 0px 10px 0px 10px;
+}
+
+div#dl_list ul li {
+    cursor: pointer;
+}
+
+div#dl_list ul li.select {
+    background-color: #dddddd;
+}
