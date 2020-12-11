@@ -11,7 +11,10 @@ export default async function manhattanPlotCanvas(stanza, params) {
 
   console.log(params.api);
   let dataset = await metastanza.getFormatedJson(params.api, stanza.root.querySelector('#chart'));
-  if (typeof dataset == "object") draw(dataset, stanza, params);
+  if (typeof dataset == "object") {
+    draw(dataset, stanza, params);
+    metastanza.appendDlButton(stanza.root.querySelector('#chart'), stanza.root.querySelector('svg'), "manhattan_plot", stanza);
+  }
 }
 
 async function draw(dataset, stanza, params) {
