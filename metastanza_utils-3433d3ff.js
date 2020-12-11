@@ -1888,20 +1888,12 @@ var metastanza = {
     let dlButtonSVG = select(buttonDiv).append("svg")
     	.attr("id", "dl_button")
 	.attr("width", 32)
-	.attr("height", 32)
-	.style("position", "absolute")
-	.style("top", "0px")
-	.style("right", "0px");
+	.attr("height", 32);
     let dlListDiv = select(buttonDiv).append("div")
     	.attr("id", "dl_list")
-	.style("display", "none")
-	.style("border", "solid 1px #000000")
-    	.style("position", "absolute")
-	.style("top", "32px")
-	.style("right", "15px")
-	.style("width", "fir-content");
+	.style("display", "none");
     let g = dlButtonSVG.append("g")
-	.style("cursor", "pointer")
+	.attr("class", "circle_g")
 	.on("click", function(){
 	  if (dlListDiv.style("display") == "none") dlListDiv.style("display", "block");
 	  else dlListDiv.style("display", "none");
@@ -1914,38 +1906,43 @@ var metastanza = {
     g.append("circle").attr("cx", 16).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
     g.append("circle").attr("cx", 24).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
 
-    let dlListUl = dlListDiv.append("ul")
-	.style("list-style-type", "none");
+    let dlListUl = dlListDiv.append("ul");
     dlListUl.append("li")
-      .style("cursor", "pointer")
       .text("Save as SVG")
       .on("click", function(){
 	downloadImg(select(svg), "svg", filename, stanza);
 	dlListDiv.style("display", "none");
+      }).on("mouseover", function(){
+	this.classList.add("select");
+      }).on("mouseout", function(){
+	this.classList.remove("select");
       });
     
     dlListUl.append("li")
-      .style("cursor", "pointer")
       .text("Save as PNG")
       .on("click", function(){
 	downloadImg(select(svg), "png", filename, stanza);
       	dlListDiv.style("display", "none");
-      });    
+      }).on("mouseover", function(){
+	this.classList.add("select");
+      }).on("mouseout", function(){
+	this.classList.remove("select");
+      });  
 
     let downloadImg = function(svg, format, filename, stanza){
       let url, img, canvas, context;
       let pngZoom = 2;  // png resolution rate
+
+      svg.attr("version", 1.1)
+	.attr("xmlns", "http://www.w3.org/2000/svg");
       
       let style = "";
       if (stanza.root.host) style += stanza.root.host.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
       if (stanza) style += stanza.root.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
-      console.log(style);
       let tmp = svg.node().outerHTML.match(/^([^\>]+\>)(.+)$/);
       let string = tmp[1] + "<style>" + style + "</style>" + tmp[2];
       let w = parseInt(svg.style("width"));
       let h = parseInt(svg.style("height"));
-      svg.attr("version", 1.1)
-	.attr("xmlns", "http://www.w3.org/2000/svg");
       
       // downloading function
       let aLinkClickDL = function(){
@@ -1976,6 +1973,7 @@ var metastanza = {
 	url = window.URL.createObjectURL(blobObject);
 	aLinkClickDL();
       }else if(format == "png"){  // PNG
+	console.log(string);
 	filename += ".png";
 	img = new Image();
 	img.src = "data:image/svg+xml;utf8," + encodeURIComponent(string);
@@ -1995,4 +1993,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-13b50001.js.map
+//# sourceMappingURL=metastanza_utils-3433d3ff.js.map
