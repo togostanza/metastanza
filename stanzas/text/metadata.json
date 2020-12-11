@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "text",
-  "stanza:label": "PENQE_Text",
-  "stanza:definition": "",
+  "stanza:label": "text",
+  "stanza:definition": "text for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",
   "stanza:provider": "Togostanza",

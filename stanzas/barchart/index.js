@@ -1,81 +1,142 @@
-import * as d3 from 'd3';
-import metastanza from '@/lib/metastanza_utils.js';
+import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
+  let spec = await fetch(params["src-url"]).then((res) => res.json());
+  spec.data[0].values = [
+    {"category": "value1", "amount": 1},
+    {"category": "value2", "amount": 7},
+    {"category": "value3", "amount": 5},
+    {"category": "value4", "amount": 9},
+  ]
+
+  //stanza（描画範囲）のwidth・height
+  spec.width = params["width"];
+  spec.height = params["height"];
+
+  //stanzaのpadding
+  spec.padding = params["padding"];
+
+  //イベントなど設定できるかと思ったができない
+  // spec.signals[0].on[0].events = "click"
+  // spec.signals[0].on[1].events = "click"
+
+  //棒・スケールに関する設定
+  spec.scales[0].paddingInner = params["padding-inner"]
+  spec.scales[0].paddingOuter = params["padding-outer"]
   
-  stanza.render({
-    template: 'stanza.html.hbs',
-    parameters: {
-      title: params.title
+  //軸に関する設定
+  spec.axes[0].orient = params["orient-of-xaxis"]
+  // gridを表示させたいが、できない
+  // spec.axis[0].grid = true;
+  spec.axes[1].orient = params["orient-of-yaxis"]
+  spec.axes[0].title = params["title-of-xaxis"]
+  spec.axes[1].title = params["title-of-yaxis"]
+  spec.axes[0].encode = {
+    "ticks": {
+      "update": {
+      "stroke": {"value": "var(--label-color)"}
+      }
+    },
+    "labels": {
+      "interactive": true,
+      "update": {
+        "fill": {"value": "var(--label-color)"},
+        "labelFont":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
+      },
+      "hover": {
+        "fill": {"value": "var(--emphasized-color)"}
+      }
+    },
+    "title": {
+      "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+      }
+    },
+    "domain": {
+      "update": {
+        "stroke": {"value": "var(--axis-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+      }
     }
-  });
-  
-  const element = stanza.root.querySelector('#chart');
-  //const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
-  const dataset = await metastanza.getFormatedJson(params.api, element, params.post_params);
-  if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
-}
+  }
 
+  spec.axes[1].encode = {
+    "ticks": {
+      "update": {
+      "stroke": {"value": "var(--axis-color)"}
+      }
+    },
+    "labels": {
+      "interactive": true,
+      "update": {
+        "fill": {"value": "var(--label-color)"},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
+      },
+      "hover": {
+        "fill": {"value": "var(--emphasized-color)"}
+      }
+    },
+    "title": {
+      "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+      }
+    },
+    "domain": {
+      "update": {
+        "stroke": {"value": "var(--axis-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+      }
+    }
+  }
 
-function draw(el, dataset) {
-  let width = 800;
-  let height = 400;
-  let pad_left = 50;
-  let pad_right = 10;
-  let pad_top = 10;
-  let pad_bottom = 130;
+  //rect（棒）の描画について
+  spec.marks[0].encode ={
+    "enter": {
+      "x": {"scale": "xscale", "field": "category"},
+      "width": {"scale": "xscale", "band": params["bar-width"]},
+      "y": {"scale": "yscale", "field": "amount"},
+      "y2": {"scale": "yscale", "value": 0}  
+    },
+    "update": {
+      "fill": {"value": "var(--series-0-color)"},
+      },
+    "hover": {
+      "fill": {"value": "var(--emphasized-color)"}
+    }
+  }
 
-  // SVG
-  const svg = d3.select(el).append("svg").attr("width", width).attr("height", height);
+  spec.marks[1].encode ={
+    "enter": {
+      "align": {"value": "center"},
+      "baseline": {"value": "bottom"},
+      "fill": {"value": "var(--emphasized-color)"},
+      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+      "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
+      "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
+    },
+    "update": {
+      "x": {"scale": "xscale", "signal": "tooltip.category", "band": 0.5},
+      "y": {"scale": "yscale", "signal": "tooltip.amount", "offset": -1},
+      "text": {"signal": "tooltip.amount"},
+      "fillOpacity": [
+        {"test": "datum === tooltip", "value": 0},
+        {"value": 1}
+      ]
+    }
+  }
+  // spec.marks[0].encode.update.fill.value = "var(--bar-color)"
+  // spec.marks[0].encode.hover.fill.value = "var(--emphasized-color)"
+  // spec.marks[1].encode.enter.fill.value = "var(--emphasized-color)"
+  // spec.marks[1].encode.enter.fontSize = {value: params["fontsize-of-value"]}
+  // spec.marks[1].encode.enter.fontWeight = {value: params["fontweight-of-value"]}
 
-  // axis scale
-  let xScale = d3.scaleBand()
-      .rangeRound([pad_left, width - pad_right])
-      .padding(0.1)
-      .domain(dataset.data.map(function(d) { return d.label; }));
-  
-  let yScale = d3.scaleLinear()
-      .domain( [0, d3.max(dataset.data, function(d) {
-	let sum  = 0;
-	Object.keys(d).forEach(key => { if(key != "label") sum += d[key]; })
-	return sum;
-      }) ])
-      .range([height - pad_bottom, pad_top]);
-  
-  // render axis
-  svg.append("g")
-    .attr("transform", "translate(" + 0 + "," + (height - pad_bottom) + ")")
-    .call(d3.axisBottom(xScale))
-    .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("transform", "rotate(-90)")
-    .attr("dx", "-0.8em")
-    .attr("dy", "-0.6em");
-  
-  svg.append("g")
-    .attr("transform", "translate(" + pad_left + "," + 0 + ")")
-    .call(d3.axisLeft(yScale));
-  
-  let stack = d3.stack().keys(dataset.series).order(d3.stackOrderDescending);
-  let series = stack(dataset.data);
-
-  console.log(series);
-  
-  // render bar
-  let data_bar_g = svg.append("g");
-  let series_g = data_bar_g.selectAll(".series")
-      .data(series)
-      .enter()
-      .append("g")
-      .attr("class", function(d, i){ return "series series_" + i; });
-  series_g.selectAll(".bar")
-    .data(function(d) { return d; })
-    .enter()
-    .append("rect")
-    .attr("class", "bar")
-    .attr("x", function(d) { return xScale(d.data.label); })
-    .attr("y", function(d) { return yScale(d[1]); })
-    .attr("width", xScale.bandwidth())
-    .attr("height", function(d) { return yScale(d[0]) - yScale(d[1]); }); 
-
+  const el = stanza.root.querySelector("main");
+  const opts = {
+    renderer: "svg"
+  };
+  await vegaEmbed(el, spec, opts);
 }

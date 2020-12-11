@@ -2,14 +2,14 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "barchart",
-  "stanza:label": "barchart",
-  "stanza:definition": "Vega wrapped barchart for MetaStanza",
+  "@id": "scatterplot",
+  "stanza:label": "scatterplot",
+  "stanza:definition": "Vega wrapped scatterplot for MetaStanza",
   "stanza:type": "Stanza",
-  "stanza:display": "Chart",
+  "stanza:display": "Graph",
   "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "c_nakashima",
+  "stanza:author": "c-nakashima",
   "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
   "stanza:created": "2020-11-06",
@@ -17,8 +17,14 @@
   "stanza:parameter": [
     {
       "stanza:key": "src-url",
-      "stanza:example": "https://vega.github.io/vega/examples/bar-chart.vg.json",
+      "stanza:example": "https://vega.github.io/vega/examples/scatter-plot.vg.json",
       "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "your-data",
+      "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
+      "stanza:description": "JSON data url which you want to draw",
       "stanza:required": true
     },
     {
@@ -55,19 +61,37 @@
       "stanza:key": "title-of-xaxis",
       "stanza:type": "string",
       "stanza:example": "title of Xaxis",
-      "stanza:description": "title of X-axis"
+      "stanza:description": "title of Xaxis"
     },
     {
       "stanza:key": "title-of-yaxis",
       "stanza:type": "string",
       "stanza:example": "title of Yaxis",
-      "stanza:description": "title of Y-axis"
+      "stanza:description": "title of Yaxis"
     },
     {
-      "stanza:key": "bar-width",
-      "stanza:type": "number",
-      "stanza:example": "0.8",
-      "stanza:description": "width of bars.This mast be in the range[0,1]"
+      "stanza:key": "title-of-legend",
+      "stanza:type": "string",
+      "stanza:example": "Acceleration",
+      "stanza:description": "title of legends"
+    },
+    {
+      "stanza:key": "xgrid",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "display of X-grids"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "display of Y-grids"
+    }, 
+    {
+      "stanza:key": "symbol-type",
+      "stanza:type": "string",
+      "stanza:example": "circle",
+      "stanza:description":"symbol type of plot."
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -75,32 +99,14 @@
     {
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#94d0da",
-      "stanza:description": "bar color"
+      "stanza:default": "#4682b4",
+      "stanza:description": "color of plot"
     },
     {
       "stanza:key": "--emphasized-color",
       "stanza:type": "color",
       "stanza:default": "#ec7d8d",
       "stanza:description": "emphasized color when you hover on labels and rects"
-    },
-    {
-      "stanza:key": "--padding-inner",
-      "stanza:type": "number",
-      "stanza:dafault": "0.1",
-      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
-    },
-    {
-      "stanza:key": "--padding-outer",
-      "stanza:type": "number",
-      "stanza:dafault": "0.1",
-      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
-    },
-    {
-      "stanza:key": "--tick-color",
-      "stanza:type": "color",
-      "stanza:default": "#333",
-      "stanza:description": "tick color"
     },
     {
       "stanza:key": "--label-color",
@@ -139,16 +145,22 @@
       "stanza:description": "width of axis"
     },
     {
-      "stanza:key": "--fontsize-of-value",
-      "stanza:type": "number",
-      "stanza:default": "18",
-      "stanza:description": "font size of each value"
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description":"symbol type of plot."
     },
     {
-      "stanza:key": "--fontweight-of-value",
-      "stanza:type": "string",
-      "stanza:default": "bold",
-      "stanza:description": "font weight of each value"
-    }  
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width"
+    }, 
+    {
+      "stanza:key": "--opacity",
+      "stanza:type": "text",
+      "stanza:default": "0.7",
+      "stanza:description":"opacity of each plots"
+    }
   ]
 }
