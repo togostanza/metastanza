@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
 import './timer-be811b16.js';
-import { m as metastanza } from './metastanza_utils-5eed7612.js';
+import { m as metastanza } from './metastanza_utils-c52776c2.js';
 
 async function tableBody(stanza, params) {
 

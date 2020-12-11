@@ -1910,28 +1910,26 @@ var metastanza = {
     g.append("circle").attr("cx", 16).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
     g.append("circle").attr("cx", 24).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
 
+    let listData = [
+      {text: "Save as SVG", type: "svg"},
+      {text: "Save as PNG", type: "png"}
+    ];
+    
     let dlListUl = dlListDiv.append("ul");
-    dlListUl.append("li")
-      .text("Save as SVG")
-      .on("click", function(){
-	downloadImg(select(svg), "svg", filename, stanza);
+    dlListUl.selectAll(".dl_type")
+      .data(listData)
+      .enter()
+      .append("li")
+      .attr("class", "dl_type")
+      .text(function(d){ return d.text })
+      .on("click", function(e, d){
+	downloadImg(select(svg), d.type, filename, stanza);
 	dlListDiv.style("display", "none");
       }).on("mouseover", function(){
 	this.classList.add("hover");
       }).on("mouseout", function(){
 	this.classList.remove("hover");
       });
-    
-    dlListUl.append("li")
-      .text("Save as PNG")
-      .on("click", function(){
-	downloadImg(select(svg), "png", filename, stanza);
-      	dlListDiv.style("display", "none");
-      }).on("mouseover", function(){
-	this.classList.add("hover");
-      }).on("mouseout", function(){
-	this.classList.remove("hover");
-      });  
 
     let downloadImg = function(svg, format, filename, stanza){
       let url, img, canvas, context;
@@ -1941,8 +1939,8 @@ var metastanza = {
 	.attr("xmlns", "http://www.w3.org/2000/svg");
       
       let style = "";
-      if (stanza.root.host) style += stanza.root.host.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
-      if (stanza) style += stanza.root.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
+      if (stanza.root.host && stanza.root.host.querySelector("style")) style += stanza.root.host.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
+      if (stanza && stanza.root.querySelector("style")) style += stanza.root.querySelector("style").innerHTML.replace(/[\r\n]/g, "");
       let tmp = svg.node().outerHTML.match(/^([^\>]+\>)(.+)$/);
       let string = tmp[1] + "<style>" + style + "</style>" + tmp[2];
       let w = parseInt(svg.style("width"));
@@ -1954,7 +1952,7 @@ var metastanza = {
 	  context.drawImage(img, 0, 0, w, h, 0, 0, w * pngZoom, h * pngZoom);
 	  url = canvas.node().toDataURL("image/png");
 	}
-	
+
 	let a = select("body").append("a");	
 	a.attr("class", "downloadLink")
 	  .attr("download", filename)
@@ -1964,19 +1962,19 @@ var metastanza = {
 	
 	a.node().click();
 	
-	setTimeout(function() {
+	setTimeout(function(){
 	  window.URL.revokeObjectURL(url);
-	  if(format == "png") canvas.remove();
+	  if (format == "png") canvas.remove();
 	  a.remove();
 	}, 10);  
       };
       
-      if(format == "svg"){  // SVG
+      if (format == "svg") {  // SVG
 	filename += ".svg";
 	let blobObject = new Blob([string], { "type" : "data:image/svg+xml;base64" });
 	url = window.URL.createObjectURL(blobObject);
 	aLinkClickDL();
-      }else if(format == "png"){  // PNG
+      } else if (format == "png") {  // PNG
 	console.log(string);
 	filename += ".png";
 	img = new Image();
@@ -1997,4 +1995,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-5eed7612.js.map
+//# sourceMappingURL=metastanza_utils-c52776c2.js.map
