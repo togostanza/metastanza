@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
 import './timer-be811b16.js';
-import { m as metastanza, s as select } from './metastanza_utils-3e754189.js';
-import { p as pointer, d as drag } from './drag-7ac599a0.js';
+import { m as metastanza, s as select } from './metastanza_utils-13b50001.js';
+import { p as pointer, d as drag } from './drag-4f6860de.js';
 
 async function manhattanPlotCanvas(stanza, params) {
   stanza.render({

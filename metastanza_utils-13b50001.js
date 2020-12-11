@@ -1888,11 +1888,18 @@ var metastanza = {
     let dlButtonSVG = select(buttonDiv).append("svg")
     	.attr("id", "dl_button")
 	.attr("width", 32)
-	.attr("height", 32);
+	.attr("height", 32)
+	.style("position", "absolute")
+	.style("top", "0px")
+	.style("right", "0px");
     let dlListDiv = select(buttonDiv).append("div")
     	.attr("id", "dl_list")
 	.style("display", "none")
-	.style("border", "solid 1px #000000");
+	.style("border", "solid 1px #000000")
+    	.style("position", "absolute")
+	.style("top", "32px")
+	.style("right", "15px")
+	.style("width", "fir-content");
     let g = dlButtonSVG.append("g")
 	.style("cursor", "pointer")
 	.on("click", function(){
@@ -1907,7 +1914,8 @@ var metastanza = {
     g.append("circle").attr("cx", 16).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
     g.append("circle").attr("cx", 24).attr("cy", 16).attr("r", 2).attr("fill", "#000000");
 
-    let dlListUl = dlListDiv.append("ul");
+    let dlListUl = dlListDiv.append("ul")
+	.style("list-style-type", "none");
     dlListUl.append("li")
       .style("cursor", "pointer")
       .text("Save as SVG")
@@ -1987,4 +1995,4 @@ var metastanza = {
 };
 
 export { metastanza as m, select as s };
-//# sourceMappingURL=metastanza_utils-3e754189.js.map
+//# sourceMappingURL=metastanza_utils-13b50001.js.map
