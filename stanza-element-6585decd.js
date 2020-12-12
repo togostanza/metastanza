@@ -1,17 +1,8 @@
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-function createCommonjsModule(fn, basedir, module) {
-	return module = {
-		path: basedir,
-		exports: {},
-		require: function (path, base) {
-			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-		}
-	}, fn(module, module.exports), module.exports;
-}
-
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
 }
 
 /**
@@ -905,6 +896,21 @@ var commit = {
 		}
 	}
 };
+var container = {
+	name: "container",
+	keywords: [
+	],
+	heights: {
+		"16": {
+			width: 16,
+			path: "<path fill-rule=\"evenodd\" d=\"M10.41.24l4.711 2.774A1.767 1.767 0 0116 4.54v5.01a1.77 1.77 0 01-.88 1.53l-7.753 4.521-.002.001a1.767 1.767 0 01-1.774 0H5.59L.873 12.85A1.762 1.762 0 010 11.327V6.292c0-.304.078-.598.22-.855l.004-.005.01-.019c.15-.262.369-.486.64-.643L8.641.239a1.75 1.75 0 011.765 0l.002.001zM9.397 1.534a.25.25 0 01.252 0l4.115 2.422-7.152 4.148a.267.267 0 01-.269 0L2.227 5.716l7.17-4.182zM7.365 9.402L8.73 8.61v4.46l-1.5.875V9.473a1.77 1.77 0 00.136-.071zm2.864 2.794V7.741l1.521-.882v4.45l-1.521.887zm3.021-1.762l1.115-.65h.002a.268.268 0 00.133-.232V5.264l-1.25.725v4.445zm-11.621 1.12l4.1 2.393V9.474a1.77 1.77 0 01-.138-.072L1.5 7.029v4.298c0 .095.05.181.129.227z\"></path>"
+		},
+		"24": {
+			width: 24,
+			path: "<path fill-rule=\"evenodd\" d=\"M13.152.682a2.25 2.25 0 012.269 0l.007.004 6.957 4.276a2.276 2.276 0 011.126 1.964v7.516c0 .81-.432 1.56-1.133 1.968l-.002.001-11.964 7.037-.004.003a2.276 2.276 0 01-2.284 0l-.026-.015-6.503-4.502a2.268 2.268 0 01-1.096-1.943V9.438c0-.392.1-.77.284-1.1l.003-.006.014-.026a2.28 2.28 0 01.82-.827h.002L13.152.681zm.757 1.295h-.001L2.648 8.616l6.248 4.247a.776.776 0 00.758-.01h.001l11.633-6.804-6.629-4.074a.75.75 0 00-.75.003zM18 9.709l-3.25 1.9v7.548L18 17.245V9.709zm1.5-.878v7.532l2.124-1.25a.777.777 0 00.387-.671V7.363L19.5 8.831zm-9.09 5.316l2.84-1.66v7.552l-3.233 1.902v-7.612c.134-.047.265-.107.391-.18l.002-.002zm-1.893 7.754V14.33a2.277 2.277 0 01-.393-.18l-.023-.014-6.102-4.147v7.003c0 .275.145.528.379.664l.025.014 6.114 4.232z\"></path>"
+		}
+	}
+};
 var copy = {
 	name: "copy",
 	keywords: [
@@ -940,7 +946,7 @@ var dash = {
 	heights: {
 		"16": {
 			width: 16,
-			path: "<path fill-rule=\"evenodd\" d=\"M2 8a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H2.75A.75.75 0 012 8z\"></path>"
+			path: "<path fill-rule=\"evenodd\" d=\"M2 7.75A.75.75 0 012.75 7h10a.75.75 0 010 1.5h-10A.75.75 0 012 7.75z\"></path>"
 		},
 		"24": {
 			width: 24,
@@ -1819,7 +1825,7 @@ var plus = {
 	heights: {
 		"16": {
 			width: 16,
-			path: "<path fill-rule=\"evenodd\" d=\"M8 2a.75.75 0 01.75.75v4.5h4.5a.75.75 0 010 1.5h-4.5v4.5a.75.75 0 01-1.5 0v-4.5h-4.5a.75.75 0 010-1.5h4.5v-4.5A.75.75 0 018 2z\"></path>"
+			path: "<path fill-rule=\"evenodd\" d=\"M7.75 2a.75.75 0 01.75.75V7h4.25a.75.75 0 110 1.5H8.5v4.25a.75.75 0 11-1.5 0V8.5H2.75a.75.75 0 010-1.5H7V2.75A.75.75 0 017.75 2z\"></path>"
 		},
 		"24": {
 			width: 24,
@@ -2108,7 +2114,7 @@ var smiley = {
 		},
 		"24": {
 			width: 24,
-			path: "<path d=\"M9.503 14.639a.75.75 0 00-1.047-.145.767.767 0 00-.146 1.055l.075.092c.044.05.105.119.184.198.158.158.39.363.695.566A4.88 4.88 0 0012 17.22a4.88 4.88 0 002.736-.814 4.58 4.58 0 00.695-.566c.079-.08.14-.147.184-.198l.079-.097a.75.75 0 00-1.197-.905l-.001.002a1.807 1.807 0 01-.126.137c-.1.1-.255.239-.466.38a3.38 3.38 0 01-1.904.56 3.38 3.38 0 01-1.904-.56 3.078 3.078 0 01-.466-.38 1.668 1.668 0 01-.127-.139zM16 11.75a1.25 1.25 0 100-2.5 1.25 1.25 0 000 2.5zM9 10.5a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z\"></path><path fill-rule=\"evenodd\" d=\"M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm0 1.781a9.219 9.219 0 100 18.438A9.219 9.219 0 0012 2.78z\"></path>"
+			path: "<path d=\"M8.456 14.494a.75.75 0 011.068.17 3.08 3.08 0 00.572.492A3.381 3.381 0 0012 15.72c.855 0 1.487-.283 1.904-.562a3.081 3.081 0 00.572-.492l.021-.026a.75.75 0 011.197.905l-.027.034c-.013.016-.03.038-.052.063-.044.05-.105.119-.184.198a4.569 4.569 0 01-.695.566A4.88 4.88 0 0112 17.22a4.88 4.88 0 01-2.736-.814 4.57 4.57 0 01-.695-.566 3.253 3.253 0 01-.236-.261c-.259-.332-.223-.824.123-1.084z\"></path><path fill-rule=\"evenodd\" d=\"M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zM2.5 12a9.5 9.5 0 1119 0 9.5 9.5 0 01-19 0z\"></path><path d=\"M9 10.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0zM16.25 12a1.25 1.25 0 100-2.5 1.25 1.25 0 000 2.5z\"></path>"
 		}
 	}
 };
@@ -2138,6 +2144,10 @@ var squirrel = {
 		"16": {
 			width: 16,
 			path: "<path fill-rule=\"evenodd\" d=\"M3.499.75a.75.75 0 011.5 0v.996C5.9 2.903 6.793 3.65 7.662 4.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873 10.794-.045 12.622.26 14.408.558 16 1.94 16 4.25c0 1.278-.954 2.575-2.44 2.734l.146.508.065.22c.203.701.412 1.455.476 2.226.142 1.707-.4 3.03-1.487 3.898C11.714 14.671 10.27 15 8.75 15h-6a.75.75 0 010-1.5h1.376a4.489 4.489 0 01-.563-1.191 3.833 3.833 0 01-.05-2.063 4.636 4.636 0 01-2.025-.293.75.75 0 11.525-1.406c1.357.507 2.376-.006 2.698-.318l.009-.01a.748.748 0 011.06 0 .75.75 0 01-.012 1.074c-.912.92-.992 1.835-.768 2.586.221.74.745 1.337 1.196 1.621H8.75c1.343 0 2.398-.296 3.074-.836.635-.507 1.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.404 2.404 0 01-.507-.441 3.063 3.063 0 01-.633-1.248.75.75 0 011.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738 0 1.25-.615 1.25-1.25 0-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706 1.345-.46.92-.27 1.774.019 3.062l.042.19a.753.753 0 01.01.05c.348.443.666.949.94 1.553a.75.75 0 11-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768a85.08 85.08 0 00-.317-.265c-.814-.68-1.75-1.462-2.692-2.619a3.74 3.74 0 00-1.023.88c-.406.495-.663 1.036-.722 1.508.116.122.306.21.591.239.388.038.797-.06 1.032-.19a.75.75 0 01.728 1.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75 5.677V5.5c0-.984.48-1.94 1.077-2.664.46-.559 1.05-1.055 1.673-1.353V.75z\"></path>"
+		},
+		"24": {
+			width: 24,
+			path: "<path d=\"M18.377 3.49c-1.862-.31-3.718.62-4.456 2.095-.428.857-.691 1.624-.728 2.361-.035.71.138 1.444.67 2.252.644.854 1.199 1.913 1.608 3.346a.75.75 0 11-1.442.412c-.353-1.236-.82-2.135-1.372-2.865l-.008-.01c-.53-.698-1.14-1.242-1.807-1.778a50.724 50.724 0 00-.667-.524C9.024 7.884 7.71 6.863 6.471 5.16c-.59.287-1.248.798-1.806 1.454-.665.78-1.097 1.66-1.158 2.446.246.36.685.61 1.246.715.643.12 1.278.015 1.633-.182a.75.75 0 11.728 1.311c-.723.402-1.728.516-2.637.346-.916-.172-1.898-.667-2.398-1.666L2 9.427V9.25c0-1.323.678-2.615 1.523-3.607.7-.824 1.59-1.528 2.477-1.917V2.75a.75.75 0 111.5 0v1.27c1.154 1.67 2.363 2.612 3.568 3.551.207.162.415.323.621.489.001-.063.003-.126.006-.188.052-1.034.414-2.017.884-2.958 1.06-2.118 3.594-3.313 6.044-2.904 1.225.204 2.329.795 3.125 1.748C22.546 4.713 23 5.988 23 7.5c0 1.496-.913 3.255-2.688 3.652.838 1.699 1.438 3.768 1.181 5.697-.269 2.017-1.04 3.615-2.582 4.675C17.409 22.558 15.288 23 12.5 23H4.75a.75.75 0 010-1.5h2.322c-.58-.701-.998-1.578-1.223-2.471-.327-1.3-.297-2.786.265-4.131-.92.091-1.985-.02-3.126-.445a.75.75 0 11.524-1.406c1.964.733 3.428.266 4.045-.19.068-.06.137-.12.208-.18a.745.745 0 01.861-.076.746.746 0 01.32.368.752.752 0 01-.173.819c-.077.076-.16.15-.252.221-1.322 1.234-1.62 3.055-1.218 4.654.438 1.737 1.574 2.833 2.69 2.837H12.5c2.674 0 4.429-.433 5.56-1.212 1.094-.752 1.715-1.904 1.946-3.637.236-1.768-.445-3.845-1.407-5.529a.576.576 0 01-.012-.02 3.557 3.557 0 01-1.553-.94c-.556-.565-.89-1.243-1.012-1.73a.75.75 0 011.456-.364c.057.231.26.67.626 1.043.35.357.822.623 1.443.623 1.172 0 1.953-1.058 1.953-2.234 0-1.205-.357-2.127-.903-2.78-.547-.654-1.318-1.08-2.22-1.23z\"></path>"
 		}
 	}
 };
@@ -2189,6 +2199,21 @@ var stopwatch = {
 		"24": {
 			width: 24,
 			path: "<path fill-rule=\"evenodd\" d=\"M10.25 0a.75.75 0 000 1.5h1v1.278a9.955 9.955 0 00-5.635 2.276L4.28 3.72a.75.75 0 00-1.06 1.06l1.315 1.316A9.962 9.962 0 002 12.75c0 5.523 4.477 10 10 10s10-4.477 10-10a9.962 9.962 0 00-2.535-6.654L20.78 4.78a.75.75 0 00-1.06-1.06l-1.334 1.334a9.955 9.955 0 00-5.636-2.276V1.5h1a.75.75 0 000-1.5h-3.5zM12 21.25a8.5 8.5 0 100-17 8.5 8.5 0 000 17zm4.03-12.53a.75.75 0 010 1.06l-2.381 2.382a1.75 1.75 0 11-1.06-1.06l2.38-2.382a.75.75 0 011.061 0z\"></path>"
+		}
+	}
+};
+var strikethrough = {
+	name: "strikethrough",
+	keywords: [
+	],
+	heights: {
+		"16": {
+			width: 16,
+			path: "<path fill-rule=\"evenodd\" d=\"M7.581 3.25c-2.036 0-2.778 1.082-2.778 1.786 0 .055.002.107.006.157a.75.75 0 01-1.496.114 3.56 3.56 0 01-.01-.271c0-1.832 1.75-3.286 4.278-3.286 1.418 0 2.721.58 3.514 1.093a.75.75 0 11-.814 1.26c-.64-.414-1.662-.853-2.7-.853zm3.474 5.25h3.195a.75.75 0 000-1.5H1.75a.75.75 0 000 1.5h6.018c.835.187 1.503.464 1.951.81.439.34.647.725.647 1.197 0 .428-.159.895-.594 1.267-.444.38-1.254.726-2.676.726-1.373 0-2.38-.493-2.86-.956a.75.75 0 00-1.042 1.079C3.992 13.393 5.39 14 7.096 14c1.652 0 2.852-.403 3.65-1.085a3.134 3.134 0 001.12-2.408 2.85 2.85 0 00-.811-2.007z\"></path>"
+		},
+		"24": {
+			width: 24,
+			path: "<path fill-rule=\"evenodd\" d=\"M12.36 5C9.37 5 8.105 6.613 8.105 7.848c0 .411.072.744.193 1.02a.75.75 0 01-1.373.603 3.993 3.993 0 01-.32-1.623c0-2.363 2.271-4.348 5.755-4.348 1.931 0 3.722.794 4.814 1.5a.75.75 0 11-.814 1.26c-.94-.607-2.448-1.26-4-1.26zm4.173 7.5h3.717a.75.75 0 000-1.5H3.75a.75.75 0 000 1.5h9.136c1.162.28 2.111.688 2.76 1.211.642.518.979 1.134.979 1.898a2.63 2.63 0 01-.954 2.036c-.703.601-1.934 1.105-3.999 1.105-2.018 0-3.529-.723-4.276-1.445a.75.75 0 10-1.042 1.08c1.066 1.028 2.968 1.865 5.318 1.865 2.295 0 3.916-.56 4.974-1.464a4.131 4.131 0 001.479-3.177c0-1.296-.608-2.316-1.538-3.066a5.77 5.77 0 00-.054-.043z\"></path>"
 		}
 	}
 };
@@ -2978,6 +3003,7 @@ var data = {
 	}
 },
 	commit: commit,
+	container: container,
 	copy: copy,
 	cpu: cpu,
 	"credit-card": {
@@ -4182,6 +4208,7 @@ var data = {
 },
 	stop: stop,
 	stopwatch: stopwatch,
+	strikethrough: strikethrough,
 	sun: sun,
 	sync: sync,
 	tab: tab,
@@ -5062,11 +5089,8 @@ module.exports = exports['default'];
 
 });
 
-var helpers = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.registerDefaultHelpers = registerDefaultHelpers;
-exports.moveHelperToHooks = moveHelperToHooks;
+var registerDefaultHelpers_1 = registerDefaultHelpers;
+var moveHelperToHooks_1 = moveHelperToHooks;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -5118,7 +5142,11 @@ function moveHelperToHooks(instance, helperName, keepHelper) {
   }
 }
 
-});
+
+var helpers = /*#__PURE__*/Object.defineProperty({
+	registerDefaultHelpers: registerDefaultHelpers_1,
+	moveHelperToHooks: moveHelperToHooks_1
+}, '__esModule', {value: true});
 
 var inline = createCommonjsModule(function (module, exports) {
 
@@ -5151,23 +5179,23 @@ module.exports = exports['default'];
 
 });
 
-var decorators = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.registerDefaultDecorators = registerDefaultDecorators;
+var registerDefaultDecorators_1 = registerDefaultDecorators;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$1(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 
 
-var _decoratorsInline2 = _interopRequireDefault(inline);
+var _decoratorsInline2 = _interopRequireDefault$1(inline);
 
 function registerDefaultDecorators(instance) {
   _decoratorsInline2['default'](instance);
 }
 
-});
+
+var decorators = /*#__PURE__*/Object.defineProperty({
+	registerDefaultDecorators: registerDefaultDecorators_1
+}, '__esModule', {value: true});
 
 var logger_1 = createCommonjsModule(function (module, exports) {
 
@@ -5218,10 +5246,7 @@ module.exports = exports['default'];
 
 });
 
-var createNewLookupObject_1 = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.createNewLookupObject = createNewLookupObject;
+var createNewLookupObject_2 = createNewLookupObject;
 
 
 
@@ -5240,14 +5265,14 @@ function createNewLookupObject() {
   return utils.extend.apply(undefined, [Object.create(null)].concat(sources));
 }
 
-});
 
-var protoAccess = createCommonjsModule(function (module, exports) {
+var createNewLookupObject_1 = /*#__PURE__*/Object.defineProperty({
+	createNewLookupObject: createNewLookupObject_2
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.createProtoAccessControl = createProtoAccessControl;
-exports.resultIsAllowed = resultIsAllowed;
-exports.resetLoggedProperties = resetLoggedProperties;
+var createProtoAccessControl_1 = createProtoAccessControl;
+var resultIsAllowed_1 = resultIsAllowed;
+var resetLoggedProperties_1 = resetLoggedProperties;
 // istanbul ignore next
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -5315,21 +5340,23 @@ function resetLoggedProperties() {
   });
 }
 
-});
 
-var base = createCommonjsModule(function (module, exports) {
+var protoAccess = /*#__PURE__*/Object.defineProperty({
+	createProtoAccessControl: createProtoAccessControl_1,
+	resultIsAllowed: resultIsAllowed_1,
+	resetLoggedProperties: resetLoggedProperties_1
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.HandlebarsEnvironment = HandlebarsEnvironment;
+var HandlebarsEnvironment_1 = HandlebarsEnvironment;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$2(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 
 
 
 
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault$2(exception);
 
 
 
@@ -5337,17 +5364,17 @@ var _exception2 = _interopRequireDefault(exception);
 
 
 
-var _logger2 = _interopRequireDefault(logger_1);
+var _logger2 = _interopRequireDefault$2(logger_1);
 
 
 
 var VERSION = '4.7.6';
-exports.VERSION = VERSION;
+var VERSION_1 = VERSION;
 var COMPILER_REVISION = 8;
-exports.COMPILER_REVISION = COMPILER_REVISION;
+var COMPILER_REVISION_1 = COMPILER_REVISION;
 var LAST_COMPATIBLE_COMPILER_REVISION = 7;
 
-exports.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
+var LAST_COMPATIBLE_COMPILER_REVISION_1 = LAST_COMPATIBLE_COMPILER_REVISION;
 var REVISION_CHANGES = {
   1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
   2: '== 1.0.0-rc.3',
@@ -5359,7 +5386,7 @@ var REVISION_CHANGES = {
   8: '>= 4.3.0'
 };
 
-exports.REVISION_CHANGES = REVISION_CHANGES;
+var REVISION_CHANGES_1 = REVISION_CHANGES;
 var objectType = '[object Object]';
 
 function HandlebarsEnvironment(helpers$1, partials, decorators$1) {
@@ -5427,13 +5454,23 @@ HandlebarsEnvironment.prototype = {
   }
 };
 
-var log = _logger2['default'].log;
+var log$1 = _logger2['default'].log;
 
-exports.log = log;
-exports.createFrame = utils.createFrame;
-exports.logger = _logger2['default'];
+var log_1 = log$1;
+var createFrame = utils.createFrame;
+var logger$1 = _logger2['default'];
 
-});
+
+var base = /*#__PURE__*/Object.defineProperty({
+	HandlebarsEnvironment: HandlebarsEnvironment_1,
+	VERSION: VERSION_1,
+	COMPILER_REVISION: COMPILER_REVISION_1,
+	LAST_COMPATIBLE_COMPILER_REVISION: LAST_COMPATIBLE_COMPILER_REVISION_1,
+	REVISION_CHANGES: REVISION_CHANGES_1,
+	log: log_1,
+	createFrame: createFrame,
+	logger: logger$1
+}, '__esModule', {value: true});
 
 var safeString = createCommonjsModule(function (module, exports) {
 
@@ -5451,10 +5488,7 @@ module.exports = exports['default'];
 
 });
 
-var wrapHelper_1 = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.wrapHelper = wrapHelper;
+var wrapHelper_2 = wrapHelper;
 
 function wrapHelper(helper, transformOptionsFn) {
   if (typeof helper !== 'function') {
@@ -5470,32 +5504,32 @@ function wrapHelper(helper, transformOptionsFn) {
   return wrapper;
 }
 
-});
 
-var runtime = createCommonjsModule(function (module, exports) {
+var wrapHelper_1 = /*#__PURE__*/Object.defineProperty({
+	wrapHelper: wrapHelper_2
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.checkRevision = checkRevision;
-exports.template = template;
-exports.wrapProgram = wrapProgram;
-exports.resolvePartial = resolvePartial;
-exports.invokePartial = invokePartial;
-exports.noop = noop;
+var checkRevision_1 = checkRevision;
+var template_1 = template;
+var wrapProgram_1 = wrapProgram;
+var resolvePartial_1 = resolvePartial;
+var invokePartial_1 = invokePartial;
+var noop_1 = noop$1;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$3(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 // istanbul ignore next
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+function _interopRequireWildcard$1(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 
 
-var Utils = _interopRequireWildcard(utils);
+var Utils = _interopRequireWildcard$1(utils);
 
 
 
-var _exception2 = _interopRequireDefault(exception);
+var _exception2$1 = _interopRequireDefault$3(exception);
 
 
 
@@ -5516,20 +5550,20 @@ function checkRevision(compilerInfo) {
   if (compilerRevision < base.LAST_COMPATIBLE_COMPILER_REVISION) {
     var runtimeVersions = base.REVISION_CHANGES[currentRevision],
         compilerVersions = base.REVISION_CHANGES[compilerRevision];
-    throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
+    throw new _exception2$1['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
   } else {
     // Use the embedded version info since the runtime doesn't know about this revision yet
-    throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
+    throw new _exception2$1['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
   }
 }
 
 function template(templateSpec, env) {
   /* istanbul ignore next */
   if (!env) {
-    throw new _exception2['default']('No environment passed to template');
+    throw new _exception2$1['default']('No environment passed to template');
   }
   if (!templateSpec || !templateSpec.main) {
-    throw new _exception2['default']('Unknown template object: ' + typeof templateSpec);
+    throw new _exception2$1['default']('Unknown template object: ' + typeof templateSpec);
   }
 
   templateSpec.main.decorator = templateSpec.main_d;
@@ -5575,7 +5609,7 @@ function template(templateSpec, env) {
       }
       return result;
     } else {
-      throw new _exception2['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
+      throw new _exception2$1['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
     }
   }
 
@@ -5583,7 +5617,7 @@ function template(templateSpec, env) {
   var container = {
     strict: function strict(obj, name, loc) {
       if (!obj || !(name in obj)) {
-        throw new _exception2['default']('"' + name + '" not defined in ' + obj, {
+        throw new _exception2$1['default']('"' + name + '" not defined in ' + obj, {
           loc: loc
         });
       }
@@ -5719,10 +5753,10 @@ function template(templateSpec, env) {
 
   ret._child = function (i, data, blockParams, depths) {
     if (templateSpec.useBlockParams && !blockParams) {
-      throw new _exception2['default']('must pass block params');
+      throw new _exception2$1['default']('must pass block params');
     }
     if (templateSpec.useDepths && !depths) {
-      throw new _exception2['default']('must pass parent depths');
+      throw new _exception2$1['default']('must pass parent depths');
     }
 
     return wrapProgram(container, i, templateSpec[i], data, 0, blockParams, depths);
@@ -5778,7 +5812,7 @@ function invokePartial(partial, context, options) {
   }
 
   var partialBlock = undefined;
-  if (options.fn && options.fn !== noop) {
+  if (options.fn && options.fn !== noop$1) {
     (function () {
       options.data = base.createFrame(options.data);
       // Wrapper function to get access to currentPartialBlock from the closure
@@ -5803,13 +5837,13 @@ function invokePartial(partial, context, options) {
   }
 
   if (partial === undefined) {
-    throw new _exception2['default']('The partial ' + options.name + ' could not be found');
+    throw new _exception2$1['default']('The partial ' + options.name + ' could not be found');
   } else if (partial instanceof Function) {
     return partial(context, options);
   }
 }
 
-function noop() {
+function noop$1() {
   return '';
 }
 
@@ -5844,7 +5878,15 @@ function passLookupPropertyOption(helper, container) {
   });
 }
 
-});
+
+var runtime = /*#__PURE__*/Object.defineProperty({
+	checkRevision: checkRevision_1,
+	template: template_1,
+	wrapProgram: wrapProgram_1,
+	resolvePartial: resolvePartial_1,
+	invokePartial: invokePartial_1,
+	noop: noop_1
+}, '__esModule', {value: true});
 
 var noConflict = createCommonjsModule(function (module, exports) {
 
@@ -5939,7 +5981,6 @@ module.exports = exports['default'];
 // the runtime on a supported path.
 var runtime$1 = handlebars_runtime['default'];
 
-var lodash_isequal = createCommonjsModule(function (module, exports) {
 /**
  * Lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="npm" -o ./`
@@ -5949,6 +5990,7 @@ var lodash_isequal = createCommonjsModule(function (module, exports) {
  * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 
+var lodash_isequal = createCommonjsModule(function (module, exports) {
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
 
@@ -8018,4 +8060,4 @@ function ensureAboutLinkElementDefined() {
 }
 
 export { createCommonjsModule as c, defineStanzaElement as d };
-//# sourceMappingURL=stanza-element-d1cc4290.js.map
+//# sourceMappingURL=stanza-element-6585decd.js.map

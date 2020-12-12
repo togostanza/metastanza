@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
+import { d as defineStanzaElement } from './stanza-element-6585decd.js';
 
 function columnTreeView(stanza, params) {
 

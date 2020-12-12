@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
+import { d as defineStanzaElement } from './stanza-element-6585decd.js';
 import './timer-be811b16.js';
 import './metastanza_utils-c52776c2.js';
 import './table_body.js';

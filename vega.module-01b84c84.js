@@ -3419,6 +3419,11 @@ function defaultLocale$2(numberSpec, timeSpec) {
 
   return args ? createLocale(numberFormatDefaultLocale(numberSpec), timeFormatDefaultLocale(timeSpec)) : createLocale(numberFormatDefaultLocale(), timeFormatDefaultLocale());
 }
+function resetDefaultLocale() {
+  resetNumberFormatDefaultLocale();
+  resetTimeFormatDefaultLocale();
+  return defaultLocale$2();
+}
 
 //   https://...    file://...    //...
 
@@ -6193,6 +6198,9 @@ function bin$1 (_) {
 }
 
 var random = Math.random;
+function setRandom(r) {
+  random = r;
+}
 
 function bootstrapCI (array, samples, alpha, f) {
   if (!array.length) return [undefined, undefined];
@@ -6283,6 +6291,64 @@ function smoothing(v, thresh) {
   }
 
   return v;
+}
+
+function lcg (seed) {
+  // Random numbers using a Linear Congruential Generator with seed value
+  // Uses glibc values from https://en.wikipedia.org/wiki/Linear_congruential_generator
+  return function () {
+    seed = (1103515245 * seed + 12345) % 2147483647;
+    return seed / 2147483647;
+  };
+}
+
+function integer (min, max) {
+  if (max == null) {
+    max = min;
+    min = 0;
+  }
+
+  let a, b, d;
+  const dist = {
+    min(_) {
+      if (arguments.length) {
+        a = _ || 0;
+        d = b - a;
+        return dist;
+      } else {
+        return a;
+      }
+    },
+
+    max(_) {
+      if (arguments.length) {
+        b = _ || 0;
+        d = b - a;
+        return dist;
+      } else {
+        return b;
+      }
+    },
+
+    sample() {
+      return a + Math.floor(d * random());
+    },
+
+    pdf(x) {
+      return x === Math.floor(x) && x >= a && x < b ? 1 / d : 0;
+    },
+
+    cdf(x) {
+      const v = Math.floor(x);
+      return v < a ? 0 : v >= b ? 1 : (v - a + 1) / d;
+    },
+
+    icdf(p) {
+      return p >= 0 && p <= 1 ? a - 1 + Math.floor(p * d) : NaN;
+    }
+
+  };
+  return dist.min(min).max(max);
 }
 
 const SQRT2PI = Math.sqrt(2 * Math.PI);
@@ -15188,6 +15254,9 @@ function domainCaption(locale, scale, opt) {
 }
 
 let gradient_id = 0;
+function resetSVGGradientId() {
+  gradient_id = 0;
+}
 const patternPrefix = 'p_';
 function isGradient(value) {
   return value && value.gradient;
@@ -16220,6 +16289,9 @@ function trail(context, items) {
 }
 
 var clip_id = 1;
+function resetSVGClipId() {
+  clip_id = 1;
+}
 function clip (renderer, item, size) {
   var clip = item.clip,
       defs = renderer._defs,
@@ -20305,6 +20377,40 @@ function boundClip (mark) {
   } else return;
 
   mark.bounds.intersect(clipBounds);
+}
+
+const TOLERANCE = 1e-9;
+function sceneEqual(a, b, key) {
+  return a === b ? true : key === 'path' ? pathEqual(a, b) : a instanceof Date && b instanceof Date ? +a === +b : isNumber(a) && isNumber(b) ? Math.abs(a - b) <= TOLERANCE : !a || !b || !isObject(a) && !isObject(b) ? a == b : objectEqual(a, b);
+}
+function pathEqual(a, b) {
+  return sceneEqual(pathParse(a), pathParse(b));
+}
+
+function objectEqual(a, b) {
+  var ka = Object.keys(a),
+      kb = Object.keys(b),
+      key,
+      i;
+  if (ka.length !== kb.length) return false;
+  ka.sort();
+  kb.sort();
+
+  for (i = ka.length - 1; i >= 0; i--) {
+    if (ka[i] != kb[i]) return false;
+  }
+
+  for (i = ka.length - 1; i >= 0; i--) {
+    key = ka[i];
+    if (!sceneEqual(a[key], b[key], key)) return false;
+  }
+
+  return typeof a === typeof b;
+}
+
+function resetSVGDefIds() {
+  resetSVGClipId();
+  resetSVGGradientId();
 }
 
 const Top = 'top';
@@ -27835,7 +27941,7 @@ const a = 1664525;
 const c = 1013904223;
 const m = 4294967296; // 2^32
 
-function lcg() {
+function lcg$1() {
   let s = 1;
   return () => (s = (a * s + c) % m) / m;
 }
@@ -27861,7 +27967,7 @@ function forceSimulation(nodes) {
       forces = new Map(),
       stepper = timer$1(step),
       event = dispatch("tick", "end"),
-      random = lcg();
+      random = lcg$1();
 
   if (nodes == null) nodes = [];
 
@@ -43015,8 +43121,238 @@ function parse$1$1 (spec, config, options) {
   return parseView(spec, new Scope$1(config, options)).toRuntime();
 }
 
+var version = "5.17.0";
+
 // -- Transforms -----
 extend(transforms, tx, vtx, encode, geo, force, label, tree$1, reg, voronoi, wordcloud, xf); // -- Exports -----
 
-export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, isArray as d, isFunction as e, array as f, eventSelector as g, has as h, isNumber as i, identity as j, parse$1$1 as k, logger as l, mergeConfig as m, parser as p, splitAccessPath as s, toSet as t, writeConfig as w };
-//# sourceMappingURL=vega.module-dc1c4886.js.map
+var vegaImport = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  version: version,
+  Dataflow: Dataflow,
+  EventStream: EventStream,
+  MultiPulse: MultiPulse,
+  Operator: Operator,
+  Parameters: Parameters,
+  Pulse: Pulse,
+  Transform: Transform,
+  changeset: changeset,
+  definition: definition,
+  ingest: ingest,
+  isTuple: isTuple,
+  transform: transform$1,
+  transforms: transforms,
+  tupleid: tupleid,
+  interpolate: interpolate$1,
+  interpolateColors: interpolateColors,
+  interpolateRange: interpolateRange,
+  quantizeInterpolator: quantizeInterpolator,
+  scale: scale,
+  scheme: scheme,
+  projection: projection$1,
+  View: View,
+  defaultLocale: defaultLocale$2,
+  formatLocale: numberFormatDefaultLocale,
+  locale: locale$2,
+  resetDefaultLocale: resetDefaultLocale,
+  timeFormatLocale: timeFormatDefaultLocale,
+  expressionFunction: expressionFunction,
+  parse: parse$1$1,
+  runtimeContext: context$2,
+  Debug: Debug,
+  Error: Error$1,
+  Info: Info,
+  None: None,
+  Warn: Warn,
+  accessor: accessor,
+  accessorFields: accessorFields,
+  accessorName: accessorName,
+  array: array,
+  ascending: ascending,
+  clampRange: clampRange,
+  compare: compare,
+  constant: constant,
+  debounce: debounce,
+  error: error,
+  extend: extend,
+  extent: extent,
+  extentIndex: extentIndex,
+  falsy: falsy,
+  fastmap: fastmap,
+  field: field,
+  flush: flush,
+  hasOwnProperty: has,
+  id: id,
+  identity: identity,
+  inherits: inherits,
+  inrange: inrange,
+  isArray: isArray,
+  isBoolean: isBoolean,
+  isDate: isDate,
+  isFunction: isFunction,
+  isIterable: isIterable,
+  isNumber: isNumber,
+  isObject: isObject,
+  isRegExp: isRegExp,
+  isString: isString,
+  key: key,
+  lerp: lerp,
+  logger: logger,
+  lruCache: lruCache,
+  merge: merge,
+  mergeConfig: mergeConfig,
+  one: one,
+  pad: pad,
+  panLinear: panLinear,
+  panLog: panLog,
+  panPow: panPow,
+  panSymlog: panSymlog,
+  peek: peek,
+  quarter: quarter,
+  repeat: repeat,
+  span: span,
+  splitAccessPath: splitAccessPath,
+  stringValue: $,
+  toBoolean: toBoolean,
+  toDate: toDate,
+  toNumber: toNumber,
+  toSet: toSet,
+  toString: toString,
+  truncate: truncate,
+  truthy: truthy,
+  utcquarter: utcquarter,
+  visitArray: visitArray,
+  writeConfig: writeConfig,
+  zero: zero,
+  zoomLinear: zoomLinear,
+  zoomLog: zoomLog,
+  zoomPow: zoomPow,
+  zoomSymlog: zoomSymlog,
+  bandwidthNRD: estimateBandwidth,
+  bin: bin$1,
+  bootstrapCI: bootstrapCI,
+  cumulativeLogNormal: cumulativeLogNormal,
+  cumulativeNormal: cumulativeNormal,
+  cumulativeUniform: cumulativeUniform,
+  densityLogNormal: densityLogNormal,
+  densityNormal: densityNormal,
+  densityUniform: densityUniform,
+  dotbin: dotbin,
+  quantileLogNormal: quantileLogNormal,
+  quantileNormal: quantileNormal,
+  quantileUniform: quantileUniform,
+  quantiles: quantiles,
+  quartiles: quartiles,
+  get random () { return random; },
+  randomInteger: integer,
+  randomKDE: kde,
+  randomLCG: lcg,
+  randomLogNormal: lognormal,
+  randomMixture: mixture,
+  randomNormal: gaussian,
+  randomUniform: uniform,
+  regressionExp: exp$1,
+  regressionLinear: linear,
+  regressionLoess: loess,
+  regressionLog: log$2,
+  regressionPoly: poly,
+  regressionPow: pow$1,
+  regressionQuad: quad,
+  sampleCurve: sampleCurve,
+  sampleLogNormal: sampleLogNormal,
+  sampleNormal: sampleNormal,
+  sampleUniform: sampleUniform,
+  setRandom: setRandom,
+  DATE: DATE,
+  DAY: DAY,
+  DAYOFYEAR: DAYOFYEAR,
+  HOURS: HOURS,
+  MILLISECONDS: MILLISECONDS,
+  MINUTES: MINUTES,
+  MONTH: MONTH,
+  QUARTER: QUARTER,
+  SECONDS: SECONDS,
+  TIME_UNITS: TIME_UNITS,
+  WEEK: WEEK,
+  YEAR: YEAR,
+  dayofyear: dayofyear,
+  timeBin: bin,
+  timeFloor: timeFloor,
+  timeInterval: timeInterval,
+  timeOffset: timeOffset,
+  timeSequence: timeSequence,
+  timeUnitSpecifier: timeUnitSpecifier,
+  timeUnits: timeUnits,
+  utcFloor: utcFloor,
+  utcInterval: utcInterval,
+  utcOffset: utcOffset,
+  utcSequence: utcSequence,
+  utcdayofyear: utcdayofyear,
+  utcweek: utcweek,
+  week: week,
+  format: format$1,
+  formats: formats,
+  inferType: inferType,
+  inferTypes: inferTypes,
+  loader: loader,
+  read: read,
+  responseType: responseType,
+  typeParsers: typeParsers,
+  Bounds: Bounds,
+  CanvasHandler: CanvasHandler,
+  CanvasRenderer: CanvasRenderer,
+  Gradient: Gradient,
+  GroupItem: GroupItem,
+  Handler: Handler,
+  Item: Item,
+  Marks: Marks,
+  RenderType: RenderType,
+  Renderer: Renderer,
+  ResourceLoader: ResourceLoader,
+  SVGHandler: SVGHandler,
+  SVGRenderer: SVGRenderer,
+  SVGStringRenderer: SVGStringRenderer,
+  Scenegraph: Scenegraph,
+  boundClip: boundClip,
+  boundContext: boundContext,
+  boundItem: boundItem,
+  boundMark: boundMark,
+  boundStroke: boundStroke,
+  domChild: domChild,
+  domClear: domClear,
+  domCreate: domCreate,
+  domFind: domFind,
+  font: font,
+  fontFamily: fontFamily,
+  fontSize: fontSize,
+  intersect: intersect$1,
+  intersectBoxLine: intersectBoxLine,
+  intersectPath: intersectPath,
+  intersectPoint: intersectPoint,
+  intersectRule: intersectRule,
+  lineHeight: lineHeight,
+  markup: markup,
+  multiLineOffset: multiLineOffset,
+  pathCurves: curves,
+  pathEqual: pathEqual,
+  pathParse: pathParse,
+  pathRectangle: vg_rect,
+  pathRender: pathRender,
+  pathSymbols: symbols$1,
+  pathTrail: vg_trail,
+  point: point$5,
+  renderModule: renderModule,
+  resetSVGClipId: resetSVGClipId,
+  resetSVGDefIds: resetSVGDefIds,
+  sceneEqual: sceneEqual,
+  sceneFromJSON: sceneFromJSON,
+  scenePickVisit: pickVisit,
+  sceneToJSON: sceneToJSON,
+  sceneVisit: visit,
+  sceneZOrder: zorder,
+  serializeXML: serializeXML,
+  textMetrics: textMetrics
+});
+
+export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, isArray as d, isFunction as e, array as f, eventSelector as g, has as h, isNumber as i, identity as j, parse$1$1 as k, logger as l, mergeConfig as m, parser as p, splitAccessPath as s, toSet as t, vegaImport as v, writeConfig as w };
+//# sourceMappingURL=vega.module-01b84c84.js.map

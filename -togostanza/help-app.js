@@ -1,33 +1,25 @@
-import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, k as withScopeId, p as pushScopeId, l as popScopeId, n, f as createApp } from './Layout-23c2c35f.js';
+import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-e922515f.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-function createCommonjsModule(fn, basedir, module) {
-	return module = {
-		path: basedir,
-		exports: {},
-		require: function (path, base) {
-			return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-		}
-	}, fn(module, module.exports), module.exports;
+function createCommonjsModule(fn) {
+  var module = { exports: {} };
+	return fn(module, module.exports), module.exports;
 }
 
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-}
-
-var data = createCommonjsModule(function (module, exports) {
 /*!
-  * Bootstrap data.js v5.0.0-alpha2 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.0.0-beta1 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
+
+var data = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
    module.exports = factory() ;
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): dom/data.js
+   * Bootstrap (v5.0.0-beta1): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -98,129 +90,19 @@ var data = createCommonjsModule(function (module, exports) {
 
 });
 
-var polyfill = createCommonjsModule(function (module, exports) {
 /*!
-  * Bootstrap polyfill.js v5.0.0-alpha2 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.0.0-beta1 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
-(function (global, factory) {
-   factory(exports) ;
-}(commonjsGlobal, (function (exports) {
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  var MAX_UID = 1000000;
-  /**
-   * --------------------------------------------------------------------------
-   * Public Util Api
-   * --------------------------------------------------------------------------
-   */
-
-
-  var getUID = function getUID(prefix) {
-    do {
-      prefix += Math.floor(Math.random() * MAX_UID);
-    } while (document.getElementById(prefix));
-
-    return prefix;
-  };
-
-  /* istanbul ignore file */
-  exports.find = Element.prototype.querySelectorAll;
-  exports.findOne = Element.prototype.querySelector; // MSEdge resets defaultPrevented flag upon dispatchEvent call if at least one listener is attached
-
-  var defaultPreventedPreservedOnDispatch = function () {
-    var e = new CustomEvent('Bootstrap', {
-      cancelable: true
-    });
-    var element = document.createElement('div');
-    element.addEventListener('Bootstrap', function () {
-      return null;
-    });
-    e.preventDefault();
-    element.dispatchEvent(e);
-    return e.defaultPrevented;
-  }();
-
-  var scopeSelectorRegex = /:scope\b/;
-
-  var supportScopeQuery = function () {
-    var element = document.createElement('div');
-
-    try {
-      element.querySelectorAll(':scope *');
-    } catch (_) {
-      return false;
-    }
-
-    return true;
-  }();
-
-  if (!supportScopeQuery) {
-    exports.find = function find(selector) {
-      if (!scopeSelectorRegex.test(selector)) {
-        return this.querySelectorAll(selector);
-      }
-
-      var hasId = Boolean(this.id);
-
-      if (!hasId) {
-        this.id = getUID('scope');
-      }
-
-      var nodeList = null;
-
-      try {
-        selector = selector.replace(scopeSelectorRegex, "#" + this.id);
-        nodeList = this.querySelectorAll(selector);
-      } finally {
-        if (!hasId) {
-          this.removeAttribute('id');
-        }
-      }
-
-      return nodeList;
-    };
-
-    exports.findOne = function findOne(selector) {
-      if (!scopeSelectorRegex.test(selector)) {
-        return this.querySelector(selector);
-      }
-
-      var matches = exports.find.call(this, selector);
-
-      if (typeof matches[0] !== 'undefined') {
-        return matches[0];
-      }
-
-      return null;
-    };
-  }
-
-  exports.defaultPreventedPreservedOnDispatch = defaultPreventedPreservedOnDispatch;
-
-  Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
-
-});
 
 var eventHandler = createCommonjsModule(function (module, exports) {
-/*!
-  * Bootstrap event-handler.js v5.0.0-alpha2 (https://getbootstrap.com/)
-  * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
 (function (global, factory) {
-   module.exports = factory(polyfill) ;
-}(commonjsGlobal, (function (polyfill_js) {
+   module.exports = factory() ;
+}(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): util/index.js
+   * Bootstrap (v5.0.0-beta1): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -229,16 +111,18 @@ var eventHandler = createCommonjsModule(function (module, exports) {
     var _window = window,
         jQuery = _window.jQuery;
 
-    if (jQuery && !document.body.hasAttribute('data-no-jquery')) {
+    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
       return jQuery;
     }
 
     return null;
   };
 
+  var isRTL = document.documentElement.dir === 'rtl';
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): dom/event-handler.js
+   * Bootstrap (v5.0.0-beta1): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -248,7 +132,6 @@ var eventHandler = createCommonjsModule(function (module, exports) {
    * ------------------------------------------------------------------------
    */
 
-  var $ = getjQuery();
   var namespaceRegex = /[^.]*(?=\..*)\.|.*/;
   var stripNameRegex = /\..*/;
   var stripUidRegex = /::\d+$/;
@@ -259,7 +142,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
     mouseenter: 'mouseover',
     mouseleave: 'mouseout'
   };
-  var nativeEvents = ['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll'];
+  var nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
   /**
    * ------------------------------------------------------------------------
    * Private methods
@@ -341,7 +224,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
       typeEvent = custom;
     }
 
-    var isNative = nativeEvents.indexOf(typeEvent) > -1;
+    var isNative = nativeEvents.has(typeEvent);
 
     if (!isNative) {
       typeEvent = originalTypeEvent;
@@ -398,7 +281,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
   function removeNamespacedHandlers(element, events, typeEvent, namespace) {
     var storeElementEvent = events[typeEvent] || {};
     Object.keys(storeElementEvent).forEach(function (handlerKey) {
-      if (handlerKey.indexOf(namespace) > -1) {
+      if (handlerKey.includes(namespace)) {
         var event = storeElementEvent[handlerKey];
         removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
       }
@@ -424,7 +307,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
 
       var inNamespace = typeEvent !== originalTypeEvent;
       var events = getEvent(element);
-      var isNamespace = originalTypeEvent.charAt(0) === '.';
+      var isNamespace = originalTypeEvent.startsWith('.');
 
       if (typeof originalHandler !== 'undefined') {
         // Simplest case: handler is passed, remove that listener ONLY.
@@ -446,7 +329,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
       Object.keys(storeElementEvent).forEach(function (keyHandlers) {
         var handlerKey = keyHandlers.replace(stripUidRegex, '');
 
-        if (!inNamespace || originalTypeEvent.indexOf(handlerKey) > -1) {
+        if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
           var event = storeElementEvent[keyHandlers];
           removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
         }
@@ -457,9 +340,10 @@ var eventHandler = createCommonjsModule(function (module, exports) {
         return null;
       }
 
+      var $ = getjQuery();
       var typeEvent = event.replace(stripNameRegex, '');
       var inNamespace = event !== typeEvent;
-      var isNative = nativeEvents.indexOf(typeEvent) > -1;
+      var isNative = nativeEvents.has(typeEvent);
       var jQueryEvent;
       var bubbles = true;
       var nativeDispatch = true;
@@ -497,14 +381,6 @@ var eventHandler = createCommonjsModule(function (module, exports) {
 
       if (defaultPrevented) {
         evt.preventDefault();
-
-        if (!polyfill_js.defaultPreventedPreservedOnDispatch) {
-          Object.defineProperty(evt, 'defaultPrevented', {
-            get: function get() {
-              return true;
-            }
-          });
-        }
       }
 
       if (nativeDispatch) {
@@ -525,27 +401,28 @@ var eventHandler = createCommonjsModule(function (module, exports) {
 
 });
 
-var selectorEngine = createCommonjsModule(function (module, exports) {
 /*!
-  * Bootstrap selector-engine.js v5.0.0-alpha2 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.0.0-beta1 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
+
+var selectorEngine = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
-   module.exports = factory(polyfill) ;
-}(commonjsGlobal, (function (polyfill_js) {
+   module.exports = factory() ;
+}(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): dom/selector-engine.js
+   * Bootstrap (v5.0.0-beta1): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
+
   /**
    * ------------------------------------------------------------------------
    * Constants
    * ------------------------------------------------------------------------
    */
-
   var NODE_TEXT = 3;
   var SelectorEngine = {
     matches: function matches(element, selector) {
@@ -558,14 +435,14 @@ var selectorEngine = createCommonjsModule(function (module, exports) {
         element = document.documentElement;
       }
 
-      return (_ref = []).concat.apply(_ref, polyfill_js.find.call(element, selector));
+      return (_ref = []).concat.apply(_ref, Element.prototype.querySelectorAll.call(element, selector));
     },
     findOne: function findOne(selector, element) {
       if (element === void 0) {
         element = document.documentElement;
       }
 
-      return polyfill_js.findOne.call(element, selector);
+      return Element.prototype.querySelector.call(element, selector);
     },
     children: function children(element, selector) {
       var _ref2;
@@ -624,12 +501,13 @@ var selectorEngine = createCommonjsModule(function (module, exports) {
 
 });
 
-var tab = createCommonjsModule(function (module, exports) {
 /*!
-  * Bootstrap tab.js v5.0.0-alpha2 (https://getbootstrap.com/)
+  * Bootstrap tab.js v5.0.0-beta1 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
+
+var tab = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
    module.exports = factory(data, eventHandler, selectorEngine) ;
 }(commonjsGlobal, (function (Data, EventHandler, SelectorEngine) {
@@ -641,7 +519,7 @@ var tab = createCommonjsModule(function (module, exports) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.0-alpha2): util/index.js
+   * Bootstrap (v5.0.0-beta1): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -649,7 +527,7 @@ var tab = createCommonjsModule(function (module, exports) {
   var TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
   var getSelector = function getSelector(element) {
-    var selector = element.getAttribute('data-target');
+    var selector = element.getAttribute('data-bs-target');
 
     if (!selector || selector === '#') {
       var hrefAttr = element.getAttribute('href');
@@ -674,8 +552,8 @@ var tab = createCommonjsModule(function (module, exports) {
         transitionDuration = _window$getComputedSt.transitionDuration,
         transitionDelay = _window$getComputedSt.transitionDelay;
 
-    var floatTransitionDuration = parseFloat(transitionDuration);
-    var floatTransitionDelay = parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+    var floatTransitionDuration = Number.parseFloat(transitionDuration);
+    var floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
 
     if (!floatTransitionDuration && !floatTransitionDelay) {
       return 0;
@@ -684,7 +562,7 @@ var tab = createCommonjsModule(function (module, exports) {
 
     transitionDuration = transitionDuration.split(',')[0];
     transitionDelay = transitionDelay.split(',')[0];
-    return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
   };
 
   var triggerTransitionEnd = function triggerTransitionEnd(element) {
@@ -717,12 +595,22 @@ var tab = createCommonjsModule(function (module, exports) {
     var _window = window,
         jQuery = _window.jQuery;
 
-    if (jQuery && !document.body.hasAttribute('data-no-jquery')) {
+    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
       return jQuery;
     }
 
     return null;
   };
+
+  var onDOMContentLoaded = function onDOMContentLoaded(callback) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', callback);
+    } else {
+      callback();
+    }
+  };
+
+  var isRTL = document.documentElement.dir === 'rtl';
 
   function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -733,8 +621,53 @@ var tab = createCommonjsModule(function (module, exports) {
    * ------------------------------------------------------------------------
    */
 
+  var VERSION = '5.0.0-beta1';
+
+  var BaseComponent = /*#__PURE__*/function () {
+    function BaseComponent(element) {
+      if (!element) {
+        return;
+      }
+
+      this._element = element;
+      Data__default['default'].setData(element, this.constructor.DATA_KEY, this);
+    }
+
+    var _proto = BaseComponent.prototype;
+
+    _proto.dispose = function dispose() {
+      Data__default['default'].removeData(this._element, this.constructor.DATA_KEY);
+      this._element = null;
+    }
+    /** Static */
+    ;
+
+    BaseComponent.getInstance = function getInstance(element) {
+      return Data__default['default'].getData(element, this.DATA_KEY);
+    };
+
+    _createClass(BaseComponent, null, [{
+      key: "VERSION",
+      get: function get() {
+        return VERSION;
+      }
+    }]);
+
+    return BaseComponent;
+  }();
+
+  function _defineProperties$1(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+  function _createClass$1(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties$1(Constructor.prototype, protoProps); if (staticProps) _defineProperties$1(Constructor, staticProps); return Constructor; }
+
+  function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+  /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+
   var NAME = 'tab';
-  var VERSION = '5.0.0-alpha2';
   var DATA_KEY = 'bs.tab';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
@@ -752,7 +685,7 @@ var tab = createCommonjsModule(function (module, exports) {
   var SELECTOR_NAV_LIST_GROUP = '.nav, .list-group';
   var SELECTOR_ACTIVE = '.active';
   var SELECTOR_ACTIVE_UL = ':scope > li > .active';
-  var SELECTOR_DATA_TOGGLE = '[data-toggle="tab"], [data-toggle="pill"], [data-toggle="list"]';
+  var SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]';
   var SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
   var SELECTOR_DROPDOWN_ACTIVE_CHILD = ':scope > .dropdown-menu .active';
   /**
@@ -761,12 +694,12 @@ var tab = createCommonjsModule(function (module, exports) {
    * ------------------------------------------------------------------------
    */
 
-  var Tab = /*#__PURE__*/function () {
-    function Tab(element) {
-      this._element = element;
-      Data__default['default'].setData(this._element, DATA_KEY, this);
-    } // Getters
+  var Tab = /*#__PURE__*/function (_BaseComponent) {
+    _inheritsLoose(Tab, _BaseComponent);
 
+    function Tab() {
+      return _BaseComponent.apply(this, arguments) || this;
+    }
 
     var _proto = Tab.prototype;
 
@@ -821,11 +754,6 @@ var tab = createCommonjsModule(function (module, exports) {
       } else {
         complete();
       }
-    };
-
-    _proto.dispose = function dispose() {
-      Data__default['default'].removeData(this._element, DATA_KEY);
-      this._element = null;
     } // Private
     ;
 
@@ -908,19 +836,16 @@ var tab = createCommonjsModule(function (module, exports) {
       });
     };
 
-    Tab.getInstance = function getInstance(element) {
-      return Data__default['default'].getData(element, DATA_KEY);
-    };
-
-    _createClass(Tab, null, [{
-      key: "VERSION",
+    _createClass$1(Tab, null, [{
+      key: "DATA_KEY",
+      // Getters
       get: function get() {
-        return VERSION;
+        return DATA_KEY;
       }
     }]);
 
     return Tab;
-  }();
+  }(BaseComponent);
   /**
    * ------------------------------------------------------------------------
    * Data Api implementation
@@ -933,26 +858,28 @@ var tab = createCommonjsModule(function (module, exports) {
     var data = Data__default['default'].getData(this, DATA_KEY) || new Tab(this);
     data.show();
   });
-  var $ = getjQuery();
   /**
    * ------------------------------------------------------------------------
    * jQuery
    * ------------------------------------------------------------------------
-   * add .tab to jQuery only if jQuery is present
+   * add .Tab to jQuery only if jQuery is present
    */
 
-  /* istanbul ignore if */
+  onDOMContentLoaded(function () {
+    var $ = getjQuery();
+    /* istanbul ignore if */
 
-  if ($) {
-    var JQUERY_NO_CONFLICT = $.fn[NAME];
-    $.fn[NAME] = Tab.jQueryInterface;
-    $.fn[NAME].Constructor = Tab;
+    if ($) {
+      var JQUERY_NO_CONFLICT = $.fn[NAME];
+      $.fn[NAME] = Tab.jQueryInterface;
+      $.fn[NAME].Constructor = Tab;
 
-    $.fn[NAME].noConflict = function () {
-      $.fn[NAME] = JQUERY_NO_CONFLICT;
-      return Tab.jQueryInterface;
-    };
-  }
+      $.fn[NAME].noConflict = function () {
+        $.fn[NAME] = JQUERY_NO_CONFLICT;
+        return Tab.jQueryInterface;
+      };
+    }
+  });
 
   return Tab;
 
@@ -981,11 +908,7 @@ const _hoisted_2 = {
   class: "text-danger"
 };
 const _hoisted_3 = { class: "input-group" };
-const _hoisted_4 = {
-  key: 2,
-  class: "input-group-append"
-};
-const _hoisted_5 = { class: "form-text text-muted" };
+const _hoisted_4 = { class: "form-text text-muted" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock(Fragment, null, [
@@ -1015,20 +938,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             type: _ctx.type,
             value: _ctx.input.ref.value,
             onInput: _cache[2] || (_cache[2] = $event => (_ctx.input.setValue($event.target.value))),
-            class: "form-control"
-          }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["type", "value"])),
+            class: ["form-control", {'form-control-color': _ctx.type === 'color'}]
+          }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, ["type", "value"])),
       (_ctx.input.hasDefault)
-        ? (openBlock(), createBlock("div", _hoisted_4, [
-            createVNode("button", {
-              onClick: _cache[3] || (_cache[3] = $event => (_ctx.input.resetToDefault())),
-              disabled: _ctx.input.isDefault.value,
-              type: "button",
-              class: "btn btn-light border"
-            }, "Reset", 8 /* PROPS */, ["disabled"])
-          ]))
+        ? (openBlock(), createBlock("button", {
+            key: 2,
+            onClick: _cache[3] || (_cache[3] = $event => (_ctx.input.resetToDefault())),
+            disabled: _ctx.input.isDefault.value,
+            type: "button",
+            class: "btn btn-light border"
+          }, "Reset", 8 /* PROPS */, ["disabled"]))
         : createCommentVNode("v-if", true)
     ]),
-    createVNode("small", _hoisted_5, toDisplayString(_ctx.helpText), 1 /* TEXT */)
+    createVNode("small", _hoisted_4, toDisplayString(_ctx.helpText), 1 /* TEXT */)
   ], 64 /* STABLE_FRAGMENT */))
 }
 
@@ -1967,11 +1889,8 @@ module.exports = exports['default'];
 
 });
 
-var helpers = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.registerDefaultHelpers = registerDefaultHelpers;
-exports.moveHelperToHooks = moveHelperToHooks;
+var registerDefaultHelpers_1 = registerDefaultHelpers;
+var moveHelperToHooks_1 = moveHelperToHooks;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -2023,7 +1942,11 @@ function moveHelperToHooks(instance, helperName, keepHelper) {
   }
 }
 
-});
+
+var helpers = /*#__PURE__*/Object.defineProperty({
+	registerDefaultHelpers: registerDefaultHelpers_1,
+	moveHelperToHooks: moveHelperToHooks_1
+}, '__esModule', {value: true});
 
 var inline = createCommonjsModule(function (module, exports) {
 
@@ -2056,23 +1979,23 @@ module.exports = exports['default'];
 
 });
 
-var decorators = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.registerDefaultDecorators = registerDefaultDecorators;
+var registerDefaultDecorators_1 = registerDefaultDecorators;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$1(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 
 
-var _decoratorsInline2 = _interopRequireDefault(inline);
+var _decoratorsInline2 = _interopRequireDefault$1(inline);
 
 function registerDefaultDecorators(instance) {
   _decoratorsInline2['default'](instance);
 }
 
-});
+
+var decorators = /*#__PURE__*/Object.defineProperty({
+	registerDefaultDecorators: registerDefaultDecorators_1
+}, '__esModule', {value: true});
 
 var logger_1 = createCommonjsModule(function (module, exports) {
 
@@ -2123,10 +2046,7 @@ module.exports = exports['default'];
 
 });
 
-var createNewLookupObject_1 = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.createNewLookupObject = createNewLookupObject;
+var createNewLookupObject_2 = createNewLookupObject;
 
 
 
@@ -2145,14 +2065,14 @@ function createNewLookupObject() {
   return utils.extend.apply(undefined, [Object.create(null)].concat(sources));
 }
 
-});
 
-var protoAccess = createCommonjsModule(function (module, exports) {
+var createNewLookupObject_1 = /*#__PURE__*/Object.defineProperty({
+	createNewLookupObject: createNewLookupObject_2
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.createProtoAccessControl = createProtoAccessControl;
-exports.resultIsAllowed = resultIsAllowed;
-exports.resetLoggedProperties = resetLoggedProperties;
+var createProtoAccessControl_1 = createProtoAccessControl;
+var resultIsAllowed_1 = resultIsAllowed;
+var resetLoggedProperties_1 = resetLoggedProperties;
 // istanbul ignore next
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
@@ -2220,21 +2140,23 @@ function resetLoggedProperties() {
   });
 }
 
-});
 
-var base = createCommonjsModule(function (module, exports) {
+var protoAccess = /*#__PURE__*/Object.defineProperty({
+	createProtoAccessControl: createProtoAccessControl_1,
+	resultIsAllowed: resultIsAllowed_1,
+	resetLoggedProperties: resetLoggedProperties_1
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.HandlebarsEnvironment = HandlebarsEnvironment;
+var HandlebarsEnvironment_1 = HandlebarsEnvironment;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$2(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 
 
 
 
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault$2(exception);
 
 
 
@@ -2242,17 +2164,17 @@ var _exception2 = _interopRequireDefault(exception);
 
 
 
-var _logger2 = _interopRequireDefault(logger_1);
+var _logger2 = _interopRequireDefault$2(logger_1);
 
 
 
 var VERSION = '4.7.6';
-exports.VERSION = VERSION;
+var VERSION_1 = VERSION;
 var COMPILER_REVISION = 8;
-exports.COMPILER_REVISION = COMPILER_REVISION;
+var COMPILER_REVISION_1 = COMPILER_REVISION;
 var LAST_COMPATIBLE_COMPILER_REVISION = 7;
 
-exports.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
+var LAST_COMPATIBLE_COMPILER_REVISION_1 = LAST_COMPATIBLE_COMPILER_REVISION;
 var REVISION_CHANGES = {
   1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
   2: '== 1.0.0-rc.3',
@@ -2264,7 +2186,7 @@ var REVISION_CHANGES = {
   8: '>= 4.3.0'
 };
 
-exports.REVISION_CHANGES = REVISION_CHANGES;
+var REVISION_CHANGES_1 = REVISION_CHANGES;
 var objectType = '[object Object]';
 
 function HandlebarsEnvironment(helpers$1, partials, decorators$1) {
@@ -2332,13 +2254,23 @@ HandlebarsEnvironment.prototype = {
   }
 };
 
-var log = _logger2['default'].log;
+var log$1 = _logger2['default'].log;
 
-exports.log = log;
-exports.createFrame = utils.createFrame;
-exports.logger = _logger2['default'];
+var log_1 = log$1;
+var createFrame = utils.createFrame;
+var logger$1 = _logger2['default'];
 
-});
+
+var base = /*#__PURE__*/Object.defineProperty({
+	HandlebarsEnvironment: HandlebarsEnvironment_1,
+	VERSION: VERSION_1,
+	COMPILER_REVISION: COMPILER_REVISION_1,
+	LAST_COMPATIBLE_COMPILER_REVISION: LAST_COMPATIBLE_COMPILER_REVISION_1,
+	REVISION_CHANGES: REVISION_CHANGES_1,
+	log: log_1,
+	createFrame: createFrame,
+	logger: logger$1
+}, '__esModule', {value: true});
 
 var safeString = createCommonjsModule(function (module, exports) {
 
@@ -2356,10 +2288,7 @@ module.exports = exports['default'];
 
 });
 
-var wrapHelper_1 = createCommonjsModule(function (module, exports) {
-
-exports.__esModule = true;
-exports.wrapHelper = wrapHelper;
+var wrapHelper_2 = wrapHelper;
 
 function wrapHelper(helper, transformOptionsFn) {
   if (typeof helper !== 'function') {
@@ -2375,32 +2304,32 @@ function wrapHelper(helper, transformOptionsFn) {
   return wrapper;
 }
 
-});
 
-var runtime = createCommonjsModule(function (module, exports) {
+var wrapHelper_1 = /*#__PURE__*/Object.defineProperty({
+	wrapHelper: wrapHelper_2
+}, '__esModule', {value: true});
 
-exports.__esModule = true;
-exports.checkRevision = checkRevision;
-exports.template = template;
-exports.wrapProgram = wrapProgram;
-exports.resolvePartial = resolvePartial;
-exports.invokePartial = invokePartial;
-exports.noop = noop;
+var checkRevision_1 = checkRevision;
+var template_1 = template;
+var wrapProgram_1 = wrapProgram;
+var resolvePartial_1 = resolvePartial;
+var invokePartial_1 = invokePartial;
+var noop_1 = noop;
 // istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function _interopRequireDefault$3(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 // istanbul ignore next
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+function _interopRequireWildcard$1(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 
 
-var Utils = _interopRequireWildcard(utils);
+var Utils = _interopRequireWildcard$1(utils);
 
 
 
-var _exception2 = _interopRequireDefault(exception);
+var _exception2$1 = _interopRequireDefault$3(exception);
 
 
 
@@ -2421,20 +2350,20 @@ function checkRevision(compilerInfo) {
   if (compilerRevision < base.LAST_COMPATIBLE_COMPILER_REVISION) {
     var runtimeVersions = base.REVISION_CHANGES[currentRevision],
         compilerVersions = base.REVISION_CHANGES[compilerRevision];
-    throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
+    throw new _exception2$1['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
   } else {
     // Use the embedded version info since the runtime doesn't know about this revision yet
-    throw new _exception2['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
+    throw new _exception2$1['default']('Template was precompiled with a newer version of Handlebars than the current runtime. ' + 'Please update your runtime to a newer version (' + compilerInfo[1] + ').');
   }
 }
 
 function template(templateSpec, env) {
   /* istanbul ignore next */
   if (!env) {
-    throw new _exception2['default']('No environment passed to template');
+    throw new _exception2$1['default']('No environment passed to template');
   }
   if (!templateSpec || !templateSpec.main) {
-    throw new _exception2['default']('Unknown template object: ' + typeof templateSpec);
+    throw new _exception2$1['default']('Unknown template object: ' + typeof templateSpec);
   }
 
   templateSpec.main.decorator = templateSpec.main_d;
@@ -2480,7 +2409,7 @@ function template(templateSpec, env) {
       }
       return result;
     } else {
-      throw new _exception2['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
+      throw new _exception2$1['default']('The partial ' + options.name + ' could not be compiled when running in runtime-only mode');
     }
   }
 
@@ -2488,7 +2417,7 @@ function template(templateSpec, env) {
   var container = {
     strict: function strict(obj, name, loc) {
       if (!obj || !(name in obj)) {
-        throw new _exception2['default']('"' + name + '" not defined in ' + obj, {
+        throw new _exception2$1['default']('"' + name + '" not defined in ' + obj, {
           loc: loc
         });
       }
@@ -2624,10 +2553,10 @@ function template(templateSpec, env) {
 
   ret._child = function (i, data, blockParams, depths) {
     if (templateSpec.useBlockParams && !blockParams) {
-      throw new _exception2['default']('must pass block params');
+      throw new _exception2$1['default']('must pass block params');
     }
     if (templateSpec.useDepths && !depths) {
-      throw new _exception2['default']('must pass parent depths');
+      throw new _exception2$1['default']('must pass parent depths');
     }
 
     return wrapProgram(container, i, templateSpec[i], data, 0, blockParams, depths);
@@ -2708,7 +2637,7 @@ function invokePartial(partial, context, options) {
   }
 
   if (partial === undefined) {
-    throw new _exception2['default']('The partial ' + options.name + ' could not be found');
+    throw new _exception2$1['default']('The partial ' + options.name + ' could not be found');
   } else if (partial instanceof Function) {
     return partial(context, options);
   }
@@ -2749,7 +2678,15 @@ function passLookupPropertyOption(helper, container) {
   });
 }
 
-});
+
+var runtime = /*#__PURE__*/Object.defineProperty({
+	checkRevision: checkRevision_1,
+	template: template_1,
+	wrapProgram: wrapProgram_1,
+	resolvePartial: resolvePartial_1,
+	invokePartial: invokePartial_1,
+	noop: noop_1
+}, '__esModule', {value: true});
 
 var noConflict = createCommonjsModule(function (module, exports) {
 
@@ -3133,20 +3070,20 @@ const _hoisted_1$3 = { class: "display-4" };
 const _hoisted_2$3 = { class: "lead" };
 const _hoisted_3$2 = { class: "row" };
 const _hoisted_4$2 = { class: "col-lg-6" };
-const _hoisted_5$1 = /*#__PURE__*/createVNode("nav", {
+const _hoisted_5 = /*#__PURE__*/createVNode("nav", {
   class: "nav nav-tabs",
   role: "tablist"
 }, [
   /*#__PURE__*/createVNode("a", {
     class: "nav-link active",
     href: "#overview",
-    "data-toggle": "tab",
+    "data-bs-toggle": "tab",
     role: "tab"
   }, "Overview"),
   /*#__PURE__*/createVNode("a", {
     class: "nav-link",
     href: "#customize",
-    "data-toggle": "tab",
+    "data-bs-toggle": "tab",
     role: "tab"
   }, "Customize")
 ], -1 /* HOISTED */);
@@ -3179,12 +3116,12 @@ const _hoisted_23 = {
   id: "customize",
   role: "tabpanel"
 };
-const _hoisted_24 = /*#__PURE__*/createVNode("h2", null, "Parameters", -1 /* HOISTED */);
-const _hoisted_25 = { class: "row mt-3" };
-const _hoisted_26 = { class: "col-sm-6 col-lg-12 col-xl-6 mb-3" };
-const _hoisted_27 = /*#__PURE__*/createVNode("hr", null, null, -1 /* HOISTED */);
-const _hoisted_28 = /*#__PURE__*/createVNode("h2", null, "Styles", -1 /* HOISTED */);
-const _hoisted_29 = { class: "row mt-3" };
+const _hoisted_24 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */);
+const _hoisted_25 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
+const _hoisted_26 = { class: "col" };
+const _hoisted_27 = /*#__PURE__*/createVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */);
+const _hoisted_28 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */);
+const _hoisted_29 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
 const _hoisted_30 = {
   key: 0,
   class: "font-italic"
@@ -3193,7 +3130,7 @@ const _hoisted_31 = { class: "col-lg-6" };
 const _hoisted_32 = /*#__PURE__*/createVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
 popScopeId();
 
-const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $setup, $data, $options) {
+const render$3 = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
   const _component_FormField = resolveComponent("FormField");
   const _component_StanzaPreviewer = resolveComponent("StanzaPreviewer");
   const _component_Layout = resolveComponent("Layout");
@@ -3204,7 +3141,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
       createVNode("p", _hoisted_2$3, toDisplayString(_ctx.metadata['stanza:definition']), 1 /* TEXT */),
       createVNode("div", _hoisted_3$2, [
         createVNode("div", _hoisted_4$2, [
-          _hoisted_5$1,
+          _hoisted_5,
           createVNode("div", _hoisted_6, [
             createVNode("div", _hoisted_7, [
               createVNode("table", _hoisted_8, [
@@ -3283,7 +3220,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                   (openBlock(true), createBlock(Fragment, null, renderList(_ctx.paramFields, ({param, input}) => {
                     return (openBlock(), createBlock("div", {
                       key: param['stanza:key'],
-                      class: "col-sm-6 col-lg-12 col-xl-6 mb-3"
+                      class: "col"
                     }, [
                       createVNode(_component_FormField, {
                         input: input,
@@ -3300,7 +3237,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                       type: 'single-choice',
                       choices: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'none'],
                       "help-text": 'Placement of the information icon which links to this page.'
-                    }, null, 8 /* PROPS */, ["input"])
+                    }, null, 8 /* PROPS */, ["input", "help-text"])
                   ])
                 ])
               ]),
@@ -3311,7 +3248,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
                   (openBlock(true), createBlock(Fragment, null, renderList(_ctx.styleFields, ({style, input}) => {
                     return (openBlock(), createBlock("div", {
                       key: style['stanza:key'],
-                      class: "col-sm-6 col-lg-12 col-xl-6 mb-3"
+                      class: "col"
                     }, [
                       createVNode(_component_FormField, {
                         input: input,
@@ -3340,7 +3277,7 @@ const render$3 = /*#__PURE__*/_withId(function render(_ctx, _cache, $props, $set
         ])
       ])
     ]),
-    _: 1
+    _: 1 /* STABLE */
   }))
 });
 
