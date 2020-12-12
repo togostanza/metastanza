@@ -1,3 +1,3 @@
-# Barchart
+# Vega barchart
 
-Stanza description goes here. Edit `stanzas/barchart/README.md` to update.
+Stanza description goes here. Edit `stanzas/vega_barchart/README.md` to update.
