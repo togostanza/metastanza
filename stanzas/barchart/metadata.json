@@ -64,6 +64,16 @@
       "stanza:description": "title of Y-axis"
     },
     {
+      "stanza:key": "xgrid",
+      "stanza:example": "false",
+      "stanza:description": "display of X-grids.(true or false)"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:example": "true",
+      "stanza:description": "display of Y-grids.(true or false)"
+    },
+    {
       "stanza:key": "bar-width",
       "stanza:type": "number",
       "stanza:example": "0.8",
