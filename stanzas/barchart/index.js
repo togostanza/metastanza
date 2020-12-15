@@ -1,4 +1,5 @@
 import vegaEmbed from "vega-embed";
+import { reduce } from "vega-lite/build/src/encoding";
 
 export default async function barchart(stanza, params) {
   let spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -31,6 +32,7 @@ export default async function barchart(stanza, params) {
     "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
     "grid": params["xgrid"],
+    "gridColor": "var(--xgrid-color)",
     "encode": {
       "ticks": {
         "update": {
@@ -69,6 +71,7 @@ export default async function barchart(stanza, params) {
     "orient": params["orient-of-yaxis"],
     "title": params["title-of-yaxis"],
     "grid": params["ygrid"],
+    "gridColor": "var(--ygrid-color)",
     "encode": {
       "ticks": {
         "update": {

@@ -107,6 +107,18 @@
       "stanza:description": "padding between each bars.This mast be in the range[0,1]"
     },
     {
+      "stanza:key": "--xgrid-color",
+      "stanza:type": "color",
+      "stanza:default": "#eee",
+      "stanza:description": "X-grid color"
+    },
+    {
+      "stanza:key": "--ygrid-color",
+      "stanza:type": "color",
+      "stanza:default": "#eee",
+      "stanza:description": "Y-grid color"
+    },
+    {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
       "stanza:default": "#333",
