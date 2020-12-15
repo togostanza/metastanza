@@ -41,9 +41,8 @@ export default async function barchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
-        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-        // "labelFont":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
+        "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
@@ -73,8 +72,8 @@ export default async function barchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
-        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
+        "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
@@ -82,7 +81,7 @@ export default async function barchart(stanza, params) {
     },
     "title": {
       "update": {
-        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
@@ -115,7 +114,7 @@ export default async function barchart(stanza, params) {
       "align": {"value": "center"},
       "baseline": {"value": "bottom"},
       "fill": {"value": "var(--emphasized-color)"},
-      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+      "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
       "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
     },

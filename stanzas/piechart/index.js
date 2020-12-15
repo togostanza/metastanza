@@ -7,6 +7,7 @@ export default async function piechart(stanza, params) {
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
+  spec.padding = {"left": 5, "top": 5, "right": 150, "bottom": 5}
 
 // scales: カラースキームを指定
   spec.scales[0].range = [
@@ -49,7 +50,7 @@ export default async function piechart(stanza, params) {
     }
   }
 
-  // // hover時にvalueを出したい・・・
+  // // hover時にvalueを出したい
   // spec.marks[1].encode = {
   //   "enter": {
   //     // "align": {"value": "center"},
@@ -76,22 +77,12 @@ export default async function piechart(stanza, params) {
     {
       "fill": "color",
       "title": params["title-of-legend"],
-      "orient": "top-right",
+      "orient": "none",
+      "legendX": "220",
+      "legendY": "5",
       "encode": {
-        // "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
         "labels": {"update": {"text": {"field": "value"}}}
       }
-      // ,
-      // "legend":{
-      //   "layout": {
-      //     "bottom": {
-      //       "anchor": "middle",
-      //       "direction": "vertical",
-      //       "center": true,
-      //       "margin": 2,
-      //     }
-      //   }
-      // } 
     }
   ]
 
