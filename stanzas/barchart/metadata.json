@@ -119,6 +119,18 @@
       "stanza:description": "Y-grid color"
     },
     {
+      "stanza:key": "--xgrid-dash",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "X-grid stroke dash.  Blank for solid lines."
+    },
+    {
+      "stanza:key": "--ygrid-dash",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "Y-grid stroke dash.  Blank for solid lines."
+    },
+    {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
       "stanza:default": "#333",

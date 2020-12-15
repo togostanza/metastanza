@@ -33,6 +33,7 @@ export default async function barchart(stanza, params) {
     "title": params["title-of-xaxis"],
     "grid": params["xgrid"],
     "gridColor": "var(--xgrid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
     "encode": {
       "ticks": {
         "update": {
@@ -72,6 +73,7 @@ export default async function barchart(stanza, params) {
     "title": params["title-of-yaxis"],
     "grid": params["ygrid"],
     "gridColor": "var(--ygrid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "encode": {
       "ticks": {
         "update": {
@@ -103,74 +105,6 @@ export default async function barchart(stanza, params) {
       }
     }
   }
-
-  // spec.axes[0].orient = params["orient-of-xaxis"]
-  // // gridを表示させたいが、できない
-  // // spec.axis[0].grid = true;
-  // spec.axes[1].orient = params["orient-of-yaxis"]
-  // spec.axes[0].title = params["title-of-xaxis"]
-  // spec.axes[1].title = params["title-of-yaxis"]
-  // spec.axes[0].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": "var(--label-color)"}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": "var(--label-color)"},
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": "var(--axis-color)"},
-  //       "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
-  //     }
-  //   }
-  // }
-
-  // spec.axes[1].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": "var(--axis-color)"}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": "var(--label-color)"},
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": "var(--axis-color)"},
-  //       "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
-  //     }
-  //   }
-  // }
 
   //rect（棒）の描画について
   spec.marks[0].encode ={
