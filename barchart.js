@@ -34,6 +34,10 @@ async function barchart(stanza, params) {
     "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
     "grid": params["xgrid"],
+    "gridColor": "var(--xgrid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
+    "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),    
     "encode": {
       "ticks": {
         "update": {
@@ -72,6 +76,10 @@ async function barchart(stanza, params) {
     "orient": params["orient-of-yaxis"],
     "title": params["title-of-yaxis"],
     "grid": params["ygrid"],
+    "gridColor": "var(--ygrid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
+    "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
     "encode": {
       "ticks": {
         "update": {
@@ -103,74 +111,6 @@ async function barchart(stanza, params) {
       }
     }
   };
-
-  // spec.axes[0].orient = params["orient-of-xaxis"]
-  // // gridを表示させたいが、できない
-  // // spec.axis[0].grid = true;
-  // spec.axes[1].orient = params["orient-of-yaxis"]
-  // spec.axes[0].title = params["title-of-xaxis"]
-  // spec.axes[1].title = params["title-of-yaxis"]
-  // spec.axes[0].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": "var(--label-color)"}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": "var(--label-color)"},
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": "var(--axis-color)"},
-  //       "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
-  //     }
-  //   }
-  // }
-
-  // spec.axes[1].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": "var(--axis-color)"}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": "var(--label-color)"},
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": "var(--axis-color)"},
-  //       "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
-  //     }
-  //   }
-  // }
 
   //rect（棒）の描画について
   spec.marks[0].encode ={
@@ -328,6 +268,54 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:dafault": "0.1",
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
+	},
+	{
+		"stanza:key": "--xgrid-color",
+		"stanza:type": "color",
+		"stanza:default": "#eee",
+		"stanza:description": "X-grid color"
+	},
+	{
+		"stanza:key": "--ygrid-color",
+		"stanza:type": "color",
+		"stanza:default": "#eee",
+		"stanza:description": "Y-grid color"
+	},
+	{
+		"stanza:key": "--xgrid-dash",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "X-grid stroke dash.  Blank for solid lines."
+	},
+	{
+		"stanza:key": "--ygrid-dash",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "Y-grid stroke dash.  Blank for solid lines."
+	},
+	{
+		"stanza:key": "--xgrid-opacity",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "X-grid opacity.(0-1)"
+	},
+	{
+		"stanza:key": "--ygrid-opacity",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Y-grid opacity.(0-1)"
+	},
+	{
+		"stanza:key": "--xgrid-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "X-grid width in pixel."
+	},
+	{
+		"stanza:key": "--ygrid-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Y-grid width in pixel"
 	},
 	{
 		"stanza:key": "--tick-color",

@@ -107,6 +107,54 @@
       "stanza:description": "padding between each bars.This mast be in the range[0,1]"
     },
     {
+      "stanza:key": "--xgrid-color",
+      "stanza:type": "color",
+      "stanza:default": "#eee",
+      "stanza:description": "X-grid color"
+    },
+    {
+      "stanza:key": "--ygrid-color",
+      "stanza:type": "color",
+      "stanza:default": "#eee",
+      "stanza:description": "Y-grid color"
+    },
+    {
+      "stanza:key": "--xgrid-dash",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "X-grid stroke dash.  Blank for solid lines."
+    },
+    {
+      "stanza:key": "--ygrid-dash",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "Y-grid stroke dash.  Blank for solid lines."
+    },
+    {
+      "stanza:key": "--xgrid-opacity",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "X-grid opacity.(0-1)"
+    },
+    {
+      "stanza:key": "--ygrid-opacity",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "Y-grid opacity.(0-1)"
+    },
+    {
+      "stanza:key": "--xgrid-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "X-grid width in pixel."
+    },
+    {
+      "stanza:key": "--ygrid-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "Y-grid width in pixel"
+    },
+    {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
       "stanza:default": "#333",
