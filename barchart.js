@@ -30,9 +30,10 @@ async function barchart(stanza, params) {
   //軸に関する設定
   spec.axes[0] =
   {
-    "orient": params["orient-of-xaxis"],
     "scale": "xscale",
+    "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
+    "grid": params["xgrid"],
     "encode": {
       "ticks": {
         "update": {
@@ -67,9 +68,10 @@ async function barchart(stanza, params) {
 
   spec.axes[1] = 
   {
-    "orient": params["orient-of-yaxis"],
     "scale": "yscale",
+    "orient": params["orient-of-yaxis"],
     "title": params["title-of-yaxis"],
+    "grid": params["ygrid"],
     "encode": {
       "ticks": {
         "update": {
@@ -283,6 +285,16 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:example": "title of Yaxis",
 		"stanza:description": "title of Y-axis"
+	},
+	{
+		"stanza:key": "xgrid",
+		"stanza:example": "false",
+		"stanza:description": "display of X-grids.(true or false)"
+	},
+	{
+		"stanza:key": "ygrid",
+		"stanza:example": "true",
+		"stanza:description": "display of Y-grids.(true or false)"
 	},
 	{
 		"stanza:key": "bar-width",
