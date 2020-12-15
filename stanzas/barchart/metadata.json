@@ -129,8 +129,8 @@
     {
       "stanza:key": "--label-font",
       "stanza:type": "string",
-      "stanza:default": "san serif",
-      "stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "font style of labels."
     },
     {
       "stanza:key": "--axis-width",

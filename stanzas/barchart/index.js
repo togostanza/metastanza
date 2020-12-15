@@ -41,7 +41,8 @@ export default async function barchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
-        "labelFont":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        // "labelFont":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
