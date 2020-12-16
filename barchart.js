@@ -33,6 +33,7 @@ async function barchart(stanza, params) {
     "scale": "xscale",
     "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
+    "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["xgrid"] === "true",
     "gridColor": "var(--xgrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
@@ -69,7 +70,8 @@ async function barchart(stanza, params) {
       "title": {
         "update": {
           "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+          "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
         }
       },
       "domain": {
@@ -86,8 +88,8 @@ async function barchart(stanza, params) {
   {
     "scale": "yscale",
     "orient": params["orient-of-yaxis"],
-    "bandPosition": 0.5,
     "title": params["title-of-yaxis"],
+    "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["ygrid"] === "true",
     "gridColor": "var(--ygrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
@@ -124,7 +126,8 @@ async function barchart(stanza, params) {
       "title": {
         "update": {
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+          "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
         }
       },
       "domain": {
@@ -384,6 +387,18 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "font size of titles"
+	},
+	{
+		"stanza:key": "--title-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "font weight of titles"
+	},
+	{
+		"stanza:key": "--title-padding",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "padding between axis labels and title.(in pixel)"
 	},
 	{
 		"stanza:key": "--label-size",

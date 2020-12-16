@@ -79,14 +79,26 @@ async function piechart(stanza, params) {
   [
     {
       "fill": "color",
-      "title": params["title-of-legend"],
       "orient": "none",
       "legendX": "220",
       "legendY": "5",
+      "title": params["title-of-legend"],
+      "titleColor": "var(--legendtitle-color)",
+      "labelColor": "var(--legendlabel-color)",
       "encode": {
-        "labels": {"update": {"text": {"field": "value"}}}
+        "title": {
+          "update": {
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          }
+        }
       }
-    }
   ];
 
   const el = stanza.root.querySelector("main");
@@ -182,25 +194,25 @@ var metadata = {
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#FFC39E",
-		"stanza:description": "second color"
+		"stanza:description": "first color"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#FF8DB8",
-		"stanza:description": "third color"
+		"stanza:description": "second color"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#C690C6",
-		"stanza:description": "forth color"
+		"stanza:description": "third color"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#6992D1",
-		"stanza:description": "fifth color"
+		"stanza:description": "fourth color"
 	},
 	{
 		"stanza:key": "--series-4-color",
@@ -212,7 +224,31 @@ var metadata = {
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#94BC8A",
-		"stanza:description": "first color"
+		"stanza:description": "sixth color"
+	},
+	{
+		"stanza:key": "--legendtitle-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "font size of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend title"
+	},
+	{
+		"stanza:key": "--legendlabel-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "font size of the legend label"
+	},
+	{
+		"stanza:key": "--legendlabel-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend label"
 	}
 ]
 };
