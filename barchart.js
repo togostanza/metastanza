@@ -38,13 +38,15 @@ async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
     "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
+    "ticks": params["xtick"] === "true",
     "encode": {
       "axis": {
-        "zindex": "1"
+        "update": {
+        }
       },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--label-color)"},
+          "stroke": {"value": "var(--tick-color)"},
         }
       },
       "grids": {
@@ -73,7 +75,8 @@ async function barchart(stanza, params) {
       "domain": {
         "update": {
           "stroke": {"value": "var(--axis-color)"},
-          "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+          "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")},
+          "zindex": {"value": "1"}
         }
       }
     }
@@ -83,21 +86,22 @@ async function barchart(stanza, params) {
   {
     "scale": "yscale",
     "orient": params["orient-of-yaxis"],
+    "bandPosition": 0.5,
     "title": params["title-of-yaxis"],
     "grid": params["ygrid"] === "true",
     "gridColor": "var(--ygrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
-    "tickCap": "round",
+    "ticks": params["ytick"] === "true",
     "encode": {
       "axis": {
-        "zindex": "1"
+        "update": {
+        }
       },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--axis-color)"},
-          "zindex": {"value": "1"}
+          "stroke": {"value": "var(--tick-color)"}
         }
       },
       "grids": {
@@ -255,6 +259,16 @@ var metadata = {
 		"stanza:key": "ygrid",
 		"stanza:example": true,
 		"stanza:description": "display of Y-grids.(true or false)"
+	},
+	{
+		"stanza:key": "xtick",
+		"stanza:example": false,
+		"stanza:description": "display of X-ticks.(true or false)"
+	},
+	{
+		"stanza:key": "ytick",
+		"stanza:example": true,
+		"stanza:description": "display of Y-ticks.(true or false)"
 	},
 	{
 		"stanza:key": "xlabel-angle",
