@@ -199,6 +199,12 @@
       "stanza:description": "font size of titles"
     },
     {
+      "stanza:key": "--title-weight",
+      "stanza:type": "number",
+      "stanza:default": "400",
+      "stanza:description": "font weight of titles"
+    },
+    {
       "stanza:key": "--label-size",
       "stanza:type": "number",
       "stanza:default": "12",

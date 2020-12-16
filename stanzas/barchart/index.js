@@ -67,7 +67,8 @@ export default async function barchart(stanza, params) {
       "title": {
         "update": {
           "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+          "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
         }
       },
       "domain": {
@@ -122,7 +123,8 @@ export default async function barchart(stanza, params) {
       "title": {
         "update": {
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+          "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+          "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
         }
       },
       "domain": {
