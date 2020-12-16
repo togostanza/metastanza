@@ -145,12 +145,12 @@ export default async function scatterplot(stanza, params) {
               "fill": {"value": "var(--series-0-color)"},
               "stroke": {"value": "var(--stroke-color)"},
               "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
+            }
           }
         }
       }
-    }
-  ]
+    ]
 
   spec.marks= [
     {
@@ -163,13 +163,15 @@ export default async function scatterplot(stanza, params) {
         "y": {"scale": "y", "field": "Miles_per_Gallon"},
         "size": {"scale": "size", "field": "Acceleration"},
         "shape": {"value": params["symbol-shape"]},
-        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+        "fill": {"value": "var(--series-0-color)"},
         "stroke": {"value": "var(--stroke-color)"},
-        "fill": {"value": "var(--series-0-color)"}
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"},
+        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-opacity")}
+        
       }
       }
     }
