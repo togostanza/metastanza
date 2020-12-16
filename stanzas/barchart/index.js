@@ -39,11 +39,13 @@ export default async function barchart(stanza, params) {
     "ticks": params["xtick"] === "true",
     "encode": {
       "axis": {
-        "zindex": "1"
+        "update": {
+          "zindex": {"value": "1"}
+        }
       },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--label-color)"},
+          "stroke": {"value": "var(--tick-color)"},
         }
       },
       "grids": {
@@ -91,11 +93,13 @@ export default async function barchart(stanza, params) {
     "ticks": params["ytick"] === "true",
     "encode": {
       "axis": {
-        "zindex": "1"
+        "update": {
+          "zindex": {"value": "1"}
+        }
       },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--axis-color)"},
+          "stroke": {"value": "var(--tick-color)"},
           "zindex": {"value": "1"}
         }
       },
@@ -124,7 +128,7 @@ export default async function barchart(stanza, params) {
       },
       "domain": {
         "update": {
-          "stroke": {"value": "var(--axis-color)"},
+          // "stroke": {"value": "var(--axis-color)"},
           "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
         }
       }
