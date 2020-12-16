@@ -36,7 +36,6 @@ export default async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
     "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
-    "labelAngle": params["xlabel-angle"],  
     "encode": {
       "ticks": {
         "update": {
@@ -46,6 +45,7 @@ export default async function barchart(stanza, params) {
       "labels": {
         "interactive": true,
         "update": {
+          "angle": {"value": params["xlabel-angle"]},
           "fill": {"value": "var(--label-color)"},
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
           "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -79,7 +79,6 @@ export default async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
-    "labelAngle": params["ylabel-angle"],
     "encode": {
       "ticks": {
         "update": {
@@ -89,6 +88,7 @@ export default async function barchart(stanza, params) {
       "labels": {
         "interactive": true,
         "update": {
+          "angle": {"value": params["ylabel-angle"]},
           "fill": {"value": "var(--label-color)"},
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
           "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
