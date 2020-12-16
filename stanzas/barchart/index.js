@@ -37,9 +37,17 @@ export default async function barchart(stanza, params) {
     "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
     "encode": {
+      "axis": {
+        "zindex": "1"
+      },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--label-color)"}
+          "stroke": {"value": "var(--label-color)"},
+        }
+      },
+      "grids": {
+        "update": {
+          "zindex": {"value": "0"}
         }
       },
       "labels": {
@@ -79,10 +87,20 @@ export default async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
+    "tickCap": "round",
     "encode": {
+      "axis": {
+        "zindex": "1"
+      },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--axis-color)"}
+          "stroke": {"value": "var(--axis-color)"},
+          "zindex": {"value": "1"}
+        }
+      },
+      "grids": {
+        "update": {
+          "zindex": {"value": "0"}
         }
       },
       "labels": {
