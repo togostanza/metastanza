@@ -33,20 +33,29 @@ async function barchart(stanza, params) {
     "scale": "xscale",
     "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
-    "grid": params["xgrid"],
+    "grid": params["xgrid"] === "true",
     "gridColor": "var(--xgrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
     "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
-    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),    
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
     "encode": {
+      "axis": {
+        "zindex": "1"
+      },
       "ticks": {
         "update": {
-        "stroke": {"value": "var(--label-color)"}
+          "stroke": {"value": "var(--label-color)"},
+        }
+      },
+      "grids": {
+        "update": {
+          "zindex": {"value": "0"}
         }
       },
       "labels": {
         "interactive": true,
         "update": {
+          "angle": {"value": params["xlabel-angle"]},
           "fill": {"value": "var(--label-color)"},
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
           "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -75,20 +84,31 @@ async function barchart(stanza, params) {
     "scale": "yscale",
     "orient": params["orient-of-yaxis"],
     "title": params["title-of-yaxis"],
-    "grid": params["ygrid"],
+    "grid": params["ygrid"] === "true",
     "gridColor": "var(--ygrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
+    "tickCap": "round",
     "encode": {
+      "axis": {
+        "zindex": "1"
+      },
       "ticks": {
         "update": {
-        "stroke": {"value": "var(--axis-color)"}
+          "stroke": {"value": "var(--axis-color)"},
+          "zindex": {"value": "1"}
+        }
+      },
+      "grids": {
+        "update": {
+          "zindex": {"value": "0"}
         }
       },
       "labels": {
         "interactive": true,
         "update": {
+          "angle": {"value": params["ylabel-angle"]},
           "fill": {"value": "var(--label-color)"},
           "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
           "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -228,13 +248,23 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xgrid",
-		"stanza:example": "false",
+		"stanza:example": false,
 		"stanza:description": "display of X-grids.(true or false)"
 	},
 	{
 		"stanza:key": "ygrid",
-		"stanza:example": "true",
+		"stanza:example": true,
 		"stanza:description": "display of Y-grids.(true or false)"
+	},
+	{
+		"stanza:key": "xlabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "angle of X-labels.(in degree)"
+	},
+	{
+		"stanza:key": "ylabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "angle of Y-labels.(in degree)"
 	},
 	{
 		"stanza:key": "bar-width",

@@ -65,13 +65,23 @@
     },
     {
       "stanza:key": "xgrid",
-      "stanza:example": "false",
+      "stanza:example": false,
       "stanza:description": "display of X-grids.(true or false)"
     },
     {
       "stanza:key": "ygrid",
-      "stanza:example": "true",
+      "stanza:example": true,
       "stanza:description": "display of Y-grids.(true or false)"
+    },
+    {
+      "stanza:key": "xlabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of X-labels.(in degree)"
+    },
+    {
+      "stanza:key": "ylabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of Y-labels.(in degree)"
     },
     {
       "stanza:key": "bar-width",
