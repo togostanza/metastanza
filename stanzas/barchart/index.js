@@ -31,6 +31,7 @@ export default async function barchart(stanza, params) {
     "scale": "xscale",
     "orient": params["orient-of-xaxis"],
     "title": params["title-of-xaxis"],
+    "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["xgrid"] === "true",
     "gridColor": "var(--xgrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
@@ -85,8 +86,8 @@ export default async function barchart(stanza, params) {
   {
     "scale": "yscale",
     "orient": params["orient-of-yaxis"],
-    "bandPosition": 0.5,
     "title": params["title-of-yaxis"],
+    "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["ygrid"] === "true",
     "gridColor": "var(--ygrid-color)",
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
