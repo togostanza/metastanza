@@ -120,6 +120,7 @@ async function scatterplot(stanza, params) {
     }
   ];
 
+// legendに関する設定
   spec.legends = [
     {
       "size": "size",

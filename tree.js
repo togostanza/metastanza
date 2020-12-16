@@ -9,13 +9,12 @@ async function tree(stanza, params) {
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"]; 
-  spec.height = params["width"];
+  spec.height = params["height"];
   
   //stanzaのpadding
   spec.padding = params["padding"];
 
   //scales: カラースキームを指定
-
   spec.scales[0].type = "ordinal";
 
   spec.scales[0].range = [
@@ -25,6 +24,40 @@ async function tree(stanza, params) {
     'var(--series-3-color)',
     'var(--series-4-color)',
     'var(--series-5-color)'
+  ];
+  
+  //legendを出す
+  spec.legends =
+  [
+    {
+      "fill": "color",
+      "title": params["legend-title"],
+      "orient": "top--left",
+      "encode": {
+        "title": {
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          },
+          "symbols": {
+            "update": {
+              "shape": {"value": params["symbol-shape"]},
+              "stroke": {"value": "var(--stroke-color)"},
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
+            }
+          }
+      }
+    }
   ];
 
   //marks:描画について
@@ -53,10 +86,14 @@ async function tree(stanza, params) {
     "update": {
       "x": {"field": "x"},
       "y": {"field": "y"},
-      "fill": {"scale": "color", "field": "depth"}
+      "fill": {"scale": "color", "field": "depth"},
+      "stroke": {"value": "var(--stroke-color)"},
+      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
     },
     "hover": {
-      "fill": {"value": "var(--emphasized-color)"}
+      "fill": {"value": "var(--emphasized-color)"},
+      "stroke": {"value": "var(--hover-stroke-color)"},
+      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
     }
   };
 
@@ -80,30 +117,6 @@ async function tree(stanza, params) {
     }
   };
 
-  //legendを出す
-  spec.legends =
-  [
-    {
-      "fill": "color",
-      "title": params["title-of-legend"],
-      "orient": "bottom-left",
-      "encode": {
-        // "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
-        "labels": {"update": {"text": {"field": "value"}}}
-      }
-      // ,
-      // "legend":{
-      //   "layout": {
-      //     "bottom": {
-      //       "anchor": "middle",
-      //       "direction": "vertical",
-      //       "center": true,
-      //       "margin": 2,
-      //     }
-      //   }
-      // } 
-    }
-  ];
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -155,7 +168,7 @@ var metadata = {
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "title-of-legend",
+		"stanza:key": "legend-title",
 		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
@@ -198,6 +211,66 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:default": "san serif",
 		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
+	},
+	{
+		"stanza:key": "--legend-font",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "font family of the legend title and legend labels"
+	},
+	{
+		"stanza:key": "--legendtitle-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "font size of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "font weight of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend title"
+	},
+	{
+		"stanza:key": "--legendlabel-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "font size of the legend label"
+	},
+	{
+		"stanza:key": "--legendlabel-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend label"
+	},
+	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "stroke color of plot."
+	},
+	{
+		"stanza:key": "--hover-stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "stroke color of plot when you hover."
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "stroke width"
+	},
+	{
+		"stanza:key": "--hover-stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "stroke width of plot when you hover."
 	},
 	{
 		"stanza:key": "--series-0-color",

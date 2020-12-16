@@ -260,19 +260,19 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
+		"stanza:default": "#fff",
 		"stanza:description": "stroke color of plot."
 	},
 	{
 		"stanza:key": "--hover-stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#fff",
+		"stanza:default": "#999",
 		"stanza:description": "stroke color of plot when you hover."
 	},
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "",
+		"stanza:default": "0",
 		"stanza:description": "stroke width"
 	},
 	{
