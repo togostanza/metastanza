@@ -34,7 +34,7 @@ export default async function piechart(stanza, params) {
     "enter": {
       "fill": {"scale": "color", "field": "id"},
       "x": {"signal": "width / 2"},
-      "y": {"signal": "height / 2"}
+      "y": {"signal": "height / 2"},
     },
     "update": {
       "startAngle": {"field": "startAngle"},
@@ -43,10 +43,14 @@ export default async function piechart(stanza, params) {
       "innerRadius": {"signal": "innerRadius"},
       "outerRadius": {"signal": "width / 2"},
       "cornerRadius": {"signal": "cornerRadius"},
-      "fill": {"scale": "color", "field": "id"}
+      "fill": {"scale": "color", "field": "id"},
+      "stroke": {"value": "var(--stroke-color)"},
+      "strokeWidth": {"value": "var(--stroke-width)"}
     },
     "hover": {
-      "fill": {"value": "var(--emphasized-color)"}
+      "fill": {"value": "var(--emphasized-color)"},
+      "stroke": {"value": "var(--hover-stroke-color)"},
+      "strokeWidth": {"value": "var(--hover-stroke-width)"}
     }
   }
 

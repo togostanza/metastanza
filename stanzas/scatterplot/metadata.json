@@ -259,7 +259,13 @@
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description":"stroke width"
-    }, 
+    },
+    {
+      "stanza:key": "--hover-stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width of plot when you hover."
+    },
     {
       "stanza:key": "--opacity",
       "stanza:type": "text",

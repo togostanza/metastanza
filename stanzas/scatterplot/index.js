@@ -171,6 +171,7 @@ export default async function scatterplot(stanza, params) {
       "hover": {
         "fill": {"value": "var(--emphasized-color)"},
         "stroke": {"value": "var(--hover-stroke-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")},
         "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-opacity")}   
         }
       }
