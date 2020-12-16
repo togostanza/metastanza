@@ -40,7 +40,6 @@ export default async function barchart(stanza, params) {
     "encode": {
       "axis": {
         "update": {
-          "zindex": {"value": "1"}
         }
       },
       "ticks": {
@@ -74,7 +73,8 @@ export default async function barchart(stanza, params) {
       "domain": {
         "update": {
           "stroke": {"value": "var(--axis-color)"},
-          "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+          "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")},
+          "zindex": {"value": "1"}
         }
       }
     }
@@ -84,6 +84,7 @@ export default async function barchart(stanza, params) {
   {
     "scale": "yscale",
     "orient": params["orient-of-yaxis"],
+    "bandPosition": 0.5,
     "title": params["title-of-yaxis"],
     "grid": params["ygrid"] === "true",
     "gridColor": "var(--ygrid-color)",
@@ -94,13 +95,11 @@ export default async function barchart(stanza, params) {
     "encode": {
       "axis": {
         "update": {
-          "zindex": {"value": "1"}
         }
       },
       "ticks": {
         "update": {
-          "stroke": {"value": "var(--tick-color)"},
-          "zindex": {"value": "1"}
+          "stroke": {"value": "var(--tick-color)"}
         }
       },
       "grids": {
@@ -128,7 +127,7 @@ export default async function barchart(stanza, params) {
       },
       "domain": {
         "update": {
-          // "stroke": {"value": "var(--axis-color)"},
+          "stroke": {"value": "var(--axis-color)"},
           "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
         }
       }
