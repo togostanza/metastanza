@@ -76,14 +76,26 @@ export default async function piechart(stanza, params) {
   [
     {
       "fill": "color",
-      "title": params["title-of-legend"],
       "orient": "none",
       "legendX": "220",
       "legendY": "5",
+      "title": params["title-of-legend"],
+      "titleColor": "var(--legendtitle-color)",
+      "labelColor": "var(--legendlabel-color)",
       "encode": {
-        "labels": {"update": {"text": {"field": "value"}}}
+        "title": {
+          "update": {
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          }
+        }
       }
-    }
   ]
 
   const el = stanza.root.querySelector("main");
