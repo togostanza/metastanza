@@ -94,6 +94,8 @@ async function piechart(stanza, params) {
         "labels": {
           "interactive": true,
           "update": {
+            "fill": {"value": "var(--label-color)"},
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
             "text": {"field": "value"}
           }
@@ -225,6 +227,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#94BC8A",
 		"stanza:description": "sixth color"
+	},
+	{
+		"stanza:key": "--legend-font",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "font family of the legend title and legend labels"
 	},
 	{
 		"stanza:key": "--legendtitle-size",
