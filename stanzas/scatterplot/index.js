@@ -139,12 +139,13 @@ export default async function scatterplot(stanza, params) {
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
             "text": {"field": "value"}
           },
-        "symbols": {
-          "update": {
-            "fill": {"value": "var(--series-0-color)"},
-            "stroke": {"value": "var(--stroke-color)"},
-            "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-            "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+          "symbols": {
+            "update": {
+              "shape": {"value": params["symbol-shape"]},
+              "fill": {"value": "var(--series-0-color)"},
+              "stroke": {"value": "var(--stroke-color)"},
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
           }
         }
       }
@@ -161,7 +162,7 @@ export default async function scatterplot(stanza, params) {
         "x": {"scale": "x", "field": "Horsepower"},
         "y": {"scale": "y", "field": "Miles_per_Gallon"},
         "size": {"scale": "size", "field": "Acceleration"},
-        "shape": {"value": params["symbol-type"]},
+        "shape": {"value": params["symbol-shape"]},
         "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
         "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
         "stroke": {"value": "var(--stroke-color)"},

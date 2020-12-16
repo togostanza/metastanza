@@ -108,10 +108,10 @@
       "stanza:description": "angle of Y-labels.(in degree)"
     },
     {
-      "stanza:key": "symbol-type",
+      "stanza:key": "symbol-shape",
       "stanza:type": "string",
       "stanza:example": "circle",
-      "stanza:description":"symbol type of plot."
+      "stanza:description": "shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
