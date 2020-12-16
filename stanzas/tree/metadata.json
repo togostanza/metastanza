@@ -40,7 +40,7 @@
       "stanza:description": "padding around your stanza"
     },
     {
-      "stanza:key": "title-of-legend",
+      "stanza:key": "legend-title",
       "stanza:type": "string",
       "stanza:example": "Title of this legend",
       "stanza:description": "title of legends"
@@ -83,6 +83,66 @@
       "stanza:type": "string",
       "stanza:default": "san serif",
       "stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
+    },
+    {
+      "stanza:key": "--legend-font",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "font family of the legend title and legend labels"
+    },
+    {
+      "stanza:key": "--legendtitle-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
+      "stanza:description": "font size of the legend title"
+    },
+    {
+      "stanza:key": "--legendtitle-weight",
+      "stanza:type": "number",
+      "stanza:default": "400",
+      "stanza:description": "font weight of the legend title"
+    },
+    {
+      "stanza:key": "--legendtitle-color",
+      "stanza:type": "color",
+      "stanza:default": "#444",
+      "stanza:description": "font color of the legend title"
+    },
+    {
+      "stanza:key": "--legendlabel-size",
+      "stanza:type": "number",
+      "stanza:default": "10",
+      "stanza:description": "font size of the legend label"
+    },
+    {
+      "stanza:key": "--legendlabel-color",
+      "stanza:type": "color",
+      "stanza:default": "#444",
+      "stanza:description": "font color of the legend label"
+    },
+    {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description":"stroke color of plot."
+    },
+    {
+      "stanza:key": "--hover-stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description":"stroke color of plot when you hover."
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width"
+    },
+    {
+      "stanza:key": "--hover-stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width of plot when you hover."
     },
     {
       "stanza:key": "--series-0-color",

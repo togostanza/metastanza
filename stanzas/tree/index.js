@@ -6,13 +6,12 @@ export default async function tree(stanza, params) {
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"]; 
-  spec.height = params["width"];
+  spec.height = params["height"];
   
   //stanzaのpadding
   spec.padding = params["padding"];
 
   //scales: カラースキームを指定
-
   spec.scales[0].type = "ordinal"
 
   spec.scales[0].range = [
@@ -22,6 +21,40 @@ export default async function tree(stanza, params) {
     'var(--series-3-color)',
     'var(--series-4-color)',
     'var(--series-5-color)'
+  ]
+  
+  //legendを出す
+  spec.legends =
+  [
+    {
+      "fill": "color",
+      "title": params["legend-title"],
+      "orient": "top--left",
+      "encode": {
+        "title": {
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          },
+          "symbols": {
+            "update": {
+              "shape": {"value": params["symbol-shape"]},
+              "stroke": {"value": "var(--stroke-color)"},
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
+            }
+          }
+      }
+    }
   ]
 
   //marks:描画について
@@ -50,10 +83,14 @@ export default async function tree(stanza, params) {
     "update": {
       "x": {"field": "x"},
       "y": {"field": "y"},
-      "fill": {"scale": "color", "field": "depth"}
+      "fill": {"scale": "color", "field": "depth"},
+      "stroke": {"value": "var(--stroke-color)"},
+      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
     },
     "hover": {
-      "fill": {"value": "var(--emphasized-color)"}
+      "fill": {"value": "var(--emphasized-color)"},
+      "stroke": {"value": "var(--hover-stroke-color)"},
+      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
     }
   }
 
@@ -77,30 +114,6 @@ export default async function tree(stanza, params) {
     }
   }
 
-  //legendを出す
-  spec.legends =
-  [
-    {
-      "fill": "color",
-      "title": params["title-of-legend"],
-      "orient": "bottom-left",
-      "encode": {
-        // "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
-        "labels": {"update": {"text": {"field": "value"}}}
-      }
-      // ,
-      // "legend":{
-      //   "layout": {
-      //     "bottom": {
-      //       "anchor": "middle",
-      //       "direction": "vertical",
-      //       "center": true,
-      //       "margin": 2,
-      //     }
-      //   }
-      // } 
-    }
-  ]
 
   const el = stanza.root.querySelector("main");
   const opts = {
