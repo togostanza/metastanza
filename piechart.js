@@ -82,19 +82,20 @@ async function piechart(stanza, params) {
       "orient": "none",
       "legendX": "220",
       "legendY": "5",
-      "title": params["title-of-legend"],
+      "title": params["legend-title"],
       "titleColor": "var(--legendtitle-color)",
       "labelColor": "var(--legendlabel-color)",
       "encode": {
         "title": {
           "update": {
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")}
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
           }
         },
         "labels": {
           "interactive": true,
           "update": {
-            "fill": {"value": "var(--label-color)"},
             "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
             "text": {"field": "value"}
@@ -154,18 +155,6 @@ var metadata = {
 		"stanza:description": ""
 	},
 	{
-		"stanza:key": "color-scheme",
-		"stanza:example": "pastel2",
-		"stanza:description": "pastel2",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"pastel1",
-			"pastel2",
-			"set1"
-		],
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "inner-padding-angle",
 		"stanza:example": "0",
 		"stanza:description": "angle of inner padding.(0-0.1)",
@@ -178,7 +167,7 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "title-of-legend",
+		"stanza:key": "legend-title",
 		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
@@ -239,6 +228,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "font size of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-weight",
+		"stanza:type": "number",
+		"stanza:default": "600",
+		"stanza:description": "font weight of the legend title"
 	},
 	{
 		"stanza:key": "--legendtitle-color",

@@ -14,29 +14,36 @@ async function scatterplot(stanza, params) {
   //stanzaのpadding
   spec.padding = params["padding"];
 
-  //スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"];
-  spec.scales[0].paddingOuter = params["padding-outer"];
-
   //軸に関する設定
   spec.axes =[
     {
       "scale": "x",
-      "grid" : true,
-      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["xgrid"]),
-      "domain": false,
-      "orient": params["orient-of-xaxis"],
+      "orient": params["xaxis-orient"],
+      "title": params["xaxis-title"],
+      "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
+      "grid": params["xgrid"] === "true",
+      "gridColor": "var(--grid-color)",
+      "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+      "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+      "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
+      "ticks": params["xtick"] === "true",
       "tickCount": 5,
-      "title": params["title-of-xaxis"],
+      "domain": false,
       "encode": {
           "ticks": {
             "update": {
-            "stroke": {"value": "var(--axis-color)"}
+            "stroke": {"value": "var(--tick-color)"}
+            }
+          },
+          "grids": {
+            "update": {
+              "zindex": {"value": "0"}
             }
           },
           "labels": {
             "interactive": true,
             "update": {
+              "angle": {"value": params["xlabel-angle"]},
               "fill": {"value": "var(--label-color)"},
               "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
               "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -48,34 +55,46 @@ async function scatterplot(stanza, params) {
           "title": {
             "update": {
               "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+              "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
             }
           },
           "domain": {
             "update": {
               "stroke": {"value": "var(--axis-color)"},
-              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")},
+              "zindex": {"value": "1"}
             }
           }
         }
     },
     {
       "scale": "y",
-      "grid" : true,
-      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["ygrid"]),
+      "orient": params["yaxis-orient"],
+      "title": params["yaxis-title"],
+      "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
+      "grid": params["ygrid"] === "true",
+      "gridColor": "var(--grid-color)",
+      "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+      "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+      "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
+      "ticks": params["ytick"] === "true",
       "domain": false,
-      "orient": params["orient-of-yaxis"],
-      "titlePadding": 5,
-      "title": params["title-of-yaxis"],
       "encode": {
         "ticks": {
           "update": {
           "stroke": {"value": "var(--tick-color)"}
           }
         },
+        "grids": {
+          "update": {
+            "zindex": {"value": "0"}
+          }
+        },
         "labels": {
           "interactive": true,
           "update": {
+            "angle": {"value": params["ylabel-angle"]},
             "fill": {"value": "var(--label-color)"},
             "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -87,7 +106,8 @@ async function scatterplot(stanza, params) {
         "title": {
           "update": {
             "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
           }
         },
         "domain": {
@@ -103,16 +123,35 @@ async function scatterplot(stanza, params) {
   spec.legends = [
     {
       "size": "size",
-      "title": params["title-of-legend"],
       "format": "s",
-      "symbolStrokeColor": "var(--stroke-color)",
-      "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-      "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
-      "symbolType": params["symbol-type"],
-      "symbolFillColor": {"value": "var(--series-0-color)"},
-      "labelFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-      "labelFontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
-      "titleFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")}
+      "title": params["legend-title"],
+      "titleColor": "var(--legendtitle-color)",
+      "labelColor": "var(--legendlabel-color)",
+      "encode": {
+        "title": {
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          },
+          "symbols": {
+            "update": {
+              "shape": {"value": params["symbol-shape"]},
+              "fill": {"value": "var(--series-0-color)"},
+              "stroke": {"value": "var(--stroke-color)"},
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+          }
+        }
+      }
     }
   ];
 
@@ -126,7 +165,7 @@ async function scatterplot(stanza, params) {
         "x": {"scale": "x", "field": "Horsepower"},
         "y": {"scale": "y", "field": "Miles_per_Gallon"},
         "size": {"scale": "size", "field": "Acceleration"},
-        "shape": {"value": params["symbol-type"]},
+        "shape": {"value": params["symbol-shape"]},
         "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
         "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
         "stroke": {"value": "var(--stroke-color)"},
@@ -191,35 +230,35 @@ var metadata = {
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": "20",
+		"stanza:example": "50",
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "orient-of-xaxis",
+		"stanza:key": "xaxis-orient",
 		"stanza:type": "string",
 		"stanza:example": "bottom",
 		"stanza:description": "orient of X-axis.(please select top or bottom)"
 	},
 	{
-		"stanza:key": "orient-of-yaxis",
+		"stanza:key": "yaxis-orient",
 		"stanza:type": "string",
 		"stanza:example": "left",
 		"stanza:description": "orient of Y-axis.(please select left or right)"
 	},
 	{
-		"stanza:key": "title-of-xaxis",
+		"stanza:key": "xaxis-title",
 		"stanza:type": "string",
 		"stanza:example": "title of Xaxis",
 		"stanza:description": "title of Xaxis"
 	},
 	{
-		"stanza:key": "title-of-yaxis",
+		"stanza:key": "yaxis-title",
 		"stanza:type": "string",
 		"stanza:example": "title of Yaxis",
 		"stanza:description": "title of Yaxis"
 	},
 	{
-		"stanza:key": "title-of-legend",
+		"stanza:key": "legend-title",
 		"stanza:type": "string",
 		"stanza:example": "Acceleration",
 		"stanza:description": "title of legends"
@@ -237,10 +276,30 @@ var metadata = {
 		"stanza:description": "display of Y-grids"
 	},
 	{
-		"stanza:key": "symbol-type",
+		"stanza:key": "xtick",
+		"stanza:example": false,
+		"stanza:description": "display of X-ticks.(true or false)"
+	},
+	{
+		"stanza:key": "ytick",
+		"stanza:example": true,
+		"stanza:description": "display of Y-ticks.(true or false)"
+	},
+	{
+		"stanza:key": "xlabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "angle of X-labels.(in degree)"
+	},
+	{
+		"stanza:key": "ylabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "angle of Y-labels.(in degree)"
+	},
+	{
+		"stanza:key": "symbol-shape",
 		"stanza:type": "string",
 		"stanza:example": "circle",
-		"stanza:description": "symbol type of plot."
+		"stanza:description": "shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -256,6 +315,36 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
 		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--grid-color",
+		"stanza:type": "color",
+		"stanza:default": "#eee",
+		"stanza:description": "grid color"
+	},
+	{
+		"stanza:key": "--grid-dash",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "grid stroke dash.  Blank for solid lines."
+	},
+	{
+		"stanza:key": "--grid-opacity",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "grid opacity.(0-1)"
+	},
+	{
+		"stanza:key": "--grid-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "grid width in pixel"
+	},
+	{
+		"stanza:key": "--tick-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "tick color"
 	},
 	{
 		"stanza:key": "--label-color",
@@ -276,6 +365,18 @@ var metadata = {
 		"stanza:description": "font size of titles"
 	},
 	{
+		"stanza:key": "--title-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "font weight of titles"
+	},
+	{
+		"stanza:key": "--title-padding",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "padding between axis labels and title.(in pixel)"
+	},
+	{
 		"stanza:key": "--label-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
@@ -292,6 +393,42 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "width of axis"
+	},
+	{
+		"stanza:key": "--legend-font",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "font family of the legend title and legend labels"
+	},
+	{
+		"stanza:key": "--legendtitle-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "font size of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "font weight of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend title"
+	},
+	{
+		"stanza:key": "--legendlabel-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "font size of the legend label"
+	},
+	{
+		"stanza:key": "--legendlabel-color",
+		"stanza:type": "color",
+		"stanza:default": "#444",
+		"stanza:description": "font color of the legend label"
 	},
 	{
 		"stanza:key": "--stroke-color",

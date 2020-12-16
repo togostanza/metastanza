@@ -31,14 +31,14 @@ async function barchart(stanza, params) {
   spec.axes[0] =
   {
     "scale": "xscale",
-    "orient": params["orient-of-xaxis"],
-    "title": params["title-of-xaxis"],
+    "orient": params["xaxis-orient"],
+    "title": params["xaxis-title"],
     "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["xgrid"] === "true",
-    "gridColor": "var(--xgrid-color)",
-    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
-    "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
-    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
+    "gridColor": "var(--grid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+    "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
     "ticks": params["xtick"] === "true",
     "encode": {
       "axis": {
@@ -87,14 +87,14 @@ async function barchart(stanza, params) {
   spec.axes[1] = 
   {
     "scale": "yscale",
-    "orient": params["orient-of-yaxis"],
-    "title": params["title-of-yaxis"],
+    "orient": params["yaxis-orient"],
+    "title": params["yaxis-title"],
     "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["ygrid"] === "true",
-    "gridColor": "var(--ygrid-color)",
-    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
-    "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
-    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
+    "gridColor": "var(--grid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+    "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
     "ticks": params["ytick"] === "true",
     "encode": {
       "axis": {
@@ -226,29 +226,29 @@ var metadata = {
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": "20",
+		"stanza:example": "50",
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "orient-of-xaxis",
+		"stanza:key": "xaxis-orient",
 		"stanza:type": "string",
 		"stanza:example": "bottom",
 		"stanza:description": "orient of X-axis.(please select top or bottom)"
 	},
 	{
-		"stanza:key": "orient-of-yaxis",
+		"stanza:key": "yaxis-orient",
 		"stanza:type": "string",
 		"stanza:example": "left",
 		"stanza:description": "orient of Y-axis.(please select left or right)"
 	},
 	{
-		"stanza:key": "title-of-xaxis",
+		"stanza:key": "xaxis-title",
 		"stanza:type": "string",
 		"stanza:example": "title of Xaxis",
 		"stanza:description": "title of X-axis"
 	},
 	{
-		"stanza:key": "title-of-yaxis",
+		"stanza:key": "yaxis-title",
 		"stanza:type": "string",
 		"stanza:example": "title of Yaxis",
 		"stanza:description": "title of Y-axis"
@@ -317,52 +317,28 @@ var metadata = {
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
-		"stanza:key": "--xgrid-color",
+		"stanza:key": "--grid-color",
 		"stanza:type": "color",
 		"stanza:default": "#eee",
-		"stanza:description": "X-grid color"
+		"stanza:description": "grid color"
 	},
 	{
-		"stanza:key": "--ygrid-color",
-		"stanza:type": "color",
-		"stanza:default": "#eee",
-		"stanza:description": "Y-grid color"
-	},
-	{
-		"stanza:key": "--xgrid-dash",
+		"stanza:key": "--grid-dash",
 		"stanza:type": "number",
 		"stanza:default": "",
-		"stanza:description": "X-grid stroke dash.  Blank for solid lines."
+		"stanza:description": "grid stroke dash.  Blank for solid lines."
 	},
 	{
-		"stanza:key": "--ygrid-dash",
-		"stanza:type": "number",
-		"stanza:default": "",
-		"stanza:description": "Y-grid stroke dash.  Blank for solid lines."
-	},
-	{
-		"stanza:key": "--xgrid-opacity",
+		"stanza:key": "--grid-opacity",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "X-grid opacity.(0-1)"
+		"stanza:description": "grid opacity.(0-1)"
 	},
 	{
-		"stanza:key": "--ygrid-opacity",
+		"stanza:key": "--grid-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "Y-grid opacity.(0-1)"
-	},
-	{
-		"stanza:key": "--xgrid-width",
-		"stanza:type": "number",
-		"stanza:default": "1",
-		"stanza:description": "X-grid width in pixel."
-	},
-	{
-		"stanza:key": "--ygrid-width",
-		"stanza:type": "number",
-		"stanza:default": "1",
-		"stanza:description": "Y-grid width in pixel"
+		"stanza:description": "grid width in pixel"
 	},
 	{
 		"stanza:key": "--tick-color",
@@ -403,7 +379,7 @@ var metadata = {
 	{
 		"stanza:key": "--label-size",
 		"stanza:type": "number",
-		"stanza:default": "12",
+		"stanza:default": "10",
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
