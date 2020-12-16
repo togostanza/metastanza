@@ -74,6 +74,16 @@
       "stanza:description": "display of Y-grids.(true or false)"
     },
     {
+      "stanza:key": "xtick",
+      "stanza:example": false,
+      "stanza:description": "display of X-ticks.(true or false)"
+    },
+    {
+      "stanza:key": "ytick",
+      "stanza:example": true,
+      "stanza:description": "display of Y-ticks.(true or false)"
+    },
+    {
       "stanza:key": "xlabel-angle",
       "stanza:example": "0",
       "stanza:description": "angle of X-labels.(in degree)"

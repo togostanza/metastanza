@@ -36,6 +36,7 @@ export default async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
     "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
+    "ticks": params["xtick"] === "true",
     "encode": {
       "axis": {
         "zindex": "1"
@@ -87,7 +88,7 @@ export default async function barchart(stanza, params) {
     "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
     "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
     "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
-    "tickCap": "round",
+    "ticks": params["ytick"] === "true",
     "encode": {
       "axis": {
         "zindex": "1"
