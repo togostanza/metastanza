@@ -11,29 +11,36 @@ export default async function scatterplot(stanza, params) {
   //stanzaのpadding
   spec.padding = params["padding"];
 
-  //スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"]
-  spec.scales[0].paddingOuter = params["padding-outer"]
-
   //軸に関する設定
   spec.axes =[
     {
       "scale": "x",
-      "grid" : true,
-      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["xgrid"]),
-      "domain": false,
-      "orient": params["orient-of-xaxis"],
+      "orient": params["xaxis-orient"],
+      "title": params["xaxis-title"],
+      "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
+      "grid": params["xgrid"] === "true",
+      "gridColor": "var(--grid-color)",
+      "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+      "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+      "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
+      "ticks": params["xtick"] === "true",
       "tickCount": 5,
-      "title": params["title-of-xaxis"],
+      "domain": false,
       "encode": {
           "ticks": {
             "update": {
-            "stroke": {"value": "var(--axis-color)"}
+            "stroke": {"value": "var(--tick-color)"}
+            }
+          },
+          "grids": {
+            "update": {
+              "zindex": {"value": "0"}
             }
           },
           "labels": {
             "interactive": true,
             "update": {
+              "angle": {"value": params["xlabel-angle"]},
               "fill": {"value": "var(--label-color)"},
               "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
               "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -45,34 +52,46 @@ export default async function scatterplot(stanza, params) {
           "title": {
             "update": {
               "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+              "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
             }
           },
           "domain": {
             "update": {
               "stroke": {"value": "var(--axis-color)"},
-              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")},
+              "zindex": {"value": "1"}
             }
           }
         }
     },
     {
       "scale": "y",
-      "grid" : true,
-      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["ygrid"]),
+      "orient": params["yaxis-orient"],
+      "title": params["yaxis-title"],
+      "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
+      "grid": params["ygrid"] === "true",
+      "gridColor": "var(--grid-color)",
+      "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+      "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+      "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
+      "ticks": params["ytick"] === "true",
       "domain": false,
-      "orient": params["orient-of-yaxis"],
-      "titlePadding": 5,
-      "title": params["title-of-yaxis"],
       "encode": {
         "ticks": {
           "update": {
           "stroke": {"value": "var(--tick-color)"}
           }
         },
+        "grids": {
+          "update": {
+            "zindex": {"value": "0"}
+          }
+        },
         "labels": {
           "interactive": true,
           "update": {
+            "angle": {"value": params["ylabel-angle"]},
             "fill": {"value": "var(--label-color)"},
             "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
@@ -84,7 +103,8 @@ export default async function scatterplot(stanza, params) {
         "title": {
           "update": {
             "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-weight")}
           }
         },
         "domain": {
@@ -100,16 +120,34 @@ export default async function scatterplot(stanza, params) {
   spec.legends = [
     {
       "size": "size",
-      "title": params["title-of-legend"],
       "format": "s",
-      "symbolStrokeColor": "var(--stroke-color)",
-      "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-      "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
-      "symbolType": params["symbol-type"],
-      "symbolFillColor": {"value": "var(--series-0-color)"},
-      "labelFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-      "labelFontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
-      "titleFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")}
+      "title": params["legend-title"],
+      "titleColor": "var(--legendtitle-color)",
+      "labelColor": "var(--legendlabel-color)",
+      "encode": {
+        "title": {
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
+          }
+        },
+        "labels": {
+          "interactive": true,
+          "update": {
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
+            "text": {"field": "value"}
+          },
+        "symbols": {
+          "update": {
+            "fill": {"value": "var(--series-0-color)"},
+            "stroke": {"value": "var(--stroke-color)"},
+            "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+            "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+          }
+        }
+      }
     }
   ]
 

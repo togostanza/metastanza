@@ -29,14 +29,14 @@ export default async function barchart(stanza, params) {
   spec.axes[0] =
   {
     "scale": "xscale",
-    "orient": params["orient-of-xaxis"],
-    "title": params["title-of-xaxis"],
+    "orient": params["xaxis-orient"],
+    "title": params["xaxis-title"],
     "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["xgrid"] === "true",
-    "gridColor": "var(--xgrid-color)",
-    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-dash"),
-    "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-opacity"),
-    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--xgrid-width"),
+    "gridColor": "var(--grid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+    "gridOpacity":getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
     "ticks": params["xtick"] === "true",
     "encode": {
       "axis": {
@@ -85,14 +85,14 @@ export default async function barchart(stanza, params) {
   spec.axes[1] = 
   {
     "scale": "yscale",
-    "orient": params["orient-of-yaxis"],
-    "title": params["title-of-yaxis"],
+    "orient": params["yaxis-orient"],
+    "title": params["yaxis-title"],
     "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
     "grid": params["ygrid"] === "true",
-    "gridColor": "var(--ygrid-color)",
-    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-dash"),
-    "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-opacity"),
-    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--ygrid-width"),
+    "gridColor": "var(--grid-color)",
+    "gridDash": getComputedStyle(stanza.root.host).getPropertyValue("--grid-dash"),
+    "gridOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--grid-opacity"),
+    "gridWidth": getComputedStyle(stanza.root.host).getPropertyValue("--grid-width"),
     "ticks": params["ytick"] === "true",
     "encode": {
       "axis": {

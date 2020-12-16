@@ -79,14 +79,15 @@ export default async function piechart(stanza, params) {
       "orient": "none",
       "legendX": "220",
       "legendY": "5",
-      "title": params["title-of-legend"],
+      "title": params["legend-title"],
       "titleColor": "var(--legendtitle-color)",
       "labelColor": "var(--legendlabel-color)",
       "encode": {
         "title": {
           "update": {
             "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")}
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
+            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
           }
         },
         "labels": {
