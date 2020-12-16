@@ -148,12 +148,12 @@ async function scatterplot(stanza, params) {
               "fill": {"value": "var(--series-0-color)"},
               "stroke": {"value": "var(--stroke-color)"},
               "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
+            }
           }
         }
       }
-    }
-  ];
+    ];
 
   spec.marks= [
     {
@@ -166,14 +166,17 @@ async function scatterplot(stanza, params) {
         "y": {"scale": "y", "field": "Miles_per_Gallon"},
         "size": {"scale": "size", "field": "Acceleration"},
         "shape": {"value": params["symbol-shape"]},
-        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+        "fill": {"value": "var(--series-0-color)"},
         "stroke": {"value": "var(--stroke-color)"},
-        "fill": {"value": "var(--series-0-color)"}
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"},
-      }
+        "stroke": {"value": "var(--hover-stroke-color)"},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")},
+        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-opacity")}   
+        }
       }
     }
   ];
@@ -343,13 +346,13 @@ var metadata = {
 	{
 		"stanza:key": "--tick-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
+		"stanza:default": "#444",
 		"stanza:description": "tick color"
 	},
 	{
 		"stanza:key": "--label-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
+		"stanza:default": "#444",
 		"stanza:description": "label color"
 	},
 	{
@@ -379,7 +382,7 @@ var metadata = {
 	{
 		"stanza:key": "--label-size",
 		"stanza:type": "number",
-		"stanza:default": "12",
+		"stanza:default": "10",
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
@@ -434,7 +437,13 @@ var metadata = {
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
 		"stanza:default": "#333",
-		"stanza:description": "symbol type of plot."
+		"stanza:description": "stroke color of plot."
+	},
+	{
+		"stanza:key": "--hover-stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "stroke color of plot when you hover."
 	},
 	{
 		"stanza:key": "--stroke-width",
@@ -443,10 +452,22 @@ var metadata = {
 		"stanza:description": "stroke width"
 	},
 	{
+		"stanza:key": "--hover-stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "stroke width of plot when you hover."
+	},
+	{
 		"stanza:key": "--opacity",
 		"stanza:type": "text",
 		"stanza:default": "0.7",
 		"stanza:description": "opacity of each plots"
+	},
+	{
+		"stanza:key": "--hover-opacity",
+		"stanza:type": "text",
+		"stanza:default": "1",
+		"stanza:description": "opacity of each plots when you hover"
 	}
 ]
 };

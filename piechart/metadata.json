@@ -138,7 +138,30 @@
       "stanza:type": "color",
       "stanza:default": "#444",
       "stanza:description": "font color of the legend label"
+    },
+    {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description":"stroke color of plot."
+    },
+    {
+      "stanza:key": "--hover-stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description":"stroke color of plot when you hover."
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description":"stroke width"
+    },
+    {
+      "stanza:key": "--hover-stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1.2",
+      "stanza:description":"stroke width of plot when you hover."
     }
-    
   ]
 }

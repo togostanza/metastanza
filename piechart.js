@@ -37,7 +37,7 @@ async function piechart(stanza, params) {
     "enter": {
       "fill": {"scale": "color", "field": "id"},
       "x": {"signal": "width / 2"},
-      "y": {"signal": "height / 2"}
+      "y": {"signal": "height / 2"},
     },
     "update": {
       "startAngle": {"field": "startAngle"},
@@ -46,10 +46,14 @@ async function piechart(stanza, params) {
       "innerRadius": {"signal": "innerRadius"},
       "outerRadius": {"signal": "width / 2"},
       "cornerRadius": {"signal": "cornerRadius"},
-      "fill": {"scale": "color", "field": "id"}
+      "fill": {"scale": "color", "field": "id"},
+      "stroke": {"value": "var(--stroke-color)"},
+      "strokeWidth": {"value": "var(--stroke-width)"}
     },
     "hover": {
-      "fill": {"value": "var(--emphasized-color)"}
+      "fill": {"value": "var(--emphasized-color)"},
+      "stroke": {"value": "var(--hover-stroke-color)"},
+      "strokeWidth": {"value": "var(--hover-stroke-width)"}
     }
   };
 
@@ -252,6 +256,30 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#444",
 		"stanza:description": "font color of the legend label"
+	},
+	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "stroke color of plot."
+	},
+	{
+		"stanza:key": "--hover-stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "stroke color of plot when you hover."
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "stroke width"
+	},
+	{
+		"stanza:key": "--hover-stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1.2",
+		"stanza:description": "stroke width of plot when you hover."
 	}
 ]
 };

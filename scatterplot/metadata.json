@@ -155,13 +155,13 @@
     {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "#444",
       "stanza:description": "tick color"
     },
     {
       "stanza:key": "--label-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "#444",
       "stanza:description": "label color"
     },
     {
@@ -191,7 +191,7 @@
     {
       "stanza:key": "--label-size",
       "stanza:type": "number",
-      "stanza:default": "12",
+      "stanza:default": "10",
       "stanza:description": "emphasized color when you hover on labels and rects"
     },
     {
@@ -246,19 +246,37 @@
       "stanza:key": "--stroke-color",
       "stanza:type": "color",
       "stanza:default": "#333",
-      "stanza:description":"symbol type of plot."
+      "stanza:description":"stroke color of plot."
+    },
+    {
+      "stanza:key": "--hover-stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description":"stroke color of plot when you hover."
     },
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description":"stroke width"
-    }, 
+    },
+    {
+      "stanza:key": "--hover-stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description":"stroke width of plot when you hover."
+    },
     {
       "stanza:key": "--opacity",
       "stanza:type": "text",
       "stanza:default": "0.7",
       "stanza:description":"opacity of each plots"
+    },
+    {
+      "stanza:key": "--hover-opacity",
+      "stanza:type": "text",
+      "stanza:default": "1",
+      "stanza:description":"opacity of each plots when you hover"
     }
   ]
 }
