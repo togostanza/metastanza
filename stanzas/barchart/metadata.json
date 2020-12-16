@@ -65,12 +65,12 @@
     },
     {
       "stanza:key": "xgrid",
-      "stanza:example": "false",
+      "stanza:example": false,
       "stanza:description": "display of X-grids.(true or false)"
     },
     {
       "stanza:key": "ygrid",
-      "stanza:example": "true",
+      "stanza:example": true,
       "stanza:description": "display of Y-grids.(true or false)"
     },
     {
