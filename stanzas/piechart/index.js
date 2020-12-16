@@ -91,6 +91,8 @@ export default async function piechart(stanza, params) {
         "labels": {
           "interactive": true,
           "update": {
+            "fill": {"value": "var(--label-color)"},
+            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
             "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
             "text": {"field": "value"}
           }

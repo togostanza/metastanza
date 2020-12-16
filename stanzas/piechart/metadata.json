@@ -116,6 +116,12 @@
       "stanza:description": "sixth color"
     },
     {
+      "stanza:key": "--legend-font",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "font family of the legend title and legend labels"
+    },
+    {
       "stanza:key": "--legendtitle-size",
       "stanza:type": "number",
       "stanza:default": "12",
