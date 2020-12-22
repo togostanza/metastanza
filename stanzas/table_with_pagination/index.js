@@ -55,6 +55,7 @@ function draw(dataset, stanza, element) {
       label = dataset.head.labels[i];
     }
     th.innerHTML = label;
+    // th.setAttribute("data-id", dataset.vars[i]);
     span_filter.classList.add("icon", "filter-icon");
     span_sort.setAttribute("data-type", label);
     span_sort.classList.add("icon", "sort-icon");
@@ -80,21 +81,32 @@ function draw(dataset, stanza, element) {
     }
   }
 
+  // クリックされたカラムがどのカラムかを取得し、ソートにおけるkeyを定義する
   var sort = stanza.select(".sort-icon");
   sort.addEventListener("click", function () {
-    console.log("クリックされました");
+    console.log("クリックされました1");
+    var eventDOM = sort.target.parentNodes;
+    console.log(eventDOM);
   });
-  // bb.onclick = function(){
-  //   alert("ボタンが押されました。")
-  // }
-  // setTimeout(function(){
-  //   const hoge = document.getElementById('sort-icon-id3');
-  //   if(hoge){
-  //     hoge.addEventListener("click", function () {
-  //       console.log("クリックされました");
-  //     });
-  //   }
-  // },5000)
+
+  // // th要素にdata-id属性を設定し、データとカラムを紐づける
+  // let element = document.getElementsByTagName("th")
+  // element.dataset.name = dataset.vars[i];
+
+  // bodyの配列内のオブジェクトを、id（クリックされたカラムのdata-id属性）のvalueを基準に並び替えたい
+  console.log(dataset.body);
+  const sortArray = dataset.body.sort((a,b) => a.id.value - b.id.value);
+  console.log(sortArray);
+
+  // console.log(dataset.head.vars);
+  // const sortArray = dataset.head.vars.sort((a,b) => a.id - b.id);
+  // console.log(sortArray);
+
+// ここからsortのクリックイベント
+  var sort = stanza.select(".sort-icon");
+  sort.addEventListener("click", function () {
+    console.log("クリックされました2");
+  });
 }
 
 // document.getElementsByClassName("sort-icon").onclick = function(){
