@@ -16,9 +16,27 @@
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
+      "stanza:key": "table_data_api",
+      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example",
+      "stanza:description": "table data api",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "limit",
+      "stanza:example": "10",
+      "stanza:description": "table page size",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "offset",
+      "stanza:example": "0",
+      "stanza:description": "page numbere",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "params",
+      "stanza:example": "taxonomy='9606'",
+      "stanza:description": "parameters for table data api",
       "stanza:required": false
     }
   ],
@@ -87,8 +105,14 @@
     {
       "stanza:key": "--thead-font-color",
       "stanza:type": "color",
-      "stanza:default": "--series-0-color",
+      "stanza:default": "#256d80",
       "stanza:description": "font color of table header"
+    },
+    {
+      "stanza:key": "--thead-font-weight",
+      "stanza:type": "text",
+      "stanza:default": "400",
+      "stanza:description": "font weight of table header"
     },
     {
       "stanza:key": "--label-font",

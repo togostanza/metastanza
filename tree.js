@@ -96,7 +96,7 @@ async function tree(stanza, params) {
       "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
     }
   };
-
+  
   spec.marks[2].encode ={
     "enter": {
       "text": {"field": "name"},
@@ -111,9 +111,17 @@ async function tree(stanza, params) {
       "align": {"signal": "datum.children ? 'right' : 'left'"},
       "opacity": {"signal": "labels ? 1 : 0"},
       "fill": {"value": "var(--label-color)"}
+      // hoverした時の文字色が薄い場合は文字にstrokecolorをつけたほうがよいかも？（検討）
+      // "stroke": {"value": ""},
+      // "strokeWidth": {"value": ""}
+      // "stroke": {"value": "var(--stroke-color)"},
+      // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
     },
     "hover": {
-      "fill": {"value": "var(--emphasized-color)"}
+      "fill": {"value": "var(--emphasized-color)"},
+      // "stroke": {"value": "var(--hover-stroke-color)"},
+      // "strokeWidth": {"value": "0.5"}
+      // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
     }
   };
 
