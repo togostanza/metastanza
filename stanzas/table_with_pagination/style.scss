@@ -11,13 +11,18 @@ main {
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  font-family: var(--general-font-family);
   color: var(--general-font-color);
+  font-family: var(--general-font-family);
   font-size: var(--general-font-size);
 }
 
+#renderDiv{
+  width: 100%;
+}
+
 .container{
-  width: 800px;
+  width:100%;
+  max-width: 800px;
 }
 
 .infomation{
@@ -88,11 +93,16 @@ thead{
   padding: 8px 8px 0 8px;
 }
 
+#renderDiv > table > thead > tr > th{
+  color: var(--thead-font-color);
+  font-weight: var(--thead-font-weight);
+}
+
 thead>tr>td{
   color: var(--series-0-color);
 }
 
-thead>tr>td>.icon{
+thead>tr>th>.icon{
   cursor: pointer;
   content: "";
   display: inline-block;
@@ -114,7 +124,7 @@ thead>tr>td>.icon{
 
 tbody{
   font-size: var(--tbody-font-size);
-  color: var(--thead-font-color);
+  color: var(--general-font-color);
   padding: 0px 8px;
 }
 
@@ -126,7 +136,7 @@ tbody tr td:hover{
   color: var(--emphasized-color);
 }
 
-td{
+td, th{
 width: 150px;
 padding: 5px;
 }
