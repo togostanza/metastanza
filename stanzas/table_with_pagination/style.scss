@@ -76,6 +76,15 @@ main {
   height: 13px;
 }
 
+.table-fixed th:first-child, .table-fixed td:first-child {
+  position: sticky; 
+  left: 0;
+}
+
+th:first-child, td:first-child {
+  background-color: #fff;
+}
+
 table{
   width: inherit;
   text-align: left;

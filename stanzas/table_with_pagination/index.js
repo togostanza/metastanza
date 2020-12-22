@@ -46,6 +46,7 @@ function draw(dataset, stanza, element) {
   var drawBody = function(data) {
     for(let row of data){
       tr = document.createElement("tr");
+      tr.classList.add("table-fixed");
       tbody.appendChild(tr);
       for(let j of order){
         let td = document.createElement("td");
@@ -88,6 +89,7 @@ function draw(dataset, stanza, element) {
       drawBody(sortArray);
       for(let row of sortArray){
         tr = document.createElement("tr");
+        tr.classList.add("table-fixed");
         tbody.appendChild(tr);
         for(let j of order){
           let td = document.createElement("td");
