@@ -57,10 +57,32 @@ function draw(dataset, stanza, element) {
     th.innerHTML = label;
     // th.setAttribute("data-id", dataset.vars[i]);
     span_filter.classList.add("icon", "filter-icon");
-    span_sort.setAttribute("data-type", label);
+    span_sort.setAttribute("data-type", dataset.head.vars[i] );
     span_sort.classList.add("icon", "sort-icon");
     span_sort.addEventListener('click', (e)=>{
       console.log(e.path[0].getAttribute('data-type'));
+      const key = e.path[0].getAttribute('data-type');
+      const sortArray = dataset.body.sort((a,b) => a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1);
+      console.log(sortArray);
+      stanza.root.querySelector("tbody").remove();
+      let tbody = document.createElement("tbody");
+      for(let row of sortArray){
+        tr = document.createElement("tr");
+        tbody.appendChild(tr);
+        for(let j of order){
+          let td = document.createElement("td");
+          if (dataset.head.href[j]) {
+            let a = document.createElement("a");
+            a.setAttribute("href", row[dataset.head.href[j]].value);
+            a.innerHTML = row[dataset.head.vars[j]].value;
+            td.appendChild(a);
+          } else {
+            td.innerHTML = row[dataset.head.vars[j]].value;
+          }
+          tr.appendChild(td);
+        }
+      }
+      stanza.root.querySelector("table").appendChild(tbody);
     })
     th.appendChild(span_filter);
     th.appendChild(span_sort);
@@ -83,33 +105,6 @@ function draw(dataset, stanza, element) {
       tr.appendChild(td);
     }
   }
-
-  // クリックされたカラムがどのカラムかを取得し、ソートにおけるkeyを定義する
-  var sort = stanza.select(".sort-icon");
-  sort.addEventListener("click", function () {
-    console.log("クリックされました1");
-    var eventDOM = sort.target.parentNodes;
-    console.log(eventDOM);
-  });
-
-  // // th要素にdata-id属性を設定し、データとカラムを紐づける
-  // let element = document.getElementsByTagName("th")
-  // element.dataset.name = dataset.vars[i];
-
-  // bodyの配列内のオブジェクトを、id（クリックされたカラムのdata-id属性）のvalueを基準に並び替えたい
-  console.log(dataset.body);
-  const sortArray = dataset.body.sort((a,b) => a.id.value - b.id.value);
-  console.log(sortArray);
-
-  // console.log(dataset.head.vars);
-  // const sortArray = dataset.head.vars.sort((a,b) => a.id - b.id);
-  // console.log(sortArray);
-
-// ここからsortのクリックイベント
-  var sort = stanza.select(".sort-icon");
-  sort.addEventListener("click", function () {
-    console.log("クリックされました2");
-  });
 }
 
 // document.getElementsByClassName("sort-icon").onclick = function(){
