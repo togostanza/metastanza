@@ -6,7 +6,7 @@ export default async function tableWithPagination(stanza, params) {
   stanza.render({
     template: 'stanza.html.hbs'
   });
-  
+
   let formBody = [];
   for (let key in params) {
     if(params[key] && key != "table_data_api") formBody.push(key + "=" + encodeURIComponent(params[key]))
@@ -17,15 +17,15 @@ export default async function tableWithPagination(stanza, params) {
   let dataset = await metastanza.getFormatedJson(api, element, formBody.join("&"));
   if (typeof dataset == "object") draw(dataset, stanza, element);
 }
-  
+
 function draw(dataset, stanza, element) {
   let table = document.createElement("table");
   let thead = document.createElement("thead");
-  let tbody = document.createElement("tbody");	
+  let tbody = document.createElement("tbody");
   element.appendChild(table);
   table.appendChild(thead);
   table.appendChild(tbody);
-  
+
   let order = [];
   if (dataset.head.order) {
     for (let i = 0;  i < dataset.head.order.length; i++) {
@@ -36,7 +36,7 @@ function draw(dataset, stanza, element) {
   } else {
     order = [...Array(dataset.head.vars.length).keys()];
   }
-  
+
   let tr = document.createElement("tr");
   tr.classList.add("table-fixed");
   thead.appendChild(tr);
@@ -44,22 +44,17 @@ function draw(dataset, stanza, element) {
     let th = document.createElement("th");
     let span_filter = document.createElement("span");
     let span_sort = document.createElement("span");
-    span_filter.classList.add("icon", "filter-icon");
-    span_sort.setAttribute("id", "sort-icon-id" + i );
-    console.log("read?");
-    span_sort.classList.add("icon", "sort-icon");
     let label = dataset.head.vars[i];
     if (dataset.head.labels) label = dataset.head.labels[i];
     th.innerHTML = label;
+    span_filter.classList.add("icon", "filter-icon");
+    span_sort.setAttribute("data-type", label );
+    span_sort.classList.add("icon", "sort-icon");
     th.appendChild(span_filter);
     th.appendChild(span_sort);
     tr.appendChild(th);
   }
-      // document.getElementsByClassName("sort-icon").onclick = function() {
-      //     console.log("クリックされた");
-      //     // document.getElementById("text").innerHTML = "クリックされた！";
-      //   };
-      
+
   for(let row of dataset.body){
     tr = document.createElement("tr");
     tbody.appendChild(tr);
@@ -77,14 +72,13 @@ function draw(dataset, stanza, element) {
     }
   }
 
-
-  setTimeout(function(){
-    var bb = document.getElementById("sort-icon-id3");
-    console.log(bb);
-    bb.onclick = function(){
-      alert("ボタンが押されました。")
-    }
-  },5000)
+  var sort = stanza.select(".sort-icon");
+  sort.addEventListener("click", function () {
+    console.log("クリックされました");
+  });
+    // bb.onclick = function(){
+    //   alert("ボタンが押されました。")
+    // }
   // setTimeout(function(){
   //   const hoge = document.getElementById('sort-icon-id3');
   //   if(hoge){
