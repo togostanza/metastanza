@@ -59,6 +59,9 @@ function draw(dataset, stanza, element) {
     span_filter.classList.add("icon", "filter-icon");
     span_sort.setAttribute("data-type", label);
     span_sort.classList.add("icon", "sort-icon");
+    span_sort.addEventListener('click', (e)=>{
+      console.log(e.path[0].getAttribute('data-type'));
+    })
     th.appendChild(span_filter);
     th.appendChild(span_sort);
     tr.appendChild(th);
