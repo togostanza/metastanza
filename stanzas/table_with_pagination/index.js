@@ -43,19 +43,38 @@ function draw(dataset, stanza, element) {
     order = [...Array(dataset.head.vars.length).keys()];
   }
 
+  var drawBody = function(data) {
+    for(let row of data){
+      tr = document.createElement("tr");
+      tbody.appendChild(tr);
+      for(let j of order){
+        let td = document.createElement("td");
+        if (dataset.head.href[j]) {
+          let a = document.createElement("a");
+          a.setAttribute("href", row[dataset.head.href[j]].value);
+          a.innerHTML = row[dataset.head.vars[j]].value;
+          td.appendChild(a);
+        } else {
+          td.innerHTML = row[dataset.head.vars[j]].value;
+        }
+        tr.appendChild(td);
+      }
+    }
+  };
+
   let tr = document.createElement("tr");
   tr.classList.add("table-fixed");
   thead.appendChild(tr);
-  for (const i of order) {
-    const th = document.createElement("th");
-    const span_filter = document.createElement("span");
-    const span_sort = document.createElement("span");
+
+  for(let i of order){
+    let th = document.createElement("th");
+    let span_filter = document.createElement("span");
+    let span_sort = document.createElement("span");
     let label = dataset.head.vars[i];
     if (dataset.head.labels) {
       label = dataset.head.labels[i];
     }
     th.innerHTML = label;
-    // th.setAttribute("data-id", dataset.vars[i]);
     span_filter.classList.add("icon", "filter-icon");
     span_sort.setAttribute("data-type", dataset.head.vars[i] );
     span_sort.classList.add("icon", "sort-icon");
@@ -63,9 +82,10 @@ function draw(dataset, stanza, element) {
       console.log(e.path[0].getAttribute('data-type'));
       const key = e.path[0].getAttribute('data-type');
       const sortArray = dataset.body.sort((a,b) => a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1);
-      console.log(sortArray);
+      // console.log(sortArray);
       stanza.root.querySelector("tbody").remove();
       let tbody = document.createElement("tbody");
+      drawBody(sortArray);
       for(let row of sortArray){
         tr = document.createElement("tr");
         tbody.appendChild(tr);
@@ -88,40 +108,5 @@ function draw(dataset, stanza, element) {
     th.appendChild(span_sort);
     tr.appendChild(th);
   }
-
-  for (const row of dataset.body) {
-    tr = document.createElement("tr");
-    tbody.appendChild(tr);
-    for (const j of order) {
-      const td = document.createElement("td");
-      if (dataset.head.href[j]) {
-        const a = document.createElement("a");
-        a.setAttribute("href", row[dataset.head.href[j]].value);
-        a.innerHTML = row[dataset.head.vars[j]].value;
-        td.appendChild(a);
-      } else {
-        td.innerHTML = row[dataset.head.vars[j]].value;
-      }
-      tr.appendChild(td);
-    }
-  }
+  drawBody(dataset.body);
 }
-
-// document.getElementsByClassName("sort-icon").onclick = function(){
-//   console.log("クリックされた");
-// }
-// document.getElementsByClassName("sort-icon").click (function(){
-//   console.log("クリックされた");
-// })
-
-// var bb = document.getElementsByClassName("sort-icon");
-// bb.onclick = function(){
-//   console.log("ボタンが押されました");
-// }
-
-// window.onload = function(){
-//   let bb = document.getElementsByClassName("sort-icon");
-//   bb.addEventListener("click", function(){
-//     console.log("ボタンが押されました。")
-//   });
-// };
