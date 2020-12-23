@@ -76,17 +76,18 @@ function draw(dataset, stanza, element) {
       label = dataset.head.labels[i];
     }
     th.innerHTML = label;
-    span_filter.classList.add("icon", "filter-icon");
+    span_filter.classList.add("icon", "filtericon");
     span_sort.setAttribute("data-type", dataset.head.vars[i] );
-    span_sort.classList.add("icon", "sort-icon");
+    span_sort.classList.add("icon", "sorticon");
     span_sort.addEventListener('click', (e)=>{
+      span_sort.className = "icon sorticon-des"
       console.log(e.path[0].getAttribute('data-type'));
       const key = e.path[0].getAttribute('data-type');
       const sortArray = dataset.body.sort((a,b) => a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1);
       // console.log(sortArray);
       stanza.root.querySelector("tbody").remove();
       let tbody = document.createElement("tbody");
-      drawBody(sortArray);
+      // drawBody(sortArray);
       for(let row of sortArray){
         tr = document.createElement("tr");
         tr.classList.add("table-fixed");
