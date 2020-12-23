@@ -80,32 +80,61 @@ function draw(dataset, stanza, element) {
     span_sort.setAttribute("data-type", dataset.head.vars[i] );
     span_sort.classList.add("icon", "sorticon");
     span_sort.addEventListener('click', (e)=>{
-      span_sort.className = "icon sorticon-des"
-      console.log(e.path[0].getAttribute('data-type'));
-      const key = e.path[0].getAttribute('data-type');
-      const sortArray = dataset.body.sort((a,b) => a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1);
-      // console.log(sortArray);
-      stanza.root.querySelector("tbody").remove();
-      let tbody = document.createElement("tbody");
-      // drawBody(sortArray);
-      for(let row of sortArray){
-        tr = document.createElement("tr");
-        tr.classList.add("table-fixed");
-        tbody.appendChild(tr);
-        for(let j of order){
-          let td = document.createElement("td");
-          if (dataset.head.href[j]) {
-            let a = document.createElement("a");
-            a.setAttribute("href", row[dataset.head.href[j]].value);
-            a.innerHTML = row[dataset.head.vars[j]].value;
-            td.appendChild(a);
-          } else {
-            td.innerHTML = row[dataset.head.vars[j]].value;
+      let offsetX = e.offsetX; // =>要素左上からのx座標
+      let offsetY = e.offsetY; // =>要素左上からのy座標
+      if(offsetY >= 8){
+        span_sort.className = "icon sorticon-asc"
+        console.log(e.path[0].getAttribute('data-type'));
+        const key = e.path[0].getAttribute('data-type');
+        const sortArray = dataset.body.sort((a,b) => a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1);
+        stanza.root.querySelector("tbody").remove();
+        let tbody = document.createElement("tbody");
+        // drawBody(sortArray);
+        for(let row of sortArray){
+          tr = document.createElement("tr");
+          tr.classList.add("table-fixed");
+          tbody.appendChild(tr);
+          for(let j of order){
+            let td = document.createElement("td");
+            if (dataset.head.href[j]) {
+              let a = document.createElement("a");
+              a.setAttribute("href", row[dataset.head.href[j]].value);
+              a.innerHTML = row[dataset.head.vars[j]].value;
+              td.appendChild(a);
+            } else {
+              td.innerHTML = row[dataset.head.vars[j]].value;
+            }
+            tr.appendChild(td);
           }
-          tr.appendChild(td);
         }
-      }
       stanza.root.querySelector("table").appendChild(tbody);
+      }else{
+        span_sort.className = "icon sorticon-des"
+        console.log(e.path[0].getAttribute('data-type'));
+        const key = e.path[0].getAttribute('data-type');
+        const sortArray = dataset.body.sort((a,b) => b[key].value.toLowerCase() < a[key].value.toLowerCase() ? -1 : 1);
+        stanza.root.querySelector("tbody").remove();
+        let tbody = document.createElement("tbody");
+        // drawBody(sortArray);
+        for(let row of sortArray){
+          tr = document.createElement("tr");
+          tr.classList.add("table-fixed");
+          tbody.appendChild(tr);
+          for(let j of order){
+            let td = document.createElement("td");
+            if (dataset.head.href[j]) {
+              let a = document.createElement("a");
+              a.setAttribute("href", row[dataset.head.href[j]].value);
+              a.innerHTML = row[dataset.head.vars[j]].value;
+              td.appendChild(a);
+            } else {
+              td.innerHTML = row[dataset.head.vars[j]].value;
+            }
+            tr.appendChild(td);
+          }
+        }
+        stanza.root.querySelector("table").appendChild(tbody);
+      }
     })
     th.appendChild(span_filter);
     th.appendChild(span_sort);
