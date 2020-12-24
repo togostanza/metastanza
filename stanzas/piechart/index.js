@@ -3,6 +3,39 @@ import vegaEmbed from "vega-embed";
 export default async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
+  let srcData = fetch('http://togostanza.org/sparqlist/api/metastanza_chart')
+  .then(function (response) {
+    return response.json();
+  }).then(function (myjson) {
+    // 読み込ませたいSPALQlistの配列データにおける各オブジェクトにidを追加
+    for(let i=0; i < myjson.values.length; i++){
+      myjson.values[i].id = i;
+    }
+    
+    // オブジェクトのキー名を、vegaが読み込める状態に変更（countをfieldに変更）
+    let src = myjson.values;
+    let dst = [];
+    for (let i = 0; i < src.length; i++) {
+      dst.push({
+        category: src[i].category,
+        field: src[i].count-0,
+        id: src[i].id
+      });
+    }
+    // console.log(dst);
+    return dst
+  });
+
+  // idおよびfieldのkey/valueを持ったオブジェクトの配列（SPALQlistのデータ）を、vegaのデフォルトのデータと置き換えたい
+  console.log(srcData);
+  console.log(spec.data[0].values);
+  
+  spec.data[0].values = srcData;
+  
+  console.log(srcData);
+
+
+
   //stanza（描画範囲）のwidth・height（うまく効かない…広くなってしまう？）
   // spec.width = params["width"]
   // spec.height = params["height"]

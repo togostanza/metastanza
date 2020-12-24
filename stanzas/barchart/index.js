@@ -2,12 +2,13 @@ import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].values = [
-    { category: "value1", amount: 1 },
-    { category: "value2", amount: 7 },
-    { category: "value3", amount: 5 },
-    { category: "value4", amount: 9 },
-  ];
+  spec.data[0].url = params["your-data"];
+  // spec.data[0].values = [
+  //   {"category": "value1", "amount": 1},
+  //   {"category": "value2", "amount": 7},
+  //   {"category": "value3", "amount": 5},
+  //   {"category": "value4", "amount": 9},
+  // ]
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"];
