@@ -63,7 +63,7 @@
     {
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#256d80",
+      "stanza:default": "#adc1c7",
       "stanza:description": "basic fill color"
     },
     {
@@ -97,9 +97,15 @@
       "stanza:description": "style of ruled line"
     },
     {
+      "stanza:key": "--table-outside-border",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #ccb9b1",
+      "stanza:description": "border style of table"
+    },
+    {
       "stanza:key": "--stack-line",
       "stanza:type": "text",
-      "stanza:default": "1px solid #333",
+      "stanza:default": "1px solid #ccb9b1",
       "stanza:description": "style of stack line"
     },
     {
@@ -147,14 +153,8 @@
     {
       "stanza:key": "--thead-font-color",
       "stanza:type": "color",
-      "stanza:default": "#256d80",
+      "stanza:default": "#adc1c7",
       "stanza:description": "font color of table header"
-    },
-    {
-      "stanza:key": "--thead-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "400",
-      "stanza:description": "font weight of table header"
     },
     {
       "stanza:key": "--label-font",
@@ -163,11 +163,22 @@
       "stanza:description": "font(e.g: serif,san serif,fantasy)"
     },
     {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:key": "--thead-font-weight",
+      "stanza:type": "text",
+      "stanza:default": "400",
+      "stanza:description": "font weight of table header"
+    },
+    {
+      "stanza:key": "--thead-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#efeeed",
+      "stanza:description": "background color of thead"
+    },
+    {
+      "stanza:key": "--tbody-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#ffffff",
+      "stanza:description": "background color of tbody"
     }
   ]
 }

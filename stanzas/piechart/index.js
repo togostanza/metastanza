@@ -32,7 +32,7 @@ export default async function piechart(stanza, params) {
   
   spec.data[0].values = srcData;
   
-  console.log(srcData);
+  console.log(spec.data[0].values);
 
 
 

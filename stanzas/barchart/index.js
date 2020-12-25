@@ -10,12 +10,14 @@ export default async function barchart(stanza, params) {
   //   {"category": "value4", "amount": 9},
   // ]
 
-  //stanza（描画範囲）のwidth・height
+  //描画範囲のwidth・height・padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
+
+  // 描画範囲のbackgraund
+  spec.backgruond =  "red";
+  spec.group = {"fill": "red"}
 
   //イベントなど設定できるかと思ったができない
   // spec.signals[0].on[0].events = "click"
