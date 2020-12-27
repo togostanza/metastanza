@@ -177,6 +177,12 @@
       "stanza:description": "font size of titles"
     },
     {
+      "stanza:key": "--title-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "font color of title"
+    },
+    {
       "stanza:key": "--title-weight",
       "stanza:type": "number",
       "stanza:default": "400",

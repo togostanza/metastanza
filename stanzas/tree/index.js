@@ -29,6 +29,8 @@ export default async function tree(stanza, params) {
     {
       "fill": "color",
       "title": params["legend-title"],
+      "titleColor": "var(--legendtitle-color)",
+      "labelColor": "var(--legendlabel-color)",
       "orient": "top--left",
       "encode": {
         "title": {
