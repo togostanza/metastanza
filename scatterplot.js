@@ -20,6 +20,7 @@ async function scatterplot(stanza, params) {
       "scale": "x",
       "orient": params["xaxis-orient"],
       "title": params["xaxis-title"],
+      "titleColor": "var(--title-color)",
       "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
       "grid": params["xgrid"] === "true",
       "gridColor": "var(--grid-color)",
@@ -72,6 +73,7 @@ async function scatterplot(stanza, params) {
       "scale": "y",
       "orient": params["yaxis-orient"],
       "title": params["yaxis-title"],
+      "titleColor": "var(--title-color)",
       "titlePadding": getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")-0,
       "grid": params["ygrid"] === "true",
       "gridColor": "var(--grid-color)",
@@ -367,6 +369,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "font size of titles"
+	},
+	{
+		"stanza:key": "--title-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "font color of title"
 	},
 	{
 		"stanza:key": "--title-weight",
