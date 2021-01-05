@@ -27,7 +27,7 @@ main {
 
 .infomation{
   width: 100%;
-  height: 47px;
+  height: 30px;
   display: flex;
   justify-content: space-between;
 }
@@ -40,13 +40,14 @@ main {
 }
 
 .search-box{
-  margin-right: 5px;
+  margin-right: 3px;
   height: 20px;
   width: 164px;
   border: 1px solid var(--series-0-color);
-  border-radius: 3px;
+  border-radius: var(--searchbox-radius);
   font-size: 10px;
   color: #c1c0c0;
+  background-color: var(--searchbox-background-color);
 }
 
 ::placeholder{
@@ -58,8 +59,8 @@ main {
   height: 20px;
   width: 20px;
   border: 1px solid var(--series-0-color);
-  border-radius: 3px;
-  background-color:var(--series-0-color);
+  border-radius: var(--searchbtn-radius);
+  background-color:var(--searchbtn-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,7 +83,8 @@ table{
   border-collapse: collapse;
   margin: 0;
   background-color: var(--background-color);
-  box-shadow: 1px 1px 3px 1px #eee;
+  border: var(--table-border);
+  box-shadow: var(--table-shadow);
 }
 
 thead{
