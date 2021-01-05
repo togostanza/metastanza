@@ -109,6 +109,12 @@
       "stanza:description": "radius of search box"
     },
     {
+      "stanza:key": "--searchbox-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "border color of search box"
+    },
+    {
       "stanza:key": "--searchbox-background-color",
       "stanza:type": "color",
       "stanza:default": "#fff",
