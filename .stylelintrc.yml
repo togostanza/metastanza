@@ -1,0 +1,8 @@
+extends:
+  - stylelint-config-recommended-scss
+  - stylelint-config-prettier
+
+syntax: scss
+
+rules:
+  no-empty-source: null

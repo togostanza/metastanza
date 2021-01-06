@@ -1,0 +1,29 @@
+name: Lint
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - run: npm ci
+
+      - uses: github/super-linter@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: / # https://github.com/github/super-linter/issues/685#issuecomment-690939192
+          VALIDATE_JAVASCRIPT_ES: true
+          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.yml
+          JAVASCRIPT_DEFAULT_STYLE: prettier
+          VALIDATE_CSS: true
+          CSS_FILE_NAME: .stylelintrc.yml
+          VALIDATE_EDITORCONFIG: true
