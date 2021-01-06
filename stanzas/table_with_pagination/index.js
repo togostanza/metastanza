@@ -148,16 +148,14 @@ function draw(data, stanza, element) {
         select.setAttribute("id", moji+i);
         let option = document.createElement("option")
         select.appendChild(option);
-        // for(let j=0; j<5; j++){
-        //   select.classList.add("form-control");
-        //   let moji = "mylist";
-        //   select.setAttribute("id", moji+i);
-        //   let option = document.createElement("option")
-        //   select.appendChild(option);
-        //   // for(let l=0; l<5; l++){
-        //   //   option.innerText = dataBody[i][dataHead.vars[l]].value;
-        //   // }
-        // }
+        for(let j=0; j< dataBody.length; j++){
+          select.classList.add("form-control");
+          let moji = "mylist";
+          select.setAttribute("id", moji+i);
+          let option = document.createElement("option")
+          option.innerText = dataBody[j][dataHead.vars[i]].value;
+          select.appendChild(option);
+        }
         span_filter.classList.add("icon", "filtericon");
         span_sort.setAttribute("data-type", dataHead.vars[i]);
         span_sort.classList.add("icon", "sorticon", "button_sort");
@@ -167,6 +165,7 @@ function draw(data, stanza, element) {
         th.appendChild(span_sort);
         tr.appendChild(th);
       }
+
 
       //▼tbodyの描画
       let tbody = stanza.root.querySelector("#tbodyID");
@@ -192,6 +191,7 @@ function draw(data, stanza, element) {
           }
           tbody.appendChild(tr);
           tr.appendChild(td);
+          // tdの値を使ってフィルターのドロップダウンに表示させる値を設定する
         }
       }
 
