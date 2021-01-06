@@ -3,6 +3,17 @@
   "version": "0.0.1",
   "license": "MIT",
   "repository": "https://github.com/togostanza/metastanza.git",
+  "scripts": {
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
+    "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
+    "lint:eslint": "eslint . --cache",
+    "lint:eslint:fix": "eslint . --fix",
+    "lint:stylelint": "stylelint '**/*.scss'",
+    "lint:stylelint:fix": "stylelint '**/*.scss' --fix",
+    "lint:prettier": "prettier . --check",
+    "lint:prettier:fix": "prettier . --write",
+    "lint:editorconfig": "editorconfig-checker"
+  },
   "dependencies": {
     "d3": "^6.2.0",
     "togostanza": "^3.0.0-beta.8",
@@ -14,6 +25,7 @@
     "editorconfig-checker": "^3.3.0",
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
