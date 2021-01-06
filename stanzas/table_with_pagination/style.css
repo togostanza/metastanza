@@ -1,8 +1,4 @@
-// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
-
-// The following is just an example. Feel free to modify it.
-// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 main {
   padding: 1rem 2rem;
 }
@@ -63,12 +59,12 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  img {
-    width: 12px;
-    height: 12px;
-    display: block;
-  }
+.search-btn img {
+  width: 12px;
+  height: 12px;
+  display: block;
 }
 
 .dl-btn img {
@@ -76,11 +72,9 @@ main {
   height: 13px;
 }
 
-.table-fixed {
-  th:first-child, td:first-child {
-    position: sticky;
-    left: 0;
-  }
+.table-fixed th:first-child, .table-fixed td:first-child {
+  position: sticky;
+  left: 0;
 }
 
 th:first-child {
@@ -118,21 +112,19 @@ thead {
   font-weight: var(--thead-font-weight);
 }
 
-thead > tr > {
-  td {
-    color: var(--series-0-color);
-  }
+thead > tr > td {
+  color: var(--series-0-color);
+}
 
-  th > .icon {
-    cursor: pointer;
-    content: "";
-    display: inline-block;
-    width: 9px;
-    height: 13px;
-    background-repeat: no-repeat;
-    background-position: center 5px;
-    background-size: 8px 8px;
-  }
+thead > tr > th > .icon {
+  cursor: pointer;
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 13px;
+  background-repeat: no-repeat;
+  background-position: center 5px;
+  background-size: 8px 8px;
 }
 
 .filtericon {
@@ -146,8 +138,8 @@ thead > tr > {
 
 .sorticon-des {
   background-image: url(../../assets/grey-sort2-des.svg);
-
 }
+
 .sorticon-asc {
   background-image: url(../../assets/grey-sort2-asc.svg);
 }
@@ -161,10 +153,10 @@ tbody {
   border-bottom: var(--table-outside-border);
   border-right: var(--table-outside-border);
   border-left: var(--table-outside-border);
+}
 
-  tr td:hover {
-    color: var(--emphasized-color);
-  }
+tbody tr td:hover {
+  color: var(--emphasized-color);
 }
 
 td, th {
@@ -186,46 +178,46 @@ tbody td {
   padding-top: 30px;
   display: flex;
   justify-content: center;
+}
 
-  ul {
-    display: flex;
-    font-size: var(--general-font-size);
-    padding: 0;
-  }
+#pagenation ul {
+  display: flex;
+  font-size: var(--general-font-size);
+  padding: 0;
+}
 
-  li {
-    margin: 4px;
-    padding: 4px;
-  }
+#pagenation li {
+  margin: 4px;
+  padding: 4px;
+}
 
-  .first-btn, .previous-btn, .last-btn, .next-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+#pagenation .first-btn, #pagenation .previous-btn, #pagenation .last-btn, #pagenation .next-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .first-btn span, .previous-btn span {
-    display: block;
-    width: 7px;
-    height: 7px;
-    border: 1px solid;
-    border-color: transparent transparent var(--series-0-color) var(--series-0-color);
-    transform: rotate(45deg);
-  }
+#pagenation .first-btn span, #pagenation .previous-btn span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: transparent transparent var(--series-0-color) var(--series-0-color);
+  transform: rotate(45deg);
+}
 
-  .last-btn span, .next-btn span {
-    display: block;
-    width: 7px;
-    height: 7px;
-    border: 1px solid;
-    border-color: var(--series-0-color) var(--series-0-color) transparent transparent;
-    transform: rotate(45deg);
-  }
+#pagenation .last-btn span, #pagenation .next-btn span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: var(--series-0-color) var(--series-0-color) transparent transparent;
+  transform: rotate(45deg);
+}
 
-  .current-btn {
-    color: var(--series-0-color);
-    border-bottom: 1px solid var(--series-0-color);
-  }
+#pagenation .current-btn {
+  color: var(--series-0-color);
+  border-bottom: 1px solid var(--series-0-color);
 }
 
 .show-info {
@@ -233,6 +225,6 @@ tbody td {
   justify-content: center;
 }
 
-.form-control{
+.form-control {
   max-width: 120px;
 }

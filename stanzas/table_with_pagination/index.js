@@ -144,7 +144,6 @@ function draw(data, stanza, element) {
         }
         th.innerHTML = label;
         let select = document.createElement("select");
-        console.log(select);
         select.classList.add("form-control");
         let moji = "mylist";
         select.setAttribute("id", moji+i);
@@ -154,6 +153,7 @@ function draw(data, stanza, element) {
           select.classList.add("form-control");
           let mylist = "mylist";
           select.setAttribute("id", mylist+i);
+          select.addEventListener("change", filterColumn);
           let option = document.createElement("option")
           option.innerText = dataBody[j][dataHead.vars[i]].value;
           select.appendChild(option);
@@ -182,7 +182,6 @@ function draw(data, stanza, element) {
         let tr = document.createElement("tr");
         for (let j of order) {
           let td = document.createElement("td");
-          // let tdValue = Object.values(dataBody[i]);
           if (dataHead.href[j]) {
             let a = document.createElement("a");
             a.setAttribute("href", dataBody[i][dataHead.href[j]].value);
@@ -195,8 +194,6 @@ function draw(data, stanza, element) {
           tr.appendChild(td);
         }
       }
-      const filterButton = stanza.root.querySelector("#mylist0");
-      filterButton.addEventListener("change", filterColumn);
 
       checkButtonOpacity();
       selectedPage();
@@ -275,25 +272,55 @@ function draw(data, stanza, element) {
       }
     };
 
-    let filterColumn = function() {
-      var input = stanza.root.querySelector("#mylist0");
-      console.log(input);
-      console.log(input.value);
-      var filter = input.value.toUpperCase();
+    let filterColumn = function(e) {
+      // var input = stanza.root.querySelector("#mylist0");
+      // var filter = input.value.toUpperCase();
+      var filter = e.target.value.toUpperCase();
+      console.log(filter);
+      console.log(e.target.id);
+      var colStr = e.target.id.replace("mylist", "");
+      var colNum = parseInt(colStr)-1;
+      console.log(colNum);
       var table = stanza.root.querySelector("#listingTable");
       var tr = table.querySelectorAll("tr");
-      console.log(tr);
+
+
       for (var i = 0; i < tr.length; i++) {
-        var td = tr[i].querySelectorAll("td")[0];
+        // console.log(order[i]);
+        // let trOrder = order[i];
+        // console.log(trOrder);
+        var td = tr[i].querySelectorAll("td")[colNum];
         console.log(td);
         if (td) {
-          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          console.log(i+"回まわった？");
+          if (td.innerText.toUpperCase().indexOf(filter) > -1) {
             tr[i].style.display = "";
           } else {
             tr[i].style.display = "none";
           }
+          console.log(i+"回まわったよ");
         }       
       }
+      
+      // for (var i = 0; i < tr.length; i++) {
+      //   for(var j = 0; j < order.length; j++){
+      //     console.log(order[i]);
+      //     let trOrder = order[i];
+      //     console.log(trOrder);
+      //     var td = tr[i].querySelectorAll("td")[j];
+      //     console.log(td);
+      //     if (td) {
+      //       console.log(i+"回まわった？");
+      //       if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+      //         tr[i].style.display = "";
+      //       } else {
+      //         tr[i].style.display = "none";
+      //       }
+      //       console.log(i+"回まわったよ");
+      //     }       
+      //   }
+      // }
+
     }
 
     let prevPage = function () {
