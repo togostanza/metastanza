@@ -36,7 +36,8 @@ function draw(data, stanza, element) {
     const firstButton = stanza.root.querySelector("#button_first");
     const lastButton = stanza.root.querySelector("#button_last");
     const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
-    const filterButton = stanza.root.querySelector("#mylist");
+    // const filterButton = stanza.root.querySelectorAll("[id^=mylist]");
+    // const filterButton = stanza.root.querySelector("#mylist");
 
     let current_page = 1;
     let records_per_page = 5;
@@ -71,7 +72,8 @@ function draw(data, stanza, element) {
       nextButton.addEventListener("click", nextPage);
       firstButton.addEventListener("click", firstPage);
       lastButton.addEventListener("click", lastPage);
-      filterButton.addEventListener("change", filterColumn);
+      // setTimeout(
+      //   filterButton.addEventListener("change", filterColumn), 2000);
     };
 
     let selectedPage = function () {
@@ -150,8 +152,8 @@ function draw(data, stanza, element) {
         select.appendChild(option);
         for(let j=0; j< dataBody.length; j++){
           select.classList.add("form-control");
-          let moji = "mylist";
-          select.setAttribute("id", moji+i);
+          let mylist = "mylist";
+          select.setAttribute("id", mylist+i);
           let option = document.createElement("option")
           option.innerText = dataBody[j][dataHead.vars[i]].value;
           select.appendChild(option);
@@ -191,9 +193,10 @@ function draw(data, stanza, element) {
           }
           tbody.appendChild(tr);
           tr.appendChild(td);
-          // tdの値を使ってフィルターのドロップダウンに表示させる値を設定する
         }
       }
+      const filterButton = stanza.root.querySelector("#mylist0");
+      filterButton.addEventListener("change", filterColumn);
 
       checkButtonOpacity();
       selectedPage();
@@ -203,7 +206,6 @@ function draw(data, stanza, element) {
     let sortColumn = function (e) {
       let page = current_page;
       let tbody = stanza.root.querySelector("#tbodyID");
-      // let span_sort = document.getElementsByClassName('button_sort');
       let span_sorts = stanza.root.querySelectorAll(".button_sort");
       let span_sort = e.path[0];
       let offsetY = e.offsetY; // =>要素左上からのy座標
@@ -274,7 +276,7 @@ function draw(data, stanza, element) {
     };
 
     let filterColumn = function() {
-      var input = stanza.root.querySelector("#mylist");
+      var input = stanza.root.querySelector("#mylist0");
       console.log(input);
       console.log(input.value);
       var filter = input.value.toUpperCase();
