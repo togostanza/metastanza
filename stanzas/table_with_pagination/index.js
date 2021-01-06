@@ -36,6 +36,7 @@ function draw(data, stanza, element) {
     const firstButton = stanza.root.querySelector("#button_first");
     const lastButton = stanza.root.querySelector("#button_last");
     const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
+    const filterButton = stanza.root.querySelector("#mylist");
 
     let current_page = 1;
     let records_per_page = 5;
@@ -62,6 +63,7 @@ function draw(data, stanza, element) {
       selectedPage();
       clickPage();
       addEventListeners();
+      // filterColumn();
     };
 
     let addEventListeners = function () {
@@ -69,6 +71,7 @@ function draw(data, stanza, element) {
       nextButton.addEventListener("click", nextPage);
       firstButton.addEventListener("click", firstPage);
       lastButton.addEventListener("click", lastPage);
+      filterButton.addEventListener("change", filterColumn);
     };
 
     let selectedPage = function () {
@@ -138,11 +141,28 @@ function draw(data, stanza, element) {
           label = dataHead.labels[i];
         }
         th.innerHTML = label;
+        let select = document.createElement("select");
+        console.log(select);
+        select.classList.add("form-control");
+        let moji = "mylist";
+        select.setAttribute("id", moji+i);
+        let option = document.createElement("option")
+        select.appendChild(option);
+        // for(let j=0; j<5; j++){
+        //   select.classList.add("form-control");
+        //   let moji = "mylist";
+        //   select.setAttribute("id", moji+i);
+        //   let option = document.createElement("option")
+        //   select.appendChild(option);
+        //   // for(let l=0; l<5; l++){
+        //   //   option.innerText = dataBody[i][dataHead.vars[l]].value;
+        //   // }
+        // }
         span_filter.classList.add("icon", "filtericon");
         span_sort.setAttribute("data-type", dataHead.vars[i]);
         span_sort.classList.add("icon", "sorticon", "button_sort");
         span_sort.addEventListener("click", sortColumn)
-
+        th.appendChild(select);
         th.appendChild(span_filter);
         th.appendChild(span_sort);
         tr.appendChild(th);
@@ -252,6 +272,27 @@ function draw(data, stanza, element) {
         }
       }
     };
+
+    let filterColumn = function() {
+      var input = stanza.root.querySelector("#mylist");
+      console.log(input);
+      console.log(input.value);
+      var filter = input.value.toUpperCase();
+      var table = stanza.root.querySelector("#listingTable");
+      var tr = table.querySelectorAll("tr");
+      console.log(tr);
+      for (var i = 0; i < tr.length; i++) {
+        var td = tr[i].querySelectorAll("td")[0];
+        console.log(td);
+        if (td) {
+          if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }       
+      }
+    }
 
     let prevPage = function () {
       if (current_page > 1) {
