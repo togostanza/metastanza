@@ -15,55 +15,52 @@ p.greeting {
 }
 
 div#chart {
-    position: relative;
+  position: relative;
 }
 
 div.bar {
-    position: relative;
+  position: relative;
 }
 
 .bar-style-na {
-    fill: #dddddd;
+  fill: #dddddd;
 }
 .bar-style-0 {
-    fill: var(--series-0-color);
+  fill: var(--series-0-color);
 }
 .bar-style-1 {
-    fill: var(--series-1-color);
+  fill: var(--series-1-color);
 }
 .bar-style-2 {
-    fill: var(--series-2-color);
+  fill: var(--series-2-color);
 }
 .bar-style-3 {
-    fill: var(--series-3-color);
+  fill: var(--series-3-color);
 }
 .bar-style-4 {
-    fill: var(--series-4-color);
+  fill: var(--series-4-color);
 }
 .bar-style-5 {
-    fill: var(--series-5-color);
-}
-.bar-style-5 {
-    fill: var(--series-5-color);
+  fill: var(--series-5-color);
 }
 .bar-style-6 {
-    fill: var(--series-6-color);
+  fill: var(--series-6-color);
 }
 .bar-style-7 {
-    fill: var(--series-7-color);
+  fill: var(--series-7-color);
 }
 .bar-style-8 {
-    fill: var(--series-8-color);
+  fill: var(--series-8-color);
 }
 .bar-style-9 {
-    fill: var(--series-9-color);
+  fill: var(--series-9-color);
 }
 .na-bar {
-    fill: #dddddd;
-    stroke: #888888;
-    stroke-width: 2px;
+  fill: #dddddd;
+  stroke: #888888;
+  stroke-width: 2px;
 }
 .selected-sign {
-    display: none;
-    fill: #e33512;
+  display: none;
+  fill: #e33512;
 }

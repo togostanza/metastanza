@@ -6,54 +6,54 @@
   "stanza:label": "Table pagination metastanza",
   "stanza:definition": "metastanza for table pagination with slider.",
   "stanza:parameter": [
-     {
-       "stanza:key": "table_data_count_api",
-       "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example?count=1",
-       "stanza:description": "table row count api",
-       "stanza:required": true
-     },
-     {
-       "stanza:key": "table_stanza",
-       "stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
-       "stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
-       "stanza:required": true
-     },
-     {
-       "stanza:key": "params",
-       "stanza:example": "taxonomy=9606",
-       "stanza:description": "parameters for count api",
-       "stanza:required": false
-     },
-     {
-       "stanza:key": "table_stanza_params",
-       "stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example'",
-       "stanza:description": "parameters for table stanza (except 'limit' and 'offset')",
-       "stanza:required": false
-     },
-     {
-       "stanza:key": "page_opt",
-       "stanza:example": "10,20,50,100",
-       "stanza:description": "page size list",
-       "stanza:required": false
-     },
-     {
-       "stanza:key": "slider",
-       "stanza:example": "1",
-       "stanza:description": "slider on/off",
-       "stanza:required": false
-     },
-     {
-       "stanza:key": "top_button",
-       "stanza:example": "1",
-       "stanza:description": "top page button on/off",
-       "stanza:required": false
-     },
-     {
-       "stanza:key": "bottom_button",
-       "stanza:example": "",
-       "stanza:description": "bottom page button on/off",
-       "stanza:required": false
-     }
+    {
+      "stanza:key": "table_data_count_api",
+      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example?count=1",
+      "stanza:description": "table row count api",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "table_stanza",
+      "stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
+      "stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "params",
+      "stanza:example": "taxonomy=9606",
+      "stanza:description": "parameters for count api",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "table_stanza_params",
+      "stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example'",
+      "stanza:description": "parameters for table stanza (except 'limit' and 'offset')",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "page_opt",
+      "stanza:example": "10,20,50,100",
+      "stanza:description": "page size list",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "slider",
+      "stanza:example": "1",
+      "stanza:description": "slider on/off",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "top_button",
+      "stanza:example": "1",
+      "stanza:description": "top page button on/off",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "bottom_button",
+      "stanza:example": "",
+      "stanza:description": "bottom page button on/off",
+      "stanza:required": false
+    }
   ],
   "stanza:style": [
     {
@@ -77,11 +77,7 @@
     {
       "stanza:key": "--button-align",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
+      "stanza:choice": ["left", "center", "right"],
       "stanza:default": "center",
       "stanza:description": "page button align (left, center, right), when 'slider' off."
     },
@@ -99,8 +95,7 @@
   "stanza:license": "MIT",
   "stanza:author": "TogoStanza",
   "stanza:address": "admin@biohackathon.org",
-  "stanza:contributor": [
-  ],
+  "stanza:contributor": [],
   "stanza:created": "2020-05-27",
   "stanza:updated": "2020-05-27"
 }

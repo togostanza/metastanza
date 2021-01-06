@@ -1,36 +1,42 @@
-import metastanza from '@/lib/metastanza_utils.js';
-import { span } from 'vega';
+import metastanza from "@/lib/metastanza_utils.js";
 
 export default async function tableWithPagination(stanza, params) {
-
   stanza.render({
-    template: 'stanza.html.hbs'
+    template: "stanza.html.hbs",
   });
 
-  let formBody = [];
-  for (let key in params) {
-    if(params[key] && key != "table_data_api") formBody.push(key + "=" + encodeURIComponent(params[key]))
+  const formBody = [];
+  for (const key in params) {
+    if (params[key] && key !== "table_data_api") {
+      formBody.push(key + "=" + encodeURIComponent(params[key]));
+    }
   }
 
-  let api = params.table_data_api;
-  let element = stanza.root.querySelector('#renderDiv');
-  let dataset = await metastanza.getFormatedJson(api, element, formBody.join("&"));
-  if (typeof dataset == "object") draw(dataset, stanza, element);
+  const api = params.table_data_api;
+  const element = stanza.root.querySelector("#renderDiv");
+  const dataset = await metastanza.getFormatedJson(
+    api,
+    element,
+    formBody.join("&")
+  );
+  if (typeof dataset === "object") {
+    draw(dataset, stanza, element);
+  }
 }
 
 function draw(dataset, stanza, element) {
-  let table = document.createElement("table");
-  let thead = document.createElement("thead");
-  let tbody = document.createElement("tbody");
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const tbody = document.createElement("tbody");
   element.appendChild(table);
   table.appendChild(thead);
   table.appendChild(tbody);
 
   let order = [];
   if (dataset.head.order) {
-    for (let i = 0;  i < dataset.head.order.length; i++) {
+    for (let i = 0; i < dataset.head.order.length; i++) {
       if (parseInt(dataset.head.order[i]) >= 0) {
-	order[parseInt(dataset.head.order[i])] = i;
+        order[parseInt(dataset.head.order[i])] = i;
       }
     }
   } else {
@@ -40,28 +46,30 @@ function draw(dataset, stanza, element) {
   let tr = document.createElement("tr");
   tr.classList.add("table-fixed");
   thead.appendChild(tr);
-  for(let i of order){
-    let th = document.createElement("th");
-    let span_filter = document.createElement("span");
-    let span_sort = document.createElement("span");
+  for (const i of order) {
+    const th = document.createElement("th");
+    const span_filter = document.createElement("span");
+    const span_sort = document.createElement("span");
     let label = dataset.head.vars[i];
-    if (dataset.head.labels) label = dataset.head.labels[i];
+    if (dataset.head.labels) {
+      label = dataset.head.labels[i];
+    }
     th.innerHTML = label;
     span_filter.classList.add("icon", "filter-icon");
-    span_sort.setAttribute("data-type", label );
+    span_sort.setAttribute("data-type", label);
     span_sort.classList.add("icon", "sort-icon");
     th.appendChild(span_filter);
     th.appendChild(span_sort);
     tr.appendChild(th);
   }
 
-  for(let row of dataset.body){
+  for (const row of dataset.body) {
     tr = document.createElement("tr");
     tbody.appendChild(tr);
-    for(let j of order){
-      let td = document.createElement("td");
+    for (const j of order) {
+      const td = document.createElement("td");
       if (dataset.head.href[j]) {
-        let a = document.createElement("a");
+        const a = document.createElement("a");
         a.setAttribute("href", row[dataset.head.href[j]].value);
         a.innerHTML = row[dataset.head.vars[j]].value;
         td.appendChild(a);
@@ -76,9 +84,9 @@ function draw(dataset, stanza, element) {
   sort.addEventListener("click", function () {
     console.log("クリックされました");
   });
-    // bb.onclick = function(){
-    //   alert("ボタンが押されました。")
-    // }
+  // bb.onclick = function(){
+  //   alert("ボタンが押されました。")
+  // }
   // setTimeout(function(){
   //   const hoge = document.getElementById('sort-icon-id3');
   //   if(hoge){
@@ -107,6 +115,3 @@ function draw(dataset, stanza, element) {
 //     console.log("ボタンが押されました。")
 //   });
 // };
-
-
-

@@ -1,9 +1,11 @@
 <style>
-div.main {
+  div.main {
       font-family: "Arial",san-serif;
 }
 div#paginationTop, div#paginationBottom {
-    text-align: {{button_align}};
+    text-align: {{
+    button_align
+  }};
     clear: both;
     position: relative;
 }
@@ -60,7 +62,7 @@ li.page_slider_knob {
 }
 li.prev_button {
     transform: translateX(-10px);
-    border-radius: 10px;  
+    border-radius: 10px;
 }
 li.next_button {
     transform: translateX(10px);
@@ -68,7 +70,7 @@ li.next_button {
 }
 li.first_button {
     transform: translateX(-20px);
-    border-radius: 10px;  
+    border-radius: 10px;
 }
 li.last_button{
     transform: translateX(20px);
@@ -102,8 +104,20 @@ div.slider_range_color {
 
 <div class="main">
   <div id="tableInfo">
-    <div class="float_left">Showing <span id="listStart"></span>..<span id="listEnd"></span> of <span id="totalSize"> entries</span></div>
-    <div class="float_right">Page size: <select id="pageSizeSelect"></select></div>
+    <div class="float_left">
+      Showing
+      <span id="listStart"></span>
+      ..
+      <span id="listEnd"></span>
+      of
+      <span id="totalSize">
+        entries
+      </span>
+    </div>
+    <div class="float_right">
+      Page size:
+      <select id="pageSizeSelect"></select>
+    </div>
   </div>
   <div id="paginationTop"></div>
   <div id="tableBody"></div>
