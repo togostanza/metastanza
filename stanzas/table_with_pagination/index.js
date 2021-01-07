@@ -36,8 +36,6 @@ function draw(data, stanza, element) {
     const firstButton = stanza.root.querySelector("#button_first");
     const lastButton = stanza.root.querySelector("#button_last");
     const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
-    // const filterButton = stanza.root.querySelectorAll("[id^=mylist]");
-    // const filterButton = stanza.root.querySelector("#mylist");
 
     let current_page = 1;
     let records_per_page = 5;
@@ -133,26 +131,28 @@ function draw(data, stanza, element) {
       thead.innerHTML = "";
       thead.innerHTML = "<tr id='theadRowID'></tr>";
       //▽trおよびthの描画
-      for (let i of order) {
+      // for (let i of order) {
+      for (let l=0; l<order.length; l++) {
+        let i = order[l];
         let tr = stanza.root.querySelector("#theadRowID");
         let th = document.createElement("th");
         let span_filter = document.createElement("span");
         let span_sort = document.createElement("span");
         let label = dataHead.vars[i];
+        console.log(i);
         if (dataHead.labels) {
           label = dataHead.labels[i];
         }
         th.innerHTML = label;
         let select = document.createElement("select");
         select.classList.add("form-control");
-        let moji = "mylist";
-        select.setAttribute("id", moji+i);
         let option = document.createElement("option")
         select.appendChild(option);
         for(let j=0; j< dataBody.length; j++){
           select.classList.add("form-control");
           let mylist = "mylist";
           select.setAttribute("id", mylist+i);
+          select.setAttribute("data-column", l);
           select.addEventListener("change", filterColumn);
           let option = document.createElement("option")
           option.innerText = dataBody[j][dataHead.vars[i]].value;
@@ -273,22 +273,13 @@ function draw(data, stanza, element) {
     };
 
     let filterColumn = function(e) {
-      // var input = stanza.root.querySelector("#mylist0");
-      // var filter = input.value.toUpperCase();
       var filter = e.target.value.toUpperCase();
-      console.log(filter);
-      console.log(e.target.id);
-      var colStr = e.target.id.replace("mylist", "");
-      var colNum = parseInt(colStr)-1;
-      console.log(colNum);
+      var colNum = e.target.getAttribute("data-column");
       var table = stanza.root.querySelector("#listingTable");
       var tr = table.querySelectorAll("tr");
 
 
       for (var i = 0; i < tr.length; i++) {
-        // console.log(order[i]);
-        // let trOrder = order[i];
-        // console.log(trOrder);
         var td = tr[i].querySelectorAll("td")[colNum];
         console.log(td);
         if (td) {
@@ -301,26 +292,6 @@ function draw(data, stanza, element) {
           console.log(i+"回まわったよ");
         }       
       }
-      
-      // for (var i = 0; i < tr.length; i++) {
-      //   for(var j = 0; j < order.length; j++){
-      //     console.log(order[i]);
-      //     let trOrder = order[i];
-      //     console.log(trOrder);
-      //     var td = tr[i].querySelectorAll("td")[j];
-      //     console.log(td);
-      //     if (td) {
-      //       console.log(i+"回まわった？");
-      //       if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-      //         tr[i].style.display = "";
-      //       } else {
-      //         tr[i].style.display = "none";
-      //       }
-      //       console.log(i+"回まわったよ");
-      //     }       
-      //   }
-      // }
-
     }
 
     let prevPage = function () {
