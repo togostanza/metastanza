@@ -31,6 +31,7 @@ function draw(data, stanza, element) {
   let dataBody = data.body;
 
   function Pagination() {
+    const searchBox = stanza.root.querySelector("#search_box");
     const prevButton = stanza.root.querySelector("#button_prev");
     const nextButton = stanza.root.querySelector("#button_next");
     const firstButton = stanza.root.querySelector("#button_first");
@@ -65,6 +66,7 @@ function draw(data, stanza, element) {
     };
 
     let addEventListeners = function () {
+      searchBox.addEventListener("input", searchTable);
       prevButton.addEventListener("click", prevPage);
       nextButton.addEventListener("click", nextPage);
       firstButton.addEventListener("click", firstPage);
@@ -95,10 +97,7 @@ function draw(data, stanza, element) {
 
 // 表示中データ件数を取得・表示する関数
     let showingRecordsNumber = function (page) {
-      const showing_records_number = stanza.root.querySelector(
-        "#showing_records_number"
-      );
-
+      const showing_records_number = stanza.root.querySelector("#showing_records_number");
       let firstrecord_per_page = (page - 1) * records_per_page + 1;
       let lastrecord_per_page = page * records_per_page;
 
@@ -199,7 +198,7 @@ function draw(data, stanza, element) {
 
       // //▽trおよびtdの描画
       for (
-        var i = (page - 1) * records_per_page;
+        let i = (page - 1) * records_per_page;
         i < page * records_per_page && i < dataBody.length;
         i++
       ) {
@@ -232,7 +231,7 @@ function draw(data, stanza, element) {
       let span_sort = e.path[0];
       let offsetY = e.offsetY; // =>要素左上からのy座標
       // 他のカラムにおけるソートアイコンのクラスをリセット
-      for (var i = 0, l = span_sorts.length; l > i; i++) {
+      for (let i = 0, l = span_sorts.length; l > i; i++) {
         let span_sort = span_sorts[i];
         span_sort.className = "icon sorticon button_sort";
       }
@@ -246,7 +245,7 @@ function draw(data, stanza, element) {
         );
         tbody.innerHTML = "";
         for (
-          var i = (page - 1) * records_per_page;
+          let i = (page - 1) * records_per_page;
           i < page * records_per_page && i < sortArray.length;
           i++
         ) {
@@ -274,7 +273,7 @@ function draw(data, stanza, element) {
         );
         tbody.innerHTML = "";
         for (
-          var i = (page - 1) * records_per_page;
+          let i = (page - 1) * records_per_page;
           i < page * records_per_page && i < sortArray.length;
           i++
         ) {
@@ -340,6 +339,27 @@ function draw(data, stanza, element) {
         }
       }
   }
+
+// テーブル全体をフィルターする検索ボックスの関数
+    let searchTable = function(e){
+      let searchbox = stanza.root.querySelector("#search_box");
+      let filter = searchbox.value.toUpperCase();
+      console.log(filter);
+      let table = stanza.root.querySelector("#listingTable");
+      let tr = table.querySelectorAll("tr");
+
+      for(var i=0; i<tr.length; i++){
+        let td = tr[i].querySelectorAll("td")[0];
+
+        if(td){
+          if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
 
 // 以下ページ遷移の関数
     let prevPage = function () {
