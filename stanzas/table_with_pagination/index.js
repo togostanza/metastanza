@@ -1,4 +1,6 @@
 import metastanza from "@/lib/metastanza_utils.js";
+import { span } from "vega";
+import { filter } from "d3";
 
 export default async function tableWithPagination(stanza, params) {
   stanza.render({
@@ -166,7 +168,9 @@ function draw(data, stanza, element) {
         }
         span_filter.setAttribute("data-type", dataHead.vars[i]);
         span_filter.setAttribute("data-col", l);
-        span_filter.classList.add("icon", "filtericon");
+        let filtericon_id ="filtericon";
+        span_filter.setAttribute("id", filtericon_id+l);
+        span_filter.classList.add("icon", "filtericon", "button_filter");
         span_sort.setAttribute("data-type", dataHead.vars[i]);
         span_sort.setAttribute("data-col", l);
         span_sort.classList.add("icon", "sorticon", "button_sort");
@@ -284,9 +288,24 @@ function draw(data, stanza, element) {
 
     let displayFilter = function(e){
       let colNum = e.target.getAttribute('data-col')
-      console.log(colNum);
       let filter_window = stanza.root.querySelector("#filter"+colNum);
       filter_window.className = "filter-window -opened";
+
+      stanza.root.addEventListener("click", (evt) => {
+        let targetElement = evt.target; // clicked element
+        let span_filter = stanza.root.querySelector("#filtericon"+colNum);
+        do {
+            if (targetElement == filter_window || targetElement == span_filter) {
+                console.log("Clicked inside");
+                return;
+            }
+            // Go up the DOM
+            targetElement = targetElement.parentNode;
+        } while (targetElement);
+        console.log("clicked outside");
+        filter_window.className = "filter-window -closed";
+    });
+
     }
 
     let filterColumn = function(e) {
