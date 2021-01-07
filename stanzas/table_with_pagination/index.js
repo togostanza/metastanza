@@ -137,15 +137,8 @@ function draw(data, stanza, element) {
       for (let l=0; l<order.length; l++) {
         let i = order[l];
         let tr = stanza.root.querySelector("#theadRowID");
+
         let th = document.createElement("th");
-        let span_sort = document.createElement("span");
-        let span_filter = document.createElement("span");
-        let filter_window = document.createElement("div");
-        filter_window.innerHTML = "<p>Hello World</p>";
-        filter_window.classList.add("fiter-window","-closed");
-        let filter_id = "filter";
-        filter_window.setAttribute("id", filter_id+l);
-        span_filter.addEventListener('click', displayFilter);
         let label = dataHead.vars[i];
         console.log(i);
         if (dataHead.labels) {
@@ -153,32 +146,56 @@ function draw(data, stanza, element) {
         }
         th.innerHTML = label;
         th.setAttribute('data-col', l);
+
+        let span_sort = document.createElement("span");
+        span_sort.classList.add("icon", "sorticon", "button_sort");
+        span_sort.setAttribute("data-type", dataHead.vars[i]);
+        span_sort.setAttribute("data-col", l);
+        span_sort.addEventListener("click", sortColumn)
+        
+        let span_filter = document.createElement("span");
+        span_filter.setAttribute("id", "filtericon"+l);
+        span_filter.classList.add("icon", "filtericon", "button_filter");
+        span_filter.setAttribute("data-type", dataHead.vars[i]);
+        span_filter.setAttribute("data-col", l);
+        span_filter.addEventListener('click', displayFilter);
+        
+        let ul_filter = document.createElement("ul");
+        // ul_filter.setAttribute("id", "filterul"+l);
+        ul_filter.classList.add("fiter-window","-closed");
+        ul_filter.setAttribute("data-type", dataHead.vars[i]);
+        ul_filter.setAttribute("data-col", l);
+        // ul_filter.innerHTML = "<p>Hello World</p>";
+        for(let j=0; j< dataBody.length; j++){
+          ul_filter.setAttribute("id", "filterul"+l);
+          ul_filter.addEventListener("change", filterColumn);
+          let input = document.createElement("input")
+          input.innerText = dataBody[j][dataHead.vars[i]].value;
+          ul_filter.appendChild(input);
+        }
+        
+        // let input = document.createElement("input");
+        // select.classList.add("");
+        // let option = document.createElement("option")
+        // select.appendChild(option);
+
         let select = document.createElement("select");
         select.classList.add("form-control");
         let option = document.createElement("option")
         select.appendChild(option);
+
         for(let j=0; j< dataBody.length; j++){
-          let mylist = "mylist";
-          select.setAttribute("id", mylist+i);
+          select.setAttribute("id", "mylist"+i);
           select.setAttribute("data-col", l);
           select.addEventListener("change", filterColumn);
           let option = document.createElement("option")
           option.innerText = dataBody[j][dataHead.vars[i]].value;
           select.appendChild(option);
         }
-        span_filter.setAttribute("data-type", dataHead.vars[i]);
-        span_filter.setAttribute("data-col", l);
-        let filtericon_id ="filtericon";
-        span_filter.setAttribute("id", filtericon_id+l);
-        span_filter.classList.add("icon", "filtericon", "button_filter");
-        span_sort.setAttribute("data-type", dataHead.vars[i]);
-        span_sort.setAttribute("data-col", l);
-        span_sort.classList.add("icon", "sorticon", "button_sort");
-        span_sort.addEventListener("click", sortColumn)
         th.appendChild(select);
         th.appendChild(span_sort);
         th.appendChild(span_filter);
-        th.appendChild(filter_window);
+        th.appendChild(ul_filter);
         tr.appendChild(th);
       }
 
@@ -288,14 +305,14 @@ function draw(data, stanza, element) {
 
     let displayFilter = function(e){
       let colNum = e.target.getAttribute('data-col')
-      let filter_window = stanza.root.querySelector("#filter"+colNum);
-      filter_window.className = "filter-window -opened";
+      let ul_filter = stanza.root.querySelector("#filterul"+colNum);
+      ul_filter.className = "filter-window -opened";
 
       stanza.root.addEventListener("click", (evt) => {
         let targetElement = evt.target; // clicked element
         let span_filter = stanza.root.querySelector("#filtericon"+colNum);
         do {
-            if (targetElement == filter_window || targetElement == span_filter) {
+            if (targetElement == ul_filter || targetElement == span_filter) {
                 console.log("Clicked inside");
                 return;
             }
@@ -303,7 +320,7 @@ function draw(data, stanza, element) {
             targetElement = targetElement.parentNode;
         } while (targetElement);
         console.log("clicked outside");
-        filter_window.className = "filter-window -closed";
+        ul_filter.className = "filter-window -closed";
     });
 
     }
