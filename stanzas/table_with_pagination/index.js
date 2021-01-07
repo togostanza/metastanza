@@ -283,13 +283,9 @@ function draw(data, stanza, element) {
     };
 
     let displayFilter = function(e){
-      let filter_window = stanza.root.querySelector("#filter0");
-      // console.log(filter_window);
-      // console.log(filter_window[0]);
-      // let colNum = e.target.getAttribute('data-col')
-      // console.log(colNum);
-      // console.log(filter_window[colNum]);
-      // filter_window[colNum].className = "filter-window -opened";
+      let colNum = e.target.getAttribute('data-col')
+      console.log(colNum);
+      let filter_window = stanza.root.querySelector("#filter"+colNum);
       filter_window.className = "filter-window -opened";
     }
 
