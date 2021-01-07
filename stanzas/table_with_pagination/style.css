@@ -163,6 +163,7 @@ td, th {
   min-width: 150px;
   max-width: 150px;
   padding: 5px;
+  height: auto;
 }
 
 tbody td {
@@ -230,9 +231,14 @@ tbody td {
 }
 
 .filter-window {
-  width: 100px;
+  width: auto;
   height: auto;
   background-color: lavender;
+  padding: 5px;
+}
+
+.filter-window li {
+  display: flex;
 }
 
 .-closed {

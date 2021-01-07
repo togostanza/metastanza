@@ -27,8 +27,6 @@ export default async function tableWithPagination(stanza, params) {
 }
 
 function draw(data, stanza, element) {
-  // responce.json()で受け取った中身を確認
-  // 実際にはここでdataの中身を利用して様々な処理をする
   let dataHead = data.head;
   let dataBody = data.body;
 
@@ -64,7 +62,6 @@ function draw(data, stanza, element) {
       selectedPage();
       clickPage();
       addEventListeners();
-      // filterColumn();
     };
 
     let addEventListeners = function () {
@@ -72,10 +69,9 @@ function draw(data, stanza, element) {
       nextButton.addEventListener("click", nextPage);
       firstButton.addEventListener("click", firstPage);
       lastButton.addEventListener("click", lastPage);
-      // setTimeout(
-      //   filterButton.addEventListener("change", filterColumn), 2000);
     };
 
+// ページネーションにおいて、選択したページ数のスタイルを変更する関数
     let selectedPage = function () {
       let page_number = stanza.root.querySelectorAll(".clickPageNumber");
       for (let i = 0; i < page_number.length; i++) {
@@ -87,6 +83,7 @@ function draw(data, stanza, element) {
       }
     };
 
+// ページネーションにおいて、選択したページ数のスタイルを変更する関数
     let checkButtonOpacity = function () {
       current_page == 1
         ? prevButton.classList.add("opacity")
@@ -96,6 +93,7 @@ function draw(data, stanza, element) {
         : nextButton.classList.remove("opacity");
     };
 
+// 表示中データ件数を取得・表示する関数
     let showingRecordsNumber = function (page) {
       const showing_records_number = stanza.root.querySelector(
         "#showing_records_number"
@@ -120,6 +118,7 @@ function draw(data, stanza, element) {
         "entres</p>";
     };
 
+// ページを変更（描画）する関数（初期値を１ページとしている）
     let changePage = function (page) {
       if (page < 1) {
         page = 1;
@@ -138,21 +137,23 @@ function draw(data, stanza, element) {
         let i = order[l];
         let tr = stanza.root.querySelector("#theadRowID");
 
+        // thを作成
         let th = document.createElement("th");
         let label = dataHead.vars[i];
-        console.log(i);
         if (dataHead.labels) {
           label = dataHead.labels[i];
         }
         th.innerHTML = label;
         th.setAttribute('data-col', l);
 
+        // ソートアイコンを作成
         let span_sort = document.createElement("span");
         span_sort.classList.add("icon", "sorticon", "button_sort");
         span_sort.setAttribute("data-type", dataHead.vars[i]);
         span_sort.setAttribute("data-col", l);
         span_sort.addEventListener("click", sortColumn)
         
+        // フィルターアイコンを作成
         let span_filter = document.createElement("span");
         span_filter.setAttribute("id", "filtericon"+l);
         span_filter.classList.add("icon", "filtericon", "button_filter");
@@ -160,45 +161,37 @@ function draw(data, stanza, element) {
         span_filter.setAttribute("data-col", l);
         span_filter.addEventListener('click', displayFilter);
         
+        // フィルターウィンドウを格納するulを作成
         let ul_filter = document.createElement("ul");
-        // ul_filter.setAttribute("id", "filterul"+l);
         ul_filter.classList.add("fiter-window","-closed");
         ul_filter.setAttribute("data-type", dataHead.vars[i]);
         ul_filter.setAttribute("data-col", l);
-        // ul_filter.innerHTML = "<p>Hello World</p>";
-        for(let j=0; j< dataBody.length; j++){
-          ul_filter.setAttribute("id", "filterul"+l);
-          ul_filter.addEventListener("change", filterColumn);
-          let input = document.createElement("input")
-          input.innerText = dataBody[j][dataHead.vars[i]].value;
-          ul_filter.appendChild(input);
-        }
-        
-        // let input = document.createElement("input");
-        // select.classList.add("");
-        // let option = document.createElement("option")
-        // select.appendChild(option);
+        ul_filter.setAttribute("id", "filterul"+l);
 
-        let select = document.createElement("select");
-        select.classList.add("form-control");
-        let option = document.createElement("option")
-        select.appendChild(option);
-
+        // チェックボックスを作成（「チェックボックス+ラベル」をリストに格納し、ulに格納）
         for(let j=0; j< dataBody.length; j++){
-          select.setAttribute("id", "mylist"+i);
-          select.setAttribute("data-col", l);
-          select.addEventListener("change", filterColumn);
-          let option = document.createElement("option")
-          option.innerText = dataBody[j][dataHead.vars[i]].value;
-          select.appendChild(option);
+          let li = document.createElement("li");
+          let input = document.createElement("input");
+          input.setAttribute("id", "box"+j);
+          input.setAttribute("data-col", l);
+          input.setAttribute("type", "checkbox");
+          input.setAttribute("name", "items");
+          input.setAttribute("value", dataBody[j][dataHead.vars[i]].value);
+          input.addEventListener('click', filterColumn);
+          let item_label = document.createElement("label");
+          input.setAttribute("for", "box"+j);
+          item_label.innerText = dataBody[j][dataHead.vars[i]].value;
+          ul_filter.appendChild(li);
+          li.appendChild(input);
+          li.appendChild(item_label);
         }
-        th.appendChild(select);
+
+        // appendする
         th.appendChild(span_sort);
         th.appendChild(span_filter);
         th.appendChild(ul_filter);
         tr.appendChild(th);
       }
-
 
       //▼tbodyの描画
       let tbody = stanza.root.querySelector("#tbodyID");
@@ -231,6 +224,7 @@ function draw(data, stanza, element) {
       showingRecordsNumber(current_page);
     };
 
+// カラムをソートする関数
     let sortColumn = function (e) {
       let page = current_page;
       let tbody = stanza.root.querySelector("#tbodyID");
@@ -287,7 +281,6 @@ function draw(data, stanza, element) {
           let tr = document.createElement("tr");
           for (let j of order) {
             let td = document.createElement("td");
-            // let tdValue = Object.values(dataBody[i]);
             if (dataHead.href[j]) {
               let a = document.createElement("a");
               a.setAttribute("href", sortArray[i][dataHead.href[j]].value);
@@ -303,12 +296,13 @@ function draw(data, stanza, element) {
       }
     };
 
+// フィルターのチェックボックスウィンドウを出現させる関数
     let displayFilter = function(e){
       let colNum = e.target.getAttribute('data-col')
       let ul_filter = stanza.root.querySelector("#filterul"+colNum);
       ul_filter.className = "filter-window -opened";
 
-      stanza.root.addEventListener("click", (evt) => {
+      stanza.root.addEventListener("click", function(evt){
         let targetElement = evt.target; // clicked element
         let span_filter = stanza.root.querySelector("#filtericon"+colNum);
         do {
@@ -325,29 +319,29 @@ function draw(data, stanza, element) {
 
     }
 
-    let filterColumn = function(e) {
-      var filter = e.target.value.toUpperCase();
-      var colNum = e.target.getAttribute("data-col");
-      var table = stanza.root.querySelector("#listingTable");
-      var tr = table.querySelectorAll("tr");
+// チェックボックスの入力に応じてカラムをフィルターする関数
+    let filterColumn = function(e){
+      let filter = e.target.value.toUpperCase();
+      let colNum = e.target.getAttribute("data-col");
+      let table = stanza.root.querySelector("#listingTable");
+      let tr = table.querySelectorAll("tr");
 
-
-      for (var i = 0; i < tr.length; i++) {
-        var td = tr[i].querySelectorAll("td")[colNum];
-        if (td) {
-          if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
-        }       
+      if(e.target.checked){
+        console.log("チェックされました");
+        for (let i = 0; i < tr.length; i++) {
+          let td = tr[i].querySelectorAll("td")[colNum];
+          if (td) {
+            if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }       
+        }
       }
-    }
+  }
 
-    // let searchTable = function(){
-    //   let filter = document
-    // }
-
+// 以下ページ遷移の関数
     let prevPage = function () {
       if (current_page > 1) {
         current_page--;
