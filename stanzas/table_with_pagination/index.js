@@ -136,35 +136,45 @@ function draw(data, stanza, element) {
         let i = order[l];
         let tr = stanza.root.querySelector("#theadRowID");
         let th = document.createElement("th");
-        let span_filter = document.createElement("span");
         let span_sort = document.createElement("span");
+        let span_filter = document.createElement("span");
+        let filter_window = document.createElement("div");
+        filter_window.innerHTML = "<p>Hello World</p>";
+        filter_window.classList.add("fiter-window","-closed");
+        let filter_id = "filter";
+        filter_window.setAttribute("id", filter_id+l);
+        span_filter.addEventListener('click', displayFilter);
         let label = dataHead.vars[i];
         console.log(i);
         if (dataHead.labels) {
           label = dataHead.labels[i];
         }
         th.innerHTML = label;
+        th.setAttribute('data-col', l);
         let select = document.createElement("select");
         select.classList.add("form-control");
         let option = document.createElement("option")
         select.appendChild(option);
         for(let j=0; j< dataBody.length; j++){
-          select.classList.add("form-control");
           let mylist = "mylist";
           select.setAttribute("id", mylist+i);
-          select.setAttribute("data-column", l);
+          select.setAttribute("data-col", l);
           select.addEventListener("change", filterColumn);
           let option = document.createElement("option")
           option.innerText = dataBody[j][dataHead.vars[i]].value;
           select.appendChild(option);
         }
+        span_filter.setAttribute("data-type", dataHead.vars[i]);
+        span_filter.setAttribute("data-col", l);
         span_filter.classList.add("icon", "filtericon");
         span_sort.setAttribute("data-type", dataHead.vars[i]);
+        span_sort.setAttribute("data-col", l);
         span_sort.classList.add("icon", "sorticon", "button_sort");
         span_sort.addEventListener("click", sortColumn)
         th.appendChild(select);
-        th.appendChild(span_filter);
         th.appendChild(span_sort);
+        th.appendChild(span_filter);
+        th.appendChild(filter_window);
         tr.appendChild(th);
       }
 
@@ -272,27 +282,39 @@ function draw(data, stanza, element) {
       }
     };
 
+    let displayFilter = function(e){
+      let filter_window = stanza.root.querySelector("#filter0");
+      // console.log(filter_window);
+      // console.log(filter_window[0]);
+      // let colNum = e.target.getAttribute('data-col')
+      // console.log(colNum);
+      // console.log(filter_window[colNum]);
+      // filter_window[colNum].className = "filter-window -opened";
+      filter_window.className = "filter-window -opened";
+    }
+
     let filterColumn = function(e) {
       var filter = e.target.value.toUpperCase();
-      var colNum = e.target.getAttribute("data-column");
+      var colNum = e.target.getAttribute("data-col");
       var table = stanza.root.querySelector("#listingTable");
       var tr = table.querySelectorAll("tr");
 
 
       for (var i = 0; i < tr.length; i++) {
         var td = tr[i].querySelectorAll("td")[colNum];
-        console.log(td);
         if (td) {
-          console.log(i+"回まわった？");
           if (td.innerText.toUpperCase().indexOf(filter) > -1) {
             tr[i].style.display = "";
           } else {
             tr[i].style.display = "none";
           }
-          console.log(i+"回まわったよ");
         }       
       }
     }
+
+    // let searchTable = function(){
+    //   let filter = document
+    // }
 
     let prevPage = function () {
       if (current_page > 1) {

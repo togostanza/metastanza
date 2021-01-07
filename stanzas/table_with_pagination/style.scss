@@ -236,3 +236,17 @@ tbody td {
 .form-control{
   max-width: 120px;
 }
+
+.filter-window{
+  width: 100px;
+  height: auto;
+  background-color: lavender;
+}
+
+.-closed{
+  display: none;
+}
+
+.-opened{
+  display: "";
+}
