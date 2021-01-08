@@ -1,6 +1,7 @@
 import metastanza from "@/lib/metastanza_utils.js";
 import { span } from "vega";
 import { filter } from "d3";
+import { forEach } from "vega-lite/build/src/encoding";
 
 export default async function tableWithPagination(stanza, params) {
   stanza.render({
@@ -29,35 +30,50 @@ export default async function tableWithPagination(stanza, params) {
 function draw(data, stanza, element) {
   let dataHead = data.head;
   let dataBody = data.body;
-
-  function Pagination() {
-    const searchBox = stanza.root.querySelector("#search_box");
-    const prevButton = stanza.root.querySelector("#button_prev");
-    const nextButton = stanza.root.querySelector("#button_next");
-    const firstButton = stanza.root.querySelector("#button_first");
-    const lastButton = stanza.root.querySelector("#button_last");
-    const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
-
-    let current_page = 1;
-    let records_per_page = 5;
-    let total_records = dataBody.length;
-
-    //orderを定義（負の値があったときは排除して新たに定義し、それ以外の場合はカラムの数だけorderを定義する）
-    let order = [];
-    if (dataHead.order) {
-      for (let i = 0; i < dataHead.order.length; i++) {
-        if (parseInt(dataHead.order[i]) >= 0) {
-          order[parseInt(dataHead.order[i])] = i;
+  
+  const searchBox = stanza.root.querySelector("#search_box");
+  const prevButton = stanza.root.querySelector("#button_prev");
+  const nextButton = stanza.root.querySelector("#button_next");
+  const firstButton = stanza.root.querySelector("#button_first");
+  const lastButton = stanza.root.querySelector("#button_last");
+  const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
+  
+  let current_page = 1;
+  let records_per_page = 5;
+  let total_records = dataBody.length;
+  
+  //orderを定義（負の値があったときは排除して新たに定義し、それ以外の場合はカラムの数だけorderを定義する）
+  let order = [];
+  if (dataHead.order) {
+    for (let i = 0; i < dataHead.order.length; i++) {
+      if (parseInt(dataHead.order[i]) >= 0) {
+        order[parseInt(dataHead.order[i])] = i;
         }
       }
     } else {
       order = [...Array(dataHead.vars.length).keys()];
     }
+    console.log(order);
+
+    let adjustedData = [];
+
+    dataBody.forEach(function(datam){
+      let obj = {};
+      order.forEach(function(val){
+        let key = Object.keys(datam)[val];
+        console.log("key",key);
+        console.log("datam",datam);
+        console.log("val", val);
+        obj[key] = datam[key];
+      })
+      adjustedData.push(obj);
+    })
+    console.log(adjustedData);
 
     let tableKey = Object.keys(dataBody[0]); //th・tdに格納されるデータのキーを配列で取得してtableKeyに代入
     let columns_per_row = tableKey.length; //tableKeyで取得したキーの配列の数（＝列の数）を取得してcolumns_per_rowに代入
 
-    this.init = function () {
+    const init = function () {
       changePage(1);
       pageNumbers();
       selectedPage();
@@ -415,8 +431,7 @@ function draw(data, stanza, element) {
     let numPages = function () {
       return Math.ceil(dataBody.length / records_per_page);
     };
-  }
-  let pagination = new Pagination();
-  pagination.init();
+  
+  init();
 
 }
