@@ -6,25 +6,36 @@
       padding: 5px 20px 5px 20px;;
   }
   th {
-      {{!-- border-bottom: solid 2px #000000; --}}
+  {{! border-bottom: solid 2px #000000; }}
   }
 </style>
 
 <div class="container">
-
   <div class="infomation">
     <form class="search-form" action="#">
-      <input class="search-box" type="text" placeholder="Serch for keywords...">
+      <input
+        class="search-box"
+        type="text"
+        placeholder="Serch for keywords..."
+      />
       <button class="search-btn" type="submit">
-        <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg" alt="search">
+        <img
+          src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
+          alt="search"
+        />
       </button>
     </form>
-    <a class="dl-btn" href="#" download="#"><img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt=""></a>
+    <a class="dl-btn" href="#" download="#">
+      <img
+        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg"
+        alt=""
+      />
+    </a>
   </div>
   <div id="renderDiv"></div>
 </div>
 
-  {{!-- <div class="container">
+{{! <div class="container">
     <div class="infomation">
       <form class="search-form" action="#">
         <input class="search-box" type="text" placeholder="Serch for keywords...">
@@ -42,7 +53,7 @@
           <td>Taxonomy ID<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
           <td>Isolation<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
           <td>Environments<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
-        </tr>    
+        </tr>
       </thead>
       <tbody>
         <tr>
@@ -102,27 +113,49 @@
           <td>hot spring,  spring sediment</td>
         </tr>
       </tbody>
-    </table> --}}
-    <div id="pagenation">
-      <ul>
-        <li class="first-btn"><span></span><span></span></li>
-        <li class="previous-btn"><span></span></li>
-        <li class="current-btn">1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>…</li>
-        <li>10</li>
-        <li class="next-btn"><span></span></li>
-        <li class="last-btn"><span></span><span></span></li>
-      </ul>
-    </div>
-    <p class="show-info">Showing 1 to 10 of 44 entres</p>
-  {{!-- </div> --}}
+    </table> }}
+<div id="pagenation">
+  <ul>
+    <li class="first-btn">
+      <span></span>
+      <span></span>
+    </li>
+    <li class="previous-btn">
+      <span></span>
+    </li>
+    <li class="current-btn">
+      1
+    </li>
+    <li>
+      2
+    </li>
+    <li>
+      3
+    </li>
+    <li>
+      4
+    </li>
+    <li>
+      …
+    </li>
+    <li>
+      10
+    </li>
+    <li class="next-btn">
+      <span></span>
+    </li>
+    <li class="last-btn">
+      <span></span>
+      <span></span>
+    </li>
+  </ul>
+</div>
+<p class="show-info">
+  Showing 1 to 10 of 44 entres
+</p>
+{{! </div> }}
 
-
-
-  {{!-- <div class="container">
+{{! <div class="container">
     <div class="infomation">
       <form class="search-form" action="#">
         <input class="search-box" type="text" placeholder="Serch for keywords...">
@@ -140,7 +173,7 @@
           <td>Taxonomy ID<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
           <td>Isolation<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
           <td>Environments<span class="icon filter-icon"></span><span class="icon sort-icon"></span></td>
-        </tr>    
+        </tr>
       </thead>
       <tbody>
         <tr>
@@ -216,4 +249,4 @@
       </ul>
     </div>
     <p class="show-info">Showing 1 to 10 of 44 entres</p>
-  </div> --}}
+  </div> }}

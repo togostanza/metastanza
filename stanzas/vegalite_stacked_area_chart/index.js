@@ -1,8 +1,8 @@
 import vegaEmbed from "vega-embed";
 
-export default function vegaliteStackedAreaChart(stanza, params) {
+export default function vegaliteStackedAreaChart(stanza /* , params */) {
   //let spec = await fetch(params["src-url"]).then((res) => res.json());
-  let spec = JSON.parse(`{
+  const spec = JSON.parse(`{
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "width": 300, "height": 200,
     "data": {"url": "https://vega.github.io/vega-lite/data/unemployment-across-industries.json"},
@@ -22,18 +22,18 @@ export default function vegaliteStackedAreaChart(stanza, params) {
     }
   }`);
 
-  console.log(spec)
+  console.log(spec);
 
-  // 新たにカラースキームを自作したいが、反映されない 
+  // 新たにカラースキームを自作したいが、反映されない
   // vega.scheme('basic', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff']);
 
   //カラースキームのセットをパラメータ化して、選択できるようにしたいがvar(--color-scheme)が認識されない・・・
   // spec.encoding.color.scale = {"scheme": "var(--color-scheme)"}
-  spec.encoding.color.scale = {"scheme": "pastel1"}
-  
+  spec.encoding.color.scale = { scheme: "pastel1" };
+
   const el = stanza.root.querySelector("main");
   const opts = {
-    renderer: "svg"
+    renderer: "svg",
   };
   vegaEmbed(el, spec, opts);
 }
