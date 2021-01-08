@@ -4,13 +4,13 @@ import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
 async function tree(stanza, params) {
-  let spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].url ="https://vega.github.io/vega/data/flare.json";
+  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  spec.data[0].url = "https://vega.github.io/vega/data/flare.json";
 
   //stanza（描画範囲）のwidth・height
-  spec.width = params["width"]; 
+  spec.width = params["width"];
   spec.height = params["height"];
-  
+
   //stanzaのpadding
   spec.padding = params["padding"];
 
@@ -18,119 +18,161 @@ async function tree(stanza, params) {
   spec.scales[0].type = "ordinal";
 
   spec.scales[0].range = [
-    'var(--series-0-color)',
-    'var(--series-1-color)',
-    'var(--series-2-color)',
-    'var(--series-3-color)',
-    'var(--series-4-color)',
-    'var(--series-5-color)'
+    "var(--series-0-color)",
+    "var(--series-1-color)",
+    "var(--series-2-color)",
+    "var(--series-3-color)",
+    "var(--series-4-color)",
+    "var(--series-5-color)",
   ];
-  
+
   //legendを出す
-  spec.legends =
-  [
+  spec.legends = [
     {
-      "fill": "color",
-      "title": params["legend-title"],
-      "titleColor": "var(--legendtitle-color)",
-      "labelColor": "var(--legendlabel-color)",
-      "orient": "top--left",
-      "encode": {
-        "title": {
-          "update": {
-            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
-            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
-          }
-        },
-        "labels": {
-          "interactive": true,
-          "update": {
-            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
-            "text": {"field": "value"}
+      fill: "color",
+      title: params["legend-title"],
+      titleColor: "var(--legendtitle-color)",
+      labelColor: "var(--legendlabel-color)",
+      orient: "top--left",
+      encode: {
+        title: {
+          update: {
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legend-font"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendtitle-size"
+              ),
+            },
+            fontWeight: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendtitle-weight"
+              ),
+            },
           },
-          "symbols": {
-            "update": {
-              "shape": {"value": params["symbol-shape"]},
-              "stroke": {"value": "var(--stroke-color)"},
-              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
-              "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")}
-            }
-          }
-      }
-    }
+        },
+        labels: {
+          interactive: true,
+          update: {
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legend-font"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendlabel-size"
+              ),
+            },
+          },
+          text: { field: "value" },
+        },
+        symbols: {
+          update: {
+            shape: { value: params["symbol-shape"] },
+            stroke: { value: "var(--stroke-color)" },
+            strokeWidth: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--stroke-width"
+              ),
+            },
+            opacity: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--opacity"
+              ),
+            },
+          },
+        },
+      },
+    },
   ];
 
   //marks:描画について
 
-  //（デフォルトのコントローラを削除） 
-  for (let signal of spec.signals)
-    { 
-      delete(signal.bind); 
-    } 
+  //（デフォルトのコントローラを削除）
+  for (const signal of spec.signals) {
+    delete signal.bind;
+  }
 
-  spec.marks[0].encode ={
-    "update": {
-      "path": {"field": "path"},
-      "stroke": {"value": "var(--branch-color)"}
+  spec.marks[0].encode = {
+    update: {
+      path: { field: "path" },
+      stroke: { value: "var(--branch-color)" },
     },
-    "hover": {
-      "stroke": {"value": "var(--emphasized-color)"}
-    }
+    hover: {
+      stroke: { value: "var(--emphasized-color)" },
+    },
   };
 
-  spec.marks[1].encode ={
-    "enter": {
-      "size": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--node-size")},
-      "stroke": {"value": "var(--stroke-color)"}
+  spec.marks[1].encode = {
+    enter: {
+      size: {
+        value: getComputedStyle(stanza.root.host).getPropertyValue(
+          "--node-size"
+        ),
+      },
+      stroke: { value: "var(--stroke-color)" },
     },
-    "update": {
-      "x": {"field": "x"},
-      "y": {"field": "y"},
-      "fill": {"scale": "color", "field": "depth"},
-      "stroke": {"value": "var(--stroke-color)"},
-      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
+    update: {
+      x: { field: "x" },
+      y: { field: "y" },
+      fill: { scale: "color", field: "depth" },
+      stroke: { value: "var(--stroke-color)" },
+      strokeWidth: {
+        value: getComputedStyle(stanza.root.host).getPropertyValue(
+          "--stroke-width"
+        ),
+      },
     },
-    "hover": {
-      "fill": {"value": "var(--emphasized-color)"},
-      "stroke": {"value": "var(--hover-stroke-color)"},
-      "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
-    }
+    hover: {
+      fill: { value: "var(--emphasized-color)" },
+      stroke: { value: "var(--hover-stroke-color)" },
+      strokeWidth: {
+        value: getComputedStyle(stanza.root.host).getPropertyValue(
+          "--hover-stroke-width"
+        ),
+      },
+    },
   };
-  
-  spec.marks[2].encode ={
-    "enter": {
-      "text": {"field": "name"},
-      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-      "fontSize": {"value": params["label-size"]},
-      "baseline": {"value": "middle"},
+
+  spec.marks[2].encode = {
+    enter: {
+      text: { field: "name" },
+      font: {
+        value: getComputedStyle(stanza.root.host).getPropertyValue(
+          "--label-font"
+        ),
+      },
+      fontSize: { value: params["label-size"] },
+      baseline: { value: "middle" },
     },
-    "update": {
-      "x": {"field": "x"},
-      "y": {"field": "y"},
-      "dx": {"signal": "datum.children ? -7 : 7"},
-      "align": {"signal": "datum.children ? 'right' : 'left'"},
-      "opacity": {"signal": "labels ? 1 : 0"},
-      "fill": {"value": "var(--label-color)"}
+    update: {
+      x: { field: "x" },
+      y: { field: "y" },
+      dx: { signal: "datum.children ? -7 : 7" },
+      align: { signal: "datum.children ? 'right' : 'left'" },
+      opacity: { signal: "labels ? 1 : 0" },
+      fill: { value: "var(--label-color)" },
       // hoverした時の文字色が薄い場合は文字にstrokecolorをつけたほうがよいかも？（検討）
       // "stroke": {"value": ""},
       // "strokeWidth": {"value": ""}
       // "stroke": {"value": "var(--stroke-color)"},
       // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
     },
-    "hover": {
-      "fill": {"value": "var(--emphasized-color)"},
+    hover: {
+      fill: { value: "var(--emphasized-color)" },
       // "stroke": {"value": "var(--hover-stroke-color)"},
       // "strokeWidth": {"value": "0.5"}
       // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
-    }
+    },
   };
-
 
   const el = stanza.root.querySelector("main");
   const opts = {
-    renderer: "svg"
+    renderer: "svg",
   };
   await embed(el, spec, opts);
 }
@@ -330,9 +372,9 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>\n";
+  return "<p class=\"greeting\">\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
+    + "\n</p>";
 },"useData":true}]
 ];
 

@@ -2,10 +2,10 @@ import { d as defineStanzaElement } from './stanza-element-6585decd.js';
 
 async function scorecard(stanza, params) {
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      greeting: `Hello, ${params['say-to']}!`
-    }
+      greeting: `Hello, ${params["say-to"]}!`,
+    },
   });
 }
 
@@ -58,7 +58,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "\n<style>\n</style>\n\n<svg width=\"200\" height=\"200\">\n  <text x=\"30\" y=\"30\" font-family=\"sans-serif\" font-size=\"30px\" fill=\"var(--series-0-color)\">Hello!</text>\n</svg>\n      \n";
+    return "\n<style>\n</style>\n\n<svg width=\"200\" height=\"200\">\n  <text\n    x=\"30\"\n    y=\"30\"\n    font-family=\"sans-serif\"\n    font-size=\"30px\"\n    fill=\"var(--series-0-color)\"\n  >\n    Hello!\n  </text>\n</svg>";
 },"useData":true}]
 ];
 

@@ -3,9 +3,9 @@ import { e as embed } from './vega-embed.module-05baedf9.js';
 import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
-function vegaliteMosaicChartWithLabels(stanza, params) {
+function vegaliteMosaicChartWithLabels(stanza /* , params */) {
   //let spec = await fetch(params["src-url"]).then((res) => res.json());
-  let spec = JSON.parse(`{
+  const spec = JSON.parse(`{
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
     "data": {
       "url": "https://vega.github.io/vega-lite/data/cars.json"
@@ -245,16 +245,16 @@ function vegaliteMosaicChartWithLabels(stanza, params) {
 
   console.log(spec);
 
-  // 新たにカラースキームを自作したいが、反映されない 
+  // 新たにカラースキームを自作したいが、反映されない
   // vega.scheme('basic', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff']);
 
   //カラースキームのセットをパラメータ化して、選択できるようにしたいがvar(--color-scheme)が認識されない・・・
   // spec.encoding.color.scale = {"scheme": "var(--color-scheme)"}
   // spec.encoding.color.scale = {"scheme": "pastel1"}
-  
+
   const el = stanza.root.querySelector("main");
   const opts = {
-    renderer: "svg"
+    renderer: "svg",
   };
   embed(el, spec, opts);
 }
@@ -315,9 +315,9 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>\n";
+  return "<p class=\"greeting\">\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
+    + "\n</p>";
 },"useData":true}]
 ];
 

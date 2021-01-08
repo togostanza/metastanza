@@ -4,57 +4,55 @@ import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
 async function piechart(stanza, params) {
-  let spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   //stanza（描画範囲）のwidth・height（うまく効かない…広くなってしまう？）
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
-  spec.padding = {"left": 5, "top": 5, "right": 150, "bottom": 5};
+  spec.padding = { left: 5, top: 5, right: 150, bottom: 5 };
 
-// scales: カラースキームを指定
+  // scales: カラースキームを指定
   spec.scales[0].range = [
-    'var(--series-0-color)',
-    'var(--series-1-color)',
-    'var(--series-2-color)',
-    'var(--series-3-color)',
-    'var(--series-4-color)',
-    'var(--series-5-color)'
+    "var(--series-0-color)",
+    "var(--series-1-color)",
+    "var(--series-2-color)",
+    "var(--series-3-color)",
+    "var(--series-4-color)",
+    "var(--series-5-color)",
   ];
 
+  //円の描画について
+  //（デフォルトのコントローラを削除）
+  for (const signal of spec.signals) {
+    delete signal.bind;
+  }
 
-//円の描画について
-  //（デフォルトのコントローラを削除） 
-  for (let signal of spec.signals)
-    { 
-      delete(signal.bind); 
-    } 
-  
   spec.signals[2].value = params["inner-padding-angle"];
   spec.signals[3].value = params["inner-radius"];
 
   spec.marks[0].encode = {
-    "enter": {
-      "fill": {"scale": "color", "field": "id"},
-      "x": {"signal": "width / 2"},
-      "y": {"signal": "height / 2"},
+    enter: {
+      fill: { scale: "color", field: "id" },
+      x: { signal: "width / 2" },
+      y: { signal: "height / 2" },
     },
-    "update": {
-      "startAngle": {"field": "startAngle"},
-      "endAngle": {"field": "endAngle"},
-      "padAngle": {"signal": "padAngle"},
-      "innerRadius": {"signal": "innerRadius"},
-      "outerRadius": {"signal": "width / 2"},
-      "cornerRadius": {"signal": "cornerRadius"},
-      "fill": {"scale": "color", "field": "id"},
-      "stroke": {"value": "var(--stroke-color)"},
-      "strokeWidth": {"value": "var(--stroke-width)"}
+    update: {
+      startAngle: { field: "startAngle" },
+      endAngle: { field: "endAngle" },
+      padAngle: { signal: "padAngle" },
+      innerRadius: { signal: "innerRadius" },
+      outerRadius: { signal: "width / 2" },
+      cornerRadius: { signal: "cornerRadius" },
+      fill: { scale: "color", field: "id" },
+      stroke: { value: "var(--stroke-color)" },
+      strokeWidth: { value: "var(--stroke-width)" },
     },
-    "hover": {
-      "fill": {"value": "var(--emphasized-color)"},
-      "stroke": {"value": "var(--hover-stroke-color)"},
-      "strokeWidth": {"value": "var(--hover-stroke-width)"}
-    }
+    hover: {
+      fill: { value: "var(--emphasized-color)" },
+      stroke: { value: "var(--hover-stroke-color)" },
+      strokeWidth: { value: "var(--hover-stroke-width)" },
+    },
   };
 
   // // hover時にvalueを出したい
@@ -79,38 +77,58 @@ async function piechart(stanza, params) {
   // }
 
   //legendを出す
-  spec.legends =
-  [
+  spec.legends = [
     {
-      "fill": "color",
-      "orient": "none",
-      "legendX": "220",
-      "legendY": "5",
-      "title": params["legend-title"],
-      "titleColor": "var(--legendtitle-color)",
-      "labelColor": "var(--legendlabel-color)",
-      "encode": {
-        "title": {
-          "update": {
-            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-size")},
-            "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendtitle-weight")}
-          }
+      fill: "color",
+      orient: "none",
+      legendX: "220",
+      legendY: "5",
+      title: params["legend-title"],
+      titleColor: "var(--legendtitle-color)",
+      labelColor: "var(--legendlabel-color)",
+      encode: {
+        title: {
+          update: {
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legend-font"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendtitle-size"
+              ),
+            },
+            fontWeight: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendtitle-weight"
+              ),
+            },
+          },
         },
-        "labels": {
-          "interactive": true,
-          "update": {
-            "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legend-font")},
-            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--legendlabel-size")}},
-            "text": {"field": "value"}
-          }
-        }
-      }
+        labels: {
+          interactive: true,
+          update: {
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legend-font"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--legendlabel-size"
+              ),
+            },
+          },
+          text: { field: "value" },
+        },
+      },
+    },
   ];
 
   const el = stanza.root.querySelector("main");
   const opts = {
-    renderer: "svg"
+    renderer: "svg",
   };
   await embed(el, spec, opts);
 }
@@ -293,9 +311,9 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>";
+  return "<p class=\"greeting\">\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
+    + "\n</p>";
 },"useData":true}]
 ];
 

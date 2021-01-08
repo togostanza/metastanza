@@ -4,26 +4,26 @@ import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
 async function areachart(stanza, params) {
-  let spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   // カラースキームを定義しようとしたけれどできない
   // vega.scheme('basic', ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff']);
   // spec.scales[2].range = {"scheme": "var(--color-scheme)"}
   spec.scales[2].range = [
-    'var(--series-0-color)',
-    'var(--series-1-color)',
-    'var(--series-2-color)',
-    'var(--series-3-color)',
-    'var(--series-4-color)',
-    'var(--series-5-color)',
+    "var(--series-0-color)",
+    "var(--series-1-color)",
+    "var(--series-2-color)",
+    "var(--series-3-color)",
+    "var(--series-4-color)",
+    "var(--series-5-color)",
   ];
   // spec.marks[0].marks[0].encode.enter.strokeWidth.value = "var(--stroke-width)"
 
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      title: params.title
-    }
+      title: params.title,
+    },
   });
 
   // const conf = {
@@ -40,11 +40,9 @@ async function areachart(stanza, params) {
 
   const el = stanza.root.querySelector("main");
   const opts = {
-    renderer: "svg"
+    renderer: "svg",
   };
   await embed(el, spec, opts);
-
-
 }
 
 var metadata = {
@@ -162,9 +160,9 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>\n";
+  return "<p class=\"greeting\">\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
+    + "\n</p>";
 },"useData":true}]
 ];
 

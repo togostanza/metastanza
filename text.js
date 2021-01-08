@@ -2,10 +2,10 @@ import { d as defineStanzaElement } from './stanza-element-6585decd.js';
 
 async function text(stanza, params) {
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      greeting: `Hello, ${params['say-to']}!`
-    }
+      greeting: `Hello, ${params["say-to"]}!`,
+    },
   });
 }
 
@@ -70,7 +70,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  *{\n    font-family: var(--label-font);\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n  }\n  tr{\n    border-bottom: 1px solid #999;\n  }\n\n  dl{\n    border-bottom: 0.5px solid #999;\n    margin: 0;\n    padding: 10px 0 15px 0;  \n  }\n  dt{\n    font-weight: bold;\n    font-size: 13px;\n    line-height: 14px;\n  }\n  dd{\n    font-size: 11px;\n    margin-inline-start: 0px;\n  }\n\n\n</style>\n\n\n<table>\n    <tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n    </tr>\n</table>\n";
+    return "<style>\n  *{\n    font-family: var(--label-font);\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n  }\n  tr{\n    border-bottom: 1px solid #999;\n  }\n\n  dl{\n    border-bottom: 0.5px solid #999;\n    margin: 0;\n    padding: 10px 0 15px 0;\n  }\n  dt{\n    font-weight: bold;\n    font-size: 13px;\n    line-height: 14px;\n  }\n  dd{\n    font-size: 11px;\n    margin-inline-start: 0px;\n  }\n</style>\n\n<table>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n</table>";
 },"useData":true}]
 ];
 

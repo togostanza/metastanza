@@ -86,7 +86,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "display of Y-grids"
-    }, 
+    },
     {
       "stanza:key": "xtick",
       "stanza:example": false,
@@ -252,37 +252,37 @@
       "stanza:key": "--stroke-color",
       "stanza:type": "color",
       "stanza:default": "#333",
-      "stanza:description":"stroke color of plot."
+      "stanza:description": "stroke color of plot."
     },
     {
       "stanza:key": "--hover-stroke-color",
       "stanza:type": "color",
       "stanza:default": "#333",
-      "stanza:description":"stroke color of plot when you hover."
+      "stanza:description": "stroke color of plot when you hover."
     },
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
       "stanza:default": "1",
-      "stanza:description":"stroke width"
+      "stanza:description": "stroke width"
     },
     {
       "stanza:key": "--hover-stroke-width",
       "stanza:type": "number",
       "stanza:default": "1",
-      "stanza:description":"stroke width of plot when you hover."
+      "stanza:description": "stroke width of plot when you hover."
     },
     {
       "stanza:key": "--opacity",
       "stanza:type": "text",
       "stanza:default": "0.7",
-      "stanza:description":"opacity of each plots"
+      "stanza:description": "opacity of each plots"
     },
     {
       "stanza:key": "--hover-opacity",
       "stanza:type": "text",
       "stanza:default": "1",
-      "stanza:description":"opacity of each plots when you hover"
+      "stanza:description": "opacity of each plots when you hover"
     }
   ]
 }

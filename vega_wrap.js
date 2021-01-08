@@ -6,18 +6,25 @@ async function vegaWrap(stanza, params) {
   const spec = await fetch(params["vega-json"]).then((res) => res.json());
 
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      title: params.title
-    }
+      title: params.title,
+    },
   });
 
   const conf = {
     range: {
-      category: ["var(--series-0-color)", "var(--series-1-color)", "var(--series-2-color)", "var(--series-3-color)", "var(--series-4-color)", "var(--series-5-color)"]
-    }
+      category: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+    },
   };
-  
+
   const view = new View(parse$1(spec, conf), {
     renderer: "svg",
     container: stanza.root.querySelector("#chart"),
@@ -109,9 +116,9 @@ var templates = [
         return undefined
     };
 
-  return "<h1>"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"title","hash":{},"data":data,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":13}}}) : helper)))
-    + "</h1>\n<div id=\"chart\"></div>\n";
+  return "<h1>\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"title","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":11}}}) : helper)))
+    + "\n</h1>\n<div id=\"chart\"></div>";
 },"useData":true}]
 ];
 
