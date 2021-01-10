@@ -135,9 +135,11 @@ function draw(data, stanza, element) {
         let li = document.createElement("li");
         let input = document.createElement("input");
         input.setAttribute("id", "box" + j);
+        input.classList.add("checkbox");
         input.setAttribute("data-col", l);
         input.setAttribute("type", "checkbox");
         input.setAttribute("name", "items");
+        input.setAttribute("checked", "true");
         input.setAttribute("value", dataBody[j][dataHead.vars[i]].value);
         input.addEventListener('click', filterColumn);
         let item_label = document.createElement("label");
@@ -283,19 +285,46 @@ function draw(data, stanza, element) {
     let table = stanza.root.querySelector("#listingTable");
     let tr = table.querySelectorAll("tr");
 
-    if (e.target.checked) {
-      console.log("チェックされました");
-      for (let i = 0; i < tr.length; i++) {
-        let td = tr[i].querySelectorAll("td")[colNum];
-        if (td) {
-          if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
-        }
-      }
+
+    console.log(e.path[0].getAttribute("checked"));
+    if(e.path[0].getAttribute("checked")){
+      e.path[0].setAttribute("checked","false")
+    }else{
+      e.path[0].setAttribute("checked","true")
     }
+  
+    let unchecked_input = stanza.root.querySelectorAll(".checkbox[checked=false]");
+    console.log("unchecked_input",unchecked_input);
+
+    let unchecked_columns = [];
+
+    unchecked_columns = [
+      {
+        col: "Accesiion",
+        val: "Q99127"
+      },
+      {
+        col: "Accesiion",
+        val: "Q99127"
+      },
+      {
+        col: "Mnemonic",
+        val: "Q99127"
+      }
+    ]
+    // if (e.target.checked) {
+    //   console.log("チェックされました");
+    //   for (let i = 0; i < tr.length; i++) {
+    //     let td = tr[i].querySelectorAll("td")[colNum];
+    //     if (td) {
+    //       if (td.innerText.toUpperCase().indexOf(filter) > -1) {
+    //         tr[i].style.display = "";
+    //       } else {
+    //         tr[i].style.display = "none";
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   // テーブル全体をフィルターする検索ボックスの関数
