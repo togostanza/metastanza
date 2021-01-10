@@ -438,7 +438,7 @@ var metadata = {
 	{
 		"stanza:key": "--title-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
+		"stanza:default": "#222",
 		"stanza:description": "font color of title"
 	},
 	{
