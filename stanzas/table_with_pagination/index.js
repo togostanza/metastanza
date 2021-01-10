@@ -293,25 +293,43 @@ function draw(data, stanza, element) {
       e.path[0].setAttribute("checked","true")
     }
   
+  
     let unchecked_input = stanza.root.querySelectorAll(".checkbox[checked=false]");
     console.log("unchecked_input",unchecked_input);
+    console.log("unchecked_input[0].value",unchecked_input[0].value);
+    console.log(dataHead.labels)
+
+    let data_col = e.path[0].getAttribute('data-col');
+    console.log(data_col);
+    let label =dataHead.labels[data_col];
+    console.log(label);
 
     let unchecked_columns = [];
 
-    unchecked_columns = [
-      {
-        col: "Accesiion",
-        val: "Q99127"
-      },
-      {
-        col: "Accesiion",
-        val: "Q99127"
-      },
-      {
-        col: "Mnemonic",
-        val: "Q99127"
+    for(let i=0; i<unchecked_input.length; i++){
+      let unchecked_column = {
+        "col": label,
+        "val": unchecked_input[i].value
       }
-    ]
+      unchecked_columns.push(unchecked_column);
+    }
+
+    console.log('unchecked_columns',unchecked_columns);
+
+    // unchecked_columns = [
+    //   {
+    //     col: "Accesiion",
+    //     val: "Q99127"
+    //   },
+    //   {
+    //     col: "Accesiion",
+    //     val: "Q99127"
+    //   },
+    //   {
+    //     col: "Mnemonic",
+    //     val: "Q99127"
+    //   }
+    // ]
     // if (e.target.checked) {
     //   console.log("チェックされました");
     //   for (let i = 0; i < tr.length; i++) {
