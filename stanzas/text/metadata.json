@@ -48,6 +48,18 @@
       "stanza:type": "text",
       "stanza:default": "serif",
       "stanza:description": "font(e.g: serif,san serif,fantasy)"
+    },
+    {
+      "stanza:key": "--dt-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "font color of text header"
+    },
+    {
+      "stanza:key": "--dd-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "font color of taext body"
     }
   ]
 }

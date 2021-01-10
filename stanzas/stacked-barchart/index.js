@@ -124,6 +124,7 @@ export default async function stackedBarchart(stanza, params) {
     scale: "y",
     orient: params["yaxis-orient"],
     title: params["yaxis-title"],
+    titleColor: "var(--title-color)",
     titlePadding:
       getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
       0,
