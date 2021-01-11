@@ -137,6 +137,7 @@ function draw(data, stanza, element) {
         input.setAttribute("id", "box" + j);
         input.classList.add("checkbox");
         input.setAttribute("data-col", l);
+        input.setAttribute("data-row", j);
         input.setAttribute("type", "checkbox");
         input.setAttribute("name", "items");
         input.setAttribute("checked", "true");
@@ -171,6 +172,7 @@ function draw(data, stanza, element) {
       let tr = document.createElement("tr");
       for (let j of order) {
         let td = document.createElement("td");
+        td.setAttribute("data-row", i);
         if (dataHead.href[j]) {
           let a = document.createElement("a");
           a.setAttribute("href", dataBody[i][dataHead.href[j]].value);
@@ -257,13 +259,13 @@ function draw(data, stanza, element) {
 
   // フィルターのチェックボックスウィンドウを出現させる関数
   let displayFilter = function (e) {
-    let colNum = e.target.getAttribute('data-col')
-    let ul_filter = stanza.root.querySelector("#filterul" + colNum);
+    let data_col = e.target.getAttribute('data-col')
+    let ul_filter = stanza.root.querySelector("#filterul" + data_col);
     ul_filter.className = "filter-window -opened";
 
     stanza.root.addEventListener("click", function (evt) {
       let targetElement = evt.target; // clicked element
-      let span_filter = stanza.root.querySelector("#filtericon" + colNum);
+      let span_filter = stanza.root.querySelector("#filtericon" + data_col);
       do {
         if (targetElement == ul_filter || targetElement == span_filter) {
           console.log("Clicked inside");
@@ -280,32 +282,28 @@ function draw(data, stanza, element) {
 
   // チェックボックスの入力に応じてカラムをフィルターする関数
   let filterColumn = function (e) {
-    let filter = e.target.value.toUpperCase();
-    let colNum = e.target.getAttribute("data-col");
+    let data_col = e.path[0].getAttribute('data-col'); //クリックされたカラムの列（何列目か）
+    let label = dataHead.labels[data_col]; // クリックされたカラム名
     let table = stanza.root.querySelector("#listingTable");
-    let tr = table.querySelectorAll("tr");
-
-
+    let th = table.querySelectorAll("th");
+    
     console.log(e.path[0].getAttribute("checked"));
     if(e.path[0].getAttribute("checked")){
       e.path[0].setAttribute("checked","false")
     }else{
       e.path[0].setAttribute("checked","true")
     }
-  
-  
-    let unchecked_input = stanza.root.querySelectorAll(".checkbox[checked=false]");
-    console.log("unchecked_input",unchecked_input);
-    console.log("unchecked_input[0].value",unchecked_input[0].value);
-    console.log(dataHead.labels)
 
-    let data_col = e.path[0].getAttribute('data-col');
-    console.log(data_col);
-    let label =dataHead.labels[data_col];
-    console.log(label);
+    console.log(th[data_col]);
+    console.log(th[data_col].querySelectorAll(".checkbox[checked=true]"));
+    let unchecked_input = th[data_col].querySelectorAll(".checkbox[checked=false]");
+    let checked_input = th[data_col].querySelectorAll(".checkbox[checked=true]");
+    // // ▼表全体のカラムからchecked/uncheckedのinput要素を取得してしまう
+    // let unchecked_input = stanza.root.querySelectorAll(".checkbox[checked=false]");
+    // let checked_input = stanza.root.querySelectorAll(".checkbox[checked=true]");
 
+    // unchecked_inputが属するカラム名と、unchecked_inputの値（value）を格納した配列（=unchecked_columns）を作成 
     let unchecked_columns = [];
-
     for(let i=0; i<unchecked_input.length; i++){
       let unchecked_column = {
         "col": label,
@@ -314,33 +312,40 @@ function draw(data, stanza, element) {
       unchecked_columns.push(unchecked_column);
     }
 
-    console.log('unchecked_columns',unchecked_columns);
+    // checked_inputが属するカラム名と、checked_inputの値（value）を格納した配列（=checked_columns）を作成 
+    let checked_columns = [];
+    for(let i=0; i<checked_input.length; i++){
+      let checked_column = {
+        "col": label,
+        "val": checked_input[i].value,
+        "row": checked_input[i].getAttribute('data-row')
+      }
+      checked_columns.push(checked_column);
+    }
 
-    // unchecked_columns = [
-    //   {
-    //     col: "Accesiion",
-    //     val: "Q99127"
-    //   },
-    //   {
-    //     col: "Accesiion",
-    //     val: "Q99127"
-    //   },
-    //   {
-    //     col: "Mnemonic",
-    //     val: "Q99127"
-    //   }
-    // ]
-    // if (e.target.checked) {
-    //   console.log("チェックされました");
-    //   for (let i = 0; i < tr.length; i++) {
-    //     let td = tr[i].querySelectorAll("td")[colNum];
-    //     if (td) {
-    //       if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-    //         tr[i].style.display = "";
-    //       } else {
-    //         tr[i].style.display = "none";
-    //       }
-    //     }
+    let checked_rows = [];
+    for(let i=0; i<checked_columns.length; i++){
+      checked_rows.push(checked_columns[i].row);
+    }
+    console.log("checked_rows",checked_rows);
+
+    // checked_inputの値を含む列を、dispkyaBodyに追加していく方法（途中）
+    displayBody = [];
+    for(let i=0; i<checked_rows.length; i++){
+      displayBody.push(adjustedBody[checked_rows[i]])
+    }
+    console.log(displayBody);
+    updateBody();
+    // unchecked_inputの値を含む列を、adjustedBodyから消していく方法（途中）
+    // displayBody = [];
+    // for(let i=0; i<unchecked_input.length; i++){
+    //   let unchecked_value = unchecked_columns[i].val;
+    //   let td = tr[i+1].querySelectorAll("td")[data_col];
+    //   let unchecked_row = td.getAttribute('data-row');
+    //   console.log(unchecked_value);
+    //   console.log(td.textContent);
+    //   if(unchecked_value.indexOf(td.textContent) < -1){
+    //     displayBody = adjustedBody[unchecked_row].splice();
     //   }
     // }
   }
