@@ -11,3 +11,8 @@ Describe about the repository here. These contents will help the repository user
 - What is this repository for?
 - Who maintains this repository?
 - ...
+
+## Development
+
+- `npm run lint` checks the format of code
+- `npm run lint:fix` fixes fixable format errors
