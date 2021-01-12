@@ -4,6 +4,10 @@ import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
 async function stackedBarchart(stanza, params) {
+  function getPropertyValue(name) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(name);
+  }
+
   const spec = await fetch(params["src-url"]).then((res) => res.json());
   // spec.data[0].values = [
   //   {"category": "value1", "amount": 1},
@@ -24,8 +28,8 @@ async function stackedBarchart(stanza, params) {
   // spec.signals[0].on[1].events = "click"
 
   //棒・スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"];
-  spec.scales[0].paddingOuter = params["padding-outer"];
+  spec.scales[0].paddingInner = getPropertyValue("--padding-inner");
+  spec.scales[0].paddingOuter = getPropertyValue("--padding-outer");
 
   spec.scales[2].range = [
     "var(--series-0-color)",
@@ -213,7 +217,7 @@ async function stackedBarchart(stanza, params) {
   //rect（棒）の描画について
   spec.marks[0].encode = {
     enter: {
-      x: { scale: "x", field: "x" },
+      x: { scale: "x", field: "x", offset: 1 },
       width: { scale: "x", band: params["bar-width"] },
       y: { scale: "y", field: "y0" },
       y2: { scale: "y", field: "y1" },
