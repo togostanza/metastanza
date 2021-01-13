@@ -15,8 +15,11 @@
     "lint:editorconfig": "editorconfig-checker"
   },
   "dependencies": {
+    "@rollup/plugin-replace": "^2.3.4",
+    "@vue/compiler-sfc": "^3.0.5",
     "d3": "^6.2.0",
-    "togostanza": "^3.0.0-beta.8",
+    "rollup-plugin-vue": "^6.0.0-beta.10",
+    "togostanza": "github:togostanza/togostanza#build-config",
     "vega": "^5.17.0",
     "vega-embed": "^6.12.2",
     "vega-lite": "^4.17.0"

@@ -1,0 +1,33 @@
+<template>
+  <div class="container">
+    <div class="infomation">
+      <form class="search-form" action="#">
+        <input class="search-box" id="search_box" type="text" placeholder="Serch for keywords..." />
+
+        <button class="search-btn" type="submit">
+          <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg" alt="search" />
+        </button>
+      </form>
+
+      <a class="dl-btn" href="#" download="#">
+        <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt="" />
+      </a>
+    </div>
+
+    <div class="table-block">
+      <table class="tableList" id="listingTable">
+        <thead id="theadID"></thead>
+        <tbody id="tbodyID"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="pagination-block">
+    <span class="pageButton outline-none" id="button_first">&lt;&lt;</span>
+    <span class="pageButton outline-none" id="button_prev">&lt;</span>
+    <span id="page_number" class="outline-none"></span>
+    <span class="pageButton outline-none" id="button_next">&gt;</span>
+    <span class="pageButton outline-none" id="button_last">&gt;&gt;</span>
+    <div id="showing_records_number"></div>
+  </div>
+</template>
