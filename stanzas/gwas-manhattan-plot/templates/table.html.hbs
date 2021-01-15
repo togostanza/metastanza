@@ -17,3 +17,23 @@
       </ul>
       {{/each} --}}
 <p>テーブル</p>
+
+{{#each fields as |field|}}
+  <div>
+    <label>
+      {{field.label}}
+
+      {{#if field.required}}
+        <span class="required">(required)</span>
+      {{/if}}
+    </label>
+
+    <input type="text" />
+  </div>
+{{/each}}
+
+{{#each arrays as |array|}}
+  <div>
+      {{array.dbSNP_RS_ID}}
+  </div>
+{{/each}}

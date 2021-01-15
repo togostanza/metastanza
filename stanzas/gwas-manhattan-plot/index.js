@@ -35,6 +35,7 @@ async function draw(dataset, stanza, params) {
 
   const chart_element = stanza.root.querySelector("#chart");
   const control_element = stanza.root.querySelector("#control");
+  let over_thresh_array
 
   if (params.low_thresh === "") {
     params.low_thresh = 0.5;
@@ -338,25 +339,25 @@ async function draw(dataset, stanza, params) {
     });
 
   reRender();
-
+  
   function reRender() {
     if (range[0] === undefined) {
       range = [
         0,
         Object.values(chromosomeNtLength.hg38).reduce(
           (sum, value) => sum + value
-        ),
-      ];
-      total = range[1];
-    }
-
+          ),
+        ];
+        total = range[1];
+      }
+      
+    over_thresh_array = []
     max_log_p = 0;
 
     plot_g.html("");
     xlabel_g.html("");
     ylabel_g.html("");
 
-    let over_thresh_array = []
     plot_g
       .selectAll(".plot")
       .data(dataset)
@@ -485,7 +486,7 @@ async function draw(dataset, stanza, params) {
           "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
         );
     }
-    //// y zero (low_thresh)
+    // y zero (low_thresh)
     ylabel_g
       .append("text")
       .text(low_thresh)
@@ -574,9 +575,26 @@ async function draw(dataset, stanza, params) {
     }
     ctrl_button.select("#range_text").html(text);
   }
-  
+  console.log(over_thresh_array);
   stanza.render({
     template: 'table.html.hbs',
-    selector: '#table'
+    selector: '#table',
+    parameters: {
+      fields: [
+        {
+          label: 'First name',
+          required: true
+        },
+        {
+          label: 'Middle name',
+          required: false
+        },
+        {
+          label: 'Last name',
+          required: true
+        }
+      ],
+      arrays: over_thresh_array
+    }
   });
 }
