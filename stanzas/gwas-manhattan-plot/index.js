@@ -146,11 +146,11 @@ async function draw(dataset, stanza, params) {
 
   // axis line
   axis_g
-    .append("path")
+    .append("path") //x軸
     .attr("d", "M " + marginLeft + ", " + areaHeight + " H " + width + " Z")
     .attr("class", "axis-line");
   axis_g
-    .append("path")
+    .append("path") //y軸
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
 
@@ -158,28 +158,29 @@ async function draw(dataset, stanza, params) {
   let dragBegin = false;
   svg
     .on("mousedown", function (e) {
-      if (d3.pointer(e)[1] <= areaHeight) {
-        dragBegin = d3.pointer(e)[0];
-        svg
+      // d3.pointer(e)[1]はイベント発火時のy座標
+      if (d3.pointer(e)[1] <= areaHeight) { //イベント発火時のy座標が、描画範囲内にあるとき（＝描画範囲がクリックされたとき）
+        dragBegin = d3.pointer(e)[0]; //dragBeginの値を、イベント発火時のx座標とする
+        svg //半透明の矩形を作成しsvgにappend
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
           .attr("stroke", "black")
-          .attr("x", dragBegin)
-          .attr("y", 0)
+          .attr("x", dragBegin) //矩形のx座標はdragBegin
+          .attr("y", 0) //矩形のy座標はゼロ
           .attr("width", 0)
-          .attr("height", areaHeight)
+          .attr("height", areaHeight) //高さは描画範囲とする（y軸の選択なし）
           .attr("id", "selector");
       }
     })
     .on("mousemove", function (e) {
-      if (dragBegin) {
-        const dragEnd = d3.pointer(e)[0];
+      if (dragBegin) { //dragBeginの値がある場合、
+        const dragEnd = d3.pointer(e)[0]; //dragEndをイベント発火時のx座標とする
         if (dragBegin < dragEnd) {
-          svg.select("#selector").attr("width", dragEnd - dragBegin);
+          svg.select("#selector").attr("width", dragEnd - dragBegin); //selecter（矩形）にwidthを与える
         } else {
           svg
             .select("#selector")
-            .attr("x", dragEnd)
+            .attr("x", dragEnd) //この場合、イベント発火時のx軸を再定義する必要がある
             .attr("width", dragBegin - dragEnd);
         }
       }
@@ -187,7 +188,7 @@ async function draw(dataset, stanza, params) {
     .on("mouseup", function (e) {
       if (dragBegin) {
         const dragEnd = d3.pointer(e)[0];
-        // re-render
+        // re-render //⇦矩形サイズが5以下の場合、rangeを変更
         if (-5 > dragEnd - dragBegin) {
           range = [
             (dragEnd / width) * (range[1] - range[0]) + range[0],
@@ -201,7 +202,7 @@ async function draw(dataset, stanza, params) {
           ];
           reRender();
         }
-        svg.select("#selector").remove();
+        svg.select("#selector").remove(); //矩形を除去
         dragBegin = false;
       }
     });
@@ -436,6 +437,9 @@ async function draw(dataset, stanza, params) {
     });
 
     renderCanvas(range);
+    let selectedPlot = document.getElementsByClassName(".over-thresh-plot");
+  console.log(selectedPlot);
+  console.log("helllo");
 
     // x axis label
     xlabel_g
