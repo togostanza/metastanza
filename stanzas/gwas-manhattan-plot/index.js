@@ -574,4 +574,9 @@ async function draw(dataset, stanza, params) {
     }
     ctrl_button.select("#range_text").html(text);
   }
+  
+  stanza.render({
+    template: 'table.html.hbs',
+    selector: '#table'
+  });
 }
