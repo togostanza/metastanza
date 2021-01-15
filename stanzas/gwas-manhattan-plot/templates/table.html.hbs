@@ -32,8 +32,18 @@
   </div>
 {{/each}}
 
-{{#each arrays as |array|}}
-  <div>
-      {{array.dbSNP_RS_ID}}
-  </div>
-{{/each}}
+
+  <table>
+    <thead>
+
+    </thead>
+    <tbody>
+        {{#each arrays as |array|}}
+      <tr>
+          <td>{{array.dbSNP_RS_ID}}</td>
+          <td>{{array.Chromosome}}</td>
+          <td>{{array.pos}}</td>
+      </tr>
+        {{/each}}
+    </tbody>
+  </table>
