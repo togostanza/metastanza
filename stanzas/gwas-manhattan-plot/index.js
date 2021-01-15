@@ -356,6 +356,7 @@ async function draw(dataset, stanza, params) {
     xlabel_g.html("");
     ylabel_g.html("");
 
+    let over_thresh_array = []
     plot_g
       .selectAll(".plot")
       .data(dataset)
@@ -408,6 +409,9 @@ async function draw(dataset, stanza, params) {
       .attr("r", 2)
       // filter: high p-value
       .filter(function (d) {
+        if(Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
+          over_thresh_array.push(d)
+        }
         return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
       })
       .classed("over-thresh-plot", true)
@@ -435,11 +439,9 @@ async function draw(dataset, stanza, params) {
           max_log_p_int
       );
     });
+    console.log('over_thresh_array', over_thresh_array)
 
     renderCanvas(range);
-    let selectedPlot = document.getElementsByClassName(".over-thresh-plot");
-  console.log(selectedPlot);
-  console.log("helllo");
 
     // x axis label
     xlabel_g
