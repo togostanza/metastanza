@@ -1,5 +1,6 @@
 import * as d3 from "d3";
 import metastanza from "@/lib/metastanza_utils.js";
+import a_dataset from "../gwas-manhattan-plot/gwas.var2.json.js";
 
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
@@ -8,6 +9,8 @@ export default async function gwasManhattanPlot(stanza, params) {
       greeting: `Hello, ${params['say-to']}!`
     }
   });
+
+  console.log(a_dataset);
 
   console.log(params.api);
   const dataset = await metastanza.getFormatedJson(
