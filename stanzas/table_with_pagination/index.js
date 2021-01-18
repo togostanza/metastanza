@@ -1,6 +1,6 @@
 import metastanza from "@/lib/metastanza_utils.js";
 import { span } from "vega";
-import { filter } from "d3";
+import { filter, sort } from "d3";
 import { forEach } from "vega-lite/build/src/encoding";
 
 export default async function tableWithPagination(stanza, params) {
@@ -17,412 +17,228 @@ export default async function tableWithPagination(stanza, params) {
 
   const api = params.table_data_api;
   const element = stanza.root.querySelector("#renderDiv");
-  const dataset = await metastanza.getFormatedJson(
+  const data = await metastanza.getFormatedJson(
     api,
     element,
     formBody.join("&")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, element);
-  }
-}
+  console.log('original_data', data);
 
-function draw(data, stanza, element) {
-  let dataHead = data.head;
-  let dataBody = data.body;
-
-  const searchBox = stanza.root.querySelector("#search_box");
-  const prevButton = stanza.root.querySelector("#button_prev");
-  const nextButton = stanza.root.querySelector("#button_next");
-  const firstButton = stanza.root.querySelector("#button_first");
-  const lastButton = stanza.root.querySelector("#button_last");
-  const clickPageNumber = stanza.root.querySelectorAll(".clickPageNumber");
-
-  let current_page = 1;
-  let records_per_page = 5;
-  let total_records = dataBody.length;
-
-  //orderを定義（負の値があったときは排除して新たに定義し、それ以外の場合はカラムの数だけorderを定義する）
-  let order = [];
-  if (dataHead.order) {
-    for (let i = 0; i < dataHead.order.length; i++) {
-      if (parseInt(dataHead.order[i]) >= 0) {
-        order[parseInt(dataHead.order[i])] = i;
-      }
-    }
-  } else {
-    order = [...Array(dataHead.vars.length).keys()];
-  }
-  console.log(order);
-
-  // データの整形（オリジナルのデータ）
-  let adjustedBody = [];
-  dataBody.forEach(function (datam) {
-    let obj = {};
-    order.forEach(function (val) {
-      let key = Object.keys(datam)[val];
-      obj[key] = datam[key];
-    })
-    adjustedBody.push(obj);
-  })
-  console.log(adjustedBody);
-
-  // テーブル表示用のデータ（表示中の内容とsync）
-  let displayBody = adjustedBody;
-  let tableKey = Object.keys(dataBody[0]); //th・tdに格納されるデータのキーを配列で取得してtableKeyに代入
-  let columns_per_row = tableKey.length; //tableKeyで取得したキーの配列の数（＝列の数）を取得してcolumns_per_rowに代入
-
-  const init = function () {
-    changePage(1);
-    clickPage();
-    addEventListeners();
+  let data_for_table = {
+    head: [],
+    body: [],
+    meta: {
+      page: 1,
+      total: 10,
+    },
   };
 
-  let addEventListeners = function () {
-    searchBox.addEventListener("input", searchTable);
-    prevButton.addEventListener("click", prevPage);
-    nextButton.addEventListener("click", nextPage);
-    firstButton.addEventListener("click", firstPage);
-    lastButton.addEventListener("click", lastPage);
-  };
-
-  // ページを描画する関数（adjustedBodyを描画）
-  let drawPage = function () {
-    //▼theadの描画
-    let thead = stanza.root.querySelector("#theadID");
-    thead.innerHTML = "";
-    thead.innerHTML = "<tr id='theadRowID'></tr>";
-
-    //▽trおよびthの描画
-    // for (let i of order) {
-    for (let l = 0; l < order.length; l++) {
-      let i = order[l];
-      let tr = stanza.root.querySelector("#theadRowID");
-
-      // thを作成
-      let th = document.createElement("th");
-      let label = dataHead.vars[i];
-      if (dataHead.labels) {
-        label = dataHead.labels[i];
-      }
-      th.innerHTML = label;
-      th.setAttribute('data-col', l);
-
-      // ソートアイコンを作成
-      let span_sort = document.createElement("span");
-      span_sort.classList.add("icon", "sorticon", "button_sort");
-      span_sort.setAttribute("data-type", dataHead.vars[i]);
-      span_sort.setAttribute("data-col", l);
-      span_sort.addEventListener("click", sortColumn)
-
-      // フィルターアイコンを作成
-      let span_filter = document.createElement("span");
-      span_filter.setAttribute("id", "filtericon" + l);
-      span_filter.classList.add("icon", "filtericon", "button_filter");
-      span_filter.setAttribute("data-type", dataHead.vars[i]);
-      span_filter.setAttribute("data-col", l);
-      span_filter.addEventListener('click', displayFilter);
-
-      // フィルターウィンドウを格納するulを作成
-      let ul_filter = document.createElement("ul");
-      ul_filter.classList.add("fiter-window", "-closed");
-      ul_filter.setAttribute("data-type", dataHead.vars[i]);
-      ul_filter.setAttribute("data-col", l);
-      ul_filter.setAttribute("id", "filterul" + l);
-
-      // チェックボックスを作成（「チェックボックス+ラベル」をリストに格納し、ulに格納）
-      for (let j = 0; j < displayBody.length; j++) {
-        let li = document.createElement("li");
-        let input = document.createElement("input");
-        input.setAttribute("id", "box" + j);
-        input.classList.add("checkbox");
-        input.setAttribute("data-col", l);
-        input.setAttribute("data-row", j);
-        input.setAttribute("type", "checkbox");
-        input.setAttribute("name", "items");
-        input.setAttribute("checked", "true");
-        input.setAttribute("value", dataBody[j][dataHead.vars[i]].value);
-        input.addEventListener('click', filterColumn);
-        let item_label = document.createElement("label");
-        input.setAttribute("for", "box" + j);
-        item_label.innerText = dataBody[j][dataHead.vars[i]].value;
-        ul_filter.appendChild(li);
-        li.appendChild(input);
-        li.appendChild(item_label);
-      }
-
-      // appendする
-      th.appendChild(span_sort);
-      th.appendChild(span_filter);
-      th.appendChild(ul_filter);
-      tr.appendChild(th);
-
-      // bodyの描画
-      updateBody();
-    }
-  }
-
-  let updateBody = function () {
-    //▼tbodyの描画
-    let tbody = stanza.root.querySelector("#tbodyID");
-    tbody.innerHTML = "";
-
-    // //▽trおよびtdの描画
-    for (let i = (current_page - 1) * records_per_page; i < current_page * records_per_page && i < dataBody.length; i++) {
-      let tr = document.createElement("tr");
-      for (let j of order) {
-        let td = document.createElement("td");
-        td.setAttribute("data-row", i);
-        if (dataHead.href[j]) {
-          let a = document.createElement("a");
-          a.setAttribute("href", dataBody[i][dataHead.href[j]].value);
-          a.innerHTML = displayBody[i][dataHead.vars[j]].value;
-          td.appendChild(a);
-        } else {
-          td.innerHTML = displayBody[i][dataHead.vars[j]].value;
+  data.head.labels.forEach((label, index) => {
+    if (label) {
+      let vars = [];
+      data.body.forEach(datam => {
+        if (vars.indexOf(datam[data.head.vars[index]].value) === -1) {
+          vars.push(datam[data.head.vars[index]].value);
         }
-        tbody.appendChild(tr);
-        tr.appendChild(td);
-      }
+      });
+      data_for_table.head.push({
+        index: data.head.order[index],
+        label: label,
+        data: data.head.vars[index],
+        vars: vars,
+      });
     }
-  }
+  });
 
-  // ページを変更する関数
-  let changePage = function (page) {
-    current_page = page;
-    drawPage();
-    //表示中のページ数を表示 
-    let page_number = stanza.root.querySelectorAll(".clickPageNumber");
-    for (let i = 0; i < page_number.length; i++) {
-      if (i == current_page - 1) {
-        page_number[i].style.opacity = "1.0";
+  data.body.forEach(datam => {
+    let body_datam = {
+      value: {},
+      display: "inline-table",
+    };
+    data.head.labels.forEach((label, index) => {
+      const col = data.head.vars[index];
+      const href = data.head.href[index];
+      if (label) {
+        body_datam.value[col] = datam[col];
+      }
+      if (href) {
+        body_datam.value[col].href = datam[href].value;
+      }
+    });
+    data_for_table.body.push(body_datam);
+  });
+
+  console.log("data for table", data_for_table);
+
+  stanza.render({
+    template: "stanza.html.hbs",
+    parameters: data_for_table,
+  });
+
+  //download
+  const blob = new Blob([JSON.stringify(data_for_table, null, "  ")], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  stanza.select("#download-btn").setAttribute("href", url)
+
+  let adjusted_data_for_table = {
+    head: [...data_for_table.head],
+    body: [...data_for_table.body],
+    meta: {
+      page: 1,
+      total: 10,
+    },
+  };
+
+  //filter
+
+  //toggle window
+  stanza.selectAll(".filter-icon").forEach(el => {
+    el.addEventListener("click", e => {
+      let col = e.path[0].getAttribute("data-type");
+      stanza.select(`.filter-window[data-type="${col}"]`).classList.add("on");
+      stanza.select("#modal-bg").classList.add("on");
+    });
+  });
+
+  //toggle filter checkbox
+  stanza.selectAll('input[type="checkbox"]').forEach(filter_elm => {
+    filter_elm.addEventListener("click", e => {
+      filterBody();
+    });
+  });
+
+  //click Select All or Clear button at filter window
+  stanza.selectAll("button.toggle_all_button").forEach(filter_elm => {
+    filter_elm.addEventListener("click", e => {
+      let select_all = false;
+      if (e.path[0].getAttribute("class").indexOf("select_all") !== -1) {
+        select_all = true;
+      }
+      let target_col = e.path[0].parentElement.getAttribute("data-type");
+      stanza
+        .selectAll(`input[type="checkbox"][data-type="${target_col}"]`)
+        .forEach(filter_elm => {
+          if (select_all) {
+            filter_elm.checked = true;
+          } else {
+            filter_elm.checked = false;
+          }
+        });
+      filterBody();
+    });
+  });
+
+  const filterBody = () => {
+    let remove_data = [];
+    stanza.selectAll('input[type="checkbox"]').forEach(checkbox => {
+      if (!checkbox.checked) {
+        let col_to_remove = checkbox.getAttribute("data-type");
+        let val_to_remove = stanza.select(
+          `label[for="${checkbox.getAttribute("id")}"]`
+        ).innerText;
+        remove_data.push({ col: col_to_remove, val: val_to_remove });
+      }
+    });
+
+    adjusted_data_for_table.body = data_for_table.body.filter(datam => {
+      let is_checked = true;
+      remove_data.forEach(remove_datam => {
+        if (datam.value[remove_datam.col].value === remove_datam.val) {
+          is_checked = false;
+        }
+      });
+      return is_checked;
+    });
+    reRenderBody();
+  };
+
+  //sort
+  let sort_state = {
+    active_col: "",
+    order: "asc",
+  };
+
+  stanza.select("#modal-bg").addEventListener("click", () => {
+    stanza.selectAll(".filter-window").forEach(el => {
+      el.classList.remove("on");
+      stanza.select("#modal-bg").classList.remove("on");
+    });
+  });
+
+  stanza.selectAll(".sort-icon").forEach(el => {
+    el.addEventListener("click", e => {
+      stanza
+        .selectAll(".sort-icon")
+        .forEach(el => el.classList.remove("asc", "desc"));
+      let clicked_element = e.path[0];
+      if (sort_state.active_col === clicked_element.getAttribute("data-type")) {
+        sort_state.order = sort_state.order === "asc" ? "desc" : "asc";
       } else {
-        page_number[i].style.opacity = "0.5";
+        sort_state.active_col = clicked_element.getAttribute("data-type");
+        sort_state.order = "asc";
       }
-    }
-
-    // 表示中のデータ数を表示
-    const showing_records_number = stanza.root.querySelector("#showing_records_number");
-    let firstrecord_per_page = (current_page - 1) * records_per_page + 1;
-    let lastrecord_per_page = current_page * records_per_page;
-    if (total_records == records_per_page * numPages()) {
-      lastrecord_per_page = current_page * records_per_page;
-    } else {
-      lastrecord_per_page =
-        (current_page - 1) * records_per_page + (total_records % records_per_page);
-    }
-    showing_records_number.innerHTML = "<p>Showing" + firstrecord_per_page + "to" + lastrecord_per_page + "of" + total_records + "entres</p>";
-  };
-
-  // カラムをソートする関数
-  let sortColumn = function (e) {
-    let page = current_page;
-    let tbody = stanza.root.querySelector("#tbodyID");
-    let span_sorts = stanza.root.querySelectorAll(".button_sort");
-    let span_sort = e.path[0];
-    console.log(span_sort.className);
-    
-    let order = "";
-    
-    // 初期値はasc, クリックされたタグのクラス名を判断して変更する
-    if (span_sort.className.indexOf("sorticon-asc") !== -1) {
-      order = "des";
-    } else {
-      order = "asc";
-    }
-
-   // // 他のカラムにおけるソートアイコンのクラスをリセット
-    for (let i = 0, l = span_sorts.length; l > i; i++) {
-      let span_sort = span_sorts[i];
-      span_sort.className = "icon sorticon button_sort";
-    }
-
-    span_sort.className = `icon sorticon-${order} button_sort`;
-    const key = e.path[0].getAttribute("data-type");
-
-    switch (order) {
-      case 'des':
-        displayBody = adjustedBody.sort((a, b) =>
-          a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1
-        );
-        break;
-      case 'asc':
-        displayBody = adjustedBody.sort((b, a) =>
-          a[key].value.toLowerCase() < b[key].value.toLowerCase() ? -1 : 1
-        );
-        break;
-    }
-
-    console.log(displayBody);
-    updateBody();
-  };
-
-  // フィルターのチェックボックスウィンドウを出現させる関数
-  let displayFilter = function (e) {
-    let data_col = e.target.getAttribute('data-col')
-    let ul_filter = stanza.root.querySelector("#filterul" + data_col);
-    ul_filter.className = "filter-window -opened";
-
-    stanza.root.addEventListener("click", function (evt) {
-      let targetElement = evt.target; // clicked element
-      let span_filter = stanza.root.querySelector("#filtericon" + data_col);
-      do {
-        if (targetElement == ul_filter || targetElement == span_filter) {
-          console.log("Clicked inside");
-          return;
-        }
-        // Go up the DOM
-        targetElement = targetElement.parentNode;
-      } while (targetElement);
-      console.log("clicked outside");
-      ul_filter.className = "filter-window -closed";
+      clicked_element.classList.add(sort_state.order);
+      switch (sort_state.order) {
+        case "desc":
+          adjusted_data_for_table.body.sort((a, b) => {
+            return a.value[sort_state.active_col].value.toLowerCase() <
+              b.value[sort_state.active_col].value.toLowerCase()
+              ? -1
+              : 1;
+          });
+          break;
+        case "asc":
+          adjusted_data_for_table.body.sort((b, a) => {
+            return a.value[sort_state.active_col].value.toLowerCase() <
+              b.value[sort_state.active_col].value.toLowerCase()
+              ? -1
+              : 1;
+          });
+          break;
+      }
+      reRenderBody();
     });
+  });
 
-  }
+  //text search
+  stanza.select("#search-btn").addEventListener("click", () => {
+    searchByText();
+  });
 
-  // チェックボックスの入力に応じてカラムをフィルターする関数
-  let filterColumn = function (e) {
-    let data_col = e.path[0].getAttribute('data-col'); //クリックされたカラムの列（何列目か）
-    let label = dataHead.labels[data_col]; // クリックされたカラム名
-    let table = stanza.root.querySelector("#listingTable");
-    let th = table.querySelectorAll("th");
-    
-    console.log(e.path[0].getAttribute("checked"));
-    if(e.path[0].getAttribute("checked")){
-      e.path[0].setAttribute("checked","false")
-    }else{
-      e.path[0].setAttribute("checked","true")
+  stanza.select("#search-input").addEventListener("keypress", e => {
+    const key = e.keyCode || e.charCode || 0;
+    if (key == 13) {
+      e.preventDefault();
+      searchByText();
     }
+  });
 
-    console.log(th[data_col]);
-    console.log(th[data_col].querySelectorAll(".checkbox[checked=true]"));
-    let unchecked_input = th[data_col].querySelectorAll(".checkbox[checked=false]");
-    let checked_input = th[data_col].querySelectorAll(".checkbox[checked=true]");
-    // // ▼表全体のカラムからchecked/uncheckedのinput要素を取得してしまう
-    // let unchecked_input = stanza.root.querySelectorAll(".checkbox[checked=false]");
-    // let checked_input = stanza.root.querySelectorAll(".checkbox[checked=true]");
-
-    // unchecked_inputが属するカラム名と、unchecked_inputの値（value）を格納した配列（=unchecked_columns）を作成 
-    let unchecked_columns = [];
-    for(let i=0; i<unchecked_input.length; i++){
-      let unchecked_column = {
-        "col": label,
-        "val": unchecked_input[i].value
-      }
-      unchecked_columns.push(unchecked_column);
-    }
-
-    // checked_inputが属するカラム名と、checked_inputの値（value）を格納した配列（=checked_columns）を作成 
-    let checked_columns = [];
-    for(let i=0; i<checked_input.length; i++){
-      let checked_column = {
-        "col": label,
-        "val": checked_input[i].value,
-        "row": checked_input[i].getAttribute('data-row')
-      }
-      checked_columns.push(checked_column);
-    }
-
-    let checked_rows = [];
-    for(let i=0; i<checked_columns.length; i++){
-      checked_rows.push(checked_columns[i].row);
-    }
-    console.log("checked_rows",checked_rows);
-
-    // checked_inputの値を含む列を、dispkyaBodyに追加していく方法（途中）
-    displayBody = [];
-    for(let i=0; i<checked_rows.length; i++){
-      displayBody.push(adjustedBody[checked_rows[i]])
-    }
-    console.log(displayBody);
-    updateBody();
-    // unchecked_inputの値を含む列を、adjustedBodyから消していく方法（途中）
-    // displayBody = [];
-    // for(let i=0; i<unchecked_input.length; i++){
-    //   let unchecked_value = unchecked_columns[i].val;
-    //   let td = tr[i+1].querySelectorAll("td")[data_col];
-    //   let unchecked_row = td.getAttribute('data-row');
-    //   console.log(unchecked_value);
-    //   console.log(td.textContent);
-    //   if(unchecked_value.indexOf(td.textContent) < -1){
-    //     displayBody = adjustedBody[unchecked_row].splice();
-    //   }
-    // }
-  }
-
-  // テーブル全体をフィルターする検索ボックスの関数
-  let searchTable = function (e) {
-    let searchbox = stanza.root.querySelector("#search_box");
-    let filter = searchbox.value.toUpperCase();
-    console.log(filter);
-    let table = stanza.root.querySelector("#listingTable");
-    let tr = table.querySelectorAll("tr");
-
-    for (var i = 0; i < tr.length; i++) {
-      let td = tr[i].querySelectorAll("td")[0];
-
-      if (td) {
-        if (td.innerText.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
+  const searchByText = () => {
+    let text_for_search = stanza.select("#search-input").value;
+    adjusted_data_for_table.body = data_for_table.body.filter(datam => {
+      let is_shown = false;
+      Object.keys(datam.value).forEach(col => {
+        if(datam.value[col].value.indexOf(text_for_search) !== -1) {
+          is_shown = true
         }
-      }
-    }
-  }
-
-  // 以下ページ遷移の関数
-  let prevPage = function () {
-    if (current_page > 1) {
-      current_page--;
-      changePage(current_page);
-    }
-  };
-
-  let nextPage = function () {
-    if (current_page < numPages()) {
-      current_page++;
-      changePage(current_page);
-    }
-  };
-
-  let firstPage = function () {
-    if (current_page != 1) {
-      current_page = 1;
-      changePage(current_page);
-    }
-  };
-
-  let lastPage = function () {
-    if (current_page != numPages()) {
-      current_page = numPages();
-      changePage(current_page);
-    }
-  };
-
-  let clickPage = function () {
-    let pageNumber = stanza.root.querySelector("#page_number");
-    pageNumber.addEventListener("click", function (e) {
-      if (
-        e &&
-        e.target.nodeName == "SPAN" &&
-        e.target.classList.contains("clickPageNumber")
-      ) {
-        current_page = e.target.textContent;
-        changePage(current_page);
-      }
+      })
+      return is_shown
     });
-    pageNumber.innerHTML = "";
-    for (let i = 1; i < numPages() + 1; i++) {
-      pageNumber.innerHTML +=
-        "<span class='clickPageNumber'>" + i + "</span>";
-    }
+    // highlight
+    // adjusted_data_for_table.body = adjusted_data_for_table.body.map(datam => {
+    //   Object.keys(datam.value).forEach(col => {
+    //     datam.value[col].value = datam.value[col].value.replace(text_for_search, `<b>${text_for_search}</b>`)
+    //   })
+    //   return datam
+    // })
+    reRenderBody();
   };
 
-  let numPages = function () {
-    return Math.ceil(dataBody.length / records_per_page);
+  const reRenderBody = () => {
+    stanza.render({
+      template: "tbody.html.hbs",
+      selector: "tbody",
+      parameters: adjusted_data_for_table,
+    });
   };
-
-  init();
-
 }

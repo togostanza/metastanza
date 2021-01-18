@@ -1,0 +1,15 @@
+<tbody>
+  {{#each body as |row|}}
+  <tr style="display: {{this.visibility}};">
+    {{#each row.value}}
+    <td>
+      {{#if this.href}}
+        <a href={{this.href}} target="_blank">{{this.value}}</a>
+      {{else}}
+        {{this.value}}
+      {{/if}}
+    </td>
+    {{/each}}
+  </tr>
+  {{/each}}
+</tbody>

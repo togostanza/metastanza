@@ -1,30 +1,59 @@
-<style>
-  table {
-    width: 100%;
-  }
-
-  td {
-    padding: 5px 20px 5px 20px;
-    ;
-  }
-</style>
-
 <div class="container">
   <div class="infomation">
-    <form class="search-form" action="#">
-      <input class="search-box" id="search_box" type="text" placeholder="Serch for keywords...">
-      <button class="search-btn" type="submit">
+    <div class="text-search-wrapper">
+      <input type="text" id="search-input" placeholder="Search for keywords...">
+      <button id="search-btn" type="submit">
         <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
           alt="search">
       </button>
-    </form>
-    <a class="dl-btn" href="#" download="#"><img
-        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt=""></a>
+    </div>
+    <a id="download-btn" download="table-data">
+      <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt="download">
+    </a>
   </div>
   <div class="table-block">
-    <table class="tableList" id="listingTable">
-      <thead id="theadID"></thead>
-      <tbody id="tbodyID"></tbody>
+    <div id="modal-bg"></div>
+    <table class="tableList">
+      <thead>
+        <tr>
+          {{#each head as |col|}}
+          <th data-col={{col.index}}>
+            {{col.label}}
+            <span class="icon sort-icon" data-type={{col.data}}></span>
+            <div class="filter-wrapper">
+              <span class="icon filter-icon" data-type={{col.data}}></span>
+              <div class="filter-window" data-type={{col.data}}>
+                <ul>
+                  {{#each col.vars as |var|}}
+                  <li>
+                    <input id={{var}} value={{var}} type="checkbox" name="items" data-type={{col.data}} checked="true">
+                    <label for={{var}}>{{var}}</label>
+                  </li>
+                  {{/each}}
+                </ul>
+                <button class="toggle_all_button select_all">Select All</button>
+                <button class="toggle_all_button clear">Clear</button>
+              </div>
+            </div>
+          </th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each body as |row|}}
+        <tr style="display: {{this.display}};">
+          {{#each row.value}}
+          <td>
+            {{#if this.href}}
+              <a href={{this.href}} target="_blank">{{this.value}}</a>
+            {{else}}
+              {{this.value}}
+            {{/if}}
+          </td>
+          {{/each}}
+        </tr>
+        {{/each}}
+      </tbody>
     </table>
   </div>
 </div>
