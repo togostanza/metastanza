@@ -557,6 +557,28 @@ async function draw(dataset, stanza, params) {
       );
     }
     canvas.style("display", "none");
+
+    stanza.render({
+      template: 'table.html.hbs',
+      selector: '#table',
+      parameters: {
+        fields: [
+          {
+            label: 'First name',
+            required: true
+          },
+          {
+            label: 'Middle name',
+            required: false
+          },
+          {
+            label: 'Last name',
+            required: true
+          }
+        ],
+        arrays: over_thresh_array
+      }
+    });
   }
 
   function setRange(range) {
@@ -575,26 +597,4 @@ async function draw(dataset, stanza, params) {
     }
     ctrl_button.select("#range_text").html(text);
   }
-  console.log(over_thresh_array);
-  stanza.render({
-    template: 'table.html.hbs',
-    selector: '#table',
-    parameters: {
-      fields: [
-        {
-          label: 'First name',
-          required: true
-        },
-        {
-          label: 'Middle name',
-          required: false
-        },
-        {
-          label: 'Last name',
-          required: true
-        }
-      ],
-      arrays: over_thresh_array
-    }
-  });
 }
