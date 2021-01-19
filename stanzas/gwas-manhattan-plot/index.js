@@ -2,6 +2,59 @@ import * as d3 from "d3";
 import metastanza from "@/lib/metastanza_utils.js";
 import a_dataset from "../gwas-manhattan-plot/gwas.var2.json.js";
 
+// convert data
+
+// study name
+let study_name = Object.keys(a_dataset)[0]; //(single per a json)
+// console.log(...study_name); //"B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究"
+// study_name = study_name[0];
+console.log('【study_name】',study_name)
+
+//project data and project names(each of them are single per a json)
+let project = Object.values(a_dataset)[0]; 
+project = project[0];
+console.log('【project】', project)
+
+let project_name = Object.keys(project);
+project_name = project_name[0];
+console.log('【project_name】', project_name)
+
+// stage data and stage names
+let stages = Object.values(project);
+console.log('【stages】',stages);
+
+let stages_name = Object.keys(...stages)[0]; // can be 4 variation
+console.log('【stages_name】',stages_name);
+
+// get sach stage's information
+let stage = Object.values(...stages);
+console.log('【conditions】',stage);
+
+// get condition of each stage
+let condition1 = stage[0].condition1;
+let condition2 = stage[0].condition2;
+console.log('【condition1】', condition1);
+console.log('【condition2】', condition2);
+
+// variants
+let variants = stage[0].variants;
+console.log('【variants】', variants);
+
+// convert chromosome data from 'chrnum' to 'num'
+for(let i=0; i<variants.length; i++){
+  let chr = variants[i].Chromosome;
+  // chr = parseInt(chr.replace('chr',''));
+  chr = chr.replace('chr','');
+  variants[i].Chromosome = chr;
+  console.log(variants[i].Chromosome);
+
+  let pval = variants[i].CLR_C_BMI_pv;
+  String(pval);
+
+  let physical_pos = variants[i].Phyisical_position;
+  String(physical_pos);
+}
+
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
     template: 'stanza.html.hbs',
@@ -10,15 +63,17 @@ export default async function gwasManhattanPlot(stanza, params) {
     }
   });
 
-  console.log(a_dataset);
-
+  
   console.log(params.api);
   const dataset = await metastanza.getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
-  );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
+    );
+  console.log('dataset', dataset);
+  console.log('a_dataset', a_dataset);
+  console.log('variants',variants);
+  if (typeof variants === "object") {
+    draw(variants, stanza, params);
     metastanza.appendDlButton(
       stanza.root.querySelector("#chart"),
       stanza.root.querySelector("svg"),
