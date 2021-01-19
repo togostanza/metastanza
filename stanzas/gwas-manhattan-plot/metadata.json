@@ -29,37 +29,37 @@
     },
     {
       "stanza:key": "chromosome_key",
-      "stanza:example": "Chromosome",
+      "stanza:example": "chr",
       "stanza:description": "key to a chromosome in data frame. default: 'chromosome'",
       "stanza:required": false
     },
     {
       "stanza:key": "position_key",
-      "stanza:example": "Physical_position",
+      "stanza:example": "stop",
       "stanza:description": "key to a position on chromosome in data frame. default: 'position'",
       "stanza:required": false
     },
     {
       "stanza:key": "p_value_key",
-      "stanza:example": "CLR_C_BMI_pv",
+      "stanza:example": "p-value",
       "stanza:description": "key to a p-value in data frame. default: 'p-value'",
       "stanza:required": false
     },
     {
       "stanza:key": "label_key",
-      "stanza:example": "dbSNP_RS_ID",
+      "stanza:example": "rsId",
       "stanza:description": "key to a label in data frame. default: 'label'",
       "stanza:required": false
     },
     {
       "stanza:key": "low_thresh",
-      "stanza:example": "1",
+      "stanza:example": "4",
       "stanza:description": "filtering threshold. =log10(p-value) default: 0.5",
       "stanza:required": false
     },
     {
       "stanza:key": "high_thresh",
-      "stanza:example": "4",
+      "stanza:example": "20",
       "stanza:description": "highlight shreshold. =log10(p-value)",
       "stanza:required": false
     },

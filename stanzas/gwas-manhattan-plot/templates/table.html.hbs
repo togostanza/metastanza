@@ -16,9 +16,8 @@
         </li>
       </ul>
       {{/each} --}}
-<p>テーブル</p>
 
-{{#each fields as |field|}}
+{{!-- {{#each fields as |field|}}
   <div>
     <label>
       {{field.label}}
@@ -30,7 +29,7 @@
 
     <input type="text" />
   </div>
-{{/each}}
+{{/each}} --}}
 
 
   <table>
@@ -38,16 +37,24 @@
 
     </thead>
       <tr>
-        <th>dbSNP RS_ID</th>
+        <th>Gene name</th>
+        <th>rsId</th>
         <th>Chromosome</th>
         <th>position</th>
+        <th>Ref</th>
+        <th>Alt</th>
+        <th>P-value</th>
       </tr>
     <tbody>
         {{#each arrays as |array|}}
       <tr>
-          <td>{{array.dbSNP_RS_ID}}</td>
-          <td>{{array.Chromosome}}</td>
-          <td>{{array.pos}}</td>
+          <td>{{array.gene_name}}</td>
+          <td>{{array.rsId}}</td>
+          <td>{{array.chr}}</td>
+          <td>{{array.stop}}</td>
+          <td>{{array.ref}}</td>
+          <td>{{array.alt}}</td>
+          <td>{{array.p-value}}</td>
       </tr>
         {{/each}}
     </tbody>

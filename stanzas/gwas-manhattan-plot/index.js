@@ -23,7 +23,7 @@ console.log('【project_name】', project_name)
 let stages = Object.values(project);
 console.log('【stages】',stages);
 
-let stages_name = Object.keys(...stages)[0]; // can be 4 variation
+let stages_name = Object.keys(...stages)[0]; // can be 4 variations
 console.log('【stages_name】',stages_name);
 
 // get sach stage's information
@@ -40,18 +40,18 @@ console.log('【condition2】', condition2);
 let variants = stage[0].variants;
 console.log('【variants】', variants);
 
-// convert chromosome data from 'chrnum' to 'num'
+// adjust datas
 for(let i=0; i<variants.length; i++){
-  let chr = variants[i].Chromosome;
-  // chr = parseInt(chr.replace('chr',''));
+// convert chromosome data from 'chrnum' to 'num'
+  let chr = variants[i].chr;
   chr = chr.replace('chr','');
-  variants[i].Chromosome = chr;
-  console.log(variants[i].Chromosome);
+  variants[i].chr = chr;
+  console.log(variants[i].chr);
 
-  let pval = variants[i].CLR_C_BMI_pv;
+  let pval = variants[i]['p-value'];
   String(pval);
 
-  let physical_pos = variants[i].Phyisical_position;
+  let physical_pos = variants[i]['stop'];
   String(physical_pos);
 }
 
@@ -62,7 +62,6 @@ export default async function gwasManhattanPlot(stanza, params) {
       greeting: `Hello, ${params['say-to']}!`
     }
   });
-
   
   console.log(params.api);
   const dataset = await metastanza.getFormatedJson(
@@ -72,6 +71,7 @@ export default async function gwasManhattanPlot(stanza, params) {
   console.log('dataset', dataset);
   console.log('a_dataset', a_dataset);
   console.log('variants',variants);
+
   if (typeof variants === "object") {
     draw(variants, stanza, params);
     metastanza.appendDlButton(
@@ -120,6 +120,10 @@ async function draw(dataset, stanza, params) {
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
   const label_key = params.label_key;
+
+  console.log(label_key);
+  console.log(variants[0].rsId);
+  console.log(variants[0].rsId);
 
   const chromosomes = [
     "1",
