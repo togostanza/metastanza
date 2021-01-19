@@ -59,7 +59,11 @@ export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
     template: 'stanza.html.hbs',
     parameters: {
-      greeting: `Hello, ${params['say-to']}!`
+      greeting: `Hello, ${params['say-to']}!`,
+      study_name: study_name,
+      project_name: project_name,
+      condition1: condition1,
+      condition2: condition2
     }
   });
   
@@ -502,6 +506,8 @@ async function draw(dataset, stanza, params) {
           max_log_p_int
       );
     });
+
+
     console.log('over_thresh_array', over_thresh_array)
 
     renderCanvas(range);
@@ -547,6 +553,15 @@ async function draw(dataset, stanza, params) {
           "d",
           "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
         );
+
+      if(i===high_thresh){
+        // overthresh-line (high_thresh)
+    // let y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
+        axis_g
+        .append("path") //x軸
+        .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
+        .attr("class", "overthresh-line axis-line");
+      }
     }
     // y zero (low_thresh)
     ylabel_g
