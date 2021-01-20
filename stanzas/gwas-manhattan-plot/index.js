@@ -554,13 +554,13 @@ async function draw(dataset, stanza, params) {
           "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
         );
 
+      // overthresh-line (high_thresh)
       if(i===high_thresh){
-        // overthresh-line (high_thresh)
     // let y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
         axis_g
         .append("path") //x軸
         .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
-        .attr("class", "overthresh-line axis-line");
+        .attr("class", "overthresh-line");
       }
     }
     // y zero (low_thresh)
