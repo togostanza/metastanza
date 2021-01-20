@@ -27,9 +27,10 @@ main {
 
 .infomation {
   width: 100%;
-  height: 30px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+  margin: var(--information-margin)
 }
 
 .search-form {
@@ -67,14 +68,14 @@ main {
 }
 
 .search-btn img {
-  width: 12px;
-  height: 12px;
+  width: var(--searchbtn-img-width);
+  height: var(--searchbtn-img-height);
   display: block;
 }
 
 .dl-btn img {
-  width: 13px;
-  height: 13px;
+  width: var(--dlbtn-img-width);
+  height: var(--dlbtn-img-height);
 }
 
 table {
