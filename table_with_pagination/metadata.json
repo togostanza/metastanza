@@ -181,6 +181,36 @@
       "stanza:description": "color of search button"
     },
     {
+      "stanza:key": "--searchbtn-img-width",
+      "stanza:type": "text",
+      "stanza:default": "12px",
+      "stanza:description": "width of search button image"
+    },
+    {
+      "stanza:key": "--searchbtn-img-height",
+      "stanza:type": "text",
+      "stanza:default": "12px",
+      "stanza:description": "height of search button image"
+    },
+    {
+      "stanza:key": "--dlbtn-img-width",
+      "stanza:type": "text",
+      "stanza:default": "13px",
+      "stanza:description": "width of download button image"
+    },
+    {
+      "stanza:key": "--dlbtn-img-height",
+      "stanza:type": "text",
+      "stanza:default": "13px",
+      "stanza:description": "height of download button image"
+    },
+    {
+      "stanza:key": "--information-margin",
+      "stanza:type": "text",
+      "stanza:default": "0px 0px 10px 0px",
+      "stanza:description": "margin of information area"
+    },
+    {
       "stanza:key": "--thead-font-size",
       "stanza:type": "number",
       "stanza:default": "12px",
