@@ -3,191 +3,302 @@
 
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
-main {
-  padding: 1rem 2rem;
-}
-
-* {
-  box-sizing: border-box;
+table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
   margin: 0;
-  list-style: none;
-  color: var(--general-font-color);
-  font-family: var(--general-font-family);
-  font-size: var(--general-font-size);
-}
-
-#renderDiv {
-  width: 100%;
-}
-
-.container {
-  width: 100%;
-  max-width: 800px;
-  > .infomation {
-    width: 100%;
-    height: 25px;
-    display: flex;
-    justify-content: space-between;
-    > .text-search-wrapper {
-      height: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      > input[type="text"] {
-        margin-right: 5px;
-        height: 20px;
-        width: 164px;
-        border: 1px solid var(--series-0-color);
-        border-radius: 3px;
-        font-size: 10px;
-        color: #c1c0c0;
-        &::placeholder {
-          color: #eaeaea;
-        }
-      }
-      > button#search-btn {
-        margin-right: 2px;
-        height: 20px;
-        width: 20px;
-        border: 1px solid var(--series-0-color);
-        border-radius: 3px;
-        background-color: var(--series-0-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-          width: 12px;
-          height: 12px;
-          display: block;
-        }
-      }
-    }
-    > #download-btn img {
-      width: 13px;
-      height: 13px;
-    }
-  }
-  > .table-block {
-    > #modal-bg {
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      &.on {
-        display: block;
-      }
-    }
-    > table {
-      width: 100%;
-      text-align: left;
-      border-collapse: collapse;
-      margin: 0;
-      background-color: var(--background-color);
-      box-shadow: 1px 1px 3px 1px #eee;
-      > thead {
-        display: block;
-        // height: auto;
-        // max-height: 50px;
-        font-size: var(--thead-font-size);
+  background-color: var(--background-color);
+  box-shadow: 1px 1px 3px 1px #eee;
+  > thead {
+    display: block;
+    // height: auto;
+    // max-height: 50px;
+    font-size: var(--thead-font-size);
+    color: var(--thead-font-color);
+    margin-bottom: 0;
+    background-color: var(--thead-background-color);
+    border-top: var(--table-outside-border);
+    border-right: var(--table-outside-border);
+    border-left: var(--table-outside-border);
+    border-bottom: var(--stack-line);
+    > tr {
+      > th {
         color: var(--thead-font-color);
-        margin-bottom: 0;
-        padding: 8px;
-        background-color: var(--thead-background-color);
-        border-top: var(--table-outside-border);
-        border-right: var(--table-outside-border);
-        border-left: var(--table-outside-border);
-        border-bottom: var(--stack-line);
-        > tr {
-          > th {
-            color: var(--thead-font-color);
-            font-weight: var(--thead-font-weight);
-            &:first-child {
-              background-color: var(--thead-background-color);
-            }
-            .icon {
-              cursor: pointer;
-              content: "";
-              display: inline-block;
-              width: 9px;
-              height: 13px;
-              background-repeat: no-repeat;
-              background-position: center 5px;
-              background-size: 8px 8px;
-              &.filter-icon {
-                margin-left: 2px;
-                background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
-              }
+        font-weight: var(--thead-font-weight);
+        padding: 2px 8px;
+        &:first-child {
+          background-color: var(--thead-background-color);
+        }
+        .icon {
+          cursor: pointer;
+          content: "";
+          display: inline-block;
+          width: 9px;
+          height: 13px;
+          background-repeat: no-repeat;
+          background-position: center 5px;
+          background-size: 8px 8px;
+          &.filter-icon {
+            margin-left: 2px;
+            background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
+          }
 
-              &.sort-icon {
-                background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
-                &.desc {
-                  background-image: url(../../assets/grey-sort2-des.svg);
-                }
-                &.asc {
-                  background-image: url(../../assets/grey-sort2-asc.svg);
-                }
-              }
+          &.sort-icon {
+            background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
+            &.desc {
+              background-image: url(../../assets/grey-sort2-des.svg);
             }
-            > .filter-wrapper {
-              display: inline-block;
-              position: relative;
-              > div.filter-window {
-                display: none;
-                position: absolute;
-                right: 0;
-                z-index: 3;
-                width: auto;
-                height: auto;
-                background-color: lavender;
-                padding: 14px 10px;
-                > ul{
-                  padding: 0;
-                  > li{
-                    display: flex;
-                    margin-bottom: 8px;
-                    line-height: 1.4em;
-                    > input[type="checkbox"] {
-                      margin-top: 1px;
-                      margin-right: 4px;
-                    }
-                  }
-                }
-                &.on{
-                  display: block;
-                }
-              }
+            &.asc {
+              background-image: url(../../assets/grey-sort2-asc.svg);
             }
           }
         }
-      }
-      > tbody {
-        display: block;
-        font-size: var(--tbody-font-size);
-        color: var(--general-font-color);
-        padding: 0px 8px;
-        background-color: var(--tbody-background-color);
-        border-bottom: var(--table-outside-border);
-        border-right: var(--table-outside-border);
-        border-left: var(--table-outside-border);
-        > tr {
-          > td {
-            border-bottom: var(--ruled-line);
-            border-collapse: collapse;
-            padding: 5px 20px 5px 20px;
-            &:first-child {
-              background-color: var(--tbody-background-color);
+        > .filter-wrapper {
+          display: inline-block;
+          position: relative;
+          > div.filter-window {
+            display: none;
+            position: absolute;
+            right: 0;
+            z-index: 3;
+            width: auto;
+            height: auto;
+            background-color: lavender;
+            padding: 14px 10px;
+            > ul{
+              padding: 0;
+              > li{
+                display: flex;
+                margin-bottom: 8px;
+                line-height: 1.4em;
+                > input[type="checkbox"] {
+                  margin-top: 1px;
+                  margin-right: 4px;
+                }
+              }
+            }
+            &.on{
+              display: block;
             }
           }
         }
-      }
-      td, th {
-        min-width: 150px;
-        max-width: 150px;
-        height: auto;
       }
     }
   }
+  > tbody {
+    display: block;
+    font-size: var(--tbody-font-size);
+    color: var(--general-font-color);
+    background-color: var(--tbody-background-color);
+    border-bottom: var(--table-outside-border);
+    border-right: var(--table-outside-border);
+    border-left: var(--table-outside-border);
+    > tr {
+      > td {
+        border-bottom: var(--ruled-line);
+        border-collapse: collapse;
+        padding: 2px 8px;
+        &:first-child {
+          background-color: var(--tbody-background-color);
+        }
+      }
+    }
+  }
+  td, th {
+    min-width: 150px;
+    max-width: 150px;
+    height: auto;
+  }
 }
+
+
+
+// main {
+//   padding: 1rem 2rem;
+// }
+
+// * {
+//   box-sizing: border-box;
+//   margin: 0;
+//   list-style: none;
+//   color: var(--general-font-color);
+//   font-family: var(--general-font-family);
+//   font-size: var(--general-font-size);
+// }
+
+// #renderDiv {
+//   width: 100%;
+// }
+
+// .container {
+//   width: 100%;
+//   max-width: 800px;
+//   > .infomation {
+//     width: 100%;
+//     height: 25px;
+//     display: flex;
+//     justify-content: space-between;
+//     > .text-search-wrapper {
+//       height: 20px;
+//       display: flex;
+//       justify-content: center;
+//       align-items: center;
+//       > input[type="text"] {
+//         margin-right: 5px;
+//         height: 20px;
+//         width: 164px;
+//         border: 1px solid var(--series-0-color);
+//         border-radius: 3px;
+//         font-size: 10px;
+//         color: #c1c0c0;
+//         &::placeholder {
+//           color: #eaeaea;
+//         }
+//       }
+//       > button#search-btn {
+//         margin-right: 2px;
+//         height: 20px;
+//         width: 20px;
+//         border: 1px solid var(--series-0-color);
+//         border-radius: 3px;
+//         background-color: var(--series-0-color);
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+
+//         img {
+//           width: 12px;
+//           height: 12px;
+//           display: block;
+//         }
+//       }
+//     }
+//     > #download-btn img {
+//       width: 13px;
+//       height: 13px;
+//     }
+//   }
+//   > .table-block {
+//     > #modal-bg {
+//       width: 100vw;
+//       height: 100vh;
+//       display: none;
+//       position: fixed;
+//       top: 0;
+//       left: 0;
+//       &.on {
+//         display: block;
+//       }
+//     }
+//     > table {
+//       width: 100%;
+//       text-align: left;
+//       border-collapse: collapse;
+//       margin: 0;
+//       background-color: var(--background-color);
+//       box-shadow: 1px 1px 3px 1px #eee;
+//       > thead {
+//         display: block;
+//         // height: auto;
+//         // max-height: 50px;
+//         font-size: var(--thead-font-size);
+//         color: var(--thead-font-color);
+//         margin-bottom: 0;
+//         padding: 8px;
+//         background-color: var(--thead-background-color);
+//         border-top: var(--table-outside-border);
+//         border-right: var(--table-outside-border);
+//         border-left: var(--table-outside-border);
+//         border-bottom: var(--stack-line);
+//         > tr {
+//           > th {
+//             color: var(--thead-font-color);
+//             font-weight: var(--thead-font-weight);
+//             &:first-child {
+//               background-color: var(--thead-background-color);
+//             }
+//             .icon {
+//               cursor: pointer;
+//               content: "";
+//               display: inline-block;
+//               width: 9px;
+//               height: 13px;
+//               background-repeat: no-repeat;
+//               background-position: center 5px;
+//               background-size: 8px 8px;
+//               &.filter-icon {
+//                 margin-left: 2px;
+//                 background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
+//               }
+
+//               &.sort-icon {
+//                 background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
+//                 &.desc {
+//                   background-image: url(../../assets/grey-sort2-des.svg);
+//                 }
+//                 &.asc {
+//                   background-image: url(../../assets/grey-sort2-asc.svg);
+//                 }
+//               }
+//             }
+//             > .filter-wrapper {
+//               display: inline-block;
+//               position: relative;
+//               > div.filter-window {
+//                 display: none;
+//                 position: absolute;
+//                 right: 0;
+//                 z-index: 3;
+//                 width: auto;
+//                 height: auto;
+//                 background-color: lavender;
+//                 padding: 14px 10px;
+//                 > ul{
+//                   padding: 0;
+//                   > li{
+//                     display: flex;
+//                     margin-bottom: 8px;
+//                     line-height: 1.4em;
+//                     > input[type="checkbox"] {
+//                       margin-top: 1px;
+//                       margin-right: 4px;
+//                     }
+//                   }
+//                 }
+//                 &.on{
+//                   display: block;
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//       > tbody {
+//         display: block;
+//         font-size: var(--tbody-font-size);
+//         color: var(--general-font-color);
+//         padding: 0px 8px;
+//         background-color: var(--tbody-background-color);
+//         border-bottom: var(--table-outside-border);
+//         border-right: var(--table-outside-border);
+//         border-left: var(--table-outside-border);
+//         > tr {
+//           > td {
+//             border-bottom: var(--ruled-line);
+//             border-collapse: collapse;
+//             padding: 5px 20px 5px 20px;
+//             &:first-child {
+//               background-color: var(--tbody-background-color);
+//             }
+//           }
+//         }
+//       }
+//       td, th {
+//         min-width: 150px;
+//         max-width: 150px;
+//         height: auto;
+//       }
+//     }
+//   }
+// }
