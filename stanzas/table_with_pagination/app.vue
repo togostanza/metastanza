@@ -72,6 +72,66 @@
       </tr>
     </tbody>
   </table>
+  <div class="paginationWrapper">
+    <span
+      v-if="pagination.page !== 1"
+      @click="pagination.page = 1"
+      class="arrow left"
+    ></span>
+    <span
+      v-if="pagination.page !== 1"
+      @click="pagination.page--"
+      class="singleArrow left"
+    ></span>
+    <ul v-if="pagination.lastpage <= 5">
+      <li
+        v-for="index in pagination.lastpage"
+        :key="index"
+        :class="['pagination', {active: pagination.page === index}]"
+        @click="pagination.page = index"
+      >{{ index }}</li>
+    </ul>
+    <ul v-if="pagination.lastpage > 5 && pagination.page < 3">
+      <li
+        v-for="index in 5"
+        :key="index"
+        :class="['pagination', {active: pagination.page === index}]"
+        @click="pagination.page = index"
+      >{{ index }}</li>
+    </ul>
+    <ul v-if="pagination.lastpage > 5 && pagination.page >= 3 && pagination.page < pagination.lastpage - 2">
+      <li
+        v-for="index in 5"
+        :key="index"
+        :class="['pagination', {active: pagination.page === pagination.page + (index - 3)}]"
+        @click="pagination.page = pagination.page + (index - 3)"
+      >{{ pagination.page + (index - 3)  }}</li>
+    </ul>
+    <ul v-if="pagination.lastpage > 5 && pagination.page >= pagination.lastpage - 2">
+      <li
+        v-for="index in 5"
+        :key="index"
+        :class="['pagination', {active: pagination.page === pagination.lastpage + (index - 5)}]"
+        @click="pagination.page = pagination.lastpage + (index - 5)"
+      >{{ pagination.lastpage + (index - 5)  }}</li>
+    </ul>
+    <span
+      v-if="pagination.page !== pagination.lastpage"
+      @click="pagination.page++"
+      class="singleArrow right"
+    ></span>
+    <span
+      v-if="pagination.page !== pagination.lastpage"
+      @click="pagination.page = pagination.lastpage"
+      class="arrow right"
+    ></span>
+    <div class="pageNumber">
+      Page
+      <input type="text" v-model="inputPageNumber" @keydown.enter="ChangePageByInput">
+      of {{pagination.lastpage}}
+    </div>
+  </div>
+
   <div
     class="modalBackground"
     v-if="openFilterWindowId !== ''"
@@ -100,11 +160,16 @@ export default defineComponent({
       active: "",
       order: "desc",
     });
-    const openFilterWindowId = ref([]);
+    const openFilterWindowId = ref('');
     const filterContents = reactive({});
     const filterState = reactive({});
     const textSearchInput = ref('')
     const textSearchInputDone = ref('')
+    const pagination = reactive({
+        page: 1,
+        limit: 5
+    });
+    const inputPageNumber = ref('')
 
     //methods
     const GetData = () => {
@@ -168,6 +233,15 @@ export default defineComponent({
       textSearchInputDone.value = textSearchInput.value
     }
 
+    const ChangePageByInput = () => {
+      if(Number(inputPageNumber.value) > pagination.lastpage) {
+        pagination.page = pagination.lastpage
+        inputPageNumber.value = pagination.lastpage
+      } else {
+        pagination.page = Number(inputPageNumber.value)
+      }
+    }
+
     // computed
     const adjustedTableData = computed(() => {
       let adjustedTableData = JSON.parse(JSON.stringify(tableData.value))
@@ -217,6 +291,18 @@ export default defineComponent({
             return flag
           })
         }
+
+        // pagination
+        let displayAdjustedTableData = [];
+        const start = (pagination.page - 1) * pagination.limit;
+        const end = start + pagination.limit;
+        pagination.lastpage = Math.ceil(adjustedTableData.body.length / pagination.limit)
+        for(let i = start ; i < end ; i++) {
+          if(adjustedTableData.body[i]) {
+            displayAdjustedTableData.push(adjustedTableData.body[i])
+          }
+        }
+        adjustedTableData.body = displayAdjustedTableData
       }
       return adjustedTableData
     });
@@ -243,7 +329,10 @@ export default defineComponent({
       filterState,
       textSearchInput,
       SearchByText,
-      blob
+      blob,
+      pagination,
+      inputPageNumber,
+      ChangePageByInput
     };
   },
 });
