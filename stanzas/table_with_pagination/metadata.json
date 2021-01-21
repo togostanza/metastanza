@@ -97,12 +97,6 @@
       "stanza:description": "style of ruled line"
     },
     {
-      "stanza:key": "--stack-line",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #333",
-      "stanza:description": "style of stack line"
-    },
-    {
       "stanza:key": "--searchbox-radius",
       "stanza:type": "text",
       "stanza:default": "3px",
@@ -211,6 +205,30 @@
       "stanza:description": "margin of information area"
     },
     {
+      "stanza:key": "--thead-border-top",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #000000",
+      "stanza:description": "border top of thead"
+    },
+    {
+      "stanza:key": "--thead-border-right",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #000000",
+      "stanza:description": "border right of thead"
+    },
+    {
+      "stanza:key": "--thead-border-bottom",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #000000",
+      "stanza:description": "border bottom of thead"
+    },
+    {
+      "stanza:key": "--thead-border-left",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #000000",
+      "stanza:description": "border left of thead"
+    },
+    {
       "stanza:key": "--thead-font-size",
       "stanza:type": "number",
       "stanza:default": "12px",
@@ -239,6 +257,30 @@
       "stanza:type": "color",
       "stanza:default": "#fff",
       "stanza:description": "background color of table header"
+    },
+    {
+      "stanza:key": "--tbody-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "font color of table body"
+    },
+    {
+      "stanza:key": "--tbody-border-right",
+      "stanza:type": "text",
+      "stanza:default": "0px solid #333",
+      "stanza:description": "border right of table body"
+    },
+    {
+      "stanza:key": "--tbody-border-bottom",
+      "stanza:type": "text",
+      "stanza:default": "0px solid #333",
+      "stanza:description": "border bottom of table body"
+    },
+    {
+      "stanza:key": "--tbody-border-left",
+      "stanza:type": "text",
+      "stanza:default": "0px solid #333",
+      "stanza:description": "border left of table body"
     },
     {
       "stanza:key": "--tbody-background-color",

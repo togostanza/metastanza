@@ -1,0 +1,268 @@
+@use '@/common.scss';
+main {
+  padding: 1rem 2rem;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  list-style: none;
+  color: var(--general-font-color);
+  font-family: var(--general-font-family);
+  font-size: var(--general-font-size);
+}
+
+#renderDiv {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.infomation {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: var(--information-margin);
+}
+
+.infomation > .text-search-wrapper {
+  height: var(--searchbox-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.infomation > .text-search-wrapper > #search-input {
+  margin-right: 3px;
+  height: var(--searchbox-height);
+  width: var(--searchbox-width);
+  border: 1px solid var(--searchbox-border-color);
+  border-radius: var(--searchbox-radius);
+  font-size: var(--searchbox-font-size);
+  color: var(--searchbox-font-color);
+  background-color: var(--searchbox-background-color);
+}
+
+.infomation > .text-search-wrapper > #search-input ::placeholder {
+  color: #eaeaea;
+}
+
+.infomation > .text-search-wrapper > #search-btn {
+  margin-right: 2px;
+  height: var(--searchbtn-height);
+  width: var(--searchbtn-width);
+  border: 1px solid var(--searchbtn-border-color);
+  border-radius: var(--searchbtn-radius);
+  background-color: var(--searchbtn-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.infomation > .text-search-wrapper > #search-btn > img {
+  width: var(--searchbtn-img-width);
+  height: var(--searchbtn-img-height);
+  display: block;
+}
+
+.infomation > #download-btn > img {
+  width: var(--dlbtn-img-width);
+  height: var(--dlbtn-img-height);
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin: 0;
+  background-color: var(--background-color);
+  border: var(--table-border);
+  box-shadow: var(--table-shadow);
+}
+
+table > thead {
+  background-color: var(--thead-background-color);
+  font-size: var(--thead-font-size);
+  border-bottom: var(--thead-border-bottom);
+  color: var(--thead-font-color);
+  margin-bottom: 0;
+  border-top: var(--table-outside-border);
+  border-right: var(--table-outside-border);
+  border-left: var(--table-outside-border);
+  border-bottom: var(--thead-border-bottom);
+}
+
+table > thead > tr > th {
+  color: var(--thead-font-color);
+  font-weight: var(--thead-font-weight);
+  padding: 10px;
+}
+
+table > thead > tr > th:first-child {
+  background-color: var(--thead-background-color);
+  padding-left: 20px;
+}
+
+table > thead > tr > th:first-child {
+  padding-right: 20px;
+}
+
+table > thead > tr .icon {
+  cursor: pointer;
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 13px;
+  background-repeat: no-repeat;
+  background-position: center 5px;
+  background-size: 8px 8px;
+}
+
+table > thead > tr .icon.filter-icon {
+  margin-left: 2px;
+  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
+}
+
+table > thead > tr .icon.sort-icon {
+  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
+}
+
+table > thead > tr .icon.sort-icon.desc {
+  background-image: url(../../assets/grey-sort2-des.svg);
+}
+
+table > thead > tr .icon.sort-icon.asc {
+  background-image: url(../../assets/grey-sort2-asc.svg);
+}
+
+table > thead > tr .icon > .filter-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+table > thead > tr .icon > .filter-wrapper > div.filter-window {
+  display: none;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+  width: auto;
+  height: auto;
+  background-color: lavender;
+  padding: 14px 10px;
+}
+
+table > thead > tr .icon > .filter-wrapper > div.filter-window > ul {
+  padding: 0;
+}
+
+table > thead > tr .icon > .filter-wrapper > div.filter-window > ul > li {
+  display: flex;
+  margin-bottom: 8px;
+  line-height: 1.4em;
+}
+
+table > thead > tr .icon > .filter-wrapper > div.filter-window > ul > li > input[type="checkbox"] {
+  margin-top: 1px;
+  margin-right: 4px;
+}
+
+table > thead > tr .icon > .filter-wrapper > div.filter-window.on {
+  display: block;
+}
+
+table > tbody {
+  font-size: var(--tbody-font-size);
+  color: var(--tbody-font-color);
+  background-color: var(--tbody-background-color);
+  border-right: var(---tbody-border-right);
+  border-bottom: var(---tbody-border-bottom);
+  border-left: var(--tbody-border-left);
+}
+
+table > tbody > tr > td {
+  border-bottom: var(--ruled-line);
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+table > tbody > tr > td:first-child {
+  padding-left: 20px;
+  background-color: var(--tbody-background-color);
+}
+
+table > tbody > tr > td:last-child {
+  padding-right: 20px;
+}
+
+table > tbody > tr:last-of-type > td {
+  border-bottom: none;
+}
+
+#pagenation {
+  padding: var(--pagination-padding);
+  display: flex;
+  justify-content: var(--pagination-placement);
+}
+
+#pagenation > ul {
+  display: flex;
+  padding: 0;
+}
+
+#pagenation > ul > li {
+  color: var(--paginationbtn-font-color);
+  background-color: var(--paginationbtn-background-color);
+  border: var(--paginationbtn-border);
+  border-bottom: var(--paginationbtn-border-bottom);
+  border-radius: var(--paginationbtn-border-radius);
+  margin: var(--paginationbtn-margin);
+  padding: var(--paginationbtn-padding);
+  font-size: var(--paginationbtn-font-size);
+}
+
+#pagenation > ul > li.arrow-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#pagenation > ul > li.back-btn > span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);
+  transform: rotate(45deg);
+}
+
+#pagenation > ul > li.advance-btn > span {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid;
+  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;
+  transform: rotate(45deg);
+}
+
+#pagenation > ul > li.current-btn {
+  color: var(--currentbtn-font-color);
+  background-color: var(--currentbtn-background-color);
+  border: var(--currentbtn-border);
+  border-bottom: var(--currentbtn-border-bottom);
+  border-radius: var(--currentbtn-border-radius);
+  padding: var(--currentbtn-padding);
+  margin: var(--currentbtn-margin);
+}
+
+.show-info {
+  display: flex;
+  justify-content: var(--showinfo-placement);
+}
+
+summary {
+  display: none;
+}
