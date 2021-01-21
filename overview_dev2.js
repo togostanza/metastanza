@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import { g as getFormatedJson, s as select } from './metastanza_utils-7618371c.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-f9a4a11c.js';
 import { l as lodash_mapvalues } from './index-5e66d0c2.js';
 
 async function overviewDev2(stanza, params) {
