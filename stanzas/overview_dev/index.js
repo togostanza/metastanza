@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import metastanza from "@/lib/metastanza_utils.js";
+import { getFormatedJson } from "@/lib/metastanza_utils.js";
 
 export default async function overviewDev(stanza, params) {
   stanza.render({
@@ -20,7 +20,7 @@ async function draw(element, apis, body) {
 
   const dataset = {};
   for (const api of apis) {
-    dataset[api] = await metastanza.getFormatedJson(
+    dataset[api] = await getFormatedJson(
       api,
       element,
       body.join("&")
@@ -132,7 +132,7 @@ async function draw(element, apis, body) {
     });
 
   async function getDataAndRender(element, api, body, dataset) {
-    const newData = await metastanza.getFormatedJson(
+    const newData = await getFormatedJson(
       api,
       element.querySelector("#div_" + dataset[api].id),
       body.join("&")

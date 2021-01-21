@@ -1,4 +1,4 @@
-import metastanza from "@/lib/metastanza_utils.js";
+import { getFormatedJson } from "@/lib/metastanza_utils.js";
 
 export default async function tableWithPagination(stanza, params) {
   stanza.render({
@@ -14,7 +14,7 @@ export default async function tableWithPagination(stanza, params) {
 
   const api = params.table_data_api;
   const element = stanza.root.querySelector("#renderDiv");
-  const dataset = await metastanza.getFormatedJson(
+  const dataset = await getFormatedJson(
     api,
     element,
     formBody.join("&")
