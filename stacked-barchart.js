@@ -4,17 +4,7 @@ import './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 
 async function stackedBarchart(stanza, params) {
-  function getPropertyValue(name) {
-    return getComputedStyle(stanza.root.host).getPropertyValue(name);
-  }
-
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  // spec.data[0].values = [
-  //   {"category": "value1", "amount": 1},
-  //   {"category": "value2", "amount": 7},
-  //   {"category": "value3", "amount": 5},
-  //   {"category": "value4", "amount": 9},
-  // ]
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"];
@@ -23,13 +13,11 @@ async function stackedBarchart(stanza, params) {
   //stanzaのpadding
   spec.padding = params["padding"];
 
-  //イベントなど設定できるかと思ったができない
-  // spec.signals[0].on[0].events = "click"
-  // spec.signals[0].on[1].events = "click"
-
   //棒・スケールに関する設定
-  spec.scales[0].paddingInner = getPropertyValue("--padding-inner");
-  spec.scales[0].paddingOuter = getPropertyValue("--padding-outer");
+  spec.scales[0].paddingInner = 0.1;
+  spec.scales[0].paddingOuter = 0.2;
+  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") - 0;
+  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") - 0;
 
   spec.scales[2].range = [
     "var(--series-0-color)",
@@ -214,10 +202,23 @@ async function stackedBarchart(stanza, params) {
     },
   };
 
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  };
+
+
   //rect（棒）の描画について
   spec.marks[0].encode = {
     enter: {
-      x: { scale: "x", field: "x", offset: 1 },
+      x: { scale: "x", field: "x" },
       width: { scale: "x", band: params["bar-width"] },
       y: { scale: "y", field: "y0" },
       y2: { scale: "y", field: "y1" },
@@ -361,6 +362,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": "0.7",
 		"stanza:description": "width of bars.This mast be in the range[0,1]"
+	},
+	{
+		"stanza:key": "figuretitle",
+		"stanza:type": "text",
+		"stanza:example": "Figure 1 Title of the figure",
+		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -409,14 +416,14 @@ var metadata = {
 	},
 	{
 		"stanza:key": "--padding-inner",
-		"stanza:type": "number",
-		"stanza:dafault": "0.01",
+		"stanza:type": "text",
+		"stanza:dafault": "0.1",
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
 		"stanza:key": "--padding-outer",
-		"stanza:type": "number",
-		"stanza:dafault": "0.1",
+		"stanza:type": "text",
+		"stanza:dafault": "0.2",
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
@@ -504,7 +511,7 @@ var metadata = {
 		"stanza:description": "width of axis"
 	},
 	{
-		"stanza:key": "--fontsize-of-value",
+		"stanza:key": "--fontsize-value",
 		"stanza:type": "number",
 		"stanza:default": "18",
 		"stanza:description": "font size of each value"
@@ -514,6 +521,42 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:default": "bold",
 		"stanza:description": "font weight of each value"
+	},
+	{
+		"stanza:key": "--figuretitle-orient",
+		"stanza:type": "text",
+		"stanza:default": "bottom",
+		"stanza:description": "orient of figure title.(top, bottom)"
+	},
+	{
+		"stanza:key": "--figuretitle-anchor",
+		"stanza:type": "text",
+		"stanza:default": "middle",
+		"stanza:description": "figure title placement.(left, right, middle)"
+	},
+	{
+		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:type": "number",
+		"stanza:default": "100",
+		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:type": "number",
+		"stanza:default": "250",
+		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12",
+		"stanza:description": "font size of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of figure title"
 	}
 ]
 };

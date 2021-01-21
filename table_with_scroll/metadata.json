@@ -67,7 +67,7 @@
       "stanza:description": "style of ruled line"
     },
     {
-      "stanza:key": "--stack-line",
+      "stanza:key": "--thead-border-bottom",
       "stanza:type": "text",
       "stanza:default": "1px solid #333",
       "stanza:description": "style of stack line"

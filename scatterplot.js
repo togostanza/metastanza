@@ -251,6 +251,18 @@ async function scatterplot(stanza, params) {
     },
   ];
 
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  };
+
   spec.marks = [
     {
       name: "marks",
@@ -415,6 +427,12 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:example": "circle",
 		"stanza:description": "shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle"
+	},
+	{
+		"stanza:key": "figuretitle",
+		"stanza:type": "text",
+		"stanza:example": "Figure 1 Title of the figure",
+		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -586,6 +604,42 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "1",
 		"stanza:description": "opacity of each plots when you hover"
+	},
+	{
+		"stanza:key": "--figuretitle-orient",
+		"stanza:type": "text",
+		"stanza:default": "bottom",
+		"stanza:description": "orient of figure title.(top, bottom)"
+	},
+	{
+		"stanza:key": "--figuretitle-anchor",
+		"stanza:type": "text",
+		"stanza:default": "middle",
+		"stanza:description": "figure title placement.(left, right, middle)"
+	},
+	{
+		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:type": "number",
+		"stanza:default": "100",
+		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:type": "number",
+		"stanza:default": "250",
+		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12",
+		"stanza:description": "font size of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of figure title"
 	}
 ]
 };

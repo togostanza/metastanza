@@ -192,13 +192,23 @@ async function barchart(stanza, params) {
         update: {
           stroke: { value: "var(--axis-color)" },
           strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--axis-width"
-            ),
+            value: getComputedStyle(stanza.root.host).getPropertyValue("--axis-width"),
           },
         },
       },
     },
+  };
+
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
   };
 
   //rect（棒）の描画について
@@ -229,7 +239,7 @@ async function barchart(stanza, params) {
       },
       fontSize: {
         value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--fontsize-of-value"
+          "--fontsize-value"
         ),
       },
       fontWeight: {
@@ -359,6 +369,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": "0.8",
 		"stanza:description": "width of bars.This mast be in the range[0,1]"
+	},
+	{
+		"stanza:key": "figuretitle",
+		"stanza:type": "text",
+		"stanza:example": "Figure 1 Title of the figure",
+		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -418,12 +434,6 @@ var metadata = {
 		"stanza:description": "tick color"
 	},
 	{
-		"stanza:key": "--label-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "label color"
-	},
-	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
 		"stanza:default": "#333",
@@ -460,8 +470,14 @@ var metadata = {
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
+		"stanza:key": "--label-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "label color"
+	},
+	{
 		"stanza:key": "--label-font",
-		"stanza:type": "string",
+		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "font family of labels."
 	},
@@ -472,16 +488,52 @@ var metadata = {
 		"stanza:description": "width of axis"
 	},
 	{
-		"stanza:key": "--fontsize-of-value",
+		"stanza:key": "--fontsize-value",
 		"stanza:type": "number",
 		"stanza:default": "18",
 		"stanza:description": "font size of each value"
 	},
 	{
-		"stanza:key": "--fontweight-of-value",
-		"stanza:type": "string",
+		"stanza:key": "--fontweight-value",
+		"stanza:type": "text",
 		"stanza:default": "bold",
 		"stanza:description": "font weight of each value"
+	},
+	{
+		"stanza:key": "--figuretitle-orient",
+		"stanza:type": "text",
+		"stanza:default": "bottom",
+		"stanza:description": "orient of figure title.(top, bottom)"
+	},
+	{
+		"stanza:key": "--figuretitle-anchor",
+		"stanza:type": "text",
+		"stanza:default": "middle",
+		"stanza:description": "figure title placement.(left, right, middle)"
+	},
+	{
+		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:type": "number",
+		"stanza:default": "100",
+		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:type": "number",
+		"stanza:default": "250",
+		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12",
+		"stanza:description": "font size of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of figure title"
 	}
 ]
 };
@@ -497,10 +549,7 @@ var templates = [
 
   return "<head>\n</head>\n\n<p class=\"greeting\">\n  "
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":14}}}) : helper)))
-    + "\n</p>";
-},"useData":true}],
-["style-like-togovar.css", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return ":root {\n  --series-0-color: #ff00ff;\n  --emphasized-color: #00ff00;\n}\n";
+    + "\n</p>\n\n  <p class=\"table-title\">Title of this Table</p>";
 },"useData":true}]
 ];
 

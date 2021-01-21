@@ -159,6 +159,12 @@ var metadata = {
 		"stanza:example": "taxonomy='9606'",
 		"stanza:description": "parameters for table data api",
 		"stanza:required": false
+	},
+	{
+		"stanza:key": "tableTitle",
+		"stanza:example": "Title of this Table",
+		"stanza:description": "Title of the table",
+		"stanza:required": false
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -200,6 +206,36 @@ var metadata = {
 		"stanza:description": "background color"
 	},
 	{
+		"stanza:key": "--tabletitle-display",
+		"stanza:type": "text",
+		"stanza:default": "flex",
+		"stanza:description": "display of table title.(flex, block or none)"
+	},
+	{
+		"stanza:key": "--tabletitle-placement",
+		"stanza:type": "text",
+		"stanza:default": "center",
+		"stanza:description": "table title placement when table title is displayed.(left, right, center)"
+	},
+	{
+		"stanza:key": "--tabletitle-margin",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "margin of table title"
+	},
+	{
+		"stanza:key": "--tabletitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "font size of table title"
+	},
+	{
+		"stanza:key": "--tabletitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "font color of table title"
+	},
+	{
 		"stanza:key": "--table-border",
 		"stanza:type": "text",
 		"stanza:default": "1px solid #eee",
@@ -216,12 +252,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
 		"stanza:description": "style of ruled line"
-	},
-	{
-		"stanza:key": "--stack-line",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #333",
-		"stanza:description": "style of stack line"
 	},
 	{
 		"stanza:key": "--searchbox-radius",
@@ -314,6 +344,30 @@ var metadata = {
 		"stanza:description": "height of search button image"
 	},
 	{
+		"stanza:key": "--searchimg-display",
+		"stanza:type": "text",
+		"stanza:default": "block",
+		"stanza:description": "display of search button image"
+	},
+	{
+		"stanza:key": "--searchtext-display",
+		"stanza:type": "text",
+		"stanza:default": "none",
+		"stanza:description": "display of search button text.(dafault: none)"
+	},
+	{
+		"stanza:key": "--searchtext-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "color of search button text"
+	},
+	{
+		"stanza:key": "--searchtext-font-size",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "font size of search button text"
+	},
+	{
 		"stanza:key": "--dlbtn-img-width",
 		"stanza:type": "text",
 		"stanza:default": "13px",
@@ -330,6 +384,30 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "0px 0px 10px 0px",
 		"stanza:description": "margin of information area"
+	},
+	{
+		"stanza:key": "--thead-border-top",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #000000",
+		"stanza:description": "border top of thead"
+	},
+	{
+		"stanza:key": "--thead-border-right",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #000000",
+		"stanza:description": "border right of thead"
+	},
+	{
+		"stanza:key": "--thead-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #000000",
+		"stanza:description": "border bottom of thead"
+	},
+	{
+		"stanza:key": "--thead-border-left",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #000000",
+		"stanza:description": "border left of thead"
 	},
 	{
 		"stanza:key": "--thead-font-size",
@@ -360,6 +438,30 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#fff",
 		"stanza:description": "background color of table header"
+	},
+	{
+		"stanza:key": "--tbody-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "font color of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-right",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border right of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border bottom of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-left",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border left of table body"
 	},
 	{
 		"stanza:key": "--tbody-background-color",
@@ -513,11 +615,11 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  table {\n      width: 100%;\n  }\n  td {\n      padding: 5px 20px 5px 20px;;\n  }\n  th {\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"infomation\">\n    <form class=\"search-form\" action=\"#\">\n      <input\n        class=\"search-box\"\n        type=\"text\"\n        placeholder=\"Serch for keywords...\"\n      />\n      <button class=\"search-btn\" type=\"submit\">\n        <img\n          src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg\"\n          alt=\"search\"\n        />\n      </button>\n    </form>\n    <a class=\"dl-btn\" href=\"#\" download=\"#\">\n      <img\n        src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg\"\n        alt=\"\"\n      />\n    </a>\n  </div>\n  <div id=\"renderDiv\"></div>\n</div>\n\n<div id=\"pagenation\">\n  <ul>\n    <li class=\"first-btn\">\n      <span></span>\n      <span></span>\n    </li>\n    <li class=\"previous-btn\">\n      <span></span>\n    </li>\n    <li class=\"current-btn\">\n      1\n    </li>\n    <li>\n      2\n    </li>\n    <li>\n      3\n    </li>\n    <li>\n      4\n    </li>\n    <li>\n      …\n    </li>\n    <li>\n      10\n    </li>\n    <li class=\"next-btn\">\n      <span></span>\n    </li>\n    <li class=\"last-btn\">\n      <span></span>\n      <span></span>\n    </li>\n  </ul>\n</div>\n<p class=\"show-info\">\n  Showing 1 to 10 of 44 entres\n</p>\n\n";
+    return "<style>\n  table {\n      width: 100%;\n  }\n</style>\n\n<div class=\"container\">\n    <div class=\"infomation\">\n    <div class=\"text-search-wrapper\">\n      <input type=\"text\" id=\"search-input\" placeholder=\"Search for keywords...\">\n      <button id=\"search-btn\" type=\"submit\">\n        <img src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg\"\n          alt=\"search\">\n        <span class=\"search-text\">Search</span>\n      </button>\n    </div>\n    <a id=\"download-btn\" download=\"table-data\">\n      <img src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg\" alt=\"download\">\n    </a>\n  </div>\n  <p class=\"table-title\">Title of this Table</p>\n  <div id=\"renderDiv\"></div>\n</div>\n\n\n<div id=\"pagenation\">\n  <ul>\n    <li class=\"first-btn back-btn arrow-btn\">\n      <span></span>\n      <span></span>\n    </li>\n    <li class=\"previous-btn back-btn arrow-btn\">\n      <span></span>\n    </li>\n    <li class=\"current-btn\">\n      1\n    </li>\n    <li>\n      2\n    </li>\n    <li>\n      3\n    </li>\n    <li>\n      4\n    </li>\n    <li>\n      …\n    </li>\n    <li>\n      10\n    </li>\n    <li class=\"next-btn advance-btn arrow-btn\">\n      <span></span>\n    </li>\n    <li class=\"last-btn advance-btn arrow-btn\">\n      <span></span>\n      <span></span>\n    </li>\n  </ul>\n</div>\n<p class=\"show-info\">\n  Showing 1 to 10 of 44 entres\n</p>";
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.infomation {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n\n.search-form {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-box {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n\n::placeholder {\n  color: #eaeaea;\n}\n\n.search-btn {\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-btn img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: block;\n}\n\n.dl-btn img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n\ntable {\n  width: inherit;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\n\nthead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n\ntd,\nth {\n  width: 150px;\n  padding: 5px;\n}\n\ntbody td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n}\n\nthead > tr > td {\n  color: var(--series-0-color);\n}\n\n#renderDiv > table > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n}\n\nthead > tr > th > .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center 5px;\n  background-size: 8px 8px;\n}\n\n.filter-icon {\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);\n}\n\n.sort-icon {\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);\n}\n\ntbody {\n  background-color: var(--tbody-background-color);\n  font-size: var(--tbody-font-size);\n  color: var(--general-font-color);\n  padding: 0px 8px;\n}\n\nthead,\ntbody {\n  display: block;\n}\n\ntbody tr td:hover {\n  color: var(--emphasized-color);\n}\n\n.stack {\n  border-right: var(--stack-line);\n}\n\n#pagenation {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n}\n\n#pagenation ul {\n  display: flex;\n  padding: 0;\n}\n\n#pagenation li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border: var(--paginationbtn-border);\n  border-bottom: var(--paginationbtn-border-bottom);\n  border-radius: var(--paginationbtn-border-radius);\n  margin: var(--paginationbtn-margin);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n}\n\n#pagenation .first-btn,\n#pagenation .previous-btn,\n#pagenation .last-btn,\n#pagenation .next-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n#pagenation .first-btn span,\n#pagenation .previous-btn span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n}\n\n#pagenation .last-btn span,\n#pagenation .next-btn span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;\n  transform: rotate(45deg);\n}\n\n#pagenation .current-btn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--currentbtn-border);\n  border-bottom: var(--currentbtn-border-bottom);\n  border-radius: var(--currentbtn-border-radius);\n  padding: var(--currentbtn-padding);\n  margin: var(--currentbtn-margin);\n}\n\n.show-info {\n  display: flex;\n  justify-content: var(--showinfo-placement);\n}\n\nsummary {\n  display: none;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.infomation {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.infomation > .text-search-wrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.infomation > .text-search-wrapper > #search-input {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.infomation > .text-search-wrapper > #search-input ::placeholder {\n  color: #eaeaea;\n}\n.infomation > .text-search-wrapper > #search-btn {\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.infomation > .text-search-wrapper > #search-btn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n.infomation > .text-search-wrapper > #search-btn > .search-text {\n  display: var(--searchtext-display);\n  color: var(--searchtext-color);\n  font-size: var(--searchtext-font-size);\n}\n.infomation > #download-btn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n\n.table-title {\n  display: var(--tabletitle-display);\n  justify-content: var(--tabletitle-placement);\n  margin: var(--tabletitle-margin);\n  font-size: var(--tabletitle-font-size);\n  color: var(--tabletitle-color);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--thead-border-bottom);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--table-outside-border);\n  border-right: var(--table-outside-border);\n  border-left: var(--table-outside-border);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n}\ntable > thead > tr > th:first-child {\n  padding-right: 20px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center 5px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.filter-icon {\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);\n}\ntable > thead > tr .icon.sort-icon {\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);\n}\ntable > thead > tr .icon.sort-icon.desc {\n  background-image: url(../../assets/grey-sort2-des.svg);\n}\ntable > thead > tr .icon.sort-icon.asc {\n  background-image: url(../../assets/grey-sort2-asc.svg);\n}\ntable > thead > tr .icon > .filter-wrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr .icon > .filter-wrapper > div.filter-window {\n  display: none;\n  position: absolute;\n  right: 0;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: lavender;\n  padding: 14px 10px;\n}\ntable > thead > tr .icon > .filter-wrapper > div.filter-window > ul {\n  padding: 0;\n}\ntable > thead > tr .icon > .filter-wrapper > div.filter-window > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr .icon > .filter-wrapper > div.filter-window > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 4px;\n}\ntable > thead > tr .icon > .filter-wrapper > div.filter-window.on {\n  display: block;\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(---tbody-border-right);\n  border-bottom: var(---tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n  background-color: var(--tbody-background-color);\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}\n\n#pagenation {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n}\n#pagenation > ul {\n  display: flex;\n  padding: 0;\n}\n#pagenation > ul > li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border: var(--paginationbtn-border);\n  border-bottom: var(--paginationbtn-border-bottom);\n  border-radius: var(--paginationbtn-border-radius);\n  margin: var(--paginationbtn-margin);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n}\n#pagenation > ul > li.arrow-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n#pagenation > ul > li.back-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n}\n#pagenation > ul > li.advance-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;\n  transform: rotate(45deg);\n}\n#pagenation > ul > li.current-btn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--currentbtn-border);\n  border-bottom: var(--currentbtn-border-bottom);\n  border-radius: var(--currentbtn-border-radius);\n  padding: var(--currentbtn-padding);\n  margin: var(--currentbtn-margin);\n}\n\n.show-info {\n  display: flex;\n  justify-content: var(--showinfo-placement);\n}\n\nsummary {\n  display: none;\n}";
 
 defineStanzaElement(tableWithPagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table_with_pagination.js.map

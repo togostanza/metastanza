@@ -90,6 +90,19 @@ async function tree(stanza, params) {
     },
   ];
 
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  };
+
+
   //marks:描画について
 
   //（デフォルトのコントローラを削除）
@@ -224,6 +237,12 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
+	},
+	{
+		"stanza:key": "figuretitle",
+		"stanza:type": "text",
+		"stanza:example": "Figure 1 Title of the figure",
+		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -359,6 +378,42 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#94BC8A",
 		"stanza:description": "sixth color"
+	},
+	{
+		"stanza:key": "--figuretitle-orient",
+		"stanza:type": "text",
+		"stanza:default": "bottom",
+		"stanza:description": "orient of figure title.(top, bottom)"
+	},
+	{
+		"stanza:key": "--figuretitle-anchor",
+		"stanza:type": "text",
+		"stanza:default": "middle",
+		"stanza:description": "figure title placement.(left, right, middle)"
+	},
+	{
+		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:type": "number",
+		"stanza:default": "350",
+		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:type": "number",
+		"stanza:default": "1650",
+		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12",
+		"stanza:description": "font size of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of figure title"
 	}
 ]
 };

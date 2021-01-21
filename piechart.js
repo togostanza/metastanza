@@ -55,27 +55,6 @@ async function piechart(stanza, params) {
     },
   };
 
-  // // hover時にvalueを出したい
-  // spec.marks[1].encode = {
-  //   "enter": {
-  //     // "align": {"value": "center"},
-  //     // "baseline": {"value": "bottom"},
-  //     "fill": {"value": "var(--emphasized-color)"},
-  //     // "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //     // "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
-  //     // "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
-  //   },
-  //   "update": {
-  //     "x": {"signal": "tooltip.category", "band": 0.5},
-  //     "y": {"signal": "tooltip.amount", "offset": -1},
-  //     "text": {"signal": "tooltip.id"},
-  //     "fillOpacity": [
-  //       {"test": "datum === tooltip", "value": 0},
-  //       {"value": 1}
-  //     ]
-  //   }
-  // }
-
   //legendを出す
   spec.legends = [
     {
@@ -126,6 +105,20 @@ async function piechart(stanza, params) {
     },
   ];
 
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": 100,
+    "dy": 200,
+    // "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    // "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  };
+
   const el = stanza.root.querySelector("main");
   const opts = {
     renderer: "svg",
@@ -161,13 +154,13 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": "200",
+		"stanza:example": "400",
 		"stanza:description": "width of your stanza"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": "200",
+		"stanza:example": "500",
 		"stanza:description": "height of your stanza"
 	},
 	{
@@ -193,6 +186,12 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
+	},
+	{
+		"stanza:key": "figuretitle",
+		"stanza:type": "text",
+		"stanza:example": "Figure 1 Title of the figure",
+		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -298,6 +297,54 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "1.2",
 		"stanza:description": "stroke width of plot when you hover."
+	},
+	{
+		"stanza:key": "--label-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "label color"
+	},
+	{
+		"stanza:key": "--label-font",
+		"stanza:type": "string",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "font family of labels."
+	},
+	{
+		"stanza:key": "--figuretitle-orient",
+		"stanza:type": "text",
+		"stanza:default": "bottom",
+		"stanza:description": "orient of figure title.(top, bottom)"
+	},
+	{
+		"stanza:key": "--figuretitle-anchor",
+		"stanza:type": "text",
+		"stanza:default": "middle",
+		"stanza:description": "figure title placement.(left, right, middle)"
+	},
+	{
+		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:type": "number",
+		"stanza:default": "60",
+		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12",
+		"stanza:description": "font size of figure title in pixel"
+	},
+	{
+		"stanza:key": "--figuretitle-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of figure title"
 	}
 ]
 };
