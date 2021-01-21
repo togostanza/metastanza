@@ -11,9 +11,6 @@ table {
   background-color: var(--background-color);
   box-shadow: 1px 1px 3px 1px #eee;
   > thead {
-    display: block;
-    // height: auto;
-    // max-height: 50px;
     font-size: var(--thead-font-size);
     color: var(--thead-font-color);
     margin-bottom: 0;
@@ -44,7 +41,7 @@ table {
             background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
           }
 
-          &.sort-icon {
+          &.sortIcon {
             background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
             &.desc {
               background-image: url(../../assets/grey-sort2-des.svg);
@@ -87,7 +84,6 @@ table {
     }
   }
   > tbody {
-    display: block;
     font-size: var(--tbody-font-size);
     color: var(--general-font-color);
     background-color: var(--tbody-background-color);
@@ -103,12 +99,12 @@ table {
           background-color: var(--tbody-background-color);
         }
       }
+      &:last-of-type {
+        > td {
+          border-bottom: none;
+        }
+      }
     }
-  }
-  td, th {
-    min-width: 150px;
-    max-width: 150px;
-    height: auto;
   }
 }
 
