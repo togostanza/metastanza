@@ -3,40 +3,48 @@
 
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
-.textSearchWrapper {
+.tableOption {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 10px;
-  > input[type="text"] {
-    margin-right: 5px;
-    height: 20px;
-    width: 164px;
-    border: 1px solid var(--series-0-color);
-    border-radius: 3px;
-    font-size: 10px;
-    color: #c1c0c0;
-    box-sizing: border-box;
-    &::placeholder {
-      color: #eaeaea;
+  justify-content: space-between;
+  > .textSearchWrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+    > input[type="text"] {
+      margin-right: 5px;
+      height: 20px;
+      width: 164px;
+      border: 1px solid var(--series-0-color);
+      border-radius: 3px;
+      font-size: 10px;
+      color: #c1c0c0;
+      box-sizing: border-box;
+      &::placeholder {
+        color: #eaeaea;
+      }
+    }
+    > button.searchBtn {
+      margin-right: 2px;
+      height: 20px;
+      width: 20px;
+      border: 1px solid var(--series-0-color);
+      border-radius: 3px;
+      background-color: var(--series-0-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 12px;
+        height: 12px;
+        display: block;
+      }
     }
   }
-  > button.searchBtn {
-    margin-right: 2px;
-    height: 20px;
-    width: 20px;
-    border: 1px solid var(--series-0-color);
-    border-radius: 3px;
-    background-color: var(--series-0-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      width: 12px;
-      height: 12px;
-      display: block;
-    }
+  > .downloadBtn > img {
+    width: 13px;
+    height: 13px;
   }
 }
 table {

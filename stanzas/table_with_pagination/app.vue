@@ -1,10 +1,15 @@
 <template>
-  <div class="textSearchWrapper">
-    <input type="text" placeholder="Search for keywords..." v-model="textSearchInput" @keydown.enter="SearchByText">
-    <button class="searchBtn" type="submit" @click="SearchByText">
-      <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
-        alt="search">
-    </button>
+  <div class="tableOption">
+    <div class="textSearchWrapper">
+      <input type="text" placeholder="Search for keywords..." v-model="textSearchInput" @keydown.enter="SearchByText">
+      <button class="searchBtn" type="submit" @click="SearchByText">
+        <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
+          alt="search">
+      </button>
+    </div>
+    <a class="downloadBtn" :href="blob" download="tableData">
+      <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt="download">
+    </a>
   </div>
   <table v-if="adjustedTableData">
     <thead>
@@ -164,7 +169,7 @@ export default defineComponent({
     }
 
     // computed
-    let adjustedTableData = computed(() => {
+    const adjustedTableData = computed(() => {
       let adjustedTableData = JSON.parse(JSON.stringify(tableData.value))
       if(adjustedTableData.body) {
         //filter
@@ -216,6 +221,11 @@ export default defineComponent({
       return adjustedTableData
     });
 
+    const blob = computed(() => {
+      if(tableData.value.body) {
+        return URL.createObjectURL(new Blob([JSON.stringify(tableData.value, null, "  ")], {type: "application/json"}));
+      }
+    })
     // mounted
     onMounted(() => {
       GetData();
@@ -232,7 +242,8 @@ export default defineComponent({
       filterContents,
       filterState,
       textSearchInput,
-      SearchByText
+      SearchByText,
+      blob
     };
   },
 });
