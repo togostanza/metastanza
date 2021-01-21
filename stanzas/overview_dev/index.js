@@ -8,24 +8,21 @@ export default async function overviewDev(stanza, params) {
   });
 
   const apis = JSON.parse(params.apis);
-  if (typeof apis === "object") {
-    draw(stanza.root.querySelector("#chart"), apis, []);
-  }
+
+  draw(stanza.root.querySelector("#chart"), apis);
 }
 
-async function draw(element, apis, body) {
+async function draw(element, apis) {
   const labelMargin = 100;
   const width = 700;
   const height = 50;
 
   const dataset = {};
   for (const api of apis) {
-    dataset[api] = await getFormatedJson(
-      api,
-      element,
-      body.join("&")
-    );
+    dataset[api] = await getFormatedJson(api, element);
   }
+
+  let body = {};
 
   for (let id = 0; id < apis.length; id++) {
     const api = apis[id];
@@ -102,9 +99,9 @@ async function draw(element, apis, body) {
       })
       .on("click", async function (e, d) {
         // re-render
-        body.push(
-          dataset[api].type.replace(/\s/g, "_") + "=" + d.onclick_list[0].id
-        );
+        const key = dataset[api].type.replace(/\s/g, "_");
+        body[key] = d.onclick_list[0].id;
+
         for (const api of apis) {
           getDataAndRender(element, api, body, dataset);
         }
@@ -118,7 +115,8 @@ async function draw(element, apis, body) {
     .style("cursor", "pointer")
     .on("click", function () {
       // reset-render
-      body = [];
+      body = {};
+
       for (const api of apis) {
         dataset[api].data = changeData(
           dataset[api].data,
@@ -135,7 +133,7 @@ async function draw(element, apis, body) {
     const newData = await getFormatedJson(
       api,
       element.querySelector("#div_" + dataset[api].id),
-      body.join("&")
+      body
     );
     dataset[api].data = changeData(
       dataset[api].data,

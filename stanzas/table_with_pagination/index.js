@@ -1,27 +1,21 @@
 import { getFormatedJson } from "@/lib/metastanza_utils.js";
+import omit from "lodash.omit";
 
 export default async function tableWithPagination(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
   });
 
-  const formBody = [];
-  for (const key in params) {
-    if (params[key] && key !== "table_data_api") {
-      formBody.push(key + "=" + encodeURIComponent(params[key]));
-    }
-  }
-
   const api = params.table_data_api;
   const element = stanza.root.querySelector("#renderDiv");
+
   const dataset = await getFormatedJson(
     api,
     element,
-    formBody.join("&")
+    omit(params, "table_data_api")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, element);
-  }
+
+  draw(dataset, stanza, element);
 }
 
 function draw(dataset, stanza, element) {

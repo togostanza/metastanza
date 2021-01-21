@@ -10,13 +10,13 @@ export default async function manhattanPlot(stanza, params) {
   });
 
   console.log(params.api);
+
   const dataset = await getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
-  }
+
+  draw(dataset, stanza, params);
 }
 
 async function draw(dataset, stanza, params) {

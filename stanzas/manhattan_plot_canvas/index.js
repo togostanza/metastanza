@@ -14,15 +14,15 @@ export default async function manhattanPlotCanvas(stanza, params) {
     params.api,
     stanza.root.querySelector("#chart")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
-    appendDlButton(
-      stanza.root.querySelector("#chart"),
-      stanza.root.querySelector("svg"),
-      "manhattan_plot",
-      stanza
-    );
-  }
+
+  draw(dataset, stanza, params);
+
+  appendDlButton(
+    stanza.root.querySelector("#chart"),
+    stanza.root.querySelector("svg"),
+    "manhattan_plot",
+    stanza
+  );
 }
 
 async function draw(dataset, stanza, params) {
