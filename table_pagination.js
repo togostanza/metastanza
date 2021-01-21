@@ -1,6 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import './metastanza_utils-6f306649.js';
+import './metastanza_utils-7618371c.js';
+import './index-65014721.js';
 import './table_body.js';
 
 function tablePagination(stanza, params) {

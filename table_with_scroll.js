@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 
 async function tableWithScroll(stanza, params) {
   stanza.render({

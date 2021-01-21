@@ -1,29 +1,23 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import { m as metastanza } from './metastanza_utils-6f306649.js';
+import { g as getFormatedJson } from './metastanza_utils-7618371c.js';
+import { l as lodash_omit } from './index-65014721.js';
 
 async function tableWithPagination(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
   });
 
-  const formBody = [];
-  for (const key in params) {
-    if (params[key] && key !== "table_data_api") {
-      formBody.push(key + "=" + encodeURIComponent(params[key]));
-    }
-  }
-
   const api = params.table_data_api;
   const element = stanza.root.querySelector("#renderDiv");
-  const dataset = await metastanza.getFormatedJson(
+
+  const dataset = await getFormatedJson(
     api,
     element,
-    formBody.join("&")
+    lodash_omit(params, "table_data_api")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, element);
-  }
+
+  draw(dataset, stanza, element);
 }
 
 function draw(dataset, stanza, element) {

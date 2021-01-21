@@ -1,7 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import { m as metastanza, s as select } from './metastanza_utils-6f306649.js';
-import { p as pointer, d as drag } from './drag-521d7384.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-7618371c.js';
+import { p as pointer, d as drag } from './drag-b6259fe5.js';
 
 async function manhattanPlot(stanza, params) {
   stanza.render({
@@ -12,13 +12,13 @@ async function manhattanPlot(stanza, params) {
   });
 
   console.log(params.api);
-  const dataset = await metastanza.getFormatedJson(
+
+  const dataset = await getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
-  }
+
+  draw(dataset, stanza, params);
 }
 
 async function draw(dataset, stanza, params) {

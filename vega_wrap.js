@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import { V as View, k as parse$1 } from './vega.module-01b84c84.js';
 import './timer-be811b16.js';
 

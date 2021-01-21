@@ -1,6 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-6585decd.js';
+import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import { m as metastanza, s as select } from './metastanza_utils-6f306649.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-7618371c.js';
+import { l as lodash_mapvalues } from './index-5e66d0c2.js';
 
 async function overviewDev3(stanza, params) {
   stanza.render({
@@ -9,20 +10,21 @@ async function overviewDev3(stanza, params) {
   });
 
   const apis = JSON.parse(params.apis);
-  if (typeof apis === "object") {
-    draw(stanza.root.querySelector("#chart"), apis, {});
-  }
+
+  draw(stanza.root.querySelector("#chart"), apis);
 }
 
-async function draw(element, apis, body) {
+async function draw(element, apis) {
   const labelMargin = 100;
   const width = 700;
   const height = 50;
 
   const dataset = {};
   for (const api of apis) {
-    dataset[api] = await metastanza.getFormatedJson(api, element, mkBody(body));
+    dataset[api] = await getFormatedJson(api, element);
   }
+
+  let body = {};
 
   for (let id = 0; id < apis.length; id++) {
     const api = apis[id];
@@ -205,10 +207,10 @@ async function draw(element, apis, body) {
     });
 
   async function getDataAndRender(element, api, body, dataset) {
-    const newData = await metastanza.getFormatedJson(
+    const newData = await getFormatedJson(
       api,
       element.querySelector("#div_" + dataset[api].id),
-      mkBody(body)
+      lodash_mapvalues(body, (v) => v.join(","))
     );
     dataset[api].data = changeData(
       dataset[api],
@@ -317,15 +319,6 @@ async function draw(element, apis, body) {
       }
     }
     return data;
-  }
-
-  function mkBody(body) {
-    const params = [];
-    for (const key in body) {
-      params.push(key + "=" + body[key].join(","));
-    }
-
-    return params.join("&");
   }
 }
 
