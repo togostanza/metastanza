@@ -1,4 +1,11 @@
 <template>
+  <div class="textSearchWrapper">
+    <input type="text" placeholder="Search for keywords..." v-model="textSearchInput" @keydown.enter="SearchByText">
+    <button class="searchBtn" type="submit" @click="SearchByText">
+      <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
+        alt="search">
+    </button>
+  </div>
   <table v-if="adjustedTableData">
     <thead>
       <tr>
@@ -38,8 +45,8 @@
                   <label :for="content">{{ content }}</label>
                 </li>
               </ul>
-              <button class="toggle_all_button select_all">Select All</button>
-              <button class="toggle_all_button clear">Clear</button>
+              <button class="toggle_all_button select_all" @click="ToggleAllCheckbox(head.id, 'all')">Select All</button>
+              <button class="toggle_all_button clear" @click="ToggleAllCheckbox(head.id, 'clear')">Clear</button>
             </div>
           </div>
         </th>
@@ -74,7 +81,7 @@ import {
   reactive,
   computed,
   watch,
-  onMounted,
+  onMounted
 } from "vue";
 import metadata from "./metadata.json";
 
@@ -91,6 +98,8 @@ export default defineComponent({
     const openFilterWindowId = ref([]);
     const filterContents = reactive({});
     const filterState = reactive({});
+    const textSearchInput = ref('')
+    const textSearchInputDone = ref('')
 
     //methods
     const GetData = () => {
@@ -139,8 +148,23 @@ export default defineComponent({
       sortState.order = sortState.order === "asc" ? "desc" : "asc";
     };
 
+    const ToggleAllCheckbox = (id, mode) => {
+      switch(mode) {
+        case 'all' :
+          filterState.id = [...filterContents.id]
+          break;
+        case 'clear' :
+          filterState.id = []
+          break;
+      }
+    }
+
+    const SearchByText = () => {
+      textSearchInputDone.value = textSearchInput.value
+    }
+
     // computed
-    const adjustedTableData = computed(() => {
+    let adjustedTableData = computed(() => {
       let adjustedTableData = JSON.parse(JSON.stringify(tableData.value))
       if(adjustedTableData.body) {
         //filter
@@ -175,6 +199,19 @@ export default defineComponent({
               break;
           }
         }
+
+        //seach by text
+        if(textSearchInputDone.value !== "") {
+          adjustedTableData.body = tableData.value.body.filter(bodyDatam => {
+            let flag = false
+            Object.keys(bodyDatam).forEach(columnName => {
+              if(bodyDatam[columnName].value.indexOf(textSearchInputDone.value) !== -1) {
+                flag = true
+              }
+            })
+            return flag
+          })
+        }
       }
       return adjustedTableData
     });
@@ -189,10 +226,13 @@ export default defineComponent({
       filteredHead,
       sortState,
       SortData,
+      ToggleAllCheckbox,
       params,
       openFilterWindowId,
       filterContents,
       filterState,
+      textSearchInput,
+      SearchByText
     };
   },
 });
