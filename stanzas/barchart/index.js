@@ -189,14 +189,24 @@ export default async function barchart(stanza, params) {
         update: {
           stroke: { value: "var(--axis-color)" },
           strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--axis-width"
-            ),
+            value: getComputedStyle(stanza.root.host).getPropertyValue("--axis-width"),
           },
         },
       },
     },
   };
+
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  }
 
   //rect（棒）の描画について
   spec.marks[0].encode = {
@@ -226,7 +236,7 @@ export default async function barchart(stanza, params) {
       },
       fontSize: {
         value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--fontsize-of-value"
+          "--fontsize-value"
         ),
       },
       fontWeight: {

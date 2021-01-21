@@ -61,10 +61,15 @@ main {
       justify-content: center;
       align-items: center;
       > img {
-          width: var(--searchbtn-img-width);
-          height: var(--searchbtn-img-height);
-          display: block;
+        width: var(--searchbtn-img-width);
+        height: var(--searchbtn-img-height);
+        display: var(--searchimg-display);//block;
         }
+      > .search-text{
+        display: var(--searchtext-display);
+        color: var(--searchtext-color);
+        font-size: var(--searchtext-font-size);
+      }
     }
   }
   > #download-btn {
@@ -73,6 +78,14 @@ main {
       height: var(--dlbtn-img-height);
     }
   }
+}
+
+.table-title {
+  display: var(--tabletitle-display);
+  justify-content: var(--tabletitle-placement);
+  margin: var(--tabletitle-margin);
+  font-size: var(--tabletitle-font-size);
+  color: var(--tabletitle-color);
 }
 
 table {

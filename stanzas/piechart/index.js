@@ -52,27 +52,6 @@ export default async function piechart(stanza, params) {
     },
   };
 
-  // // hover時にvalueを出したい
-  // spec.marks[1].encode = {
-  //   "enter": {
-  //     // "align": {"value": "center"},
-  //     // "baseline": {"value": "bottom"},
-  //     "fill": {"value": "var(--emphasized-color)"},
-  //     // "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //     // "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
-  //     // "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
-  //   },
-  //   "update": {
-  //     "x": {"signal": "tooltip.category", "band": 0.5},
-  //     "y": {"signal": "tooltip.amount", "offset": -1},
-  //     "text": {"signal": "tooltip.id"},
-  //     "fillOpacity": [
-  //       {"test": "datum === tooltip", "value": 0},
-  //       {"value": 1}
-  //     ]
-  //   }
-  // }
-
   //legendを出す
   spec.legends = [
     {
@@ -122,6 +101,20 @@ export default async function piechart(stanza, params) {
       },
     },
   ];
+
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": 100,
+    "dy": 200,
+    // "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    // "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {

@@ -38,6 +38,12 @@
       "stanza:example": "taxonomy='9606'",
       "stanza:description": "parameters for table data api",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "tableTitle",
+      "stanza:example": "Title of this Table",
+      "stanza:description": "Title of the table",
+      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -77,6 +83,36 @@
       "stanza:type": "color",
       "stanza:default": "#fff",
       "stanza:description": "background color"
+    },
+    {
+      "stanza:key": "--tabletitle-display",
+      "stanza:type": "text",
+      "stanza:default": "flex",
+      "stanza:description": "display of table title.(flex, block or none)"
+    },
+    {
+      "stanza:key": "--tabletitle-placement",
+      "stanza:type": "text",
+      "stanza:default": "center",
+      "stanza:description": "table title placement when table title is displayed.(left, right, center)"
+    },
+    {
+      "stanza:key": "--tabletitle-margin",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "margin of table title"
+    },
+    {
+      "stanza:key": "--tabletitle-font-size",
+      "stanza:type": "text",
+      "stanza:default": "12px",
+      "stanza:description": "font size of table title"
+    },
+    {
+      "stanza:key": "--tabletitle-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "font color of table title"
     },
     {
       "stanza:key": "--table-border",
@@ -185,6 +221,30 @@
       "stanza:type": "text",
       "stanza:default": "12px",
       "stanza:description": "height of search button image"
+    },
+    {
+      "stanza:key": "--searchimg-display",
+      "stanza:type": "text",
+      "stanza:default": "block",
+      "stanza:description": "display of search button image"
+    },
+    {
+      "stanza:key": "--searchtext-display",
+      "stanza:type": "text",
+      "stanza:default": "none",
+      "stanza:description": "display of search button text.(dafault: none)"
+    },
+    {
+      "stanza:key": "--searchtext-color",
+      "stanza:type": "color",
+      "stanza:default": "#333",
+      "stanza:description": "color of search button text"
+    },
+    {
+      "stanza:key": "--searchtext-font-size",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "font size of search button text"
     },
     {
       "stanza:key": "--dlbtn-img-width",

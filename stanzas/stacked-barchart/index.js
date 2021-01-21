@@ -1,17 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function stackedBarchart(stanza, params) {
-  function getPropertyValue(name) {
-    return getComputedStyle(stanza.root.host).getPropertyValue(name);
-  }
-
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  // spec.data[0].values = [
-  //   {"category": "value1", "amount": 1},
-  //   {"category": "value2", "amount": 7},
-  //   {"category": "value3", "amount": 5},
-  //   {"category": "value4", "amount": 9},
-  // ]
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"];
@@ -20,13 +10,11 @@ export default async function stackedBarchart(stanza, params) {
   //stanzaのpadding
   spec.padding = params["padding"];
 
-  //イベントなど設定できるかと思ったができない
-  // spec.signals[0].on[0].events = "click"
-  // spec.signals[0].on[1].events = "click"
-
   //棒・スケールに関する設定
-  spec.scales[0].paddingInner = getPropertyValue("--padding-inner");
-  spec.scales[0].paddingOuter = getPropertyValue("--padding-outer");
+  spec.scales[0].paddingInner = 0.1;
+  spec.scales[0].paddingOuter = 0.2;
+  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") - 0;
+  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") - 0;
 
   spec.scales[2].range = [
     "var(--series-0-color)",
@@ -211,10 +199,23 @@ export default async function stackedBarchart(stanza, params) {
     },
   };
 
+  spec.title = {
+    "text": params["figuretitle"], //"Title of this figure",
+    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
+    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
+    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
+    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+  }
+
+
   //rect（棒）の描画について
   spec.marks[0].encode = {
     enter: {
-      x: { scale: "x", field: "x", offset: 1 },
+      x: { scale: "x", field: "x" },
       width: { scale: "x", band: params["bar-width"] },
       y: { scale: "y", field: "y0" },
       y2: { scale: "y", field: "y1" },
