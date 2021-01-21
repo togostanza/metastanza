@@ -1,5 +1,5 @@
 import { w as dispatch } from './timer-be811b16.js';
-import { s as select } from './metastanza_utils-f9a4a11c.js';
+import { s as select } from './metastanza_utils-efe3c964.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -279,4 +279,4 @@ function drag() {
 }
 
 export { drag as d, pointer as p };
-//# sourceMappingURL=drag-41988615.js.map
+//# sourceMappingURL=drag-3398b484.js.map

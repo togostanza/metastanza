@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-5bd032c5.js';
 import './timer-be811b16.js';
-import { g as getFormatedJson } from './metastanza_utils-f9a4a11c.js';
+import { g as getFormatedJson } from './metastanza_utils-efe3c964.js';
 import { l as lodash_omit } from './index-65014721.js';
 
 async function tableBody(stanza, params) {
