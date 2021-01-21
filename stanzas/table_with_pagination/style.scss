@@ -36,7 +36,7 @@ table {
           background-repeat: no-repeat;
           background-position: center 5px;
           background-size: 8px 8px;
-          &.filter-icon {
+          &.filterIcon {
             margin-left: 2px;
             background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
           }
@@ -51,13 +51,12 @@ table {
             }
           }
         }
-        > .filter-wrapper {
+        > .filterWrapper {
           display: inline-block;
           position: relative;
-          > div.filter-window {
-            display: none;
+          > div.filterWindow {
             position: absolute;
-            right: 0;
+            left: -10px;
             z-index: 3;
             width: auto;
             height: auto;
@@ -75,8 +74,9 @@ table {
                 }
               }
             }
-            &.on{
-              display: block;
+            &.lastCol {
+              right: 0;
+              left: auto;
             }
           }
         }
@@ -106,6 +106,13 @@ table {
       }
     }
   }
+}
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 
