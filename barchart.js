@@ -212,20 +212,28 @@ async function barchart(stanza, params) {
   };
 
   //rect（棒）の描画について
-  spec.marks[0].encode = {
-    enter: {
-      x: { scale: "xscale", field: "category" },
-      width: { scale: "xscale", band: params["bar-width"] },
-      y: { scale: "yscale", field: "amount" },
-      y2: { scale: "yscale", value: 0 },
-    },
-    update: {
-      fill: { value: "var(--series-0-color)" },
-    },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-    },
-  };
+  spec.marks[0] = {
+      "type": "rect",
+      "from": {"data":"table"},
+      "encode": {
+        enter: {
+          x: { scale: "xscale", field: "category" },
+          width: { scale: "xscale", band: params["bar-width"] },
+          y: { scale: "yscale", field: "amount" },
+          y2: { scale: "yscale", value: 0 },
+        },
+        update: {
+          fill: { value: "var(--series-0-color)" },
+          stroke: {value: "var(--stroke-color)"},
+          strokeWidth: {value: getComputedStyle(stanza.root.host).getPropertyValue(
+            "--stroke-width"
+          ),}
+        },
+        hover: {
+          fill: { value: "var(--emphasized-color)" },
+        }
+      }
+    };
 
   spec.marks[1].encode = {
     enter: {
@@ -486,6 +494,18 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "width of axis"
+	},
+	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#000000",
+		"stanza:description": "color of stroke"
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "width of stroke"
 	},
 	{
 		"stanza:key": "--fontsize-value",
