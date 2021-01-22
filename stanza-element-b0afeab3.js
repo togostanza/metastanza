@@ -391,7 +391,7 @@ function noop() {
     }
 }
 function createWeakMap() {
-    if (typeof WeakMap !== 'undefined') {
+    if (typeof WeakMap !== "undefined") {
         return new WeakMap();
     }
     else {
@@ -407,7 +407,9 @@ function fakeSetOrMap() {
         delete: noop,
         get: noop,
         set: noop,
-        has: function (k) { return false; },
+        has: function (k) {
+            return false;
+        },
     };
 }
 // Safe hasOwnProperty
@@ -438,23 +440,23 @@ function _outdentArray(strings, firstInterpolatedValueSetsIndentationLevel, opti
         indentationLevel = match[1].length;
     }
     var reSource = "(\\r\\n|\\r|\\n).{0," + indentationLevel + "}";
-    var reMatchIndent = new RegExp(reSource, 'g');
+    var reMatchIndent = new RegExp(reSource, "g");
     if (firstInterpolatedValueSetsIndentationLevel) {
         strings = strings.slice(1);
     }
     var newline = options.newline, trimLeadingNewline = options.trimLeadingNewline, trimTrailingNewline = options.trimTrailingNewline;
-    var normalizeNewlines = typeof newline === 'string';
+    var normalizeNewlines = typeof newline === "string";
     var l = strings.length;
     var outdentedStrings = strings.map(function (v, i) {
         // Remove leading indentation from all lines
-        v = v.replace(reMatchIndent, '$1');
+        v = v.replace(reMatchIndent, "$1");
         // Trim a leading newline from the first string
         if (i === 0 && trimLeadingNewline) {
-            v = v.replace(reLeadingNewline, '');
+            v = v.replace(reLeadingNewline, "");
         }
         // Trim a trailing newline from the last string
         if (i === l - 1 && trimTrailingNewline) {
-            v = v.replace(reTrailingNewline, '');
+            v = v.replace(reTrailingNewline, "");
         }
         // Normalize newlines
         if (normalizeNewlines) {
@@ -465,7 +467,7 @@ function _outdentArray(strings, firstInterpolatedValueSetsIndentationLevel, opti
     return outdentedStrings;
 }
 function concatStringsAndValues(strings, values) {
-    var ret = '';
+    var ret = "";
     for (var i = 0, l = strings.length; i < l; i++) {
         ret += strings[i];
         if (i < l - 1) {
@@ -475,7 +477,7 @@ function concatStringsAndValues(strings, values) {
     return ret;
 }
 function isTemplateStringsArray(v) {
-    return has(v, 'raw') && has(v, 'length');
+    return has(v, "raw") && has(v, "length");
 }
 /**
  * It is assumed that opts will not change.  If this is a problem, clone your options object and pass the clone to
@@ -487,9 +489,9 @@ function createInstance(options) {
     /** Cache of pre-processed template literal arrays */
     var arrayAutoIndentCache = createWeakMap();
     /**
-     * Cache of pre-processed template literal arrays, where first interpolated value is a reference to outdent,
-     * before interpolated values are injected.
-     */
+       * Cache of pre-processed template literal arrays, where first interpolated value is a reference to outdent,
+       * before interpolated values are injected.
+       */
     var arrayFirstInterpSetsIndentCache = createWeakMap();
     function outdent(stringsOrOptions) {
         var values = [];
@@ -504,7 +506,9 @@ function createInstance(options) {
                 reOnlyWhitespaceWithAtLeastOneNewline.test(strings[0]) &&
                 reStartsWithNewlineOrIsEmpty.test(strings[1]);
             // Perform outdentation
-            var cache = firstInterpolatedValueSetsIndentationLevel ? arrayFirstInterpSetsIndentCache : arrayAutoIndentCache;
+            var cache = firstInterpolatedValueSetsIndentationLevel
+                ? arrayFirstInterpSetsIndentCache
+                : arrayAutoIndentCache;
             var renderedArray = cache.get(strings);
             if (!renderedArray) {
                 renderedArray = _outdentArray(strings, firstInterpolatedValueSetsIndentationLevel, options);
@@ -534,12 +538,12 @@ var defaultOutdent = createInstance({
     trimLeadingNewline: true,
     trimTrailingNewline: true,
 });
-if (typeof module !== 'undefined') {
+if (typeof module !== "undefined") {
     // In webpack harmony-modules environments, module.exports is read-only,
     // so we fail gracefully.
     try {
         module.exports = defaultOutdent;
-        Object.defineProperty(defaultOutdent, '__esModule', { value: true });
+        Object.defineProperty(defaultOutdent, "__esModule", { value: true });
         defaultOutdent.default = defaultOutdent;
         defaultOutdent.outdent = defaultOutdent;
     }
@@ -8060,4 +8064,4 @@ function ensureAboutLinkElementDefined() {
 }
 
 export { commonjsGlobal as a, createCommonjsModule as c, defineStanzaElement as d };
-//# sourceMappingURL=stanza-element-5bd032c5.js.map
+//# sourceMappingURL=stanza-element-b0afeab3.js.map

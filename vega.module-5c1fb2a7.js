@@ -17676,7 +17676,7 @@ useCanvas(true);
 
 function useCanvas(use) {
   textMetrics.width = use && context$1 ? measureWidth : estimateWidth;
-} // make dumb, simple estimate if no canvas is available
+} // make simple estimate if no canvas is available
 
 
 function estimateWidth(item, text) {
@@ -19265,7 +19265,8 @@ const rootAttributes = {
 };
 
 const RootIndex = 0,
-      ns = metadata.xmlns;
+      xmlns = 'http://www.w3.org/2000/xmlns/',
+      svgns = metadata.xmlns;
 function SVGRenderer(loader) {
   Renderer.call(this, loader);
   this._dirtyID = 0;
@@ -19294,14 +19295,19 @@ inherits(SVGRenderer, Renderer, {
     this._clearDefs();
 
     if (el) {
-      this._svg = domChild(el, 0, 'svg', ns);
-      setAttributes(this._svg, metadata);
+      this._svg = domChild(el, 0, 'svg', svgns);
+
+      this._svg.setAttributeNS(xmlns, 'xmlns', svgns);
+
+      this._svg.setAttributeNS(xmlns, 'xmlns:xlink', metadata['xmlns:xlink']);
+
+      this._svg.setAttribute('version', metadata['version']);
 
       this._svg.setAttribute('class', 'marks');
 
       domClear(el, 1); // set the svg root group
 
-      this._root = domChild(this._svg, RootIndex, 'g', ns);
+      this._root = domChild(this._svg, RootIndex, 'g', svgns);
       setAttributes(this._root, rootAttributes); // ensure no additional child elements
 
       domClear(this._svg, RootIndex + 1);
@@ -19370,7 +19376,7 @@ inherits(SVGRenderer, Renderer, {
 
     if (bg) {
       svg.removeAttribute('style');
-      node = domChild(svg, RootIndex, 'rect', ns);
+      node = domChild(svg, RootIndex, 'rect', svgns);
       setAttributes(node, {
         width: this._width,
         height: this._height,
@@ -19609,12 +19615,12 @@ inherits(SVGRenderer, Renderer, {
         index = 0;
 
     for (const id in defs.gradient) {
-      if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', ns);
+      if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', svgns);
       index = updateGradient(el, defs.gradient[id], index);
     }
 
     for (const id in defs.clipping) {
-      if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', ns);
+      if (!el) defs.el = el = domChild(svg, RootIndex + 1, 'defs', svgns);
       index = updateClipping(el, defs.clipping[id], index);
     } // clean-up
 
@@ -19654,7 +19660,7 @@ function updateGradient(el, grad, index) {
     // coordinates, in a way that is cumbersome to replicate in canvas.
     // We wrap the radial gradient in a pattern element, allowing us to
     // maintain a circular gradient that matches what canvas provides.
-    let pt = domChild(el, index++, 'pattern', ns);
+    let pt = domChild(el, index++, 'pattern', svgns);
     setAttributes(pt, {
       id: patternPrefix + grad.id,
       viewBox: '0,0,1,1',
@@ -19662,13 +19668,13 @@ function updateGradient(el, grad, index) {
       height: '100%',
       preserveAspectRatio: 'xMidYMid slice'
     });
-    pt = domChild(pt, 0, 'rect', ns);
+    pt = domChild(pt, 0, 'rect', svgns);
     setAttributes(pt, {
       width: 1,
       height: 1,
       fill: "url(".concat(href(), "#").concat(grad.id, ")")
     });
-    el = domChild(el, index++, 'radialGradient', ns);
+    el = domChild(el, index++, 'radialGradient', svgns);
     setAttributes(el, {
       id: grad.id,
       fx: grad.x1,
@@ -19679,7 +19685,7 @@ function updateGradient(el, grad, index) {
       r: grad.r2
     });
   } else {
-    el = domChild(el, index++, 'linearGradient', ns);
+    el = domChild(el, index++, 'linearGradient', svgns);
     setAttributes(el, {
       id: grad.id,
       x1: grad.x1,
@@ -19690,7 +19696,7 @@ function updateGradient(el, grad, index) {
   }
 
   for (i = 0, n = grad.stops.length; i < n; ++i) {
-    stop = domChild(el, i, 'stop', ns);
+    stop = domChild(el, i, 'stop', svgns);
     stop.setAttribute('offset', grad.stops[i].offset);
     stop.setAttribute('stop-color', grad.stops[i].color);
   }
@@ -19702,14 +19708,14 @@ function updateGradient(el, grad, index) {
 
 function updateClipping(el, clip, index) {
   let mask;
-  el = domChild(el, index, 'clipPath', ns);
+  el = domChild(el, index, 'clipPath', svgns);
   el.setAttribute('id', clip.id);
 
   if (clip.path) {
-    mask = domChild(el, 0, 'path', ns);
+    mask = domChild(el, 0, 'path', svgns);
     mask.setAttribute('d', clip.path);
   } else {
-    mask = domChild(el, 0, 'rect', ns);
+    mask = domChild(el, 0, 'rect', svgns);
     setAttributes(mask, {
       x: 0,
       y: 0,
@@ -19743,7 +19749,7 @@ function bind(item, el, sibling, tag, svg) {
 
   if (!node) {
     doc = el.ownerDocument;
-    node = domCreate(doc, tag, ns);
+    node = domCreate(doc, tag, svgns);
     item._svg = node;
 
     if (item.mark) {
@@ -19753,13 +19759,13 @@ function bind(item, el, sibling, tag, svg) {
       }; // if group, create background, content, and foreground elements
 
       if (tag === 'g') {
-        const bg = domCreate(doc, 'path', ns);
+        const bg = domCreate(doc, 'path', svgns);
         node.appendChild(bg);
         bg.__data__ = item;
-        const cg = domCreate(doc, 'g', ns);
+        const cg = domCreate(doc, 'g', svgns);
         node.appendChild(cg);
         cg.__data__ = item;
-        const fg = domCreate(doc, 'path', ns);
+        const fg = domCreate(doc, 'path', svgns);
         node.appendChild(fg);
         fg.__data__ = item;
         fg.__values__ = {
@@ -19849,7 +19855,7 @@ const mark_extras = {
         doc = el.ownerDocument;
         lh = lineHeight(item);
         value.forEach((t, i) => {
-          const ts = domCreate(doc, 'tspan', ns);
+          const ts = domCreate(doc, 'tspan', svgns);
           ts.__data__ = item; // data binding
 
           ts.textContent = t;
@@ -26049,7 +26055,7 @@ function quantize$2 (k, nice, zero) {
         stop = ex[1],
         span = stop - start,
         step = nice ? tickStep(start, stop, k) : span / (k + 1);
-    return range(step, stop, step);
+    return range(start + step, stop, step);
   };
 }
 
@@ -34730,6 +34736,10 @@ function scanPunctuator() {
       start: start,
       end: index$1
     };
+  }
+
+  if (ch2 === '//') {
+    throwError({}, MessageUnexpectedToken, ILLEGAL);
   } // 1-character punctuators: < > = ! + - * % & | ^ /
 
 
@@ -35832,13 +35842,6 @@ function Functions (codegen) {
     utcmilliseconds: fn('getUTCMilliseconds', DATE, 0),
     // sequence functions
     length: fn('length', null, -1),
-    join: fn('join', null),
-    indexof: fn('indexOf', null),
-    lastindexof: fn('lastIndexOf', null),
-    slice: fn('slice', null),
-    reverse: function (args) {
-      return '(' + codegen(args[0]) + ').slice().reverse()';
-    },
     // STRING functions
     parseFloat: 'parseFloat',
     parseInt: 'parseInt',
@@ -35846,7 +35849,6 @@ function Functions (codegen) {
     lower: fn('toLowerCase', STRING, 0),
     substring: fn('substring', STRING),
     split: fn('split', STRING),
-    replace: fn('replace', STRING),
     trim: fn('trim', STRING, 0),
     // REGEXP functions
     regexp: REGEXP,
@@ -35930,7 +35932,7 @@ function codegen (opt) {
       return isFunction(fn) ? fn(args) : fn + '(' + args.map(visit).join(',') + ')';
     },
     ArrayExpression: n => '[' + n.elements.map(visit).join(',') + ']',
-    BinaryExpression: n => '(' + visit(n.left) + n.operator + visit(n.right) + ')',
+    BinaryExpression: n => '(' + visit(n.left) + ' ' + n.operator + ' ' + visit(n.right) + ')',
     UnaryExpression: n => '(' + n.operator + visit(n.argument) + ')',
     ConditionalExpression: n => '(' + visit(n.test) + '?' + visit(n.consequent) + ':' + visit(n.alternate) + ')',
     LogicalExpression: n => '(' + visit(n.left) + n.operator + visit(n.right) + ')',
@@ -35959,18 +35961,134 @@ function codegen (opt) {
   return codegen;
 }
 
+const Literal$1 = 'Literal';
+
+/*
+  The following expression parser is based on Esprima (http://esprima.org/).
+  Original header comment and license for Esprima is included here:
+
+  Copyright (C) 2013 Ariya Hidayat <ariya.hidayat@gmail.com>
+  Copyright (C) 2013 Thaddee Tyl <thaddee.tyl@gmail.com>
+  Copyright (C) 2013 Mathias Bynens <mathias@qiwi.be>
+  Copyright (C) 2012 Ariya Hidayat <ariya.hidayat@gmail.com>
+  Copyright (C) 2012 Mathias Bynens <mathias@qiwi.be>
+  Copyright (C) 2012 Joost-Wim Boekesteijn <joost-wim@boekesteijn.nl>
+  Copyright (C) 2012 Kris Kowal <kris.kowal@cixar.com>
+  Copyright (C) 2012 Yusuke Suzuki <utatane.tea@gmail.com>
+  Copyright (C) 2012 Arpad Borsos <arpad.borsos@googlemail.com>
+  Copyright (C) 2011 Ariya Hidayat <ariya.hidayat@gmail.com>
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+var TokenName$1;
+var TokenBooleanLiteral$1 = 1,
+    TokenEOF$1 = 2,
+    TokenIdentifier$1 = 3,
+    TokenKeyword$1 = 4,
+    TokenNullLiteral$1 = 5,
+    TokenNumericLiteral$1 = 6,
+    TokenPunctuator$1 = 7,
+    TokenStringLiteral$1 = 8,
+    TokenRegularExpression$1 = 9;
+TokenName$1 = {};
+TokenName$1[TokenBooleanLiteral$1] = 'Boolean';
+TokenName$1[TokenEOF$1] = '<end>';
+TokenName$1[TokenIdentifier$1] = 'Identifier';
+TokenName$1[TokenKeyword$1] = 'Keyword';
+TokenName$1[TokenNullLiteral$1] = 'Null';
+TokenName$1[TokenNumericLiteral$1] = 'Numeric';
+TokenName$1[TokenPunctuator$1] = 'Punctuator';
+TokenName$1[TokenStringLiteral$1] = 'String';
+TokenName$1[TokenRegularExpression$1] = 'RegularExpression';
+
+function ascending$3 (a, b) {
+  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+}
+
+function bisector$1 (f) {
+  let delta = f;
+  let compare = f;
+
+  if (f.length === 1) {
+    delta = (d, x) => f(d) - x;
+
+    compare = ascendingComparator$1(f);
+  }
+
+  function left(a, x, lo, hi) {
+    if (lo == null) lo = 0;
+    if (hi == null) hi = a.length;
+
+    while (lo < hi) {
+      const mid = lo + hi >>> 1;
+      if (compare(a[mid], x) < 0) lo = mid + 1;else hi = mid;
+    }
+
+    return lo;
+  }
+
+  function right(a, x, lo, hi) {
+    if (lo == null) lo = 0;
+    if (hi == null) hi = a.length;
+
+    while (lo < hi) {
+      const mid = lo + hi >>> 1;
+      if (compare(a[mid], x) > 0) hi = mid;else lo = mid + 1;
+    }
+
+    return lo;
+  }
+
+  function center(a, x, lo, hi) {
+    if (lo == null) lo = 0;
+    if (hi == null) hi = a.length;
+    const i = left(a, x, lo, hi - 1);
+    return i > lo && delta(a[i - 1], x) > -delta(a[i], x) ? i - 1 : i;
+  }
+
+  return {
+    left,
+    center,
+    right
+  };
+}
+
+function ascendingComparator$1(f) {
+  return (d, x) => ascending$3(f(d), x);
+}
+
 const Intersect = 'intersect';
 const Union = 'union';
 const VlMulti = 'vlMulti';
+const VlPoint = 'vlPoint';
 const Or = 'or';
 const And = 'and';
 
-var TYPE_ENUM = 'E',
-    TYPE_RANGE_INC = 'R',
-    TYPE_RANGE_EXC = 'R-E',
-    TYPE_RANGE_LE = 'R-LE',
-    TYPE_RANGE_RE = 'R-RE',
-    UNIT_INDEX = 'index:unit'; // TODO: revisit date coercion?
+const SELECTION_ID = '_vgsid_',
+      TYPE_ENUM = 'E',
+      TYPE_RANGE_INC = 'R',
+      TYPE_RANGE_EXC = 'R-E',
+      TYPE_RANGE_LE = 'R-LE',
+      TYPE_RANGE_RE = 'R-RE',
+      UNIT_INDEX = 'index:unit'; // TODO: revisit date coercion?
 
 function testPoint(datum, entry) {
   var fields = entry.fields,
@@ -36068,16 +36186,57 @@ function selectionTest(name, datum, op) {
 
   return n && intersect;
 }
+const selectionId = field(SELECTION_ID),
+      bisect = bisector$1(selectionId),
+      bisectLeft$1 = bisect.left,
+      bisectRight$1 = bisect.right;
+function selectionIdTest(name, datum, op) {
+  const data = this.context.data[name],
+        entries = data ? data.values.value : [],
+        unitIdx = data ? data[UNIT_INDEX] && data[UNIT_INDEX].value : undefined,
+        intersect = op === Intersect,
+        value = selectionId(datum),
+        index = bisectLeft$1(entries, value);
+  if (index === entries.length) return false;
+  if (selectionId(entries[index]) !== value) return false;
+
+  if (unitIdx && intersect) {
+    if (unitIdx.size === 1) return true;
+    if (bisectRight$1(entries, value) - index < unitIdx.size) return false;
+  }
+
+  return true;
+}
+
+/**
+ * Maps an array of scene graph items to an array of selection tuples.
+ * @param {string} name  - The name of the dataset representing the selection.
+ * @param {string} unit  - The name of the unit view.
+ *
+ * @returns {array} An array of selection entries for the given unit.
+ */
+
+function selectionTuples(array, base) {
+  return array.map(x => extend({
+    values: base.fields.map(f => (f.getter || (f.getter = field(f.field)))(x.datum))
+  }, base));
+}
 
 /**
  * Resolves selection for use as a scale domain or reads via the API.
  * @param {string} name - The name of the dataset representing the selection
  * @param {string} [op='union'] - The set operation for combining selections.
  *                 One of 'intersect' or 'union' (default).
+ * @param {boolean} isMulti - Identifies a "multi" selection to perform more
+ *                 expensive resolution computation.
+ * @param {boolean} vl5 - With Vega-Lite v5, "multi" selections are now called "point"
+ *                 selections, and thus the resolved tuple should reflect this name.
+ *                 This parameter allows us to reflect this change without triggering
+ *                 a major version bump for Vega.
  * @returns {object} An object of selected fields and values.
  */
 
-function selectionResolve(name, op, isMulti) {
+function selectionResolve(name, op, isMulti, vl5) {
   var data = this.context.data[name],
       entries = data ? data.values.value : [],
       resolved = {},
@@ -36132,7 +36291,8 @@ function selectionResolve(name, op, isMulti) {
   entries = Object.keys(multiRes);
 
   if (isMulti && entries.length) {
-    resolved[VlMulti] = op === Union ? {
+    const key = vl5 ? VlPoint : VlMulti;
+    resolved[key] = op === Union ? {
       [Or]: entries.reduce((acc, k) => (acc.push(...multiRes[k]), acc), [])
     } : {
       [And]: entries.map(k => ({
@@ -36195,7 +36355,7 @@ var ops = {
 const DataPrefix = ':',
       IndexPrefix = '@';
 function selectionVisitor(name, args, scope, params) {
-  if (args[0].type !== Literal) error('First argument to selection functions must be a string literal.');
+  if (args[0].type !== Literal$1) error('First argument to selection functions must be a string literal.');
   const data = args[0].value,
         op = args.length >= 2 && peek(args).value,
         field = 'unit',
@@ -36519,6 +36679,40 @@ function pinchAngle(event) {
   return Math.atan2(t[0].clientY - t[1].clientY, t[0].clientX - t[1].clientX);
 }
 
+const accessors = {};
+function pluck (data, name) {
+  const accessor = accessors[name] || (accessors[name] = field(name));
+  return isArray(data) ? data.map(accessor) : accessor(data);
+}
+
+function array$5(seq) {
+  return isArray(seq) || ArrayBuffer.isView(seq) ? seq : null;
+}
+
+function sequence$1(seq) {
+  return array$5(seq) || (isString(seq) ? seq : null);
+}
+
+function join$1(seq, ...args) {
+  return array$5(seq).join(...args);
+}
+function indexof(seq, ...args) {
+  return sequence$1(seq).indexOf(...args);
+}
+function lastindexof(seq, ...args) {
+  return sequence$1(seq).lastIndexOf(...args);
+}
+function slice$1(seq, ...args) {
+  return sequence$1(seq).slice(...args);
+}
+function replace$1(str, pattern, repl) {
+  if (isFunction(repl)) error('Function argument passed to replace.');
+  return String(str).replace(pattern, repl);
+}
+function reverse$1(seq) {
+  return array$5(seq).slice().reverse();
+}
+
 function bandspace(count, paddingInner, paddingOuter) {
   return bandSpace(count || 0, paddingInner || 0, paddingOuter || 0);
 }
@@ -36682,11 +36876,18 @@ const functionContext = {
   toDate,
   toNumber,
   toString,
+  indexof,
+  join: join$1,
+  lastindexof,
+  replace: replace$1,
+  reverse: reverse$1,
+  slice: slice$1,
   flush,
   lerp,
   merge: merge$3,
   pad,
   peek,
+  pluck,
   span,
   inrange,
   truncate,
@@ -36809,7 +37010,9 @@ expressionFunction('treePath', treePath, dataVisitor);
 expressionFunction('treeAncestors', treeAncestors, dataVisitor); // register Vega-Lite selection functions
 
 expressionFunction('vlSelectionTest', selectionTest, selectionVisitor);
+expressionFunction('vlSelectionIdTest', selectionIdTest, selectionVisitor);
 expressionFunction('vlSelectionResolve', selectionResolve, selectionVisitor);
+expressionFunction('vlSelectionTuples', selectionTuples);
 
 function parser$1 (expr, scope) {
   const params = {}; // parse the expression to an abstract syntax tree (ast)
@@ -37730,12 +37933,8 @@ function extension(view, item, point) {
     item: constant(item || {}),
     group: group,
     xy: xy,
-    x: function (item) {
-      return xy(item)[0];
-    },
-    y: function (item) {
-      return xy(item)[1];
-    }
+    x: item => xy(item)[0],
+    y: item => xy(item)[1]
   };
 }
 
@@ -41599,8 +41798,8 @@ function analyze(data, scope, ops) {
 
   if (data.values) {
     // hard-wired input data set
-    if (hasSignal(data.values) || hasSignal(data.format)) {
-      // if either values or format has signal, use dynamic loader
+    if (isSignal(data.values) || hasSignal(data.format)) {
+      // if either values is signal or format has signal, use dynamic loader
       output.push(load$1(scope, data));
       output.push(source = collect());
     } else {
@@ -43121,14 +43320,96 @@ function parse$1$1 (spec, config, options) {
   return parseView(spec, new Scope$1(config, options)).toRuntime();
 }
 
-var version = "5.17.0";
+var name = "vega";
+var version = "5.19.1";
+var description = "The Vega visualization grammar.";
+var keywords$1 = [
+	"vega",
+	"visualization",
+	"interaction",
+	"dataflow",
+	"library",
+	"data",
+	"d3"
+];
+var license = "BSD-3-Clause";
+var author = "UW Interactive Data Lab (http://idl.cs.washington.edu)";
+var main = "build/vega-node.js";
+var module = "build/vega.module.js";
+var unpkg = "build/vega.min.js";
+var jsdelivr = "build/vega.min.js";
+var types = "index.d.ts";
+var repository = "vega/vega";
+var scripts = {
+	bundle: "rollup -c --config-bundle",
+	prebuild: "rimraf build && rimraf build-es5",
+	build: "rollup -c --config-core --config-bundle --config-ie",
+	postbuild: "node schema-copy",
+	pretest: "yarn build --config-test",
+	test: "TZ=America/Los_Angeles tape 'test/**/*-test.js'",
+	prepublishOnly: "yarn test && yarn build",
+	postpublish: "./schema-deploy.sh"
+};
+var dependencies = {
+	"vega-crossfilter": "~4.0.5",
+	"vega-dataflow": "~5.7.3",
+	"vega-encode": "~4.8.3",
+	"vega-event-selector": "~2.0.6",
+	"vega-expression": "~4.0.1",
+	"vega-force": "~4.0.7",
+	"vega-format": "~1.0.4",
+	"vega-functions": "~5.12.0",
+	"vega-geo": "~4.3.8",
+	"vega-hierarchy": "~4.0.9",
+	"vega-label": "~1.0.0",
+	"vega-loader": "~4.4.0",
+	"vega-parser": "~6.1.3",
+	"vega-projection": "~1.4.5",
+	"vega-regression": "~1.0.9",
+	"vega-runtime": "~6.1.3",
+	"vega-scale": "~7.1.1",
+	"vega-scenegraph": "~4.9.3",
+	"vega-statistics": "~1.7.9",
+	"vega-time": "~2.0.4",
+	"vega-transforms": "~4.9.3",
+	"vega-typings": "~0.19.2",
+	"vega-util": "~1.16.0",
+	"vega-view": "~5.9.2",
+	"vega-view-transforms": "~4.5.8",
+	"vega-voronoi": "~4.1.5",
+	"vega-wordcloud": "~4.1.3"
+};
+var devDependencies = {
+	"vega-schema": "*"
+};
+var gitHead = "f112ee55fc5ddd025df8820fce371803106a3968";
+var pkg = {
+	name: name,
+	version: version,
+	description: description,
+	keywords: keywords$1,
+	license: license,
+	author: author,
+	main: main,
+	module: module,
+	unpkg: unpkg,
+	jsdelivr: jsdelivr,
+	types: types,
+	repository: repository,
+	scripts: scripts,
+	dependencies: dependencies,
+	devDependencies: devDependencies,
+	gitHead: gitHead
+};
 
 // -- Transforms -----
 extend(transforms, tx, vtx, encode, geo, force, label, tree$1, reg, voronoi, wordcloud, xf); // -- Exports -----
 
+const version$1 = pkg.version;
+
 var vegaImport = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  version: version,
+  version: version$1,
   Dataflow: Dataflow,
   EventStream: EventStream,
   MultiPulse: MultiPulse,
@@ -43354,5 +43635,5 @@ var vegaImport = /*#__PURE__*/Object.freeze({
   textMetrics: textMetrics
 });
 
-export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, isArray as d, isFunction as e, array as f, eventSelector as g, has as h, isNumber as i, identity as j, parse$1$1 as k, logger as l, mergeConfig as m, parser as p, splitAccessPath as s, toSet as t, vegaImport as v, writeConfig as w };
-//# sourceMappingURL=vega.module-01b84c84.js.map
+export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, isArray as d, isFunction as e, array as f, eventSelector as g, has as h, isNumber as i, identity as j, logger as l, mergeConfig as m, parse$1$1 as p, splitAccessPath as s, toSet as t, vegaImport as v, writeConfig as w };
+//# sourceMappingURL=vega.module-5c1fb2a7.js.map

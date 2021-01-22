@@ -2576,7 +2576,10 @@ function baseCreateRenderer(options, createHydrationFns) {
         else {
             if (patchFlag > 0 &&
                 patchFlag & 64 /* STABLE_FRAGMENT */ &&
-                dynamicChildren) {
+                dynamicChildren &&
+                // #2715 the previous fragment could've been a BAILed one as a result
+                // of renderSlot() with no valid children
+                n1.dynamicChildren) {
                 // a stable fragment (template root or <template v-for>) doesn't need to
                 // patch children order, but it may contain dynamicChildren.
                 patchBlockChildren(n1.dynamicChildren, dynamicChildren, container, parentComponent, parentSuspense, isSVG);
@@ -2689,8 +2692,9 @@ function baseCreateRenderer(options, createHydrationFns) {
                 }
                 // onVnodeMounted
                 if ((vnodeHook = props && props.onVnodeMounted)) {
+                    const scopedInitialVNode = initialVNode;
                     queuePostRenderEffect(() => {
-                        invokeVNodeHook(vnodeHook, parent, initialVNode);
+                        invokeVNodeHook(vnodeHook, parent, scopedInitialVNode);
                     }, parentSuspense);
                 }
                 // activated hook for keep-alive roots.
@@ -2702,6 +2706,8 @@ function baseCreateRenderer(options, createHydrationFns) {
                     queuePostRenderEffect(a, parentSuspense);
                 }
                 instance.isMounted = true;
+                // #2458: deference mount-only object parameters to prevent memleaks
+                initialVNode = container = anchor = null;
             }
             else {
                 // updateComponent
@@ -3357,7 +3363,7 @@ function resolveAsset(type, name, warnMissing = true) {
             if (name === `_self`) {
                 return Component;
             }
-            const selfName = Component.displayName || Component.name;
+            const selfName = getComponentName(Component);
             if (selfName &&
                 (selfName === name ||
                     selfName === camelize(name) ||
@@ -4053,11 +4059,14 @@ function recordInstanceBoundEffect(effect, instance = currentInstance) {
 }
 const classifyRE = /(?:^|[-_])(\w)/g;
 const classify = (str) => str.replace(classifyRE, c => c.toUpperCase()).replace(/[-_]/g, '');
-/* istanbul ignore next */
-function formatComponentName(instance, Component, isRoot = false) {
-    let name = isFunction(Component)
+function getComponentName(Component) {
+    return isFunction(Component)
         ? Component.displayName || Component.name
         : Component.name;
+}
+/* istanbul ignore next */
+function formatComponentName(instance, Component, isRoot = false) {
+    let name = getComponentName(Component);
     if (!name && Component.__file) {
         const match = Component.__file.match(/([^/\\]+)\.\w+$/);
         if (match) {
@@ -4126,7 +4135,7 @@ function renderList(source, renderItem) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.0.4";
+const version = "3.0.5";
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const doc = (typeof document !== 'undefined' ? document : null);
@@ -4537,8 +4546,10 @@ const createApp = ((...args) => {
         // clear content before mounting
         container.innerHTML = '';
         const proxy = mount(container);
-        container.removeAttribute('v-cloak');
-        container.setAttribute('data-v-app', '');
+        if (container instanceof Element) {
+            container.removeAttribute('v-cloak');
+            container.setAttribute('data-v-app', '');
+        }
         return proxy;
     };
     return app;
@@ -8545,21 +8556,21 @@ var scripts = {
 	"lint:editorconfig": "editorconfig-checker"
 };
 var dependencies = {
-	d3: "^6.2.0",
+	d3: "^6.3.1",
 	"lodash.mapvalues": "^4.6.0",
 	"lodash.omit": "^4.5.0",
-	togostanza: "^3.0.0-beta.8",
-	vega: "^5.17.0",
-	"vega-embed": "^6.12.2",
+	togostanza: "^3.0.0-beta.12",
+	vega: "^5.19.1",
+	"vega-embed": "^6.15.0",
 	"vega-lite": "^4.17.0"
 };
 var devDependencies = {
 	"editorconfig-checker": "^3.3.0",
-	eslint: "^7.16.0",
-	"eslint-config-prettier": "^7.1.0",
+	eslint: "^7.18.0",
+	"eslint-config-prettier": "^7.2.0",
 	"npm-run-all": "^4.1.5",
 	prettier: "^2.2.1",
-	stylelint: "^13.8.0",
+	stylelint: "^13.9.0",
 	"stylelint-config-prettier": "^8.0.2",
 	"stylelint-config-recommended-scss": "^4.2.0",
 	"stylelint-scss": "^3.18.0"
@@ -8715,4 +8726,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, createTextVNode as g, ref as h, octicons as i, computed$1 as j, popScopeId as k, withScopeId as l, mergeProps as m, n, openBlock as o, pushScopeId as p, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-c6c635ac.js.map
+//# sourceMappingURL=Layout-c36b7051.js.map

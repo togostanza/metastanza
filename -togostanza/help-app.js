@@ -1,4 +1,4 @@
-import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-c6c635ac.js';
+import { d as defineComponent, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, g as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, h as ref, i as octicons, m as mergeProps, j as computed, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-c36b7051.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -2940,7 +2940,7 @@ var script$2 = defineComponent({
 });
 
 const _hoisted_1$2 = { class: "bg-dark" };
-const _hoisted_2$2 = { class: "text-right p-2" };
+const _hoisted_2$2 = { class: "text-end p-2" };
 const _hoisted_3$1 = { class: "overflow-auto p-3 pt-0 text-white" };
 const _hoisted_4$1 = { class: "overflow-auto p-3 bg-light" };
 
@@ -3110,7 +3110,7 @@ const _hoisted_18 = /*#__PURE__*/createTextVNode(" - ");
 const _hoisted_19 = /*#__PURE__*/createVNode("th", null, "License", -1 /* HOISTED */);
 const _hoisted_20 = /*#__PURE__*/createVNode("th", null, "Created", -1 /* HOISTED */);
 const _hoisted_21 = /*#__PURE__*/createVNode("th", null, "Updated", -1 /* HOISTED */);
-const _hoisted_22 = { class: "text-right" };
+const _hoisted_22 = { class: "text-end" };
 const _hoisted_23 = {
   class: "tab-pane",
   id: "customize",
