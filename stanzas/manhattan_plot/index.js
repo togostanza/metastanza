@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import metastanza from "@/lib/metastanza_utils.js";
+import { getFormatedJson } from "@/lib/metastanza_utils.js";
 
 export default async function manhattanPlot(stanza, params) {
   stanza.render({
@@ -10,13 +10,13 @@ export default async function manhattanPlot(stanza, params) {
   });
 
   console.log(params.api);
-  const dataset = await metastanza.getFormatedJson(
+
+  const dataset = await getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
-  }
+
+  draw(dataset, stanza, params);
 }
 
 async function draw(dataset, stanza, params) {

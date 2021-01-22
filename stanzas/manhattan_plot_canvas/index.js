@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import metastanza from "@/lib/metastanza_utils.js";
+import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
 
 export default async function manhattanPlotCanvas(stanza, params) {
   stanza.render({
@@ -10,19 +10,19 @@ export default async function manhattanPlotCanvas(stanza, params) {
   });
 
   console.log(params.api);
-  const dataset = await metastanza.getFormatedJson(
+  const dataset = await getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
   );
-  if (typeof dataset === "object") {
-    draw(dataset, stanza, params);
-    metastanza.appendDlButton(
-      stanza.root.querySelector("#chart"),
-      stanza.root.querySelector("svg"),
-      "manhattan_plot",
-      stanza
-    );
-  }
+
+  draw(dataset, stanza, params);
+
+  appendDlButton(
+    stanza.root.querySelector("#chart"),
+    stanza.root.querySelector("svg"),
+    "manhattan_plot",
+    stanza
+  );
 }
 
 async function draw(dataset, stanza, params) {
