@@ -221,7 +221,7 @@ table {
       &.arrow-btn {
         display: flex;
         justify-content: center;
-        align-items: center;        
+        align-items: center;
       }
       &.back-btn{
         > span{
@@ -230,7 +230,7 @@ table {
           height: 7px;
           border: 1px solid;
           border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);
-          transform: rotate(45deg);          
+          transform: rotate(45deg);
         }
       }
       &.advance-btn{
