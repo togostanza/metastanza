@@ -243,9 +243,9 @@ export default async function scatterplot(stanza, params) {
               ),
             },
           },
-        },
-      },
-    },
+        }
+      }
+    }
   ];
 
   spec.title = {

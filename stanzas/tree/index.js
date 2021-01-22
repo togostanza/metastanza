@@ -92,8 +92,8 @@ export default async function tree(stanza, params) {
     "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
     "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
     "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--tree-figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--tree-figuretitle-vertical-offset") - 0,
     "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
     "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
     "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
@@ -156,7 +156,9 @@ export default async function tree(stanza, params) {
           "--label-font"
         ),
       },
-      fontSize: { value: params["label-size"] },
+      fontSize: { value: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--label-size"
+      ) },
       baseline: { value: "middle" },
     },
     update: {

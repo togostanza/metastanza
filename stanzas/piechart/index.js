@@ -98,8 +98,24 @@ export default async function piechart(stanza, params) {
           },
           text: { field: "value" },
         },
-      },
-    },
+        symbols: {
+          update: {
+            shape: { value: params["symbol-shape"] },
+            stroke: { value: "var(--stroke-color)" },
+            strokeWidth: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--stroke-width"
+              ),
+            },
+            opacity: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--opacity"
+              ),
+            },
+          },
+        }
+      }
+    }
   ];
 
   spec.title = {
