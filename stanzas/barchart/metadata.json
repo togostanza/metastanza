@@ -217,6 +217,18 @@
       "stanza:description": "width of axis"
     },
     {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "color of stroke"
+    },
+    {
+      "stanza:key": "--stroke-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "width of stroke"
+    },
+    {
       "stanza:key": "--fontsize-value",
       "stanza:type": "number",
       "stanza:default": "18",

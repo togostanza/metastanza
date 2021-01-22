@@ -48,7 +48,8 @@ export default async function stackedBarchart(stanza, params) {
     ticks: params["xtick"] === "true",
     encode: {
       axis: {
-        update: {},
+        update: {
+        },
       },
       ticks: {
         update: {
@@ -57,7 +58,7 @@ export default async function stackedBarchart(stanza, params) {
       },
       grids: {
         update: {
-          zindex: { value: "0" },
+          zindex: { value: 0 },
         },
       },
       labels: {
@@ -139,7 +140,7 @@ export default async function stackedBarchart(stanza, params) {
       },
       ticks: {
         update: {
-          stroke: { value: "var(--tick-color)" },
+          stroke: { value: "var(--tick-color)" }
         },
       },
       grids: {
@@ -213,43 +214,29 @@ export default async function stackedBarchart(stanza, params) {
 
 
   //rect（棒）の描画について
-  spec.marks[0].encode = {
-    enter: {
-      x: { scale: "x", field: "x" },
-      width: { scale: "x", band: params["bar-width"] },
-      y: { scale: "y", field: "y0" },
-      y2: { scale: "y", field: "y1" },
-      fill: { scale: "color", field: "c", offset: -1 },
-      // "y": {"scale": "y", "field": "amount"},
-      // "y2": {"scale": "y", "value": 0}
-    },
-    update: {
-      fill: { scale: "color", field: "c" },
-    },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-    },
+  spec.marks[0] = {
+    "type": "rect",
+    "from": {"data":"table"},
+    "encode": {
+      enter: {
+        x: { scale: "x", field: "x" },
+        width: { scale: "x", band: params["bar-width"] },
+        y: { scale: "y", field: "y0" },
+        y2: { scale: "y", field: "y1" },
+        fill: { scale: "color", field: "c", offset: -1 }
+      },
+      update: {
+        fill: { scale: "color", field: "c" },
+        stroke: {value: "var(--stroke-color)"},
+        strokeWidth: {value: getComputedStyle(stanza.root.host).getPropertyValue(
+          "--stroke-width"
+        )}
+      },
+      hover: {
+        fill: { value: "var(--emphasized-color)" }
+      }
+    }
   };
-
-  // spec.marks[1].encode ={
-  //   "enter": {
-  //     "align": {"value": "center"},
-  //     "baseline": {"value": "bottom"},
-  //     "fill": {"value": "var(--emphasized-color)"},
-  //     "font": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
-  //     "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
-  //     "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
-  //   },
-  //   "update": {
-  //     "x": {"scale": "x", "signal": "tooltip.category", "band": 0.5},
-  //     "y": {"scale": "y", "signal": "tooltip.amount", "offset": -1},
-  //     "text": {"signal": "tooltip.amount"},
-  //     "fillOpacity": [
-  //       {"test": "datum === tooltip", "value": 0},
-  //       {"value": 1}
-  //     ]
-  //   }
-  // }
 
   const el = stanza.root.querySelector("main");
   const opts = {
