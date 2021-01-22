@@ -176,11 +176,11 @@ export default defineComponent({
       fetch(params.table_data_api)
         .then((response) => response.json())
         .then((data) => {
-          data.head.href.forEach((datam, index) => {
-            if (datam) {
+          data.head.href.forEach((datum, index) => {
+            if (datum) {
               data.body = data.body.map((bodyDatam) => {
                 const hasHrefData = data.head.vars[index];
-                bodyDatam[hasHrefData].href = bodyDatam[datam].value;
+                bodyDatam[hasHrefData].href = bodyDatam[datum].value;
                 return bodyDatam;
               });
             }
@@ -197,16 +197,16 @@ export default defineComponent({
             }
           });
 
-          filteredHead.value.forEach((datam, index) => {
+          filteredHead.value.forEach((datum, index) => {
             data.body.forEach((bodyDatam) => {
-              if (!filterState[datam.id]) {
-                filterState[datam.id] = [bodyDatam[datam.id].value];
-                filterContents[datam.id] = [bodyDatam[datam.id].value];
+              if (!filterState[datum.id]) {
+                filterState[datum.id] = [bodyDatam[datum.id].value];
+                filterContents[datum.id] = [bodyDatam[datum.id].value];
               } else if (
-                filterState[datam.id].indexOf(bodyDatam[datam.id].value) === -1
+                filterState[datum.id].indexOf(bodyDatam[datum.id].value) === -1
               ) {
-                filterState[datam.id].push(bodyDatam[datam.id].value);
-                filterContents[datam.id].push(bodyDatam[datam.id].value);
+                filterState[datum.id].push(bodyDatam[datum.id].value);
+                filterContents[datum.id].push(bodyDatam[datum.id].value);
               }
             });
           });
