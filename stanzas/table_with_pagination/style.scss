@@ -102,9 +102,9 @@ table {
     border-bottom: var(--thead-border-bottom);
     color: var(--thead-font-color);
     margin-bottom: 0;
-    border-top: var(--table-outside-border);
-    border-right: var(--table-outside-border);
-    border-left: var(--table-outside-border);
+    border-top: var(--thead-border-top);
+    border-right: var(--thead-border-right);
+    border-left: var(--thead-border-left);
     border-bottom: var(--thead-border-bottom);
     > tr {
       > th {
