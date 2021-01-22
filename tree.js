@@ -95,8 +95,8 @@ async function tree(stanza, params) {
     "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
     "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
     "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--tree-figuretitle-horizonal-offset") - 0,
+    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--tree-figuretitle-vertical-offset") - 0,
     "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
     "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
     "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
@@ -159,7 +159,9 @@ async function tree(stanza, params) {
           "--label-font"
         ),
       },
-      fontSize: { value: params["label-size"] },
+      fontSize: { value: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--label-size"
+      ) },
       baseline: { value: "middle" },
     },
     update: {
@@ -284,6 +286,12 @@ var metadata = {
 		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
 	},
 	{
+		"stanza:key": "--label-size",
+		"stanza:type": "number",
+		"stanza:default": "11",
+		"stanza:description": "font size of the legend label"
+	},
+	{
 		"stanza:key": "--legend-font",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
@@ -392,13 +400,13 @@ var metadata = {
 		"stanza:description": "figure title placement.(left, right, middle)"
 	},
 	{
-		"stanza:key": "--figuretitle-horizonal-offset",
+		"stanza:key": "--tree-figuretitle-horizonal-offset",
 		"stanza:type": "number",
 		"stanza:default": "350",
 		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
 	},
 	{
-		"stanza:key": "--figuretitle-vertical-offset",
+		"stanza:key": "--tree-figuretitle-vertical-offset",
 		"stanza:type": "number",
 		"stanza:default": "1650",
 		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"

@@ -246,9 +246,9 @@ async function scatterplot(stanza, params) {
               ),
             },
           },
-        },
-      },
-    },
+        }
+      }
+    }
   ];
 
   spec.title = {

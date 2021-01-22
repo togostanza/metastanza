@@ -91,6 +91,12 @@
       "stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
     },
     {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "11",
+      "stanza:description": "font size of the legend label"
+    },
+    {
       "stanza:key": "--legend-font",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
@@ -199,13 +205,13 @@
       "stanza:description": "figure title placement.(left, right, middle)"
     },
     {
-      "stanza:key": "--figuretitle-horizonal-offset",
+      "stanza:key": "--tree-figuretitle-horizonal-offset",
       "stanza:type": "number",
       "stanza:default": "350",
       "stanza:description": "horizonal offset(X-offset) of figure title in pixel"
     },
     {
-      "stanza:key": "--figuretitle-vertical-offset",
+      "stanza:key": "--tree-figuretitle-vertical-offset",
       "stanza:type": "number",
       "stanza:default": "1650",
       "stanza:description": "vertical offset(Y-offset) of figure title in pixel"
