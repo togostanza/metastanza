@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "dev-vega-wrap",
+  "stanza:label": "dev Vega wrap",
+  "stanza:definition": "",
+  "stanza:type": "Stanza",
+  "stanza:context": "Environment",
+  "stanza:display": "Text",
+  "stanza:provider": "",
+  "stanza:license": "MIT",
+  "stanza:author": "moriya-dbcls",
+  "stanza:address": "",
+  "stanza:contributor": [],
+  "stanza:created": "2020-10-27",
+  "stanza:updated": "2020-10-27",
+  "stanza:parameter": [
+    {
+      "stanza:key": "vega-json",
+      "stanza:example": "https://vega.github.io/vega/examples/stacked-bar-chart.vg.json",
+      "stanza:description": "json api",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "title",
+      "stanza:example": "Example",
+      "stanza:description": "title",
+      "stanza:required": true
+    }
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#a8a8e0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#a8e0e0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#a8e0a8",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#e0e0a8",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#e0a8d3",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#d3a8e0",
+      "stanza:description": "bar color"
+    }
+  ]
+}
