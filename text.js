@@ -54,10 +54,10 @@ var metadata = {
 		"stanza:description": "text align of greeting"
 	},
 	{
-		"stanza:key": "--border-style",
-		"stanza:type": "string",
-		"stanza:default": "1px solid #333",
-		"stanza:description": "emphasized color when you hover on labels and rects"
+		"stanza:key": "--text-width",
+		"stanza:type": "text",
+		"stanza:default": "800px",
+		"stanza:description": "text width"
 	},
 	{
 		"stanza:key": "--label-font",
@@ -66,27 +66,75 @@ var metadata = {
 		"stanza:description": "font(e.g: serif,san serif,fantasy)"
 	},
 	{
+		"stanza:key": "--dt-margin-bottom",
+		"stanza:type": "text",
+		"stanza:default": "8px",
+		"stanza:description": "margin bottom of text header"
+	},
+	{
+		"stanza:key": "--row-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #ccc",
+		"stanza:description": "border bottom of text row"
+	},
+	{
 		"stanza:key": "--dt-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256d80",
+		"stanza:default": "#444444",
 		"stanza:description": "font color of text header"
 	},
 	{
 		"stanza:key": "--dd-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256d80",
+		"stanza:default": "#444444",
 		"stanza:description": "font color of taext body"
+	},
+	{
+		"stanza:key": "--dt-font-size",
+		"stanza:type": "text",
+		"stanza:default": "14px",
+		"stanza:description": "font size of text header"
+	},
+	{
+		"stanza:key": "--dd-font-size",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "font size of taext body"
+	},
+	{
+		"stanza:key": "--dt-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of text header"
+	},
+	{
+		"stanza:key": "--dd-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of taext body"
+	},
+	{
+		"stanza:key": "--dt-line-height",
+		"stanza:type": "text",
+		"stanza:default": "14px",
+		"stanza:description": "line height of text header"
+	},
+	{
+		"stanza:key": "--dd-line-height",
+		"stanza:type": "tEXT",
+		"stanza:default": "10px",
+		"stanza:description": "line hight of taext body"
 	}
 ]
 };
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  *{\n    font-family: var(--label-font);\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n  }\n\n  tr{\n    border-bottom: 1px solid #999;\n  }\n\n  dl{\n    border-bottom: 0.5px solid #999;\n    margin: 0;\n    padding: 10px 0 15px 0;\n  }\n\n  dt{\n    color: var(--dt-font-color);\n    font-weight: bold;\n    font-size: 13px;\n    line-height: 14px;\n  }\n  dd{\n    color: var(--dd-font-color);\n    font-size: 11px;\n    margin-inline-start: 0px;\n  }\n</style>\n\n<table>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n</table>";
+    return "<table>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n</table>";
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}\n\n* {\n  font-family: var(--label-font);\n  box-sizing: border-box;\n}\n\ntable {\n  width: var(--text-width);\n}\ntable dl {\n  margin: 0;\n  padding: 10px 0 15px 0;\n  border-bottom: var(--row-border-bottom);\n}\ntable dl dt {\n  color: var(--dt-font-color);\n  font-size: var(--dt-font-size);\n  font-weight: var(--dt-font-weight);\n  line-height: var(--dt-line-height);\n  margin-bottom: var(--dt-margin-bottom);\n}\ntable dl dd {\n  color: var(--dd-font-color);\n  font-size: var(--dd-font-size);\n  font-weight: var(--dd-font-weight);\n  line-height: var(--dd-line-height);\n  margin-inline-start: 0px;\n}";
 
 defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=text.js.map
