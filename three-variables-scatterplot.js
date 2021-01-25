@@ -3,23 +3,57 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-async function scatterplot(stanza, params) {
+async function threeVariablesScatterplot(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].url = params["your-data"];
 
-  //stanza（描画範囲）のwidth・height
+  // width, hight,padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
 
-  //軸に関する設定
+  let xVariable = params["x-variable"];
+  let yVariable = params["y-variable"];
+  let zVariable = params["z-variable"];
+
+  spec.data[0] = 
+    {
+      "name": "source",
+      "url": params["your-data"],
+      "transform": [
+        {
+          "type": "filter",
+          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`
+        }
+      ]
+    };
+
+  //scales
+  spec.scales[0] = 
+    {
+      "name": "x",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": xVariable},
+      "range": "width"
+    },
+    {
+      "name": "size",
+      "type": "linear",
+      "round": true,
+      "nice": false,
+      "zero": true,
+      "domain": {"data": "source", "field": zVariable},
+      "range": [4,361]
+    };
+
+  //axis
   spec.axes = [
     {
       scale: "x",
       orient: params["xaxis-orient"],
-      title: params["xaxis-title"],
+      title: xVariable,
       titleColor: "var(--title-color)",
       titlePadding:
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
@@ -104,7 +138,7 @@ async function scatterplot(stanza, params) {
     {
       scale: "y",
       orient: params["yaxis-orient"],
-      title: params["yaxis-title"],
+      title: yVariable,
       titleColor: "var(--title-color)",
       titlePadding:
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
@@ -186,12 +220,12 @@ async function scatterplot(stanza, params) {
     },
   ];
 
-  // legendに関する設定
+  // legend
   spec.legends = [
     {
       size: "size",
       format: "s",
-      title: params["legend-title"],
+      title: zVariable,
       titleColor: "var(--legendtitle-color)",
       labelColor: "var(--legendlabel-color)",
       encode: {
@@ -284,9 +318,9 @@ async function scatterplot(stanza, params) {
       from: { data: "source" },
       encode: {
         update: {
-          x: { scale: "x", field: "Horsepower" },
-          y: { scale: "y", field: "Miles_per_Gallon" },
-          size: { scale: "size", field: "Acceleration" },
+          x: { scale: "x", field: xVariable },
+          y: { scale: "y", field: yVariable },
+          size: { scale: "size", field: zVariable },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
           stroke: { value: "var(--stroke-color)" },
@@ -330,8 +364,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "scatterplot",
-	"stanza:label": "scatterplot",
+	"@id": "three-variables-scatterplot",
+	"stanza:label": "three variables scatterplot",
 	"stanza:definition": "Vega wrapped scatterplot for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Graph",
@@ -355,6 +389,24 @@ var metadata = {
 		"stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
 		"stanza:description": "JSON data url which you want to draw",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "x-variable",
+		"stanza:type": "string",
+		"stanza:example": "Horsepower",
+		"stanza:description": "data key for x-variable"
+	},
+	{
+		"stanza:key": "y-variable",
+		"stanza:type": "string",
+		"stanza:example": "Miles_per_Gallon",
+		"stanza:description": "data key for y-variable"
+	},
+	{
+		"stanza:key": "z-variable",
+		"stanza:type": "string",
+		"stanza:example": "Acceleration",
+		"stanza:description": "data key for z-variable"
 	},
 	{
 		"stanza:key": "width",
@@ -675,5 +727,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement(scatterplot, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=scatterplot.js.map
+defineStanzaElement(threeVariablesScatterplot, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=three-variables-scatterplot.js.map
