@@ -4,7 +4,7 @@ import './metastanza_utils-f0c71da7.js';
 import './timer-be811b16.js';
 import './index-9856201e.js';
 
-function tablePaginationOnMemory(stanza, params) {
+function tablePagination(stanza, params) {
   let page_size_list = [10, 20, 50];
   if (params.page_opt) {
     page_size_list = params.page_opt.split(/,/);
@@ -23,20 +23,9 @@ function tablePaginationOnMemory(stanza, params) {
   let dragF = false;
   let startX = 0;
   let button_display = undefined;
-  if (
-    params.slider ||
-    (params.button_align !== "center" &&
-      params.button_align !== "left" &&
-      params.button_align !== "right")
-  ) {
-    params.button_align = "center";
-  }
 
   stanza.render({
     template: "stanza.html.hbs",
-    parameters: {
-      button_align: params.button_align,
-    },
   });
 
   const div = stanza.select("#tableBody");
@@ -55,27 +44,9 @@ function tablePaginationOnMemory(stanza, params) {
   const togostanza = div.getElementsByTagName(
     "togostanza-" + table_stanza_name
   )[0];
-  togostanza.style.display = "none";
+  togostanza.setAttribute("limit", limit);
+  togostanza.setAttribute("offset", offset);
   div.appendChild(togostanza);
-
-  const displayTableTr = () => {
-    const togostanza = stanza
-      .select("#tableBody")
-      .getElementsByTagName("togostanza-" + table_stanza_name)[0];
-    const tbody = togostanza.shadowRoot.children[0].getElementsByTagName(
-      "tbody"
-    )[0];
-    if (tbody) {
-      const trs = tbody.getElementsByTagName("tr");
-      for (let i = 0; i < trs.length; i++) {
-        if (i >= offset && i < offset + limit) {
-          trs[i].style.display = "";
-        } else {
-          trs[i].style.display = "none";
-        }
-      }
-    }
-  };
 
   const setListStartEnd = (start, end) => {
     stanza.select("#listStart").innerHTML = start;
@@ -97,7 +68,8 @@ function tablePaginationOnMemory(stanza, params) {
     limit = parseInt(e.target.value);
     console.log(limit);
     current_page = Math.ceil(offset / limit);
-    displayTableTr();
+    togostanza.setAttribute("limit", limit);
+    togostanza.setAttribute("offset", offset);
     setBothPagination();
   });
 
@@ -183,6 +155,8 @@ function tablePaginationOnMemory(stanza, params) {
     }
 
     if (params.slider) {
+      div.style.setProperty("text-align", "center", "important");
+
       const slider = div.getElementsByClassName("page_slider_div")[0];
       const knob_ul = div.getElementsByClassName("page_slider_knob_ul")[0];
       const knob = div.getElementsByClassName("page_slider_knob")[0];
@@ -206,10 +180,6 @@ function tablePaginationOnMemory(stanza, params) {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("class", "slider_range");
     div.appendChild(canvas);
-    const slider_range_color = document.createElement("div");
-    slider_range_color.setAttribute("class", "slider_range_color");
-    slider_range_color.innerHTML = "dummy";
-    div.appendChild(slider_range_color);
 
     const slider = document.createElement("div");
     slider.setAttribute("class", "page_slider_div");
@@ -277,7 +247,7 @@ function tablePaginationOnMemory(stanza, params) {
         if (offset > max) {
           offset = max - limit;
         }
-        displayTableTr();
+        togostanza.setAttribute("offset", offset);
         setBothPagination();
         dragF = false;
       }
@@ -330,7 +300,7 @@ function tablePaginationOnMemory(stanza, params) {
         }
       }
       if (current_offset !== offset) {
-        displayTableTr();
+        togostanza.setAttribute("offset", offset);
         setBothPagination();
       }
     });
@@ -386,9 +356,9 @@ function tablePaginationOnMemory(stanza, params) {
         100
       );
       ctx.closePath();
-      ctx.fillStyle = document.defaultView.getComputedStyle(
-        div.getElementsByClassName("slider_range_color")[0]
-      ).backgroundColor;
+      ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
+        "--slider-range-color"
+      );
       ctx.fill();
     }
   };
@@ -409,45 +379,55 @@ function tablePaginationOnMemory(stanza, params) {
   }
 
   // total size
-  const checkChildStanza = () => {
-    const togostanza = stanza
-      .select("#tableBody")
-      .getElementsByTagName("togostanza-" + table_stanza_name)[0];
-    const tbody = togostanza.shadowRoot.children[0].getElementsByTagName(
-      "tbody"
-    )[0];
-    if (tbody) {
-      clearInterval(waitingTimer);
-      const trs = tbody.getElementsByTagName("tr");
-      max = trs.length;
-      max_page = Math.ceil(max / limit);
-      stanza.select("#totalSize").innerHTML = max;
-      setBothPagination();
-      displayTableTr();
-      togostanza.style.display = "inline";
-    }
+  const options = {
+    method: "POST",
+    mode: "cors",
+    body: params.params.split(/\s+/).join("&"),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
   };
-  const waitingTimer = setInterval(checkChildStanza, 100);
+  const url = params.table_data_count_api;
+  const q = fetch(url, options).then((res) => res.json());
+  q.then(function (data) {
+    max = parseInt(data.count);
+    max_page = Math.ceil(max / limit);
+    stanza.select("#totalSize").innerHTML = max;
+    setBothPagination();
+  });
 }
 
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table_pagination_on_memory",
-	"stanza:label": "Table pagination metastanza - on memory",
-	"stanza:definition": "Metastanza for table pagination with slider for table data on memory.",
+	"@id": "table_pagination",
+	"stanza:label": "Table pagination metastanza",
+	"stanza:definition": "metastanza for table pagination with slider.",
 	"stanza:parameter": [
 	{
-		"stanza:key": "table_stanza",
-		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
-		"stanza:description": "table stanza for all data (need 'tbody' tag in the table)",
+		"stanza:key": "table_data_count_api",
+		"stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example?count=1",
+		"stanza:description": "table row count api",
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "table_stanza",
+		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
+		"stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "params",
+		"stanza:example": "taxonomy=9606",
+		"stanza:description": "parameters for count api",
+		"stanza:required": false
+	},
+	{
 		"stanza:key": "table_stanza_params",
-		"stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example' limit='none'",
-		"stanza:description": "parameters for table stanza",
+		"stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example'",
+		"stanza:description": "parameters for table stanza (except 'limit' and 'offset')",
 		"stanza:required": false
 	},
 	{
@@ -473,17 +453,48 @@ var metadata = {
 		"stanza:example": "",
 		"stanza:description": "bottom page button on/off",
 		"stanza:required": false
-	},
-	{
-		"stanza:key": "button_align",
-		"stanza:example": "center",
-		"stanza:description": "page button align (left, center, right), when 'slidr' off.",
-		"stanza:required": false
 	}
 ],
-	"stanza:usage": "<togostanza-table_pagination_at_once></togostanza-table_pagination_at_once>",
+	"stanza:style": [
+	{
+		"stanza:key": "--button-bg-color",
+		"stanza:type": "color",
+		"stanza:default": "#b6c769",
+		"stanza:description": "button default background color"
+	},
+	{
+		"stanza:key": "--current-button-bg-color",
+		"stanza:type": "color",
+		"stanza:default": "#7b8a38",
+		"stanza:description": "button active background color"
+	},
+	{
+		"stanza:key": "--button-text-color",
+		"stanza:type": "color",
+		"stanza:default": "#ffffff",
+		"stanza:description": "button text color"
+	},
+	{
+		"stanza:key": "--button-align",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"center",
+			"right"
+		],
+		"stanza:default": "center",
+		"stanza:description": "page button align (left, center, right), when 'slider' off."
+	},
+	{
+		"stanza:key": "--slider-range-color",
+		"stanza:type": "color",
+		"stanza:default": "#e0e6ca",
+		"stanza:description": "slider range color"
+	}
+],
+	"stanza:usage": "<togostanza-table_pagination></togostanza-table_pagination>",
 	"stanza:type": "MetaStanza",
-	"stanza:display": "",
+	"stanza:display": "Table",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "TogoStanza",
@@ -496,20 +507,11 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "<style>\n  div.main {\n      font-family: \"Arial\",san-serif;\n}\ndiv#paginationTop, div#paginationBottom {\n    text-align: "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"button_align") || (depth0 != null ? lookupProperty(depth0,"button_align") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"button_align","hash":{},"data":data,"loc":{"start":{"line":6,"column":16},"end":{"line":8,"column":4}}}) : helper)))
-    + ";\n    clear: both;\n    position: relative;\n}\ndiv.page_slider_div {\n    width: 100%;\n    height: 20px;\n    margin: 10px 0px 20px 0px;\n    text-align: left;\n}\ndiv.page_slider_bar {\n    width: calc(100% - 40px);\n    margin-left: 20px;\n    background-color: #bbbbbb;  /* slider bar color */\n    height: 4px;\n    position: relative;\n    top: 8px;\n}\nul.page_button_ul {\n    display: inline-block;\n    padding: 0px 20px 0px 20px;\n}\nul.page_slider_knob_ul {\n    margin: 0px;\n    display: inline-block;\n    padding: 0px;\n    position: relative;\n    top: -4px;\n}\nli.page_slider_knob, li.page_button {\n    background-color: #b6c769; /* button default bg color */\n    color: #ffffff;            /* button default font color */\n    text-align: center;\n    height: 20px;\n    padding-left: 14px;\n    padding-right: 14px;\n    list-style: none;\n    cursor: pointer;\n    user-select: none;\n    display : table-cell;\n    vertical-align: middle;\n    transform: translateX(0px);  /* for z-index conflict of slider range object */\n}\nli.current_button, li.onmouse_button{\n    background-color: #7b8a38; /* button active bg color */\n}\nli.inactive_button{\n    background-color: #cccccc; /* button inactive bg color */\n}\nli.current_button, li.page_slider_knob, li.inactive_button{\n    cursor: default;\n}\nli.page_slider_knob {\n    border-radius: 10px;\n}\nli.prev_button {\n    transform: translateX(-10px);\n    border-radius: 10px;\n}\nli.next_button {\n    transform: translateX(10px);\n    border-radius: 10px;\n}\nli.first_button {\n    transform: translateX(-20px);\n    border-radius: 10px;\n}\nli.last_button{\n    transform: translateX(20px);\n    border-radius: 10px;\n}\nli.page_button_left {\n    padding-left: 24px;\n    border-radius: 10px 0px 0px 10px;\n}\nli.page_button_right {\n    padding-right: 24px;\n    border-radius: 0px 10px 10px 0px;\n}\ndiv.float_left {\n    float: left;\n}\ndiv.float_right {\n    float: right;\n}\ncanvas.slider_range {\n    width: 100%;\n    height: 100px;\n    position: absolute;\n    left: 0px;\n}\ndiv.slider_range_color {\n    background-color: #e0e6ca; /* slider range color */\n    display: none;\n}\n</style>\n\n<div class=\"main\">\n  <div id=\"tableInfo\">\n    <div class=\"float_left\">\n      Showing\n      <span id=\"listStart\"></span>\n      ..\n      <span id=\"listEnd\"></span>\n      of\n      <span id=\"totalSize\">\n        entries\n      </span>\n    </div>\n    <div class=\"float_right\">\n      Page size:\n      <select id=\"pageSizeSelect\"></select>\n    </div>\n  </div>\n  <div id=\"paginationTop\"></div>\n  <div id=\"tableBody\"></div>\n  <div id=\"paginationBottom\"></div>\n</div>";
+    return "<div class=\"main\">\n  <div id=\"tableInfo\">\n    <div class=\"float_left\">\n      Showing\n      <span id=\"listStart\"></span>\n      ..\n      <span id=\"listEnd\"></span>\n      of\n      <span id=\"totalSize\">\n        entries\n      </span>\n    </div>\n    <div class=\"float_right\">\n      Page size:\n      <select id=\"pageSizeSelect\"></select>\n    </div>\n  </div>\n  <div id=\"paginationTop\"></div>\n  <div id=\"tableBody\"></div>\n  <div id=\"paginationBottom\"></div>\n</div>";
 },"useData":true}]
 ];
 
-var css = "";
+var css = "div.main {\n  font-family: \"Arial\", sans-serif;\n}\n\ndiv#paginationTop,\ndiv#paginationBottom {\n  text-align: var(--button-align);\n  clear: both;\n  position: relative;\n}\n\ndiv.page_slider_div {\n  width: 100%;\n  height: 20px;\n  margin: 10px 0px 20px 0px;\n  text-align: left;\n}\n\ndiv.page_slider_bar {\n  width: calc(100% - 40px);\n  margin-left: 20px;\n  background-color: #bbbbbb;\n  /* slider bar color */\n  height: 4px;\n  position: relative;\n  top: 8px;\n}\n\nul.page_button_ul {\n  display: inline-block;\n  padding: 0px 20px 0px 20px;\n}\n\nul.page_slider_knob_ul {\n  margin: 0px;\n  display: inline-block;\n  padding: 0px;\n  position: relative;\n  top: -4px;\n}\n\nli.page_slider_knob,\nli.page_button {\n  background-color: var(--button-bg-color);\n  /* button default bg color */\n  color: var(--button-text-color);\n  /* button default font color */\n  text-align: center;\n  height: 20px;\n  padding-left: 14px;\n  padding-right: 14px;\n  list-style: none;\n  cursor: pointer;\n  user-select: none;\n  display: table-cell;\n  vertical-align: middle;\n  transform: translateX(0px);\n  /* for z-index conflict of slider range object */\n}\n\nli.current_button,\nli.onmouse_button {\n  background-color: var(--current-button-bg-color);\n  /* button active bg color */\n}\n\nli.inactive_button {\n  background-color: #cccccc;\n  /* button inactive bg color */\n}\n\nli.current_button,\nli.page_slider_knob,\nli.inactive_button {\n  cursor: default;\n}\n\nli.page_slider_knob {\n  border-radius: 10px;\n}\n\nli.prev_button {\n  transform: translateX(-10px);\n  border-radius: 10px;\n}\n\nli.next_button {\n  transform: translateX(10px);\n  border-radius: 10px;\n}\n\nli.first_button {\n  transform: translateX(-20px);\n  border-radius: 10px;\n}\n\nli.last_button {\n  transform: translateX(20px);\n  border-radius: 10px;\n}\n\nli.page_button_left {\n  padding-left: 24px;\n  border-radius: 10px 0px 0px 10px;\n}\n\nli.page_button_right {\n  padding-right: 24px;\n  border-radius: 0px 10px 10px 0px;\n}\n\ndiv.float_left {\n  float: left;\n}\n\ndiv.float_right {\n  float: right;\n}\n\ncanvas.slider_range {\n  width: 100%;\n  height: 100px;\n  position: absolute;\n  left: 0px;\n}";
 
-defineStanzaElement(tablePaginationOnMemory, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=table_pagination_on_memory.js.map
+defineStanzaElement(tablePagination, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=table_pagination.js.map
