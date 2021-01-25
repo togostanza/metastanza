@@ -189,7 +189,9 @@ export default async function barchart(stanza, params) {
         update: {
           stroke: { value: "var(--axis-color)" },
           strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue("--axis-width"),
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--axis-width"
+            ),
           },
         },
       },
@@ -197,40 +199,56 @@ export default async function barchart(stanza, params) {
   };
 
   spec.title = {
-    "text": params["figuretitle"], //"Title of this figure",
-    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
-    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
-    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
-    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
-    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
-  }
+    text: params["figuretitle"], //"Title of this figure",
+    orient: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-orient"
+    ),
+    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-anchor"
+    ),
+    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    dx:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-horizonal-offset"
+      ) - 0,
+    dy:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-vertical-offset"
+      ) - 0,
+    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-font-size"
+    ),
+    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-font-weight"
+    ),
+  };
 
   //rect（棒）の描画について
   spec.marks[0] = {
-      "type": "rect",
-      "from": {"data":"table"},
-      "encode": {
-        enter: {
-          x: { scale: "xscale", field: "category" },
-          width: { scale: "xscale", band: params["bar-width"] },
-          y: { scale: "yscale", field: "amount" },
-          y2: { scale: "yscale", value: 0 },
-        },
-        update: {
-          fill: { value: "var(--series-0-color)" },
-          stroke: {value: "var(--stroke-color)"},
-          strokeWidth: {value: getComputedStyle(stanza.root.host).getPropertyValue(
+    type: "rect",
+    from: { data: "table" },
+    encode: {
+      enter: {
+        x: { scale: "xscale", field: "category" },
+        width: { scale: "xscale", band: params["bar-width"] },
+        y: { scale: "yscale", field: "amount" },
+        y2: { scale: "yscale", value: 0 },
+      },
+      update: {
+        fill: { value: "var(--series-0-color)" },
+        stroke: { value: "var(--stroke-color)" },
+        strokeWidth: {
+          value: getComputedStyle(stanza.root.host).getPropertyValue(
             "--stroke-width"
-          ),}
+          ),
         },
-        hover: {
-          fill: { value: "var(--emphasized-color)" },
-        }
-      }
-    };
+      },
+      hover: {
+        fill: { value: "var(--emphasized-color)" },
+      },
+    },
+  };
 
   spec.marks[1].encode = {
     enter: {

@@ -1,6 +1,6 @@
 import vegaEmbed from "vega-embed";
 
-export default function vegaliteStackedAreaChart(stanza /* , params */) {
+export default function devVegaliteStackedAreaChart(stanza /* , params */) {
   //let spec = await fetch(params["src-url"]).then((res) => res.json());
   const spec = JSON.parse(`{
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",

@@ -1,4 +1,4 @@
-export default function columnTreeView(stanza, params) {
+export default function devColumnTreeView(stanza, params) {
   const fetchReq = (query, callback, depth) => {
     const options = {
       method: "post",

@@ -14,24 +14,24 @@ p.greeting {
 summary {
   display: none;
 }
-*{
+* {
   font-family: var(--label-font);
   box-sizing: border-box;
 }
-table{
+table {
   width: var(--text-width);
-  dl{
+  dl {
     margin: 0;
     padding: 10px 0 15px 0;
     border-bottom: var(--row-border-bottom);
-    dt{
+    dt {
       color: var(--dt-font-color);
       font-size: var(--dt-font-size);
       font-weight: var(--dt-font-weight);
       line-height: var(--dt-line-height);
       margin-bottom: var(--dt-margin-bottom);
     }
-    dd{
+    dd {
       color: var(--dd-font-color);
       font-size: var(--dd-font-size);
       font-weight: var(--dd-font-weight);

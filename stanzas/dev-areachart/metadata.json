@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "areachart",
-  "stanza:label": "areachart",
+  "@id": "dev-areachart",
+  "stanza:label": "dev areachart",
   "stanza:definition": "Vega wrapped areachart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",

@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "vegalite_stacked_area_chart",
-  "stanza:label": "Vegalite stacked area chart",
+  "@id": "dev-vegalite-stacked-area-chart",
+  "stanza:label": "dev Vegalite stacked area chart",
   "stanza:definition": "vegalite_wrapping_stacked_area_chart",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",

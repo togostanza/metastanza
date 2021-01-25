@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "vegalite_mosaic_chart_with_labels",
-  "stanza:label": "Vegalite mosaic chart with labels",
+  "@id": "dev-vegalite-mosaic-chart-with-labels",
+  "stanza:label": "dev Vegalite mosaic chart with labels",
   "stanza:definition": "vegalite_wrapping_mosaic_chart_with_labels",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",

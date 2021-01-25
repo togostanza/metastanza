@@ -1,6 +1,6 @@
 import vegaEmbed from "vega-embed";
 
-export default async function linechart(stanza, params) {
+export default async function devLinechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   spec.data[0].values = [

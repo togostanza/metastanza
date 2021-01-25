@@ -52,7 +52,7 @@ main {
       font-size: var(--searchbox-font-size);
       color: var(--searchbox-font-color);
       background-color: var(--searchbox-background-color);
-      ::placeholder{
+      ::placeholder {
         color: #eaeaea;
       }
     }
@@ -69,9 +69,9 @@ main {
       > img {
         width: var(--searchbtn-img-width);
         height: var(--searchbtn-img-height);
-        display: var(--searchimg-display);//block;
-        }
-      > .search-text{
+        display: var(--searchimg-display); //block;
+      }
+      > .search-text {
         display: var(--searchtext-display);
         color: var(--searchtext-color);
         font-size: var(--searchtext-font-size);
@@ -125,11 +125,11 @@ table {
         background-repeat: no-repeat;
         background-position: center 5px;
         background-size: 8px 8px;
-        &.filter-icon{
+        &.filter-icon {
           margin-left: 2px;
           background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
         }
-        &.sort-icon{
+        &.sort-icon {
           background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
           &.desc {
             background-image: url(../../assets/grey-sort2-des.svg);
@@ -150,9 +150,9 @@ table {
             height: auto;
             background-color: lavender;
             padding: 14px 10px;
-            > ul{
+            > ul {
               padding: 0;
-              > li{
+              > li {
                 display: flex;
                 margin-bottom: 8px;
                 line-height: 1.4em;
@@ -162,7 +162,7 @@ table {
                 }
               }
             }
-            &.on{
+            &.on {
               display: block;
             }
           }
@@ -170,7 +170,7 @@ table {
       }
     }
   }
-  > tbody{
+  > tbody {
     font-size: var(--tbody-font-size);
     color: var(--tbody-font-color);
     background-color: var(--tbody-background-color);
@@ -178,10 +178,10 @@ table {
     border-bottom: var(--tbody-border-bottom);
     border-left: var(--tbody-border-left);
     > tr {
-      &:nth-child(odd){
+      &:nth-child(odd) {
         background-color: var(--tbody-odd-background-color);
       }
-      &:nth-child(even){
+      &:nth-child(even) {
         background-color: var(--tbody-even-background-color);
       }
       > td {
@@ -204,7 +204,6 @@ table {
   }
 }
 
-
 #pagination {
   padding: var(--pagination-padding);
   display: flex;
@@ -226,23 +225,25 @@ table {
         justify-content: center;
         align-items: center;
       }
-      &.back-btn{
-        > span{
+      &.back-btn {
+        > span {
           display: block;
           width: 7px;
           height: 7px;
           border: 1px solid;
-          border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);
+          border-color: transparent transparent var(--arrowbtn-color)
+            var(--arrowbtn-color);
           transform: rotate(45deg);
         }
       }
-      &.advance-btn{
-        > span{
+      &.advance-btn {
+        > span {
           display: block;
           width: 7px;
           height: 7px;
           border: 1px solid;
-          border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;
+          border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent
+            transparent;
           transform: rotate(45deg);
         }
       }

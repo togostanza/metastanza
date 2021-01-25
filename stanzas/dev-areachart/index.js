@@ -1,6 +1,6 @@
 import vegaEmbed from "vega-embed";
 
-export default async function areachart(stanza, params) {
+export default async function devAreachart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   // カラースキームを定義しようとしたけれどできない
