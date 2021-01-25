@@ -2,18 +2,18 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "scatterplot",
-  "stanza:label": "scatterplot",
-  "stanza:definition": "Vega wrapped scatterplot for MetaStanza",
+  "@id": "two-variables-scatterplot",
+  "stanza:label": "two variables scatterplot",
+  "stanza:definition": "Two variables scatterplot for MetaStanza",
   "stanza:type": "Stanza",
-  "stanza:display": "Graph",
+  "stanza:display": "Chart",
   "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
   "stanza:author": "c-nakashima",
   "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
-  "stanza:created": "2020-11-06",
-  "stanza:updated": "2020-11-06",
+  "stanza:created": "2021-01-25",
+  "stanza:updated": "2021-01-25",
   "stanza:parameter": [
     {
       "stanza:key": "src-url",
@@ -26,6 +26,18 @@
       "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
       "stanza:description": "JSON data url which you want to draw",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "x-variable",
+      "stanza:type": "string",
+      "stanza:example": "Horsepower",
+      "stanza:description": "data key for x-variable"
+    },
+    {
+      "stanza:key": "y-variable",
+      "stanza:type": "string",
+      "stanza:example": "Miles_per_Gallon",
+      "stanza:description": "data key for y-variable"
     },
     {
       "stanza:key": "width",
@@ -56,24 +68,6 @@
       "stanza:type": "string",
       "stanza:example": "left",
       "stanza:description": "orient of Y-axis.(please select left or right)"
-    },
-    {
-      "stanza:key": "xaxis-title",
-      "stanza:type": "string",
-      "stanza:example": "title of Xaxis",
-      "stanza:description": "title of Xaxis"
-    },
-    {
-      "stanza:key": "yaxis-title",
-      "stanza:type": "string",
-      "stanza:example": "title of Yaxis",
-      "stanza:description": "title of Yaxis"
-    },
-    {
-      "stanza:key": "legend-title",
-      "stanza:type": "string",
-      "stanza:example": "Acceleration",
-      "stanza:description": "title of legends"
     },
     {
       "stanza:key": "xgrid",
@@ -131,13 +125,13 @@
     {
       "stanza:key": "--emphasized-color",
       "stanza:type": "color",
-      "stanza:default": "#ec7d8d",
+      "stanza:default": "#FF5C5C",
       "stanza:description": "emphasized color when you hover on labels and rects"
     },
     {
       "stanza:key": "--grid-color",
       "stanza:type": "color",
-      "stanza:default": "#eee",
+      "stanza:default": "#333",
       "stanza:description": "grid color"
     },
     {
@@ -149,7 +143,7 @@
     {
       "stanza:key": "--grid-opacity",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0.1",
       "stanza:description": "grid opacity.(0-1)"
     },
     {
@@ -173,9 +167,15 @@
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "rgba(255, 255, 255, 1)",
       "stanza:description": "color of axis"
     },
+    {
+      "stanza:key": "--axis-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "width of axis"
+    },    
     {
       "stanza:key": "--title-size",
       "stanza:type": "number",
@@ -213,46 +213,10 @@
       "stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
     },
     {
-      "stanza:key": "--axis-width",
-      "stanza:type": "number",
-      "stanza:default": "1",
-      "stanza:description": "width of axis"
-    },
-    {
-      "stanza:key": "--legend-font",
+      "stanza:key": "--plot-size",
       "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
-      "stanza:description": "font family of the legend title and legend labels"
-    },
-    {
-      "stanza:key": "--legendtitle-size",
-      "stanza:type": "number",
-      "stanza:default": "12",
-      "stanza:description": "font size of the legend title"
-    },
-    {
-      "stanza:key": "--legendtitle-weight",
-      "stanza:type": "number",
-      "stanza:default": "400",
-      "stanza:description": "font weight of the legend title"
-    },
-    {
-      "stanza:key": "--legendtitle-color",
-      "stanza:type": "color",
-      "stanza:default": "#444",
-      "stanza:description": "font color of the legend title"
-    },
-    {
-      "stanza:key": "--legendlabel-size",
-      "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "font size of the legend label"
-    },
-    {
-      "stanza:key": "--legendlabel-color",
-      "stanza:type": "color",
-      "stanza:default": "#444",
-      "stanza:description": "font color of the legend label"
+      "stanza:description": "plot size.(The area in pixels of the plot bounding box.)"
     },
     {
       "stanza:key": "--stroke-color",
@@ -263,25 +227,25 @@
     {
       "stanza:key": "--hover-stroke-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "#fff",
       "stanza:description": "stroke color of plot when you hover."
     },
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0",
       "stanza:description": "stroke width"
     },
     {
       "stanza:key": "--hover-stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0.5",
       "stanza:description": "stroke width of plot when you hover."
     },
     {
       "stanza:key": "--opacity",
       "stanza:type": "text",
-      "stanza:default": "0.7",
+      "stanza:default": "0.5",
       "stanza:description": "opacity of each plots"
     },
     {
@@ -328,3 +292,4 @@
     }
   ]
 }
+

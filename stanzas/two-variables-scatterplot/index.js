@@ -1,22 +1,56 @@
 import vegaEmbed from "vega-embed";
 
-export default async function scatterplot(stanza, params) {
+export default async function twoVariablesScatterplot(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].url = params["your-data"];
 
-  //stanza（描画範囲）のwidth・height
+  // width, hight,padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
 
-  //軸に関する設定
+  let xVariable = params["x-variable"];
+  let yVariable = params["y-variable"];
+
+  spec.data[0] =
+    {
+      "name": "source",
+      "url": params["your-data"],
+      "transform": [
+        {
+          "type": "filter",
+          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null`
+        }
+      ]
+    }
+
+  // scales
+  spec.scales[0] =
+    {
+      "name": "x",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": xVariable},
+      "range": "width"
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "round": true,
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "source", "field": yVariable},
+      "range": "height"
+    }
+
+
+  // axis
   spec.axes = [
     {
       scale: "x",
       orient: params["xaxis-orient"],
-      title: params["xaxis-title"],
+      title: xVariable,
       titleColor: "var(--title-color)",
       titlePadding:
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
@@ -101,7 +135,8 @@ export default async function scatterplot(stanza, params) {
     {
       scale: "y",
       orient: params["yaxis-orient"],
-      title: params["yaxis-title"],
+      title: yVariable,
+      // title: params["yaxis-title"],
       titleColor: "var(--title-color)",
       titlePadding:
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
@@ -183,70 +218,7 @@ export default async function scatterplot(stanza, params) {
     },
   ];
 
-  // legendに関する設定
-  spec.legends = [
-    {
-      size: "size",
-      format: "s",
-      title: params["legend-title"],
-      titleColor: "var(--legendtitle-color)",
-      labelColor: "var(--legendlabel-color)",
-      encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
-        },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            fill: { value: "var(--series-0-color)" },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
-            },
-            opacity: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--opacity"
-              ),
-            },
-          },
-        },
-      },
-    },
-  ];
+  spec.legends = [];
 
   spec.title = {
     text: params["figuretitle"], //"Title of this figure",
@@ -278,12 +250,14 @@ export default async function scatterplot(stanza, params) {
     {
       name: "marks",
       type: "symbol",
+      // size: 2,
       from: { data: "source" },
       encode: {
         update: {
-          x: { scale: "x", field: "Horsepower" },
-          y: { scale: "y", field: "Miles_per_Gallon" },
-          size: { scale: "size", field: "Acceleration" },
+          x: { scale: "x", field: xVariable },
+          y: { scale: "y", field: yVariable },
+          // size: { scale: "size", field: "Acceleration" },
+          size: { value: 10},
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
           stroke: { value: "var(--stroke-color)" },
