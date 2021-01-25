@@ -175,7 +175,7 @@
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description": "width of axis"
-    },    
+    },
     {
       "stanza:key": "--title-size",
       "stanza:type": "number",
@@ -292,4 +292,3 @@
     }
   ]
 }
-

@@ -25,13 +25,13 @@
     {
       "stanza:key": "width",
       "stanza:type": "number",
-      "stanza:example": "400",
+      "stanza:example": "200",
       "stanza:description": "width of your stanza"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": "500",
+      "stanza:example": "300",
       "stanza:description": "height of your stanza"
     },
     {
@@ -196,13 +196,13 @@
     {
       "stanza:key": "--figuretitle-horizonal-offset",
       "stanza:type": "number",
-      "stanza:default": "60",
+      "stanza:default": "100",
       "stanza:description": "horizonal offset(X-offset) of figure title in pixel"
     },
     {
       "stanza:key": "--figuretitle-vertical-offset",
       "stanza:type": "number",
-      "stanza:default": "400",
+      "stanza:default": "210",
       "stanza:description": "vertical offset(Y-offset) of figure title in pixel"
     },
     {

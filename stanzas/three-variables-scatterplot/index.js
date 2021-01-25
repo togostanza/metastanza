@@ -8,51 +8,49 @@ export default async function threeVariablesScatterplot(stanza, params) {
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  let xVariable = params["x-variable"];
-  let yVariable = params["y-variable"];
-  let zVariable = params["z-variable"];
+  const xVariable = params["x-variable"];
+  const yVariable = params["y-variable"];
+  const zVariable = params["z-variable"];
 
-  spec.data[0] = 
-    {
-      "name": "source",
-      "url": params["your-data"],
-      "transform": [
-        {
-          "type": "filter",
-          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`
-        }
-      ]
-    }
+  spec.data[0] = {
+    name: "source",
+    url: params["your-data"],
+    transform: [
+      {
+        type: "filter",
+        expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`,
+      },
+    ],
+  };
 
   //scales
-  spec.scales[0] = 
+  (spec.scales[0] = {
+    name: "x",
+    type: "linear",
+    round: true,
+    nice: true,
+    zero: true,
+    domain: { data: "source", field: xVariable },
+    range: "width",
+  }),
     {
-      "name": "x",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": xVariable},
-      "range": "width"
+      name: "y",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: yVariable },
+      range: "height",
     },
     {
-      "name": "y",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": yVariable},
-      "range": "height"
-    },
-    {
-      "name": "size",
-      "type": "linear",
-      "round": true,
-      "nice": false,
-      "zero": true,
-      "domain": {"data": "source", "field": zVariable},
-      "range": [4,361]
-    }
+      name: "size",
+      type: "linear",
+      round: true,
+      nice: false,
+      zero: true,
+      domain: { data: "source", field: zVariable },
+      range: [4, 361],
+    };
 
   //axis
   spec.axes = [

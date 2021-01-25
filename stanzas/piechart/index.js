@@ -7,7 +7,7 @@ export default async function piechart(stanza, params) {
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
-  spec.padding = { left: 5, top: 5, right: 150, bottom: 5 };
+  spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
   // scales: カラースキームを指定
   spec.scales[0].range = [
@@ -127,10 +127,14 @@ export default async function piechart(stanza, params) {
       "--figuretitle-anchor"
     ),
     color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx: 100,
-    dy: 200,
-    // "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    // "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
+    dx:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-horizonal-offset"
+      ) - 0,
+    dy:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-vertical-offset"
+      ) - 0,
     font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
     fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
       "--figuretitle-font-size"

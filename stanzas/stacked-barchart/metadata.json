@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "stacked-barchart",
-  "stanza:label": "Stacked barchart",
-  "stanza:definition": "stacked-barchart for MetaStanza",
+  "stanza:label": "stacked barchart",
+  "stanza:definition": "stacked barchart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",
   "stanza:provider": "Togostanza",

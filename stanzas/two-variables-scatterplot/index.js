@@ -8,42 +8,39 @@ export default async function twoVariablesScatterplot(stanza, params) {
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  let xVariable = params["x-variable"];
-  let yVariable = params["y-variable"];
+  const xVariable = params["x-variable"];
+  const yVariable = params["y-variable"];
 
-  spec.data[0] =
-    {
-      "name": "source",
-      "url": params["your-data"],
-      "transform": [
-        {
-          "type": "filter",
-          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null`
-        }
-      ]
-    }
+  spec.data[0] = {
+    name: "source",
+    url: params["your-data"],
+    transform: [
+      {
+        type: "filter",
+        expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
+      },
+    ],
+  };
 
   // scales
-  spec.scales[0] =
+  (spec.scales[0] = {
+    name: "x",
+    type: "linear",
+    round: true,
+    nice: true,
+    zero: true,
+    domain: { data: "source", field: xVariable },
+    range: "width",
+  }),
     {
-      "name": "x",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": xVariable},
-      "range": "width"
-    },
-    {
-      "name": "y",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": yVariable},
-      "range": "height"
-    }
-
+      name: "y",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: yVariable },
+      range: "height",
+    };
 
   // axis
   spec.axes = [
@@ -257,7 +254,7 @@ export default async function twoVariablesScatterplot(stanza, params) {
           x: { scale: "x", field: xVariable },
           y: { scale: "y", field: yVariable },
           // size: { scale: "size", field: "Acceleration" },
-          size: { value: 10},
+          size: { value: 10 },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
           stroke: { value: "var(--stroke-color)" },
