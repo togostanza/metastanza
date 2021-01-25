@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "vega_wrap",
-  "stanza:label": "Vega wrap",
+  "@id": "dev-vega-wrap",
+  "stanza:label": "dev Vega wrap",
   "stanza:definition": "",
   "stanza:type": "Stanza",
   "stanza:context": "Environment",

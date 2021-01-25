@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_with_scroll",
+  "@id": "table-with-scroll",
   "stanza:label": "table with scroll",
-  "stanza:definition": "table with scroll for MetaStanza",
+  "stanza:definition": "Table with scroll for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",

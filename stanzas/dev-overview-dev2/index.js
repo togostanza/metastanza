@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import { getFormatedJson } from "@/lib/metastanza_utils.js";
 import mapValues from "lodash.mapvalues";
 
-export default async function overviewDev2(stanza, params) {
+export default async function devOverviewDev2(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {},

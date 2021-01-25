@@ -1,6 +1,6 @@
 import * as Vega from "vega";
 
-export default async function vegaWrap(stanza, params) {
+export default async function devVegaWrap(stanza, params) {
   const spec = await fetch(params["vega-json"]).then((res) => res.json());
 
   stanza.render({

@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "overview_dev2",
-  "stanza:label": "Overview dev2",
+  "@id": "dev-overview-dev",
+  "stanza:label": "dev Overview dev",
   "stanza:definition": "",
   "stanza:type": "MetaStanza",
   "stanza:display": "Chart",

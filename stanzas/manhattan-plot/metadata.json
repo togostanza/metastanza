@@ -2,7 +2,7 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "manhattan_plot",
+  "@id": "manhattan-plot",
   "stanza:label": "Manhattan plot",
   "stanza:definition": "Manhattan plot metastanza for GWAS data",
   "stanza:type": "MetaStanza",

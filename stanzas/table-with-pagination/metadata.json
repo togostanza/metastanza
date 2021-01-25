@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_with_pagination",
+  "@id": "table-with-pagination",
   "stanza:label": "table with pagination",
-  "stanza:definition": "table with pagination for MetaStanza",
+  "stanza:definition": "Table with pagination for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",

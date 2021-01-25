@@ -1,8 +1,7 @@
 import * as d3 from "d3";
 import { getFormatedJson } from "@/lib/metastanza_utils.js";
-import mapValues from "lodash.mapvalues";
 
-export default async function overviewDev3(stanza, params) {
+export default async function devOverviewDev(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {},
@@ -46,23 +45,32 @@ async function draw(element, apis) {
         dataset[api].type.charAt(0).toUpperCase() + dataset[api].type.slice(1)
       );
 
-    [dataset[api].data, dataset[api].total] = setData(
-      dataset[api].data,
-      width,
-      height,
-      labelMargin
-    );
+    dataset[api].data = setData(dataset[api].data, width, height, labelMargin);
     dataset[api].id = id;
 
     svg.attr("id", "svg_" + dataset[api].type.replace(/\s/g, "_"));
-
-    // bar group
-    const bar_g = svg
-      .selectAll(".bar-g")
+    svg
+      .selectAll("rect")
       .data(dataset[api].data)
       .enter()
-      .append("g")
-      .attr("class", "bar-g")
+      .append("rect")
+      .attr("x", function (d) {
+        return d.barStart;
+      })
+      .attr("y", 0)
+      .attr("width", function (d) {
+        return d.barWidth;
+      })
+      .attr("height", height)
+      .attr("id", function (d) {
+        return d.onclick_list[0].id;
+      })
+      .attr("class", function (d, i) {
+        if (d.label !== "None") {
+          return "bar-style-" + i;
+        }
+        return "bar-style-na";
+      })
       .on("mouseover", function (e, d) {
         svg
           .append("text")
@@ -92,96 +100,12 @@ async function draw(element, apis) {
       .on("click", async function (e, d) {
         // re-render
         const key = dataset[api].type.replace(/\s/g, "_");
-        const value = d.onclick_list[0].id;
-        if (
-          d3
-            .select(e.currentTarget)
-            .select("#selected-sign-" + d.onclick_list[0].id)
-            .style("display") === "none"
-        ) {
-          if (body[key]) {
-            body[key].push(value);
-          } else {
-            body[key] = [value];
-          }
-          for (const api of apis) {
-            getDataAndRender(element, api, body, dataset);
-          }
-          d3.select(e.currentTarget)
-            .select("#selected-sign-" + d.onclick_list[0].id)
-            .style("display", "block");
-        } else {
-          if (body[key].length === 1) {
-            delete body[key];
-          } else {
-            for (let i = 0; i < body[key].length; i++) {
-              if (body[key][i] === value) {
-                body[key].splice(i, 1);
-                break;
-              }
-            }
-          }
-          for (const api of apis) {
-            getDataAndRender(element, api, body, dataset);
-          }
-          d3.select(e.currentTarget)
-            .select("#selected-sign-" + d.onclick_list[0].id)
-            .style("display", "none");
+        body[key] = d.onclick_list[0].id;
+
+        for (const api of apis) {
+          getDataAndRender(element, api, body, dataset);
         }
       });
-
-    // bg bar
-    bar_g
-      .append("rect")
-      .attr("class", "na-bar")
-      .attr("x", function (d) {
-        return d.barStart;
-      })
-      .attr("y", 0)
-      .attr("width", function (d) {
-        return d.barWidth;
-      })
-      .attr("height", height);
-
-    // ratio bar
-    bar_g
-      .append("rect")
-      .attr("x", function (d) {
-        return d.barStart;
-      })
-      .attr("y", 0)
-      .attr("width", function (d) {
-        return d.barWidth;
-      })
-      .attr("height", height)
-      .attr("id", function (d) {
-        return d.onclick_list[0].id;
-      })
-      .attr("class", function (d) {
-        if (d.label !== "None") {
-          return "target-bar";
-        }
-        return "bar-style-na";
-      })
-      .attr("fill", function (d) {
-        return d.color;
-      });
-
-    // selected sign
-    bar_g
-      .append("rect")
-      .attr("x", function (d) {
-        return d.barStart;
-      })
-      .attr("y", height - 10)
-      .attr("width", function (d) {
-        return d.barWidth;
-      })
-      .attr("height", 10)
-      .attr("id", function (d) {
-        return "selected-sign-" + d.onclick_list[0].id;
-      })
-      .attr("class", "selected-sign");
   }
 
   const initDataset = JSON.parse(JSON.stringify(dataset));
@@ -192,9 +116,10 @@ async function draw(element, apis) {
     .on("click", function () {
       // reset-render
       body = {};
+
       for (const api of apis) {
         dataset[api].data = changeData(
-          dataset[api],
+          dataset[api].data,
           JSON.parse(JSON.stringify(initDataset[api].data)),
           width,
           height,
@@ -202,19 +127,16 @@ async function draw(element, apis) {
         );
         reRender(element, dataset[api]);
       }
-      d3.select(element)
-        .selectAll("rect.selected-sign")
-        .style("display", "none");
     });
 
   async function getDataAndRender(element, api, body, dataset) {
     const newData = await getFormatedJson(
       api,
       element.querySelector("#div_" + dataset[api].id),
-      mapValues(body, (v) => v.join(","))
+      body
     );
     dataset[api].data = changeData(
-      dataset[api],
+      dataset[api].data,
       newData.data,
       width,
       height,
@@ -228,7 +150,7 @@ async function draw(element, apis) {
       .select(element)
       .select("#svg_" + dataset.type.replace(/\s/g, "_"));
     svg
-      .selectAll(".target-bar")
+      .selectAll("rect")
       .data(dataset.data)
       .transition()
       .delay(200)
@@ -237,13 +159,7 @@ async function draw(element, apis) {
         return d.barStart;
       })
       .attr("width", function (d) {
-        return d.targetBarWidth;
-      })
-      .filter(function (d) {
-        return d.color;
-      })
-      .attr("fill", function (d) {
-        return d.color;
+        return d.barWidth;
       });
   }
 
@@ -259,11 +175,8 @@ async function draw(element, apis) {
       if (data.length - 1 === i) {
         barWidth = width - start + labelMargin;
       }
-      data[i].origCount = data[i].count;
       data[i].barStart = start;
       data[i].barWidth = barWidth;
-      data[i].targetBarWidth = 0;
-      data[i].color = "#ff8800";
       start += barWidth;
     }
     data.push({
@@ -273,11 +186,11 @@ async function draw(element, apis) {
       barWidth: 0,
       onclick_list: [{ id: "n-a" }],
     });
-    return [data, total];
+    return data;
   }
 
-  function changeData(dataset, newData, width, height, labelMargin) {
-    const data = dataset.data;
+  function changeData(data, newData, width, height, labelMargin) {
+    let total = 0;
     const label2data = {};
     if (!newData[0]) {
       newData = [
@@ -289,36 +202,23 @@ async function draw(element, apis) {
       ];
     }
     for (const category of newData) {
+      total += parseFloat(category.count);
       label2data[category.label] = category;
     }
     let start = labelMargin;
     for (let i = 0; i < data.length; i++) {
       if (label2data[data[i].label]) {
-        data[i].count = label2data[data[i].label].count;
+        data[i] = label2data[data[i].label];
       } else {
         data[i].count = 0;
       }
-      let targetBarWidth = (width * parseFloat(data[i].count)) / dataset.total;
+      let barWidth = (width * parseFloat(data[i].count)) / total;
       if (data.length - 1 === i) {
-        targetBarWidth = width - start + labelMargin;
+        barWidth = width - start + labelMargin;
       }
-      data[i].targetBarWidth = targetBarWidth;
-      start += targetBarWidth;
-      // color
-      const delta = Math.floor((data[i].count / data[i].origCount) * 127);
-      if (delta) {
-        let g = (256 - delta).toString(16);
-        let b = (128 - delta).toString(16);
-        if (g.length === 1) {
-          g = "0" + g;
-        }
-        if (b.length === 1) {
-          b = "0" + b;
-        }
-        data[i].color = "#ff" + g + b;
-      } else {
-        data[i].color = "#ffff88";
-      }
+      data[i].barStart = start;
+      data[i].barWidth = barWidth;
+      start += barWidth;
     }
     return data;
   }
