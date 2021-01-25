@@ -38,10 +38,10 @@
       "stanza:description": "text align of greeting"
     },
     {
-      "stanza:key": "--border-style",
-      "stanza:type": "string",
-      "stanza:default": "1px solid #333",
-      "stanza:description": "emphasized color when you hover on labels and rects"
+      "stanza:key": "--text-width",
+      "stanza:type": "text",
+      "stanza:default": "800px",
+      "stanza:description": "text width"
     },
     {
       "stanza:key": "--label-font",
@@ -50,16 +50,64 @@
       "stanza:description": "font(e.g: serif,san serif,fantasy)"
     },
     {
+      "stanza:key": "--dt-margin-bottom",
+      "stanza:type": "text",
+      "stanza:default": "8px",
+      "stanza:description": "margin bottom of text header"
+    },
+    {
+      "stanza:key": "--row-border-bottom",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #ccc",
+      "stanza:description": "border bottom of text row"
+    },
+    {
       "stanza:key": "--dt-font-color",
       "stanza:type": "color",
-      "stanza:default": "#256d80",
+      "stanza:default": "#444444",
       "stanza:description": "font color of text header"
     },
     {
       "stanza:key": "--dd-font-color",
       "stanza:type": "color",
-      "stanza:default": "#256d80",
+      "stanza:default": "#444444",
       "stanza:description": "font color of taext body"
+    },
+    {
+      "stanza:key": "--dt-font-size",
+      "stanza:type": "text",
+      "stanza:default": "14px",
+      "stanza:description": "font size of text header"
+    },
+    {
+      "stanza:key": "--dd-font-size",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "font size of taext body"
+    },
+    {
+      "stanza:key": "--dt-font-weight",
+      "stanza:type": "text",
+      "stanza:default": "400",
+      "stanza:description": "font weight of text header"
+    },
+    {
+      "stanza:key": "--dd-font-weight",
+      "stanza:type": "text",
+      "stanza:default": "400",
+      "stanza:description": "font weight of taext body"
+    },
+    {
+      "stanza:key": "--dt-line-height",
+      "stanza:type": "text",
+      "stanza:default": "14px",
+      "stanza:description": "line height of text header"
+    },
+    {
+      "stanza:key": "--dd-line-height",
+      "stanza:type": "tEXT",
+      "stanza:default": "10px",
+      "stanza:description": "line hight of taext body"
     }
   ]
 }
