@@ -349,6 +349,18 @@
       "stanza:description": "background color of table body"
     },
     {
+      "stanza:key": "--tbody-odd-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description": "background color of table body"
+    },
+    {
+      "stanza:key": "--tbody-even-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description": "background color of table body"
+    },
+    {
       "stanza:key": "--pagination-padding",
       "stanza:type": "text",
       "stanza:default": "30px 0px 0px 0px",
