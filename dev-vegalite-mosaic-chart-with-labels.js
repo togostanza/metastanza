@@ -3,7 +3,7 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-function vegaliteMosaicChartWithLabels(stanza /* , params */) {
+function devVegaliteMosaicChartWithLabels(stanza /* , params */) {
   //let spec = await fetch(params["src-url"]).then((res) => res.json());
   const spec = JSON.parse(`{
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
@@ -263,8 +263,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "vegalite_mosaic_chart_with_labels",
-	"stanza:label": "Vegalite mosaic chart with labels",
+	"@id": "dev-vegalite-mosaic-chart-with-labels",
+	"stanza:label": "dev Vegalite mosaic chart with labels",
 	"stanza:definition": "vegalite_wrapping_mosaic_chart_with_labels",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
@@ -323,5 +323,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement(vegaliteMosaicChartWithLabels, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=vegalite_mosaic_chart_with_labels.js.map
+defineStanzaElement(devVegaliteMosaicChartWithLabels, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=dev-vegalite-mosaic-chart-with-labels.js.map

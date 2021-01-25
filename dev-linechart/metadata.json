@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "linechart",
-  "stanza:label": "linechart",
+  "@id": "dev-linechart",
+  "stanza:label": "dev linechart",
   "stanza:definition": "Vega wrapped linechart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",

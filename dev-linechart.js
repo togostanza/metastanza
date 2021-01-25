@@ -3,7 +3,7 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-async function linechart(stanza, params) {
+async function devLinechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   spec.data[0].values = [
@@ -56,8 +56,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "linechart",
-	"stanza:label": "linechart",
+	"@id": "dev-linechart",
+	"stanza:label": "dev linechart",
 	"stanza:definition": "Vega wrapped linechart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -139,5 +139,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}";
 
-defineStanzaElement(linechart, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=linechart.js.map
+defineStanzaElement(devLinechart, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=dev-linechart.js.map

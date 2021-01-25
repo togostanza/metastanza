@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 
-function columnTreeView(stanza, params) {
+function devColumnTreeView(stanza, params) {
   const fetchReq = (query, callback, depth) => {
     const options = {
       method: "post",
@@ -327,8 +327,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "column_tree_view",
-	"stanza:label": "Column tree view",
+	"@id": "dev-column-tree-view",
+	"stanza:label": "dev Column tree view",
 	"stanza:definition": "Column viewer metastanza for tree and DAG structures.",
 	"stanza:parameter": [
 	{
@@ -397,5 +397,5 @@ var templates = [
 
 var css = "";
 
-defineStanzaElement(columnTreeView, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=column_tree_view.js.map
+defineStanzaElement(devColumnTreeView, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=dev-column-tree-view.js.map

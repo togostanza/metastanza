@@ -3,7 +3,7 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-async function areachart(stanza, params) {
+async function devAreachart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
   // カラースキームを定義しようとしたけれどできない
@@ -49,8 +49,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "areachart",
-	"stanza:label": "areachart",
+	"@id": "dev-areachart",
+	"stanza:label": "dev areachart",
 	"stanza:definition": "Vega wrapped areachart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -168,5 +168,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement(areachart, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=areachart.js.map
+defineStanzaElement(devAreachart, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=dev-areachart.js.map

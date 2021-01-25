@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "column_tree_view",
-  "stanza:label": "Column tree view",
+  "@id": "dev-column-tree-view",
+  "stanza:label": "dev Column tree view",
   "stanza:definition": "Column viewer metastanza for tree and DAG structures.",
   "stanza:parameter": [
     {

@@ -51,8 +51,7 @@ async function stackedBarchart(stanza, params) {
     ticks: params["xtick"] === "true",
     encode: {
       axis: {
-        update: {
-        },
+        update: {},
       },
       ticks: {
         update: {
@@ -143,7 +142,7 @@ async function stackedBarchart(stanza, params) {
       },
       ticks: {
         update: {
-          stroke: { value: "var(--tick-color)" }
+          stroke: { value: "var(--tick-color)" },
         },
       },
       grids: {
@@ -204,41 +203,56 @@ async function stackedBarchart(stanza, params) {
   };
 
   spec.title = {
-    "text": params["figuretitle"], //"Title of this figure",
-    "orient": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-orient"),
-    "anchor": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-anchor"),
-    "color": getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
-    "font": getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    "fontSize": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-size"),
-    "fontWeight": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-font-weight"),
+    text: params["figuretitle"], //"Title of this figure",
+    orient: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-orient"
+    ),
+    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-anchor"
+    ),
+    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
+    dx:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-horizonal-offset"
+      ) - 0,
+    dy:
+      getComputedStyle(stanza.root.host).getPropertyValue(
+        "--figuretitle-vertical-offset"
+      ) - 0,
+    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
+    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-font-size"
+    ),
+    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+      "--figuretitle-font-weight"
+    ),
   };
-
 
   //rect（棒）の描画について
   spec.marks[0] = {
-    "type": "rect",
-    "from": {"data":"table"},
-    "encode": {
+    type: "rect",
+    from: { data: "table" },
+    encode: {
       enter: {
         x: { scale: "x", field: "x" },
         width: { scale: "x", band: params["bar-width"] },
         y: { scale: "y", field: "y0" },
         y2: { scale: "y", field: "y1" },
-        fill: { scale: "color", field: "c", offset: -1 }
+        fill: { scale: "color", field: "c", offset: -1 },
       },
       update: {
         fill: { scale: "color", field: "c" },
-        stroke: {value: "var(--stroke-color)"},
-        strokeWidth: {value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--stroke-width"
-        )}
+        stroke: { value: "var(--stroke-color)" },
+        strokeWidth: {
+          value: getComputedStyle(stanza.root.host).getPropertyValue(
+            "--stroke-width"
+          ),
+        },
       },
       hover: {
-        fill: { value: "var(--emphasized-color)" }
-      }
-    }
+        fill: { value: "var(--emphasized-color)" },
+      },
+    },
   };
 
   const el = stanza.root.querySelector("main");
