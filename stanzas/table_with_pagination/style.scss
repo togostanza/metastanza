@@ -178,13 +178,18 @@ table {
     border-bottom: var(--tbody-border-bottom);
     border-left: var(--tbody-border-left);
     > tr {
+      &:nth-child(odd){
+        background-color: var(--tbody-odd-background-color);
+      }
+      &:nth-child(even){
+        background-color: var(--tbody-even-background-color);
+      }
       > td {
         border-bottom: var(--ruled-line);
         border-collapse: collapse;
         padding: 10px;
         &:first-child {
           padding-left: 20px;
-          background-color: var(--tbody-background-color);
         }
         &:last-child {
           padding-right: 20px;
