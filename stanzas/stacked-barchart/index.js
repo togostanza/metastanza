@@ -3,16 +3,18 @@ import vegaEmbed from "vega-embed";
 export default async function stackedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //stanza（描画範囲）のwidth・height
+  spec.data[0].url = params["your-data"];
+
+  //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
-  spec.padding = params["padding"];
+  spec.padding = getComputedStyle(stanza.root.host).getPropertyValue(
+    "--padding"
+  );
 
   //棒・スケールに関する設定
   spec.scales[0].paddingInner = 0.1;
-  spec.scales[0].paddingOuter = 0.2;
+  spec.scales[0].paddingOuter = 0.5;
   // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") - 0;
   // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") - 0;
 

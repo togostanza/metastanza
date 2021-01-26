@@ -23,6 +23,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "your-data",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": "200",

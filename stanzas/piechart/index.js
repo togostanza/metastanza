@@ -3,13 +3,68 @@ import vegaEmbed from "vega-embed";
 export default async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
+  // let srcData = fetch('http://togostanza.org/sparqlist/api/metastanza_chart')
+  // .then(function (response) {
+  //   return response.json();
+  // }).then(function (myjson) {
+  //   // 読み込ませたいSPALQlistの配列データにおける各オブジェクトにidを追加
+  //   for(let i=0; i < myjson.values.length; i++){
+  //     myjson.values[i].id = i;
+  //   }
+
+  //   // オブジェクトのキー名を、vegaが読み込める状態に変更（countをfieldに変更）
+  //   let src = myjson.values;
+  //   let dst = [];
+  //   for (let i = 0; i < src.length; i++) {
+  //     dst.push({
+  //       category: src[i].category,
+  //       id: src[i].id,
+  //       field: src[i].count-0
+  //     });
+  //   }
+  //   console.log(dst);
+  //   return dst
+  // });
+
+  // // idおよびfieldのkey/valueを持ったオブジェクトの配列（SPALQlistのデータ）を、vegaのデフォルトのデータと置き換えたい
+  // console.log(srcData);
+  // console.log(spec.data[0].values);
+  // spec.data[0].values = srcData;
+  // console.log(spec.data[0].values);
+
+  // spec.data[0].url = params["your-data"];
+  // spec.data[0].async = true;
+
+  // spec.data[0] =
+  //   {
+  //     "name": "table",
+  //     "url": params["your-data"],
+  //     // "values": [
+  //     //   {"id": 1, "field": 4},
+  //     //   {"id": 2, "field": 6},
+  //     //   {"id": 3, "field": 10},
+  //     //   {"id": 4, "field": 3},
+  //     //   {"id": 5, "field": 7},
+  //     //   {"id": 6, "field": 8}
+  //     // ],
+  //     "transform": [
+  //       {
+  //         "type": "pie",
+  //         "field": "count",
+  //         "startAngle": {"signal": "startAngle"},
+  //         "endAngle": {"signal": "endAngle"},
+  //         "sort": {"signal": "sort"}
+  //       }
+  //     ]
+  //   }
+
   //stanza（描画範囲）のwidth・height（うまく効かない…広くなってしまう？）
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
   spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
-  // scales: カラースキームを指定
+  // scales(color scheme)
   spec.scales[0].range = [
     "var(--series-0-color)",
     "var(--series-1-color)",
@@ -19,7 +74,7 @@ export default async function piechart(stanza, params) {
     "var(--series-5-color)",
   ];
 
-  //円の描画について
+  //円の描画
   //（デフォルトのコントローラを削除）
   for (const signal of spec.signals) {
     delete signal.bind;

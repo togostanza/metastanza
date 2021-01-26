@@ -22,6 +22,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "your-data",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": "200",
@@ -32,12 +38,6 @@
       "stanza:type": "number",
       "stanza:example": "200",
       "stanza:description": "height of your stanza"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": "50",
-      "stanza:description": "padding around your stanza"
     },
     {
       "stanza:key": "xaxis-orient",
@@ -149,6 +149,12 @@
       "stanza:type": "color",
       "stanza:default": "#fa8c84",
       "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--padding",
+      "stanza:type": "text",
+      "stanza:dafault": "top: 0, right: 0, bottom: 50, left: 50",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
     },
     {
       "stanza:key": "--padding-inner",
@@ -291,7 +297,7 @@
     {
       "stanza:key": "--figuretitle-vertical-offset",
       "stanza:type": "number",
-      "stanza:default": "250",
+      "stanza:default": "260",
       "stanza:description": "vertical offset(Y-offset) of figure title in pixel"
     },
     {
