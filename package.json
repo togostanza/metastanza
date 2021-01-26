@@ -19,7 +19,7 @@
     "@vue/compiler-sfc": "^3.0.5",
     "d3": "^6.2.0",
     "rollup-plugin-vue": "^6.0.0-beta.10",
-    "togostanza": "github:togostanza/togostanza#build-config",
+    "togostanza": "^3.0.0-beta.12",
     "vega": "^5.17.0",
     "vega-embed": "^6.12.2",
     "vega-lite": "^4.17.0"
