@@ -1,8 +1,8 @@
 <template>
   <div class="tableOption">
     <div class="textSearchWrapper">
-      <input type="text" placeholder="Search for keywords..." v-model="textSearchInput" @keydown.enter="SearchByText">
-      <button class="searchBtn" type="submit" @click="SearchByText">
+      <input type="text" placeholder="Search for keywords...">
+      <button class="searchBtn" type="submit">
         <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
           alt="search">
       </button>
@@ -14,13 +14,13 @@
   <table v-if="adjustedTableData">
     <thead>
       <tr>
-        <th v-for="(head, index) in filteredHead" :key="index">
-          {{ head.label }}
+        <th v-for="(column, i) in state.columns" :key="column.id">
+          {{ column.label }}
           <span
             :class="[
               'icon',
               'sortIcon',
-              sortState.active === head.id ? sortState.order : '',
+              state.sortState.active === head.id ? state.sortState.order : '',
             ]"
             @click="SortData(head.id)"
           ></span>
@@ -32,41 +32,38 @@
             <div
               :class="[
                 'filterWindow',
-                { lastCol: index === filteredHead.length - 1 },
+                { lastCol: state.columns.length - 1 === i },
               ]"
             >
               <ul>
-                <li
-                  v-for="(content, index2) in filterContents[head.id]"
-                  :key="index2"
-                >
+                <li v-for="filter in column.filters" :key="filter.id">
                   <input
-                    :id="content"
-                    :value="content"
+                    :id="filter.id"
+                    :value="filter.checked"
                     type="checkbox"
                     name="items"
-                    v-model="filterState[head.id]"
+                    v-model="filter.checked"
                   />
-                  <label :for="content">{{ content }}</label>
+                  <label :for="filter.id">{{ filter.label }}</label>
                 </li>
               </ul>
-              <button class="toggle_all_button select_all" @click="ToggleAllCheckbox(head.id, 'all')">Select All</button>
-              <button class="toggle_all_button clear" @click="ToggleAllCheckbox(head.id, 'clear')">Clear</button>
+              <button class="toggle_all_button select_all" @click="ToggleAllCheckbox(head.id, true)">Select All</button>
+              <button class="toggle_all_button clear" @click="ToggleAllCheckbox(head.id, false)">Clear</button>
             </div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(col, index) in adjustedTableData.body" :key="index">
-        <td v-for="(head, index2) in filteredHead" :key="index2">
-          <span v-if="col[head.id].href">
-            <a :href="col[head.id].href" target="_blank">{{
-              col[head.id].value
+      <tr v-for="row in adjustedTableData" :key="index">
+        <td v-for="cell in row">
+          <span v-if="cell.href">
+            <a :href="cell.href" target="_blank">{{
+              cell.value
             }}</a>
           </span>
           <span v-else>
-            {{ col[head.id].value }}
+            {{ cell.value }}
           </span>
         </td>
       </tr>
@@ -148,190 +145,154 @@ import {
   watch,
   onMounted
 } from "vue";
+
+import zip from "lodash.zip";
+
 import metadata from "./metadata.json";
 
 export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+
   setup(params) {
-    //data
-    const tableData = ref([]);
-    const filteredHead = ref([]);
-    const sortState = reactive({
-      active: "",
-      order: "desc",
+    const columns = [
+      {
+        id:    'accession',
+        label: 'Accession',
+        href:  null,
+
+        filters: [
+          {
+            id: 'foo',
+            value: 'Foo',
+            checked: true
+          }
+        ]
+      }
+    ];
+
+    const state = reactive({
+      columns,
+      rows: [],
+
+      sortState: {
+        active: null,
+        direction: "desc"
+      },
+
+      showingFilterSelector: null,
+      textSearchInput: '',
+
+      pagination: {
+        currentPage: 1,
+        perPage: 5  // TODO take from params
+      }
     });
-    const openFilterWindowId = ref('');
-    const filterContents = reactive({});
-    const filterState = reactive({});
-    const textSearchInput = ref('')
-    const textSearchInputDone = ref('')
-    const pagination = reactive({
-        page: 1,
-        limit: 5
-    });
-    const inputPageNumber = ref('')
 
     //methods
-    const GetData = () => {
-      fetch(params.table_data_api)
-        .then((response) => response.json())
-        .then((data) => {
-          data.head.href.forEach((datum, index) => {
-            if (datum) {
-              data.body = data.body.map((bodyDatam) => {
-                const hasHrefData = data.head.vars[index];
-                bodyDatam[hasHrefData].href = bodyDatam[datum].value;
-                return bodyDatam;
-              });
+    const GetData = async () => {
+      const res  = await fetch(params.table_data_api);
+      const data = await res.json();
+
+      const {vars, labels, order, href} = data.head;
+
+      const columns = zip(vars, labels, order, href).map(([_var, label, _order, _href]) => {
+        const values = data.body.map(row => row[_var].value);
+
+        return {
+          id:    _var,
+          label,
+          order: _order,
+          href:  _href,
+
+          filters: uniq(values).map((value) => {
+            return {
+              value,
+              checked: false
             }
-          });
+          })
+        }
+      }).filter((column) => column.label !== null);
 
-          tableData.value = data;
+      state.columns = sortBy(columns, ['order']);
 
-          data.head.labels.forEach((label, index) => {
-            if (label !== null) {
-              filteredHead.value.push({
-                id: data.head.vars[index],
-                label: label,
-              });
-            }
-          });
-
-          filteredHead.value.forEach((datum, index) => {
-            data.body.forEach((bodyDatam) => {
-              if (!filterState[datum.id]) {
-                filterState[datum.id] = [bodyDatam[datum.id].value];
-                filterContents[datum.id] = [bodyDatam[datum.id].value];
-              } else if (
-                filterState[datum.id].indexOf(bodyDatam[datum.id].value) === -1
-              ) {
-                filterState[datum.id].push(bodyDatam[datum.id].value);
-                filterContents[datum.id].push(bodyDatam[datum.id].value);
-              }
-            });
-          });
+      state.rows = data.body.map((row) => {
+        return columns.map(({id, href}) => {
+          return {
+            value: row[id].value,
+            href:  href ? row[href].value : null
+          }
         });
+      });
     };
 
     const SortData = (id) => {
-      sortState.active = id;
-      sortState.order = sortState.order === "asc" ? "desc" : "asc";
+      state.sortState.active = id;
+      state.sortState.direction = sortState.direction === "asc" ? "desc" : "asc";
     };
 
-    const ToggleAllCheckbox = (id, mode) => {
-      switch(mode) {
-        case 'all' :
-          filterState[id] = [...filterContents[id]]
-          break;
-        case 'clear' :
-          filterState[id] = []
-          break;
+    const ToggleAllCheckbox = (columnId, checked) => {
+      const column = state.columns.find(({id}) => columnId === id);
+
+      for (const filter of column.filters) {
+        filter.checked = checked;
       }
     }
 
-    const SearchByText = () => {
-      textSearchInputDone.value = textSearchInput.value
-    }
+    const totalPages = computed(() => {
+      return Math.ceil(adjustedTableData.value.length / state.pagination.perPage);
+    });
 
-    const ChangePageByInput = () => {
-      if(Number(inputPageNumber.value) > pagination.lastpage) {
-        pagination.page = pagination.lastpage
-        inputPageNumber.value = pagination.lastpage
-      } else {
-        pagination.page = Number(inputPageNumber.value)
-      }
+    const ChangePageByInput = (e) => {
+      let n = Number(e.target.value);
+
+      n = Math.max(n, 1);
+      n = Matn.min(n, totalPages.value);
+
+      state.pagination.currentPage = n;
     }
 
     // computed
     const adjustedTableData = computed(() => {
-      let adjustedTableData = JSON.parse(JSON.stringify(tableData.value))
-      if(adjustedTableData.body) {
-        //filter
-        adjustedTableData.body = tableData.value.body.filter(bodyDatam => {
-          let flag = true
-          Object.keys(filterState).forEach(columnName => {
-            if(filterState[columnName].indexOf(bodyDatam[columnName].value) === -1) {
-              flag = false
-            }
-          })
-          return flag
-        })
+      const query = state.textSearchInput;
 
-        //sort
-        if(sortState.active !== "") {
-          switch (sortState.order) {
-            case "desc":
-              adjustedTableData.body.sort((a, b) => {
-                return a[sortState.active].value.toLowerCase() <
-                  b[sortState.active].value.toLowerCase()
-                  ? -1
-                  : 1;
-              });
-              break;
-            case "asc":
-              adjustedTableData.body.sort((b, a) => {
-                return a[sortState.active].value.toLowerCase() <
-                  b[sortState.active].value.toLowerCase()
-                  ? -1
-                  : 1;
-              });
-              break;
-          }
-        }
+      return state.rows.filter((row) => {
+        return query ? row.some(cell => cell.value.includes(query)) : true;
+      }).filter((row) => {
+        return state.columns.some((column, i) => {
+          const valuesToFiltered = column.filters.filter(({checked}) => checked).map(({value}) => value);
 
-        //seach by text
-        if(textSearchInputDone.value !== "") {
-          adjustedTableData.body = tableData.value.body.filter(bodyDatam => {
-            let flag = false
-            Object.keys(bodyDatam).forEach(columnName => {
-              if(bodyDatam[columnName].value.indexOf(textSearchInputDone.value) !== -1) {
-                flag = true
-              }
-            })
-            return flag
-          })
-        }
+          return valuesToFiltered.length === 0 ? true : valuesToFiltered.some(v => row[i] === v)
+        });
+      }).sort((rowX, rowY) => {
+        // TODO sorting
+        return 1;
+      });
+    });
 
-        // pagination
-        let displayAdjustedTableData = [];
-        const start = (pagination.page - 1) * pagination.limit;
-        const end = start + pagination.limit;
-        pagination.lastpage = Math.ceil(adjustedTableData.body.length / pagination.limit)
-        for(let i = start ; i < end ; i++) {
-          if(adjustedTableData.body[i]) {
-            displayAdjustedTableData.push(adjustedTableData.body[i])
-          }
-        }
-        adjustedTableData.body = displayAdjustedTableData
-      }
-      return adjustedTableData
+    const displayAdjustedTableData = computed(() => {
+      const startIndex = (state.pagination.currentPage - 1) * state.pagination.perPage;
+      const endIndex = startIndex + state.pagination.perPage;
+
+      return state.rows.slice(startIndex, endIndex);
     });
 
     const blob = computed(() => {
-      if(tableData.value.body) {
-        return URL.createObjectURL(new Blob([JSON.stringify(tableData.value, null, "  ")], {type: "application/json"}));
-      }
-    })
+      // if (tableData.value.body) {
+      //   return URL.createObjectURL(new Blob([JSON.stringify(tableData.value, null, "  ")], {type: "application/json"}));
+      // }
+    });
+
     // mounted
     onMounted(() => {
       GetData();
     });
 
     return {
+      state,
       adjustedTableData,
-      filteredHead,
-      sortState,
       SortData,
       ToggleAllCheckbox,
-      params,
-      openFilterWindowId,
-      filterContents,
-      filterState,
-      textSearchInput,
-      SearchByText,
       blob,
-      pagination,
-      inputPageNumber,
       ChangePageByInput
     };
   },
