@@ -221,10 +221,10 @@ export default defineComponent({
     const ToggleAllCheckbox = (id, mode) => {
       switch(mode) {
         case 'all' :
-          filterState.id = [...filterContents.id]
+          filterState[id] = [...filterContents[id]]
           break;
         case 'clear' :
-          filterState.id = []
+          filterState[id] = []
           break;
       }
     }
