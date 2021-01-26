@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "dev-table-pagination",
-  "stanza:label": "dev Table pagination metastanza",
+  "@id": "table-pagination",
+  "stanza:label": "Table pagination metastanza",
   "stanza:definition": "metastanza for table pagination with slider.",
   "stanza:parameter": [
     {
@@ -14,7 +14,7 @@
     },
     {
       "stanza:key": "table_stanza",
-      "stanza:example": "https://togostanza.github.io/metastanza/dev-table-body/",
+      "stanza:example": "http://localhost:8080/dev-table-body/",
       "stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
       "stanza:required": true
     },

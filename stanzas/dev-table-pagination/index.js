@@ -1,4 +1,4 @@
-import "@/stanzas/table-body";
+import "@/stanzas/dev-table-body";
 
 export default function tablePagination(stanza, params) {
   let page_size_list = [10, 20, 50];
