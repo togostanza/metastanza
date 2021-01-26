@@ -1,4 +1,4 @@
-import "@/stanzas/table_body";
+import "@/stanzas/table-body";
 
 export default function tablePaginationOnMemory(stanza, params) {
   let page_size_list = [10, 20, 50];
