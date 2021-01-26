@@ -1,17 +1,17 @@
 <template>
   <div class="tableOption">
-    <div class="textSearchWrapper">
-      <input type="text" placeholder="Search for keywords...">
+    <form class="textSearchWrapper" @submit.prevent="submitQuery(state.queryInput)">
+      <input type="text" placeholder="Search for keywords..." v-model="state.queryInput">
       <button class="searchBtn" type="submit">
         <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
           alt="search">
       </button>
-    </div>
-    <a class="downloadBtn" :href="blob" download="tableData">
+    </form>
+    <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt="download">
     </a>
   </div>
-  <table v-if="adjustedTableData">
+  <table v-if="state.allRows">
     <thead>
       <tr>
         <th v-for="(column, i) in state.columns" :key="column.id">
@@ -20,15 +20,15 @@
             :class="[
               'icon',
               'sortIcon',
-              state.sortState.active === head.id ? state.sortState.order : '',
+              state.sorting.column === column ? state.sorting.direction : '',
             ]"
-            @click="SortData(head.id)"
+            @click="setSorting(column)"
           ></span>
           <span
             class="icon filterIcon"
-            @click="openFilterWindowId = head.id"
+            @click="state.columnShowingFilters = column"
           ></span>
-          <div class="filterWrapper" v-if="head.id === openFilterWindowId">
+          <div class="filterWrapper" v-if="column === state.columnShowingFilters">
             <div
               :class="[
                 'filterWindow',
@@ -36,26 +36,25 @@
               ]"
             >
               <ul>
-                <li v-for="filter in column.filters" :key="filter.id">
+                <li v-for="filter in column.filters" :key="filter.value">
                   <input
-                    :id="filter.id"
-                    :value="filter.checked"
+                    :id="filter.value"
+                    v-model="filter.checked"
                     type="checkbox"
                     name="items"
-                    v-model="filter.checked"
                   />
-                  <label :for="filter.id">{{ filter.label }}</label>
+                  <label :for="filter.id">{{ filter.value }}</label>
                 </li>
               </ul>
-              <button class="toggle_all_button select_all" @click="ToggleAllCheckbox(head.id, true)">Select All</button>
-              <button class="toggle_all_button clear" @click="ToggleAllCheckbox(head.id, false)">Clear</button>
+              <button class="toggle_all_button select_all" @click="setFilters(column, true)">Select All</button>
+              <button class="toggle_all_button clear" @click="setFilters(column, false)">Clear</button>
             </div>
           </div>
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in adjustedTableData" :key="index">
+      <tr v-for="row in rowsInCurrentPage" :key="row.id">
         <td v-for="cell in row">
           <span v-if="cell.href">
             <a :href="cell.href" target="_blank">{{
@@ -70,69 +69,81 @@
     </tbody>
   </table>
   <div class="paginationWrapper">
-    <span
-      v-if="pagination.page !== 1"
-      @click="pagination.page = 1"
-      class="arrow left"
-    ></span>
-    <span
-      v-if="pagination.page !== 1"
-      @click="pagination.page--"
-      class="singleArrow left"
-    ></span>
-    <ul v-if="pagination.lastpage <= 5">
-      <li
-        v-for="index in pagination.lastpage"
-        :key="index"
-        :class="['pagination', {active: pagination.page === index}]"
-        @click="pagination.page = index"
-      >{{ index }}</li>
-    </ul>
-    <ul v-if="pagination.lastpage > 5 && pagination.page < 3">
-      <li
-        v-for="index in 5"
-        :key="index"
-        :class="['pagination', {active: pagination.page === index}]"
-        @click="pagination.page = index"
-      >{{ index }}</li>
-    </ul>
-    <ul v-if="pagination.lastpage > 5 && pagination.page >= 3 && pagination.page < pagination.lastpage - 2">
-      <li
-        v-for="index in 5"
-        :key="index"
-        :class="['pagination', {active: pagination.page === pagination.page + (index - 3)}]"
-        @click="pagination.page = pagination.page + (index - 3)"
-      >{{ pagination.page + (index - 3)  }}</li>
-    </ul>
-    <ul v-if="pagination.lastpage > 5 && pagination.page >= pagination.lastpage - 2">
-      <li
-        v-for="index in 5"
-        :key="index"
-        :class="['pagination', {active: pagination.page === pagination.lastpage + (index - 5)}]"
-        @click="pagination.page = pagination.lastpage + (index - 5)"
-      >{{ pagination.lastpage + (index - 5)  }}</li>
-    </ul>
-    <span
-      v-if="pagination.page !== pagination.lastpage"
-      @click="pagination.page++"
-      class="singleArrow right"
-    ></span>
-    <span
-      v-if="pagination.page !== pagination.lastpage"
-      @click="pagination.page = pagination.lastpage"
-      class="arrow right"
-    ></span>
+    <template v-if="state.pagination.currentPage !== 1">
+      <span
+        @click="state.pagination.currentPage = 1"
+        class="arrow left"
+      >
+      </span>
+      <span
+        @click="state.pagination.currentPage--"
+        class="singleArrow left"
+      ></span>
+    </template>
+
+    <template v-if="totalPages <= 5">
+      <ul>
+        <li
+          v-for="index in totalPages"
+          :key="index"
+          :class="['pagination', {active: state.pagination.currentPage === index}]"
+          @click="state.pagination.currentPage = index"
+        >{{ index }}</li>
+      </ul>
+    </template>
+
+    <template v-else>
+      <ul v-if="state.pagination.currentPage < 3">
+        <li
+          v-for="index in 5"
+          :key="index"
+          :class="['pagination', {active: state.pagination.currentPage === index}]"
+          @click="state.pagination.currentPage = index"
+        >{{ index }}</li>
+      </ul>
+
+      <ul v-if="state.pagination.currentPage >= 3 && state.pagination.currentPage < totalPages - 2">
+        <li
+          v-for="index in 5"
+          :key="index"
+          :class="['pagination', {active: state.pagination.currentPage === state.pagination.currentPage + (index - 3)}]"
+          @click="state.pagination.currentPage = state.pagination.currentPage + (index - 3)"
+        >{{ state.pagination.currentPage + (index - 3)  }}</li>
+      </ul>
+
+      <ul v-if="state.pagination.currentPage >= totalPages - 2">
+        <li
+          v-for="index in 5"
+          :key="index"
+          :class="['pagination', {active: state.pagination.currentPage === totalPages + (index - 5)}]"
+          @click="state.pagination.currentPage = totalPages + (index - 5)"
+        >{{ totalPages + (index - 5)  }}</li>
+      </ul>
+    </template>
+
+    <template v-if="state.pagination.currentPage !== totalPages">
+      <span
+        @click="state.pagination.currentPage++"
+        class="singleArrow right"
+      ></span>
+
+      <span
+        @click="state.pagination.currentPage = totalPages"
+        class="arrow right"
+      ></span>
+    </template>
+
     <div class="pageNumber">
       Page
-      <input type="text" v-model="inputPageNumber" @keydown.enter="ChangePageByInput">
-      of {{pagination.lastpage}}
+      <input type="text" v-model.number="state.jumpToNumberInput" @keydown.enter=" jumpToPage(state.jumpToNumberInput)">
+      of {{totalPages}}
     </div>
   </div>
 
   <div
     class="modalBackground"
-    v-if="openFilterWindowId !== ''"
-    @click="openFilterWindowId = ''"
+    v-if="state.columnShowingFilters"
+    @click="state.columnShowingFilters = null"
   ></div>
 </template>
 
@@ -146,6 +157,8 @@ import {
   onMounted
 } from "vue";
 
+import orderBy from "lodash.orderby";
+import uniq from "lodash.uniq";
 import zip from "lodash.zip";
 
 import metadata from "./metadata.json";
@@ -154,44 +167,100 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const columns = [
-      {
-        id:    'accession',
-        label: 'Accession',
-        href:  null,
-
-        filters: [
-          {
-            id: 'foo',
-            value: 'Foo',
-            checked: true
-          }
-        ]
-      }
-    ];
-
     const state = reactive({
-      columns,
-      rows: [],
+      responseJSON: null, // for download. may consume extra memory
 
-      sortState: {
+      columns: [],
+      allRows: [],
+
+      query: '',
+      columnShowingFilters: null,
+
+      sorting: {
         active: null,
         direction: "desc"
       },
 
-      showingFilterSelector: null,
-      textSearchInput: '',
-
       pagination: {
         currentPage: 1,
         perPage: 5  // TODO take from params
+      },
+
+      queryInput: '',
+      jumpToNumberInput: ''
+    });
+
+    const filteredRows = computed(() => {
+      const query = state.query;
+
+      const filtered = state.allRows.filter((row) => {
+        return query ? row.some(cell => cell.value.includes(query)) : true;
+      }).filter((row) => {
+        return row.every((cell) => {
+          const valuesForFilter = cell.column.filters.filter(({checked}) => checked).map(({value}) => value);
+
+          return valuesForFilter.length === 0 ? true : valuesForFilter.includes(cell.value);
+        });
+      });
+
+      const sortColumn = state.sorting.column;
+
+      if (sortColumn) {
+        return orderBy(filtered, (cells) => {
+          const cell = cells.find(cell => cell.column === sortColumn);
+
+          return cell.value;
+        }, [state.sorting.direction]);
+      } else {
+        return filtered;
       }
     });
 
-    //methods
-    const GetData = async () => {
+    const totalPages = computed(() => {
+      return Math.ceil(filteredRows.value.length / state.pagination.perPage);
+    });
+
+    const rowsInCurrentPage = computed(() => {
+      const startIndex = (state.pagination.currentPage - 1) * state.pagination.perPage;
+      const endIndex = startIndex + state.pagination.perPage;
+
+      return filteredRows.value.slice(startIndex, endIndex);
+    });
+
+    const blobUrl = computed(() => {
+      const json = state.responseJSON;
+
+      if (!json) { return null; }
+
+      const blob = new Blob([JSON.stringify(json, null, '  ')], {type: 'application/json'});
+
+      return URL.createObjectURL(blob);
+    });
+
+    function setSorting(column) {
+      state.sorting.column = column;
+      state.sorting.direction = state.sorting.direction === "asc" ? "desc" : "asc";
+    }
+
+    function setFilters(column, checked) {
+      for (const filter of column.filters) {
+        filter.checked = checked;
+      }
+    }
+
+    function jumpToPage(num) {
+      state.pagination.currentPage = num;
+    }
+
+    function submitQuery(query) {
+      state.query = query;
+    }
+
+    async function fetchData() {
       const res  = await fetch(params.table_data_api);
       const data = await res.json();
+
+      state.responseJSON = data;
 
       const {vars, labels, order, href} = data.head;
 
@@ -213,87 +282,30 @@ export default defineComponent({
         }
       }).filter((column) => column.label !== null);
 
-      state.columns = sortBy(columns, ['order']);
+      state.columns = orderBy(columns, ['order']);
 
-      state.rows = data.body.map((row) => {
-        return columns.map(({id, href}) => {
+      state.allRows = data.body.map((row) => {
+        return columns.map((column) => {
           return {
-            value: row[id].value,
-            href:  href ? row[href].value : null
+            column,
+            value: row[column.id].value,
+            href:  column.href ? row[column.href].value : null
           }
         });
       });
-    };
-
-    const SortData = (id) => {
-      state.sortState.active = id;
-      state.sortState.direction = sortState.direction === "asc" ? "desc" : "asc";
-    };
-
-    const ToggleAllCheckbox = (columnId, checked) => {
-      const column = state.columns.find(({id}) => columnId === id);
-
-      for (const filter of column.filters) {
-        filter.checked = checked;
-      }
     }
 
-    const totalPages = computed(() => {
-      return Math.ceil(adjustedTableData.value.length / state.pagination.perPage);
-    });
-
-    const ChangePageByInput = (e) => {
-      let n = Number(e.target.value);
-
-      n = Math.max(n, 1);
-      n = Matn.min(n, totalPages.value);
-
-      state.pagination.currentPage = n;
-    }
-
-    // computed
-    const adjustedTableData = computed(() => {
-      const query = state.textSearchInput;
-
-      return state.rows.filter((row) => {
-        return query ? row.some(cell => cell.value.includes(query)) : true;
-      }).filter((row) => {
-        return state.columns.some((column, i) => {
-          const valuesToFiltered = column.filters.filter(({checked}) => checked).map(({value}) => value);
-
-          return valuesToFiltered.length === 0 ? true : valuesToFiltered.some(v => row[i] === v)
-        });
-      }).sort((rowX, rowY) => {
-        // TODO sorting
-        return 1;
-      });
-    });
-
-    const displayAdjustedTableData = computed(() => {
-      const startIndex = (state.pagination.currentPage - 1) * state.pagination.perPage;
-      const endIndex = startIndex + state.pagination.perPage;
-
-      return state.rows.slice(startIndex, endIndex);
-    });
-
-    const blob = computed(() => {
-      // if (tableData.value.body) {
-      //   return URL.createObjectURL(new Blob([JSON.stringify(tableData.value, null, "  ")], {type: "application/json"}));
-      // }
-    });
-
-    // mounted
-    onMounted(() => {
-      GetData();
-    });
+    onMounted(fetchData);
 
     return {
       state,
-      adjustedTableData,
-      SortData,
-      ToggleAllCheckbox,
-      blob,
-      ChangePageByInput
+      totalPages,
+      rowsInCurrentPage,
+      blobUrl,
+      setSorting,
+      setFilters,
+      jumpToPage,
+      submitQuery,
     };
   },
 });
