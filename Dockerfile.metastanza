@@ -1,0 +1,12 @@
+# build stage ------------------------------------------------------
+FROM node:lts AS builder
+
+WORKDIR /buildstage
+COPY . .
+RUN yarn install
+RUN npx togostanza build
+
+# prod stage -------------------------------------------------------
+FROM nginx:alpine
+RUN apk --no-cache add ca-certificates
+COPY --from=builder /buildstage/dist /usr/share/nginx/html
