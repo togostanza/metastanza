@@ -72,7 +72,7 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table_body",
+	"@id": "table-body",
 	"stanza:label": "table body for pagination",
 	"stanza:definition": "Greeting.",
 	"stanza:parameter": [
@@ -101,7 +101,7 @@ var metadata = {
 		"stanza:required": false
 	}
 ],
-	"stanza:usage": "<togostanza-table_body></togostanza-table_body>",
+	"stanza:usage": "<togostanza-table-body></togostanza-table-body>",
 	"stanza:type": "Metastanza",
 	"stanza:display": "",
 	"stanza:provider": "provider of this stanza",
@@ -123,4 +123,4 @@ var templates = [
 var css = "";
 
 defineStanzaElement(tableBody, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=table_body.js.map
+//# sourceMappingURL=table-body.js.map

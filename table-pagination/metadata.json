@@ -2,7 +2,7 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_pagination",
+  "@id": "table-pagination",
   "stanza:label": "Table pagination metastanza",
   "stanza:definition": "metastanza for table pagination with slider.",
   "stanza:parameter": [
@@ -14,7 +14,7 @@
     },
     {
       "stanza:key": "table_stanza",
-      "stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
+      "stanza:example": "https://sparql-support.dbcls.jp/stanza/table-body/",
       "stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
       "stanza:required": true
     },
@@ -88,7 +88,7 @@
       "stanza:description": "slider range color"
     }
   ],
-  "stanza:usage": "<togostanza-table_pagination></togostanza-table_pagination>",
+  "stanza:usage": "<togostanza-table-pagination></togostanza-table-pagination>",
   "stanza:type": "MetaStanza",
   "stanza:display": "Table",
   "stanza:provider": "TogoStanza",

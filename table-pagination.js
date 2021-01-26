@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './table_body.js';
+import './table-body.js';
 import './metastanza_utils-f0c71da7.js';
 import './timer-be811b16.js';
 import './index-9856201e.js';
@@ -402,7 +402,7 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table_pagination",
+	"@id": "table-pagination",
 	"stanza:label": "Table pagination metastanza",
 	"stanza:definition": "metastanza for table pagination with slider.",
 	"stanza:parameter": [
@@ -414,7 +414,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "table_stanza",
-		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
+		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table-body/",
 		"stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
 		"stanza:required": true
 	},
@@ -492,7 +492,7 @@ var metadata = {
 		"stanza:description": "slider range color"
 	}
 ],
-	"stanza:usage": "<togostanza-table_pagination></togostanza-table_pagination>",
+	"stanza:usage": "<togostanza-table-pagination></togostanza-table-pagination>",
 	"stanza:type": "MetaStanza",
 	"stanza:display": "Table",
 	"stanza:provider": "TogoStanza",
@@ -514,4 +514,4 @@ var templates = [
 var css = "div.main {\n  font-family: \"Arial\", sans-serif;\n}\n\ndiv#paginationTop,\ndiv#paginationBottom {\n  text-align: var(--button-align);\n  clear: both;\n  position: relative;\n}\n\ndiv.page_slider_div {\n  width: 100%;\n  height: 20px;\n  margin: 10px 0px 20px 0px;\n  text-align: left;\n}\n\ndiv.page_slider_bar {\n  width: calc(100% - 40px);\n  margin-left: 20px;\n  background-color: #bbbbbb;\n  /* slider bar color */\n  height: 4px;\n  position: relative;\n  top: 8px;\n}\n\nul.page_button_ul {\n  display: inline-block;\n  padding: 0px 20px 0px 20px;\n}\n\nul.page_slider_knob_ul {\n  margin: 0px;\n  display: inline-block;\n  padding: 0px;\n  position: relative;\n  top: -4px;\n}\n\nli.page_slider_knob,\nli.page_button {\n  background-color: var(--button-bg-color);\n  /* button default bg color */\n  color: var(--button-text-color);\n  /* button default font color */\n  text-align: center;\n  height: 20px;\n  padding-left: 14px;\n  padding-right: 14px;\n  list-style: none;\n  cursor: pointer;\n  user-select: none;\n  display: table-cell;\n  vertical-align: middle;\n  transform: translateX(0px);\n  /* for z-index conflict of slider range object */\n}\n\nli.current_button,\nli.onmouse_button {\n  background-color: var(--current-button-bg-color);\n  /* button active bg color */\n}\n\nli.inactive_button {\n  background-color: #cccccc;\n  /* button inactive bg color */\n}\n\nli.current_button,\nli.page_slider_knob,\nli.inactive_button {\n  cursor: default;\n}\n\nli.page_slider_knob {\n  border-radius: 10px;\n}\n\nli.prev_button {\n  transform: translateX(-10px);\n  border-radius: 10px;\n}\n\nli.next_button {\n  transform: translateX(10px);\n  border-radius: 10px;\n}\n\nli.first_button {\n  transform: translateX(-20px);\n  border-radius: 10px;\n}\n\nli.last_button {\n  transform: translateX(20px);\n  border-radius: 10px;\n}\n\nli.page_button_left {\n  padding-left: 24px;\n  border-radius: 10px 0px 0px 10px;\n}\n\nli.page_button_right {\n  padding-right: 24px;\n  border-radius: 0px 10px 10px 0px;\n}\n\ndiv.float_left {\n  float: left;\n}\n\ndiv.float_right {\n  float: right;\n}\n\ncanvas.slider_range {\n  width: 100%;\n  height: 100px;\n  position: absolute;\n  left: 0px;\n}";
 
 defineStanzaElement(tablePagination, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=table_pagination.js.map
+//# sourceMappingURL=table-pagination.js.map

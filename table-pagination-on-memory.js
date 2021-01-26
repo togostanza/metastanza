@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './table_body.js';
+import './table-body.js';
 import './metastanza_utils-f0c71da7.js';
 import './timer-be811b16.js';
 import './index-9856201e.js';
@@ -434,13 +434,13 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table_pagination_on_memory",
+	"@id": "table-pagination-on-memory",
 	"stanza:label": "Table pagination metastanza - on memory",
 	"stanza:definition": "Metastanza for table pagination with slider for table data on memory.",
 	"stanza:parameter": [
 	{
 		"stanza:key": "table_stanza",
-		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table_body/",
+		"stanza:example": "https://sparql-support.dbcls.jp/stanza/table-body/",
 		"stanza:description": "table stanza for all data (need 'tbody' tag in the table)",
 		"stanza:required": true
 	},
@@ -512,4 +512,4 @@ var templates = [
 var css = "";
 
 defineStanzaElement(tablePaginationOnMemory, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=table_pagination_on_memory.js.map
+//# sourceMappingURL=table-pagination-on-memory.js.map
