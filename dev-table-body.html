@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>dev table body for pagination</title>
+
+    <script type="module" src="./dev-table-body.js" async></script>
+
+    <script type="module">
+      import createHelpApp from './-togostanza/help-app.js';
+
+      const metadata = {"@context":{"stanza":"http://togostanza.org/resource/stanza#"},"@id":"dev-table-body","stanza:label":"dev table body for pagination","stanza:definition":"Greeting.","stanza:parameter":[{"stanza:key":"table_data_api","stanza:example":"https://sparql-support.dbcls.jp/rest/api/metastanza_table_example","stanza:description":"table data api","stanza:required":true},{"stanza:key":"limit","stanza:example":"10","stanza:description":"table page size","stanza:required":true},{"stanza:key":"offset","stanza:example":"0","stanza:description":"page numbere","stanza:required":true},{"stanza:key":"params","stanza:example":"taxonomy='9606'","stanza:description":"parameters for table data api","stanza:required":false}],"stanza:usage":"<togostanza-table-body></togostanza-table-body>","stanza:type":"Metastanza","stanza:display":"","stanza:provider":"provider of this stanza","stanza:license":"MIT","stanza:author":"Togostanza","stanza:address":"name@example.org","stanza:contributor":[],"stanza:created":"2020-05-27","stanza:updated":"2020-05-27"};
+      const readme   = "";
+
+      createHelpApp({metadata, readme}).mount('body');
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>

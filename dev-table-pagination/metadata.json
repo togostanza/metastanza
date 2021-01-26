@@ -2,19 +2,19 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table-pagination",
-  "stanza:label": "Table pagination metastanza",
+  "@id": "dev-table-pagination",
+  "stanza:label": "dev Table pagination metastanza",
   "stanza:definition": "metastanza for table pagination with slider.",
   "stanza:parameter": [
     {
       "stanza:key": "table_data_count_api",
-      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example?count=1",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?count=1",
       "stanza:description": "table row count api",
       "stanza:required": true
     },
     {
       "stanza:key": "table_stanza",
-      "stanza:example": "https://sparql-support.dbcls.jp/stanza/table-body/",
+      "stanza:example": "https://togostanza.github.io/metastanza/dev-table-body/",
       "stanza:description": "table stanza (req. 'limit' and 'offset' parameters)'",
       "stanza:required": true
     },
@@ -26,7 +26,7 @@
     },
     {
       "stanza:key": "table_stanza_params",
-      "stanza:example": "params='taxonomy=9606' table_data_api='https://sparql-support.dbcls.jp/rest/api/metastanza_table_example'",
+      "stanza:example": "params='taxonomy=9606' table_data_api='http://togostanza.org/sparqlist/api/metastanza_table'",
       "stanza:description": "parameters for table stanza (except 'limit' and 'offset')",
       "stanza:required": false
     },

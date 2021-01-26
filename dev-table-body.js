@@ -72,8 +72,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table-body",
-	"stanza:label": "table body for pagination",
+	"@id": "dev-table-body",
+	"stanza:label": "dev table body for pagination",
 	"stanza:definition": "Greeting.",
 	"stanza:parameter": [
 	{
@@ -123,4 +123,4 @@ var templates = [
 var css = "";
 
 defineStanzaElement(tableBody, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=table-body.js.map
+//# sourceMappingURL=dev-table-body.js.map

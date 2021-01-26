@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table-body",
-  "stanza:label": "table body for pagination",
+  "@id": "dev-table-body",
+  "stanza:label": "dev table body for pagination",
   "stanza:definition": "Greeting.",
   "stanza:parameter": [
     {
