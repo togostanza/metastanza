@@ -29,6 +29,18 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "label-variable",
+      "stanza:example": "category",
+      "stanza:description": "variable to be assigned as label",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "value-variable",
+      "stanza:example": "count",
+      "stanza:description": "variable to be assigned as value",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": "200",
@@ -60,15 +72,8 @@
     },
     {
       "stanza:key": "legend-title",
-      "stanza:type": "string",
       "stanza:example": "Title of this legend",
       "stanza:description": "title of legends"
-    },
-    {
-      "stanza:key": "figuretitle",
-      "stanza:type": "text",
-      "stanza:example": "Figure 1 Title of the figure",
-      "stanza:description": "figure title (If you blank here, it dosen't be shown)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -186,42 +191,6 @@
       "stanza:type": "string",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "font family of labels."
-    },
-    {
-      "stanza:key": "--figuretitle-orient",
-      "stanza:type": "text",
-      "stanza:default": "bottom",
-      "stanza:description": "orient of figure title.(top, bottom)"
-    },
-    {
-      "stanza:key": "--figuretitle-anchor",
-      "stanza:type": "text",
-      "stanza:default": "middle",
-      "stanza:description": "figure title placement.(left, right, middle)"
-    },
-    {
-      "stanza:key": "--figuretitle-horizonal-offset",
-      "stanza:type": "number",
-      "stanza:default": "100",
-      "stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-vertical-offset",
-      "stanza:type": "number",
-      "stanza:default": "210",
-      "stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-font-size",
-      "stanza:type": "text",
-      "stanza:default": "12",
-      "stanza:description": "font size of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "400",
-      "stanza:description": "font weight of figure title"
     }
   ]
 }

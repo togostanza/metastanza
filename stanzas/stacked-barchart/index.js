@@ -3,8 +3,6 @@ import vegaEmbed from "vega-embed";
 export default async function stackedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  spec.data[0].url = params["your-data"];
-
   //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
@@ -12,22 +10,64 @@ export default async function stackedBarchart(stanza, params) {
     "--padding"
   );
 
-  //棒・スケールに関する設定
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
+  const groupVariable = params["group-variable"];
+  
+  spec.data = [
+    {
+      "name": "table",
+      "url": params["your-data"],
+      "transform": [
+        {
+          "type": "stack",
+          "field": valueVariable,
+          "groupby": [labelVariable]
+          // "sort": {"field": groupVariable},
+        }
+      ]
+    }
+  ]
+
+  console.log(spec.data[0].value)
+
+
+  //scales
+  spec.scales = [
+    {
+      "name": "x",
+      "type": "band",
+      "range": "width",
+      // "domain": {"data": "table", "field": labelVariable}
+      "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "range": "height",
+      "nice": true, "zero": true,
+      "domain": {"data": "table", "field": "y1"}
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "range": [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+      "domain": {"data": "table", "field": groupVariable}
+    }
+  ]
+  
   spec.scales[0].paddingInner = 0.1;
   spec.scales[0].paddingOuter = 0.5;
-  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") - 0;
-  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") - 0;
 
-  spec.scales[2].range = [
-    "var(--series-0-color)",
-    "var(--series-1-color)",
-    "var(--series-2-color)",
-    "var(--series-3-color)",
-    "var(--series-4-color)",
-    "var(--series-5-color)",
-  ];
-
-  //軸に関する設定
+  //axis
   spec.axes[0] = {
     scale: "x",
     orient: params["xaxis-orient"],
@@ -201,46 +241,20 @@ export default async function stackedBarchart(stanza, params) {
     },
   };
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
   //rect（棒）の描画について
   spec.marks[0] = {
     type: "rect",
     from: { data: "table" },
     encode: {
       enter: {
-        x: { scale: "x", field: "x" },
+        x: { scale: "x", field: labelVariable },
         width: { scale: "x", band: params["bar-width"] },
         y: { scale: "y", field: "y0" },
         y2: { scale: "y", field: "y1" },
-        fill: { scale: "color", field: "c", offset: -1 },
+        fill: { scale: "color", field: groupVariable, offset: -1 },
       },
       update: {
-        fill: { scale: "color", field: "c" },
+        fill: { scale: "color", field: groupVariable },
         stroke: { value: "var(--stroke-color)" },
         strokeWidth: {
           value: getComputedStyle(stanza.root.host).getPropertyValue(

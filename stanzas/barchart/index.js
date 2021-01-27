@@ -1,9 +1,8 @@
-import { stratify } from "d3";
+// import { stratify } from "d3";
 import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].url = params["your-data"];
 
   //height, width, padding
   spec.width = params["width"];
@@ -11,11 +10,36 @@ export default async function barchart(stanza, params) {
   spec.padding = params["padding"];
   // spec.padding = getComputedStyle(stanza.root.host).getPropertyValue("--padding");
 
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
+
+  spec.data = [
+    {
+      "name": "table",
+      "url": params["your-data"]
+    }
+  ]
+
   //scales
-  spec.scales[0].paddingInner = 0.1;
-  spec.scales[0].paddingOuter = 0.4;
-  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--title-padding");
-  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--title-padding");
+  spec.scales = [
+    {
+      "name": "xscale",
+      "type": "band",
+      "domain": {"data": "table", "field": labelVariable},
+      "range": "width",
+      "padding": 0.05,
+      "paddingInner": 0.2,
+      "paddingInner": 0.5,
+      "round": true
+    },
+    {
+      "name": "yscale",
+      "domain": {"data": "table", "field": valueVariable},
+      "nice": true,
+      "range": "height"
+    }
+  ]
 
   //axis
   spec.axes[0] = {
@@ -38,6 +62,7 @@ export default async function barchart(stanza, params) {
       "--grid-width"
     ),
     ticks: params["xtick"] === "true",
+    zindex: 1,
     encode: {
       axis: {
         update: {},
@@ -191,43 +216,15 @@ export default async function barchart(stanza, params) {
     },
   };
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: "bottom",
-    // orient: getComputedStyle(stanza.root.host).getPropertyValue(
-    //   "--figuretitle-orient"
-    // ),
-    anchor: "middle",
-    // anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-    //   "--figuretitle-anchor"
-    // ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    // dx:
-    //   getComputedStyle(stanza.root.host).getPropertyValue(
-    //     "--figuretitle-horizonal-offset"
-    //   ) - 0,
-    // dy:
-    //   getComputedStyle(stanza.root.host).getPropertyValue(
-    //     "--figuretitle-vertical-offset"
-    //   ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
-  //rect（棒）の描画について
+  //marks
   spec.marks[0] = {
     type: "rect",
     from: { data: "table" },
     encode: {
       enter: {
-        x: { scale: "xscale", field: "category" },
+        x: { scale: "xscale", field: labelVariable },
         width: { scale: "xscale", band: params["bar-width"] },
-        y: { scale: "yscale", field: "amount" },
+        y: { scale: "yscale", field: valueVariable },
         y2: { scale: "yscale", value: 0 },
       },
       update: {
@@ -267,9 +264,9 @@ export default async function barchart(stanza, params) {
       },
     },
     update: {
-      x: { scale: "xscale", signal: "tooltip.category", band: 0.5 },
-      y: { scale: "yscale", signal: "tooltip.amount", offset: -1 },
-      text: { signal: "tooltip.amount" },
+      x: { scale: "xscale", signal: `tooltip.${labelVariable}`, band: 0.5 },
+      y: { scale: "yscale", signal: `tooltip.${valueVariable}`, offset: -1 },
+      text: { signal: `tooltip.${valueVariable}` },
       fillOpacity: [{ test: "datum === tooltip", value: 0 }, { value: 1 }],
     },
   };
