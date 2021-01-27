@@ -81,45 +81,14 @@
       ></span>
     </template>
 
-    <template v-if="totalPages <= 5">
-      <ul>
-        <li
-          v-for="index in totalPages"
-          :key="index"
-          :class="['pagination', {active: state.pagination.currentPage === index}]"
-          @click="state.pagination.currentPage = index"
-        >{{ index }}</li>
-      </ul>
-    </template>
-
-    <template v-else>
-      <ul v-if="state.pagination.currentPage < 3">
-        <li
-          v-for="index in 5"
-          :key="index"
-          :class="['pagination', {active: state.pagination.currentPage === index}]"
-          @click="state.pagination.currentPage = index"
-        >{{ index }}</li>
-      </ul>
-
-      <ul v-if="state.pagination.currentPage >= 3 && state.pagination.currentPage < totalPages - 2">
-        <li
-          v-for="index in 5"
-          :key="index"
-          :class="['pagination', {active: state.pagination.currentPage === state.pagination.currentPage + (index - 3)}]"
-          @click="state.pagination.currentPage = state.pagination.currentPage + (index - 3)"
-        >{{ state.pagination.currentPage + (index - 3)  }}</li>
-      </ul>
-
-      <ul v-if="state.pagination.currentPage >= totalPages - 2">
-        <li
-          v-for="index in 5"
-          :key="index"
-          :class="['pagination', {active: state.pagination.currentPage === totalPages + (index - 5)}]"
-          @click="state.pagination.currentPage = totalPages + (index - 5)"
-        >{{ totalPages + (index - 5)  }}</li>
-      </ul>
-    </template>
+    <ul>
+      <li
+        v-for="page in surroundingPages"
+        :key="page"
+        :class="['pagination', {active: state.pagination.currentPage === page}]"
+        @click="state.pagination.currentPage = page"
+      >{{ page }}</li>
+    </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
       <span
@@ -227,6 +196,25 @@ export default defineComponent({
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
+    const surroundingPages = computed(() => {
+      const currentPage = state.pagination.currentPage;
+
+      let start, end;
+
+      if (currentPage <= 3) {
+        start = 1;
+        end   = Math.min(start + 4, totalPages.value);
+      } else if ((totalPages.value - currentPage) <= 3) {
+        end   = totalPages.value;
+        start = Math.max(end - 4, 1);
+      } else {
+        start = Math.max(currentPage - 2, 1);
+        end   = Math.min(currentPage + 2, totalPages.value);
+      }
+
+      return Array.from({length: end - start + 1}, (_, i) => start + i);
+    });
+
     const blobUrl = computed(() => {
       const json = state.responseJSON;
 
@@ -301,6 +289,7 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
+      surroundingPages,
       blobUrl,
       setSorting,
       setFilters,
