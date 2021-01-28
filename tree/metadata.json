@@ -75,6 +75,42 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
+      "stanza:key": "--series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFC39E",
+      "stanza:description": "first color"
+    },
+    {
+      "stanza:key": "--series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#FF8DB8",
+      "stanza:description": "second color"
+    },
+    {
+      "stanza:key": "--series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#C690C6",
+      "stanza:description": "third color"
+    },
+    {
+      "stanza:key": "--series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#6992D1",
+      "stanza:description": "forth color"
+    },
+    {
+      "stanza:key": "--series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#71B093",
+      "stanza:description": "fifth color"
+    },
+    {
+      "stanza:key": "--series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#94BC8A",
+      "stanza:description": "sixth color"
+    },
+    {
       "stanza:key": "--emphasized-color",
       "stanza:type": "color",
       "stanza:default": "#ec7d8d",
@@ -175,42 +211,6 @@
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description": "stroke width of plot when you hover."
-    },
-    {
-      "stanza:key": "--series-0-color",
-      "stanza:type": "color",
-      "stanza:default": "#FFC39E",
-      "stanza:description": "first color"
-    },
-    {
-      "stanza:key": "--series-1-color",
-      "stanza:type": "color",
-      "stanza:default": "#FF8DB8",
-      "stanza:description": "second color"
-    },
-    {
-      "stanza:key": "--series-2-color",
-      "stanza:type": "color",
-      "stanza:default": "#C690C6",
-      "stanza:description": "third color"
-    },
-    {
-      "stanza:key": "--series-3-color",
-      "stanza:type": "color",
-      "stanza:default": "#6992D1",
-      "stanza:description": "forth color"
-    },
-    {
-      "stanza:key": "--series-4-color",
-      "stanza:type": "color",
-      "stanza:default": "#71B093",
-      "stanza:description": "fifth color"
-    },
-    {
-      "stanza:key": "--series-5-color",
-      "stanza:type": "color",
-      "stanza:default": "#94BC8A",
-      "stanza:description": "sixth color"
     }
   ]
 }

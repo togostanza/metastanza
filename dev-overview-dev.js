@@ -1,6 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { g as getFormatedJson, s as select } from './metastanza_utils-f0c71da7.js';
-import './timer-be811b16.js';
+import './index-802c870c.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-32cbc8a4.js';
+import './timer-b826f0a9.js';
 
 async function devOverviewDev(stanza, params) {
   stanza.render({

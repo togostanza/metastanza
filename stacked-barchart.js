@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
-import './timer-be811b16.js';
+import { e as embed } from './vega-embed.module-529d62fa.js';
+import './vega.module-1945ca45.js';
+import './timer-b826f0a9.js';
 
 async function stackedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -28,9 +28,9 @@ async function stackedBarchart(stanza, params) {
           field: valueVariable,
           groupby: [labelVariable],
           // "sort": {"field": groupVariable},
-        },
-      ],
-    },
+        }
+      ]
+    }
   ];
 
   console.log(spec.data[0].value);
@@ -77,8 +77,7 @@ async function stackedBarchart(stanza, params) {
     title: params["xaxis-title"],
     titleColor: "var(--title-color)",
     titlePadding:
-      getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-      0,
+      Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
     grid: params["xgrid"] === "true",
     gridColor: "var(--grid-color)",
     gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -92,18 +91,10 @@ async function stackedBarchart(stanza, params) {
     ),
     ticks: params["xtick"] === "true",
     encode: {
-      axis: {
-        update: {},
-      },
       ticks: {
         update: {
           stroke: { value: "var(--tick-color)" },
-        },
-      },
-      grids: {
-        update: {
-          zindex: { value: 0 },
-        },
+        }
       },
       labels: {
         interactive: true,
@@ -113,13 +104,13 @@ async function stackedBarchart(stanza, params) {
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--label-font"
-            ),
+            )
           },
           fontSize: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--label-size"
-            ),
-          },
+            )
+          }
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
@@ -130,19 +121,19 @@ async function stackedBarchart(stanza, params) {
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--label-font"
-            ),
+            )
           },
           fontSize: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--title-size"
-            ),
+            )
           },
           fontWeight: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--title-weight"
-            ),
-          },
-        },
+            )
+          }
+        }
       },
       domain: {
         update: {
@@ -150,12 +141,11 @@ async function stackedBarchart(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--axis-width"
-            ),
-          },
-          zindex: { value: "1" },
-        },
-      },
-    },
+            )
+          }
+        }
+      }
+    }
   };
 
   spec.axes[1] = {
@@ -164,8 +154,7 @@ async function stackedBarchart(stanza, params) {
     title: params["yaxis-title"],
     titleColor: "var(--title-color)",
     titlePadding:
-      getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-      0,
+      Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
     grid: params["ygrid"] === "true",
     gridColor: "var(--grid-color)",
     gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -179,18 +168,10 @@ async function stackedBarchart(stanza, params) {
     ),
     ticks: params["ytick"] === "true",
     encode: {
-      axis: {
-        update: {},
-      },
       ticks: {
         update: {
           stroke: { value: "var(--tick-color)" },
-        },
-      },
-      grids: {
-        update: {
-          zindex: { value: "0" },
-        },
+        }
       },
       labels: {
         interactive: true,
@@ -237,15 +218,16 @@ async function stackedBarchart(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--axis-width"
-            ),
-          },
-        },
-      },
-    },
+            )
+          }
+        }
+      }
+    }
   };
 
   //marks
-  spec.marks[0] = {
+  spec.marks = [
+  {
     type: "rect",
     from: { data: "table" },
     encode: {
@@ -262,14 +244,15 @@ async function stackedBarchart(stanza, params) {
         strokeWidth: {
           value: getComputedStyle(stanza.root.host).getPropertyValue(
             "--stroke-width"
-          ),
-        },
+          )
+        }
       },
       hover: {
         fill: { value: "var(--emphasized-color)" },
-      },
-    },
-  };
+      }
+    }
+  }
+];
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -464,7 +447,7 @@ var metadata = {
 	{
 		"stanza:key": "--grid-color",
 		"stanza:type": "color",
-		"stanza:default": "#eee",
+		"stanza:default": "#333333",
 		"stanza:description": "grid color"
 	},
 	{
@@ -476,7 +459,7 @@ var metadata = {
 	{
 		"stanza:key": "--grid-opacity",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0.1",
 		"stanza:description": "grid opacity.(0-1)"
 	},
 	{
@@ -500,7 +483,7 @@ var metadata = {
 	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
-		"stanza:default": "#6b645b",
+		"stanza:default": "#333333",
 		"stanza:description": "color of axis"
 	},
 	{

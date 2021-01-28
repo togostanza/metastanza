@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
-import './timer-be811b16.js';
+import { e as embed } from './vega-embed.module-529d62fa.js';
+import './vega.module-1945ca45.js';
+import './timer-b826f0a9.js';
 
 async function tree(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -86,19 +86,19 @@ async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-size"
-              ),
+              )
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-weight"
-              ),
-            },
-          },
+              )
+            }
+          }
         },
         labels: {
           interactive: true,
@@ -106,13 +106,13 @@ async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendlabel-size"
-              ),
-            },
+              )
+            }
           },
           text: { field: "value" },
         },
@@ -123,17 +123,17 @@ async function tree(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--stroke-width"
-              ),
+              )
             },
             opacity: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--opacity"
-              ),
-            },
-          },
-        },
-      },
-    },
+              )
+            }
+          }
+        }
+      }
+    }
   ];
 
   //marks
@@ -312,6 +312,42 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
+		"stanza:key": "--series-0-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFC39E",
+		"stanza:description": "first color"
+	},
+	{
+		"stanza:key": "--series-1-color",
+		"stanza:type": "color",
+		"stanza:default": "#FF8DB8",
+		"stanza:description": "second color"
+	},
+	{
+		"stanza:key": "--series-2-color",
+		"stanza:type": "color",
+		"stanza:default": "#C690C6",
+		"stanza:description": "third color"
+	},
+	{
+		"stanza:key": "--series-3-color",
+		"stanza:type": "color",
+		"stanza:default": "#6992D1",
+		"stanza:description": "forth color"
+	},
+	{
+		"stanza:key": "--series-4-color",
+		"stanza:type": "color",
+		"stanza:default": "#71B093",
+		"stanza:description": "fifth color"
+	},
+	{
+		"stanza:key": "--series-5-color",
+		"stanza:type": "color",
+		"stanza:default": "#94BC8A",
+		"stanza:description": "sixth color"
+	},
+	{
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
@@ -412,42 +448,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "stroke width of plot when you hover."
-	},
-	{
-		"stanza:key": "--series-0-color",
-		"stanza:type": "color",
-		"stanza:default": "#FFC39E",
-		"stanza:description": "first color"
-	},
-	{
-		"stanza:key": "--series-1-color",
-		"stanza:type": "color",
-		"stanza:default": "#FF8DB8",
-		"stanza:description": "second color"
-	},
-	{
-		"stanza:key": "--series-2-color",
-		"stanza:type": "color",
-		"stanza:default": "#C690C6",
-		"stanza:description": "third color"
-	},
-	{
-		"stanza:key": "--series-3-color",
-		"stanza:type": "color",
-		"stanza:default": "#6992D1",
-		"stanza:description": "forth color"
-	},
-	{
-		"stanza:key": "--series-4-color",
-		"stanza:type": "color",
-		"stanza:default": "#71B093",
-		"stanza:description": "fifth color"
-	},
-	{
-		"stanza:key": "--series-5-color",
-		"stanza:type": "color",
-		"stanza:default": "#94BC8A",
-		"stanza:description": "sixth color"
 	}
 ]
 };

@@ -1,7 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { g as getFormatedJson, a as appendDlButton, s as select } from './metastanza_utils-f0c71da7.js';
-import { p as pointer, d as drag } from './drag-f5d349cb.js';
-import './timer-be811b16.js';
+import './index-802c870c.js';
+import { g as getFormatedJson, a as appendDlButton, s as select } from './metastanza_utils-32cbc8a4.js';
+import { p as pointer, d as drag } from './drag-9b411d63.js';
+import './timer-b826f0a9.js';
 
 async function manhattanPlotCanvas(stanza, params) {
   stanza.render({
