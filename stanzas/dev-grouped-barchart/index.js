@@ -69,6 +69,7 @@ export default async function devGroupedBarchart(stanza, params) {
   spec.scales[0].paddingInner = 0.1;
   spec.scales[0].paddingOuter = 0.4;
 
+//axes
   spec.axes = [
     {
       orient: params["yaxis-orient"],
@@ -76,7 +77,7 @@ export default async function devGroupedBarchart(stanza, params) {
       tickSize: 0,
       labelPadding: 4,
       zindex: 1,
-      title: params["yaxis-title"],
+      title: labelVariable,
       titleColor: "var(--title-color)",
       titlePadding:
         Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
@@ -94,13 +95,10 @@ export default async function devGroupedBarchart(stanza, params) {
       ticks: params["ytick"] === "true",
       zindex: 1,
       encode: {
-        axis: {
-          update: {},
-        },
         ticks: {
           update: {
             stroke: { value: "var(--tick-color)" },
-          },
+          }
         },
         labels: {
           interactive: true,
@@ -110,36 +108,36 @@ export default async function devGroupedBarchart(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              ),
-            },
+              )
+            }
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          },
+          }
         },
         title: {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-size"
-              ),
+              )
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-weight"
-              ),
-            },
-          },
+              )
+            }
+          }
         },
         domain: {
           update: {
@@ -156,7 +154,7 @@ export default async function devGroupedBarchart(stanza, params) {
     {
       scale: "xscale",
       orient: params["xaxis-orient"],
-      title: params["xaxis-title"],
+      title: valueVariable,
       titleColor: "var(--title-color)",
       titlePadding:
         Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
@@ -173,13 +171,10 @@ export default async function devGroupedBarchart(stanza, params) {
       ),
       ticks: params["xtick"] === "true",
       encode: {
-        axis: {
-          update: {},
-        },
         ticks: {
           update: {
             stroke: { value: "var(--tick-color)" },
-          },
+          }
         },
         labels: {
           interactive: true,
@@ -194,24 +189,24 @@ export default async function devGroupedBarchart(stanza, params) {
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              ),
-            },
+              )
+            }
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          },
+          }
         },
         title: {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-size"
-              ),
+              )
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -234,6 +229,57 @@ export default async function devGroupedBarchart(stanza, params) {
     }
   ]
 
+    // legend
+    spec.legends = [
+      {
+        fill: "color",
+        orient: "none",
+        legendX: 840,
+        legendY: "0",
+        title: groupVariable,
+        titleColor: "var(--legendtitle-color)",
+        labelColor: "var(--legendlabel-color)",
+        encode: {
+          title: {
+            update: {
+              font: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--legend-font"
+                )
+              },
+              fontSize: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--legendtitle-size"
+                )
+              },
+              fontWeight: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--legendtitle-weight"
+                )
+              }
+            }
+          },
+          labels: {
+            interactive: true,
+            update: {
+              font: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--legend-font"
+                )
+              },
+              fontSize: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--legendlabel-size"
+                )
+              }
+            },
+            text: { field: "value" },
+          }
+        }
+      }
+    ]
+
+//marks
   spec.marks = [
     {
       type: "group",

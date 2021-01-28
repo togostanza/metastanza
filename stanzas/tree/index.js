@@ -83,19 +83,19 @@ export default async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-size"
-              ),
+              )
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-weight"
-              ),
-            },
-          },
+              )
+            }
+          }
         },
         labels: {
           interactive: true,
@@ -103,13 +103,13 @@ export default async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              ),
+              )
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendlabel-size"
-              ),
-            },
+              )
+            }
           },
           text: { field: "value" },
         },
@@ -120,18 +120,18 @@ export default async function tree(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--stroke-width"
-              ),
+              )
             },
             opacity: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--opacity"
-              ),
-            },
-          },
-        },
-      },
-    },
-  ];
+              )
+            }
+          }
+        }
+      }
+    }
+  ]
 
   //marks
   spec.marks = [

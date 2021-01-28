@@ -279,7 +279,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
         }
       }
     }
-  ];
+  ]
 
   //marks
   spec.marks = [
