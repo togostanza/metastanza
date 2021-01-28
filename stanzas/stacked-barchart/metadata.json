@@ -273,7 +273,7 @@
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0",
       "stanza:description": "width of stroke"
     },
     {

@@ -39,8 +39,8 @@ export default async function stackedBarchart(stanza, params) {
       "name": "x",
       "type": "band",
       "range": "width",
-      // "domain": {"data": "table", "field": labelVariable}
-      "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
+      "domain": {"data": "table", "field": labelVariable}
+      // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
     },
     {
       "name": "y",
@@ -241,7 +241,7 @@ export default async function stackedBarchart(stanza, params) {
     },
   };
 
-  //rect（棒）の描画について
+  //marks
   spec.marks[0] = {
     type: "rect",
     from: { data: "table" },
