@@ -183,7 +183,7 @@
     {
       "stanza:key": "--grid-color",
       "stanza:type": "color",
-      "stanza:default": "#eee",
+      "stanza:default": "#333333",
       "stanza:description": "grid color"
     },
     {
@@ -195,7 +195,7 @@
     {
       "stanza:key": "--grid-opacity",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0.1",
       "stanza:description": "grid opacity.(0-1)"
     },
     {
@@ -219,7 +219,7 @@
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
-      "stanza:default": "#6b645b",
+      "stanza:default": "#333333",
       "stanza:description": "color of axis"
     },
     {

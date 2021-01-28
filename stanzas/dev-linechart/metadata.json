@@ -22,39 +22,265 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "title",
-      "stanza:example": "Example",
-      "stanza:description": "title",
+      "stanza:key": "your-data",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
       "stanza:required": true
     },
     {
-      "stanza:key": "color-scheme",
-      "stanza:example": "pastel2",
-      "stanza:description": "pastel2",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["pastel1", "pastel2", "set1"]
+      "stanza:key": "label-variable",
+      "stanza:example": "category",
+      "stanza:description": "variable to be assigned as label",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "value-variable",
+      "stanza:example": "count",
+      "stanza:description": "variable to be assigned as value",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "group-variable",
+      "stanza:example": "chromosome",
+      "stanza:description": "variable to be assigned as an identifier of a group",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "width of your stanza"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": "200",
+      "stanza:description": "height of your stanza"
+    },
+    {
+      "stanza:key": "xaxis-orient",
+      "stanza:type": "string",
+      "stanza:example": "bottom",
+      "stanza:description": "orient of X-axis.(please select top or bottom)"
+    },
+    {
+      "stanza:key": "yaxis-orient",
+      "stanza:type": "string",
+      "stanza:example": "left",
+      "stanza:description": "orient of Y-axis.(please select left or right)"
+    },
+    {
+      "stanza:key": "xaxis-title",
+      "stanza:type": "string",
+      "stanza:example": "title of Xaxis",
+      "stanza:description": "title of X-axis"
+    },
+    {
+      "stanza:key": "yaxis-title",
+      "stanza:type": "string",
+      "stanza:example": "title of Yaxis",
+      "stanza:description": "title of Y-axis"
+    },
+    {
+      "stanza:key": "xgrid",
+      "stanza:example": false,
+      "stanza:description": "display of X-grids.(true or false)"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:example": true,
+      "stanza:description": "display of Y-grids.(true or false)"
+    },
+    {
+      "stanza:key": "xtick",
+      "stanza:example": false,
+      "stanza:description": "display of X-ticks.(true or false)"
+    },
+    {
+      "stanza:key": "ytick",
+      "stanza:example": true,
+      "stanza:description": "display of Y-ticks.(true or false)"
+    },
+    {
+      "stanza:key": "xlabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of X-labels.(in degree)"
+    },
+    {
+      "stanza:key": "ylabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of Y-labels.(in degree)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
+      "stanza:key": "--series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#adc1c7",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#ceeded",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#ccb9b1",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#f5e7d0",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#aed6c8",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#C4D6F5",
+      "stanza:description": "bar color"
+    },
+    {
+      "stanza:key": "--emphasized-color",
+      "stanza:type": "color",
+      "stanza:default": "#fa8c84",
+      "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--padding",
+      "stanza:type": "text",
+      "stanza:dafault": "top: 0, right: 0, bottom: 50, left: 50",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "--padding-inner",
+      "stanza:type": "text",
+      "stanza:dafault": "0.1",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "--padding-outer",
+      "stanza:type": "text",
+      "stanza:dafault": "0.2",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+    },
+    {
+      "stanza:key": "--grid-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "grid color"
+    },
+    {
+      "stanza:key": "--grid-dash",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "grid stroke dash.  Blank for solid lines."
+    },
+    {
+      "stanza:key": "--grid-opacity",
+      "stanza:type": "number",
+      "stanza:default": "0.1",
+      "stanza:description": "grid opacity.(0-1)"
+    },
+    {
+      "stanza:key": "--grid-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "grid width in pixel"
+    },
+    {
+      "stanza:key": "--tick-color",
+      "stanza:type": "color",
+      "stanza:default": "#6b645b",
+      "stanza:description": "tick color"
+    },
+    {
+      "stanza:key": "--label-color",
+      "stanza:type": "color",
+      "stanza:default": "#6b645b",
+      "stanza:description": "label color"
+    },
+    {
+      "stanza:key": "--axis-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "color of axis"
+    },
+    {
+      "stanza:key": "--title-size",
+      "stanza:type": "number",
+      "stanza:default": "12",
+      "stanza:description": "font size of titles"
+    },
+    {
+      "stanza:key": "--title-color",
+      "stanza:type": "color",
+      "stanza:default": "#222",
+      "stanza:description": "font color of title"
+    },
+    {
+      "stanza:key": "--title-weight",
+      "stanza:type": "number",
+      "stanza:default": "400",
+      "stanza:description": "font weight of titles"
+    },
+    {
+      "stanza:key": "--title-padding",
+      "stanza:type": "number",
+      "stanza:default": "10",
+      "stanza:description": "padding between axis labels and title.(in pixel)"
+    },
+    {
+      "stanza:key": "--label-size",
+      "stanza:type": "number",
+      "stanza:default": "10",
+      "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--label-font",
+      "stanza:type": "string",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "font family of labels."
+    },
+    {
+      "stanza:key": "--axis-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "width of axis"
+    },
+    {
+      "stanza:key": "--stroke-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "color of stroke"
+    },
+    {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "2",
-      "stanza:description": "Width of stroke"
+      "stanza:default": "0",
+      "stanza:description": "width of stroke"
     },
     {
-      "stanza:key": "--greeting-color",
-      "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
+      "stanza:key": "--fontsize-value",
+      "stanza:type": "number",
+      "stanza:default": "18",
+      "stanza:description": "font size of each value"
     },
     {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:key": "--fontweight-value",
+      "stanza:type": "string",
+      "stanza:default": "bold",
+      "stanza:description": "font weight of each value"
     }
   ]
 }
