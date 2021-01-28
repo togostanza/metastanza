@@ -1,6 +1,6 @@
-import "@/stanzas/table_body";
+import "@/stanzas/dev-table-body";
 
-export default function tablePaginationOnMemory(stanza, params) {
+export default function tablePagination(stanza, params) {
   let page_size_list = [10, 20, 50];
   if (params.page_opt) {
     page_size_list = params.page_opt.split(/,/);
@@ -19,20 +19,9 @@ export default function tablePaginationOnMemory(stanza, params) {
   let dragF = false;
   let startX = 0;
   let button_display = undefined;
-  if (
-    params.slider ||
-    (params.button_align !== "center" &&
-      params.button_align !== "left" &&
-      params.button_align !== "right")
-  ) {
-    params.button_align = "center";
-  }
 
   stanza.render({
     template: "stanza.html.hbs",
-    parameters: {
-      button_align: params.button_align,
-    },
   });
 
   const div = stanza.select("#tableBody");
@@ -51,27 +40,9 @@ export default function tablePaginationOnMemory(stanza, params) {
   const togostanza = div.getElementsByTagName(
     "togostanza-" + table_stanza_name
   )[0];
-  togostanza.style.display = "none";
+  togostanza.setAttribute("limit", limit);
+  togostanza.setAttribute("offset", offset);
   div.appendChild(togostanza);
-
-  const displayTableTr = () => {
-    const togostanza = stanza
-      .select("#tableBody")
-      .getElementsByTagName("togostanza-" + table_stanza_name)[0];
-    const tbody = togostanza.shadowRoot.children[0].getElementsByTagName(
-      "tbody"
-    )[0];
-    if (tbody) {
-      const trs = tbody.getElementsByTagName("tr");
-      for (let i = 0; i < trs.length; i++) {
-        if (i >= offset && i < offset + limit) {
-          trs[i].style.display = "";
-        } else {
-          trs[i].style.display = "none";
-        }
-      }
-    }
-  };
 
   const setListStartEnd = (start, end) => {
     stanza.select("#listStart").innerHTML = start;
@@ -93,7 +64,8 @@ export default function tablePaginationOnMemory(stanza, params) {
     limit = parseInt(e.target.value);
     console.log(limit);
     current_page = Math.ceil(offset / limit);
-    displayTableTr();
+    togostanza.setAttribute("limit", limit);
+    togostanza.setAttribute("offset", offset);
     setBothPagination();
   });
 
@@ -179,6 +151,8 @@ export default function tablePaginationOnMemory(stanza, params) {
     }
 
     if (params.slider) {
+      div.style.setProperty("text-align", "center", "important");
+
       const slider = div.getElementsByClassName("page_slider_div")[0];
       const knob_ul = div.getElementsByClassName("page_slider_knob_ul")[0];
       const knob = div.getElementsByClassName("page_slider_knob")[0];
@@ -202,10 +176,6 @@ export default function tablePaginationOnMemory(stanza, params) {
     const canvas = document.createElement("canvas");
     canvas.setAttribute("class", "slider_range");
     div.appendChild(canvas);
-    const slider_range_color = document.createElement("div");
-    slider_range_color.setAttribute("class", "slider_range_color");
-    slider_range_color.innerHTML = "dummy";
-    div.appendChild(slider_range_color);
 
     const slider = document.createElement("div");
     slider.setAttribute("class", "page_slider_div");
@@ -273,7 +243,7 @@ export default function tablePaginationOnMemory(stanza, params) {
         if (offset > max) {
           offset = max - limit;
         }
-        displayTableTr();
+        togostanza.setAttribute("offset", offset);
         setBothPagination();
         dragF = false;
       }
@@ -326,7 +296,7 @@ export default function tablePaginationOnMemory(stanza, params) {
         }
       }
       if (current_offset !== offset) {
-        displayTableTr();
+        togostanza.setAttribute("offset", offset);
         setBothPagination();
       }
     });
@@ -382,9 +352,9 @@ export default function tablePaginationOnMemory(stanza, params) {
         100
       );
       ctx.closePath();
-      ctx.fillStyle = document.defaultView.getComputedStyle(
-        div.getElementsByClassName("slider_range_color")[0]
-      ).backgroundColor;
+      ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
+        "--slider-range-color"
+      );
       ctx.fill();
     }
   };
@@ -405,23 +375,21 @@ export default function tablePaginationOnMemory(stanza, params) {
   }
 
   // total size
-  const checkChildStanza = () => {
-    const togostanza = stanza
-      .select("#tableBody")
-      .getElementsByTagName("togostanza-" + table_stanza_name)[0];
-    const tbody = togostanza.shadowRoot.children[0].getElementsByTagName(
-      "tbody"
-    )[0];
-    if (tbody) {
-      clearInterval(waitingTimer);
-      const trs = tbody.getElementsByTagName("tr");
-      max = trs.length;
-      max_page = Math.ceil(max / limit);
-      stanza.select("#totalSize").innerHTML = max;
-      setBothPagination();
-      displayTableTr();
-      togostanza.style.display = "inline";
-    }
+  const options = {
+    method: "POST",
+    mode: "cors",
+    body: params.params.split(/\s+/).join("&"),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
   };
-  const waitingTimer = setInterval(checkChildStanza, 100);
+  const url = params.table_data_count_api;
+  const q = fetch(url, options).then((res) => res.json());
+  q.then(function (data) {
+    max = parseInt(data.count);
+    max_page = Math.ceil(max / limit);
+    stanza.select("#totalSize").innerHTML = max;
+    setBothPagination();
+  });
 }

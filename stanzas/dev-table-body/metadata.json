@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_body",
-  "stanza:label": "table body for pagination",
+  "@id": "dev-table-body",
+  "stanza:label": "dev table body for pagination",
   "stanza:definition": "Greeting.",
   "stanza:parameter": [
     {
@@ -31,7 +31,7 @@
       "stanza:required": false
     }
   ],
-  "stanza:usage": "<togostanza-table_body></togostanza-table_body>",
+  "stanza:usage": "<togostanza-table-body></togostanza-table-body>",
   "stanza:type": "Metastanza",
   "stanza:display": "",
   "stanza:provider": "provider of this stanza",
