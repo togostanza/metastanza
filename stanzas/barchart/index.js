@@ -47,7 +47,7 @@ export default async function barchart(stanza, params) {
     },
   ];
 
-  //axis
+  //axes
   spec.axes[0] = {
     scale: "xscale",
     orient: params["xaxis-orient"],
@@ -76,11 +76,6 @@ export default async function barchart(stanza, params) {
       ticks: {
         update: {
           stroke: { value: "var(--tick-color)" },
-        },
-      },
-      grids: {
-        update: {
-          zindex: { value: "0" },
         },
       },
       labels: {
@@ -128,13 +123,12 @@ export default async function barchart(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--axis-width"
-            ),
-          },
-          zindex: { value: "1" },
-        },
-      },
-    },
-  };
+            )
+          }
+        }
+      }
+    }
+  }
 
   spec.axes[1] = {
     scale: "yscale",
@@ -165,11 +159,6 @@ export default async function barchart(stanza, params) {
           stroke: { value: "var(--tick-color)" },
         },
       },
-      grids: {
-        update: {
-          zindex: { value: "0" },
-        },
-      },
       labels: {
         interactive: true,
         update: {
@@ -188,26 +177,26 @@ export default async function barchart(stanza, params) {
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
-        },
+        }
       },
       title: {
         update: {
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--label-font"
-            ),
+            )
           },
           fontSize: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--title-size"
-            ),
+            )
           },
           fontWeight: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--title-weight"
-            ),
-          },
-        },
+            )
+          }
+        }
       },
       domain: {
         update: {
@@ -215,12 +204,12 @@ export default async function barchart(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--axis-width"
-            ),
-          },
-        },
-      },
-    },
-  };
+            )
+          }
+        }
+      }
+    }
+  }
 
   //marks
   spec.marks[0] = {
@@ -239,13 +228,13 @@ export default async function barchart(stanza, params) {
         strokeWidth: {
           value: getComputedStyle(stanza.root.host).getPropertyValue(
             "--stroke-width"
-          ),
-        },
+          )
+        }
       },
       hover: {
         fill: { value: "var(--emphasized-color)" },
-      },
-    },
+      }
+    }
   };
 
   spec.marks[1].encode = {
