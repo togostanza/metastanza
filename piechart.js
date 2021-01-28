@@ -3,37 +3,64 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
+// import { key } from "vega";
+
 async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //stanza（描画範囲）のwidth・height（うまく効かない…広くなってしまう？）
+  //width・height・padding
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
-  spec.padding = { left: 5, top: 5, right: 150, bottom: 5 };
+  spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
-  // scales: カラースキームを指定
-  spec.scales[0].range = [
-    "var(--series-0-color)",
-    "var(--series-1-color)",
-    "var(--series-2-color)",
-    "var(--series-3-color)",
-    "var(--series-4-color)",
-    "var(--series-5-color)",
-  ];
+  //innerpadding
+  spec.signals[2].value = params["inner-padding-angle"];
+  spec.signals[3].value = params["inner-radius"];
 
-  //円の描画について
-  //（デフォルトのコントローラを削除）
+  //delete default controller
   for (const signal of spec.signals) {
     delete signal.bind;
   }
 
-  spec.signals[2].value = params["inner-padding-angle"];
-  spec.signals[3].value = params["inner-radius"];
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
+
+  spec.data[0] = {
+    name: "table",
+    url: params["your-data"],
+    transform: [
+      {
+        type: "pie",
+        field: valueVariable,
+        startAngle: { signal: "startAngle" },
+        endAngle: { signal: "endAngle" },
+        sort: { signal: "sort" },
+      },
+    ],
+  };
+
+  // scales(color scheme)
+  spec.scales = [
+    {
+      name: "color",
+      type: "ordinal",
+      domain: { data: "table", field: labelVariable },
+      range: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+    },
+  ];
 
   spec.marks[0].encode = {
     enter: {
-      fill: { scale: "color", field: "id" },
+      fill: { scale: "color", field: labelVariable },
       x: { signal: "width / 2" },
       y: { signal: "height / 2" },
     },
@@ -44,7 +71,7 @@ async function piechart(stanza, params) {
       innerRadius: { signal: "innerRadius" },
       outerRadius: { signal: "width / 2" },
       cornerRadius: { signal: "cornerRadius" },
-      fill: { scale: "color", field: "id" },
+      fill: { scale: "color", field: labelVariable },
       stroke: { value: "var(--stroke-color)" },
       strokeWidth: { value: "var(--stroke-width)" },
     },
@@ -55,7 +82,7 @@ async function piechart(stanza, params) {
     },
   };
 
-  //legendを出す
+  //legend
   spec.legends = [
     {
       fill: "color",
@@ -121,28 +148,6 @@ async function piechart(stanza, params) {
     },
   ];
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx: 100,
-    dy: 200,
-    // "dx": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-horizonal-offset") - 0,
-    // "dy": getComputedStyle(stanza.root.host).getPropertyValue("--figuretitle-vertical-offset") - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
   const el = stanza.root.querySelector("main");
   const opts = {
     renderer: "svg",
@@ -176,15 +181,33 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "your-data",
+		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "label-variable",
+		"stanza:example": "category",
+		"stanza:description": "variable to be assigned as label",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value-variable",
+		"stanza:example": "count",
+		"stanza:description": "variable to be assigned as value",
+		"stanza:required": true
+	},
+	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": "400",
+		"stanza:example": "200",
 		"stanza:description": "width of your stanza"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": "500",
+		"stanza:example": "300",
 		"stanza:description": "height of your stanza"
 	},
 	{
@@ -207,15 +230,8 @@ var metadata = {
 	},
 	{
 		"stanza:key": "legend-title",
-		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
-	},
-	{
-		"stanza:key": "figuretitle",
-		"stanza:type": "text",
-		"stanza:example": "Figure 1 Title of the figure",
-		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -333,42 +349,6 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "font family of labels."
-	},
-	{
-		"stanza:key": "--figuretitle-orient",
-		"stanza:type": "text",
-		"stanza:default": "bottom",
-		"stanza:description": "orient of figure title.(top, bottom)"
-	},
-	{
-		"stanza:key": "--figuretitle-anchor",
-		"stanza:type": "text",
-		"stanza:default": "middle",
-		"stanza:description": "figure title placement.(left, right, middle)"
-	},
-	{
-		"stanza:key": "--figuretitle-horizonal-offset",
-		"stanza:type": "number",
-		"stanza:default": "60",
-		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-vertical-offset",
-		"stanza:type": "number",
-		"stanza:default": "400",
-		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12",
-		"stanza:description": "font size of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of figure title"
 	}
 ]
 };

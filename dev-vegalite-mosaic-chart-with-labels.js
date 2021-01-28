@@ -3,7 +3,9 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-function devVegaliteMosaicChartWithLabels(stanza /* , params */) {
+function devVegaliteMosaicChartWithLabels(
+  stanza /* , params */
+) {
   //let spec = await fetch(params["src-url"]).then((res) => res.json());
   const spec = JSON.parse(`{
     "$schema": "https://vega.github.io/schema/vega-lite/v4.json",

@@ -11,42 +11,39 @@ async function twoVariablesScatterplot(stanza, params) {
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  let xVariable = params["x-variable"];
-  let yVariable = params["y-variable"];
+  const xVariable = params["x-variable"];
+  const yVariable = params["y-variable"];
 
-  spec.data[0] =
-    {
-      "name": "source",
-      "url": params["your-data"],
-      "transform": [
-        {
-          "type": "filter",
-          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null`
-        }
-      ]
-    };
+  spec.data[0] = {
+    name: "source",
+    url: params["your-data"],
+    transform: [
+      {
+        type: "filter",
+        expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
+      },
+    ],
+  };
 
   // scales
-  spec.scales[0] =
+  (spec.scales[0] = {
+    name: "x",
+    type: "linear",
+    round: true,
+    nice: true,
+    zero: true,
+    domain: { data: "source", field: xVariable },
+    range: "width",
+  }),
     {
-      "name": "x",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": xVariable},
-      "range": "width"
-    },
-    {
-      "name": "y",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": yVariable},
-      "range": "height"
+      name: "y",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: yVariable },
+      range: "height",
     };
-
 
   // axis
   spec.axes = [
@@ -260,7 +257,7 @@ async function twoVariablesScatterplot(stanza, params) {
           x: { scale: "x", field: xVariable },
           y: { scale: "y", field: yVariable },
           // size: { scale: "size", field: "Acceleration" },
-          size: { value: 10},
+          size: { value: 10 },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
           stroke: { value: "var(--stroke-color)" },
@@ -605,9 +602,9 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>\n";
+  return "<p class=\"greeting\">\n  "
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
+    + "\n</p>";
 },"useData":true}]
 ];
 

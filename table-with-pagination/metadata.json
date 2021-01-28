@@ -183,7 +183,7 @@
     {
       "stanza:key": "--searchbox-font-color",
       "stanza:type": "text",
-      "stanza:default": "10px",
+      "stanza:default": "#707070",
       "stanza:description": "font color of search box"
     },
     {
@@ -265,38 +265,50 @@
       "stanza:description": "margin of information area"
     },
     {
+      "stanza:key": "--filtericon-display",
+      "stanza:type": "text",
+      "stanza:default": "inline-block",
+      "stanza:description": "display of filter icon"
+    },
+    {
+      "stanza:key": "--sorticon-display",
+      "stanza:type": "text",
+      "stanza:default": "inline-block",
+      "stanza:description": "display of sort icon"
+    },
+    {
       "stanza:key": "--thead-border-top",
       "stanza:type": "text",
-      "stanza:default": "1px solid #000000",
+      "stanza:default": "1px solid #eee",
       "stanza:description": "border top of thead"
     },
     {
       "stanza:key": "--thead-border-right",
       "stanza:type": "text",
-      "stanza:default": "1px solid #000000",
+      "stanza:default": "1px solid #eee",
       "stanza:description": "border right of thead"
     },
     {
       "stanza:key": "--thead-border-bottom",
       "stanza:type": "text",
-      "stanza:default": "1px solid #000000",
+      "stanza:default": "1px solid #eee",
       "stanza:description": "border bottom of thead"
     },
     {
       "stanza:key": "--thead-border-left",
       "stanza:type": "text",
-      "stanza:default": "1px solid #000000",
+      "stanza:default": "1px solid #eee",
       "stanza:description": "border left of thead"
     },
     {
       "stanza:key": "--thead-font-size",
-      "stanza:type": "number",
+      "stanza:type": "text",
       "stanza:default": "12px",
       "stanza:description": "font size of labels"
     },
     {
       "stanza:key": "--tbody-font-size",
-      "stanza:type": "number",
+      "stanza:type": "text",
       "stanza:default": "10px",
       "stanza:description": "font size of labels"
     },
@@ -427,6 +439,12 @@
       "stanza:type": "text",
       "stanza:default": "10px",
       "stanza:description": "font size of pagination button"
+    },
+    {
+      "stanza:key": "--edge-paginationbtn-border-radius",
+      "stanza:type": "text",
+      "stanza:default": "4px",
+      "stanza:description": "border radius of edge pagination button"
     },
     {
       "stanza:key": "--currentbtn-font-color",

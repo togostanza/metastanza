@@ -3,31 +3,49 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
+// import { stratify } from "d3";
+
 async function barchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].values = [
-    { category: "value1", amount: 1 },
-    { category: "value2", amount: 7 },
-    { category: "value3", amount: 5 },
-    { category: "value4", amount: 9 },
-  ];
 
-  //stanza（描画範囲）のwidth・height
+  //height, width, padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
+  // spec.padding = getComputedStyle(stanza.root.host).getPropertyValue("--padding");
 
-  //イベントなど設定できるかと思ったができない
-  // spec.signals[0].on[0].events = "click"
-  // spec.signals[0].on[1].events = "click"
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
 
-  //棒・スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"];
-  spec.scales[0].paddingOuter = params["padding-outer"];
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+    },
+  ];
 
-  //軸に関する設定
+  //scales
+  spec.scales = [
+    {
+      name: "xscale",
+      type: "band",
+      domain: { data: "table", field: labelVariable },
+      range: "width",
+      padding: 0.05,
+      paddingInner: 0.2,
+      paddingInner: 0.5,
+      round: true,
+    },
+    {
+      name: "yscale",
+      domain: { data: "table", field: valueVariable },
+      nice: true,
+      range: "height",
+    },
+  ];
+
+  //axis
   spec.axes[0] = {
     scale: "xscale",
     orient: params["xaxis-orient"],
@@ -48,6 +66,7 @@ async function barchart(stanza, params) {
       "--grid-width"
     ),
     ticks: params["xtick"] === "true",
+    zindex: 1,
     encode: {
       axis: {
         update: {},
@@ -201,41 +220,15 @@ async function barchart(stanza, params) {
     },
   };
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
-  //rect（棒）の描画について
+  //marks
   spec.marks[0] = {
     type: "rect",
     from: { data: "table" },
     encode: {
       enter: {
-        x: { scale: "xscale", field: "category" },
+        x: { scale: "xscale", field: labelVariable },
         width: { scale: "xscale", band: params["bar-width"] },
-        y: { scale: "yscale", field: "amount" },
+        y: { scale: "yscale", field: valueVariable },
         y2: { scale: "yscale", value: 0 },
       },
       update: {
@@ -275,9 +268,9 @@ async function barchart(stanza, params) {
       },
     },
     update: {
-      x: { scale: "xscale", signal: "tooltip.category", band: 0.5 },
-      y: { scale: "yscale", signal: "tooltip.amount", offset: -1 },
-      text: { signal: "tooltip.amount" },
+      x: { scale: "xscale", signal: `tooltip.${labelVariable}`, band: 0.5 },
+      y: { scale: "yscale", signal: `tooltip.${valueVariable}`, offset: -1 },
+      text: { signal: `tooltip.${valueVariable}` },
       fillOpacity: [{ test: "datum === tooltip", value: 0 }, { value: 1 }],
     },
   };
@@ -316,6 +309,24 @@ var metadata = {
 		"stanza:key": "src-url",
 		"stanza:example": "https://vega.github.io/vega/examples/bar-chart.vg.json",
 		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "your-data",
+		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "label-variable",
+		"stanza:example": "category",
+		"stanza:description": "variable to be assigned as label",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value-variable",
+		"stanza:example": "count",
+		"stanza:description": "variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
@@ -382,7 +393,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xlabel-angle",
-		"stanza:example": "0",
+		"stanza:example": "-45",
 		"stanza:description": "angle of X-labels.(in degree)"
 	},
 	{
@@ -392,15 +403,8 @@ var metadata = {
 	},
 	{
 		"stanza:key": "bar-width",
-		"stanza:type": "number",
 		"stanza:example": "0.8",
 		"stanza:description": "width of bars.This mast be in the range[0,1]"
-	},
-	{
-		"stanza:key": "figuretitle",
-		"stanza:type": "text",
-		"stanza:example": "Figure 1 Title of the figure",
-		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -418,15 +422,21 @@ var metadata = {
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
+		"stanza:key": "--padding",
+		"stanza:type": "text",
+		"stanza:dafault": "top: 0, right: 0, bottom: 50, left: 150",
+		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
+	},
+	{
 		"stanza:key": "--padding-inner",
-		"stanza:type": "number",
+		"stanza:type": "text",
 		"stanza:dafault": "0.1",
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
 		"stanza:key": "--padding-outer",
-		"stanza:type": "number",
-		"stanza:dafault": "0.1",
+		"stanza:type": "text",
+		"stanza:dafault": "0.2",
 		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
@@ -444,7 +454,7 @@ var metadata = {
 	{
 		"stanza:key": "--grid-opacity",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0.2",
 		"stanza:description": "grid opacity.(0-1)"
 	},
 	{
@@ -536,42 +546,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "bold",
 		"stanza:description": "font weight of each value"
-	},
-	{
-		"stanza:key": "--figuretitle-orient",
-		"stanza:type": "text",
-		"stanza:default": "bottom",
-		"stanza:description": "orient of figure title.(top, bottom)"
-	},
-	{
-		"stanza:key": "--figuretitle-anchor",
-		"stanza:type": "text",
-		"stanza:default": "middle",
-		"stanza:description": "figure title placement.(left, right, middle)"
-	},
-	{
-		"stanza:key": "--figuretitle-horizonal-offset",
-		"stanza:type": "number",
-		"stanza:default": "100",
-		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-vertical-offset",
-		"stanza:type": "number",
-		"stanza:default": "250",
-		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12",
-		"stanza:description": "font size of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of figure title"
 	}
 ]
 };

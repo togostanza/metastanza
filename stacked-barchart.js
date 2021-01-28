@@ -6,29 +6,71 @@ import './timer-be811b16.js';
 async function stackedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //stanza（描画範囲）のwidth・height
+  //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
+  spec.padding = getComputedStyle(stanza.root.host).getPropertyValue(
+    "--padding"
+  );
 
-  //stanzaのpadding
-  spec.padding = params["padding"];
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
+  const groupVariable = params["group-variable"];
 
-  //棒・スケールに関する設定
-  spec.scales[0].paddingInner = 0.1;
-  spec.scales[0].paddingOuter = 0.2;
-  // spec.scales[0].paddingInner = getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") - 0;
-  // spec.scales[0].paddingOuter = getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") - 0;
-
-  spec.scales[2].range = [
-    "var(--series-0-color)",
-    "var(--series-1-color)",
-    "var(--series-2-color)",
-    "var(--series-3-color)",
-    "var(--series-4-color)",
-    "var(--series-5-color)",
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "stack",
+          field: valueVariable,
+          groupby: [labelVariable],
+          // "sort": {"field": groupVariable},
+        },
+      ],
+    },
   ];
 
-  //軸に関する設定
+  console.log(spec.data[0].value);
+
+  //scales
+  spec.scales = [
+    {
+      name: "x",
+      type: "band",
+      range: "width",
+      domain: { data: "table", field: labelVariable },
+      // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
+    },
+    {
+      name: "y",
+      type: "linear",
+      range: "height",
+      nice: true,
+      zero: true,
+      domain: { data: "table", field: "y1" },
+    },
+    {
+      name: "color",
+      type: "ordinal",
+      range: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+      domain: { data: "table", field: groupVariable },
+    },
+  ];
+
+  spec.scales[0].paddingInner = 0.1;
+  spec.scales[0].paddingOuter = 0.5;
+
+  //axis
   spec.axes[0] = {
     scale: "x",
     orient: params["xaxis-orient"],
@@ -202,46 +244,20 @@ async function stackedBarchart(stanza, params) {
     },
   };
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
-  //rect（棒）の描画について
+  //marks
   spec.marks[0] = {
     type: "rect",
     from: { data: "table" },
     encode: {
       enter: {
-        x: { scale: "x", field: "x" },
+        x: { scale: "x", field: labelVariable },
         width: { scale: "x", band: params["bar-width"] },
         y: { scale: "y", field: "y0" },
         y2: { scale: "y", field: "y1" },
-        fill: { scale: "color", field: "c", offset: -1 },
+        fill: { scale: "color", field: groupVariable, offset: -1 },
       },
       update: {
-        fill: { scale: "color", field: "c" },
+        fill: { scale: "color", field: groupVariable },
         stroke: { value: "var(--stroke-color)" },
         strokeWidth: {
           value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -267,8 +283,8 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "stacked-barchart",
-	"stanza:label": "Stacked barchart",
-	"stanza:definition": "stacked-barchart for MetaStanza",
+	"stanza:label": "stacked barchart",
+	"stanza:definition": "stacked barchart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
 	"stanza:provider": "Togostanza",
@@ -287,6 +303,30 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "your-data",
+		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "label-variable",
+		"stanza:example": "category",
+		"stanza:description": "variable to be assigned as label",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value-variable",
+		"stanza:example": "count",
+		"stanza:description": "variable to be assigned as value",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "group-variable",
+		"stanza:example": "chromosome",
+		"stanza:description": "variable to be assigned as an identifier of a group",
+		"stanza:required": true
+	},
+	{
 		"stanza:key": "width",
 		"stanza:type": "number",
 		"stanza:example": "200",
@@ -297,12 +337,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": "200",
 		"stanza:description": "height of your stanza"
-	},
-	{
-		"stanza:key": "padding",
-		"stanza:type": "number",
-		"stanza:example": "50",
-		"stanza:description": "padding around your stanza"
 	},
 	{
 		"stanza:key": "xaxis-orient",
@@ -350,7 +384,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xlabel-angle",
-		"stanza:example": "0",
+		"stanza:example": "-45",
 		"stanza:description": "angle of X-labels.(in degree)"
 	},
 	{
@@ -363,12 +397,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": "0.7",
 		"stanza:description": "width of bars.This mast be in the range[0,1]"
-	},
-	{
-		"stanza:key": "figuretitle",
-		"stanza:type": "text",
-		"stanza:example": "Figure 1 Title of the figure",
-		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -414,6 +442,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#fa8c84",
 		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--padding",
+		"stanza:type": "text",
+		"stanza:dafault": "top: 0, right: 0, bottom: 50, left: 50",
+		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
 	},
 	{
 		"stanza:key": "--padding-inner",
@@ -520,7 +554,7 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0",
 		"stanza:description": "width of stroke"
 	},
 	{
@@ -534,42 +568,6 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:default": "bold",
 		"stanza:description": "font weight of each value"
-	},
-	{
-		"stanza:key": "--figuretitle-orient",
-		"stanza:type": "text",
-		"stanza:default": "bottom",
-		"stanza:description": "orient of figure title.(top, bottom)"
-	},
-	{
-		"stanza:key": "--figuretitle-anchor",
-		"stanza:type": "text",
-		"stanza:default": "middle",
-		"stanza:description": "figure title placement.(left, right, middle)"
-	},
-	{
-		"stanza:key": "--figuretitle-horizonal-offset",
-		"stanza:type": "number",
-		"stanza:default": "100",
-		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-vertical-offset",
-		"stanza:type": "number",
-		"stanza:default": "250",
-		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12",
-		"stanza:description": "font size of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of figure title"
 	}
 ]
 };

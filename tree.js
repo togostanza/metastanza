@@ -5,35 +5,81 @@ import './timer-be811b16.js';
 
 async function tree(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].url = "https://vega.github.io/vega/data/flare.json";
-
-  //stanza（描画範囲）のwidth・height
+  //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
 
-  //scales: カラースキームを指定
-  spec.scales[0].type = "ordinal";
+  //delete default controller
+  for (const signal of spec.signals) {
+    delete signal.bind;
+  }
 
-  spec.scales[0].range = [
-    "var(--series-0-color)",
-    "var(--series-1-color)",
-    "var(--series-2-color)",
-    "var(--series-3-color)",
-    "var(--series-4-color)",
-    "var(--series-5-color)",
+  //data
+  const labelVariable = params["label-variable"]; //"name"
+  const valueVariable = params["value-variable"]; //"size"
+  const parentVariable = params["parent-variable"]; //"parent"
+  const idVariable = params["id-variable"]; //"id-variable"
+
+  spec.data = [
+    {
+      name: "tree",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "stratify",
+          key: idVariable,
+          parentKey: parentVariable,
+        },
+        {
+          type: "tree",
+          method: { signal: "layout" },
+          size: [{ signal: "height" }, { signal: "width - 100" }],
+          separation: { signal: "separation" },
+          as: ["y", "x", "depth", "children"],
+        },
+      ],
+    },
+    {
+      name: "links",
+      source: "tree",
+      transform: [
+        { type: "treelinks" },
+        {
+          type: "linkpath",
+          orient: "horizontal",
+          shape: { signal: "links" },
+        },
+      ],
+    },
   ];
 
-  //legendを出す
+  //scales
+  spec.scales = [
+    {
+      name: "color",
+      type: "ordinal",
+      range: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+      domain: { data: "tree", field: "depth" },
+      zero: true,
+    },
+  ];
+
+  //legend
   spec.legends = [
     {
       fill: "color",
       title: params["legend-title"],
       titleColor: "var(--legendtitle-color)",
       labelColor: "var(--legendlabel-color)",
-      orient: "top--left",
+      orient: "top-left",
       encode: {
         title: {
           update: {
@@ -90,115 +136,96 @@ async function tree(stanza, params) {
     },
   ];
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tree-figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tree-figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
-  //marks:描画について
-
-  //（デフォルトのコントローラを削除）
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
-
-  spec.marks[0].encode = {
-    update: {
-      path: { field: "path" },
-      stroke: { value: "var(--branch-color)" },
-    },
-    hover: {
-      stroke: { value: "var(--emphasized-color)" },
-    },
-  };
-
-  spec.marks[1].encode = {
-    enter: {
-      size: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--node-size"
-        ),
-      },
-      stroke: { value: "var(--stroke-color)" },
-    },
-    update: {
-      x: { field: "x" },
-      y: { field: "y" },
-      fill: { scale: "color", field: "depth" },
-      stroke: { value: "var(--stroke-color)" },
-      strokeWidth: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--stroke-width"
-        ),
+  //marks
+  spec.marks = [
+    {
+      type: "path",
+      from: { data: "links" },
+      encode: {
+        update: {
+          path: { field: "path" },
+          stroke: { value: "var(--branch-color)" },
+        },
+        hover: {
+          stroke: { value: "var(--emphasized-color)" },
+        },
       },
     },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-      stroke: { value: "var(--hover-stroke-color)" },
-      strokeWidth: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--hover-stroke-width"
-        ),
+    {
+      type: "symbol",
+      from: { data: "tree" },
+      encode: {
+        enter: {
+          size: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--node-size"
+            ),
+          },
+          stroke: { value: "var(--stroke-color)" },
+        },
+        update: {
+          x: { field: "x" },
+          y: { field: "y" },
+          fill: { scale: "color", field: "depth" },
+          stroke: { value: "var(--stroke-color)" },
+          strokeWidth: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--stroke-width"
+            ),
+          },
+        },
+        hover: {
+          fill: { value: "var(--emphasized-color)" },
+          stroke: { value: "var(--hover-stroke-color)" },
+          strokeWidth: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--hover-stroke-width"
+            ),
+          },
+        },
       },
     },
-  };
-
-  spec.marks[2].encode = {
-    enter: {
-      text: { field: "name" },
-      font: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--label-font"
-        ),
+    {
+      type: "text",
+      from: { data: "tree" },
+      encode: {
+        enter: {
+          text: { field: labelVariable },
+          font: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--label-font"
+            ),
+          },
+          fontSize: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--label-size"
+            ),
+          },
+          baseline: { value: "middle" },
+        },
+        update: {
+          x: { field: "x" },
+          y: { field: "y" },
+          dx: { signal: "datum.children ? -7 : 7" },
+          align: { signal: "datum.children ? 'right' : 'left'" },
+          opacity: { signal: "labels ? 1 : 0" },
+          fill: { value: "var(--label-color)" },
+          stroke: { value: "var(--stroke-color)" },
+          strokeWidth: {
+            value: getComputedStyle(stanza.root.host).getPropertyValue(
+              "--stroke-width"
+            ),
+          },
+        },
+        hover: {
+          fill: { value: "var(--emphasized-color)" },
+          // "stroke": {"value": "var(--hover-stroke-color)"},
+          // "strokeWidth": {"value": "0.5"}
+          // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
+        },
       },
-      fontSize: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--label-size"
-        ),
-      },
-      baseline: { value: "middle" },
     },
-    update: {
-      x: { field: "x" },
-      y: { field: "y" },
-      dx: { signal: "datum.children ? -7 : 7" },
-      align: { signal: "datum.children ? 'right' : 'left'" },
-      opacity: { signal: "labels ? 1 : 0" },
-      fill: { value: "var(--label-color)" },
-      // hoverした時の文字色が薄い場合は文字にstrokecolorをつけたほうがよいかも？（検討）
-      // "stroke": {"value": ""},
-      // "strokeWidth": {"value": ""}
-      // "stroke": {"value": "var(--stroke-color)"},
-      // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")}
-    },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-      // "stroke": {"value": "var(--hover-stroke-color)"},
-      // "strokeWidth": {"value": "0.5"}
-      // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
-    },
-  };
+  ];
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -215,7 +242,7 @@ var metadata = {
 	"stanza:label": "tree",
 	"stanza:definition": "Vega wrapped tree for MetaStanza",
 	"stanza:type": "Stanza",
-	"stanza:display": "Tree",
+	"stanza:display": "tree",
 	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
 	"stanza:author": "c-nakashima",
@@ -232,34 +259,54 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "your-data",
+		"stanza:example": "https://vega.github.io/vega/data/flare.json",
+		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "label-variable",
+		"stanza:example": "name",
+		"stanza:description": "variable to be assigned as label",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value-variable",
+		"stanza:example": "size",
+		"stanza:description": "variable to be assigned as value",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "parent-variable",
+		"stanza:example": "parent",
+		"stanza:description": "variable to be assigned as parent node",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "id-variable",
+		"stanza:example": "id",
+		"stanza:description": "variable to be assigned as id",
+		"stanza:required": true
+	},
+	{
 		"stanza:key": "width",
-		"stanza:type": "number",
 		"stanza:example": "600",
 		"stanza:description": "width of your stanza"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:type": "number",
 		"stanza:example": "1600",
 		"stanza:description": "height of your stanza"
 	},
 	{
 		"stanza:key": "padding",
-		"stanza:type": "number",
 		"stanza:example": "5",
 		"stanza:description": "padding around your stanza"
 	},
 	{
 		"stanza:key": "legend-title",
-		"stanza:type": "string",
 		"stanza:example": "Title of this legend",
 		"stanza:description": "title of legends"
-	},
-	{
-		"stanza:key": "figuretitle",
-		"stanza:type": "text",
-		"stanza:example": "Figure 1 Title of the figure",
-		"stanza:description": "figure title (If you blank here, it dosen't be shown)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -357,7 +404,7 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0.2",
 		"stanza:description": "stroke width"
 	},
 	{
@@ -401,42 +448,6 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#94BC8A",
 		"stanza:description": "sixth color"
-	},
-	{
-		"stanza:key": "--figuretitle-orient",
-		"stanza:type": "text",
-		"stanza:default": "bottom",
-		"stanza:description": "orient of figure title.(top, bottom)"
-	},
-	{
-		"stanza:key": "--figuretitle-anchor",
-		"stanza:type": "text",
-		"stanza:default": "middle",
-		"stanza:description": "figure title placement.(left, right, middle)"
-	},
-	{
-		"stanza:key": "--tree-figuretitle-horizonal-offset",
-		"stanza:type": "number",
-		"stanza:default": "350",
-		"stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--tree-figuretitle-vertical-offset",
-		"stanza:type": "number",
-		"stanza:default": "1650",
-		"stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12",
-		"stanza:description": "font size of figure title in pixel"
-	},
-	{
-		"stanza:key": "--figuretitle-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of figure title"
 	}
 ]
 };

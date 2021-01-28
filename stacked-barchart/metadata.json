@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "stacked-barchart",
-  "stanza:label": "Stacked barchart",
-  "stanza:definition": "stacked-barchart for MetaStanza",
+  "stanza:label": "stacked barchart",
+  "stanza:definition": "stacked barchart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",
   "stanza:provider": "Togostanza",
@@ -22,6 +22,30 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "your-data",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "label-variable",
+      "stanza:example": "category",
+      "stanza:description": "variable to be assigned as label",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "value-variable",
+      "stanza:example": "count",
+      "stanza:description": "variable to be assigned as value",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "group-variable",
+      "stanza:example": "chromosome",
+      "stanza:description": "variable to be assigned as an identifier of a group",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": "200",
@@ -32,12 +56,6 @@
       "stanza:type": "number",
       "stanza:example": "200",
       "stanza:description": "height of your stanza"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": "50",
-      "stanza:description": "padding around your stanza"
     },
     {
       "stanza:key": "xaxis-orient",
@@ -85,7 +103,7 @@
     },
     {
       "stanza:key": "xlabel-angle",
-      "stanza:example": "0",
+      "stanza:example": "-45",
       "stanza:description": "angle of X-labels.(in degree)"
     },
     {
@@ -98,12 +116,6 @@
       "stanza:type": "number",
       "stanza:example": "0.7",
       "stanza:description": "width of bars.This mast be in the range[0,1]"
-    },
-    {
-      "stanza:key": "figuretitle",
-      "stanza:type": "text",
-      "stanza:example": "Figure 1 Title of the figure",
-      "stanza:description": "figure title (If you blank here, it dosen't be shown)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -149,6 +161,12 @@
       "stanza:type": "color",
       "stanza:default": "#fa8c84",
       "stanza:description": "emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--padding",
+      "stanza:type": "text",
+      "stanza:dafault": "top: 0, right: 0, bottom: 50, left: 50",
+      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
     },
     {
       "stanza:key": "--padding-inner",
@@ -255,7 +273,7 @@
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0",
       "stanza:description": "width of stroke"
     },
     {
@@ -269,42 +287,6 @@
       "stanza:type": "string",
       "stanza:default": "bold",
       "stanza:description": "font weight of each value"
-    },
-    {
-      "stanza:key": "--figuretitle-orient",
-      "stanza:type": "text",
-      "stanza:default": "bottom",
-      "stanza:description": "orient of figure title.(top, bottom)"
-    },
-    {
-      "stanza:key": "--figuretitle-anchor",
-      "stanza:type": "text",
-      "stanza:default": "middle",
-      "stanza:description": "figure title placement.(left, right, middle)"
-    },
-    {
-      "stanza:key": "--figuretitle-horizonal-offset",
-      "stanza:type": "number",
-      "stanza:default": "100",
-      "stanza:description": "horizonal offset(X-offset) of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-vertical-offset",
-      "stanza:type": "number",
-      "stanza:default": "250",
-      "stanza:description": "vertical offset(Y-offset) of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-font-size",
-      "stanza:type": "text",
-      "stanza:default": "12",
-      "stanza:description": "font size of figure title in pixel"
-    },
-    {
-      "stanza:key": "--figuretitle-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "400",
-      "stanza:description": "font weight of figure title"
     }
   ]
 }
