@@ -4,55 +4,55 @@ import vegaEmbed from "vega-embed";
 export default async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //width・height・padding（うまく効かない…広くなってしまう？）
+  //width・height・padding
   // spec.width = params["width"]
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
   spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
-//innerpadding
+  //innerpadding
   spec.signals[2].value = params["inner-padding-angle"];
   spec.signals[3].value = params["inner-radius"];
-
-//data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
-
-  spec.data[0] =
-    {
-      "name": "table",
-      "url": params["your-data"],
-      "transform": [
-        {
-          "type": "pie",
-          "field": valueVariable,
-          "startAngle": {"signal": "startAngle"},
-          "endAngle": {"signal": "endAngle"},
-          "sort": {"signal": "sort"}
-        }
-      ]
-    }
-
-  // scales(color scheme)
-  spec.scales = [
-    {
-      "name": "color",
-      "type": "ordinal",
-      "domain": {"data": "table", "field": labelVariable},
-      "range": ["var(--series-0-color)",
-      "var(--series-1-color)",
-      "var(--series-2-color)",
-      "var(--series-3-color)",
-      "var(--series-4-color)",
-      "var(--series-5-color)"]      
-    }
-  ]
 
   //delete default controller
   for (const signal of spec.signals) {
     delete signal.bind;
   }
 
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
+
+  spec.data[0] = {
+    name: "table",
+    url: params["your-data"],
+    transform: [
+      {
+        type: "pie",
+        field: valueVariable,
+        startAngle: { signal: "startAngle" },
+        endAngle: { signal: "endAngle" },
+        sort: { signal: "sort" },
+      },
+    ],
+  };
+
+  // scales(color scheme)
+  spec.scales = [
+    {
+      name: "color",
+      type: "ordinal",
+      domain: { data: "table", field: labelVariable },
+      range: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+    },
+  ];
 
   spec.marks[0].encode = {
     enter: {

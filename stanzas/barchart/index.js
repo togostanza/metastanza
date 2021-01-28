@@ -16,30 +16,30 @@ export default async function barchart(stanza, params) {
 
   spec.data = [
     {
-      "name": "table",
-      "url": params["your-data"]
-    }
-  ]
+      name: "table",
+      url: params["your-data"],
+    },
+  ];
 
   //scales
   spec.scales = [
     {
-      "name": "xscale",
-      "type": "band",
-      "domain": {"data": "table", "field": labelVariable},
-      "range": "width",
-      "padding": 0.05,
-      "paddingInner": 0.2,
-      "paddingInner": 0.5,
-      "round": true
+      name: "xscale",
+      type: "band",
+      domain: { data: "table", field: labelVariable },
+      range: "width",
+      padding: 0.05,
+      paddingInner: 0.2,
+      paddingInner: 0.5,
+      round: true,
     },
     {
-      "name": "yscale",
-      "domain": {"data": "table", "field": valueVariable},
-      "nice": true,
-      "range": "height"
-    }
-  ]
+      name: "yscale",
+      domain: { data: "table", field: valueVariable },
+      nice: true,
+      range: "height",
+    },
+  ];
 
   //axis
   spec.axes[0] = {

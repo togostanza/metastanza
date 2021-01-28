@@ -14,45 +14,45 @@ export default async function stackedBarchart(stanza, params) {
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
   const groupVariable = params["group-variable"];
-  
+
   spec.data = [
     {
-      "name": "table",
-      "url": params["your-data"],
-      "transform": [
+      name: "table",
+      url: params["your-data"],
+      transform: [
         {
-          "type": "stack",
-          "field": valueVariable,
-          "groupby": [labelVariable]
+          type: "stack",
+          field: valueVariable,
+          groupby: [labelVariable],
           // "sort": {"field": groupVariable},
-        }
-      ]
-    }
-  ]
+        },
+      ],
+    },
+  ];
 
-  console.log(spec.data[0].value)
-
+  console.log(spec.data[0].value);
 
   //scales
   spec.scales = [
     {
-      "name": "x",
-      "type": "band",
-      "range": "width",
-      "domain": {"data": "table", "field": labelVariable}
+      name: "x",
+      type: "band",
+      range: "width",
+      domain: { data: "table", field: labelVariable },
       // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
     },
     {
-      "name": "y",
-      "type": "linear",
-      "range": "height",
-      "nice": true, "zero": true,
-      "domain": {"data": "table", "field": "y1"}
+      name: "y",
+      type: "linear",
+      range: "height",
+      nice: true,
+      zero: true,
+      domain: { data: "table", field: "y1" },
     },
     {
-      "name": "color",
-      "type": "ordinal",
-      "range": [
+      name: "color",
+      type: "ordinal",
+      range: [
         "var(--series-0-color)",
         "var(--series-1-color)",
         "var(--series-2-color)",
@@ -60,10 +60,10 @@ export default async function stackedBarchart(stanza, params) {
         "var(--series-4-color)",
         "var(--series-5-color)",
       ],
-      "domain": {"data": "table", "field": groupVariable}
-    }
-  ]
-  
+      domain: { data: "table", field: groupVariable },
+    },
+  ];
+
   spec.scales[0].paddingInner = 0.1;
   spec.scales[0].paddingOuter = 0.5;
 
