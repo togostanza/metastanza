@@ -146,13 +146,13 @@
     {
       "stanza:key": "--padding-outer",
       "stanza:type": "text",
-      "stanza:dafault": "0.2",
+      "stanza:dafault": "0.3",
       "stanza:description": "padding between each bars.This mast be in the range[0,1]"
     },
     {
       "stanza:key": "--grid-color",
       "stanza:type": "color",
-      "stanza:default": "#eee",
+      "stanza:default": "#333333",
       "stanza:description": "grid color"
     },
     {
@@ -176,13 +176,13 @@
     {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "#333333",
       "stanza:description": "tick color"
     },
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
+      "stanza:default": "#333333",
       "stanza:description": "color of axis"
     },
     {
@@ -194,7 +194,7 @@
     {
       "stanza:key": "--title-color",
       "stanza:type": "color",
-      "stanza:default": "#222",
+      "stanza:default": "#222222",
       "stanza:description": "font color of title"
     },
     {

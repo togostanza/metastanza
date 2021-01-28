@@ -4,7 +4,7 @@ import vegaEmbed from "vega-embed";
 export default async function barchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //height, width, padding
+  //height,width,padding
   spec.width = params["width"];
   spec.height = params["height"];
   spec.padding = params["padding"];
@@ -29,8 +29,14 @@ export default async function barchart(stanza, params) {
       domain: { data: "table", field: labelVariable },
       range: "width",
       padding: 0.05,
-      paddingInner: 0.2,
-      paddingInner: 0.5,
+      // paddingInner:
+      //   getComputedStyle(stanza.root.host).getPropertyValue("--padding-inner") -
+      //   0,
+      // paddingOuter:
+      //   getComputedStyle(stanza.root.host).getPropertyValue("--padding-outer") -
+      //   0,
+      paddingInner: 0.1,
+      paddingOuter: 0.4,
       round: true,
     },
     {
