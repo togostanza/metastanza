@@ -1,84 +1,85 @@
 import * as d3 from "d3";
-import metastanza from "@/lib/metastanza_utils.js";
+// import metastanza from "@/lib/metastanza_utils.js";
+import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
 import a_dataset from "../gwas-manhattan-plot/gwas.var2.json.js";
 
 // convert data
 
 // study name
-let study_name = Object.keys(a_dataset)[0]; //(single per a json)
+const study_name = Object.keys(a_dataset)[0]; //(single per a json)
 // console.log(...study_name); //"B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究"
 // study_name = study_name[0];
-console.log('【study_name】',study_name)
+console.log("【study_name】", study_name);
 
 //project data and project names(each of them are single per a json)
-let project = Object.values(a_dataset)[0]; 
+let project = Object.values(a_dataset)[0];
 project = project[0];
-console.log('【project】', project)
+console.log("【project】", project);
 
 let project_name = Object.keys(project);
 project_name = project_name[0];
-console.log('【project_name】', project_name)
+console.log("【project_name】", project_name);
 
 // stage data and stage names
-let stages = Object.values(project);
-console.log('【stages】',stages);
+const stages = Object.values(project);
+console.log("【stages】", stages);
 
-let stages_name = Object.keys(...stages)[0]; // can be 4 variations
-console.log('【stages_name】',stages_name);
+const stages_name = Object.keys(...stages)[0]; // can be 4 variations
+console.log("【stages_name】", stages_name);
 
 // get sach stage's information
-let stage = Object.values(...stages);
-console.log('【conditions】',stage);
+const stage = Object.values(...stages);
+console.log("【conditions】", stage);
 
 // get condition of each stage
-let condition1 = stage[0].condition1;
-let condition2 = stage[0].condition2;
-console.log('【condition1】', condition1);
-console.log('【condition2】', condition2);
+const condition1 = stage[0].condition1;
+const condition2 = stage[0].condition2;
+console.log("【condition1】", condition1);
+console.log("【condition2】", condition2);
 
 // variants
-let variants = stage[0].variants;
-console.log('【variants】', variants);
+const variants = stage[0].variants;
+console.log("【variants】", variants);
 
 // adjust datas
-for(let i=0; i<variants.length; i++){
-// convert chromosome data from 'chrnum' to 'num'
+for (let i = 0; i < variants.length; i++) {
+  // convert chromosome data from 'chrnum' to 'num'
   let chr = variants[i].chr;
-  chr = chr.replace('chr','');
+  chr = chr.replace("chr", "");
   variants[i].chr = chr;
   console.log(variants[i].chr);
 
-  let pval = variants[i]['p-value'];
+  const pval = variants[i]["p-value"];
   String(pval);
 
-  let physical_pos = variants[i]['stop'];
+  const physical_pos = variants[i]["stop"];
   String(physical_pos);
 }
 
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      greeting: `Hello, ${params['say-to']}!`,
-      study_name: study_name,
-      project_name: project_name,
-      condition1: condition1,
-      condition2: condition2
-    }
+      greeting: `Hello, ${params["say-to"]}!`,
+      study_name,
+      project_name,
+      condition1,
+      condition2,
+    },
   });
-  
+
   console.log(params.api);
-  const dataset = await metastanza.getFormatedJson(
+  const dataset = await getFormatedJson(
     params.api,
     stanza.root.querySelector("#chart")
-    );
-  console.log('dataset', dataset);
-  console.log('a_dataset', a_dataset);
-  console.log('variants',variants);
+  );
+  console.log("dataset", dataset);
+  console.log("a_dataset", a_dataset);
+  console.log("variants", variants);
 
   if (typeof variants === "object") {
     draw(variants, stanza, params);
-    metastanza.appendDlButton(
+    appendDlButton(
       stanza.root.querySelector("#chart"),
       stanza.root.querySelector("svg"),
       "manhattan_plot",
@@ -97,7 +98,7 @@ async function draw(dataset, stanza, params) {
 
   const chart_element = stanza.root.querySelector("#chart");
   const control_element = stanza.root.querySelector("#control");
-  let over_thresh_array
+  let over_thresh_array;
 
   if (params.low_thresh === "") {
     params.low_thresh = 0.5;
@@ -226,7 +227,8 @@ async function draw(dataset, stanza, params) {
   svg
     .on("mousedown", function (e) {
       // d3.pointer(e)[1]はイベント発火時のy座標
-      if (d3.pointer(e)[1] <= areaHeight) { //イベント発火時のy座標が、描画範囲内にあるとき（＝描画範囲がクリックされたとき）
+      if (d3.pointer(e)[1] <= areaHeight) {
+        //イベント発火時のy座標が、描画範囲内にあるとき（＝描画範囲がクリックされたとき）
         dragBegin = d3.pointer(e)[0]; //dragBeginの値を、イベント発火時のx座標とする
         svg //半透明の矩形を作成しsvgにappend
           .append("rect")
@@ -240,7 +242,8 @@ async function draw(dataset, stanza, params) {
       }
     })
     .on("mousemove", function (e) {
-      if (dragBegin) { //dragBeginの値がある場合、
+      if (dragBegin) {
+        //dragBeginの値がある場合、
         const dragEnd = d3.pointer(e)[0]; //dragEndをイベント発火時のx座標とする
         if (dragBegin < dragEnd) {
           svg.select("#selector").attr("width", dragEnd - dragBegin); //selecter（矩形）にwidthを与える
@@ -405,19 +408,19 @@ async function draw(dataset, stanza, params) {
     });
 
   reRender();
-  
+
   function reRender() {
     if (range[0] === undefined) {
       range = [
         0,
         Object.values(chromosomeNtLength.hg38).reduce(
           (sum, value) => sum + value
-          ),
-        ];
-        total = range[1];
-      }
-      
-    over_thresh_array = []
+        ),
+      ];
+      total = range[1];
+    }
+
+    over_thresh_array = [];
     max_log_p = 0;
 
     plot_g.html("");
@@ -476,8 +479,8 @@ async function draw(dataset, stanza, params) {
       .attr("r", 2)
       // filter: high p-value
       .filter(function (d) {
-        if(Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
-          over_thresh_array.push(d)
+        if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
+          over_thresh_array.push(d);
         }
         return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
       })
@@ -507,8 +510,7 @@ async function draw(dataset, stanza, params) {
       );
     });
 
-
-    console.log('over_thresh_array', over_thresh_array)
+    console.log("over_thresh_array", over_thresh_array);
 
     renderCanvas(range);
 
@@ -555,12 +557,12 @@ async function draw(dataset, stanza, params) {
         );
 
       // overthresh-line (high_thresh)
-      if(i===high_thresh){
-    // let y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
+      if (i === high_thresh) {
+        // let y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
         axis_g
-        .append("path") //x軸
-        .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
-        .attr("class", "overthresh-line");
+          .append("path") //x軸
+          .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
+          .attr("class", "overthresh-line");
       }
     }
     // y zero (low_thresh)
@@ -636,25 +638,25 @@ async function draw(dataset, stanza, params) {
     canvas.style("display", "none");
 
     stanza.render({
-      template: 'table.html.hbs',
-      selector: '#table',
+      template: "table.html.hbs",
+      selector: "#table",
       parameters: {
         fields: [
           {
-            label: 'First name',
-            required: true
+            label: "First name",
+            required: true,
           },
           {
-            label: 'Middle name',
-            required: false
+            label: "Middle name",
+            required: false,
           },
           {
-            label: 'Last name',
-            required: true
-          }
+            label: "Last name",
+            required: true,
+          },
         ],
-        arrays: over_thresh_array
-      }
+        arrays: over_thresh_array,
+      },
     });
   }
 

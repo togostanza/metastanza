@@ -27,8 +27,8 @@ export default async function barchart(stanza, params) {
     {
       name: "xscale",
       type: "band",
-      domain: { data: "table", field: labelVariable },
       range: "width",
+      domain: { data: "table", field: labelVariable },
       padding: 0.05,
       paddingInner: params["padding-inner"],
       paddingOuter: params["padding-outer"],
@@ -36,9 +36,9 @@ export default async function barchart(stanza, params) {
     },
     {
       name: "yscale",
+      range: "height",
       domain: { data: "table", field: valueVariable },
       // nice: true,
-      range: "height",
     },
   ];
 
@@ -60,7 +60,7 @@ export default async function barchart(stanza, params) {
         "--grid-opacity"
       ),
       gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
+        "--grid-weight"
       ),
       ticks: params["xtick"] === "true",
       // tickCount: params["xtick-count"],

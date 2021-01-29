@@ -19,7 +19,7 @@ h2 {
 }
 
 // specific styles
-main{
+main {
   padding: 1rem 2rem;
 }
 
@@ -31,7 +31,7 @@ div#chart {
   }
 }
 
-path{
+path {
   &.axis-line {
     stroke: black;
     stroke-width: 2px;
@@ -222,7 +222,7 @@ div#dl_list {
   // }
 }
 
-.table-section{
+.table-section {
   margin-top: 60px;
   table {
     margin: 10px auto 0px 10px;
@@ -236,20 +236,19 @@ div#dl_list {
       border-bottom: var(--stack-line);
       margin-bottom: 0;
       padding: var(--thead-padding);
-      tr
-        th {
-          padding: 10px;
-          text-align: left;
-        }
+      tr th {
+        padding: 10px;
+        text-align: left;
+      }
     }
     tbody {
       background-color: var(--tbody-background-color);
     }
-      tr{
-        height: 40px;
-      }
-        td {
-          padding: 10px;
-        }
+    tr {
+      height: 40px;
+    }
+    td {
+      padding: 10px;
+    }
   }
 }

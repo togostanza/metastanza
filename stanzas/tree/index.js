@@ -2,6 +2,7 @@ import vegaEmbed from "vega-embed";
 
 export default async function tree(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
+
   //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
@@ -206,18 +207,16 @@ export default async function tree(stanza, params) {
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
           fill: { value: "var(--label-color)" },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--stroke-width"
-            ),
-          },
+          // strokeWidth: {
+          //   value: getComputedStyle(stanza.root.host).getPropertyValue(
+          //     "--stroke-width"
+          //   ),
+          // },
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
-          // "stroke": {"value": "var(--hover-stroke-color)"},
-          // "strokeWidth": {"value": "0.5"}
-          // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
+          stroke: {value: "var(--hover-stroke-color)"},
+          strokeWidth: {"value": "0.5"}
         },
       },
     },

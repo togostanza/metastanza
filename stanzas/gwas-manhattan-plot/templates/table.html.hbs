@@ -31,30 +31,57 @@
   </div>
 {{/each}} --}}
 
-
-  <table>
-    <thead>
+<table>
+  <thead>
+    <tr>
+      <th>
+        Gene name
+      </th>
+      <th>
+        rsId
+      </th>
+      <th>
+        Chromosome
+      </th>
+      <th>
+        position
+      </th>
+      <th>
+        Ref
+      </th>
+      <th>
+        Alt
+      </th>
+      <th>
+        P-value
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each arrays as |array|}}
       <tr>
-        <th>Gene name</th>
-        <th>rsId</th>
-        <th>Chromosome</th>
-        <th>position</th>
-        <th>Ref</th>
-        <th>Alt</th>
-        <th>P-value</th>
+        <td>
+          {{array.gene_name}}
+        </td>
+        <td>
+          {{array.rsId}}
+        </td>
+        <td>
+          {{array.chr}}
+        </td>
+        <td>
+          {{array.stop}}
+        </td>
+        <td>
+          {{array.ref}}
+        </td>
+        <td>
+          {{array.alt}}
+        </td>
+        <td>
+          {{array.p-value}}
+        </td>
       </tr>
-    </thead>
-    <tbody>
-        {{#each arrays as |array|}}
-      <tr>
-          <td>{{array.gene_name}}</td>
-          <td>{{array.rsId}}</td>
-          <td>{{array.chr}}</td>
-          <td>{{array.stop}}</td>
-          <td>{{array.ref}}</td>
-          <td>{{array.alt}}</td>
-          <td>{{array.p-value}}</td>
-      </tr>
-        {{/each}}
-    </tbody>
-  </table>
+    {{/each}}
+  </tbody>
+</table>

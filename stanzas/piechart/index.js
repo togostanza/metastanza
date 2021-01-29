@@ -1,4 +1,3 @@
-// import { key } from "vega";
 import vegaEmbed from "vega-embed";
 
 export default async function piechart(stanza, params) {
@@ -10,32 +9,34 @@ export default async function piechart(stanza, params) {
   // spec.autosize = params["autosize"]
   spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
-  //innerpadding
-  spec.signals[2].value = params["inner-padding-angle"];
-  spec.signals[3].value = params["inner-radius"];
-
   //delete default controller
   for (const signal of spec.signals) {
     delete signal.bind;
   }
 
+  //innerpadding
+  spec.signals[2].value = params["inner-padding-angle"];
+  spec.signals[3].value = params["inner-radius"];
+
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
 
-  spec.data[0] = {
-    name: "table",
-    url: params["your-data"],
-    transform: [
-      {
-        type: "pie",
-        field: valueVariable,
-        startAngle: { signal: "startAngle" },
-        endAngle: { signal: "endAngle" },
-        sort: { signal: "sort" },
-      },
-    ],
-  };
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "pie",
+          field: valueVariable,
+          startAngle: { signal: "startAngle" },
+          endAngle: { signal: "endAngle" },
+          sort: { signal: "sort" },
+        },
+      ],
+    },
+  ];
 
   // scales(color scheme)
   spec.scales = [
@@ -54,30 +55,6 @@ export default async function piechart(stanza, params) {
     },
   ];
 
-  spec.marks[0].encode = {
-    enter: {
-      fill: { scale: "color", field: labelVariable },
-      x: { signal: "width / 2" },
-      y: { signal: "height / 2" },
-    },
-    update: {
-      startAngle: { field: "startAngle" },
-      endAngle: { field: "endAngle" },
-      padAngle: { signal: "padAngle" },
-      innerRadius: { signal: "innerRadius" },
-      outerRadius: { signal: "width / 2" },
-      cornerRadius: { signal: "cornerRadius" },
-      fill: { scale: "color", field: labelVariable },
-      stroke: { value: "var(--stroke-color)" },
-      strokeWidth: { value: "var(--stroke-width)" },
-    },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-      stroke: { value: "var(--hover-stroke-color)" },
-      strokeWidth: { value: "var(--hover-stroke-width)" },
-    },
-  };
-
   //legend
   spec.legends = [
     {
@@ -85,60 +62,58 @@ export default async function piechart(stanza, params) {
       orient: "none",
       legendX: "220",
       legendY: "5",
-      title: params["legend-title"],
+      title: labelVariable,
       titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
       labelColor: "var(--legendlabel-color)",
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolType: params["symbol-shape"],
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
+    },
+  ];
+
+  //marks
+  spec.marks = [
+    {
+      type: "arc",
+      from: { data: "table" },
       encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
+        enter: {
+          fill: { scale: "color", field: labelVariable },
+          x: { signal: "width / 2" },
+          y: { signal: "height / 2" },
         },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
+        update: {
+          startAngle: { field: "startAngle" },
+          endAngle: { field: "endAngle" },
+          padAngle: { signal: "padAngle" },
+          innerRadius: { signal: "innerRadius" },
+          outerRadius: { signal: "width / 2" },
+          cornerRadius: { signal: "cornerRadius" },
+          fill: { scale: "color", field: labelVariable },
+          stroke: { value: "var(--stroke-color)" },
+          strokeWidth: { value: "var(--stroke-width)" },
         },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
-            },
-            opacity: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--opacity"
-              ),
-            },
-          },
+        hover: {
+          fill: { value: "var(--emphasized-color)" },
         },
       },
     },
