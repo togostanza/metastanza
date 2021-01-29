@@ -1,8 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { g as getFormatedJson } from './metastanza_utils-32cbc8a4.js';
+import { g as getFormatedJson } from './metastanza_utils-f0c71da7.js';
 import { l as lodash_omit } from './index-9856201e.js';
-import './index-802c870c.js';
-import './timer-b826f0a9.js';
+import './timer-be811b16.js';
 
 async function tableWithPagination(stanza, params) {
   stanza.render({

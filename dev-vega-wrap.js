@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { V as View, p as parse$1 } from './vega.module-1945ca45.js';
-import './timer-b826f0a9.js';
+import { V as View, p as parse$1 } from './vega.module-5c1fb2a7.js';
+import './timer-be811b16.js';
 
 async function devVegaWrap(stanza, params) {
   const spec = await fetch(params["vega-json"]).then((res) => res.json());

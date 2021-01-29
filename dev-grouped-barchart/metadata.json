@@ -121,50 +121,50 @@
     {
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#FFC39E",
-      "stanza:description": "first color"
+      "stanza:default": "#6590e6",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--series-1-color",
       "stanza:type": "color",
-      "stanza:default": "#FF8DB8",
-      "stanza:description": "second color"
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--series-2-color",
       "stanza:type": "color",
-      "stanza:default": "#C690C6",
-      "stanza:description": "third color"
+      "stanza:default": "#9ede2f",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--series-3-color",
       "stanza:type": "color",
-      "stanza:default": "#6992D1",
-      "stanza:description": "forth color"
+      "stanza:default": "#f5da64",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--series-4-color",
       "stanza:type": "color",
-      "stanza:default": "#71B093",
-      "stanza:description": "fifth color"
+      "stanza:default": "#f57f5b",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--series-5-color",
       "stanza:type": "color",
-      "stanza:default": "#94BC8A",
-      "stanza:description": "sixth color"
+      "stanza:default": "#f75976",
+      "stanza:description": "bar color"
     },
     {
       "stanza:key": "--emphasized-color",
       "stanza:type": "color",
-      "stanza:default": "#ec7d8d",
-      "stanza:description": "emphasized color when you hover on labels and rects"
+      "stanza:default": "#fa8c84",
+      "stanza:description": "Emphasized color when you hover on labels and rects"
     },
     {
-      "stanza:key": "--padding",
+      "stanza:key": "--font-family",
       "stanza:type": "text",
-      "stanza:dafault": "top: 0, right: 0, bottom: 50, left: 150",
-      "stanza:description": "padding between each bars.This mast be in the range[0,1]"
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family."
     },
     {
       "stanza:key": "--padding-inner",
@@ -257,12 +257,6 @@
       "stanza:description": "label color"
     },
     {
-      "stanza:key": "--font-family",
-      "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family."
-    },
-    {
       "stanza:key": "--legend-font",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
@@ -307,7 +301,7 @@
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0.5",
       "stanza:description": "width of stroke"
     }
   ]

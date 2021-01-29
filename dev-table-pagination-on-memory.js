@@ -1,8 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import './dev-table-body.js';
-import './metastanza_utils-32cbc8a4.js';
-import './index-802c870c.js';
-import './timer-b826f0a9.js';
+import './metastanza_utils-f0c71da7.js';
+import './timer-be811b16.js';
 import './index-9856201e.js';
 
 function tablePaginationOnMemory(stanza, params) {

@@ -1,11 +1,9 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './index-802c870c.js';
-import { g as getFormatedJson, a as appendDlButton, s as select } from './metastanza_utils-32cbc8a4.js';
-import { p as pointer, d as drag } from './drag-9b411d63.js';
-import './timer-b826f0a9.js';
+import { g as getFormatedJson, a as appendDlButton, s as select } from './metastanza_utils-f0c71da7.js';
+import { p as pointer, d as drag } from './drag-f5d349cb.js';
+import './timer-be811b16.js';
 
-let a_dataset;
-a_dataset = {
+const a_dataset = {
   B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究: [
     {
       blank: {
@@ -7557,18 +7555,16 @@ a_dataset = {
   ],
 };
 
-var a_dataset$1 = a_dataset;
-
 // convert data
 
 // study name
-const study_name = Object.keys(a_dataset$1)[0]; //(single per a json)
+const study_name = Object.keys(a_dataset)[0]; //(single per a json)
 // console.log(...study_name); //"B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究"
 // study_name = study_name[0];
 console.log("【study_name】", study_name);
 
 //project data and project names(each of them are single per a json)
-let project = Object.values(a_dataset$1)[0];
+let project = Object.values(a_dataset)[0];
 project = project[0];
 console.log("【project】", project);
 
@@ -7628,7 +7624,7 @@ async function gwasManhattanPlot(stanza, params) {
     stanza.root.querySelector("#chart")
   );
   console.log("dataset", dataset);
-  console.log("a_dataset", a_dataset$1);
+  console.log("a_dataset", a_dataset);
   console.log("variants", variants);
 
   if (typeof variants === "object") {

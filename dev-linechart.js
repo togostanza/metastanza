@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-529d62fa.js';
-import './vega.module-1945ca45.js';
-import './timer-b826f0a9.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
+import './timer-be811b16.js';
 
 async function devLinechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -445,44 +445,50 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#adc1c7",
+		"stanza:default": "#6590e6",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#ceeded",
+		"stanza:default": "#3ac9b6",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#ccb9b1",
+		"stanza:default": "#9ede2f",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#f5e7d0",
+		"stanza:default": "#f5da64",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#aed6c8",
+		"stanza:default": "#f57f5b",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#C4D6F5",
+		"stanza:default": "#f75976",
 		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
 		"stanza:default": "#fa8c84",
-		"stanza:description": "emphasized color when you hover on labels and rects"
+		"stanza:description": "Emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--grid-color",
@@ -525,12 +531,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "emphasized color when you hover on labels and rects"
-	},
-	{
-		"stanza:key": "--font-family",
-		"stanza:type": "string",
-		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--axis-color",

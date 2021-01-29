@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-529d62fa.js';
-import './vega.module-1945ca45.js';
-import './timer-b826f0a9.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
+import './timer-be811b16.js';
 
 async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -28,7 +28,15 @@ async function piechart(stanza, params) {
   spec.data = [
     {
       name: "table",
-      url: params["your-data"],
+      // url: params["your-data"],
+      values: [
+        { id: 1, field: 4 },
+        { id: 2, field: 6 },
+        { id: 3, field: 10 },
+        { id: 4, field: 3 },
+        { id: 5, field: 7 },
+        { id: 6, field: 8 },
+      ],
       transform: [
         {
           type: "pie",
@@ -162,13 +170,13 @@ var metadata = {
 	},
 	{
 		"stanza:key": "label-variable",
-		"stanza:example": "category",
+		"stanza:example": "id",
 		"stanza:description": "Variable to be assigned as label",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "value-variable",
-		"stanza:example": "count",
+		"stanza:example": "field",
 		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
 	},

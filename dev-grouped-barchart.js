@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-529d62fa.js';
-import './vega.module-1945ca45.js';
-import './timer-b826f0a9.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
+import './timer-be811b16.js';
 
 async function devGroupedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
@@ -98,11 +98,6 @@ async function devGroupedBarchart(stanza, params) {
       ),
       ticks: params["ytick"] === "true",
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
@@ -121,25 +116,6 @@ async function devGroupedBarchart(stanza, params) {
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          },
-        },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
           },
         },
         domain: {
@@ -476,50 +452,50 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFC39E",
-		"stanza:description": "first color"
+		"stanza:default": "#6590e6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#FF8DB8",
-		"stanza:description": "second color"
+		"stanza:default": "#3ac9b6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#C690C6",
-		"stanza:description": "third color"
+		"stanza:default": "#9ede2f",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#6992D1",
-		"stanza:description": "forth color"
+		"stanza:default": "#f5da64",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#71B093",
-		"stanza:description": "fifth color"
+		"stanza:default": "#f57f5b",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#94BC8A",
-		"stanza:description": "sixth color"
+		"stanza:default": "#f75976",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
-		"stanza:default": "#ec7d8d",
-		"stanza:description": "emphasized color when you hover on labels and rects"
+		"stanza:default": "#fa8c84",
+		"stanza:description": "Emphasized color when you hover on labels and rects"
 	},
 	{
-		"stanza:key": "--padding",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
-		"stanza:dafault": "top: 0, right: 0, bottom: 50, left: 150",
-		"stanza:description": "padding between each bars.This mast be in the range[0,1]"
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--padding-inner",
@@ -612,12 +588,6 @@ var metadata = {
 		"stanza:description": "label color"
 	},
 	{
-		"stanza:key": "--font-family",
-		"stanza:type": "text",
-		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
-	},
-	{
 		"stanza:key": "--legend-font",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
@@ -662,7 +632,7 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0.5",
 		"stanza:description": "width of stroke"
 	}
 ]

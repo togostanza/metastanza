@@ -1,8 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './index-802c870c.js';
-import { e as embed } from './vega-embed.module-529d62fa.js';
-import './timer-b826f0a9.js';
-import './vega.module-1945ca45.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
+import './timer-be811b16.js';
 
 // import { stratify } from "d3";
 
