@@ -31,8 +31,8 @@ async function barchart(stanza, params) {
     {
       name: "xscale",
       type: "band",
-      domain: { data: "table", field: labelVariable },
       range: "width",
+      domain: { data: "table", field: labelVariable },
       padding: 0.05,
       paddingInner: params["padding-inner"],
       paddingOuter: params["padding-outer"],
@@ -40,9 +40,9 @@ async function barchart(stanza, params) {
     },
     {
       name: "yscale",
-      domain: { data: "table", field: valueVariable },
-      nice: true,
       range: "height",
+      domain: { data: "table", field: valueVariable },
+      // nice: true,
     },
   ];
 
@@ -64,7 +64,7 @@ async function barchart(stanza, params) {
         "--grid-opacity"
       ),
       gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
+        "--grid-weight"
       ),
       ticks: params["xtick"] === "true",
       // tickCount: params["xtick-count"],
@@ -303,6 +303,16 @@ var metadata = {
 		"stanza:description": "Padding outside of bar group. This mast be in the range[0,1]"
 	},
 	{
+		"stanza:key": "xaxis-orient",
+		"stanza:example": "bottom",
+		"stanza:description": "Orient of X-axis.(top or bottom)"
+	},
+	{
+		"stanza:key": "yaxis-orient",
+		"stanza:example": "left",
+		"stanza:description": "Orient of Y-axis.(left or right)"
+	},
+	{
 		"stanza:key": "xgrid",
 		"stanza:example": false,
 		"stanza:description": "Display of X-grids.(true or false)"
@@ -331,16 +341,6 @@ var metadata = {
 		"stanza:key": "ytick-count",
 		"stanza:example": "nice",
 		"stanza:description": "Count of Y-ticks for quantitative scales. Acceptable data-types are Number, Stirng, and Object."
-	},
-	{
-		"stanza:key": "xaxis-orient",
-		"stanza:example": "bottom",
-		"stanza:description": "Orient of X-axis.(top or bottom)"
-	},
-	{
-		"stanza:key": "yaxis-orient",
-		"stanza:example": "left",
-		"stanza:description": "Orient of Y-axis.(left or right)"
 	},
 	{
 		"stanza:key": "xlabel-angle",
@@ -396,7 +396,19 @@ var metadata = {
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family of labels."
+		"stanza:description": "Font family."
+	},
+	{
+		"stanza:key": "--axis-color",
+		"stanza:type": "color",
+		"stanza:default": "#4e5059",
+		"stanza:description": "Axis color."
+	},
+	{
+		"stanza:key": "--axis-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Axis width."
 	},
 	{
 		"stanza:key": "--grid-color",
@@ -430,27 +442,15 @@ var metadata = {
 	},
 	{
 		"stanza:key": "--tick-size",
-		"stanza:type": "Number",
+		"stanza:type": "number",
 		"stanza:default": "1.5",
 		"stanza:description": "Tick length in pixel."
 	},
 	{
 		"stanza:key": "--tick-width",
-		"stanza:type": "Number",
-		"stanza:default": "1",
-		"stanza:description": "Tick width in pixel."
-	},
-	{
-		"stanza:key": "--axis-color",
-		"stanza:type": "color",
-		"stanza:default": "#4e5059",
-		"stanza:description": "Axis color."
-	},
-	{
-		"stanza:key": "--axis-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "Axis width."
+		"stanza:description": "Tick width in pixel."
 	},
 	{
 		"stanza:key": "--title-color",

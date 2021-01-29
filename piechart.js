@@ -3,8 +3,6 @@ import { e as embed } from './vega-embed.module-529d62fa.js';
 import './vega.module-1945ca45.js';
 import './timer-b826f0a9.js';
 
-// import { key } from "vega";
-
 async function piechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
@@ -14,32 +12,34 @@ async function piechart(stanza, params) {
   // spec.autosize = params["autosize"]
   spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
-  //innerpadding
-  spec.signals[2].value = params["inner-padding-angle"];
-  spec.signals[3].value = params["inner-radius"];
-
   //delete default controller
   for (const signal of spec.signals) {
     delete signal.bind;
   }
 
+  //innerpadding
+  spec.signals[2].value = params["inner-padding-angle"];
+  spec.signals[3].value = params["inner-radius"];
+
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
 
-  spec.data[0] = {
-    name: "table",
-    url: params["your-data"],
-    transform: [
-      {
-        type: "pie",
-        field: valueVariable,
-        startAngle: { signal: "startAngle" },
-        endAngle: { signal: "endAngle" },
-        sort: { signal: "sort" },
-      },
-    ],
-  };
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "pie",
+          field: valueVariable,
+          startAngle: { signal: "startAngle" },
+          endAngle: { signal: "endAngle" },
+          sort: { signal: "sort" },
+        },
+      ],
+    },
+  ];
 
   // scales(color scheme)
   spec.scales = [
@@ -58,30 +58,6 @@ async function piechart(stanza, params) {
     },
   ];
 
-  spec.marks[0].encode = {
-    enter: {
-      fill: { scale: "color", field: labelVariable },
-      x: { signal: "width / 2" },
-      y: { signal: "height / 2" },
-    },
-    update: {
-      startAngle: { field: "startAngle" },
-      endAngle: { field: "endAngle" },
-      padAngle: { signal: "padAngle" },
-      innerRadius: { signal: "innerRadius" },
-      outerRadius: { signal: "width / 2" },
-      cornerRadius: { signal: "cornerRadius" },
-      fill: { scale: "color", field: labelVariable },
-      stroke: { value: "var(--stroke-color)" },
-      strokeWidth: { value: "var(--stroke-width)" },
-    },
-    hover: {
-      fill: { value: "var(--emphasized-color)" },
-      stroke: { value: "var(--hover-stroke-color)" },
-      strokeWidth: { value: "var(--hover-stroke-width)" },
-    },
-  };
-
   //legend
   spec.legends = [
     {
@@ -89,60 +65,58 @@ async function piechart(stanza, params) {
       orient: "none",
       legendX: "220",
       legendY: "5",
-      title: params["legend-title"],
+      title: labelVariable,
       titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
       labelColor: "var(--legendlabel-color)",
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolType: params["symbol-shape"],
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
+    },
+  ];
+
+  //marks
+  spec.marks = [
+    {
+      type: "arc",
+      from: { data: "table" },
       encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
+        enter: {
+          fill: { scale: "color", field: labelVariable },
+          x: { signal: "width / 2" },
+          y: { signal: "height / 2" },
         },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
+        update: {
+          startAngle: { field: "startAngle" },
+          endAngle: { field: "endAngle" },
+          padAngle: { signal: "padAngle" },
+          innerRadius: { signal: "innerRadius" },
+          outerRadius: { signal: "width / 2" },
+          cornerRadius: { signal: "cornerRadius" },
+          fill: { scale: "color", field: labelVariable },
+          stroke: { value: "var(--stroke-color)" },
+          strokeWidth: { value: "var(--stroke-width)" },
         },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
-            },
-            opacity: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--opacity"
-              ),
-            },
-          },
+        hover: {
+          fill: { value: "var(--emphasized-color)" },
         },
       },
     },
@@ -183,32 +157,35 @@ var metadata = {
 	{
 		"stanza:key": "your-data",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
-		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "label-variable",
 		"stanza:example": "category",
-		"stanza:description": "variable to be assigned as label",
+		"stanza:description": "Variable to be assigned as label",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "value-variable",
 		"stanza:example": "count",
-		"stanza:description": "variable to be assigned as value",
+		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "width",
-		"stanza:type": "number",
-		"stanza:example": "200",
-		"stanza:description": "width of your stanza"
+		"stanza:example": "400",
+		"stanza:description": "Width of your stanza"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:type": "number",
-		"stanza:example": "300",
-		"stanza:description": "height of your stanza"
+		"stanza:example": "200",
+		"stanza:description": "Height of your stanza"
+	},
+	{
+		"stanza:key": "padding",
+		"stanza:example": "50",
+		"stanza:description": "Padding around your stanza"
 	},
 	{
 		"stanza:key": "autosize",
@@ -219,136 +196,112 @@ var metadata = {
 	{
 		"stanza:key": "inner-padding-angle",
 		"stanza:example": "0",
-		"stanza:description": "angle of inner padding.(0-0.1)",
+		"stanza:description": "Angle of inner padding.(0-0.1)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "inner-radius",
 		"stanza:example": "0",
-		"stanza:description": "inner radius of your pie.(0-99)",
+		"stanza:description": "Inner radius of your pie.(0-99)",
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "legend-title",
-		"stanza:example": "Title of this legend",
-		"stanza:description": "title of legends"
+		"stanza:key": "symbol-shape",
+		"stanza:example": "circle",
+		"stanza:description": "Shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--emphasized-color",
-		"stanza:type": "color",
-		"stanza:default": "#ec7d8d",
-		"stanza:description": "emphasized color when you hover on labels and rects"
-	},
-	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFC39E",
-		"stanza:description": "first color"
+		"stanza:default": "#6590e6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#FF8DB8",
-		"stanza:description": "second color"
+		"stanza:default": "#3ac9b6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#C690C6",
-		"stanza:description": "third color"
+		"stanza:default": "#9ede2f",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#6992D1",
-		"stanza:description": "fourth color"
+		"stanza:default": "#f5da64",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#71B093",
-		"stanza:description": "fifth color"
+		"stanza:default": "#f57f5b",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#94BC8A",
-		"stanza:description": "sixth color"
+		"stanza:default": "#f75976",
+		"stanza:description": "bar color"
 	},
 	{
-		"stanza:key": "--legend-font",
+		"stanza:key": "--emphasized-color",
+		"stanza:type": "color",
+		"stanza:default": "#fa8c84",
+		"stanza:description": "Emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "font family of the legend title and legend labels"
+		"stanza:description": "Font family."
+	},
+	{
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "font color of the legend title"
 	},
 	{
 		"stanza:key": "--legendtitle-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "font size of the legend title"
+		"stanza:description": "Font size of the legend title"
 	},
 	{
 		"stanza:key": "--legendtitle-weight",
 		"stanza:type": "number",
-		"stanza:default": "600",
-		"stanza:description": "font weight of the legend title"
+		"stanza:default": "400",
+		"stanza:description": "Font weight of the legend title"
 	},
 	{
-		"stanza:key": "--legendtitle-color",
+		"stanza:key": "--legendlabel-color",
 		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "font color of the legend title"
+		"stanza:default": "#333333",
+		"stanza:description": "Font color of the legend label"
 	},
 	{
 		"stanza:key": "--legendlabel-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "font size of the legend label"
-	},
-	{
-		"stanza:key": "--legendlabel-color",
-		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "font color of the legend label"
+		"stanza:description": "Font size of the legend label"
 	},
 	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "stroke color of plot."
-	},
-	{
-		"stanza:key": "--hover-stroke-color",
-		"stanza:type": "color",
-		"stanza:default": "#999",
-		"stanza:description": "stroke color of plot when you hover."
+		"stanza:default": "#4e5059",
+		"stanza:description": "Stroke color."
 	},
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "0",
-		"stanza:description": "stroke width"
-	},
-	{
-		"stanza:key": "--hover-stroke-width",
-		"stanza:type": "number",
-		"stanza:default": "1.2",
-		"stanza:description": "stroke width of plot when you hover."
-	},
-	{
-		"stanza:key": "--label-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "label color"
-	},
-	{
-		"stanza:key": "--font-family",
-		"stanza:type": "string",
-		"stanza:default": "Helvetica Neue",
-		"stanza:description": "font family of labels."
+		"stanza:default": "0.5",
+		"stanza:description": "Stroke width."
 	}
 ]
 };

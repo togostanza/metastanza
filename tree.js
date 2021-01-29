@@ -5,6 +5,7 @@ import './timer-b826f0a9.js';
 
 async function tree(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
+
   //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
@@ -17,7 +18,6 @@ async function tree(stanza, params) {
 
   //data
   const labelVariable = params["label-variable"]; //"name"
-  // const valueVariable = params["value-variable"]; //"size"
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
@@ -210,18 +210,16 @@ async function tree(stanza, params) {
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
           fill: { value: "var(--label-color)" },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--stroke-width"
-            ),
-          },
+          // strokeWidth: {
+          //   value: getComputedStyle(stanza.root.host).getPropertyValue(
+          //     "--stroke-width"
+          //   ),
+          // },
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
-          // "stroke": {"value": "var(--hover-stroke-color)"},
-          // "strokeWidth": {"value": "0.5"}
-          // "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--hover-stroke-width")}
+          stroke: {value: "var(--hover-stroke-color)"},
+          strokeWidth: {"value": "0.5"}
         },
       },
     },
@@ -261,7 +259,7 @@ var metadata = {
 	{
 		"stanza:key": "your-data",
 		"stanza:example": "https://vega.github.io/vega/data/flare.json",
-		"stanza:description": "source url which returns Vega specification compliant JSON",
+		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
 	{
@@ -314,44 +312,50 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFC39E",
-		"stanza:description": "first color"
+		"stanza:default": "#6590e6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#FF8DB8",
-		"stanza:description": "second color"
+		"stanza:default": "#3ac9b6",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#C690C6",
-		"stanza:description": "third color"
+		"stanza:default": "#9ede2f",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#6992D1",
-		"stanza:description": "forth color"
+		"stanza:default": "#f5da64",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#71B093",
-		"stanza:description": "fifth color"
+		"stanza:default": "#f57f5b",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#94BC8A",
-		"stanza:description": "sixth color"
+		"stanza:default": "#f75976",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
-		"stanza:default": "#ec7d8d",
-		"stanza:description": "emphasized color when you hover on text of each nodes"
+		"stanza:default": "#fa8c84",
+		"stanza:description": "Emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--label-color",
@@ -360,16 +364,22 @@ var metadata = {
 		"stanza:description": "text color of each nodes"
 	},
 	{
+		"stanza:key": "--label-size",
+		"stanza:type": "number",
+		"stanza:default": "11",
+		"stanza:description": "font size of the legend label"
+	},
+	{
 		"stanza:key": "--branch-color",
 		"stanza:type": "color",
-		"stanza:default": "#eee",
-		"stanza:description": "color of branches"
+		"stanza:default": "#AEB3BF",
+		"stanza:description": "Branch color."
 	},
 	{
 		"stanza:key": "--node-size",
 		"stanza:type": "number",
 		"stanza:default": "100",
-		"stanza:description": "size of each node"
+		"stanza:description": "Node size."
 	},
 	{
 		"stanza:key": "--stroke-color",
@@ -378,70 +388,52 @@ var metadata = {
 		"stanza:description": "color of stroke"
 	},
 	{
-		"stanza:key": "--font-family",
-		"stanza:type": "string",
-		"stanza:default": "san serif",
-		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
-	},
-	{
-		"stanza:key": "--label-size",
-		"stanza:type": "number",
-		"stanza:default": "11",
-		"stanza:description": "font size of the legend label"
-	},
-	{
-		"stanza:key": "--legend-font",
-		"stanza:type": "text",
-		"stanza:default": "Helvetica Neue",
-		"stanza:description": "font family of the legend title and legend labels"
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "font color of the legend title"
 	},
 	{
 		"stanza:key": "--legendtitle-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "font size of the legend title"
+		"stanza:description": "Font size of the legend title"
 	},
 	{
 		"stanza:key": "--legendtitle-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "font weight of the legend title"
+		"stanza:description": "Font weight of the legend title"
 	},
 	{
-		"stanza:key": "--legendtitle-color",
+		"stanza:key": "--legendlabel-color",
 		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "font color of the legend title"
+		"stanza:default": "#333333",
+		"stanza:description": "Font color of the legend label"
 	},
 	{
 		"stanza:key": "--legendlabel-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "font size of the legend label"
-	},
-	{
-		"stanza:key": "--legendlabel-color",
-		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "font color of the legend label"
+		"stanza:description": "Font size of the legend label"
 	},
 	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "stroke color of plot."
+		"stanza:default": "#4e5059",
+		"stanza:description": "Stroke color."
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "0.5",
+		"stanza:description": "Stroke width."
 	},
 	{
 		"stanza:key": "--hover-stroke-color",
 		"stanza:type": "color",
 		"stanza:default": "#333",
 		"stanza:description": "stroke color of plot when you hover."
-	},
-	{
-		"stanza:key": "--stroke-width",
-		"stanza:type": "number",
-		"stanza:default": "0.2",
-		"stanza:description": "stroke width"
 	},
 	{
 		"stanza:key": "--hover-stroke-width",

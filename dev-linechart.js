@@ -530,7 +530,7 @@ var metadata = {
 		"stanza:key": "--font-family",
 		"stanza:type": "string",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "font family of labels."
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--axis-color",

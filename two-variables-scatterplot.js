@@ -6,11 +6,12 @@ import './timer-b826f0a9.js';
 async function twoVariablesScatterplot(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  // width, hight,padding
+  //width,height,padding
   spec.width = params["width"];
   spec.height = params["height"];
   spec.padding = params["padding"];
 
+  //data
   const xVariable = params["x-variable"];
   const yVariable = params["y-variable"];
 
@@ -49,17 +50,16 @@ async function twoVariablesScatterplot(stanza, params) {
     },
   ];
 
-  // axis
   //axes
   spec.axes = [
     {
       scale: "x",
       orient: params["xaxis-orient"],
-      title: xVariable,
-      titleColor: "var(--title-color)",
-      titlePadding:
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-        0,
+      domain: true,
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
+      ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -72,18 +72,36 @@ async function twoVariablesScatterplot(stanza, params) {
         "--grid-width"
       ),
       ticks: params["xtick"] === "true",
-      tickCount: 5,
-      domain: true,
+      // tickCount: params["xtick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: xVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 1,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
+            dx: { value: params["xlabel-horizonal-offset"] },
+            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -100,44 +118,15 @@ async function twoVariablesScatterplot(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-          },
-        },
       },
     },
     {
       scale: "y",
       orient: params["yaxis-orient"],
-      title: yVariable,
-      titleColor: "var(--title-color)",
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      domain: true,
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
       ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
@@ -151,17 +140,36 @@ async function twoVariablesScatterplot(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
-      domain: true,
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: yVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 1,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
+            dx: { value: params["ylabel-horizonal-offset"] },
+            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -178,39 +186,11 @@ async function twoVariablesScatterplot(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-          },
-        },
       },
     },
   ];
 
+  //delete legend
   spec.legends = [];
 
   //marks
@@ -224,13 +204,13 @@ async function twoVariablesScatterplot(stanza, params) {
         update: {
           x: { scale: "x", field: xVariable },
           y: { scale: "y", field: yVariable },
+          shape: { value: params["symbol-shape"] },
+          fill: { value: "var(--series-0-color)" },
           size: {
             value: Number(
               getComputedStyle(stanza.root.host).getPropertyValue("--plot-size")
             ),
           },
-          shape: { value: params["symbol-shape"] },
-          fill: { value: "var(--series-0-color)" },
           stroke: { value: "var(--stroke-color)" },
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -295,43 +275,43 @@ var metadata = {
 	{
 		"stanza:key": "your-data",
 		"stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
-		"stanza:description": "JSON data url which you want to draw",
+		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "x-variable",
 		"stanza:example": "Horsepower",
-		"stanza:description": "data key for x-variable"
+		"stanza:description": "Key for X-variable."
 	},
 	{
 		"stanza:key": "y-variable",
 		"stanza:example": "Miles_per_Gallon",
-		"stanza:description": "data key for y-variable"
+		"stanza:description": "Key for Y-variable."
 	},
 	{
 		"stanza:key": "width",
-		"stanza:example": "200",
-		"stanza:description": "width of your stanza"
+		"stanza:example": "400",
+		"stanza:description": "Width of your stanza"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:example": "200",
-		"stanza:description": "height of your stanza"
+		"stanza:description": "Height of your stanza"
 	},
 	{
 		"stanza:key": "padding",
 		"stanza:example": "50",
-		"stanza:description": "padding around your stanza"
+		"stanza:description": "Padding around your stanza"
 	},
 	{
 		"stanza:key": "xaxis-orient",
 		"stanza:example": "bottom",
-		"stanza:description": "orient of X-axis.(please select top or bottom)"
+		"stanza:description": "Orient of X-axis.(top or bottom)"
 	},
 	{
 		"stanza:key": "yaxis-orient",
 		"stanza:example": "left",
-		"stanza:description": "orient of Y-axis.(please select left or right)"
+		"stanza:description": "Orient of Y-axis.(left or right)"
 	},
 	{
 		"stanza:key": "xgrid",
@@ -364,9 +344,29 @@ var metadata = {
 		"stanza:description": "angle of Y-labels.(in degree)"
 	},
 	{
+		"stanza:key": "xlabel-horizonal-offset",
+		"stanza:default": "60",
+		"stanza:description": "Horizonal offset of xlabels."
+	},
+	{
+		"stanza:key": "xlabel-vertical-offset",
+		"stanza:default": "0",
+		"stanza:description": "Vertical offset of xlabels."
+	},
+	{
+		"stanza:key": "ylabel-horizonal-offset",
+		"stanza:default": "5",
+		"stanza:description": "Horizonal offset of ylabels."
+	},
+	{
+		"stanza:key": "ylabel-vertical-offset",
+		"stanza:default": "5",
+		"stanza:description": "Vertical offset of ylabels."
+	},
+	{
 		"stanza:key": "symbol-shape",
 		"stanza:example": "circle",
-		"stanza:description": "shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle"
+		"stanza:description": "Shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -374,140 +374,152 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#4682b4",
-		"stanza:description": "color of plot"
+		"stanza:default": "#6590e6",
+		"stanza:description": "Plot colot."
 	},
 	{
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
 		"stanza:default": "#FF5C5C",
-		"stanza:description": "emphasized color when you hover on labels and rects"
+		"stanza:description": "Emphasized color."
 	},
 	{
-		"stanza:key": "--grid-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "grid color"
-	},
-	{
-		"stanza:key": "--grid-dash",
-		"stanza:type": "number",
-		"stanza:default": "",
-		"stanza:description": "grid stroke dash.  Blank for solid lines."
-	},
-	{
-		"stanza:key": "--grid-opacity",
-		"stanza:type": "number",
-		"stanza:default": "0.2",
-		"stanza:description": "grid opacity.(0-1)"
-	},
-	{
-		"stanza:key": "--grid-width",
-		"stanza:type": "number",
-		"stanza:default": "1",
-		"stanza:description": "grid width in pixel"
-	},
-	{
-		"stanza:key": "--tick-color",
-		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "tick color"
-	},
-	{
-		"stanza:key": "--label-color",
-		"stanza:type": "color",
-		"stanza:default": "#444",
-		"stanza:description": "label color"
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "color of axis"
+		"stanza:default": "#4e5059",
+		"stanza:description": "Axis color."
 	},
 	{
 		"stanza:key": "--axis-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "width of axis"
+		"stanza:description": "Axis width."
+	},
+	{
+		"stanza:key": "--grid-color",
+		"stanza:type": "color",
+		"stanza:default": "#aeb3bf",
+		"stanza:description": "Grid color"
+	},
+	{
+		"stanza:key": "--grid-dash",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "Grid stroke dash.  Blank for solid lines."
+	},
+	{
+		"stanza:key": "--grid-opacity",
+		"stanza:type": "number",
+		"stanza:default": "0.5",
+		"stanza:description": "Grid opacity.[0-1]"
+	},
+	{
+		"stanza:key": "--grid-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Grid width"
+	},
+	{
+		"stanza:key": "--tick-color",
+		"stanza:type": "color",
+		"stanza:default": "#4e5059",
+		"stanza:description": "Tick color"
+	},
+	{
+		"stanza:key": "--tick-size",
+		"stanza:type": "number",
+		"stanza:default": "1.5",
+		"stanza:description": "Tick length in pixel."
+	},
+	{
+		"stanza:key": "--tick-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Tick width in pixel."
+	},
+	{
+		"stanza:key": "--title-color",
+		"stanza:type": "color",
+		"stanza:default": "#4e5059",
+		"stanza:description": "Font color of titles."
 	},
 	{
 		"stanza:key": "--title-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "font size of titles"
-	},
-	{
-		"stanza:key": "--title-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "font color of title"
+		"stanza:description": "Font size of titles."
 	},
 	{
 		"stanza:key": "--title-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "font weight of titles"
+		"stanza:description": "Font weight of titles."
 	},
 	{
 		"stanza:key": "--title-padding",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "padding between axis labels and title.(in pixel)"
+		"stanza:description": "Padding between axis labels and title."
+	},
+	{
+		"stanza:key": "--label-color",
+		"stanza:type": "color",
+		"stanza:default": "#4e5059",
+		"stanza:description": "Label color."
 	},
 	{
 		"stanza:key": "--label-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "emphasized color when you hover on labels and rects"
-	},
-	{
-		"stanza:key": "--font-family",
-		"stanza:type": "string",
-		"stanza:default": "san serif",
-		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
+		"stanza:description": "Font size of labels."
 	},
 	{
 		"stanza:key": "--plot-size",
 		"stanza:type": "text",
 		"stanza:default": "10",
-		"stanza:description": "plot size.(The area in pixels of the plot bounding box.)"
+		"stanza:description": "Plot size.(The area in pixels of the plot bounding box.)"
 	},
 	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "stroke color of plot."
-	},
-	{
-		"stanza:key": "--hover-stroke-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "stroke color of plot when you hover."
+		"stanza:default": "#4e5059",
+		"stanza:description": "Stroke color."
 	},
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "0",
-		"stanza:description": "stroke width"
-	},
-	{
-		"stanza:key": "--hover-stroke-width",
-		"stanza:type": "number",
 		"stanza:default": "0.5",
-		"stanza:description": "stroke width of plot when you hover."
+		"stanza:description": "Stroke width."
 	},
 	{
 		"stanza:key": "--opacity",
 		"stanza:type": "text",
 		"stanza:default": "0.8",
-		"stanza:description": "opacity of each plots"
+		"stanza:description": "Opacity of each plots"
+	},
+	{
+		"stanza:key": "--hover-stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#ffffff",
+		"stanza:description": "Stroke color of each plots when you hover."
+	},
+	{
+		"stanza:key": "--hover-stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "0.5",
+		"stanza:description": "Stroke width of each plots when you hover."
 	},
 	{
 		"stanza:key": "--hover-opacity",
 		"stanza:type": "text",
 		"stanza:default": "1",
-		"stanza:description": "opacity of each plots when you hover"
+		"stanza:description": "Opacity of each plots when you hover."
 	}
 ]
 };

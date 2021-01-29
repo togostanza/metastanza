@@ -97,7 +97,6 @@ async function devGroupedBarchart(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
-      zindex: 1,
       encode: {
         ticks: {
           update: {
@@ -242,45 +241,30 @@ async function devGroupedBarchart(stanza, params) {
       legendX: 840,
       legendY: "0",
       title: groupVariable,
+      title: groupVariable,
       titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
       labelColor: "var(--legendlabel-color)",
-      encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
-        },
-      },
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
     },
   ];
 
@@ -631,7 +615,7 @@ var metadata = {
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "font family of labels."
+		"stanza:description": "Font family."
 	},
 	{
 		"stanza:key": "--legend-font",
