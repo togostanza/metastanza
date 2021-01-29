@@ -37,7 +37,7 @@ export default async function barchart(stanza, params) {
     {
       name: "yscale",
       domain: { data: "table", field: valueVariable },
-      nice: true,
+      // nice: true,
       range: "height",
     },
   ];

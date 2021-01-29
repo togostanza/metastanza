@@ -2,7 +2,7 @@ import vegaEmbed from "vega-embed";
 
 export default async function devLinechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-
+  
   //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];

@@ -94,7 +94,6 @@ export default async function devGroupedBarchart(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
-      zindex: 1,
       encode: {
         ticks: {
           update: {

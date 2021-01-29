@@ -14,7 +14,6 @@ export default async function tree(stanza, params) {
 
   //data
   const labelVariable = params["label-variable"]; //"name"
-  // const valueVariable = params["value-variable"]; //"size"
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
