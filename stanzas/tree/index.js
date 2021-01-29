@@ -215,8 +215,8 @@ export default async function tree(stanza, params) {
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
-          stroke: {value: "var(--hover-stroke-color)"},
-          strokeWidth: {"value": "0.5"}
+          stroke: { value: "var(--hover-stroke-color)" },
+          strokeWidth: { value: "0.5" },
         },
       },
     },

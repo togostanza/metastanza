@@ -1,4 +1,4 @@
-let a_dataset;
+// const a_dataset;
 a_dataset = {
   Study_name_B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究: [
     {
@@ -7551,4 +7551,4 @@ a_dataset = {
   ],
 };
 
-export default a_dataset;
+// export default a_dataset;

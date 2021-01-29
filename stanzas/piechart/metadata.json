@@ -30,13 +30,13 @@
     },
     {
       "stanza:key": "label-variable",
-      "stanza:example": "category",
+      "stanza:example": "id",
       "stanza:description": "Variable to be assigned as label",
       "stanza:required": true
     },
     {
       "stanza:key": "value-variable",
-      "stanza:example": "count",
+      "stanza:example": "field",
       "stanza:description": "Variable to be assigned as value",
       "stanza:required": true
     },

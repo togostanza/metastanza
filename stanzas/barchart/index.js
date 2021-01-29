@@ -1,5 +1,5 @@
 // import { stratify } from "d3";
-import { nice } from "d3";
+// import { nice } from "d3";
 import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {

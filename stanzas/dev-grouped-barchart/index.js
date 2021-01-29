@@ -95,11 +95,6 @@ export default async function devGroupedBarchart(stanza, params) {
       ),
       ticks: params["ytick"] === "true",
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
@@ -118,25 +113,6 @@ export default async function devGroupedBarchart(stanza, params) {
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          },
-        },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
           },
         },
         domain: {
