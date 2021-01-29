@@ -141,7 +141,7 @@
       "stanza:description": "color of stroke"
     },
     {
-      "stanza:key": "--label-font",
+      "stanza:key": "--font-family",
       "stanza:type": "string",
       "stanza:default": "san serif",
       "stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"

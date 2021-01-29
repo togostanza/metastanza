@@ -94,7 +94,7 @@
       "stanza:example": "nice",
       "stanza:description": "Count of Y-ticks for quantitative scales. Acceptable data-types are Number, Stirng, and Object."
     },
-    {      
+    {
       "stanza:key": "xaxis-orient",
       "stanza:example": "bottom",
       "stanza:description": "Orient of X-axis.(top or bottom)"
@@ -153,6 +153,12 @@
       "stanza:type": "color",
       "stanza:default": "#FA8C84",
       "stanza:description": "Emphasized color when you hover on labels and rects"
+    },
+    {
+      "stanza:key": "--font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family of labels."
     },
     {
       "stanza:key": "--grid-color",
@@ -237,12 +243,6 @@
       "stanza:type": "color",
       "stanza:default": "#4e5059",
       "stanza:description": "Label color."
-    },
-    {
-      "stanza:key": "--label-font",
-      "stanza:type": "text",
-      "stanza:default": "Helvetica Nune",
-      "stanza:description": "Font family of labels."
     },
     {
       "stanza:key": "--label-size",
