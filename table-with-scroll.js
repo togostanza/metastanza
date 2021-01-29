@@ -103,7 +103,7 @@ var metadata = {
 		"stanza:description": "font color of table header"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica",
 		"stanza:description": "font(e.g: serif,san serif,fantasy)"

@@ -5,16 +5,16 @@ import './timer-b826f0a9.js';
 
 async function devLinechart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  
+
   //width、height、padding
   spec.width = params["width"];
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-    //delete default controller
-    for (const signal of spec.signals) {
-      delete signal.bind;
-    }
+  //delete default controller
+  for (const signal of spec.signals) {
+    delete signal.bind;
+  }
 
   //data
   const labelVariable = params["label-variable"];
@@ -37,7 +37,7 @@ async function devLinechart(stanza, params) {
       //   {"x": 8, "y": 68, "c":0}, {"x": 8, "y": 16, "c":1},
       //   {"x": 9, "y": 49, "c":0}, {"x": 9, "y": 25, "c":1}
       // ]
-    }
+    },
   ];
   //scale
   spec.scales = [
@@ -45,7 +45,7 @@ async function devLinechart(stanza, params) {
       name: "x",
       type: "point",
       range: "width",
-      domain: {data: "table", field: labelVariable}
+      domain: { data: "table", field: labelVariable },
     },
     {
       name: "y",
@@ -53,7 +53,7 @@ async function devLinechart(stanza, params) {
       range: "height",
       nice: true,
       zero: true,
-      domain: {data: "table", field: valueVariable}
+      domain: { data: "table", field: valueVariable },
     },
     {
       name: "color",
@@ -66,8 +66,8 @@ async function devLinechart(stanza, params) {
         "var(--series-4-color)",
         "var(--series-5-color)",
       ],
-      domain: {data: "table", field: groupVariable}
-    }
+      domain: { data: "table", field: groupVariable },
+    },
   ];
 
   //axes
@@ -77,8 +77,9 @@ async function devLinechart(stanza, params) {
       orient: params["xaxis-orient"],
       title: labelVariable,
       titleColor: "var(--title-color)",
-      titlePadding:
-        Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -95,7 +96,7 @@ async function devLinechart(stanza, params) {
         ticks: {
           update: {
             stroke: { value: "var(--tick-color)" },
-          }
+          },
         },
         labels: {
           interactive: true,
@@ -104,14 +105,14 @@ async function devLinechart(stanza, params) {
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              )
+                "--font-family"
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              )
-            }
+              ),
+            },
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
@@ -121,20 +122,20 @@ async function devLinechart(stanza, params) {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              )
+                "--font-family"
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-size"
-              )
+              ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         domain: {
           update: {
@@ -142,19 +143,20 @@ async function devLinechart(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--axis-width"
-              )
-            }
-          }
-        }
-      }
+              ),
+            },
+          },
+        },
+      },
     },
     {
       scale: "y",
       orient: params["yaxis-orient"],
       title: valueVariable,
       titleColor: "var(--title-color)",
-      titlePadding:
-        Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -171,7 +173,7 @@ async function devLinechart(stanza, params) {
         ticks: {
           update: {
             stroke: { value: "var(--tick-color)" },
-          }
+          },
         },
         labels: {
           interactive: true,
@@ -180,7 +182,7 @@ async function devLinechart(stanza, params) {
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -191,13 +193,13 @@ async function devLinechart(stanza, params) {
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          }
+          },
         },
         title: {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -208,9 +210,9 @@ async function devLinechart(stanza, params) {
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         domain: {
           update: {
@@ -218,12 +220,12 @@ async function devLinechart(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--axis-width"
-              )
-            }
-          }
-        }
-      }
-    }
+              ),
+            },
+          },
+        },
+      },
+    },
   ];
 
   // legend
@@ -242,19 +244,19 @@ async function devLinechart(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              )
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-size"
-              )
+              ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         labels: {
           interactive: true,
@@ -262,21 +264,21 @@ async function devLinechart(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              )
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendlabel-size"
-              )
-            }
+              ),
+            },
           },
           text: { field: "value" },
-        }
-      }
-    }
+        },
+      },
+    },
   ];
 
-//marks
+  //marks
   spec.marks = [
     {
       type: "group",
@@ -284,37 +286,37 @@ async function devLinechart(stanza, params) {
         facet: {
           name: "series",
           data: "table",
-          groupby: groupVariable
-        }
+          groupby: groupVariable,
+        },
       },
       marks: [
         {
           type: "line",
-          from: {data: "series"},
+          from: { data: "series" },
           encode: {
             enter: {
-              x: {scale: "x", field: labelVariable},
-              y: {scale: "y", field: valueVariable},
-              stroke: {scale: "color", field: groupVariable},
+              x: { scale: "x", field: labelVariable },
+              y: { scale: "y", field: valueVariable },
+              stroke: { scale: "color", field: groupVariable },
               strokeWidth: {
                 value: getComputedStyle(stanza.root.host).getPropertyValue(
                   "--line-width"
-                )
-              }
+                ),
+              },
             },
             update: {
-              interpolate: {signal: "interpolate"},
-              strokeOpacity: {value: 1},
-              stroke: {scale: "color", field: groupVariable}
+              interpolate: { signal: "interpolate" },
+              strokeOpacity: { value: 1 },
+              stroke: { scale: "color", field: groupVariable },
             },
             hover: {
-              stroke: {value: "var(--emphasized-color)"}
+              stroke: { value: "var(--emphasized-color)" },
               // strokeOpacity: {value: 0.5}
-            }
-          }
-        }
-      ]
-    }
+            },
+          },
+        },
+      ],
+    },
   ];
 
   const el = stanza.root.querySelector("main");
@@ -525,7 +527,7 @@ var metadata = {
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "string",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "font family of labels."

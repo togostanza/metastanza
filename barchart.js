@@ -78,7 +78,7 @@ async function barchart(stanza, params) {
       title: labelVariable,
       titleColor: "var(--title-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--label-font"
+        "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-size"
@@ -86,36 +86,35 @@ async function barchart(stanza, params) {
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-width"
       ),
-      titlePadding:
-        Number(getComputedStyle(stanza.root.host).getPropertyValue(
-          "--title-padding"
-      )),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
       zindex: 1,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            dx: { value: params["xlabel-horizonal-offset"]},
-            dy: { value: params["xlabel-vertical-offset"]},
+            dx: { value: params["xlabel-horizonal-offset"] },
+            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              )
+                "--font-family"
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              )
+              ),
             },
             // limit: 1
           },
           hover: {
-            fill: { value: "var(--emphasized-color)" }
-          }
-        }
-      }
+            fill: { value: "var(--emphasized-color)" },
+          },
+        },
+      },
     },
     {
       scale: "yscale",
@@ -147,7 +146,7 @@ async function barchart(stanza, params) {
       title: valueVariable,
       titleColor: "var(--title-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--label-font"
+        "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-size"
@@ -155,34 +154,35 @@ async function barchart(stanza, params) {
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-width"
       ),
-      titlePadding:
-        Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            dx: { value: params["ylabel-horizonal-offset"]},
-            dy: { value: params["ylabel-vertical-offset"]},
+            dx: { value: params["ylabel-horizonal-offset"] },
+            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              )
+              ),
             },
             // limit: 1
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   ];
 
   //marks
@@ -203,13 +203,13 @@ async function barchart(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--stroke-width"
-            )
-          }
+            ),
+          },
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
-        }
-      }
+        },
+      },
     },
     {
       type: "text",
@@ -220,12 +220,12 @@ async function barchart(stanza, params) {
           fill: { value: "var(--emphasized-color)" },
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
+              "--font-family"
             ),
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   ];
 
   const el = stanza.root.querySelector("main");
@@ -393,6 +393,12 @@ var metadata = {
 		"stanza:description": "Emphasized color when you hover on labels and rects"
 	},
 	{
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family of labels."
+	},
+	{
 		"stanza:key": "--grid-color",
 		"stanza:type": "color",
 		"stanza:default": "#aeb3bf",
@@ -475,12 +481,6 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
 		"stanza:description": "Label color."
-	},
-	{
-		"stanza:key": "--label-font",
-		"stanza:type": "text",
-		"stanza:default": "Helvetica Nune",
-		"stanza:description": "Font family of labels."
 	},
 	{
 		"stanza:key": "--label-size",

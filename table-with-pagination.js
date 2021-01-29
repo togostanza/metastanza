@@ -589,7 +589,7 @@ var metadata = {
 		"stanza:description": "color of pagination arrow button."
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica",
 		"stanza:description": "font(e.g: serif,san serif,fantasy)"

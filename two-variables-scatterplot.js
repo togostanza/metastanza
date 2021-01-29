@@ -16,15 +16,15 @@ async function twoVariablesScatterplot(stanza, params) {
 
   spec.data = [
     {
-    name: "source",
-    url: params["your-data"],
-    transform: [
-      {
-        type: "filter",
-        expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
-      },
-    ],
-    }
+      name: "source",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "filter",
+          expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
+        },
+      ],
+    },
   ];
 
   // scales
@@ -36,7 +36,7 @@ async function twoVariablesScatterplot(stanza, params) {
       nice: true,
       zero: true,
       domain: { data: "source", field: xVariable },
-      range: "width"
+      range: "width",
     },
     {
       name: "y",
@@ -45,8 +45,8 @@ async function twoVariablesScatterplot(stanza, params) {
       nice: true,
       zero: true,
       domain: { data: "source", field: yVariable },
-      range: "height"
-    }
+      range: "height",
+    },
   ];
 
   // axis
@@ -87,7 +87,7 @@ async function twoVariablesScatterplot(stanza, params) {
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -104,20 +104,20 @@ async function twoVariablesScatterplot(stanza, params) {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              )
+                "--font-family"
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-size"
-              )
+              ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         domain: {
           update: {
@@ -125,19 +125,20 @@ async function twoVariablesScatterplot(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--axis-width"
-              )
-            }
-          }
-        }
-      }
+              ),
+            },
+          },
+        },
+      },
     },
     {
       scale: "y",
       orient: params["yaxis-orient"],
       title: yVariable,
       titleColor: "var(--title-color)",
-      titlePadding:
-        Number(getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -155,7 +156,7 @@ async function twoVariablesScatterplot(stanza, params) {
         ticks: {
           update: {
             stroke: { value: "var(--tick-color)" },
-          }
+          },
         },
         labels: {
           interactive: true,
@@ -164,24 +165,24 @@ async function twoVariablesScatterplot(stanza, params) {
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--label-size"
-              )
-            }
+              ),
+            },
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          }
+          },
         },
         title: {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -192,9 +193,9 @@ async function twoVariablesScatterplot(stanza, params) {
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--title-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         domain: {
           update: {
@@ -202,17 +203,17 @@ async function twoVariablesScatterplot(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--axis-width"
-              )
-            }
-          }
-        }
-      }
-    }
+              ),
+            },
+          },
+        },
+      },
+    },
   ];
 
   spec.legends = [];
 
- //marks
+  //marks
   spec.marks = [
     {
       name: "marks",
@@ -223,10 +224,10 @@ async function twoVariablesScatterplot(stanza, params) {
         update: {
           x: { scale: "x", field: xVariable },
           y: { scale: "y", field: yVariable },
-          size: { 
-            value: Number(getComputedStyle(stanza.root.host).getPropertyValue(
-            "--plot-size"
-            )) 
+          size: {
+            value: Number(
+              getComputedStyle(stanza.root.host).getPropertyValue("--plot-size")
+            ),
           },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
@@ -234,13 +235,13 @@ async function twoVariablesScatterplot(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--stroke-width"
-            )
+            ),
           },
           opacity: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--opacity"
-            )
-          }
+            ),
+          },
         },
         hover: {
           fill: { value: "var(--emphasized-color)" },
@@ -248,16 +249,16 @@ async function twoVariablesScatterplot(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--hover-stroke-width"
-            )
+            ),
           },
           opacity: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--hover-opacity"
-            )
-          }
-        }
-      }
-    }
+            ),
+          },
+        },
+      },
+    },
   ];
 
   const el = stanza.root.querySelector("main");
@@ -461,7 +462,7 @@ var metadata = {
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "string",
 		"stanza:default": "san serif",
 		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"

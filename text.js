@@ -60,7 +60,7 @@ var metadata = {
 		"stanza:description": "text width"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "serif",
 		"stanza:description": "font(e.g: serif,san serif,fantasy)"
@@ -134,7 +134,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}\n\n* {\n  font-family: var(--label-font);\n  box-sizing: border-box;\n}\n\ntable {\n  width: var(--text-width);\n}\ntable dl {\n  margin: 0;\n  padding: 10px 0 15px 0;\n  border-bottom: var(--row-border-bottom);\n}\ntable dl dt {\n  color: var(--dt-font-color);\n  font-size: var(--dt-font-size);\n  font-weight: var(--dt-font-weight);\n  line-height: var(--dt-line-height);\n  margin-bottom: var(--dt-margin-bottom);\n}\ntable dl dd {\n  color: var(--dd-font-color);\n  font-size: var(--dd-font-size);\n  font-weight: var(--dd-font-weight);\n  line-height: var(--dd-line-height);\n  margin-inline-start: 0px;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}\n\n* {\n  font-family: var(--font-family);\n  box-sizing: border-box;\n}\n\ntable {\n  width: var(--text-width);\n}\ntable dl {\n  margin: 0;\n  padding: 10px 0 15px 0;\n  border-bottom: var(--row-border-bottom);\n}\ntable dl dt {\n  color: var(--dt-font-color);\n  font-size: var(--dt-font-size);\n  font-weight: var(--dt-font-weight);\n  line-height: var(--dt-line-height);\n  margin-bottom: var(--dt-margin-bottom);\n}\ntable dl dd {\n  color: var(--dd-font-color);\n  font-size: var(--dd-font-size);\n  font-weight: var(--dd-font-weight);\n  line-height: var(--dd-line-height);\n  margin-inline-start: 0px;\n}";
 
 defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=text.js.map

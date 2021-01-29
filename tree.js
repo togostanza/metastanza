@@ -17,7 +17,7 @@ async function tree(stanza, params) {
 
   //data
   const labelVariable = params["label-variable"]; //"name"
-  const valueVariable = params["value-variable"]; //"size"
+  // const valueVariable = params["value-variable"]; //"size"
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
@@ -86,19 +86,19 @@ async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              )
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-size"
-              )
+              ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendtitle-weight"
-              )
-            }
-          }
+              ),
+            },
+          },
         },
         labels: {
           interactive: true,
@@ -106,13 +106,13 @@ async function tree(stanza, params) {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legend-font"
-              )
+              ),
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendlabel-size"
-              )
-            }
+              ),
+            },
           },
           text: { field: "value" },
         },
@@ -123,17 +123,17 @@ async function tree(stanza, params) {
             strokeWidth: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--stroke-width"
-              )
+              ),
             },
             opacity: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--opacity"
-              )
-            }
-          }
-        }
-      }
-    }
+              ),
+            },
+          },
+        },
+      },
+    },
   ];
 
   //marks
@@ -193,7 +193,7 @@ async function tree(stanza, params) {
           text: { field: labelVariable },
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
+              "--font-family"
             ),
           },
           fontSize: {
@@ -378,7 +378,7 @@ var metadata = {
 		"stanza:description": "color of stroke"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "string",
 		"stanza:default": "san serif",
 		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"

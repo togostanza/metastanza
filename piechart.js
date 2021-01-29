@@ -345,7 +345,7 @@ var metadata = {
 		"stanza:description": "label color"
 	},
 	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "string",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "font family of labels."
