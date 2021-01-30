@@ -1,0 +1,87 @@
+{{!-- <table class="tableList" id="listingTable">
+  <thead id="theadID">
+    <tr id="theadRowID">
+      {{#each head as |col|}}
+      <th data-col={{col.index}}>
+        {{col.label}}
+        <span class="icon sorticon button_sort" data-type="id">
+          <span id="filtericon0" class="icon filtericon button_filter" data-type="id"></span>
+      </th>
+      <ul class="fiter-window -closed" data-type="id" id="filterul0">
+        <li>
+          {{#each col.vars as |var|}}
+          <input id="box0" class="checkbox" type="checkbox" name="items" checked value={{var.value}}>
+          <label for="box0">{{var.value}}</label>
+          {{/each}}
+        </li>
+      </ul>
+      {{/each} --}}
+
+{{!-- {{#each fields as |field|}}
+  <div>
+    <label>
+      {{field.label}}
+
+      {{#if field.required}}
+        <span class="required">(required)</span>
+      {{/if}}
+    </label>
+
+    <input type="text" />
+  </div>
+{{/each}} --}}
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        Gene name
+      </th>
+      <th>
+        rsId
+      </th>
+      <th>
+        Chromosome
+      </th>
+      <th>
+        position
+      </th>
+      <th>
+        Ref
+      </th>
+      <th>
+        Alt
+      </th>
+      <th>
+        P-value
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each arrays as |array|}}
+      <tr>
+        <td>
+          {{array.gene_name}}
+        </td>
+        <td>
+          {{array.rsId}}
+        </td>
+        <td>
+          {{array.chr}}
+        </td>
+        <td>
+          {{array.stop}}
+        </td>
+        <td>
+          {{array.ref}}
+        </td>
+        <td>
+          {{array.alt}}
+        </td>
+        <td>
+          {{array.p-value}}
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

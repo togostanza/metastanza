@@ -52,9 +52,10 @@ main {
       font-size: var(--searchbox-font-size);
       color: var(--searchbox-font-color);
       background-color: var(--searchbox-background-color);
-      ::placeholder {
-        color: #eaeaea;
-      }
+    }
+    ::placeholder {
+      padding: 0px 0px 0px 4px;
+      color: var(--searchbox-font-color);
     }
     > #search-btn {
       margin-right: 2px;
@@ -126,10 +127,12 @@ table {
         background-position: center 5px;
         background-size: 8px 8px;
         &.filter-icon {
+          display: var(--filtericon-display);
           margin-left: 2px;
           background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
         }
         &.sort-icon {
+          display: var(--sorticon-display);
           background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
           &.desc {
             background-image: url(../../assets/grey-sort2-des.svg);
@@ -220,6 +223,12 @@ table {
       margin: var(--paginationbtn-margin);
       padding: var(--paginationbtn-padding);
       font-size: var(--paginationbtn-font-size);
+      > &.first-child {
+        border-radius: var(--edge-paginationbtn-border-radius) !important;
+      }
+      > &.last-child {
+        border-radius: var(--edge-paginationbtn-border-radius) !important;
+      }
       &.arrow-btn {
         display: flex;
         justify-content: center;

@@ -78,34 +78,4 @@ function draw(dataset, stanza, element) {
   sort.addEventListener("click", function () {
     console.log("クリックされました");
   });
-  // bb.onclick = function(){
-  //   alert("ボタンが押されました。")
-  // }
-  // setTimeout(function(){
-  //   const hoge = document.getElementById('sort-icon-id3');
-  //   if(hoge){
-  //     hoge.addEventListener("click", function () {
-  //       console.log("クリックされました");
-  //     });
-  //   }
-  // },5000)
 }
-
-// document.getElementsByClassName("sort-icon").onclick = function(){
-//   console.log("クリックされた");
-// }
-// document.getElementsByClassName("sort-icon").click (function(){
-//   console.log("クリックされた");
-// })
-
-// var bb = document.getElementsByClassName("sort-icon");
-// bb.onclick = function(){
-//   console.log("ボタンが押されました");
-// }
-
-// window.onload = function(){
-//   let bb = document.getElementsByClassName("sort-icon");
-//   bb.addEventListener("click", function(){
-//     console.log("ボタンが押されました。")
-//   });
-// };

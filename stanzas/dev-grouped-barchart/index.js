@@ -1,60 +1,60 @@
 import vegaEmbed from "vega-embed";
 
-export default async function devLinechart(stanza, params) {
+export default async function devGroupedBarchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  //width、height、padding
+  // width,hight,padding
   spec.width = params["width"];
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  //delete default controller
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
-
-  //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
-  const groupVariable = params["group-variable"];
+  const labelVariable = params["label-variable"]; //category
+  const valueVariable = params["value-variable"]; //value
+  const groupVariable = params["group-variable"]; //position?
 
   spec.data = [
     {
       name: "table",
       url: params["your-data"],
-      // values: [
-      //   {"x": 0, "y": 28, "c":0}, {"x": 0, "y": 20, "c":1},
-      //   {"x": 1, "y": 43, "c":0}, {"x": 1, "y": 35, "c":1},
-      //   {"x": 2, "y": 81, "c":0}, {"x": 2, "y": 10, "c":1},
-      //   {"x": 3, "y": 19, "c":0}, {"x": 3, "y": 15, "c":1},
-      //   {"x": 4, "y": 52, "c":0}, {"x": 4, "y": 48, "c":1},
-      //   {"x": 5, "y": 24, "c":0}, {"x": 5, "y": 28, "c":1},
-      //   {"x": 6, "y": 87, "c":0}, {"x": 6, "y": 66, "c":1},
-      //   {"x": 7, "y": 17, "c":0}, {"x": 7, "y": 27, "c":1},
-      //   {"x": 8, "y": 68, "c":0}, {"x": 8, "y": 16, "c":1},
-      //   {"x": 9, "y": 49, "c":0}, {"x": 9, "y": 25, "c":1}
+      // "values": [
+      //   {"category":"A", "position":0, "value":0.1},
+      //   {"category":"A", "position":1, "value":0.6},
+      //   {"category":"A", "position":2, "value":0.9},
+      //   {"category":"A", "position":3, "value":0.4},
+      //   {"category":"B", "position":0, "value":0.7},
+      //   {"category":"B", "position":1, "value":0.2},
+      //   {"category":"B", "position":2, "value":1.1},
+      //   {"category":"B", "position":3, "value":0.8},
+      //   {"category":"C", "position":0, "value":0.6},
+      //   {"category":"C", "position":1, "value":0.1},
+      //   {"category":"C", "position":2, "value":0.2},
+      //   {"category":"C", "position":3, "value":0.7}
       // ]
     },
   ];
-  //scale
+
+  //scales
   spec.scales = [
     {
-      name: "x",
-      type: "point",
-      range: "width",
+      name: "yscale",
+      type: "band",
       domain: { data: "table", field: labelVariable },
+      range: "height",
+      padding: 0.2,
     },
     {
-      name: "y",
+      name: "xscale",
       type: "linear",
-      range: "height",
-      nice: true,
-      zero: true,
       domain: { data: "table", field: valueVariable },
+      range: "width",
+      round: true,
+      zero: true,
+      nice: true,
     },
     {
       name: "color",
       type: "ordinal",
+      domain: { data: "table", field: groupVariable },
       range: [
         "var(--series-0-color)",
         "var(--series-1-color)",
@@ -63,16 +63,74 @@ export default async function devLinechart(stanza, params) {
         "var(--series-4-color)",
         "var(--series-5-color)",
       ],
-      domain: { data: "table", field: groupVariable },
     },
   ];
+
+  spec.scales[0].paddingInner = 0.1;
+  spec.scales[0].paddingOuter = 0.4;
 
   //axes
   spec.axes = [
     {
-      scale: "x",
-      orient: params["xaxis-orient"],
+      orient: params["yaxis-orient"],
+      scale: "yscale",
+      tickSize: 0,
+      labelPadding: 4,
+      zindex: 1,
       title: labelVariable,
+      titleColor: "var(--title-color)",
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      grid: params["ygrid"] === "true",
+      gridColor: "var(--grid-color)",
+      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-dash"
+      ),
+      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-opacity"
+      ),
+      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-width"
+      ),
+      ticks: params["ytick"] === "true",
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["ylabel-angle"] },
+            fill: { value: "var(--label-color)" },
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--font-family"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--label-size"
+              ),
+            },
+          },
+          hover: {
+            fill: { value: "var(--emphasized-color)" },
+          },
+        },
+        domain: {
+          update: {
+            stroke: { value: "var(--axis-color)" },
+            strokeWidth: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--axis-width"
+              ),
+            },
+          },
+        },
+      },
+    },
+    {
+      scale: "xscale",
+      orient: params["xaxis-orient"],
+      title: valueVariable,
       titleColor: "var(--title-color)",
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
@@ -146,83 +204,6 @@ export default async function devLinechart(stanza, params) {
         },
       },
     },
-    {
-      scale: "y",
-      orient: params["yaxis-orient"],
-      title: valueVariable,
-      titleColor: "var(--title-color)",
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
-      ),
-      grid: params["ygrid"] === "true",
-      gridColor: "var(--grid-color)",
-      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
-      ),
-      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-opacity"
-      ),
-      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
-      ),
-      ticks: params["ytick"] === "true",
-      encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            angle: { value: params["ylabel-angle"] },
-            fill: { value: "var(--label-color)" },
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
-              ),
-            },
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
-        },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-          },
-        },
-      },
-    },
   ];
 
   // legend
@@ -230,48 +211,33 @@ export default async function devLinechart(stanza, params) {
     {
       fill: "color",
       orient: "none",
-      legendX: 420,
-      legendY: -5,
+      legendX: 840,
+      legendY: "0",
+      title: groupVariable,
       title: groupVariable,
       titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
       labelColor: "var(--legendlabel-color)",
-      encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
-        },
-      },
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
     },
   ];
 
@@ -281,34 +247,70 @@ export default async function devLinechart(stanza, params) {
       type: "group",
       from: {
         facet: {
-          name: "series",
           data: "table",
-          groupby: groupVariable,
+          name: "facet",
+          groupby: labelVariable,
         },
       },
+      encode: {
+        enter: {
+          y: { scale: "yscale", field: labelVariable },
+        },
+      },
+      signals: [{ name: "height", update: "bandwidth('yscale')" }],
+      scales: [
+        {
+          name: "pos",
+          type: "band",
+          range: "height",
+          domain: { data: "facet", field: groupVariable },
+        },
+      ],
       marks: [
         {
-          type: "line",
-          from: { data: "series" },
+          name: "bars",
+          from: { data: "facet" },
+          type: "rect",
           encode: {
             enter: {
-              x: { scale: "x", field: labelVariable },
-              y: { scale: "y", field: valueVariable },
-              stroke: { scale: "color", field: groupVariable },
-              strokeWidth: {
-                value: getComputedStyle(stanza.root.host).getPropertyValue(
-                  "--line-width"
-                ),
-              },
+              y: { scale: "pos", field: groupVariable },
+              height: { scale: "pos", band: 1 },
+              x: { scale: "xscale", field: valueVariable },
+              x2: { scale: "xscale", value: 0 },
+              fill: { scale: "color", field: groupVariable },
             },
-            update: {
-              interpolate: { signal: "interpolate" },
-              strokeOpacity: { value: 1 },
-              stroke: { scale: "color", field: groupVariable },
+          },
+          update: {
+            fill: { value: "var(--series-0-color)" },
+            stroke: { value: "var(--stroke-color)" },
+            strokeWidth: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--stroke-width"
+              ),
             },
-            hover: {
-              stroke: { value: "var(--emphasized-color)" },
-              // strokeOpacity: {value: 0.5}
+          },
+          hover: {
+            fill: { value: "var(--emphasized-color)" },
+          },
+        },
+        {
+          type: "text",
+          from: { data: "bars" },
+          encode: {
+            enter: {
+              x: { field: "x2", offset: -5 },
+              y: { field: "y", offset: { field: "height", mult: 0.5 } },
+              fill: [
+                {
+                  test:
+                    "contrast('white', datum.fill) > contrast('black', datum.fill)",
+                  value: "white",
+                },
+                { value: "black" },
+              ],
+              align: { value: "right" },
+              baseline: { value: "middle" },
+              // text: {field: `datum[${valueVariable}]`}
             },
           },
         },

@@ -1,77 +1,204 @@
+// import { stratify } from "d3";
+// import { nice } from "d3";
 import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
-  spec.data[0].values = [
-    { category: "value1", amount: 1 },
-    { category: "value2", amount: 7 },
-    { category: "value3", amount: 5 },
-    { category: "value4", amount: 9 },
-  ];
 
-  //stanza（描画範囲）のwidth・height
+  //height,width,padding
   spec.width = params["width"];
   spec.height = params["height"];
-
-  //stanzaのpadding
   spec.padding = params["padding"];
+  // spec.padding = getComputedStyle(stanza.root.host).getPropertyValue("--padding");
 
-  //イベントなど設定できるかと思ったができない
-  // spec.signals[0].on[0].events = "click"
-  // spec.signals[0].on[1].events = "click"
+  //data
+  const labelVariable = params["label-variable"];
+  const valueVariable = params["value-variable"];
 
-  //棒・スケールに関する設定
-  spec.scales[0].paddingInner = params["padding-inner"];
-  spec.scales[0].paddingOuter = params["padding-outer"];
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+    },
+  ];
 
-  //軸に関する設定
-  spec.axes[0] = {
-    scale: "xscale",
-    orient: params["xaxis-orient"],
-    title: params["xaxis-title"],
-    titleColor: "var(--title-color)",
-    titlePadding:
-      getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-      0,
-    grid: params["xgrid"] === "true",
-    gridColor: "var(--grid-color)",
-    gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-dash"
-    ),
-    gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-opacity"
-    ),
-    gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-width"
-    ),
-    ticks: params["xtick"] === "true",
-    encode: {
-      axis: {
-        update: {},
-      },
-      ticks: {
-        update: {
-          stroke: { value: "var(--tick-color)" },
-        },
-      },
-      grids: {
-        update: {
-          zindex: { value: "0" },
-        },
-      },
-      labels: {
-        interactive: true,
-        update: {
-          angle: { value: params["xlabel-angle"] },
-          fill: { value: "var(--label-color)" },
-          font: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
-            ),
+  //scales
+  spec.scales = [
+    {
+      name: "xscale",
+      type: "band",
+      range: "width",
+      domain: { data: "table", field: labelVariable },
+      padding: 0.05,
+      paddingInner: params["padding-inner"],
+      paddingOuter: params["padding-outer"],
+      round: true,
+    },
+    {
+      name: "yscale",
+      range: "height",
+      domain: { data: "table", field: valueVariable },
+      // nice: true,
+    },
+  ];
+
+  //axes
+  spec.axes = [
+    {
+      scale: "xscale",
+      orient: params["xaxis-orient"],
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
+      ),
+      grid: params["xgrid"] === "true",
+      gridColor: "var(--grid-color)",
+      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-dash"
+      ),
+      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-opacity"
+      ),
+      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-weight"
+      ),
+      ticks: params["xtick"] === "true",
+      // tickCount: params["xtick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: labelVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-width"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 1,
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["xlabel-angle"] },
+            dx: { value: params["xlabel-horizonal-offset"] },
+            dy: { value: params["xlabel-vertical-offset"] },
+            fill: { value: "var(--label-color)" },
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--font-family"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--label-size"
+              ),
+            },
+            // limit: 1
           },
-          fontSize: {
+          hover: {
+            fill: { value: "var(--emphasized-color)" },
+          },
+        },
+      },
+    },
+    {
+      scale: "yscale",
+      orient: params["yaxis-orient"],
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
+      ),
+      grid: params["ygrid"] === "true",
+      gridColor: "var(--grid-color)",
+      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-dash"
+      ),
+      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-opacity"
+      ),
+      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--grid-width"
+      ),
+      ticks: params["ytick"] === "true",
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: valueVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-width"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["ylabel-angle"] },
+            dx: { value: params["ylabel-horizonal-offset"] },
+            dy: { value: params["ylabel-vertical-offset"] },
+            fill: { value: "var(--label-color)" },
+            font: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--font-family"
+              ),
+            },
+            fontSize: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--label-size"
+              ),
+            },
+            // limit: 1
+          },
+          hover: {
+            fill: { value: "var(--emphasized-color)" },
+          },
+        },
+      },
+    },
+  ];
+
+  //marks
+  spec.marks = [
+    {
+      type: "rect",
+      from: { data: "table" },
+      encode: {
+        enter: {
+          x: { scale: "xscale", field: labelVariable },
+          width: { scale: "xscale", band: params["bar-width"] },
+          y: { scale: "yscale", field: valueVariable },
+          y2: { scale: "yscale", value: 0 },
+        },
+        update: {
+          fill: { value: "var(--series-0-color)" },
+          stroke: { value: "var(--stroke-color)" },
+          strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-size"
+              "--stroke-width"
             ),
           },
         },
@@ -79,210 +206,23 @@ export default async function barchart(stanza, params) {
           fill: { value: "var(--emphasized-color)" },
         },
       },
-      title: {
-        update: {
-          font: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
-            ),
-          },
-          fontSize: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--title-size"
-            ),
-          },
-          fontWeight: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--title-weight"
-            ),
-          },
-        },
-      },
-      domain: {
-        update: {
-          stroke: { value: "var(--axis-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--axis-width"
-            ),
-          },
-          zindex: { value: "1" },
-        },
-      },
     },
-  };
-
-  spec.axes[1] = {
-    scale: "yscale",
-    orient: params["yaxis-orient"],
-    title: params["yaxis-title"],
-    titleColor: "var(--title-color)",
-    titlePadding:
-      getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-      0,
-    grid: params["ygrid"] === "true",
-    gridColor: "var(--grid-color)",
-    gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-dash"
-    ),
-    gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-opacity"
-    ),
-    gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--grid-width"
-    ),
-    ticks: params["ytick"] === "true",
-    encode: {
-      axis: {
-        update: {},
-      },
-      ticks: {
-        update: {
-          stroke: { value: "var(--tick-color)" },
-        },
-      },
-      grids: {
-        update: {
-          zindex: { value: "0" },
-        },
-      },
-      labels: {
-        interactive: true,
-        update: {
-          angle: { value: params["ylabel-angle"] },
-          fill: { value: "var(--label-color)" },
-          font: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
-            ),
-          },
-          fontSize: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-size"
-            ),
-          },
-        },
-        hover: {
+    {
+      type: "text",
+      encode: {
+        enter: {
+          align: { value: "center" },
+          baseline: { value: "bottom" },
           fill: { value: "var(--emphasized-color)" },
-        },
-      },
-      title: {
-        update: {
           font: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-font"
-            ),
-          },
-          fontSize: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--title-size"
-            ),
-          },
-          fontWeight: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--title-weight"
-            ),
-          },
-        },
-      },
-      domain: {
-        update: {
-          stroke: { value: "var(--axis-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--axis-width"
+              "--font-family"
             ),
           },
         },
       },
     },
-  };
-
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
-  //rect（棒）の描画について
-  spec.marks[0] = {
-    type: "rect",
-    from: { data: "table" },
-    encode: {
-      enter: {
-        x: { scale: "xscale", field: "category" },
-        width: { scale: "xscale", band: params["bar-width"] },
-        y: { scale: "yscale", field: "amount" },
-        y2: { scale: "yscale", value: 0 },
-      },
-      update: {
-        fill: { value: "var(--series-0-color)" },
-        stroke: { value: "var(--stroke-color)" },
-        strokeWidth: {
-          value: getComputedStyle(stanza.root.host).getPropertyValue(
-            "--stroke-width"
-          ),
-        },
-      },
-      hover: {
-        fill: { value: "var(--emphasized-color)" },
-      },
-    },
-  };
-
-  spec.marks[1].encode = {
-    enter: {
-      align: { value: "center" },
-      baseline: { value: "bottom" },
-      fill: { value: "var(--emphasized-color)" },
-      font: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--label-font"
-        ),
-      },
-      fontSize: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--fontsize-value"
-        ),
-      },
-      fontWeight: {
-        value: getComputedStyle(stanza.root.host).getPropertyValue(
-          "--fontweight-of-value"
-        ),
-      },
-    },
-    update: {
-      x: { scale: "xscale", signal: "tooltip.category", band: 0.5 },
-      y: { scale: "yscale", signal: "tooltip.amount", offset: -1 },
-      text: { signal: "tooltip.amount" },
-      fillOpacity: [{ test: "datum === tooltip", value: 0 }, { value: 1 }],
-    },
-  };
-  // spec.marks[0].encode.update.fill.value = "var(--bar-color)"
-  // spec.marks[0].encode.hover.fill.value = "var(--emphasized-color)"
-  // spec.marks[1].encode.enter.fill.value = "var(--emphasized-color)"
-  // spec.marks[1].encode.enter.fontSize = {value: params["fontsize-of-value"]}
-  // spec.marks[1].encode.enter.fontWeight = {value: params["fontweight-of-value"]}
+  ];
 
   const el = stanza.root.querySelector("main");
   const opts = {

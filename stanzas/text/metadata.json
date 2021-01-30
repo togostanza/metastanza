@@ -44,7 +44,7 @@
       "stanza:description": "text width"
     },
     {
-      "stanza:key": "--label-font",
+      "stanza:key": "--font-family",
       "stanza:type": "text",
       "stanza:default": "serif",
       "stanza:description": "font(e.g: serif,san serif,fantasy)"

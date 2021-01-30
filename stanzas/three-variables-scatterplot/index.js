@@ -3,67 +3,69 @@ import vegaEmbed from "vega-embed";
 export default async function threeVariablesScatterplot(stanza, params) {
   const spec = await fetch(params["src-url"]).then((res) => res.json());
 
-  // width, hight,padding
+  // width,hight,padding
   spec.width = params["width"];
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  let xVariable = params["x-variable"];
-  let yVariable = params["y-variable"];
-  let zVariable = params["z-variable"];
+  const xVariable = params["x-variable"];
+  const yVariable = params["y-variable"];
+  const zVariable = params["z-variable"];
 
-  spec.data[0] = 
+  spec.data = [
     {
-      "name": "source",
-      "url": params["your-data"],
-      "transform": [
+      name: "source",
+      url: params["your-data"],
+      transform: [
         {
-          "type": "filter",
-          "expr": `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`
-        }
-      ]
-    }
+          type: "filter",
+          expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`,
+        },
+      ],
+    },
+  ];
 
   //scales
-  spec.scales[0] = 
+  spec.scales = [
     {
-      "name": "x",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": xVariable},
-      "range": "width"
+      name: "x",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: xVariable },
+      range: "width",
     },
     {
-      "name": "y",
-      "type": "linear",
-      "round": true,
-      "nice": true,
-      "zero": true,
-      "domain": {"data": "source", "field": yVariable},
-      "range": "height"
+      name: "y",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: yVariable },
+      range: "height",
     },
     {
-      "name": "size",
-      "type": "linear",
-      "round": true,
-      "nice": false,
-      "zero": true,
-      "domain": {"data": "source", "field": zVariable},
-      "range": [4,361]
-    }
+      name: "size",
+      type: "linear",
+      round: true,
+      nice: false,
+      zero: true,
+      domain: { data: "source", field: zVariable },
+      range: [4, 361],
+    },
+  ];
 
-  //axis
+  //axes
   spec.axes = [
     {
       scale: "x",
       orient: params["xaxis-orient"],
-      title: xVariable,
-      titleColor: "var(--title-color)",
-      titlePadding:
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-        0,
+      domain: true,
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
+      ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -76,27 +78,40 @@ export default async function threeVariablesScatterplot(stanza, params) {
         "--grid-width"
       ),
       ticks: params["xtick"] === "true",
-      tickCount: 5,
-      domain: false,
+      // tickCount: params["xtick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: xVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 0,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
-        grids: {
-          update: {
-            zindex: { value: "0" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
+            dx: { value: params["xlabel-horizonal-offset"] },
+            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -109,46 +124,16 @@ export default async function threeVariablesScatterplot(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-            zindex: { value: "1" },
-          },
-        },
       },
     },
     {
       scale: "y",
       orient: params["yaxis-orient"],
-      title: yVariable,
-      titleColor: "var(--title-color)",
-      titlePadding:
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding") -
-        0,
+      domain: true,
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
+      ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -161,26 +146,40 @@ export default async function threeVariablesScatterplot(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
-      domain: false,
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: yVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 0,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
-        grids: {
-          update: {
-            zindex: { value: "0" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
+            dx: { value: params["ylabel-horizonal-offset"] },
+            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -191,35 +190,6 @@ export default async function threeVariablesScatterplot(stanza, params) {
           },
           hover: {
             fill: { value: "var(--emphasized-color)" },
-          },
-        },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
           },
         },
       },
@@ -233,90 +203,34 @@ export default async function threeVariablesScatterplot(stanza, params) {
       format: "s",
       title: zVariable,
       titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
       labelColor: "var(--legendlabel-color)",
-      encode: {
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
-          text: { field: "value" },
-        },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            fill: { value: "var(--series-0-color)" },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
-            },
-            opacity: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--opacity"
-              ),
-            },
-          },
-        },
-      },
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolType: params["symbol-shape"],
+      symbolFillColor: "var(--series-0-color)",
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
     },
   ];
 
-  spec.title = {
-    text: params["figuretitle"], //"Title of this figure",
-    orient: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-orient"
-    ),
-    anchor: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-anchor"
-    ),
-    color: getComputedStyle(stanza.root.host).getPropertyValue("--label-color"),
-    dx:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-horizonal-offset"
-      ) - 0,
-    dy:
-      getComputedStyle(stanza.root.host).getPropertyValue(
-        "--figuretitle-vertical-offset"
-      ) - 0,
-    font: getComputedStyle(stanza.root.host).getPropertyValue("--label-font"),
-    fontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-size"
-    ),
-    fontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-      "--figuretitle-font-weight"
-    ),
-  };
-
+  //marks
   spec.marks = [
     {
       name: "marks",
@@ -326,9 +240,9 @@ export default async function threeVariablesScatterplot(stanza, params) {
         update: {
           x: { scale: "x", field: xVariable },
           y: { scale: "y", field: yVariable },
-          size: { scale: "size", field: zVariable },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
+          size: { scale: "size", field: zVariable },
           stroke: { value: "var(--stroke-color)" },
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
