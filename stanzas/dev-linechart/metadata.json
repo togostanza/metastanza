@@ -30,30 +30,30 @@
     {
       "stanza:key": "label-variable",
       "stanza:example": "chromosome",
-      "stanza:description": "variable to be assigned as label",
+      "stanza:description": "Variable to be assigned as label",
       "stanza:required": true
     },
     {
       "stanza:key": "value-variable",
       "stanza:example": "count",
-      "stanza:description": "variable to be assigned as value",
+      "stanza:description": "Variable to be assigned as value",
       "stanza:required": true
     },
     {
       "stanza:key": "group-variable",
       "stanza:example": "category",
-      "stanza:description": "variable to be assigned as an identifier of a group",
+      "stanza:description": "Variable to be assigned as an identifier of a group",
       "stanza:required": true
     },
     {
       "stanza:key": "width",
       "stanza:example": "400",
-      "stanza:description": "width of your stanza"
+      "stanza:description": "Width of your stanza"
     },
     {
       "stanza:key": "height",
       "stanza:example": "200",
-      "stanza:description": "height of your stanza"
+      "stanza:description": "Height of your stanza"
     },
     {
       "stanza:key": "padding",
