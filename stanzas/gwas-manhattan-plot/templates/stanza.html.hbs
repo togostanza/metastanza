@@ -2,24 +2,55 @@
   {{title}}
 </h1>
 <h2>
-  Manhattan plot
+  GWAS Study View
 </h2>
 
 <section class="info-section">
-  <ul class="datainfo-list">
-    <li id="study-name">
-      study name: {{study_name}}
+  <dl class="datainfo-list">
+    <dt id="study-name">study name</dt>
+    <dd>{{study_name}}</dd>
+    <dt id="project-name">study name</dt>
+    <dd>{{project_name}}</dd>
+    <dt id="stage-name">stage name</dt>
+    {{!-- <dd>{{stage_name}}</dd> --}}
+    <dd>
+      <ul>
+        <li>
+          <input type="radio" id="discovery" name="drone" value="discovery" checked="true">
+          <label for="huey">Discovery</label>
+        </li>
+        <li>
+          <input type="radio" id="replication" name="drone" value="replication" checked="false">
+          <label for="replication">Replication</label>
+        </li>
+        <li>
+          <input type="radio" id="combined" name="drone" value="combined" checked="false">
+          <label for="huey">Combined</label>
+        </li>
+        <li>
+          <input type="radio" id="meta-analysis" name="drone" value="meta-analysis" checked="false">
+          <label for="meta-analysis">Meta-analysis</label>
+        </li>
+      </ul>
+    </dd>
+  </dl>
+  <ul class="condition-list">
+    <li id="condition1">
+      <span>condition1:</span>&ensp;{{condition1}}
     </li>
-    <li id="project-name">
-      project name: {{project_name}}
-    </li>
-    <li id="stage-name">
-      stage name: {{stage_name}}
+    <li id="condition2">
+      <span>condition2:</span>&ensp;{{condition2}}
     </li>
   </ul>
+    {{!-- <dl class="condition-list">
+    <dt id="condition1">condition1:</dt>
+    <dd>{{condition1}}</dd>
+    <dt id="condition2">condition1:</dt>
+    <dd>{{condition2}}</dd>
+  </dl> --}}
 </section>
 
-<section class="condition-section">
+{{!-- <section class="condition-section">
   <ul class="condition-list">
     <li id="condition1">
       condition1: {{condition1}}
@@ -28,7 +59,7 @@
       condition2: {{condition2}}
     </li>
   </ul>
-</section>
+</section> --}}
 
 <section class="chart-section">
   <div id="chart"></div>

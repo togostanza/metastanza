@@ -24,8 +24,8 @@ console.log("【project_name】", project_name);
 const stages = Object.values(project);
 console.log("【stages】", stages);
 
-const stages_name = Object.keys(...stages)[0]; // can be 4 variations
-console.log("【stages_name】", stages_name);
+const stage_name = Object.keys(...stages)[0]; // can be 4 variations
+console.log("【stage_name】", stage_name);
 
 // get sach stage's information
 const stage = Object.values(...stages);
@@ -63,6 +63,7 @@ export default async function gwasManhattanPlot(stanza, params) {
       greeting: `Hello, ${params["say-to"]}!`,
       study_name,
       project_name,
+      stage_name,
       condition1,
       condition2,
     },
@@ -295,7 +296,7 @@ async function draw(dataset, stanza, params) {
     .attr("y", 2)
     .attr("width", areaWidth)
     .attr("height", 16)
-    .attr("fill", "#8888ff")
+    .attr("fill", "#C2E3F2")
     .call(
       d3
         .drag()
