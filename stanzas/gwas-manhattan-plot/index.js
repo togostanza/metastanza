@@ -60,6 +60,7 @@ export default async function gwasManhattanPlot(stanza, params) {
     template: "stanza.html.hbs",
     parameters: {
       greeting: `Hello, ${params["say-to"]}!`,
+      title: params['title'],
       study_name,
       project_name,
       stage_name,
