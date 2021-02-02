@@ -75,10 +75,9 @@ async function devLinechart(stanza, params) {
     {
       scale: "x",
       orient: params["xaxis-orient"],
-      title: labelVariable,
-      titleColor: "var(--title-color)",
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
       ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
@@ -92,16 +91,36 @@ async function devLinechart(stanza, params) {
         "--grid-width"
       ),
       ticks: params["xtick"] === "true",
+      // tickCount: params["xtick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: labelVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 1,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
+            dx: { value: params["xlabel-horizonal-offset"] },
+            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -118,44 +137,14 @@ async function devLinechart(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-          },
-        },
       },
     },
     {
       scale: "y",
       orient: params["yaxis-orient"],
-      title: valueVariable,
-      titleColor: "var(--title-color)",
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
       ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
@@ -169,16 +158,36 @@ async function devLinechart(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: valueVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-weight"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      zindex: 0,
       encode: {
-        ticks: {
-          update: {
-            stroke: { value: "var(--tick-color)" },
-          },
-        },
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
+            dx: { value: params["ylabel-horizonal-offset"] },
+            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -195,35 +204,7 @@ async function devLinechart(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-        title: {
-          update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
-              ),
-            },
-          },
-        },
-        domain: {
-          update: {
-            stroke: { value: "var(--axis-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--axis-width"
-              ),
-            },
-          },
-        },
+
       },
     },
   ];
@@ -243,7 +224,7 @@ async function devLinechart(stanza, params) {
           update: {
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
+                "--font-family"
               ),
             },
             fontSize: {
@@ -359,30 +340,30 @@ var metadata = {
 	{
 		"stanza:key": "label-variable",
 		"stanza:example": "chromosome",
-		"stanza:description": "variable to be assigned as label",
+		"stanza:description": "Variable to be assigned as label",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "value-variable",
 		"stanza:example": "count",
-		"stanza:description": "variable to be assigned as value",
+		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "group-variable",
 		"stanza:example": "category",
-		"stanza:description": "variable to be assigned as an identifier of a group",
+		"stanza:description": "Variable to be assigned as an identifier of a group",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "width",
 		"stanza:example": "400",
-		"stanza:description": "width of your stanza"
+		"stanza:description": "Width of your stanza"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:example": "200",
-		"stanza:description": "height of your stanza"
+		"stanza:description": "Height of your stanza"
 	},
 	{
 		"stanza:key": "padding",

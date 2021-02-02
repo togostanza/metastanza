@@ -75,15 +75,11 @@ async function devGroupedBarchart(stanza, params) {
   //axes
   spec.axes = [
     {
-      orient: params["yaxis-orient"],
       scale: "yscale",
-      tickSize: 0,
-      labelPadding: 4,
-      zindex: 1,
-      title: labelVariable,
-      titleColor: "var(--title-color)",
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      orient: params["yaxis-orient"],
+      domainColor: "var(--axis-color)",
+      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--axis-width"
       ),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
@@ -96,6 +92,31 @@ async function devGroupedBarchart(stanza, params) {
       gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-width"
       ),
+      ticks: params["ytick"] === "true",
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--tick-color)",
+      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-size"
+      ),
+      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--tick-width"
+      ),
+      title: labelVariable,
+      titleColor: "var(--title-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--title-width"
+      ),
+      titlePadding: Number(
+        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
+      ),
+      labelPadding: 4,
+      zindex: 1,
       ticks: params["ytick"] === "true",
       encode: {
         labels: {
