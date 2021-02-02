@@ -256,13 +256,13 @@
     {
       "stanza:key": "--ruled-line",
       "stanza:type": "text",
-      "stanza:default": "0.5px solid #eee",
+      "stanza:default": "0.5px solid #d2dae2",
       "stanza:description": "style of ruled line"
     },
     {
       "stanza:key": "--stack-line",
       "stanza:type": "text",
-      "stanza:default": "0px solid #333",
+      "stanza:default": "1px solid #98acb2",
       "stanza:description": "style of stack line"
     },
     {
