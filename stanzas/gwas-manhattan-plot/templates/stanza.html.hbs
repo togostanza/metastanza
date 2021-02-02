@@ -16,22 +16,24 @@
     <dd>
       <ul>
         <li>
-          <input type="radio" id="discovery" class="stage-btn" name="stage" value="discovery" data-stage="0" checked="checked">
+          <input type="checkbox" id="discovery" class="stage-btn" name="stage" value="discovery" data-stage="0">
           <label class ="stage-label" for="discovery">Discovery</label>
         </li>
         <li>
-          <input type="radio" id="replication" class="stage-btn" name="stage" value="replication" data-stage="1">
+          <input type="checkbox" id="replication" class="stage-btn" name="stage" value="replication" data-stage="1">
           <label class ="stage-label" for="replication">Replication</label>
         </li>
         <li>
-          <input type="radio" id="combined" class="stage-btn" name="stage" value="combined" data-stage="2">
+          <input type="checkbox" id="combined" class="stage-btn" name="stage" value="combined" data-stage="2">
           <label class ="stage-label" for="combined">Combined</label>
         </li>
         <li>
-          <input type="radio" id="meta-analysis" class="stage-btn" name="stage" value="meta-analysis" data-stage="3">
+          <input type="checkbox" id="meta-analysis" class="stage-btn" name="stage" value="meta-analysis" data-stage="3">
           <label class ="stage-label" for="meta-analysis">Meta-analysis</label>
         </li>
       </ul>
+      <button id="selectAllBtn" class="allBtn" type="button" name="all">Select All</button>
+      <button id="clearAllBtn" class="allBtn" type="button" name="all">Clear All</button>
     </dd>
   </dl>
   <ul class="condition-list">

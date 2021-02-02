@@ -77,16 +77,6 @@ export default async function gwasManhattanPlot(stanza, params) {
   console.log("a_dataset", a_dataset);
   console.log("variants", variants);
 
-  if (typeof variants === "object") {
-    draw(variants, stanza, params);
-    appendDlButton(
-      stanza.root.querySelector("#chart"),
-      stanza.root.querySelector("svg"),
-      "manhattan_plot",
-      stanza
-    );
-  }
-
   //get checked stage
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
   const stageLabel = stanza.root.querySelectorAll(".stage-label");
@@ -108,9 +98,39 @@ export default async function gwasManhattanPlot(stanza, params) {
             console.log(variants)
         }
       }
-    if(!flag){ 
-      stageBtn[0].checked = true;
+    if(!flag){
+      for(let i=0; i<stageBtn.length;i++){
+        stageBtn[i].checked = false;
+        }
     }
+  }
+
+  const allBtn = stanza.root.querySelectorAll(".allBtn");
+  allBtn[0].addEventListener("click", selectAll);
+  allBtn[1].addEventListener("click", clearAll);
+
+  function selectAll(){
+    for (let i=0; i<stageBtn.length; i++){
+      stageBtn[i].checked = true;
+    }
+    checkStage();
+  }
+  function clearAll(){
+    for (let i=0; i<stageBtn.length; i++){
+      stageBtn[i].checked = false;
+    }
+    checkStage();
+  }
+
+  if (typeof variants === "object") {
+    draw(variants, stanza, params);
+    appendDlButton(
+      stanza.root.querySelector("#chart"),
+      stanza.root.querySelector("svg"),
+      "manhattan_plot",
+      stanza
+    );
+    selectAll();
   }
 }
 

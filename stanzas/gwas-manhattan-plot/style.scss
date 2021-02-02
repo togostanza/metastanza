@@ -230,7 +230,7 @@ h2{
   max-width: 800px;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-end;
   margin-bottom: 60px;
   .datainfo-list {
     dt {
@@ -247,14 +247,18 @@ h2{
         display: flex;
         padding: 0;
         li {
-          margin-right: 10px
+          margin-right: 10px;
         }
       }
     }
   }
   .condition-list{
+    padding-bottom: 6px;
     li {
       font-size: 16px;
+      position: relative;
+      top: -3px;
+      line-height: 20px;
       span {
         font-size: 14px;
         color: #2f4d76;
@@ -295,7 +299,7 @@ h2{
       height: 40px;
     }
     td {
-      padding: 10px;
+      padding: 10px 20px;
     }
   }
 }
