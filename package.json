@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
-    "lint:eslint": "eslint . --cache",
-    "lint:eslint:fix": "eslint . --fix",
+    "lint:eslint": "eslint . --ext .js,.vue --cache",
+    "lint:eslint:fix": "eslint . --ext .js,.vue --fix",
     "lint:stylelint": "stylelint '**/*.scss'",
     "lint:stylelint:fix": "stylelint '**/*.scss' --fix",
     "lint:prettier": "prettier . --check",
@@ -33,6 +33,7 @@
     "editorconfig-checker": "^3.3.0",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-vue": "^7.5.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "stylelint": "^13.9.0",
