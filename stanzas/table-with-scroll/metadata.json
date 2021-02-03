@@ -16,9 +16,27 @@
   "stanza:updated": "2020-12-02",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
+      "stanza:key": "table_data_api",
+      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example",
+      "stanza:description": "table data api",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "limit",
+      "stanza:example": "100",
+      "stanza:description": "table page size",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "offset",
+      "stanza:example": "0",
+      "stanza:description": "page numbere",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "params",
+      "stanza:example": "taxonomy='9606'",
+      "stanza:description": "parameters for table data api",
       "stanza:required": false
     }
   ],
@@ -45,7 +63,7 @@
     {
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#256d80",
+      "stanza:default": "#adc1c7",
       "stanza:description": "basic fill color"
     },
     {
@@ -69,7 +87,7 @@
     {
       "stanza:key": "--thead-border-bottom",
       "stanza:type": "text",
-      "stanza:default": "1px solid #333",
+      "stanza:default": "1px solid #ccb9b1",
       "stanza:description": "style of stack line"
     },
     {
@@ -87,7 +105,7 @@
     {
       "stanza:key": "--thead-font-color",
       "stanza:type": "color",
-      "stanza:default": "--series-0-color",
+      "stanza:default": "#adc1c7",
       "stanza:description": "font color of table header"
     },
     {
@@ -97,11 +115,22 @@
       "stanza:description": "font(e.g: serif,san serif,fantasy)"
     },
     {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:key": "--thead-font-weight",
+      "stanza:type": "text",
+      "stanza:default": "400",
+      "stanza:description": "font weight of table header"
+    },
+    {
+      "stanza:key": "--thead-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#efeeed",
+      "stanza:description": "background color of thead"
+    },
+    {
+      "stanza:key": "--tbody-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#ffffff",
+      "stanza:description": "background color of tbody"
     }
   ]
 }
