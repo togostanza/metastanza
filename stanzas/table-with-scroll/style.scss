@@ -82,14 +82,15 @@ table {
   border: 1px solid #ccb9b1;
 }
 
-.sticky-table >thead > .table-fixed>th{
+.sticky-table > thead > .table-fixed > th{
   /* 縦スクロール時に固定する */
-    background-color: var(--thead-background-color);
-  position: -webkit-sticky;
+  background-color: var(--thead-background-color);
   position: sticky;
   top: 0;
   /* tbody内のセルより手前に表示する */
   z-index: 1;
+  padding-left: 10px;
+  height: 40px;
 }
 
 .sticky-table-wrapper {
@@ -109,7 +110,6 @@ thead {
   border-top: var(--table-outside-border);
   border-right: var(--table-outside-border);
   border-left: var(--table-outside-border);
-  border-bottom: var(--stack-line);
 }
 
 #renderDiv > table > thead > tr > th {
@@ -120,6 +120,10 @@ thead {
 thead > tr > {
   td {
     color: var(--series-0-color);
+    width: 150px;
+    padding: 5px 5px 5px 10px;
+    border-bottom: var(--ruled-line);
+    border-collapse: collapse;
   }
 
   th > .icon {
@@ -164,23 +168,8 @@ tbody {
 //   display: block;
 // }
 
-th{
-  padding-left: 10px;
-  height: 40px;
-}
-
 tbody tr td:hover{
   color: var(--emphasized-color);
-}
-
-td{
-width: 150px;
-padding: 5px 5px 5px 10px;
-}
-
-tbody td{
-  border-bottom: var(--ruled-line);
-  border-collapse: collapse;
 }
 
 .stack {

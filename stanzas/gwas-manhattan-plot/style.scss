@@ -7,7 +7,7 @@
 // common styles
 * {
   margin: 0;
-  font-family: "Arial", san-serif;
+  font-family: "Arial", sans-serif;
 }
 
 li {
@@ -199,6 +199,48 @@ svg#dl_button {
   }
 }
 
+.info-section {
+  padding: 0 20px;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+  .condition-list{
+    padding-bottom: 6px;
+    li {
+      font-size: 16px;
+      position: relative;
+      top: -3px;
+      line-height: 20px;
+      span {
+        font-size: 14px;
+        color: #2f4d76;
+      }
+    }
+  }
+  .datainfo-list {
+    dt {
+      color: #2f4d76;
+      font-size: 14px;
+    }
+    dd {
+      padding-bottom: 6px;
+      font-size: 16px;
+      position: relative;
+      top: -3px;
+      ul {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        li {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
 div#dl_list {
   border: solid 1px #000000;
   position: absolute;
@@ -235,47 +277,6 @@ div#dl_list {
   }
 }
 
-.info-section {
-  padding: 0 20px;
-  max-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 60px;
-  .datainfo-list {
-    dt {
-      color: #2f4d76;
-      font-size: 14px;
-    }
-    dd {
-      padding-bottom: 6px;
-      font-size: 16px;
-      position: relative;
-      top: -3px;
-      ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        li {
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-  .condition-list{
-    padding-bottom: 6px;
-    li {
-      font-size: 16px;
-      position: relative;
-      top: -3px;
-      line-height: 20px;
-      span {
-        font-size: 14px;
-        color: #2f4d76;
-      }
-    }
-  }
-}
 
 .chart-section {
   padding: 0 20px;
@@ -291,6 +292,12 @@ div#dl_list {
     margin: 10px auto 0px 0px;
     border: var(--table-border);
     border-collapse: collapse;
+    tr {
+      height: 40px;
+    }
+    td {
+      padding: 10px 20px;
+    }
     thead {
       height: 40px;
       color: var(--thead-font-color);
@@ -299,7 +306,7 @@ div#dl_list {
       border-bottom: var(--stack-line);
       margin-bottom: 0;
       padding: var(--thead-padding);
-      tr 
+      tr
         th {
           padding: 10px 20px;
           text-align: left;
@@ -321,12 +328,6 @@ div#dl_list {
           }
         }
       }
-    }
-    tr {
-      height: 40px;
-    }
-    td {
-      padding: 10px 20px;
     }
   }
 }
