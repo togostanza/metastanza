@@ -80,7 +80,7 @@
     </thead>
     <tbody>
       <tr v-for="row in rowsInCurrentPage" :key="row.id">
-        <td v-for="cell in row">
+        <td v-for="cell in row" :key="cell.column.id">
           <span v-if="cell.href">
             <a :href="cell.href" target="_blank">{{ cell.value }}</a>
           </span>
