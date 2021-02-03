@@ -89,7 +89,6 @@ export default async function devGroupedBarchart(stanza, params) {
       gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-width"
       ),
-      ticks: params["ytick"] === "true",
       // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
       tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
@@ -151,7 +150,7 @@ export default async function devGroupedBarchart(stanza, params) {
     {
       scale: "xscale",
       orient: params["xaxis-orient"],
-      title: valueVariable,
+      // title: valueVariable,
       titleColor: "var(--title-color)",
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
@@ -234,7 +233,6 @@ export default async function devGroupedBarchart(stanza, params) {
       orient: "none",
       legendX: 840,
       legendY: "0",
-      title: groupVariable,
       title: groupVariable,
       titleColor: "var(--legendtitle-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(

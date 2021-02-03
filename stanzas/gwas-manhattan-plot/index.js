@@ -83,7 +83,7 @@ export default async function gwasManhattanPlot(stanza, params) {
   const stageLabel = stanza.root.querySelectorAll(".stage-label");
   for(let i=0; i<stageBtn.length; i++){
     stageBtn[i].addEventListener("click",checkStage);
-    if(stageBtn[i].checked != true){
+    if(stageBtn[i].checked !== true){
       stageLabel[i].style.color = "#99acb2";
     }
   }
@@ -92,7 +92,7 @@ export default async function gwasManhattanPlot(stanza, params) {
     let flag = false;
     for(let i=0; i<stageBtn.length;i++){
       stageLabel[i].style.color = "#99acb2";
-        if(stageBtn[i].checked){ 
+        if(stageBtn[i].checked){
             flag = true;
             variants = stage[i].variants;
             stageLabel[i].style.color = "#000000";
