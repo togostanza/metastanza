@@ -1,5 +1,5 @@
-import vue from 'rollup-plugin-vue';
-import replace from '@rollup/plugin-replace';
+import vue from "rollup-plugin-vue";
+import replace from "@rollup/plugin-replace";
 
 export default function config(environment) {
   return {
@@ -7,11 +7,11 @@ export default function config(environment) {
       plugins: [
         vue(),
         replace({
-          'process.env.NODE_ENV': JSON.stringify(environment),
-          __VUE_OPTIONS_API__:    'false',
-          __VUE_PROD_DEVTOOLS__:  'false'
+          "process.env.NODE_ENV": JSON.stringify(environment),
+          __VUE_OPTIONS_API__: "false",
+          __VUE_PROD_DEVTOOLS__: "false",
         }),
-      ]
-    }
+      ],
+    },
   };
-};
+}

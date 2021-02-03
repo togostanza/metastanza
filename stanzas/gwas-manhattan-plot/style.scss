@@ -14,7 +14,7 @@ li {
   list-style: none;
 }
 
-h1{
+h1 {
   padding: 10px 5px 10px;
   margin-bottom: 30px;
   font-size: 22px;
@@ -25,7 +25,7 @@ h1{
   // border-bottom: none;
 }
 
-h2{
+h2 {
   font-size: 26pt;
   font-weight: 400;
   color: #000000;
@@ -206,7 +206,7 @@ svg#dl_button {
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 60px;
-  .condition-list{
+  .condition-list {
     padding-bottom: 6px;
     li {
       font-size: 16px;
@@ -264,19 +264,18 @@ div#dl_list {
   }
 }
 
-#ctrl_button{
-  input{
-    background-color: #FFFFFF;
+#ctrl_button {
+  input {
+    background-color: #ffffff;
     border: 1px solid #99acb2;
     border-radius: 2px;
     margin-right: 1px;
     height: 20px;
   }
-  #range_text{
+  #range_text {
     margin: 0px 4px 0px 2px;
   }
 }
-
 
 .chart-section {
   padding: 0 20px;
@@ -285,7 +284,7 @@ div#dl_list {
 .table-section {
   padding: 0 20px;
   margin-top: 60px;
-  h2{
+  h2 {
     padding: 0px;
   }
   table {
@@ -306,24 +305,23 @@ div#dl_list {
       border-bottom: var(--stack-line);
       margin-bottom: 0;
       padding: var(--thead-padding);
-      tr
-        th {
-          padding: 10px 20px;
-          text-align: left;
-        }
+      tr th {
+        padding: 10px 20px;
+        text-align: left;
+      }
     }
     tbody {
       background-color: var(--tbody-background-color);
-      tr{
+      tr {
         // border-bottom: var(--ruled-line);
-        &:nth-last-of-type(odd){
+        &:nth-last-of-type(odd) {
           background-color: #e6ebef;
         }
         td {
           padding: 10px 20px;
           text-align: left;
           border-left: var(--ruled-line);
-          &:first-of-type{
+          &:first-of-type {
             border-left: none;
           }
         }

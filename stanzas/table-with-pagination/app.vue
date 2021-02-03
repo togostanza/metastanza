@@ -1,14 +1,26 @@
 <template>
   <div class="tableOption">
-    <form class="textSearchWrapper" @submit.prevent="submitQuery(state.queryInput)">
-      <input type="text" placeholder="Search for keywords..." v-model="state.queryInput">
+    <form
+      class="textSearchWrapper"
+      @submit.prevent="submitQuery(state.queryInput)"
+    >
+      <input
+        type="text"
+        placeholder="Search for keywords..."
+        v-model="state.queryInput"
+      />
       <button class="searchBtn" type="submit">
-        <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
-          alt="search">
+        <img
+          src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
+          alt="search"
+        />
       </button>
     </form>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
-      <img src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg" alt="download">
+      <img
+        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg"
+        alt="download"
+      />
     </a>
   </div>
   <table v-if="state.allRows">
@@ -28,7 +40,10 @@
             class="icon filterIcon"
             @click="state.columnShowingFilters = column"
           ></span>
-          <div class="filterWrapper" v-if="column === state.columnShowingFilters">
+          <div
+            class="filterWrapper"
+            v-if="column === state.columnShowingFilters"
+          >
             <div
               :class="[
                 'filterWindow',
@@ -46,8 +61,18 @@
                   <label :for="filter.id">{{ filter.value }}</label>
                 </li>
               </ul>
-              <button class="toggle_all_button select_all" @click="setFilters(column, true)">Select All</button>
-              <button class="toggle_all_button clear" @click="setFilters(column, false)">Clear</button>
+              <button
+                class="toggle_all_button select_all"
+                @click="setFilters(column, true)"
+              >
+                Select All
+              </button>
+              <button
+                class="toggle_all_button clear"
+                @click="setFilters(column, false)"
+              >
+                Clear
+              </button>
             </div>
           </div>
         </th>
@@ -57,9 +82,7 @@
       <tr v-for="row in rowsInCurrentPage" :key="row.id">
         <td v-for="cell in row">
           <span v-if="cell.href">
-            <a :href="cell.href" target="_blank">{{
-              cell.value
-            }}</a>
+            <a :href="cell.href" target="_blank">{{ cell.value }}</a>
           </span>
           <span v-else>
             {{ cell.value }}
@@ -70,42 +93,48 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span
-        @click="state.pagination.currentPage = 1"
-        class="arrow left"
-      >
+      <span @click="state.pagination.currentPage = 1" class="arrow left"
+        >&lt;
       </span>
-      <span
-        @click="state.pagination.currentPage--"
-        class="singleArrow left"
-      ></span>
+      <span @click="state.pagination.currentPage--" class="singleArrow left"
+        >&lt;&lt;</span
+      >
     </template>
 
     <ul>
       <li
         v-for="page in surroundingPages"
         :key="page"
-        :class="['pagination', {active: state.pagination.currentPage === page}]"
+        :class="[
+          'pagination',
+          { active: state.pagination.currentPage === page },
+        ]"
         @click="state.pagination.currentPage = page"
-      >{{ page }}</li>
+      >
+        {{ page }}
+      </li>
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span
-        @click="state.pagination.currentPage++"
-        class="singleArrow right"
-      ></span>
+      <span @click="state.pagination.currentPage++" class="singleArrow right"
+        >&gt;</span
+      >
 
       <span
         @click="state.pagination.currentPage = totalPages"
         class="arrow right"
-      ></span>
+        >&gt;&gt;</span
+      >
     </template>
 
     <div class="pageNumber">
       Page
-      <input type="text" v-model.number="state.jumpToNumberInput" @keydown.enter=" jumpToPage(state.jumpToNumberInput)">
-      of {{totalPages}}
+      <input
+        type="text"
+        v-model.number="state.jumpToNumberInput"
+        @keydown.enter="jumpToPage(state.jumpToNumberInput)"
+      />
+      of {{ totalPages }}
     </div>
   </div>
 
@@ -123,7 +152,7 @@ import {
   reactive,
   computed,
   watch,
-  onMounted
+  onMounted,
 } from "vue";
 
 import orderBy from "lodash.orderby";
@@ -142,44 +171,54 @@ export default defineComponent({
       columns: [],
       allRows: [],
 
-      query: '',
+      query: "",
       columnShowingFilters: null,
 
       sorting: {
         active: null,
-        direction: "desc"
+        direction: "desc",
       },
 
       pagination: {
         currentPage: 1,
-        perPage: 5  // TODO take from params
+        perPage: params.limit, // TODO take from params
       },
 
-      queryInput: '',
-      jumpToNumberInput: ''
+      queryInput: "",
+      jumpToNumberInput: "",
     });
 
     const filteredRows = computed(() => {
       const query = state.query;
 
-      const filtered = state.allRows.filter((row) => {
-        return query ? row.some(cell => cell.value.includes(query)) : true;
-      }).filter((row) => {
-        return row.every((cell) => {
-          const valuesForFilter = cell.column.filters.filter(({checked}) => checked).map(({value}) => value);
+      const filtered = state.allRows
+        .filter((row) => {
+          return query ? row.some((cell) => cell.value.includes(query)) : true;
+        })
+        .filter((row) => {
+          return row.every((cell) => {
+            const valuesForFilter = cell.column.filters
+              .filter(({ checked }) => checked)
+              .map(({ value }) => value);
 
-          return valuesForFilter.length === 0 ? true : valuesForFilter.includes(cell.value);
+            return valuesForFilter.length === 0
+              ? true
+              : valuesForFilter.includes(cell.value);
+          });
         });
-      });
 
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
-        return orderBy(filtered, (cells) => {
-          const cell = cells.find(cell => cell.column === sortColumn);
+        return orderBy(
+          filtered,
+          (cells) => {
+            const cell = cells.find((cell) => cell.column === sortColumn);
 
-          return cell.value;
-        }, [state.sorting.direction]);
+            return cell.value;
+          },
+          [state.sorting.direction]
+        );
       } else {
         return filtered;
       }
@@ -190,7 +229,8 @@ export default defineComponent({
     });
 
     const rowsInCurrentPage = computed(() => {
-      const startIndex = (state.pagination.currentPage - 1) * state.pagination.perPage;
+      const startIndex =
+        (state.pagination.currentPage - 1) * state.pagination.perPage;
       const endIndex = startIndex + state.pagination.perPage;
 
       return filteredRows.value.slice(startIndex, endIndex);
@@ -203,31 +243,36 @@ export default defineComponent({
 
       if (currentPage <= 3) {
         start = 1;
-        end   = Math.min(start + 4, totalPages.value);
-      } else if ((totalPages.value - currentPage) <= 3) {
-        end   = totalPages.value;
+        end = Math.min(start + 4, totalPages.value);
+      } else if (totalPages.value - currentPage <= 3) {
+        end = totalPages.value;
         start = Math.max(end - 4, 1);
       } else {
         start = Math.max(currentPage - 2, 1);
-        end   = Math.min(currentPage + 2, totalPages.value);
+        end = Math.min(currentPage + 2, totalPages.value);
       }
 
-      return Array.from({length: end - start + 1}, (_, i) => start + i);
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     });
 
     const blobUrl = computed(() => {
       const json = state.responseJSON;
 
-      if (!json) { return null; }
+      if (!json) {
+        return null;
+      }
 
-      const blob = new Blob([JSON.stringify(json, null, '  ')], {type: 'application/json'});
+      const blob = new Blob([JSON.stringify(json, null, "  ")], {
+        type: "application/json",
+      });
 
       return URL.createObjectURL(blob);
     });
 
     function setSorting(column) {
       state.sorting.column = column;
-      state.sorting.direction = state.sorting.direction === "asc" ? "desc" : "asc";
+      state.sorting.direction =
+        state.sorting.direction === "asc" ? "desc" : "asc";
     }
 
     function setFilters(column, checked) {
@@ -245,40 +290,42 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const res  = await fetch(params.table_data_api);
+      const res = await fetch(params.table_data_api);
       const data = await res.json();
 
       state.responseJSON = data;
 
-      const {vars, labels, order, href} = data.head;
+      const { vars, labels, order, href } = data.head;
 
-      const columns = zip(vars, labels, order, href).map(([_var, label, _order, _href]) => {
-        const values = data.body.map(row => row[_var].value);
+      const columns = zip(vars, labels, order, href)
+        .map(([_var, label, _order, _href]) => {
+          const values = data.body.map((row) => row[_var].value);
 
-        return {
-          id:    _var,
-          label,
-          order: _order,
-          href:  _href,
+          return {
+            id: _var,
+            label,
+            order: _order,
+            href: _href,
 
-          filters: uniq(values).map((value) => {
-            return {
-              value,
-              checked: false
-            }
-          })
-        }
-      }).filter((column) => column.label !== null);
+            filters: uniq(values).map((value) => {
+              return {
+                value,
+                checked: false,
+              };
+            }),
+          };
+        })
+        .filter((column) => column.label !== null);
 
-      state.columns = orderBy(columns, ['order']);
+      state.columns = orderBy(columns, ["order"]);
 
       state.allRows = data.body.map((row) => {
         return columns.map((column) => {
           return {
             column,
             value: row[column.id].value,
-            href:  column.href ? row[column.href].value : null
-          }
+            href: column.href ? row[column.href].value : null,
+          };
         });
       });
     }

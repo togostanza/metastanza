@@ -150,7 +150,7 @@ export default async function devGroupedBarchart(stanza, params) {
     {
       scale: "xscale",
       orient: params["xaxis-orient"],
-      // title: valueVariable,
+      title: valueVariable,
       titleColor: "var(--title-color)",
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")

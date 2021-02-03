@@ -82,7 +82,7 @@ table {
   border: 1px solid #ccb9b1;
 }
 
-.sticky-table > thead > .table-fixed > th{
+.sticky-table > thead > .table-fixed > th {
   /* 縦スクロール時に固定する */
   background-color: var(--thead-background-color);
   position: sticky;
@@ -98,7 +98,6 @@ table {
   width: calc(100vw - 40rem);
   height: 75vh;
 }
-
 
 thead {
   font-size: var(--thead-font-size);
@@ -149,7 +148,6 @@ thead > tr > {
 
 .sorticon-des {
   background-image: url(../../assets/grey-sort2-des.svg);
-
 }
 .sorticon-asc {
   background-image: url(../../assets/grey-sort2-asc.svg);
@@ -168,7 +166,7 @@ tbody {
 //   display: block;
 // }
 
-tbody tr td:hover{
+tbody tr td:hover {
   color: var(--emphasized-color);
 }
 
@@ -176,7 +174,7 @@ tbody tr td:hover{
   border-right: var(--thead-border-bottom);
 }
 
-.show-info{
+.show-info {
   display: flex;
   justify-content: center;
 }
