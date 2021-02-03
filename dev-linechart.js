@@ -204,7 +204,6 @@ async function devLinechart(stanza, params) {
             fill: { value: "var(--emphasized-color)" },
           },
         },
-
       },
     },
   ];

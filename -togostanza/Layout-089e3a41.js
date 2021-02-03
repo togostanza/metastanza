@@ -8547,8 +8547,8 @@ var repository = "https://github.com/togostanza/metastanza.git";
 var scripts = {
 	lint: "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
 	"lint:fix": "npm-run-all --continue-on-error lint:*:fix",
-	"lint:eslint": "eslint . --cache",
-	"lint:eslint:fix": "eslint . --fix",
+	"lint:eslint": "eslint . --ext .js,.vue --cache",
+	"lint:eslint:fix": "eslint . --ext .js,.vue --fix",
 	"lint:stylelint": "stylelint '**/*.scss'",
 	"lint:stylelint:fix": "stylelint '**/*.scss' --fix",
 	"lint:prettier": "prettier . --check",
@@ -8556,6 +8556,12 @@ var scripts = {
 	"lint:editorconfig": "editorconfig-checker"
 };
 var dependencies = {
+	"@rollup/plugin-replace": "^2.3.4",
+	"@vue/compiler-sfc": "^3.0.5",
+	"lodash.orderby": "^4.6.0",
+	"lodash.uniq": "^4.5.0",
+	"lodash.zip": "^4.2.0",
+	"rollup-plugin-vue": "^6.0.0-beta.10",
 	d3: "^6.3.1",
 	"lodash.mapvalues": "^4.6.0",
 	"lodash.omit": "^4.5.0",
@@ -8568,6 +8574,7 @@ var devDependencies = {
 	"editorconfig-checker": "^3.3.0",
 	eslint: "^7.18.0",
 	"eslint-config-prettier": "^7.2.0",
+	"eslint-plugin-vue": "^7.5.0",
 	"npm-run-all": "^4.1.5",
 	prettier: "^2.2.1",
 	stylelint: "^13.9.0",
@@ -8726,4 +8733,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, createTextVNode as g, ref as h, octicons as i, computed$1 as j, popScopeId as k, withScopeId as l, mergeProps as m, n, openBlock as o, pushScopeId as p, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-c36b7051.js.map
+//# sourceMappingURL=Layout-089e3a41.js.map
