@@ -5,9 +5,9 @@
       @submit.prevent="submitQuery(state.queryInput)"
     >
       <input
+        v-model="state.queryInput"
         type="text"
         placeholder="Search for keywords..."
-        v-model="state.queryInput"
       />
       <button class="searchBtn" type="submit">
         <img
@@ -41,8 +41,8 @@
             @click="state.columnShowingFilters = column"
           ></span>
           <div
-            class="filterWrapper"
             v-if="column === state.columnShowingFilters"
+            class="filterWrapper"
           >
             <div
               :class="[
@@ -93,10 +93,10 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span @click="state.pagination.currentPage = 1" class="arrow left"
+      <span class="arrow left" @click="state.pagination.currentPage = 1"
         >&lt;
       </span>
-      <span @click="state.pagination.currentPage--" class="singleArrow left"
+      <span class="singleArrow left" @click="state.pagination.currentPage--"
         >&lt;&lt;</span
       >
     </template>
@@ -116,13 +116,13 @@
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span @click="state.pagination.currentPage++" class="singleArrow right"
+      <span class="singleArrow right" @click="state.pagination.currentPage++"
         >&gt;</span
       >
 
       <span
-        @click="state.pagination.currentPage = totalPages"
         class="arrow right"
+        @click="state.pagination.currentPage = totalPages"
         >&gt;&gt;</span
       >
     </template>
@@ -130,8 +130,8 @@
     <div class="pageNumber">
       Page
       <input
-        type="text"
         v-model.number="state.jumpToNumberInput"
+        type="text"
         @keydown.enter="jumpToPage(state.jumpToNumberInput)"
       />
       of {{ totalPages }}
@@ -139,8 +139,8 @@
   </div>
 
   <div
-    class="modalBackground"
     v-if="state.columnShowingFilters"
+    class="modalBackground"
     @click="state.columnShowingFilters = null"
   ></div>
 </template>
