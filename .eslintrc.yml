@@ -1,6 +1,8 @@
 extends:
   - eslint:recommended
+  - plugin:vue/vue3-recommended
   - prettier
+  - prettier/vue
 
 env:
   browser: true
@@ -8,6 +10,7 @@ env:
 
 parserOptions:
   sourceType: module
+  ecmaVersion: 12 # default for env.es2021, but needed for vue-eslint-parser
 
 ignorePatterns:
   - .github

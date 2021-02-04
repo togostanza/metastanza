@@ -1,9 +1,8 @@
 import * as d3 from "d3";
 import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
-import a_dataset from "../gwas-manhattan-plot/gwas.var2.json.js";
+import data from "../gwas-manhattan-plot/gwas.var2.json";
 
-// convert data
-
+const a_dataset = data.a_dataset;
 // study name
 const study_name = Object.keys(a_dataset)[0]; //(single per a json)
 console.log("【study_name】", study_name);
@@ -66,7 +65,7 @@ export default async function gwasManhattanPlot(stanza, params) {
     template: "stanza.html.hbs",
     parameters: {
       greeting: `Hello, ${params["say-to"]}!`,
-      title: params['title'],
+      title: params["title"],
       study_name,
       project_name,
       // stage_name,
@@ -87,29 +86,28 @@ export default async function gwasManhattanPlot(stanza, params) {
   // //get checked stage
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
   const stageLabel = stanza.root.querySelectorAll(".stage-label");
-
-  for(let i=0; i<stageBtn.length; i++){
-    stageBtn[i].addEventListener("click",checkStage);
-    if(stageBtn[i].checked != true){
+  for (let i = 0; i < stageBtn.length; i++) {
+    stageBtn[i].addEventListener("click", checkStage);
+    if (stageBtn[i].checked !== true) {
       stageLabel[i].style.color = "#99acb2";
     }
   }
 
-  function checkStage(){
+  function checkStage() {
     let flag = false;
-    for(let i = 0; i < stageBtn.length;i++){
+    for (let i = 0; i < stageBtn.length; i++) {
       stageLabel[i].style.color = "#99acb2";
-        if(stageBtn[i].checked){ 
-            flag = true;
-            // variants = stage[i].variants;
-            stageLabel[i].style.color = "#000000";
-            // console.log(variants)
-        }
+      if (stageBtn[i].checked) {
+        flag = true;
+        variants = stage[i].variants;
+        stageLabel[i].style.color = "#000000";
+        console.log(variants);
       }
-    if(!flag){
-      for(let i=0; i < stageBtn.length;i++){
+    }
+    if (!flag) {
+      for (let i = 0; i < stageBtn.length; i++) {
         stageBtn[i].checked = false;
-        }
+      }
     }
   }
 
@@ -117,15 +115,15 @@ export default async function gwasManhattanPlot(stanza, params) {
   allBtn[0].addEventListener("click", selectAll);
   allBtn[1].addEventListener("click", clearAll);
 
-  function selectAll(){
-    for (let i = 0; i < stageBtn.length; i++){
+  function selectAll() {
+    for (let i = 0; i < stageBtn.length; i++) {
       stageBtn[i].checked = true;
       stageLabel[i].style.color = "#000000";
     }
     // checkStage();
   }
-  function clearAll(){
-    for (let i=0; i<stageBtn.length; i++){
+  function clearAll() {
+    for (let i = 0; i < stageBtn.length; i++) {
       stageBtn[i].checked = false;
       stageLabel[i].style.color = "#99acb2";
     }
