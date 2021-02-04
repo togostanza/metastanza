@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function devGroupedBarchart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/grouped-bar-chart.vg.json").then((res) => res.json());
 
   // width,hight,padding
   spec.width = params["width"];
@@ -132,9 +132,6 @@ export default async function devGroupedBarchart(stanza, params) {
               ),
             },
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
         domain: {
           update: {
@@ -189,9 +186,6 @@ export default async function devGroupedBarchart(stanza, params) {
                 "--label-size"
               ),
             },
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
           },
         },
         title: {
@@ -309,9 +303,6 @@ export default async function devGroupedBarchart(stanza, params) {
                 "--stroke-width"
               ),
             },
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
           },
         },
         {

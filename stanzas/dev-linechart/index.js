@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function devLinechart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/line-chart.vg.json").then((res) => res.json());
 
   //width、height、padding
   spec.width = params["width"];
@@ -130,9 +130,6 @@ export default async function devLinechart(stanza, params) {
               ),
             },
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
       },
     },
@@ -197,11 +194,7 @@ export default async function devLinechart(stanza, params) {
               ),
             },
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
-
       },
     },
   ];
@@ -286,10 +279,6 @@ export default async function devLinechart(stanza, params) {
               interpolate: { signal: "interpolate" },
               strokeOpacity: { value: 1 },
               stroke: { scale: "color", field: groupVariable },
-            },
-            hover: {
-              stroke: { value: "var(--emphasized-color)" },
-              // strokeOpacity: {value: 0.5}
             },
           },
         },

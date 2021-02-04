@@ -16,12 +16,6 @@
   "stanza:updated": "2020-11-07",
   "stanza:parameter": [
     {
-      "stanza:key": "src-url",
-      "stanza:example": "https://vega.github.io/vega/examples/line-chart.vg.json",
-      "stanza:description": "source url which returns Vega specification compliant JSON",
-      "stanza:required": true
-    },
-    {
       "stanza:key": "your-data",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "source url which returns Vega specification compliant JSON",

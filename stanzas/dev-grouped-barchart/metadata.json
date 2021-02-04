@@ -4,7 +4,7 @@
   },
   "@id": "dev-grouped-barchart",
   "stanza:label": "dev grouped barchart",
-  "stanza:definition": "Vega wrapped linechart for MetaStanza",
+  "stanza:definition": "Vega wrapped grouped barchart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",
   "stanza:provider": "Togostanza",
@@ -15,12 +15,6 @@
   "stanza:created": "2021-01-28",
   "stanza:updated": "2021-01-28",
   "stanza:parameter": [
-    {
-      "stanza:key": "src-url",
-      "stanza:example": "https://vega.github.io/vega/examples/grouped-bar-chart.vg.json",
-      "stanza:description": "source url which returns Vega specification compliant JSON",
-      "stanza:required": true
-    },
     {
       "stanza:key": "your-data",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
