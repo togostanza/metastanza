@@ -5,38 +5,26 @@
 main {
   padding: 1rem 2rem;
 }
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
-}
-summary {
-  display: none;
-}
+
 * {
   font-family: var(--font-family);
   box-sizing: border-box;
 }
+
 table {
+  display: block;
   width: var(--text-width);
-  dl {
-    margin: 0;
-    padding: 10px 0 15px 0;
-    border-bottom: var(--row-border-bottom);
-    dt {
-      color: var(--dt-font-color);
-      font-size: var(--dt-font-size);
-      font-weight: var(--dt-font-weight);
-      line-height: var(--dt-line-height);
-      margin-bottom: var(--dt-margin-bottom);
-    }
-    dd {
-      color: var(--dd-font-color);
-      font-size: var(--dd-font-size);
-      font-weight: var(--dd-font-weight);
-      line-height: var(--dd-line-height);
-      margin-inline-start: 0px;
+  height: var(--text-height);
+  margin: var(--text-padding);
+  border: var(--table-border);
+  tbody {
+    tr {
+      td {
+        word-break : break-all;
+        color: var(--text-font-color);
+        font-size: var(--text-font-size);
+        font-weight: var(--text-font-weight);
+      }
     }
   }
 }

@@ -16,20 +16,14 @@
   "stanza:updated": "2020-12-02",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
+      "stanza:key": "api",
+      "stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
+      "stanza:description": "Source url of your data.",
       "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
-    {
-      "stanza:key": "--greeting-color",
-      "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
-    },
     {
       "stanza:key": "--greeting-align",
       "stanza:type": "single-choice",
@@ -41,73 +35,49 @@
       "stanza:key": "--text-width",
       "stanza:type": "text",
       "stanza:default": "800px",
-      "stanza:description": "text width"
+      "stanza:description": "Width of your stanza"
+    },
+    {
+      "stanza:key": "--text-height",
+      "stanza:type": "text",
+      "stanza:default": "auto",
+      "stanza:description": "Height of your stanza"
+    },
+    {
+      "stanza:key": "--text-padding",
+      "stanza:type": "text",
+      "stanza:default": "0 auto",
+      "stanza:description": "Padding of your stanza"
     },
     {
       "stanza:key": "--font-family",
       "stanza:type": "text",
-      "stanza:default": "serif",
-      "stanza:description": "font(e.g: serif,san serif,fantasy)"
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family."
     },
     {
-      "stanza:key": "--dt-margin-bottom",
-      "stanza:type": "text",
-      "stanza:default": "8px",
-      "stanza:description": "margin bottom of text header"
-    },
-    {
-      "stanza:key": "--row-border-bottom",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #ccc",
-      "stanza:description": "border bottom of text row"
-    },
-    {
-      "stanza:key": "--dt-font-color",
+      "stanza:key": "--text-font-color",
       "stanza:type": "color",
-      "stanza:default": "#444444",
-      "stanza:description": "font color of text header"
+      "stanza:default": "#4e5059",
+      "stanza:description": "Font color of text body."
     },
     {
-      "stanza:key": "--dd-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#444444",
-      "stanza:description": "font color of taext body"
-    },
-    {
-      "stanza:key": "--dt-font-size",
+      "stanza:key": "--text-font-size",
       "stanza:type": "text",
-      "stanza:default": "14px",
-      "stanza:description": "font size of text header"
+      "stanza:default": "12px",
+      "stanza:description": "Font size of text body."
     },
     {
-      "stanza:key": "--dd-font-size",
-      "stanza:type": "text",
-      "stanza:default": "10px",
-      "stanza:description": "font size of taext body"
-    },
-    {
-      "stanza:key": "--dt-font-weight",
+      "stanza:key": "--text-font-weight",
       "stanza:type": "text",
       "stanza:default": "400",
-      "stanza:description": "font weight of text header"
+      "stanza:description": "Font weight of text body"
     },
     {
-      "stanza:key": "--dd-font-weight",
+      "stanza:key": "--table-border",
       "stanza:type": "text",
-      "stanza:default": "400",
-      "stanza:description": "font weight of taext body"
-    },
-    {
-      "stanza:key": "--dt-line-height",
-      "stanza:type": "text",
-      "stanza:default": "14px",
-      "stanza:description": "line height of text header"
-    },
-    {
-      "stanza:key": "--dd-line-height",
-      "stanza:type": "tEXT",
-      "stanza:default": "10px",
-      "stanza:description": "line hight of taext body"
+      "stanza:default": "0px solid #eeeeee",
+      "stanza:description": "Border style of text stanza"
     }
   ]
 }
