@@ -87,7 +87,7 @@ main {
     transform: translate(-50%, -50%);
     z-index: 3;
     background: #ffffff;
-    box-shadow: 0px 2px 5px rgba(0,0,0,.3);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
     > p.title {
       display: block;
       padding: 6px 16px;
@@ -173,7 +173,7 @@ main {
   left: 0;
   z-index: 2;
   &.black {
-    background-color: rgba(0,0,0,.3);
+    background-color: rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -204,14 +204,6 @@ table {
           padding-left: 20px;
           padding-right: 20px;
         }
-        &:last-of-type {
-          > .filterWrapper {
-            > div.filterWindow {
-              left: auto;
-              right: 11px;
-            }
-          }
-        }
         > .filterWrapper {
           display: inline-block;
           position: relative;
@@ -222,8 +214,8 @@ table {
             z-index: 3;
             width: auto;
             height: auto;
-            background-color:#ffffff;
-            box-shadow: 0px 2px 5px rgba(0,0,0,.3);
+            background-color: #ffffff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
             border-radius: var(--searchbox-radius);
             > .filterWindowTitle {
               padding: 4px 8px;
@@ -261,6 +253,14 @@ table {
                   width: 40%;
                 }
               }
+            }
+          }
+        }
+        &:last-of-type {
+          > .filterWrapper {
+            > div.filterWindow {
+              left: auto;
+              right: 11px;
             }
           }
         }

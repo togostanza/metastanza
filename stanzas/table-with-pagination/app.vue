@@ -16,11 +16,21 @@
         />
       </button>
     </form>
-    <div class="textSearchByColumnWrapper" v-if="state.columnShowingTextSearch !== null">
-      <p class="title">Search for "{{ state.columnShowingTextSearch.label }}"</p>
+    <div
+      class="textSearchByColumnWrapper"
+      v-if="state.columnShowingTextSearch !== null"
+    >
+      <p class="title">
+        Search for "{{ state.columnShowingTextSearch.label }}"
+      </p>
       <form
         class="textSearchWrapper"
-        @submit.prevent="submitQuery(state.columnShowingTextSearch.label, state.queryInputByColumn)"
+        @submit.prevent="
+          submitQuery(
+            state.columnShowingTextSearch.label,
+            state.queryInputByColumn
+          )
+        "
       >
         <input
           v-model="state.queryInputByColumn"
@@ -58,7 +68,11 @@
             @click="setSorting(column)"
           ></span>
           <span
-            :class="['icon', 'filterIcon', {active: column === state.columnShowingFilters}]"
+            :class="[
+              'icon',
+              'filterIcon',
+              { active: column === state.columnShowingFilters },
+            ]"
             @click="state.columnShowingFilters = column"
           ></span>
           <span
@@ -88,16 +102,8 @@
                 </li>
               </ul>
               <div class="toggleAllButton">
-                <button
-                  @click="setFilters(column, true)"
-                >
-                  Select All
-                </button>
-                <button
-                  @click="setFilters(column, false)"
-                >
-                  Clear
-                </button>
+                <button @click="setFilters(column, true)">Select All</button>
+                <button @click="setFilters(column, false)">Clear</button>
               </div>
             </div>
           </div>
@@ -166,7 +172,7 @@
 
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
-    :class="['modalBackground', {black: state.columnShowingTextSearch}]"
+    :class="['modalBackground', { black: state.columnShowingTextSearch }]"
     @click="closeModal()"
   ></div>
 </template>
@@ -193,7 +199,7 @@ export default defineComponent({
       query: "",
       queryByColumn: {
         column: null,
-        query: ""
+        query: "",
       },
       columnShowingFilters: null,
       columnShowingTextSearch: null,
@@ -221,7 +227,13 @@ export default defineComponent({
           return query ? row.some((cell) => cell.value.includes(query)) : true;
         })
         .filter((row) => {
-          return queryByColumn ? row.some((cell) => cell.column.label === state.queryByColumn.column && cell.value.includes(queryByColumn)) : true;
+          return queryByColumn
+            ? row.some(
+                (cell) =>
+                  cell.column.label === state.queryByColumn.column &&
+                  cell.value.includes(queryByColumn)
+              )
+            : true;
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -313,13 +325,13 @@ export default defineComponent({
     }
 
     function submitQuery(column, query) {
-      state.queryByColumn.column = column
-      state.queryByColumn.query = query
+      state.queryByColumn.column = column;
+      state.queryByColumn.query = query;
     }
 
     function closeModal() {
-      state.columnShowingFilters = null
-      state.columnShowingTextSearch = null
+      state.columnShowingFilters = null;
+      state.columnShowingTextSearch = null;
     }
 
     async function fetchData() {
@@ -375,7 +387,7 @@ export default defineComponent({
       setFilters,
       jumpToPage,
       submitQuery,
-      closeModal
+      closeModal,
     };
   },
 });

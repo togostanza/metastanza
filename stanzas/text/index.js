@@ -2,7 +2,7 @@ import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
 
 export default async function text(stanza, params) {
   const dataset = await getFormatedJson(
-    params.api,
+    params.api
     // stanza.root.querySelector("#chart")
   );
   stanza.render({
@@ -11,8 +11,8 @@ export default async function text(stanza, params) {
       rows: [
         {
           value: dataset.value,
-        }
-      ]
-    }
+        },
+      ],
+    },
   });
 }
