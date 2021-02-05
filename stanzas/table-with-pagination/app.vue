@@ -11,14 +11,14 @@
       />
       <button class="searchBtn" type="submit">
         <img
-          src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search1.svg"
+          src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search.svg"
           alt="search"
         />
       </button>
     </form>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
-        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-download1.svg"
+        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-download.svg"
         alt="download"
       />
     </a>

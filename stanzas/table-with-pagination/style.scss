@@ -138,6 +138,15 @@ main {
   }
 }
 
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
 table {
   width: 100%;
   text-align: left;
@@ -203,16 +212,16 @@ table {
         &.filterIcon {
           display: var(--filtericon-display);
           margin-left: 2px;
-          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);
+          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-filter.svg);
         }
         &.sortIcon {
           display: var(--sorticon-display);
-          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);
+          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-sort.svg);
           &.desc {
-            background-image: url(../../assets/grey-sort2-des.svg);
+            background-image: url(../../assets/gray-sort-des.svg);
           }
           &.asc {
-            background-image: url(../../assets/grey-sort2-asc.svg);
+            background-image: url(../../assets/gray-sort-asc.svg);
           }
         }
       }
