@@ -1,10 +1,12 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
+import { e as embed } from './vega-embed.module-f7442d54.js';
+import './vega.module-4fe8ac55.js';
+import './vega-event-selector.module-5ae5c063.js';
 import './timer-be811b16.js';
+import './compile-b0eab824.js';
 
 async function devGroupedBarchart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/grouped-bar-chart.vg.json").then((res) => res.json());
 
   // width,hight,padding
   spec.width = params["width"];
@@ -134,9 +136,6 @@ async function devGroupedBarchart(stanza, params) {
               ),
             },
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
         domain: {
           update: {
@@ -191,9 +190,6 @@ async function devGroupedBarchart(stanza, params) {
                 "--label-size"
               ),
             },
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
           },
         },
         title: {
@@ -311,9 +307,6 @@ async function devGroupedBarchart(stanza, params) {
               ),
             },
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
         {
           type: "text",
@@ -353,7 +346,7 @@ var metadata = {
 },
 	"@id": "dev-grouped-barchart",
 	"stanza:label": "dev grouped barchart",
-	"stanza:definition": "Vega wrapped linechart for MetaStanza",
+	"stanza:definition": "Vega wrapped grouped barchart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
 	"stanza:provider": "Togostanza",
@@ -365,12 +358,6 @@ var metadata = {
 	"stanza:created": "2021-01-28",
 	"stanza:updated": "2021-01-28",
 	"stanza:parameter": [
-	{
-		"stanza:key": "src-url",
-		"stanza:example": "https://vega.github.io/vega/examples/grouped-bar-chart.vg.json",
-		"stanza:description": "source url which returns Vega specification compliant JSON",
-		"stanza:required": true
-	},
 	{
 		"stanza:key": "your-data",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",

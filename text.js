@@ -1,11 +1,21 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { g as getFormatedJson } from './metastanza_utils-f0c71da7.js';
+import './timer-be811b16.js';
 
 async function text(stanza, params) {
+  const dataset = await getFormatedJson(
+    params.api,
+    // stanza.root.querySelector("#chart")
+  );
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      greeting: `Hello, ${params["say-to"]}!`,
-    },
+      rows: [
+        {
+          value: dataset.value,
+        }
+      ]
+    }
   });
 }
 
@@ -28,20 +38,14 @@ var metadata = {
 	"stanza:updated": "2020-12-02",
 	"stanza:parameter": [
 	{
-		"stanza:key": "say-to",
-		"stanza:example": "world",
-		"stanza:description": "who to say hello to",
+		"stanza:key": "api",
+		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
+		"stanza:description": "Source url of your data.",
 		"stanza:required": false
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
-	{
-		"stanza:key": "--greeting-color",
-		"stanza:type": "color",
-		"stanza:default": "#eb7900",
-		"stanza:description": "text color of greeting"
-	},
 	{
 		"stanza:key": "--greeting-align",
 		"stanza:type": "single-choice",
@@ -57,84 +61,78 @@ var metadata = {
 		"stanza:key": "--text-width",
 		"stanza:type": "text",
 		"stanza:default": "800px",
-		"stanza:description": "text width"
+		"stanza:description": "Width of your stanza"
+	},
+	{
+		"stanza:key": "--text-height",
+		"stanza:type": "text",
+		"stanza:default": "auto",
+		"stanza:description": "Height of your stanza"
+	},
+	{
+		"stanza:key": "--text-padding",
+		"stanza:type": "text",
+		"stanza:default": "0 auto",
+		"stanza:description": "Padding of your stanza"
 	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
-		"stanza:default": "serif",
-		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family."
 	},
 	{
-		"stanza:key": "--dt-margin-bottom",
-		"stanza:type": "text",
-		"stanza:default": "8px",
-		"stanza:description": "margin bottom of text header"
-	},
-	{
-		"stanza:key": "--row-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #ccc",
-		"stanza:description": "border bottom of text row"
-	},
-	{
-		"stanza:key": "--dt-font-color",
+		"stanza:key": "--text-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#444444",
-		"stanza:description": "font color of text header"
+		"stanza:default": "#4e5059",
+		"stanza:description": "Font color of text body."
 	},
 	{
-		"stanza:key": "--dd-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#444444",
-		"stanza:description": "font color of taext body"
-	},
-	{
-		"stanza:key": "--dt-font-size",
+		"stanza:key": "--text-font-size",
 		"stanza:type": "text",
-		"stanza:default": "14px",
-		"stanza:description": "font size of text header"
+		"stanza:default": "12px",
+		"stanza:description": "Font size of text body."
 	},
 	{
-		"stanza:key": "--dd-font-size",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "font size of taext body"
-	},
-	{
-		"stanza:key": "--dt-font-weight",
+		"stanza:key": "--text-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
-		"stanza:description": "font weight of text header"
+		"stanza:description": "Font weight of text body"
 	},
 	{
-		"stanza:key": "--dd-font-weight",
+		"stanza:key": "--table-border",
 		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of taext body"
-	},
-	{
-		"stanza:key": "--dt-line-height",
-		"stanza:type": "text",
-		"stanza:default": "14px",
-		"stanza:description": "line height of text header"
-	},
-	{
-		"stanza:key": "--dd-line-height",
-		"stanza:type": "tEXT",
-		"stanza:default": "10px",
-		"stanza:description": "line hight of taext body"
+		"stanza:default": "0px solid #eeeeee",
+		"stanza:description": "Border style of text stanza"
 	}
 ]
 };
 
 var templates = [
-  ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<table>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n  <tr>\n    <td>\n      <dl>\n        <dt>\n          Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.\n        </dt>\n        <dd>\n          Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208\n        </dd>\n      </dl>\n    </td>\n  </tr>\n</table>";
-},"useData":true}]
+  ["stanza.html.hbs", {"1":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<table>\n  <tbody>\n    <tr>\n      <td>\n        "
+    + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
+    + "\n      </td>\n    </tr>\n  </tbody>\n</table>\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":1,"column":0},"end":{"line":11,"column":9}}})) != null ? stack1 : "");
+},"useData":true,"useBlockParams":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}\n\n* {\n  font-family: var(--font-family);\n  box-sizing: border-box;\n}\n\ntable {\n  width: var(--text-width);\n}\ntable dl {\n  margin: 0;\n  padding: 10px 0 15px 0;\n  border-bottom: var(--row-border-bottom);\n}\ntable dl dt {\n  color: var(--dt-font-color);\n  font-size: var(--dt-font-size);\n  font-weight: var(--dt-font-weight);\n  line-height: var(--dt-line-height);\n  margin-bottom: var(--dt-margin-bottom);\n}\ntable dl dd {\n  color: var(--dd-font-color);\n  font-size: var(--dd-font-size);\n  font-weight: var(--dd-font-weight);\n  line-height: var(--dd-line-height);\n  margin-inline-start: 0px;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  font-family: var(--font-family);\n  box-sizing: border-box;\n}\n\ntable {\n  display: block;\n  width: var(--text-width);\n  height: var(--text-height);\n  margin: var(--text-padding);\n  border: var(--table-border);\n}\ntable tbody tr td {\n  word-break: break-all;\n  color: var(--text-font-color);\n  font-size: var(--text-font-size);\n  font-weight: var(--text-font-weight);\n}";
 
 defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=text.js.map

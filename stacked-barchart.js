@@ -1,10 +1,12 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
+import { e as embed } from './vega-embed.module-f7442d54.js';
+import './vega.module-4fe8ac55.js';
+import './vega-event-selector.module-5ae5c063.js';
 import './timer-be811b16.js';
+import './compile-b0eab824.js';
 
 async function stackedBarchart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/stacked-bar-chart.vg.json").then((res) => res.json());
 
   //width,height,padding
   spec.width = params["width"];
@@ -245,7 +247,7 @@ async function stackedBarchart(stanza, params) {
   //marks
   spec.marks = [
     {
-      type: "rect",
+      type: "group",
       from: { data: "table" },
       encode: {
         enter: {
@@ -296,12 +298,6 @@ var metadata = {
 	"stanza:created": "2020-12-25",
 	"stanza:updated": "2020-12-25",
 	"stanza:parameter": [
-	{
-		"stanza:key": "src-url",
-		"stanza:example": "https://vega.github.io/vega/examples/stacked-bar-chart.vg.json",
-		"stanza:description": "source url which returns Vega specification compliant JSON",
-		"stanza:required": true
-	},
 	{
 		"stanza:key": "your-data",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",

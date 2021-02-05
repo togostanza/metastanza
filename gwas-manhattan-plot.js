@@ -30190,8 +30190,6 @@ var data = {
 const a_dataset$1 = data.a_dataset;
 // study name
 const study_name = Object.keys(a_dataset$1)[0]; //(single per a json)
-// console.log(...study_name); //"B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究"
-// study_name = study_name[0];
 console.log("【study_name】", study_name);
 
 //project data and project names(each of them are single per a json)
@@ -30206,36 +30204,46 @@ console.log("【project_name】", project_name);
 // stage data and stage names
 const stages = Object.values(project);
 console.log("【stages】", stages);
+console.log("【...stages】",...stages);
+console.log("【...stages】",...stages);
 
-const stage_name = Object.keys(...stages)[0]; // can be 4 variations
-console.log("【stage_name】", stage_name);
+const stage_names = Object.keys(...stages);
+console.log("【stage_names】", stage_names);
 
 // get stage information
-const stage = Object.values(...stages);
-console.log("【conditions】", stage);
+const stage_info = Object.values(...stages);
+console.log("【stage_info】", stage_info);
 
 // get condition of each stage
-const condition1 = stage[0].condition1;
-const condition2 = stage[0].condition2;
-console.log("【condition1】", condition1);
-console.log("【condition2】", condition2);
+const condition1 = stage_info[0].condition1;
+const condition2 = stage_info[0].condition2;
 
-// variants
-let variants = stage[0].variants; //init
-console.log("【variants】", variants);
-
-// adjust datas
-for (let i = 0; i < variants.length; i++) {
-  // convert chromosome data from 'chrnum' to 'num'
-  let chr = variants[i].chr;
-  chr = chr.replace("chr", "");
-  variants[i].chr = chr;
-  console.log(variants[i].chr);
-
-  const pval = variants[i]["p-value"];
-
-  const physical_pos = variants[i]["stop"];
+// // variants
+// let variants_datum;
+for(let i=0; i<stage_info.length; i++){
+  console.log("【stage_names】"+i, stage_names[i]);
+  console.log("【stage_info】"+i, stage_info[i]);
+  console.log("【condition1】"+i,stage_info[i].condition1);
+  console.log("【condition2】"+i,stage_info[i].condition2);
+  console.log("【stage_info[i].variants】"+i,stage_info[i].variants);
 }
+
+// let variants = stage_info[0].variants; //init
+
+// // adjust datas
+// for (let i = 0; i < stage_info[0].variants.length; i++) {
+//   // convert chromosome data from 'chrnum' to 'num'
+//   let chr = stage_info[0].variants[i].chr;
+//   chr = chr.replace("chr", "");
+//   stage_info[0].variants[i].chr = chr;
+//   console.log(stage_info[0].variants[i].chr);
+
+//   const pval = stage_info[0].variants[i]["p-value"];
+//   String(pval);
+
+//   const physical_pos = stage_info[0].variants[i]["stop"];
+//   String(physical_pos);
+// }
 
 async function gwasManhattanPlot(stanza, params) {
   stanza.render({
@@ -30245,7 +30253,7 @@ async function gwasManhattanPlot(stanza, params) {
       title: params["title"],
       study_name,
       project_name,
-      stage_name,
+      // stage_name,
       condition1,
       condition2,
     },
@@ -30258,9 +30266,9 @@ async function gwasManhattanPlot(stanza, params) {
   );
   console.log("dataset", dataset);
   console.log("a_dataset", a_dataset$1);
-  console.log("variants", variants);
+  // console.log("variants", variants);
 
-  //get checked stage
+  // //get checked stage
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
   const stageLabel = stanza.root.querySelectorAll(".stage-label");
   for (let i = 0; i < stageBtn.length; i++) {
@@ -30295,18 +30303,20 @@ async function gwasManhattanPlot(stanza, params) {
   function selectAll() {
     for (let i = 0; i < stageBtn.length; i++) {
       stageBtn[i].checked = true;
+      stageLabel[i].style.color = "#000000";
     }
-    checkStage();
+    // checkStage();
   }
   function clearAll() {
     for (let i = 0; i < stageBtn.length; i++) {
       stageBtn[i].checked = false;
+      stageLabel[i].style.color = "#99acb2";
     }
-    checkStage();
+    // checkStage();
   }
 
-  if (typeof variants === "object") {
-    draw(variants, stanza, params);
+  if (typeof stage_info[0].variants === "object") {
+    draw(stanza, params);
     appendDlButton(
       stanza.root.querySelector("#chart"),
       stanza.root.querySelector("svg"),
@@ -30317,7 +30327,7 @@ async function gwasManhattanPlot(stanza, params) {
   }
 }
 
-async function draw(dataset, stanza, params) {
+async function draw(stanza, params) {
   const width = 800;
   const height = 400;
   const marginLeft = 30;
@@ -30356,7 +30366,7 @@ async function draw(dataset, stanza, params) {
   const label_key = params.label_key;
 
   console.log(label_key);
-  console.log(variants[0].rsId);
+  // console.log(variants[0].rsId);
 
   const chromosomes = [
     "1",
@@ -30433,18 +30443,18 @@ async function draw(dataset, stanza, params) {
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
 
-  let range = []; // [begin position, en _position]
+  let range = []; // [begin position, end _position]
   let max_log_p = 0;
   let max_log_p_int;
   let total;
 
   // axis line
   axis_g
-    .append("path") //x軸
+    .append("path")
     .attr("d", "M " + marginLeft + ", " + areaHeight + " H " + width + " Z")
     .attr("class", "axis-line");
   axis_g
-    .append("path") //y軸
+    .append("path")
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
 
@@ -30454,29 +30464,27 @@ async function draw(dataset, stanza, params) {
     .on("mousedown", function (e) {
       // d3.pointer(e)[1]はイベント発火時のy座標
       if (pointer(e)[1] <= areaHeight) {
-        //イベント発火時のy座標が、描画範囲内にあるとき（＝描画範囲がクリックされたとき）
         dragBegin = pointer(e)[0]; //dragBeginの値を、イベント発火時のx座標とする
-        svg //半透明の矩形を作成しsvgにappend
+        svg //矩形を作成・svgにappend
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
           .attr("stroke", "black")
-          .attr("x", dragBegin) //矩形のx座標はdragBegin
-          .attr("y", 0) //矩形のy座標はゼロ
+          .attr("x", dragBegin)
+          .attr("y", 0)
           .attr("width", 0)
-          .attr("height", areaHeight) //高さは描画範囲とする（y軸の選択なし）
+          .attr("height", areaHeight) //高さは描画範囲（y軸の選択なし）
           .attr("id", "selector");
       }
     })
     .on("mousemove", function (e) {
       if (dragBegin) {
-        //dragBeginの値がある場合、
         const dragEnd = pointer(e)[0]; //dragEndをイベント発火時のx座標とする
         if (dragBegin < dragEnd) {
-          svg.select("#selector").attr("width", dragEnd - dragBegin); //selecter（矩形）にwidthを与える
+          svg.select("#selector").attr("width", dragEnd - dragBegin); //selecter（矩形）にwidthを付与
         } else {
           svg
             .select("#selector")
-            .attr("x", dragEnd) //この場合、イベント発火時のx軸を再定義する必要がある
+            .attr("x", dragEnd) //この場合、イベント発火時のx軸を再定義
             .attr("width", dragBegin - dragEnd);
         }
       }
@@ -30647,16 +30655,37 @@ async function draw(dataset, stanza, params) {
     xlabel_g.html("");
     ylabel_g.html("");
 
+    for(let i=0; i<stage_info.length; i++){
+      // adjust data to apply
+      for (let j = 0; j < stage_info[i].variants.length; j++) {
+        let chr = stage_info[i].variants[j].chr;
+        chr = chr.replace("chr", "");
+        stage_info[i].variants[j].chr = chr;
+        // console.log(stage_info[i].variants[j].chr);
+      
+        let pval = stage_info[i].variants[j]["p-value"];
+      
+        let physical_pos = stage_info[i].variants[j]["stop"];
+      }
+      
+      let variants = stage_info[i].variants;
+      // draw(variants, stanza, params);
+      // if(stageBtn[i].checked){
+      //   draw(stage_info.variants[i],stanza,params);
+      // }
+    // }
+
+
     plot_g
       .selectAll(".plot")
-      .data(dataset)
+      .data(variants)
       .enter()
       // filter: display range
       .filter(function (d) {
         if (!d.pos) {
           // calculate  accumulated position
           let pos = 0;
-          for (const ch of chromosomes) {
+          for (let ch of chromosomes) {
             if (ch === d[chromosome_key]) {
               break;
             }
@@ -30729,11 +30758,14 @@ async function draw(dataset, stanza, params) {
           max_log_p_int
       );
     });
+    console.log('plot'+i+"回目あと");
 
     console.log("over_thresh_array", over_thresh_array);
 
-    renderCanvas(range);
+    renderCanvas(variants, range);
+    console.log('rendercanvas'+i+"回目あと");
 
+  }
     // x axis label
     xlabel_g
       .selectAll(".xLabel")
@@ -30811,7 +30843,7 @@ async function draw(dataset, stanza, params) {
     setRange(range);
   }
 
-  function renderCanvas(range) {
+  function renderCanvas(dataset,range) {
     if (canvas.node().getContext) {
       canvas.attr("width", (total / (range[1] - range[0])) * areaWidth);
       const ctx = canvas.node().getContext("2d");
