@@ -4,6 +4,17 @@
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
+@mixin button {
+  border: 1px solid var(--searchbtn-border-color);
+  border-radius: var(--searchbtn-radius);
+  background-color: var(--searchbtn-color);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
 main {
   padding: 1rem 2rem;
 }
@@ -38,7 +49,7 @@ main {
       height: var(--dlbtn-img-height);
     }
   }
-  > .textSearchWrapper {
+  .textSearchWrapper {
     height: var(--searchbox-height);
     display: flex;
     justify-content: center;
@@ -58,19 +69,35 @@ main {
       }
     }
     > .searchBtn {
+      @include button;
       margin-right: 2px;
       height: var(--searchbtn-height);
       width: var(--searchbtn-width);
-      border: 1px solid var(--searchbtn-border-color);
-      border-radius: var(--searchbtn-radius);
-      background-color: var(--searchbtn-color);
-      display: flex;
-      justify-content: center;
-      align-items: center;
       > img {
         width: var(--searchbtn-img-width);
         height: var(--searchbtn-img-height);
         display: var(--searchimg-display); //block;
+      }
+    }
+  }
+  > .textSearchByColumnWrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    background: #ffffff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    > p.title {
+      display: block;
+      padding: 6px 16px;
+      background-color: var(--thead-font-color);
+      color: #ffffff;
+    }
+    > .textSearchWrapper {
+      padding: 26px 40px 26px 20px;
+      > input {
+        margin-right: 4px;
       }
     }
   }
@@ -145,6 +172,9 @@ main {
   top: 0;
   left: 0;
   z-index: 2;
+  &.black {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 }
 
 table {
@@ -179,23 +209,58 @@ table {
           position: relative;
           > div.filterWindow {
             position: absolute;
-            right: 0;
+            top: 4px;
+            left: -20px;
             z-index: 3;
             width: auto;
             height: auto;
-            background-color: lavender;
-            padding: 14px 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: var(--searchbox-radius);
+            > .filterWindowTitle {
+              padding: 4px 8px;
+              background-color: var(--thead-font-color);
+              color: #ffffff;
+            }
             > ul {
-              padding: 0;
+              padding: 9px 8px;
+              margin: 9px 8px 6px;
+              border: 1px solid rgba(0, 0, 0, 0.2);
+              border-radius: 3px;
               > li {
                 display: flex;
                 margin-bottom: 8px;
                 line-height: 1.4em;
                 > input[type="checkbox"] {
                   margin-top: 1px;
-                  margin-right: 4px;
+                  margin-right: 6px;
                 }
               }
+            }
+            > .toggleAllButton {
+              display: flex;
+              justify-content: center;
+              padding: 0 8px;
+              margin-bottom: 9px;
+              > button {
+                @include button;
+                padding: 3px 10px;
+                &:first-of-type {
+                  margin-right: 4px;
+                  width: 60%;
+                }
+                &:last-of-type {
+                  width: 40%;
+                }
+              }
+            }
+          }
+        }
+        &:last-of-type {
+          > .filterWrapper {
+            > div.filterWindow {
+              left: auto;
+              right: 11px;
             }
           }
         }
@@ -207,16 +272,28 @@ table {
         width: 9px;
         height: 13px;
         background-repeat: no-repeat;
-        background-position: center 5px;
+        background-position: center;
+        margin-bottom: -4px;
         background-size: 8px 8px;
+        &.searchIcon {
+          display: var(--searchicon-display);
+          margin-left: 2px;
+          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);
+        }
         &.filterIcon {
           display: var(--filtericon-display);
           margin-left: 2px;
-          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-filter.svg);
+          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
+          &.active {
+            z-index: 3;
+            position: relative;
+            background-color: var(--thead-font-color);
+            background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);
+          }
         }
         &.sortIcon {
           display: var(--sorticon-display);
-          background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-sort.svg);
+          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);
           &.desc {
             background-image: url(../../assets/gray-sort-des.svg);
           }

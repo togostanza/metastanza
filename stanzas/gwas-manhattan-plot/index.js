@@ -486,10 +486,17 @@ async function draw(stanza, params) {
         stage_info[i].variants[j].chr = chr;
         // console.log(stage_info[i].variants[j].chr);
 
+<<<<<<< HEAD
         const pval = stage_info[i].variants[j]["p-value"];
         String(pval);
 
         const physical_pos = stage_info[i].variants[j]["stop"];
+=======
+        let pval = stage_info[i].variants[j]["p-value"];
+        String(pval);
+
+        let physical_pos = stage_info[i].variants[j]["stop"];
+>>>>>>> df5ce5d0ada1e9715938f79d94ed89b15a41d941
         String(physical_pos);
       }
 
@@ -508,7 +515,11 @@ async function draw(stanza, params) {
         .filter(function (d) {
           if (!d.pos) {
             // calculate  accumulated position
+<<<<<<< HEAD
             const pos = 0;
+=======
+            let pos = 0;
+>>>>>>> df5ce5d0ada1e9715938f79d94ed89b15a41d941
             for (let ch of chromosomes) {
               if (ch === d[chromosome_key]) {
                 break;
