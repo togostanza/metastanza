@@ -2,7 +2,7 @@
   <div class="tableOption">
     <form
       class="textSearchWrapper"
-      @submit.prevent="submitQuery(state.queryInput)"
+      @submit.prevent="state.query = state.queryInput"
     >
       <input
         v-model="state.queryInput"
@@ -11,14 +11,35 @@
       />
       <button class="searchBtn" type="submit">
         <img
-          src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search.svg"
+          src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
           alt="search"
         />
       </button>
     </form>
+    <div class="textSearchByColumnWrapper" v-if="state.columnShowingTextSearch !== null">
+      <p class="title">Search for "{{ state.columnShowingTextSearch.label }}"</p>
+      <form
+        class="textSearchWrapper"
+        @submit.prevent="submitQuery(state.columnShowingTextSearch.label, state.queryInputByColumn)"
+      >
+        <input
+          v-model="state.queryInputByColumn"
+          type="text"
+          placeholder="Search for keywords..."
+          id="queryInputByColumn"
+          name="queryInputByColumn"
+        />
+        <button class="searchBtn" type="submit">
+          <img
+            src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
+            alt="search"
+          />
+        </button>
+      </form>
+    </div>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
-        src="https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-download.svg"
+        src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
         alt="download"
       />
     </a>
@@ -37,8 +58,12 @@
             @click="setSorting(column)"
           ></span>
           <span
-            class="icon filterIcon"
+            :class="['icon', 'filterIcon', {active: column === state.columnShowingFilters}]"
             @click="state.columnShowingFilters = column"
+          ></span>
+          <span
+            class="icon searchIcon"
+            @click="state.columnShowingTextSearch = column"
           ></span>
           <div
             v-if="column === state.columnShowingFilters"
@@ -50,6 +75,7 @@
                 { lastCol: state.columns.length - 1 === i },
               ]"
             >
+              <p class="filterWindowTitle">{{ column.label }}</p>
               <ul>
                 <li v-for="filter in column.filters" :key="filter.value">
                   <input
@@ -61,18 +87,18 @@
                   <label :for="filter.id">{{ filter.value }}</label>
                 </li>
               </ul>
-              <button
-                class="toggle_all_button select_all"
-                @click="setFilters(column, true)"
-              >
-                Select All
-              </button>
-              <button
-                class="toggle_all_button clear"
-                @click="setFilters(column, false)"
-              >
-                Clear
-              </button>
+              <div class="toggleAllButton">
+                <button
+                  @click="setFilters(column, true)"
+                >
+                  Select All
+                </button>
+                <button
+                  @click="setFilters(column, false)"
+                >
+                  Clear
+                </button>
+              </div>
             </div>
           </div>
         </th>
@@ -139,9 +165,9 @@
   </div>
 
   <div
-    v-if="state.columnShowingFilters"
-    class="modalBackground"
-    @click="state.columnShowingFilters = null"
+    v-if="state.columnShowingFilters || state.columnShowingTextSearch"
+    :class="['modalBackground', {black: state.columnShowingTextSearch}]"
+    @click="closeModal()"
   ></div>
 </template>
 
@@ -165,7 +191,12 @@ export default defineComponent({
       allRows: [],
 
       query: "",
+      queryByColumn: {
+        column: null,
+        query: ""
+      },
       columnShowingFilters: null,
+      columnShowingTextSearch: null,
 
       sorting: {
         active: null,
@@ -174,28 +205,31 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: params.limit, // TODO take from params
+        perPage: params.limit,
       },
 
       queryInput: "",
+      queryInputByColumn: "",
       jumpToNumberInput: "",
     });
 
     const filteredRows = computed(() => {
       const query = state.query;
-
+      const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
           return query ? row.some((cell) => cell.value.includes(query)) : true;
+        })
+        .filter((row) => {
+          return queryByColumn ? row.some((cell) => cell.column.label === state.queryByColumn.column && cell.value.includes(queryByColumn)) : true;
         })
         .filter((row) => {
           return row.every((cell) => {
             const valuesForFilter = cell.column.filters
               .filter(({ checked }) => checked)
               .map(({ value }) => value);
-
             return valuesForFilter.length === 0
-              ? true
+              ? false
               : valuesForFilter.includes(cell.value);
           });
         });
@@ -278,8 +312,14 @@ export default defineComponent({
       state.pagination.currentPage = num;
     }
 
-    function submitQuery(query) {
-      state.query = query;
+    function submitQuery(column, query) {
+      state.queryByColumn.column = column
+      state.queryByColumn.query = query
+    }
+
+    function closeModal() {
+      state.columnShowingFilters = null
+      state.columnShowingTextSearch = null
     }
 
     async function fetchData() {
@@ -303,7 +343,7 @@ export default defineComponent({
             filters: uniq(values).map((value) => {
               return {
                 value,
-                checked: false,
+                checked: true,
               };
             }),
           };
@@ -335,6 +375,7 @@ export default defineComponent({
       setFilters,
       jumpToPage,
       submitQuery,
+      closeModal
     };
   },
 });

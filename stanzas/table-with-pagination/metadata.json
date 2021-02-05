@@ -265,6 +265,12 @@
       "stanza:description": "margin of information area"
     },
     {
+      "stanza:key": "--searchicon-display",
+      "stanza:type": "text",
+      "stanza:default": "inline-block",
+      "stanza:description": "display of search icon"
+    },
+    {
       "stanza:key": "--filtericon-display",
       "stanza:type": "text",
       "stanza:default": "inline-block",
