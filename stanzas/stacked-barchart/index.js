@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function stackedBarchart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/stacked-bar-chart.vg.json").then((res) => res.json());
 
   //width,height,padding
   spec.width = params["width"];
@@ -242,7 +242,7 @@ export default async function stackedBarchart(stanza, params) {
   //marks
   spec.marks = [
     {
-      type: "rect",
+      type: "group",
       from: { data: "table" },
       encode: {
         enter: {

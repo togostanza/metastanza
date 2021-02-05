@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function piechart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/pie-chart.vg.json").then((res) => res.json());
 
   //width・height・padding
   // spec.width = params["width"]
@@ -119,9 +119,6 @@ export default async function piechart(stanza, params) {
           fill: { scale: "color", field: labelVariable },
           stroke: { value: "var(--stroke-color)" },
           strokeWidth: { value: "var(--stroke-width)" },
-        },
-        hover: {
-          fill: { value: "var(--emphasized-color)" },
         },
       },
     },

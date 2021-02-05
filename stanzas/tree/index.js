@@ -1,7 +1,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function tree(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/tree-layout.vg.json").then((res) => res.json());
 
   //width、height、padding
   spec.width = params["width"];
@@ -143,9 +143,6 @@ export default async function tree(stanza, params) {
           path: { field: "path" },
           stroke: { value: "var(--branch-color)" },
         },
-        hover: {
-          stroke: { value: "var(--emphasized-color)" },
-        },
       },
     },
     {
@@ -168,15 +165,6 @@ export default async function tree(stanza, params) {
           strokeWidth: {
             value: getComputedStyle(stanza.root.host).getPropertyValue(
               "--stroke-width"
-            ),
-          },
-        },
-        hover: {
-          fill: { value: "var(--emphasized-color)" },
-          stroke: { value: "var(--hover-stroke-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--hover-stroke-width"
             ),
           },
         },
@@ -212,11 +200,6 @@ export default async function tree(stanza, params) {
           //     "--stroke-width"
           //   ),
           // },
-        },
-        hover: {
-          fill: { value: "var(--emphasized-color)" },
-          stroke: { value: "var(--hover-stroke-color)" },
-          strokeWidth: { value: "0.5" },
         },
       },
     },

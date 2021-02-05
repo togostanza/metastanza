@@ -3,7 +3,7 @@
 import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
-  const spec = await fetch(params["src-url"]).then((res) => res.json());
+  const spec = await fetch("https://vega.github.io/vega/examples/bar-chart.vg.json").then((res) => res.json());
 
   //height,width,padding
   spec.width = params["width"];
@@ -106,9 +106,6 @@ export default async function barchart(stanza, params) {
             },
             // limit: 1
           },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
-          },
         },
       },
     },
@@ -172,9 +169,6 @@ export default async function barchart(stanza, params) {
               ),
             },
             // limit: 1
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
           },
         },
       },
