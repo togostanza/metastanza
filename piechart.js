@@ -1,9 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-f7442d54.js';
-import './vega.module-4fe8ac55.js';
-import './vega-event-selector.module-5ae5c063.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
-import './compile-b0eab824.js';
 
 async function piechart(stanza, params) {
   const spec = await fetch(

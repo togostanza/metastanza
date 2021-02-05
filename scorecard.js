@@ -1,8 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { g as getFormatedJson } from './metastanza_utils-f0c71da7.js';
-import './compile-b0eab824.js';
 import './timer-be811b16.js';
-import './vega-event-selector.module-5ae5c063.js';
 
 async function scorecard(stanza, params) {
   const dataset = await getFormatedJson(params.api);
@@ -82,37 +80,37 @@ var metadata = {
 		"stanza:key": "--key-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
-		"stanza:description": "Font color of key."
+		"stanza:description": "Font color for key."
 	},
 	{
 		"stanza:key": "--value-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Font color of value."
+		"stanza:description": "Font color for value."
 	},
 	{
 		"stanza:key": "--key-font-size",
 		"stanza:type": "text",
 		"stanza:default": "16px",
-		"stanza:description": "Font size of key."
+		"stanza:description": "Font size for key."
 	},
 	{
 		"stanza:key": "--value-font-size",
 		"stanza:type": "text",
 		"stanza:default": "36px",
-		"stanza:description": "Font size of value."
+		"stanza:description": "Font size for value."
 	},
 	{
 		"stanza:key": "--key-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of key."
+		"stanza:description": "Font weight for key."
 	},
 	{
 		"stanza:key": "--value-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "600",
-		"stanza:description": "Font weight of value."
+		"stanza:description": "Font weight for value."
 	}
 ]
 };

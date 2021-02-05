@@ -30228,7 +30228,7 @@ for (let i = 0; i < stage_info.length; i++) {
   console.log("【stage_info[i].variants】" + i, stage_info[i].variants);
 }
 
-// let variants = stage_info[0].variants; //init
+let variants = stage_info[0].variants; //init
 
 // // adjust datas
 // for (let i = 0; i < stage_info[0].variants.length; i++) {
@@ -30284,7 +30284,7 @@ async function gwasManhattanPlot(stanza, params) {
       stageLabel[i].style.color = "#99acb2";
       if (stageBtn[i].checked) {
         flag = true;
-        variants = stage[i].variants;
+        variants = stage_info[i].variants;
         stageLabel[i].style.color = "#000000";
         console.log(variants);
       }
@@ -30663,9 +30663,9 @@ async function draw(stanza, params) {
         stage_info[i].variants[j].chr = chr;
         // console.log(stage_info[i].variants[j].chr);
 
-        let pval = stage_info[i].variants[j]["p-value"];
+        const pval = stage_info[i].variants[j]["p-value"];
 
-        let physical_pos = stage_info[i].variants[j]["stop"];
+        const physical_pos = stage_info[i].variants[j]["stop"];
       }
 
       let variants = stage_info[i].variants;
@@ -30683,7 +30683,7 @@ async function draw(stanza, params) {
         .filter(function (d) {
           if (!d.pos) {
             // calculate  accumulated position
-            let pos = 0;
+            const pos = 0;
             for (let ch of chromosomes) {
               if (ch === d[chromosome_key]) {
                 break;
