@@ -1,7 +1,9 @@
 import vegaEmbed from "vega-embed";
 
 export default async function tree(stanza, params) {
-  const spec = await fetch("https://vega.github.io/vega/examples/tree-layout.vg.json").then((res) => res.json());
+  const spec = await fetch(
+    "https://vega.github.io/vega/examples/tree-layout.vg.json"
+  ).then((res) => res.json());
 
   //width、height、padding
   spec.width = params["width"];

@@ -19,8 +19,8 @@ console.log("【project_name】", project_name);
 // stage data and stage names
 const stages = Object.values(project);
 console.log("【stages】", stages);
-console.log("【...stages】",...stages);
-console.log("【...stages】",...stages);
+console.log("【...stages】", ...stages);
+console.log("【...stages】", ...stages);
 
 const stage_names = Object.keys(...stages);
 console.log("【stage_names】", stage_names);
@@ -35,15 +35,15 @@ const condition2 = stage_info[0].condition2;
 
 // // variants
 // let variants_datum;
-for(let i=0; i<stage_info.length; i++){
-  console.log("【stage_names】"+i, stage_names[i]);
-  console.log("【stage_info】"+i, stage_info[i]);
-  console.log("【condition1】"+i,stage_info[i].condition1);
-  console.log("【condition2】"+i,stage_info[i].condition2);
-  console.log("【stage_info[i].variants】"+i,stage_info[i].variants);
+for (let i = 0; i < stage_info.length; i++) {
+  console.log("【stage_names】" + i, stage_names[i]);
+  console.log("【stage_info】" + i, stage_info[i]);
+  console.log("【condition1】" + i, stage_info[i].condition1);
+  console.log("【condition2】" + i, stage_info[i].condition2);
+  console.log("【stage_info[i].variants】" + i, stage_info[i].variants);
 }
 
-// let variants = stage_info[0].variants; //init
+let variants = stage_info[0].variants; //init
 
 // // adjust datas
 // for (let i = 0; i < stage_info[0].variants.length; i++) {
@@ -99,7 +99,7 @@ export default async function gwasManhattanPlot(stanza, params) {
       stageLabel[i].style.color = "#99acb2";
       if (stageBtn[i].checked) {
         flag = true;
-        variants = stage[i].variants;
+        variants = stage_info[i].variants;
         stageLabel[i].style.color = "#000000";
         console.log(variants);
       }
@@ -478,119 +478,118 @@ async function draw(stanza, params) {
     xlabel_g.html("");
     ylabel_g.html("");
 
-    for(let i=0; i<stage_info.length; i++){
+    for (let i = 0; i < stage_info.length; i++) {
       // adjust data to apply
       for (let j = 0; j < stage_info[i].variants.length; j++) {
         let chr = stage_info[i].variants[j].chr;
         chr = chr.replace("chr", "");
         stage_info[i].variants[j].chr = chr;
         // console.log(stage_info[i].variants[j].chr);
-      
-        let pval = stage_info[i].variants[j]["p-value"];
+
+        const pval = stage_info[i].variants[j]["p-value"];
         String(pval);
-      
-        let physical_pos = stage_info[i].variants[j]["stop"];
+
+        const physical_pos = stage_info[i].variants[j]["stop"];
         String(physical_pos);
       }
-      
+
       let variants = stage_info[i].variants;
       // draw(variants, stanza, params);
       // if(stageBtn[i].checked){
       //   draw(stage_info.variants[i],stanza,params);
       // }
-    // }
+      // }
 
-
-    plot_g
-      .selectAll(".plot")
-      .data(variants)
-      .enter()
-      // filter: display range
-      .filter(function (d) {
-        if (!d.pos) {
-          // calculate  accumulated position
-          let pos = 0;
-          for (let ch of chromosomes) {
-            if (ch === d[chromosome_key]) {
-              break;
+      plot_g
+        .selectAll(".plot")
+        .data(variants)
+        .enter()
+        // filter: display range
+        .filter(function (d) {
+          if (!d.pos) {
+            // calculate  accumulated position
+            const pos = 0;
+            for (let ch of chromosomes) {
+              if (ch === d[chromosome_key]) {
+                break;
+              }
+              pos += chromosomeNtLength.hg38[ch];
             }
-            pos += chromosomeNtLength.hg38[ch];
+            d.pos = pos + parseInt(d[position_key]);
           }
-          d.pos = pos + parseInt(d[position_key]);
-        }
-        return range[0] <= d.pos && d.pos <= range[1];
-      })
-      // filter: low p-value
-      .filter(function (d) {
-        return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
-      })
-      .append("circle")
-      .attr("class", function (d) {
-        if (even_and_odd) {
-          let tmp = "even";
-          if (
-            d[chromosome_key] === "X" ||
-            parseInt(d[chromosome_key]) % 2 === 1
-          ) {
-            tmp = "odd";
+          return range[0] <= d.pos && d.pos <= range[1];
+        })
+        // filter: low p-value
+        .filter(function (d) {
+          return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
+        })
+        .append("circle")
+        .attr("class", function (d) {
+          if (even_and_odd) {
+            let tmp = "even";
+            if (
+              d[chromosome_key] === "X" ||
+              parseInt(d[chromosome_key]) % 2 === 1
+            ) {
+              tmp = "odd";
+            }
+            return "plot ch_" + tmp;
           }
-          return "plot ch_" + tmp;
-        }
-        return "plot ch_" + d[chromosome_key];
-      })
-      .attr("cx", function (d) {
+          return "plot ch_" + d[chromosome_key];
+        })
+        .attr("cx", function (d) {
+          return (
+            ((d.pos - range[0]) / (range[1] - range[0])) * areaWidth +
+            marginLeft
+          );
+        })
+        .attr("cy", function (d) {
+          // set max log(p-value)
+          if (max_log_p < Math.log10(parseFloat(d[p_value_key])) * -1) {
+            max_log_p = Math.log10(parseFloat(d[p_value_key])) * -1;
+          }
+          return areaHeight;
+        })
+        .attr("r", 2)
+        // filter: high p-value
+        .filter(function (d) {
+          if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
+            over_thresh_array.push(d);
+          }
+          return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
+        })
+        .classed("over-thresh-plot", true)
+        .on("mouseover", function (e, d) {
+          svg
+            .append("text")
+            .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
+            .attr("x", d3.pointer(e)[0] + 10)
+            .attr("y", d3.pointer(e)[1])
+            .attr("id", "popup_text");
+        })
+        .on("mouseout", function () {
+          svg.select("#popup_text").remove();
+        });
+
+      // set 'cy' from max log(p-value) (int)
+      if (max_log_p_int === undefined) {
+        max_log_p_int = Math.floor(max_log_p);
+      }
+      plot_g.selectAll(".plot").attr("cy", function (d) {
         return (
-          ((d.pos - range[0]) / (range[1] - range[0])) * areaWidth + marginLeft
+          areaHeight -
+          ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) *
+            areaHeight) /
+            max_log_p_int
         );
-      })
-      .attr("cy", function (d) {
-        // set max log(p-value)
-        if (max_log_p < Math.log10(parseFloat(d[p_value_key])) * -1) {
-          max_log_p = Math.log10(parseFloat(d[p_value_key])) * -1;
-        }
-        return areaHeight;
-      })
-      .attr("r", 2)
-      // filter: high p-value
-      .filter(function (d) {
-        if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
-          over_thresh_array.push(d);
-        }
-        return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
-      })
-      .classed("over-thresh-plot", true)
-      .on("mouseover", function (e, d) {
-        svg
-          .append("text")
-          .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
-          .attr("x", d3.pointer(e)[0] + 10)
-          .attr("y", d3.pointer(e)[1])
-          .attr("id", "popup_text");
-      })
-      .on("mouseout", function () {
-        svg.select("#popup_text").remove();
       });
+      console.log("plot" + i + "回目あと");
 
-    // set 'cy' from max log(p-value) (int)
-    if (max_log_p_int === undefined) {
-      max_log_p_int = Math.floor(max_log_p);
+      console.log("over_thresh_array", over_thresh_array);
+
+      renderCanvas(variants, range);
+      console.log("rendercanvas" + i + "回目あと");
     }
-    plot_g.selectAll(".plot").attr("cy", function (d) {
-      return (
-        areaHeight -
-        ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) *
-          areaHeight) /
-          max_log_p_int
-      );
-    });
-    console.log('plot'+i+"回目あと")
-
-    console.log("over_thresh_array", over_thresh_array);
-
-    renderCanvas(variants, range);
-    console.log('rendercanvas'+i+"回目あと")
-
-  }
     // x axis label
     xlabel_g
       .selectAll(".xLabel")
@@ -668,7 +667,7 @@ async function draw(stanza, params) {
     setRange(range);
   }
 
-  function renderCanvas(dataset,range) {
+  function renderCanvas(dataset, range) {
     if (canvas.node().getContext) {
       canvas.attr("width", (total / (range[1] - range[0])) * areaWidth);
       const ctx = canvas.node().getContext("2d");

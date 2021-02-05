@@ -3,7 +3,9 @@
 import vegaEmbed from "vega-embed";
 
 export default async function barchart(stanza, params) {
-  const spec = await fetch("https://vega.github.io/vega/examples/bar-chart.vg.json").then((res) => res.json());
+  const spec = await fetch(
+    "https://vega.github.io/vega/examples/bar-chart.vg.json"
+  ).then((res) => res.json());
 
   //height,width,padding
   spec.width = params["width"];

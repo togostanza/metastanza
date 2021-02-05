@@ -1,7 +1,9 @@
 import vegaEmbed from "vega-embed";
 
 export default async function devGroupedBarchart(stanza, params) {
-  const spec = await fetch("https://vega.github.io/vega/examples/grouped-bar-chart.vg.json").then((res) => res.json());
+  const spec = await fetch(
+    "https://vega.github.io/vega/examples/grouped-bar-chart.vg.json"
+  ).then((res) => res.json());
 
   // width,hight,padding
   spec.width = params["width"];
