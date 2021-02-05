@@ -5,9 +5,7 @@ import './timer-be811b16.js';
 import './vega-event-selector.module-5ae5c063.js';
 
 async function scorecard(stanza, params) {
-  const dataset = await getFormatedJson(
-    params.api,
-  );
+  const dataset = await getFormatedJson(params.api);
   console.log(dataset);
   console.log(Object.values(dataset)[0]);
   stanza.render({
@@ -17,9 +15,9 @@ async function scorecard(stanza, params) {
         {
           key: Object.keys(dataset)[0],
           value: Object.values(dataset)[0],
-        }
-      ]
-    }
+        },
+      ],
+    },
   });
 }
 
@@ -128,11 +126,11 @@ var templates = [
         return undefined
     };
 
-  return "  <svg width=\"var(--scorecard-width)\" height=\"var(--scorecard-height)\">\n    <text\n      x=\"30\"\n      y=\"30\"\n      font-family= \"var(--font-family)\"\n      fill=\"var(--key-font-color)\"\n      font-size= \"var(--key-font-size)\"\n      font-weight= \"var(--key-font-weight)\"\n    >"
+  return "  <svg width=\"var(--scorecard-width)\" height=\"var(--scorecard-height)\">\n    <text\n      x=\"30\"\n      y=\"30\"\n      font-family=\"var(--font-family)\"\n      fill=\"var(--key-font-color)\"\n      font-size=\"var(--key-font-size)\"\n      font-weight=\"var(--key-font-weight)\"\n    >\n      "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
-    + "\n    </text>\n    <text\n      x=\"30\"\n      y=\"70\"\n      font-family= \"var(--font-family)\"\n      fill= \"var(--value-font-color)\"\n      font-size= \"var(--value-font-size)\"\n      font-weight= \"var(--value-font-weight)\"\n      >"
+    + "\n    </text>\n    <text\n      x=\"30\"\n      y=\"70\"\n      font-family=\"var(--font-family)\"\n      fill=\"var(--value-font-color)\"\n      font-size=\"var(--value-font-size)\"\n      font-weight=\"var(--value-font-weight)\"\n    >\n      "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "</text>\n  </svg>\n";
+    + "\n    </text>\n  </svg>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -144,7 +142,7 @@ var templates = [
   return "<table>\n  <tbody>\n    <tr>\n      <td>\n        "
     + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"scorecard") || (depth0 != null ? lookupProperty(depth0,"scorecard") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"scorecard","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":5,"column":8},"end":{"line":5,"column":21}}}) : helper)))
     + "\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":11,"column":0},"end":{"line":31,"column":9}}})) != null ? stack1 : "");
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":11,"column":0},"end":{"line":34,"column":9}}})) != null ? stack1 : "");
 },"useData":true,"useBlockParams":true}]
 ];
 

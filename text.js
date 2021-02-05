@@ -4,7 +4,7 @@ import './timer-be811b16.js';
 
 async function text(stanza, params) {
   const dataset = await getFormatedJson(
-    params.api,
+    params.api
     // stanza.root.querySelector("#chart")
   );
   stanza.render({
@@ -13,9 +13,9 @@ async function text(stanza, params) {
       rows: [
         {
           value: dataset.value,
-        }
-      ]
-    }
+        },
+      ],
+    },
   });
 }
 
@@ -117,9 +117,9 @@ var templates = [
         return undefined
     };
 
-  return "<table>\n  <tbody>\n    <tr>\n      <td>\n        "
+  return "  <table>\n    <tbody>\n      <tr>\n        <td>\n          "
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "\n      </td>\n    </tr>\n  </tbody>\n</table>\n";
+    + "\n        </td>\n      </tr>\n    </tbody>\n  </table>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
