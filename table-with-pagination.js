@@ -8777,6 +8777,12 @@ var metadata = {
 		"stanza:description": "margin of information area"
 	},
 	{
+		"stanza:key": "--searchicon-display",
+		"stanza:type": "text",
+		"stanza:default": "inline-block",
+		"stanza:description": "display of search icon"
+	},
+	{
 		"stanza:key": "--filtericon-display",
 		"stanza:type": "text",
 		"stanza:default": "inline-block",
@@ -9045,7 +9051,12 @@ var script = defineComponent({
       allRows: [],
 
       query: "",
+      queryByColumn: {
+        column: null,
+        query: ""
+      },
       columnShowingFilters: null,
+      columnShowingTextSearch: null,
 
       sorting: {
         active: null,
@@ -9054,28 +9065,31 @@ var script = defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: params.limit, // TODO take from params
+        perPage: params.limit,
       },
 
       queryInput: "",
+      queryInputByColumn: "",
       jumpToNumberInput: "",
     });
 
     const filteredRows = computed$1(() => {
       const query = state.query;
-
+      const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
           return query ? row.some((cell) => cell.value.includes(query)) : true;
+        })
+        .filter((row) => {
+          return queryByColumn ? row.some((cell) => cell.column.label === state.queryByColumn.column && cell.value.includes(queryByColumn)) : true;
         })
         .filter((row) => {
           return row.every((cell) => {
             const valuesForFilter = cell.column.filters
               .filter(({ checked }) => checked)
               .map(({ value }) => value);
-
             return valuesForFilter.length === 0
-              ? true
+              ? false
               : valuesForFilter.includes(cell.value);
           });
         });
@@ -9158,8 +9172,14 @@ var script = defineComponent({
       state.pagination.currentPage = num;
     }
 
-    function submitQuery(query) {
-      state.query = query;
+    function submitQuery(column, query) {
+      state.queryByColumn.column = column;
+      state.queryByColumn.query = query;
+    }
+
+    function closeModal() {
+      state.columnShowingFilters = null;
+      state.columnShowingTextSearch = null;
     }
 
     async function fetchData() {
@@ -9183,7 +9203,7 @@ var script = defineComponent({
             filters: lodash_uniq(values).map((value) => {
               return {
                 value,
-                checked: false,
+                checked: true,
               };
             }),
           };
@@ -9215,6 +9235,7 @@ var script = defineComponent({
       setFilters,
       jumpToPage,
       submitQuery,
+      closeModal
     };
   },
 });
@@ -9225,31 +9246,47 @@ const _hoisted_2 = /*#__PURE__*/createVNode("button", {
   type: "submit"
 }, [
   /*#__PURE__*/createVNode("img", {
-    src: "https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search.svg",
+    src: "https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg",
     alt: "search"
   })
 ], -1 /* HOISTED */);
-const _hoisted_3 = /*#__PURE__*/createVNode("img", {
-  src: "https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-download.svg",
+const _hoisted_3 = {
+  key: 0,
+  class: "textSearchByColumnWrapper"
+};
+const _hoisted_4 = { class: "title" };
+const _hoisted_5 = /*#__PURE__*/createVNode("button", {
+  class: "searchBtn",
+  type: "submit"
+}, [
+  /*#__PURE__*/createVNode("img", {
+    src: "https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg",
+    alt: "search"
+  })
+], -1 /* HOISTED */);
+const _hoisted_6 = /*#__PURE__*/createVNode("img", {
+  src: "https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg",
   alt: "download"
 }, null, -1 /* HOISTED */);
-const _hoisted_4 = { key: 0 };
-const _hoisted_5 = {
+const _hoisted_7 = { key: 0 };
+const _hoisted_8 = {
   key: 0,
   class: "filterWrapper"
 };
-const _hoisted_6 = { key: 0 };
-const _hoisted_7 = { key: 1 };
-const _hoisted_8 = { class: "paginationWrapper" };
-const _hoisted_9 = { class: "pageNumber" };
-const _hoisted_10 = /*#__PURE__*/createTextVNode(" Page ");
+const _hoisted_9 = { class: "filterWindowTitle" };
+const _hoisted_10 = { class: "toggleAllButton" };
+const _hoisted_11 = { key: 0 };
+const _hoisted_12 = { key: 1 };
+const _hoisted_13 = { class: "paginationWrapper" };
+const _hoisted_14 = { class: "pageNumber" };
+const _hoisted_15 = /*#__PURE__*/createTextVNode(" Page ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock(Fragment, null, [
     createVNode("div", _hoisted_1, [
       createVNode("form", {
         class: "textSearchWrapper",
-        onSubmit: _cache[2] || (_cache[2] = withModifiers($event => (_ctx.submitQuery(_ctx.state.queryInput)), ["prevent"]))
+        onSubmit: _cache[2] || (_cache[2] = withModifiers($event => (_ctx.state.query = _ctx.state.queryInput), ["prevent"]))
       }, [
         withDirectives(createVNode("input", {
           "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (_ctx.state.queryInput = $event)),
@@ -9260,16 +9297,36 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         _hoisted_2
       ], 32 /* HYDRATE_EVENTS */),
+      (_ctx.state.columnShowingTextSearch !== null)
+        ? (openBlock(), createBlock("div", _hoisted_3, [
+            createVNode("p", _hoisted_4, "Search for \"" + toDisplayString(_ctx.state.columnShowingTextSearch.label) + "\"", 1 /* TEXT */),
+            createVNode("form", {
+              class: "textSearchWrapper",
+              onSubmit: _cache[4] || (_cache[4] = withModifiers($event => (_ctx.submitQuery(_ctx.state.columnShowingTextSearch.label, _ctx.state.queryInputByColumn)), ["prevent"]))
+            }, [
+              withDirectives(createVNode("input", {
+                "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => (_ctx.state.queryInputByColumn = $event)),
+                type: "text",
+                placeholder: "Search for keywords...",
+                id: "queryInputByColumn",
+                name: "queryInputByColumn"
+              }, null, 512 /* NEED_PATCH */), [
+                [vModelText, _ctx.state.queryInputByColumn]
+              ]),
+              _hoisted_5
+            ], 32 /* HYDRATE_EVENTS */)
+          ]))
+        : createCommentVNode("v-if", true),
       createVNode("a", {
         class: "downloadBtn",
         href: _ctx.blobUrl,
         download: "tableData"
       }, [
-        _hoisted_3
+        _hoisted_6
       ], 8 /* PROPS */, ["href"])
     ]),
     (_ctx.state.allRows)
-      ? (openBlock(), createBlock("table", _hoisted_4, [
+      ? (openBlock(), createBlock("table", _hoisted_7, [
           createVNode("thead", null, [
             createVNode("tr", null, [
               (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.columns, (column, i) => {
@@ -9286,17 +9343,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     onClick: $event => (_ctx.setSorting(column))
                   }, null, 10 /* CLASS, PROPS */, ["onClick"]),
                   createVNode("span", {
-                    class: "icon filterIcon",
+                    class: ['icon', 'filterIcon', {active: column === _ctx.state.columnShowingFilters}],
                     onClick: $event => (_ctx.state.columnShowingFilters = column)
+                  }, null, 10 /* CLASS, PROPS */, ["onClick"]),
+                  createVNode("span", {
+                    class: "icon searchIcon",
+                    onClick: $event => (_ctx.state.columnShowingTextSearch = column)
                   }, null, 8 /* PROPS */, ["onClick"]),
                   (column === _ctx.state.columnShowingFilters)
-                    ? (openBlock(), createBlock("div", _hoisted_5, [
+                    ? (openBlock(), createBlock("div", _hoisted_8, [
                         createVNode("div", {
                           class: [
                 'filterWindow',
                 { lastCol: _ctx.state.columns.length - 1 === i },
               ]
                         }, [
+                          createVNode("p", _hoisted_9, toDisplayString(column.label), 1 /* TEXT */),
                           createVNode("ul", null, [
                             (openBlock(true), createBlock(Fragment, null, renderList(column.filters, (filter) => {
                               return (openBlock(), createBlock("li", {
@@ -9316,14 +9378,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               ]))
                             }), 128 /* KEYED_FRAGMENT */))
                           ]),
-                          createVNode("button", {
-                            class: "toggle_all_button select_all",
-                            onClick: $event => (_ctx.setFilters(column, true))
-                          }, " Select All ", 8 /* PROPS */, ["onClick"]),
-                          createVNode("button", {
-                            class: "toggle_all_button clear",
-                            onClick: $event => (_ctx.setFilters(column, false))
-                          }, " Clear ", 8 /* PROPS */, ["onClick"])
+                          createVNode("div", _hoisted_10, [
+                            createVNode("button", {
+                              onClick: $event => (_ctx.setFilters(column, true))
+                            }, " Select All ", 8 /* PROPS */, ["onClick"]),
+                            createVNode("button", {
+                              onClick: $event => (_ctx.setFilters(column, false))
+                            }, " Clear ", 8 /* PROPS */, ["onClick"])
+                          ])
                         ], 2 /* CLASS */)
                       ]))
                     : createCommentVNode("v-if", true)
@@ -9341,13 +9403,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     key: cell.column.id
                   }, [
                     (cell.href)
-                      ? (openBlock(), createBlock("span", _hoisted_6, [
+                      ? (openBlock(), createBlock("span", _hoisted_11, [
                           createVNode("a", {
                             href: cell.href,
                             target: "_blank"
                           }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href"])
                         ]))
-                      : (openBlock(), createBlock("span", _hoisted_7, toDisplayString(cell.value), 1 /* TEXT */))
+                      : (openBlock(), createBlock("span", _hoisted_12, toDisplayString(cell.value), 1 /* TEXT */))
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]))
@@ -9355,16 +9417,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ])
         ]))
       : createCommentVNode("v-if", true),
-    createVNode("div", _hoisted_8, [
+    createVNode("div", _hoisted_13, [
       (_ctx.state.pagination.currentPage !== 1)
         ? (openBlock(), createBlock(Fragment, { key: 0 }, [
             createVNode("span", {
               class: "arrow left",
-              onClick: _cache[3] || (_cache[3] = $event => (_ctx.state.pagination.currentPage = 1))
+              onClick: _cache[5] || (_cache[5] = $event => (_ctx.state.pagination.currentPage = 1))
             }, "< "),
             createVNode("span", {
               class: "singleArrow left",
-              onClick: _cache[4] || (_cache[4] = $event => (_ctx.state.pagination.currentPage--))
+              onClick: _cache[6] || (_cache[6] = $event => (_ctx.state.pagination.currentPage--))
             }, "<<")
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
@@ -9384,20 +9446,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ? (openBlock(), createBlock(Fragment, { key: 1 }, [
             createVNode("span", {
               class: "singleArrow right",
-              onClick: _cache[5] || (_cache[5] = $event => (_ctx.state.pagination.currentPage++))
+              onClick: _cache[7] || (_cache[7] = $event => (_ctx.state.pagination.currentPage++))
             }, ">"),
             createVNode("span", {
               class: "arrow right",
-              onClick: _cache[6] || (_cache[6] = $event => (_ctx.state.pagination.currentPage = _ctx.totalPages))
+              onClick: _cache[8] || (_cache[8] = $event => (_ctx.state.pagination.currentPage = _ctx.totalPages))
             }, ">>")
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
-      createVNode("div", _hoisted_9, [
-        _hoisted_10,
+      createVNode("div", _hoisted_14, [
+        _hoisted_15,
         withDirectives(createVNode("input", {
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (_ctx.state.jumpToNumberInput = $event)),
+          "onUpdate:modelValue": _cache[9] || (_cache[9] = $event => (_ctx.state.jumpToNumberInput = $event)),
           type: "text",
-          onKeydown: _cache[8] || (_cache[8] = withKeys($event => (_ctx.jumpToPage(_ctx.state.jumpToNumberInput)), ["enter"]))
+          onKeydown: _cache[10] || (_cache[10] = withKeys($event => (_ctx.jumpToPage(_ctx.state.jumpToNumberInput)), ["enter"]))
         }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [
           [
             vModelText,
@@ -9409,12 +9471,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         createTextVNode(" of " + toDisplayString(_ctx.totalPages), 1 /* TEXT */)
       ])
     ]),
-    (_ctx.state.columnShowingFilters)
+    (_ctx.state.columnShowingFilters || _ctx.state.columnShowingTextSearch)
       ? (openBlock(), createBlock("div", {
           key: 1,
-          class: "modalBackground",
-          onClick: _cache[9] || (_cache[9] = $event => (_ctx.state.columnShowingFilters = null))
-        }))
+          class: ['modalBackground', {black: _ctx.state.columnShowingTextSearch}],
+          onClick: _cache[11] || (_cache[11] = $event => (_ctx.closeModal()))
+        }, null, 2 /* CLASS */))
       : createCommentVNode("v-if", true)
   ], 64 /* STABLE_FRAGMENT */))
 }
@@ -9429,11 +9491,11 @@ async function tableWithPagination(stanza, params) {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  table {\n      width: 100%;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"infomation\">\n    <div class=\"text-search-wrapper\">\n      <input\n        type=\"text\"\n        id=\"search-input\"\n        placeholder=\"Search for keywords...\"\n      />\n      <button id=\"search-btn\" type=\"submit\">\n        <img\n          src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/white-search.svg\"\n          alt=\"search\"\n        />\n        <span class=\"search-text\">\n          Search\n        </span>\n      </button>\n    </div>\n    <a id=\"download-btn\" download=\"table-data\">\n      <img\n        src=\"https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-download.svg\"\n        alt=\"download\"\n      />\n    </a>\n  </div>\n  <p class=\"table-title\">\n    Title of this Table\n  </p>\n  <div id=\"renderDiv\"></div>\n\n  <div id=\"pagination\">\n    <ul>\n      <li class=\"first-btn back-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n      <li class=\"previous-btn back-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"current-btn\">\n        1\n      </li>\n      <li>\n        2\n      </li>\n      <li>\n        3\n      </li>\n      <li>\n        4\n      </li>\n      <li>\n        …\n      </li>\n      <li>\n        10\n      </li>\n      <li class=\"next-btn advance-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"last-btn advance-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n    </ul>\n  </div>\n  <p class=\"show-info\">\n    Showing 1 to 10 of 44 entres\n  </p>\n</div>";
+    return "<style>\n  table {\n      width: 100%;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"infomation\">\n    <div class=\"text-search-wrapper\">\n      <input\n        type=\"text\"\n        id=\"search-input\"\n        placeholder=\"Search for keywords...\"\n      />\n      <button id=\"search-btn\" type=\"submit\">\n        <img\n          src=\"https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg\"\n          alt=\"search\"\n        />\n        <span class=\"search-text\">\n          Search\n        </span>\n      </button>\n    </div>\n    <a id=\"download-btn\" download=\"table-data\">\n      <img\n        src=\"https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg\"\n        alt=\"download\"\n      />\n    </a>\n  </div>\n  <p class=\"table-title\">\n    Title of this Table\n  </p>\n  <div id=\"renderDiv\"></div>\n\n  <div id=\"pagination\">\n    <ul>\n      <li class=\"first-btn back-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n      <li class=\"previous-btn back-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"current-btn\">\n        1\n      </li>\n      <li>\n        2\n      </li>\n      <li>\n        3\n      </li>\n      <li>\n        4\n      </li>\n      <li>\n        …\n      </li>\n      <li>\n        10\n      </li>\n      <li class=\"next-btn advance-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"last-btn advance-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n    </ul>\n  </div>\n  <p class=\"show-info\">\n    Showing 1 to 10 of 44 entres\n  </p>\n</div>";
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n.tableOption > .textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.tableOption > .textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.tableOption > .textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.tableOption > .textSearchWrapper > .searchBtn {\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.tableOption > .textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n\n.paginationWrapper {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n}\n.paginationWrapper > ul {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > ul > li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border: var(--paginationbtn-border);\n  border-bottom: var(--paginationbtn-border-bottom);\n  border-radius: var(--paginationbtn-border-radius);\n  margin: var(--paginationbtn-margin);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n}\n> .paginationWrapper > ul > li.first-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n> .paginationWrapper > ul > li.last-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n.paginationWrapper > ul > li.arrow-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.paginationWrapper > ul > li.back-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.advance-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.current-btn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--currentbtn-border);\n  border-bottom: var(--currentbtn-border-bottom);\n  border-radius: var(--currentbtn-border-radius);\n  padding: var(--currentbtn-padding);\n  margin: var(--currentbtn-margin);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  right: 0;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: lavender;\n  padding: 14px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 0;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 4px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center 5px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n.tableOption .textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.tableOption .textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.tableOption .textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.tableOption .textSearchWrapper > .searchBtn {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n}\n.tableOption .textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n.tableOption > .textSearchByColumnWrapper {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n}\n.tableOption > .textSearchByColumnWrapper > p.title {\n  display: block;\n  padding: 6px 16px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper {\n  padding: 26px 40px 26px 20px;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper > input {\n  margin-right: 4px;\n}\n\n.paginationWrapper {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n}\n.paginationWrapper > ul {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > ul > li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border: var(--paginationbtn-border);\n  border-bottom: var(--paginationbtn-border-bottom);\n  border-radius: var(--paginationbtn-border-radius);\n  margin: var(--paginationbtn-margin);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n}\n> .paginationWrapper > ul > li.first-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n> .paginationWrapper > ul > li.last-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n.paginationWrapper > ul > li.arrow-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.paginationWrapper > ul > li.back-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.advance-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.current-btn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--currentbtn-border);\n  border-bottom: var(--currentbtn-border-bottom);\n  border-radius: var(--currentbtn-border-radius);\n  padding: var(--currentbtn-padding);\n  margin: var(--currentbtn-margin);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n.modalBackground.black {\n  background-color: rgba(0, 0, 0, 0.3);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {\n  left: auto;\n  right: 11px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  top: 4px;\n  left: -20px;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n  border-radius: var(--searchbox-radius);\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {\n  padding: 4px 8px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 9px 8px;\n  margin: 9px 8px 6px;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  border-radius: 3px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 6px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {\n  display: flex;\n  justify-content: center;\n  padding: 0 8px;\n  margin-bottom: 9px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  padding: 3px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:first-of-type {\n  margin-right: 4px;\n  width: 60%;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:last-of-type {\n  width: 40%;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center;\n  margin-bottom: -4px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.searchIcon {\n  display: var(--searchicon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.filterIcon.active {\n  z-index: 3;\n  position: relative;\n  background-color: var(--thead-font-color);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}";
 
 defineStanzaElement(tableWithPagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table-with-pagination.js.map
