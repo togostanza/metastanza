@@ -1,8 +1,7 @@
-export default async function tableWithScroll(stanza, params) {
-  stanza.render({
-    template: "stanza.html.hbs",
-    parameters: {
-      greeting: `Hello, ${params["say-to"]}!`,
-    },
-  });
+import { createApp } from "vue";
+import App from "./app.vue";
+
+export default async function tableWithPagination(stanza, params) {
+  const main = stanza.root.querySelector("main");
+  createApp(App, params).mount(main);
 }
