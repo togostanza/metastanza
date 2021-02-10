@@ -3,7 +3,7 @@
     <table v-if="state.allRows">
       <thead>
         <tr>
-          <th v-for="(column, i) in state.columns" :key="column.id">
+          <th v-for="column in state.columns" :key="column.id">
             {{ column.label }}
           </th>
         </tr>
@@ -30,10 +30,9 @@
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onMounted } from "vue";
+import { defineComponent, reactive, onMounted } from "vue";
 
 import orderBy from "lodash.orderby";
-import uniq from "lodash.uniq";
 import zip from "lodash.zip";
 
 import metadata from "./metadata.json";
@@ -50,14 +49,15 @@ export default defineComponent({
 
       offset: 0,
 
-      isFetchingData: false
+      isFetchingData: false,
     });
 
-
     async function fetchData() {
-      console.log('fetchData')
-      state.isFetchingData = true
-      const res = await fetch(`${params.table_data_api}&limit=${params.limit}&offset=${state.offset}`);
+      console.log("fetchData");
+      state.isFetchingData = true;
+      const res = await fetch(
+        `${params.table_data_api}&limit=${params.limit}&offset=${state.offset}`
+      );
       const data = await res.json();
 
       state.responseJSON = data;
@@ -77,33 +77,38 @@ export default defineComponent({
 
       state.columns = orderBy(columns, ["order"]);
 
-      state.allRows = state.allRows.concat(data.body.map((row) => {
-        return columns.map((column) => {
-          return {
-            column,
-            value: row[column.id].value,
-            href: column.href ? row[column.href].value : null,
-          };
-        });
-      }));
-      state.isFetchingData = false
+      state.allRows = state.allRows.concat(
+        data.body.map((row) => {
+          return columns.map((column) => {
+            return {
+              column,
+              value: row[column.id].value,
+              href: column.href ? row[column.href].value : null,
+            };
+          });
+        })
+      );
+      state.isFetchingData = false;
     }
 
     function handleScroll(e) {
-      if(e.path[0].scrollTop === e.path[0].firstChild.clientHeight - e.path[0].clientHeight && !state.isFetchingData) {
-        state.offset++
-        fetchData()
+      if (
+        e.path[0].scrollTop ===
+          e.path[0].firstChild.clientHeight - e.path[0].clientHeight &&
+        !state.isFetchingData
+      ) {
+        state.offset++;
+        fetchData();
       }
     }
 
     onMounted(() => {
-      fetchData()
-    }
-    );
+      fetchData();
+    });
 
     return {
       state,
-      handleScroll
+      handleScroll,
     };
   },
 });

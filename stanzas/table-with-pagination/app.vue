@@ -17,8 +17,8 @@
       </button>
     </form>
     <div
-      class="textSearchByColumnWrapper"
       v-if="state.columnShowingTextSearch !== null"
+      class="textSearchByColumnWrapper"
     >
       <p class="title">
         Search for "{{ state.columnShowingTextSearch.label }}"
@@ -33,10 +33,10 @@
         "
       >
         <input
+          id="queryInputByColumn"
           v-model="state.queryInputByColumn"
           type="text"
           placeholder="Search for keywords..."
-          id="queryInputByColumn"
           name="queryInputByColumn"
         />
         <button class="searchBtn" type="submit">
