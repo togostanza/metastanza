@@ -1,6 +1,4 @@
-import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
-import { keys } from "vega-lite";
-
+import { getFormatedJson } from "@/lib/metastanza_utils.js";
 export default async function scorecard(stanza, params) {
   const dataset = await getFormatedJson(params.api);
   console.log(dataset);
