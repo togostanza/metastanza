@@ -30668,7 +30668,7 @@ async function draw(stanza, params) {
         const physical_pos = stage_info[i].variants[j]["stop"];
       }
 
-      let variants = stage_info[i].variants;
+      const variants = stage_info[i].variants;
       // draw(variants, stanza, params);
       // if(stageBtn[i].checked){
       //   draw(stage_info.variants[i],stanza,params);
@@ -30683,8 +30683,8 @@ async function draw(stanza, params) {
         .filter(function (d) {
           if (!d.pos) {
             // calculate  accumulated position
-            const pos = 0;
-            for (let ch of chromosomes) {
+            let pos = 0;
+            for (const ch of chromosomes) {
               if (ch === d[chromosome_key]) {
                 break;
               }
