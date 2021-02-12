@@ -3,49 +3,34 @@ import { e as embed } from './vega-embed.module-80d1ecde.js';
 import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
-// import { stratify } from "d3";
+// import stackedBarJson from "./stacked.json";
+// import groupedBarJson from "./grouped.json";
 
 async function barchart(stanza, params) {
-  const spec = await fetch(
-    "https://vega.github.io/vega/examples/bar-chart.vg.json"
-  ).then((res) => res.json());
+  const chartType = params["chart-type"];
 
-  //height,width,padding
-  spec.width = params["width"];
-  spec.height = params["height"];
-  spec.padding = params["padding"];
-  // spec.padding = getComputedStyle(stanza.root.host).getPropertyValue("--padding");
+  let spec = {$schema : "https://vega.github.io/schema/vega/v5.json"};
+  // switch(chartType){
+  //   case "stacked":
+  //     spec = Object.values(stackedBarJson)[0];
+  //     break;
+  //   case "grouped":
+  //     spec = Object.values(groupedBarJson)[0];
+  //     break;
+  // }
+
+  //width,height,padding
+  const width = Number(params["width"]);
+  const height = Number(params["height"]);
+  const padding = Number(params["padding"]);
+  spec.width = width;
+  spec.height = height;
+  spec.padding = padding;
 
   //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
-
-  spec.data = [
-    {
-      name: "table",
-      url: params["your-data"],
-    },
-  ];
-
-  //scales
-  spec.scales = [
-    {
-      name: "xscale",
-      type: "band",
-      range: "width",
-      domain: { data: "table", field: labelVariable },
-      padding: 0.05,
-      paddingInner: params["padding-inner"],
-      paddingOuter: params["padding-outer"],
-      round: true,
-    },
-    {
-      name: "yscale",
-      range: "height",
-      domain: { data: "table", field: valueVariable },
-      // nice: true,
-    },
-  ];
+  const labelVariable = params["label-variable"]; //x
+  const valueVariable = params["value-variable"]; //y
+  const groupVariable = params["group-variable"]; //z
 
   //axes
   spec.axes = [
@@ -65,10 +50,9 @@ async function barchart(stanza, params) {
         "--grid-opacity"
       ),
       gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-weight"
+        "--grid-width"
       ),
       ticks: params["xtick"] === "true",
-      // tickCount: params["xtick-count"],
       tickColor: "var(--tick-color)",
       tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
         "--tick-size"
@@ -85,12 +69,11 @@ async function barchart(stanza, params) {
         "--title-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-width"
+        "--title-weight"
       ),
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
       ),
-      zindex: 1,
       encode: {
         labels: {
           interactive: true,
@@ -109,7 +92,6 @@ async function barchart(stanza, params) {
                 "--label-size"
               ),
             },
-            // limit: 1
           },
         },
       },
@@ -133,7 +115,6 @@ async function barchart(stanza, params) {
         "--grid-width"
       ),
       ticks: params["ytick"] === "true",
-      // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
       tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
         "--tick-size"
@@ -150,11 +131,12 @@ async function barchart(stanza, params) {
         "--title-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-width"
+        "--title-weight"
       ),
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
       ),
+      zindex: 0,
       encode: {
         labels: {
           interactive: true,
@@ -175,53 +157,198 @@ async function barchart(stanza, params) {
             },
             // limit: 1
           },
+          hover: {
+            fill: { value: "var(--emphasized-color)" },
+          },
         },
       },
     },
   ];
 
-  //marks
-  spec.marks = [
+  // legend
+  spec.legends = [
     {
-      type: "rect",
-      from: { data: "table" },
-      encode: {
-        enter: {
-          x: { scale: "xscale", field: labelVariable },
-          width: { scale: "xscale", band: params["bar-width"] },
-          y: { scale: "yscale", field: valueVariable },
-          y2: { scale: "yscale", value: 0 },
-        },
-        update: {
-          fill: { value: "var(--series-0-color)" },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--stroke-width"
-            ),
-          },
-        },
-        hover: {
-          fill: { value: "var(--emphasized-color)" },
-        },
-      },
-    },
-    {
-      type: "text",
-      encode: {
-        enter: {
-          align: { value: "center" },
-          baseline: { value: "bottom" },
-          fill: { value: "var(--emphasized-color)" },
-          font: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--font-family"
-            ),
-          },
-        },
-      },
+      fill: "color",
+      orient: "none",
+      legendX: width + 40,
+      legendY: "0",
+      title: groupVariable,
+      titleColor: "var(--legendtitle-color)",
+      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-size"
+      ),
+      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendtitle-weight"
+      ),
+      labelColor: "var(--legendlabel-color)",
+      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--font-family"
+      ),
+      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--legendlabel-size"
+      ),
+      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-color"
+      ),
+      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
+        "--stroke-width"
+      ),
     },
   ];
+
+  spec.scales = [
+    {
+      name: "color",
+      type: "ordinal",
+      domain: { data: "table", field: groupVariable },
+      range: [
+        "var(--series-0-color)",
+        "var(--series-1-color)",
+        "var(--series-2-color)",
+        "var(--series-3-color)",
+        "var(--series-4-color)",
+        "var(--series-5-color)",
+      ],
+    }
+  ];
+
+  if(chartType === "grouped"){
+    spec.data = [
+      {
+        name: "table",
+        url: params["your-data"],
+      },
+    ];
+
+    //scales
+    spec.scales[1] = {
+      name: "xscale",
+      type: "linear",
+      domain: { data: "table", field: valueVariable },
+      range: "width",
+    };
+
+    spec.scales[2] = {
+      name: "yscale",
+      type: "band",
+      domain: { data: "table", field: labelVariable },
+      range: "height",
+      padding: 0.2,
+      paddingInner: params["padding-inner"],
+      paddingOuter: params["padding-outer"],
+    };
+
+    //marks
+    spec.marks = [
+      {
+        type: "group",
+        from: {
+          facet: {
+            data: "table",
+            name: "facet",
+            groupby: labelVariable,
+          },
+        },
+        encode: {
+          enter: {
+            y: { scale: "yscale", field: labelVariable },
+          },
+        },
+        signals: [{ name: "height", update: "bandwidth('yscale')" }],
+        scales: [
+          {
+            name: "pos",
+            type: "band",
+            range: "height",
+            domain: { data: "facet", field: groupVariable },
+          },
+        ],
+        marks: [
+          {
+            name: "bars",
+            from: { data: "facet" },
+            type: "rect",
+            encode: {
+              enter: {
+                y: { scale: "pos", field: groupVariable },
+                height: { scale: "pos", band: 1 },
+                x: { scale: "xscale", field: valueVariable },
+                x2: { scale: "xscale", value: 0 },
+                fill: { scale: "color", field: groupVariable },
+                stroke: { value: "var(--stroke-color)" },
+                strokeWidth: {
+                  value: getComputedStyle(stanza.root.host).getPropertyValue(
+                    "--stroke-width"
+                  ),
+                },
+              },
+            },
+          },
+        ],
+      },
+    ];
+  } else { //stacked
+  spec.data = [
+    {
+      name: "table",
+      url: params["your-data"],
+      transform: [
+        {
+          type: "stack",
+          field: valueVariable,
+          groupby: [labelVariable],
+          sort: {field: groupVariable},
+        },
+      ],
+    },
+  ];
+
+    //scales
+    spec.scales[1] = {
+        name: "xscale",
+        type: "band",
+        range: "width",
+        domain: { data: "table", field: labelVariable },
+        // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
+        paddingInner: params["padding-inner"],
+        paddingOuter: params["padding-outer"],
+      };
+
+    spec.scales[2] = {
+      name: "yscale",
+      type: "linear",
+      range: "height",
+      nice: true,
+      zero: true,
+      domain: { data: "table", field: "y1" },
+    },
+
+    //marks
+    spec.marks = [
+      {
+        type: "group",
+        from: { data: "table" },
+        encode: {
+          enter: {
+            x: { scale: "xscale", field: labelVariable },
+            width: { scale: "xscale", band: params["bar-width"] },
+            y: { scale: "yscale", field: "y0" },
+            y2: { scale: "yscale", field: "y1" },
+            fill: { scale: "color", field: groupVariable },
+            stroke: { value: "var(--stroke-color)" },
+            strokeWidth: {
+              value: getComputedStyle(stanza.root.host).getPropertyValue(
+                "--stroke-width"
+              ),
+            },
+          },
+        },
+      },
+    ];
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -249,14 +376,20 @@ var metadata = {
 	"stanza:updated": "2020-11-06",
 	"stanza:parameter": [
 	{
+		"stanza:key": "chart-type",
+		"stanza:example": "grouped",
+		"stanza:description": "Type of your barchart.(stacked, grouped)",
+		"stanza:required": true
+	},
+	{
 		"stanza:key": "your-data",
-		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "label-variable",
-		"stanza:example": "category",
+		"stanza:example": "chromosome",
 		"stanza:description": "Variable to be assigned as label.",
 		"stanza:required": true
 	},
@@ -267,13 +400,19 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "group-variable",
+		"stanza:example": "category",
+		"stanza:description": "variable to be assigned as an identifier of a group.(If you will not use this variable, this parapeter should be set as none)",
+		"stanza:required": false
+	},
+	{
 		"stanza:key": "width",
-		"stanza:example": "200",
+		"stanza:example": "400",
 		"stanza:description": "Width of your stanza"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:example": "200",
+		"stanza:example": "300",
 		"stanza:description": "Height of your stanza"
 	},
 	{
@@ -333,7 +472,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xlabel-angle",
-		"stanza:example": "-45",
+		"stanza:example": "0",
 		"stanza:description": "Angle of X-labels.(in degree)"
 	},
 	{
@@ -374,6 +513,36 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Bar color"
+	},
+	{
+		"stanza:key": "--series-1-color",
+		"stanza:type": "color",
+		"stanza:default": "#3ac9b6",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-2-color",
+		"stanza:type": "color",
+		"stanza:default": "#9ede2f",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-3-color",
+		"stanza:type": "color",
+		"stanza:default": "#f5da64",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-4-color",
+		"stanza:type": "color",
+		"stanza:default": "#f57f5b",
+		"stanza:description": "bar color"
+	},
+	{
+		"stanza:key": "--series-5-color",
+		"stanza:type": "color",
+		"stanza:default": "#f75976",
+		"stanza:description": "bar color"
 	},
 	{
 		"stanza:key": "--emphasized-color",
@@ -478,6 +647,36 @@ var metadata = {
 		"stanza:description": "Font size of labels."
 	},
 	{
+		"stanza:key": "--legendtitle-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "font size of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "font weight of the legend title"
+	},
+	{
+		"stanza:key": "--legendtitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "font color of the legend title"
+	},
+	{
+		"stanza:key": "--legendlabel-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "font size of the legend label"
+	},
+	{
+		"stanza:key": "--legendlabel-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "font color of the legend label"
+	},
+	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
@@ -486,7 +685,7 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": "0.5",
 		"stanza:description": "Stroke width."
 	}
 ]
