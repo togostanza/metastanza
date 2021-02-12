@@ -9,7 +9,7 @@ import './timer-be811b16.js';
 async function barchart(stanza, params) {
   const chartType = params["chart-type"];
 
-  let spec = {$schema : "https://vega.github.io/schema/vega/v5.json"};
+  const spec = { $schema: "https://vega.github.io/schema/vega/v5.json" };
   // switch(chartType){
   //   case "stacked":
   //     spec = Object.values(stackedBarJson)[0];
@@ -212,10 +212,10 @@ async function barchart(stanza, params) {
         "var(--series-4-color)",
         "var(--series-5-color)",
       ],
-    }
+    },
   ];
 
-  if(chartType === "grouped"){
+  if (chartType === "grouped") {
     spec.data = [
       {
         name: "table",
@@ -290,64 +290,64 @@ async function barchart(stanza, params) {
         ],
       },
     ];
-  } else { //stacked
-  spec.data = [
-    {
-      name: "table",
-      url: params["your-data"],
-      transform: [
-        {
-          type: "stack",
-          field: valueVariable,
-          groupby: [labelVariable],
-          sort: {field: groupVariable},
-        },
-      ],
-    },
-  ];
+  } else {
+    //stacked
+    spec.data = [
+      {
+        name: "table",
+        url: params["your-data"],
+        transform: [
+          {
+            type: "stack",
+            field: valueVariable,
+            groupby: [labelVariable],
+            sort: { field: groupVariable },
+          },
+        ],
+      },
+    ];
 
     //scales
     spec.scales[1] = {
-        name: "xscale",
-        type: "band",
-        range: "width",
-        domain: { data: "table", field: labelVariable },
-        // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
-        paddingInner: params["padding-inner"],
-        paddingOuter: params["padding-outer"],
-      };
+      name: "xscale",
+      type: "band",
+      range: "width",
+      domain: { data: "table", field: labelVariable },
+      // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
+      paddingInner: params["padding-inner"],
+      paddingOuter: params["padding-outer"],
+    };
 
-    spec.scales[2] = {
+    (spec.scales[2] = {
       name: "yscale",
       type: "linear",
       range: "height",
       nice: true,
       zero: true,
       domain: { data: "table", field: "y1" },
-    },
-
-    //marks
-    spec.marks = [
-      {
-        type: "group",
-        from: { data: "table" },
-        encode: {
-          enter: {
-            x: { scale: "xscale", field: labelVariable },
-            width: { scale: "xscale", band: params["bar-width"] },
-            y: { scale: "yscale", field: "y0" },
-            y2: { scale: "yscale", field: "y1" },
-            fill: { scale: "color", field: groupVariable },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
+    }),
+      //marks
+      (spec.marks = [
+        {
+          type: "group",
+          from: { data: "table" },
+          encode: {
+            enter: {
+              x: { scale: "xscale", field: labelVariable },
+              width: { scale: "xscale", band: params["bar-width"] },
+              y: { scale: "yscale", field: "y0" },
+              y2: { scale: "yscale", field: "y1" },
+              fill: { scale: "color", field: groupVariable },
+              stroke: { value: "var(--stroke-color)" },
+              strokeWidth: {
+                value: getComputedStyle(stanza.root.host).getPropertyValue(
+                  "--stroke-width"
+                ),
+              },
             },
           },
         },
-      },
-    ];
+      ]);
   }
 
   const el = stanza.root.querySelector("main");
