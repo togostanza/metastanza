@@ -1,5 +1,6 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
+@import "./@vueform/slider/themes/default.scss";
 
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
@@ -99,6 +100,18 @@ main {
       > input {
         margin-right: 4px;
       }
+    }
+    #slider {
+      margin: 60px 40px 30px;
+      width: 230px;
+      .slider-connect {
+        background-color: var(--thead-font-color);
+      }
+    }
+
+    .slider-tooltip {
+      border: 1px solid var(--thead-font-color);
+      background: var(--thead-font-color);
     }
   }
 }
@@ -227,6 +240,8 @@ table {
               margin: 9px 8px 6px;
               border: 1px solid rgba(0, 0, 0, 0.2);
               border-radius: 3px;
+              max-height: 400px;
+              overflow: auto;
               > li {
                 display: flex;
                 margin-bottom: 8px;

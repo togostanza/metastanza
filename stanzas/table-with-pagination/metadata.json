@@ -17,13 +17,13 @@
   "stanza:parameter": [
     {
       "stanza:key": "table_data_api",
-      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
       "stanza:description": "table data api",
       "stanza:required": true
     },
     {
       "stanza:key": "limit",
-      "stanza:example": "10",
+      "stanza:example": "5",
       "stanza:description": "table page size",
       "stanza:required": true
     },

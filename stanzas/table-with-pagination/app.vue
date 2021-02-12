@@ -24,10 +24,12 @@
         Search for "{{ state.columnShowingTextSearch.label }}"
       </p>
       <form
+        v-if="state.columnShowingTextSearch.type === 'literal'"
         class="textSearchWrapper"
         @submit.prevent="
           submitQuery(
             state.columnShowingTextSearch.label,
+            state.columnShowingTextSearch.type,
             state.queryInputByColumn
           )
         "
@@ -46,6 +48,12 @@
           />
         </button>
       </form>
+      <div v-if="state.columnShowingTextSearch.type === 'number'">
+        <Slider
+          v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
+          v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
+        ></Slider>
+      </div>
     </div>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
@@ -183,12 +191,16 @@ import { defineComponent, reactive, computed, onMounted } from "vue";
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import zip from "lodash.zip";
+import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
+import data from "./assets/tableDataWithNumber.json";
 
 export default defineComponent({
+  components: {
+    Slider
+  },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
-
   setup(params) {
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -199,6 +211,7 @@ export default defineComponent({
       query: "",
       queryByColumn: {
         column: null,
+        type: null,
         query: "",
       },
       columnShowingFilters: null,
@@ -217,6 +230,8 @@ export default defineComponent({
       queryInput: "",
       queryInputByColumn: "",
       jumpToNumberInput: "",
+
+      rangeInputs: {},
     });
 
     const filteredRows = computed(() => {
@@ -233,6 +248,17 @@ export default defineComponent({
                   cell.column.label === state.queryByColumn.column &&
                   cell.value.includes(queryByColumn)
               )
+            : true;
+        })
+        .filter((row) => {
+          return Object.keys(state.rangeInputs).length !== 0
+            ? row.some((cell) => {
+                return (
+                  cell.column.type === "number" &&
+                  cell.value >= state.rangeInputs[cell.column.id].value[0] &&
+                  cell.value <= state.rangeInputs[cell.column.id].value[1]
+                );
+              })
             : true;
         })
         .filter((row) => {
@@ -270,8 +296,7 @@ export default defineComponent({
     const rowsInCurrentPage = computed(() => {
       const startIndex =
         (state.pagination.currentPage - 1) * state.pagination.perPage;
-      const endIndex = startIndex + state.pagination.perPage;
-
+      const endIndex = Number(startIndex) + Number(state.pagination.perPage);
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
@@ -324,8 +349,9 @@ export default defineComponent({
       state.pagination.currentPage = num;
     }
 
-    function submitQuery(column, query) {
+    function submitQuery(column, type, query) {
       state.queryByColumn.column = column;
+      state.queryByColumn.type = type;
       state.queryByColumn.query = query;
     }
 
@@ -335,8 +361,8 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const res = await fetch(params.table_data_api);
-      const data = await res.json();
+      // const res = await fetch(params.table_data_api);
+      // const data = await res.json();
 
       state.responseJSON = data;
 
@@ -345,12 +371,16 @@ export default defineComponent({
       const columns = zip(vars, labels, order, href)
         .map(([_var, label, _order, _href]) => {
           const values = data.body.map((row) => row[_var].value);
-
+          const datam = data.body[0];
+          if (datam[_var].type === "number") {
+            state.rangeInputs[_var] = { value: [0, 0], min: 0, max: 0 };
+          }
           return {
             id: _var,
             label,
             order: _order,
             href: _href,
+            type: datam[_var].type,
 
             filters: uniq(values).map((value) => {
               return {
@@ -363,9 +393,18 @@ export default defineComponent({
         .filter((column) => column.label !== null);
 
       state.columns = orderBy(columns, ["order"]);
-
       state.allRows = data.body.map((row) => {
         return columns.map((column) => {
+          if (column.type === "number") {
+            if (row[column.id].value < state.rangeInputs[column.id].min) {
+              state.rangeInputs[column.id].min = row[column.id].value;
+            } else if (
+              row[column.id].value > state.rangeInputs[column.id].max
+            ) {
+              state.rangeInputs[column.id].max = row[column.id].value;
+              state.rangeInputs[column.id].value[1] = row[column.id].value;
+            }
+          }
           return {
             column,
             value: row[column.id].value,
