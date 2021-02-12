@@ -176,6 +176,12 @@ const onRE = /^on[^a-z]/;
 const isOn = (key) => onRE.test(key);
 const isModelListener = (key) => key.startsWith('onUpdate:');
 const extend = Object.assign;
+const remove = (arr, el) => {
+    const i = arr.indexOf(el);
+    if (i > -1) {
+        arr.splice(i, 1);
+    }
+};
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 const hasOwn = (val, key) => hasOwnProperty.call(val, key);
 const isArray = Array.isArray;
@@ -885,8 +891,38 @@ function isProxy(value) {
 function toRaw(observed) {
     return ((observed && toRaw(observed["__v_raw" /* RAW */])) || observed);
 }
+
+const convert = (val) => isObject(val) ? reactive(val) : val;
 function isRef(r) {
     return Boolean(r && r.__v_isRef === true);
+}
+function ref(value) {
+    return createRef(value);
+}
+class RefImpl {
+    constructor(_rawValue, _shallow = false) {
+        this._rawValue = _rawValue;
+        this._shallow = _shallow;
+        this.__v_isRef = true;
+        this._value = _shallow ? _rawValue : convert(_rawValue);
+    }
+    get value() {
+        track(toRaw(this), "get" /* GET */, 'value');
+        return this._value;
+    }
+    set value(newVal) {
+        if (hasChanged(toRaw(newVal), this._rawValue)) {
+            this._rawValue = newVal;
+            this._value = this._shallow ? newVal : convert(newVal);
+            trigger(toRaw(this), "set" /* SET */, 'value', newVal);
+        }
+    }
+}
+function createRef(rawValue, shallow = false) {
+    if (isRef(rawValue)) {
+        return rawValue;
+    }
+    return new RefImpl(rawValue, shallow);
 }
 function unref(ref) {
     return isRef(ref) ? ref.value : ref;
@@ -908,6 +944,31 @@ function proxyRefs(objectWithRefs) {
     return isReactive(objectWithRefs)
         ? objectWithRefs
         : new Proxy(objectWithRefs, shallowUnwrapHandlers);
+}
+function toRefs(object) {
+    const ret = isArray(object) ? new Array(object.length) : {};
+    for (const key in object) {
+        ret[key] = toRef(object, key);
+    }
+    return ret;
+}
+class ObjectRefImpl {
+    constructor(_object, _key) {
+        this._object = _object;
+        this._key = _key;
+        this.__v_isRef = true;
+    }
+    get value() {
+        return this._object[this._key];
+    }
+    set value(newVal) {
+        this._object[this._key] = newVal;
+    }
+}
+function toRef(object, key) {
+    return isRef(object[key])
+        ? object[key]
+        : new ObjectRefImpl(object, key);
 }
 
 class ComputedRefImpl {
@@ -1178,6 +1239,9 @@ function queueCb(cb, activeQueue, pendingQueue, index) {
         pendingQueue.push(...cb);
     }
     queueFlush();
+}
+function queuePreFlushCb(cb) {
+    queueCb(cb, activePreFlushCbs, pendingPreFlushCbs, preFlushIndex);
 }
 function queuePostFlushCb(cb) {
     queueCb(cb, activePostFlushCbs, pendingPostFlushCbs, postFlushIndex);
@@ -1927,6 +1991,173 @@ const createHook = (lifecycle) => (hook, target = currentInstance) =>
 // post-create lifecycle registrations are noops during SSR
 !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 const onMounted = createHook("m" /* MOUNTED */);
+const onUnmounted = createHook("um" /* UNMOUNTED */);
+// initial value for watchers to trigger on undefined initial values
+const INITIAL_WATCHER_VALUE = {};
+// implementation
+function watch(source, cb, options) {
+    return doWatch(source, cb, options);
+}
+function doWatch(source, cb, { immediate, deep, flush, onTrack, onTrigger } = EMPTY_OBJ, instance = currentInstance) {
+    let getter;
+    let forceTrigger = false;
+    if (isRef(source)) {
+        getter = () => source.value;
+        forceTrigger = !!source._shallow;
+    }
+    else if (isReactive(source)) {
+        getter = () => source;
+        deep = true;
+    }
+    else if (isArray(source)) {
+        getter = () => source.map(s => {
+            if (isRef(s)) {
+                return s.value;
+            }
+            else if (isReactive(s)) {
+                return traverse(s);
+            }
+            else if (isFunction(s)) {
+                return callWithErrorHandling(s, instance, 2 /* WATCH_GETTER */);
+            }
+            else ;
+        });
+    }
+    else if (isFunction(source)) {
+        if (cb) {
+            // getter with cb
+            getter = () => callWithErrorHandling(source, instance, 2 /* WATCH_GETTER */);
+        }
+        else {
+            // no cb -> simple effect
+            getter = () => {
+                if (instance && instance.isUnmounted) {
+                    return;
+                }
+                if (cleanup) {
+                    cleanup();
+                }
+                return callWithErrorHandling(source, instance, 3 /* WATCH_CALLBACK */, [onInvalidate]);
+            };
+        }
+    }
+    else {
+        getter = NOOP;
+    }
+    if (cb && deep) {
+        const baseGetter = getter;
+        getter = () => traverse(baseGetter());
+    }
+    let cleanup;
+    const onInvalidate = (fn) => {
+        cleanup = runner.options.onStop = () => {
+            callWithErrorHandling(fn, instance, 4 /* WATCH_CLEANUP */);
+        };
+    };
+    let oldValue = isArray(source) ? [] : INITIAL_WATCHER_VALUE;
+    const job = () => {
+        if (!runner.active) {
+            return;
+        }
+        if (cb) {
+            // watch(source, cb)
+            const newValue = runner();
+            if (deep || forceTrigger || hasChanged(newValue, oldValue)) {
+                // cleanup before running cb again
+                if (cleanup) {
+                    cleanup();
+                }
+                callWithAsyncErrorHandling(cb, instance, 3 /* WATCH_CALLBACK */, [
+                    newValue,
+                    // pass undefined as the old value when it's changed for the first time
+                    oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
+                    onInvalidate
+                ]);
+                oldValue = newValue;
+            }
+        }
+        else {
+            // watchEffect
+            runner();
+        }
+    };
+    // important: mark the job as a watcher callback so that scheduler knows
+    // it is allowed to self-trigger (#1727)
+    job.allowRecurse = !!cb;
+    let scheduler;
+    if (flush === 'sync') {
+        scheduler = job;
+    }
+    else if (flush === 'post') {
+        scheduler = () => queuePostRenderEffect(job, instance && instance.suspense);
+    }
+    else {
+        // default: 'pre'
+        scheduler = () => {
+            if (!instance || instance.isMounted) {
+                queuePreFlushCb(job);
+            }
+            else {
+                // with 'pre' option, the first call must happen before
+                // the component is mounted so it is called synchronously.
+                job();
+            }
+        };
+    }
+    const runner = effect(getter, {
+        lazy: true,
+        onTrack,
+        onTrigger,
+        scheduler
+    });
+    recordInstanceBoundEffect(runner, instance);
+    // initial run
+    if (cb) {
+        if (immediate) {
+            job();
+        }
+        else {
+            oldValue = runner();
+        }
+    }
+    else if (flush === 'post') {
+        queuePostRenderEffect(runner, instance && instance.suspense);
+    }
+    else {
+        runner();
+    }
+    return () => {
+        stop(runner);
+        if (instance) {
+            remove(instance.effects, runner);
+        }
+    };
+}
+function traverse(value, seen = new Set()) {
+    if (!isObject(value) || seen.has(value)) {
+        return value;
+    }
+    seen.add(value);
+    if (isRef(value)) {
+        traverse(value.value, seen);
+    }
+    else if (isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+            traverse(value[i], seen);
+        }
+    }
+    else if (isSet(value) || isMap(value)) {
+        value.forEach((v) => {
+            traverse(v, seen);
+        });
+    }
+    else {
+        for (const key in value) {
+            traverse(value[key], seen);
+        }
+    }
+    return value;
+}
 
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 
@@ -3370,7 +3601,50 @@ function getSequence(arr) {
 
 const isTeleport = (type) => type.__isTeleport;
 const isTeleportDisabled = (props) => props && (props.disabled || props.disabled === '');
+
+const COMPONENTS = 'components';
+/**
+ * @private
+ */
+function resolveComponent(name) {
+    return resolveAsset(COMPONENTS, name) || name;
+}
 const NULL_DYNAMIC_COMPONENT = Symbol();
+// implementation
+function resolveAsset(type, name, warnMissing = true) {
+    const instance = currentRenderingInstance || currentInstance;
+    if (instance) {
+        const Component = instance.type;
+        // self name has highest priority
+        if (type === COMPONENTS) {
+            // special self referencing call generated by compiler
+            // inferred from SFC filename
+            if (name === `_self`) {
+                return Component;
+            }
+            const selfName = getComponentName(Component);
+            if (selfName &&
+                (selfName === name ||
+                    selfName === camelize(name) ||
+                    selfName === capitalize(camelize(name)))) {
+                return Component;
+            }
+        }
+        const res = 
+        // local registration
+        // check instance[type] first for components with mixin or extends.
+        resolve(instance[type] || Component[type], name) ||
+            // global registration
+            resolve(instance.appContext[type], name);
+        return res;
+    }
+}
+function resolve(registry, name) {
+    return (registry &&
+        (registry[name] ||
+            registry[camelize(name)] ||
+            registry[capitalize(camelize(name))]));
+}
 
 const Fragment = Symbol( undefined);
 const Text = Symbol( undefined);
@@ -7612,5 +7886,5 @@ function isObjectLike(value) {
 
 var lodash_zip = zip;
 
-export { Fragment as F, lodash_orderby as a, createBlock as b, computed$1 as c, defineComponent as d, createVNode as e, withDirectives as f, createCommentVNode as g, renderList as h, withKeys as i, createTextVNode as j, openBlock as k, lodash_zip as l, vModelCheckbox as m, createApp as n, onMounted as o, reactive as r, toDisplayString as t, vModelText as v, withModifiers as w };
-//# sourceMappingURL=index-284d928b.js.map
+export { Fragment as F, onUnmounted as a, createBlock as b, computed$1 as c, openBlock as d, defineComponent as e, reactive as f, lodash_orderby as g, resolveComponent as h, createVNode as i, withModifiers as j, withDirectives as k, lodash_zip as l, toDisplayString as m, createCommentVNode as n, onMounted as o, mergeProps as p, renderList as q, ref as r, withKeys as s, toRefs as t, createTextVNode as u, vModelText as v, watch as w, vModelCheckbox as x, createApp as y };
+//# sourceMappingURL=index-b0a1346d.js.map

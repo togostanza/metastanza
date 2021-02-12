@@ -8558,13 +8558,14 @@ var scripts = {
 var dependencies = {
 	"@rollup/plugin-replace": "^2.3.4",
 	"@vue/compiler-sfc": "^3.0.5",
+	"@vueform/slider": "^1.0.3",
+	d3: "^6.3.1",
+	"lodash.mapvalues": "^4.6.0",
+	"lodash.omit": "^4.5.0",
 	"lodash.orderby": "^4.6.0",
 	"lodash.uniq": "^4.5.0",
 	"lodash.zip": "^4.2.0",
 	"rollup-plugin-vue": "^6.0.0-beta.10",
-	d3: "^6.3.1",
-	"lodash.mapvalues": "^4.6.0",
-	"lodash.omit": "^4.5.0",
 	togostanza: "^3.0.0-beta.12",
 	vega: "^5.19.1",
 	"vega-embed": "^6.15.0",
@@ -8733,4 +8734,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, createTextVNode as g, ref as h, octicons as i, computed$1 as j, popScopeId as k, withScopeId as l, mergeProps as m, n, openBlock as o, pushScopeId as p, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-089e3a41.js.map
+//# sourceMappingURL=Layout-8d6a1491.js.map
