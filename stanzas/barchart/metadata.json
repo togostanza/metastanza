@@ -17,8 +17,8 @@
   "stanza:parameter": [
     {
       "stanza:key": "chart-type",
-      "stanza:example": "stacked",
-      "stanza:description": "Type of your barchart.(simple, stacked, grouped)",
+      "stanza:example": "grouped",
+      "stanza:description": "Type of your barchart.(stacked, grouped)",
       "stanza:required": true
     },
     {
@@ -42,8 +42,8 @@
     {
       "stanza:key": "group-variable",
       "stanza:example": "category",
-      "stanza:description": "variable to be assigned as an identifier of a group",
-      "stanza:required": true
+      "stanza:description": "variable to be assigned as an identifier of a group.(If you will not use this variable, this parapeter should be set as none)",
+      "stanza:required": false
     },
     {
       "stanza:key": "width",
@@ -325,7 +325,7 @@
     {
       "stanza:key": "--stroke-width",
       "stanza:type": "number",
-      "stanza:default": "1",
+      "stanza:default": "0.5",
       "stanza:description": "Stroke width."
     }
   ]

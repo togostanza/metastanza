@@ -33,13 +33,6 @@ export default async function stackedBarchart(stanza, params) {
     },
   ];
 
-  // spec.data.name = "table";
-  // spec.data.url = params["your-data"];
-  // spec.data.transform[0].field = valueVariable;
-  // spec.data.transform[0].groupby = labelVariable;
-  // spec.data.transform[0].sort = groupVariable;
-
-  //scales
   spec.scales = [
     {
       name: "x",
