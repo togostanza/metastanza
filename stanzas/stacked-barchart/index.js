@@ -27,7 +27,7 @@ export default async function stackedBarchart(stanza, params) {
           type: "stack",
           field: valueVariable,
           groupby: [labelVariable],
-          sort: {field: groupVariable},
+          sort: { field: groupVariable },
         },
       ],
     },
