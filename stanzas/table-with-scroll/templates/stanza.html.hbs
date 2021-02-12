@@ -2,32 +2,75 @@
   table {
       width: 100%;
   }
-  td {
-      padding: 5px 20px 5px 20px;
-  }
 </style>
 
 <div class="container">
   <div class="infomation">
-    <form class="search-form" action="#">
+    <div class="text-search-wrapper">
       <input
-        class="search-box"
         type="text"
-        placeholder="Serch for keywords..."
+        id="search-input"
+        placeholder="Search for keywords..."
       />
-      <button class="search-btn" type="submit">
+      <button id="search-btn" type="submit">
         <img
           src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
           alt="search"
         />
+        <span class="search-text">
+          Search
+        </span>
       </button>
-    </form>
-    <a class="dl-btn" href="#" download="#">
+    </div>
+    <a id="download-btn" download="table-data">
       <img
-        src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download1.svg"
-        alt=""
+        src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
+        alt="download"
       />
     </a>
   </div>
+  <p class="table-title">
+    Title of this Table
+  </p>
   <div id="renderDiv"></div>
+
+  <div id="pagination">
+    <ul>
+      <li class="first-btn back-btn arrow-btn">
+        <span></span>
+        <span></span>
+      </li>
+      <li class="previous-btn back-btn arrow-btn">
+        <span></span>
+      </li>
+      <li class="current-btn">
+        1
+      </li>
+      <li>
+        2
+      </li>
+      <li>
+        3
+      </li>
+      <li>
+        4
+      </li>
+      <li>
+        …
+      </li>
+      <li>
+        10
+      </li>
+      <li class="next-btn advance-btn arrow-btn">
+        <span></span>
+      </li>
+      <li class="last-btn advance-btn arrow-btn">
+        <span></span>
+        <span></span>
+      </li>
+    </ul>
+  </div>
+  <p class="show-info">
+    Showing 1 to 10 of 44 entres
+  </p>
 </div>

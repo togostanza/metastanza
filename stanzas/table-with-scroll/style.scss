@@ -3,6 +3,18 @@
 
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
+
+@mixin button {
+  border: 1px solid var(--searchbtn-border-color);
+  border-radius: var(--searchbtn-radius);
+  background-color: var(--searchbtn-color);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
 main {
   padding: 1rem 2rem;
 }
@@ -11,170 +23,161 @@ main {
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  font-family: var(--general-font-family);
   color: var(--general-font-color);
+  font-family: var(--general-font-family);
   font-size: var(--general-font-size);
 }
 
-.container {
-  width: 800px;
-}
-
-.infomation {
+#renderDiv {
   width: 100%;
-  height: 25px;
-  display: flex;
-  justify-content: space-between;
 }
 
-.search-form {
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container {
+  width: 100%;
+  max-width: 800px;
 }
 
-.search-box {
-  margin-right: 5px;
-  height: 20px;
-  width: 164px;
-  border: 1px solid var(--series-0-color);
-  border-radius: 3px;
-  font-size: 10px;
-  color: #c1c0c0;
-}
-
-::placeholder {
-  color: #eaeaea;
-}
-
-.search-btn {
-  margin-right: 2px;
-  height: 20px;
-  width: 20px;
-  border: 1px solid var(--series-0-color);
-  border-radius: 3px;
-  background-color: var(--series-0-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.search-btn img {
-  width: 12px;
-  height: 12px;
-  display: block;
-}
-
-.dl-btn img {
-  width: 13px;
-  height: 13px;
-}
-
-table {
-  width: inherit;
-  text-align: left;
-  border-collapse: collapse;
-  margin: 0;
-  background-color: var(--background-color);
-  box-shadow: none;
-  // box-shadow: 1px 1px 3px 1px #eee;
-  border: 1px solid #ccb9b1;
-}
-
-.sticky-table > thead > .table-fixed > th {
-  /* 縦スクロール時に固定する */
-  background-color: var(--thead-background-color);
-  position: sticky;
-  top: 0;
-  /* tbody内のセルより手前に表示する */
-  z-index: 1;
-  padding-left: 10px;
-  height: 40px;
-}
-
-.sticky-table-wrapper {
-  overflow: scroll;
-  width: calc(100vw - 40rem);
-  height: 75vh;
-}
-
-thead {
-  font-size: var(--thead-font-size);
-  border-bottom: var(--thead-border-bottom);
-  color: var(--thead-font-color);
-  margin-bottom: 0;
-  padding: 8px 8px 0 8px;
-  // background-color: var(--thead-background-color);
-  border-top: var(--table-outside-border);
-  border-right: var(--table-outside-border);
-  border-left: var(--table-outside-border);
-}
-
-#renderDiv > table > thead > tr > th {
-  color: var(--thead-font-color);
-  font-weight: var(--thead-font-weight);
-}
-
-thead > tr > {
-  td {
-    color: var(--series-0-color);
-    width: 150px;
-    padding: 5px 5px 5px 10px;
-    border-bottom: var(--ruled-line);
+.tableWrapper {
+  height: var(--table-height);
+  overflow: auto;
+  > table {
+    width: 100%;
+    text-align: left;
     border-collapse: collapse;
+    margin: 0;
+    background-color: var(--background-color);
+    border-right: var(--table-border);
+    border-bottom: var(--table-border);
+    border-left: var(--table-border);
+    box-shadow: var(--table-shadow);
+    > thead {
+      background-color: var(--thead-background-color);
+      font-size: var(--thead-font-size);
+      color: var(--thead-font-color);
+      margin-bottom: 0;
+      > tr {
+        > th {
+          color: var(--thead-font-color);
+          font-weight: var(--thead-font-weight);
+          padding: 10px;
+          position: sticky;
+          top: -1px;
+          background: #ffffff;
+          &:after {
+            content: "";
+            width: 100%;
+            height: 1px;
+            background-color: var(--thead-border-color);
+            position: absolute;
+            left: 0;
+            bottom: 0;
+          }
+          &:first-child {
+            background-color: var(--thead-background-color);
+            padding-left: 20px;
+            padding-right: 20px;
+          }
+        }
+      }
+    }
+    > tbody {
+      font-size: var(--tbody-font-size);
+      color: var(--tbody-font-color);
+      background-color: var(--tbody-background-color);
+      border-right: var(--tbody-border-right);
+      border-bottom: var(--tbody-border-bottom);
+      border-left: var(--tbody-border-left);
+      > tr {
+        &:nth-child(odd) {
+          background-color: var(--tbody-odd-background-color);
+        }
+        &:nth-child(even) {
+          background-color: var(--tbody-even-background-color);
+        }
+        > td {
+          border-bottom: var(--ruled-line);
+          border-collapse: collapse;
+          padding: 10px;
+          &:first-child {
+            padding-left: 20px;
+          }
+          &:last-child {
+            padding-right: 20px;
+          }
+          &.loadingWrapper {
+            text-align: center;
+          }
+        }
+        &:last-of-type {
+          > td {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+$dot-width: 5px;
+$dot-spacing: $dot-width + $dot-width/2 !default;
+$dot-color: var(--thead-font-color);
+$dot-before-color: $dot-color !default;
+$dot-after-color: $dot-color !default;
+$left-pos: -9999px;
+$x1: -$left-pos - $dot-spacing;
+$x2: -$left-pos;
+$x3: -$left-pos + $dot-spacing;
+
+@mixin dot {
+  width: $dot-width;
+  height: $dot-width;
+  border-radius: 50%;
+  background-color: $dot-color;
+}
+
+.dotTyping {
+  position: relative;
+  left: $left-pos;
+  display: inline-block;
+  @include dot;
+  box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+    $x3 0 0 0 $dot-after-color;
+  animation: dot-typing 1.5s infinite linear;
+}
+
+@keyframes dot-typing {
+  0% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
   }
 
-  th > .icon {
-    cursor: pointer;
-    content: "";
-    display: inline-block;
-    width: 9px;
-    height: 13px;
-    background-repeat: no-repeat;
-    background-position: center 5px;
-    background-size: 8px 8px;
+  16.667% {
+    box-shadow: $x1 -5px 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
   }
-}
 
-.filtericon {
-  margin-left: 2px;
-  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
-}
+  33.333% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
+  }
 
-.sorticon {
-  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);
-}
+  50% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 -5px 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
+  }
 
-.sorticon-des {
-  background-image: url(../../assets/gray-sort-des.svg);
-}
-.sorticon-asc {
-  background-image: url(../../assets/gray-sort-asc.svg);
-}
+  66.667% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
+  }
 
-tbody {
-  font-size: var(--tbody-font-size);
-  color: var(--thead-font-color);
-  padding: 0px 8px;
-  overflow-x: scroll;
-  overflow-y: scroll;
-  height: 250px;
-}
+  83.333% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 -5px 0 0 $dot-after-color;
+  }
 
-// thead, tbody {
-//   display: block;
-// }
-
-tbody tr td:hover {
-  color: var(--emphasized-color);
-}
-
-.stack {
-  border-right: var(--thead-border-bottom);
-}
-
-.show-info {
-  display: flex;
-  justify-content: center;
+  100% {
+    box-shadow: $x1 0 0 0 $dot-before-color, $x2 0 0 0 $dot-color,
+      $x3 0 0 0 $dot-after-color;
+  }
 }
