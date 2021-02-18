@@ -16,45 +16,47 @@
         />
       </button>
     </form>
-    <div
-      v-if="state.columnShowingTextSearch !== null"
-      class="textSearchByColumnWrapper"
-    >
-      <p class="title">
-        Search for "{{ state.columnShowingTextSearch.label }}"
-      </p>
-      <form
-        v-if="state.columnShowingTextSearch.type === 'literal'"
-        class="textSearchWrapper"
-        @submit.prevent="
-          submitQuery(
-            state.columnShowingTextSearch.label,
-            state.columnShowingTextSearch.type,
-            state.queryInputByColumn
-          )
-        "
+    <transition name="modal">
+      <div
+        v-if="state.columnShowingTextSearch !== null"
+        class="textSearchByColumnWrapper modal"
       >
-        <input
-          id="queryInputByColumn"
-          v-model="state.queryInputByColumn"
-          type="text"
-          placeholder="Search for keywords..."
-          name="queryInputByColumn"
-        />
-        <button class="searchBtn" type="submit">
-          <img
-            src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-            alt="search"
+        <p class="title">
+          Search for "{{ state.columnShowingTextSearch.label }}"
+        </p>
+        <form
+          v-if="state.columnShowingTextSearch.type === 'literal'"
+          class="textSearchWrapper"
+          @submit.prevent="
+            submitQuery(
+              state.columnShowingTextSearch.label,
+              state.columnShowingTextSearch.type,
+              state.queryInputByColumn
+            )
+          "
+        >
+          <input
+            id="queryInputByColumn"
+            v-model="state.queryInputByColumn"
+            type="text"
+            placeholder="Search for keywords..."
+            name="queryInputByColumn"
           />
-        </button>
-      </form>
-      <div v-if="state.columnShowingTextSearch.type === 'number'">
-        <Slider
-          v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
-          v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
-        ></Slider>
+          <button class="searchBtn" type="submit">
+            <img
+              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
+              alt="search"
+            />
+          </button>
+        </form>
+        <div v-if="state.columnShowingTextSearch.type === 'number'">
+          <Slider
+            v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
+            v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
+          ></Slider>
+        </div>
       </div>
-    </div>
+    </transition>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
         src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
@@ -133,12 +135,9 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span class="arrow left" @click="state.pagination.currentPage = 1"
-        >&lt;
+      <span class="arrow double left" @click="state.pagination.currentPage = 1">
       </span>
-      <span class="singleArrow left" @click="state.pagination.currentPage--"
-        >&lt;&lt;</span
-      >
+      <span class="arrow left" @click="state.pagination.currentPage--"></span>
     </template>
 
     <ul>
@@ -147,7 +146,7 @@
         :key="page"
         :class="[
           'pagination',
-          { active: state.pagination.currentPage === page },
+          { currentBtn: state.pagination.currentPage === page },
         ]"
         @click="state.pagination.currentPage = page"
       >
@@ -156,15 +155,10 @@
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span class="singleArrow right" @click="state.pagination.currentPage++"
-        >&gt;</span
-      >
-
+      <span class="arrow right" @click="state.pagination.currentPage++"></span>
       <span
-        class="arrow right"
-        @click="state.pagination.currentPage = totalPages"
-        >&gt;&gt;</span
-      >
+        class="arrow double right"
+        @click="state.pagination.currentPage = totalPages"></span>
     </template>
 
     <div class="pageNumber">
