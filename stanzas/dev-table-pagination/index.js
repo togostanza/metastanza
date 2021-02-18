@@ -62,11 +62,11 @@ export default function tablePagination(stanza, params) {
   }
   select.addEventListener("change", (e) => {
     limit = parseInt(e.target.value);
-    console.log(limit);
     current_page = Math.ceil(offset / limit);
     togostanza.setAttribute("limit", limit);
     togostanza.setAttribute("offset", offset);
     setBothPagination();
+    setKnobWidth(limit, max)
   });
 
   const setBothPagination = () => {
@@ -188,6 +188,7 @@ export default function tablePagination(stanza, params) {
     slider.appendChild(knob_ul);
     const knob = document.createElement("li");
     knob.setAttribute("class", "page_slider_knob");
+
     knob.innerHTML = "1";
     knob_ul.appendChild(knob);
     knob.onmouseover = () => {
@@ -391,5 +392,13 @@ export default function tablePagination(stanza, params) {
     max_page = Math.ceil(max / limit);
     stanza.select("#totalSize").innerHTML = max;
     setBothPagination();
+    setKnobWidth(limit, max)
   });
+
+  const setKnobWidth = (limit, max) => {
+    const max_page = Math.ceil(max / limit);
+    const div = stanza.select("#paginationTop");
+    const knob = div.getElementsByClassName("page_slider_knob")[0]
+    knob.setAttribute('style', `width: calc(100% * ${limit / max_page})`)
+  }
 }
