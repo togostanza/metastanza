@@ -158,8 +158,7 @@
       <span class="arrow right" @click="state.pagination.currentPage++"></span>
       <span
         class="arrow double right"
-        @click="state.pagination.currentPage = totalPages"
-      ></span>
+        @click="state.pagination.currentPage = totalPages"></span>
     </template>
 
     <div class="pageNumber">

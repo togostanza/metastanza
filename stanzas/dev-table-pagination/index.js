@@ -66,7 +66,7 @@ export default function tablePagination(stanza, params) {
     togostanza.setAttribute("limit", limit);
     togostanza.setAttribute("offset", offset);
     setBothPagination();
-    setKnobWidth(limit, max)
+    setKnobWidth(limit, max);
   });
 
   const setBothPagination = () => {
@@ -392,13 +392,13 @@ export default function tablePagination(stanza, params) {
     max_page = Math.ceil(max / limit);
     stanza.select("#totalSize").innerHTML = max;
     setBothPagination();
-    setKnobWidth(limit, max)
+    setKnobWidth(limit, max);
   });
 
   const setKnobWidth = (limit, max) => {
     const max_page = Math.ceil(max / limit);
     const div = stanza.select("#paginationTop");
-    const knob = div.getElementsByClassName("page_slider_knob")[0]
-    knob.setAttribute('style', `width: calc(100% * ${limit / max_page})`)
-  }
+    const knob = div.getElementsByClassName("page_slider_knob")[0];
+    knob.setAttribute("style", `width: calc(100% * ${limit / max_page})`);
+  };
 }

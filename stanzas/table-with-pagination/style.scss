@@ -138,12 +138,10 @@ main {
         background-color: var(--currentbtn-background-color);
       }
       &:first-of-type {
-        border-radius: var(--paginationbtn-border-radius) 0 0
-          var(--paginationbtn-border-radius) !important;
+        border-radius: var(--paginationbtn-border-radius) 0 0 var(--paginationbtn-border-radius) !important;
       }
       &:last-of-type {
-        border-radius: 0 var(--paginationbtn-border-radius)
-          var(--paginationbtn-border-radius) 0 !important;
+        border-radius: 0 var(--paginationbtn-border-radius) var(--paginationbtn-border-radius) 0 !important;
         border-right: none;
       }
       &.currentBtn {
@@ -157,8 +155,7 @@ main {
     width: 7px;
     height: 7px;
     border: 1px solid;
-    border-color: transparent transparent var(--arrowbtn-color)
-      var(--arrowbtn-color);
+    border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);
     transform: rotate(45deg);
     margin: 0 2px 0 6px;
     &.right {
@@ -168,7 +165,7 @@ main {
     &.double {
       position: relative;
       &:after {
-        content: "";
+        content: '';
         display: inline-block;
         width: 7px;
         height: 7px;
