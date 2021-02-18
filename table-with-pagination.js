@@ -1,5 +1,5 @@
 import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { t as toRefs, r as ref, c as computed, o as onMounted, a as onUnmounted, w as watch, b as createBlock, d as openBlock, e as defineComponent, f as reactive, l as lodash_zip, g as lodash_orderby, h as resolveComponent, i as createVNode, j as withModifiers, k as withDirectives, v as vModelText, m as toDisplayString, n as createCommentVNode, p as mergeProps, F as Fragment, q as renderList, s as withKeys, u as createTextVNode, x as vModelCheckbox, y as createApp } from './index-b0a1346d.js';
+import { t as toRefs, r as ref, c as computed, o as onMounted, a as onUnmounted, w as watch, b as createBlock, d as openBlock, e as defineComponent, f as reactive, l as lodash_zip, g as lodash_orderby, h as resolveComponent, i as createVNode, j as withModifiers, k as withDirectives, v as vModelText, T as Transition, m as withCtx, F as Fragment, n as renderList, p as createCommentVNode, q as withKeys, s as createTextVNode, u as toDisplayString, x as mergeProps, y as vModelCheckbox, z as createApp } from './index-793980dd.js';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -1324,14 +1324,8 @@ var metadata = {
 	{
 		"stanza:key": "--paginationbtn-border",
 		"stanza:type": "text",
-		"stanza:default": "1px solid #fff",
+		"stanza:default": "1px solid rgba(0, 0, 0, .1)",
 		"stanza:description": "border style of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #fff",
-		"stanza:description": "border-bottom style of pagination button"
 	},
 	{
 		"stanza:key": "--paginationbtn-border-radius",
@@ -1340,15 +1334,9 @@ var metadata = {
 		"stanza:description": "border radius of pagination button"
 	},
 	{
-		"stanza:key": "--paginationbtn-margin",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "margin of pagination button"
-	},
-	{
 		"stanza:key": "--paginationbtn-padding",
 		"stanza:type": "text",
-		"stanza:default": "4px",
+		"stanza:default": "2px 8px",
 		"stanza:description": "padding of pagination button"
 	},
 	{
@@ -1358,21 +1346,15 @@ var metadata = {
 		"stanza:description": "font size of pagination button"
 	},
 	{
-		"stanza:key": "--edge-paginationbtn-border-radius",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "border radius of edge pagination button"
-	},
-	{
 		"stanza:key": "--currentbtn-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#002559",
+		"stanza:default": "#ffffff",
 		"stanza:description": "font color of pagination button.(at current page)"
 	},
 	{
 		"stanza:key": "--currentbtn-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#D5E1E8",
+		"stanza:default": "#256d80",
 		"stanza:description": "background color of pagination button.(at current page)"
 	},
 	{
@@ -1380,30 +1362,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "1px solid #DDDDDD",
 		"stanza:description": "border style of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #DDDDDD",
-		"stanza:description": "border-bottom style of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-border-radius",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "border radius of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-padding",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "padding of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-margin",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "margin of pagination button.(at current page)"
 	},
 	{
 		"stanza:key": "--arrowbtn-color",
@@ -3027,7 +2985,7 @@ const _hoisted_2 = /*#__PURE__*/createVNode("button", {
 ], -1 /* HOISTED */);
 const _hoisted_3 = {
   key: 0,
-  class: "textSearchByColumnWrapper"
+  class: "textSearchByColumnWrapper modal"
 };
 const _hoisted_4 = { class: "title" };
 const _hoisted_5 = /*#__PURE__*/createVNode("button", {
@@ -3075,43 +3033,48 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         _hoisted_2
       ], 32 /* HYDRATE_EVENTS */),
-      (_ctx.state.columnShowingTextSearch !== null)
-        ? (openBlock(), createBlock("div", _hoisted_3, [
-            createVNode("p", _hoisted_4, " Search for \"" + toDisplayString(_ctx.state.columnShowingTextSearch.label) + "\" ", 1 /* TEXT */),
-            (_ctx.state.columnShowingTextSearch.type === 'literal')
-              ? (openBlock(), createBlock("form", {
-                  key: 0,
-                  class: "textSearchWrapper",
-                  onSubmit: _cache[4] || (_cache[4] = withModifiers($event => (
-          _ctx.submitQuery(
-            _ctx.state.columnShowingTextSearch.label,
-            _ctx.state.columnShowingTextSearch.type,
-            _ctx.state.queryInputByColumn
-          )
-        ), ["prevent"]))
-                }, [
-                  withDirectives(createVNode("input", {
-                    id: "queryInputByColumn",
-                    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => (_ctx.state.queryInputByColumn = $event)),
-                    type: "text",
-                    placeholder: "Search for keywords...",
-                    name: "queryInputByColumn"
-                  }, null, 512 /* NEED_PATCH */), [
-                    [vModelText, _ctx.state.queryInputByColumn]
-                  ]),
-                  _hoisted_5
-                ], 32 /* HYDRATE_EVENTS */))
-              : createCommentVNode("v-if", true),
-            (_ctx.state.columnShowingTextSearch.type === 'number')
-              ? (openBlock(), createBlock("div", _hoisted_6, [
-                  createVNode(_component_Slider, mergeProps({
-                    modelValue: _ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id].value,
-                    "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => (_ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id].value = $event))
-                  }, _ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id]), null, 16 /* FULL_PROPS */, ["modelValue"])
-                ]))
-              : createCommentVNode("v-if", true)
-          ]))
-        : createCommentVNode("v-if", true),
+      createVNode(Transition, { name: "modal" }, {
+        default: withCtx(() => [
+          (_ctx.state.columnShowingTextSearch !== null)
+            ? (openBlock(), createBlock("div", _hoisted_3, [
+                createVNode("p", _hoisted_4, " Search for \"" + toDisplayString(_ctx.state.columnShowingTextSearch.label) + "\" ", 1 /* TEXT */),
+                (_ctx.state.columnShowingTextSearch.type === 'literal')
+                  ? (openBlock(), createBlock("form", {
+                      key: 0,
+                      class: "textSearchWrapper",
+                      onSubmit: _cache[4] || (_cache[4] = withModifiers($event => (
+            _ctx.submitQuery(
+              _ctx.state.columnShowingTextSearch.label,
+              _ctx.state.columnShowingTextSearch.type,
+              _ctx.state.queryInputByColumn
+            )
+          ), ["prevent"]))
+                    }, [
+                      withDirectives(createVNode("input", {
+                        id: "queryInputByColumn",
+                        "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => (_ctx.state.queryInputByColumn = $event)),
+                        type: "text",
+                        placeholder: "Search for keywords...",
+                        name: "queryInputByColumn"
+                      }, null, 512 /* NEED_PATCH */), [
+                        [vModelText, _ctx.state.queryInputByColumn]
+                      ]),
+                      _hoisted_5
+                    ], 32 /* HYDRATE_EVENTS */))
+                  : createCommentVNode("v-if", true),
+                (_ctx.state.columnShowingTextSearch.type === 'number')
+                  ? (openBlock(), createBlock("div", _hoisted_6, [
+                      createVNode(_component_Slider, mergeProps({
+                        modelValue: _ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id].value,
+                        "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => (_ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id].value = $event))
+                      }, _ctx.state.rangeInputs[_ctx.state.columnShowingTextSearch.id]), null, 16 /* FULL_PROPS */, ["modelValue"])
+                    ]))
+                  : createCommentVNode("v-if", true)
+              ]))
+            : createCommentVNode("v-if", true)
+        ]),
+        _: 1 /* STABLE */
+      }),
       createVNode("a", {
         class: "downloadBtn",
         href: _ctx.blobUrl,
@@ -3220,13 +3183,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       (_ctx.state.pagination.currentPage !== 1)
         ? (openBlock(), createBlock(Fragment, { key: 0 }, [
             createVNode("span", {
-              class: "arrow left",
+              class: "arrow double left",
               onClick: _cache[6] || (_cache[6] = $event => (_ctx.state.pagination.currentPage = 1))
-            }, "< "),
+            }),
             createVNode("span", {
-              class: "singleArrow left",
+              class: "arrow left",
               onClick: _cache[7] || (_cache[7] = $event => (_ctx.state.pagination.currentPage--))
-            }, "<<")
+            })
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
       createVNode("ul", null, [
@@ -3235,7 +3198,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             key: page,
             class: [
           'pagination',
-          { active: _ctx.state.pagination.currentPage === page },
+          { currentBtn: _ctx.state.pagination.currentPage === page },
         ],
             onClick: $event => (_ctx.state.pagination.currentPage = page)
           }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, ["onClick"]))
@@ -3244,13 +3207,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       (_ctx.state.pagination.currentPage !== _ctx.totalPages)
         ? (openBlock(), createBlock(Fragment, { key: 1 }, [
             createVNode("span", {
-              class: "singleArrow right",
-              onClick: _cache[8] || (_cache[8] = $event => (_ctx.state.pagination.currentPage++))
-            }, ">"),
-            createVNode("span", {
               class: "arrow right",
+              onClick: _cache[8] || (_cache[8] = $event => (_ctx.state.pagination.currentPage++))
+            }),
+            createVNode("span", {
+              class: "arrow double right",
               onClick: _cache[9] || (_cache[9] = $event => (_ctx.state.pagination.currentPage = _ctx.totalPages))
-            }, ">>")
+            })
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
       createVNode("div", _hoisted_15, [
@@ -3294,7 +3257,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n/* Functional styling;\n* These styles are required for noUiSlider to function.\n* You don't need to change these rules to apply your design.\n*/\n.slider-target,\n.slider-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-target {\n  position: relative;\n}\n\n.slider-base,\n.slider-connects {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n\n/* Wrapper for all connect elements.\n*/\n.slider-connects {\n  overflow: hidden;\n  z-index: 0;\n}\n\n.slider-connect,\n.slider-origin {\n  will-change: transform;\n  position: absolute;\n  z-index: 1;\n  top: 0;\n  right: 0;\n  -ms-transform-origin: 0 0;\n  -webkit-transform-origin: 0 0;\n  -webkit-transform-style: preserve-3d;\n  transform-origin: 0 0;\n  transform-style: flat;\n}\n\n.slider-connect {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-origin {\n  height: 10%;\n  width: 10%;\n}\n\n/* Offset direction\n*/\n.slider-txt-dir-rtl.slider-horizontal .slider-origin {\n  left: 0;\n  right: auto;\n}\n\n/* Give origins 0 height/width so they don't interfere with clicking the\n* connect elements.\n*/\n.slider-vertical .slider-origin {\n  width: 0;\n}\n\n.slider-horizontal .slider-origin {\n  height: 0;\n}\n\n.slider-handle {\n  -webkit-backface-visibility: hidden;\n  backface-visibility: hidden;\n  position: absolute;\n}\n\n.slider-touch-area {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-state-tap .slider-connect,\n.slider-state-tap .slider-origin {\n  -webkit-transition: transform 0.3s;\n  transition: transform 0.3s;\n}\n\n.slider-state-drag * {\n  cursor: inherit !important;\n}\n\n/* Slider size and handle placement;\n*/\n.slider-horizontal {\n  height: 6px;\n}\n\n.slider-horizontal .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -6px;\n  right: -8px;\n}\n\n.slider-vertical {\n  width: 6px;\n  height: 300px;\n}\n\n.slider-vertical .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -8px;\n  right: -6px;\n}\n\n.slider-txt-dir-rtl.slider-horizontal .slider-handle {\n  left: -8px;\n  right: auto;\n}\n\n/* Styling;\n* Giving the connect element a border radius causes issues with using transform: scale\n*/\n.slider-base {\n  background-color: #d4e0e7;\n  border-radius: 3px;\n}\n\n.slider-connects {\n  border-radius: 3px;\n}\n\n.slider-connect {\n  background: #41b883;\n  cursor: pointer;\n}\n\n/* Handles and cursors;\n*/\n.slider-draggable {\n  cursor: ew-resize;\n}\n\n.slider-vertical .slider-draggable {\n  cursor: ns-resize;\n}\n\n.slider-handle {\n  width: 16px;\n  height: 16px;\n  border-radius: 50%;\n  background: #fff;\n  border: 0;\n  right: -8px;\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);\n  cursor: grab;\n}\n.slider-handle:focus {\n  outline: none;\n}\n\n.slider-active {\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.42);\n  cursor: grabbing;\n}\n\n/* Disabled state;\n*/\n[disabled] .slider-connect {\n  background: #B8B8B8;\n}\n\n[disabled].slider-target,\n[disabled].slider-handle,\n[disabled] .slider-handle {\n  cursor: not-allowed;\n}\n\n[disabled] .slider-tooltip {\n  background: #B8B8B8;\n  border-color: #B8B8B8;\n}\n\n.slider-tooltip {\n  position: absolute;\n  display: block;\n  font-size: 14px;\n  font-weight: 500;\n  white-space: nowrap;\n  padding: 2px 5px;\n  min-width: 20px;\n  text-align: center;\n  color: #fff;\n  border-radius: 5px;\n  border: 1px solid #41b883;\n  background: #41b883;\n}\n\n.slider-horizontal .slider-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 24px;\n}\n.slider-horizontal .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  bottom: -10px;\n  left: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-top-color: inherit;\n  transform: translate(-50%);\n}\n\n.slider-vertical .slider-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 24px;\n}\n.slider-vertical .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  right: -10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-left-color: inherit;\n  transform: translateY(-50%);\n}\n\n.slider-horizontal .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(50%, 0);\n  transform: translate(50%, 0);\n  left: auto;\n  bottom: 14px;\n}\n\n.slider-vertical .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(0, -18px);\n  transform: translate(0, -18px);\n  top: auto;\n  right: 18px;\n}\n\n/* Base;\n*\n*/\n.slider-pips,\n.slider-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-pips {\n  position: absolute;\n  color: #999;\n}\n\n/* Values;\n*\n*/\n.slider-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n\n.slider-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n\n/* Markings;\n*\n*/\n.slider-marker {\n  position: absolute;\n  background: #CCC;\n}\n\n.slider-marker-sub {\n  background: #AAA;\n}\n\n.slider-marker-large {\n  background: #AAA;\n}\n\n/* Horizontal layout;\n*\n*/\n.slider-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n\n.slider-value-horizontal {\n  -webkit-transform: translate(-50%, 50%);\n  transform: translate(-50%, 50%);\n}\n.slider-rtl .slider-value-horizontal {\n  -webkit-transform: translate(50%, 50%);\n  transform: translate(50%, 50%);\n}\n\n.slider-marker-horizontal.slider-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n\n.slider-marker-horizontal.slider-marker-sub {\n  height: 10px;\n}\n\n.slider-marker-horizontal.slider-marker-large {\n  height: 15px;\n}\n\n/* Vertical layout;\n*\n*/\n.slider-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n\n.slider-value-vertical {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  padding-left: 25px;\n}\n.slider-rtl .slider-value-vertical {\n  -webkit-transform: translate(0, 50%);\n  transform: translate(0, 50%);\n}\n\n.slider-marker-vertical.slider-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n\n.slider-marker-vertical.slider-marker-sub {\n  width: 10px;\n}\n\n.slider-marker-vertical.slider-marker-large {\n  width: 15px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n.tableOption .textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.tableOption .textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.tableOption .textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.tableOption .textSearchWrapper > .searchBtn {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n}\n.tableOption .textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n.tableOption > .textSearchByColumnWrapper {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n}\n.tableOption > .textSearchByColumnWrapper > p.title {\n  display: block;\n  padding: 6px 16px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper {\n  padding: 26px 40px 26px 20px;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper > input {\n  margin-right: 4px;\n}\n.tableOption > .textSearchByColumnWrapper #slider {\n  margin: 60px 40px 30px;\n  width: 230px;\n}\n.tableOption > .textSearchByColumnWrapper #slider .slider-connect {\n  background-color: var(--thead-font-color);\n}\n.tableOption > .textSearchByColumnWrapper .slider-tooltip {\n  border: 1px solid var(--thead-font-color);\n  background: var(--thead-font-color);\n}\n\n.paginationWrapper {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n}\n.paginationWrapper > ul {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > ul > li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border: var(--paginationbtn-border);\n  border-bottom: var(--paginationbtn-border-bottom);\n  border-radius: var(--paginationbtn-border-radius);\n  margin: var(--paginationbtn-margin);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n}\n> .paginationWrapper > ul > li.first-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n> .paginationWrapper > ul > li.last-child {\n  border-radius: var(--edge-paginationbtn-border-radius) !important;\n}\n.paginationWrapper > ul > li.arrow-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.paginationWrapper > ul > li.back-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.advance-btn > span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--arrowbtn-color) var(--arrowbtn-color) transparent transparent;\n  transform: rotate(45deg);\n}\n.paginationWrapper > ul > li.current-btn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--currentbtn-border);\n  border-bottom: var(--currentbtn-border-bottom);\n  border-radius: var(--currentbtn-border-radius);\n  padding: var(--currentbtn-padding);\n  margin: var(--currentbtn-margin);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n.modalBackground.black {\n  background-color: rgba(0, 0, 0, 0.3);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  top: 4px;\n  left: -20px;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n  border-radius: var(--searchbox-radius);\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {\n  padding: 4px 8px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 9px 8px;\n  margin: 9px 8px 6px;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  border-radius: 3px;\n  max-height: 400px;\n  overflow: auto;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 6px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {\n  display: flex;\n  justify-content: center;\n  padding: 0 8px;\n  margin-bottom: 9px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  padding: 3px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:first-of-type {\n  margin-right: 4px;\n  width: 60%;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:last-of-type {\n  width: 40%;\n}\ntable > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {\n  left: auto;\n  right: 11px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center;\n  margin-bottom: -4px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.searchIcon {\n  display: var(--searchicon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.filterIcon.active {\n  z-index: 3;\n  position: relative;\n  background-color: var(--thead-font-color);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n/* Functional styling;\n* These styles are required for noUiSlider to function.\n* You don't need to change these rules to apply your design.\n*/\n.slider-target,\n.slider-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-target {\n  position: relative;\n}\n\n.slider-base,\n.slider-connects {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n\n/* Wrapper for all connect elements.\n*/\n.slider-connects {\n  overflow: hidden;\n  z-index: 0;\n}\n\n.slider-connect,\n.slider-origin {\n  will-change: transform;\n  position: absolute;\n  z-index: 1;\n  top: 0;\n  right: 0;\n  -ms-transform-origin: 0 0;\n  -webkit-transform-origin: 0 0;\n  -webkit-transform-style: preserve-3d;\n  transform-origin: 0 0;\n  transform-style: flat;\n}\n\n.slider-connect {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-origin {\n  height: 10%;\n  width: 10%;\n}\n\n/* Offset direction\n*/\n.slider-txt-dir-rtl.slider-horizontal .slider-origin {\n  left: 0;\n  right: auto;\n}\n\n/* Give origins 0 height/width so they don't interfere with clicking the\n* connect elements.\n*/\n.slider-vertical .slider-origin {\n  width: 0;\n}\n\n.slider-horizontal .slider-origin {\n  height: 0;\n}\n\n.slider-handle {\n  -webkit-backface-visibility: hidden;\n  backface-visibility: hidden;\n  position: absolute;\n}\n\n.slider-touch-area {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-state-tap .slider-connect,\n.slider-state-tap .slider-origin {\n  -webkit-transition: transform 0.3s;\n  transition: transform 0.3s;\n}\n\n.slider-state-drag * {\n  cursor: inherit !important;\n}\n\n/* Slider size and handle placement;\n*/\n.slider-horizontal {\n  height: 6px;\n}\n\n.slider-horizontal .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -6px;\n  right: -8px;\n}\n\n.slider-vertical {\n  width: 6px;\n  height: 300px;\n}\n\n.slider-vertical .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -8px;\n  right: -6px;\n}\n\n.slider-txt-dir-rtl.slider-horizontal .slider-handle {\n  left: -8px;\n  right: auto;\n}\n\n/* Styling;\n* Giving the connect element a border radius causes issues with using transform: scale\n*/\n.slider-base {\n  background-color: #d4e0e7;\n  border-radius: 3px;\n}\n\n.slider-connects {\n  border-radius: 3px;\n}\n\n.slider-connect {\n  background: #41b883;\n  cursor: pointer;\n}\n\n/* Handles and cursors;\n*/\n.slider-draggable {\n  cursor: ew-resize;\n}\n\n.slider-vertical .slider-draggable {\n  cursor: ns-resize;\n}\n\n.slider-handle {\n  width: 16px;\n  height: 16px;\n  border-radius: 50%;\n  background: #fff;\n  border: 0;\n  right: -8px;\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);\n  cursor: grab;\n}\n.slider-handle:focus {\n  outline: none;\n}\n\n.slider-active {\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.42);\n  cursor: grabbing;\n}\n\n/* Disabled state;\n*/\n[disabled] .slider-connect {\n  background: #B8B8B8;\n}\n\n[disabled].slider-target,\n[disabled].slider-handle,\n[disabled] .slider-handle {\n  cursor: not-allowed;\n}\n\n[disabled] .slider-tooltip {\n  background: #B8B8B8;\n  border-color: #B8B8B8;\n}\n\n.slider-tooltip {\n  position: absolute;\n  display: block;\n  font-size: 14px;\n  font-weight: 500;\n  white-space: nowrap;\n  padding: 2px 5px;\n  min-width: 20px;\n  text-align: center;\n  color: #fff;\n  border-radius: 5px;\n  border: 1px solid #41b883;\n  background: #41b883;\n}\n\n.slider-horizontal .slider-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 24px;\n}\n.slider-horizontal .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  bottom: -10px;\n  left: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-top-color: inherit;\n  transform: translate(-50%);\n}\n\n.slider-vertical .slider-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 24px;\n}\n.slider-vertical .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  right: -10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-left-color: inherit;\n  transform: translateY(-50%);\n}\n\n.slider-horizontal .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(50%, 0);\n  transform: translate(50%, 0);\n  left: auto;\n  bottom: 14px;\n}\n\n.slider-vertical .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(0, -18px);\n  transform: translate(0, -18px);\n  top: auto;\n  right: 18px;\n}\n\n/* Base;\n*\n*/\n.slider-pips,\n.slider-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-pips {\n  position: absolute;\n  color: #999;\n}\n\n/* Values;\n*\n*/\n.slider-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n\n.slider-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n\n/* Markings;\n*\n*/\n.slider-marker {\n  position: absolute;\n  background: #CCC;\n}\n\n.slider-marker-sub {\n  background: #AAA;\n}\n\n.slider-marker-large {\n  background: #AAA;\n}\n\n/* Horizontal layout;\n*\n*/\n.slider-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n\n.slider-value-horizontal {\n  -webkit-transform: translate(-50%, 50%);\n  transform: translate(-50%, 50%);\n}\n.slider-rtl .slider-value-horizontal {\n  -webkit-transform: translate(50%, 50%);\n  transform: translate(50%, 50%);\n}\n\n.slider-marker-horizontal.slider-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n\n.slider-marker-horizontal.slider-marker-sub {\n  height: 10px;\n}\n\n.slider-marker-horizontal.slider-marker-large {\n  height: 15px;\n}\n\n/* Vertical layout;\n*\n*/\n.slider-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n\n.slider-value-vertical {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  padding-left: 25px;\n}\n.slider-rtl .slider-value-vertical {\n  -webkit-transform: translate(0, 50%);\n  transform: translate(0, 50%);\n}\n\n.slider-marker-vertical.slider-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n\n.slider-marker-vertical.slider-marker-sub {\n  width: 10px;\n}\n\n.slider-marker-vertical.slider-marker-large {\n  width: 15px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n.tableOption .textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.tableOption .textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.tableOption .textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.tableOption .textSearchWrapper > .searchBtn {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n}\n.tableOption .textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n.tableOption > .textSearchByColumnWrapper {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n}\n.tableOption > .textSearchByColumnWrapper > p.title {\n  display: block;\n  padding: 6px 16px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper {\n  padding: 26px 40px 26px 20px;\n}\n.tableOption > .textSearchByColumnWrapper > .textSearchWrapper > input {\n  margin-right: 4px;\n}\n.tableOption > .textSearchByColumnWrapper #slider {\n  margin: 60px 40px 30px;\n  width: 230px;\n}\n.tableOption > .textSearchByColumnWrapper #slider .slider-connect {\n  background-color: var(--thead-font-color);\n}\n.tableOption > .textSearchByColumnWrapper .slider-tooltip {\n  border: 1px solid var(--thead-font-color);\n  background: var(--thead-font-color);\n}\n\n.paginationWrapper {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n  align-items: center;\n}\n.paginationWrapper > ul {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > ul > li {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border-right: var(--paginationbtn-border);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n  display: flex;\n  align-items: center;\n}\n.paginationWrapper > ul > li:hover {\n  cursor: pointer;\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > ul > li:first-of-type {\n  border-radius: var(--paginationbtn-border-radius) 0 0 var(--paginationbtn-border-radius) !important;\n}\n.paginationWrapper > ul > li:last-of-type {\n  border-radius: 0 var(--paginationbtn-border-radius) var(--paginationbtn-border-radius) 0 !important;\n  border-right: none;\n}\n.paginationWrapper > ul > li.currentBtn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > .arrow {\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n  margin: 0 2px 0 6px;\n}\n.paginationWrapper > .arrow.right {\n  transform: rotate(-135deg);\n  margin: 0 6px 0 2px;\n}\n.paginationWrapper > .arrow.double {\n  position: relative;\n}\n.paginationWrapper > .arrow.double:after {\n  content: \"\";\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(0deg);\n  top: 30%;\n  left: -80%;\n  position: absolute;\n  box-sizing: border-box;\n}\n.paginationWrapper > .arrow.double.right:after {\n  transform: rotate(0deg);\n}\n.paginationWrapper > .arrow:hover {\n  cursor: pointer;\n}\n.paginationWrapper > .pageNumber {\n  margin-left: 20px;\n}\n.paginationWrapper > .pageNumber > input[type=text] {\n  width: 40px;\n  height: var(--searchbox-height);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.paginationWrapper > .pageNumber > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n.modalBackground.black {\n  background-color: rgba(0, 0, 0, 0.3);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  top: 4px;\n  left: -20px;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n  border-radius: var(--searchbox-radius);\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {\n  padding: 4px 8px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 9px 8px;\n  margin: 9px 8px 6px;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  border-radius: 3px;\n  max-height: 400px;\n  overflow: auto;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 6px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {\n  display: flex;\n  justify-content: center;\n  padding: 0 8px;\n  margin-bottom: 9px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  padding: 3px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:first-of-type {\n  margin-right: 4px;\n  width: 60%;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button:last-of-type {\n  width: 40%;\n}\ntable > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {\n  left: auto;\n  right: 11px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center;\n  margin-bottom: -4px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.searchIcon {\n  display: var(--searchicon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.filterIcon.active {\n  z-index: 3;\n  position: relative;\n  background-color: var(--thead-font-color);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}\n\n.modal-enter-from,\n.modal-leave-to {\n  opacity: 0;\n  margin-top: -20px;\n}\n\n.modal-enter-active,\n.modal-leave-active {\n  transition: opacity 0.4s, margin-top 0.4s;\n}\n\n.modal_bg-enter-from,\n.modal_bg-leave-to {\n  opacity: 0;\n}\n\n.modal_bg-enter-active,\n.modal_bg-leave-active {\n  transition: opacity 0.4s;\n}";
 
 defineStanzaElement(tableWithPagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table-with-pagination.js.map
