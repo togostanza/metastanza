@@ -381,7 +381,7 @@
     {
       "stanza:key": "--pagination-padding",
       "stanza:type": "text",
-      "stanza:default": "30px 0px 0px 0px",
+      "stanza:default": "12px 0px 0px 0px",
       "stanza:description": "padding of pagination"
     },
     {

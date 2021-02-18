@@ -65,11 +65,11 @@ function tablePagination(stanza, params) {
   }
   select.addEventListener("change", (e) => {
     limit = parseInt(e.target.value);
-    console.log(limit);
     current_page = Math.ceil(offset / limit);
     togostanza.setAttribute("limit", limit);
     togostanza.setAttribute("offset", offset);
     setBothPagination();
+    setKnobWidth(limit, max);
   });
 
   const setBothPagination = () => {
@@ -191,6 +191,7 @@ function tablePagination(stanza, params) {
     slider.appendChild(knob_ul);
     const knob = document.createElement("li");
     knob.setAttribute("class", "page_slider_knob");
+
     knob.innerHTML = "1";
     knob_ul.appendChild(knob);
     knob.onmouseover = () => {
@@ -394,7 +395,15 @@ function tablePagination(stanza, params) {
     max_page = Math.ceil(max / limit);
     stanza.select("#totalSize").innerHTML = max;
     setBothPagination();
+    setKnobWidth(limit, max);
   });
+
+  const setKnobWidth = (limit, max) => {
+    const max_page = Math.ceil(max / limit);
+    const div = stanza.select("#paginationTop");
+    const knob = div.getElementsByClassName("page_slider_knob")[0];
+    knob.setAttribute("style", `width: calc(100% * ${limit / max_page})`);
+  };
 }
 
 var metadata = {
@@ -489,6 +498,352 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#e0e6ca",
 		"stanza:description": "slider range color"
+	},
+	{
+		"stanza:key": "--general-font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica",
+		"stanza:description": "general font family"
+	},
+	{
+		"stanza:key": "--general-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#707070",
+		"stanza:description": "general font color"
+	},
+	{
+		"stanza:key": "--general-font-size",
+		"stanza:type": "number",
+		"stanza:default": "12px",
+		"stanza:description": "general font size"
+	},
+	{
+		"stanza:key": "--series-0-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "basic fill color"
+	},
+	{
+		"stanza:key": "--emphasized-color",
+		"stanza:type": "color",
+		"stanza:default": "#44b8cc",
+		"stanza:description": "emphasized color"
+	},
+	{
+		"stanza:key": "--background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color"
+	},
+	{
+		"stanza:key": "--tabletitle-display",
+		"stanza:type": "text",
+		"stanza:default": "flex",
+		"stanza:description": "display of table title.(flex, block or none)"
+	},
+	{
+		"stanza:key": "--tabletitle-placement",
+		"stanza:type": "text",
+		"stanza:default": "center",
+		"stanza:description": "table title placement when table title is displayed.(left, right, center)"
+	},
+	{
+		"stanza:key": "--tabletitle-margin",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "margin of table title"
+	},
+	{
+		"stanza:key": "--tabletitle-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "font size of table title"
+	},
+	{
+		"stanza:key": "--tabletitle-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "font color of table title"
+	},
+	{
+		"stanza:key": "--table-border",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #eee",
+		"stanza:description": "style of table border"
+	},
+	{
+		"stanza:key": "--table-shadow",
+		"stanza:type": "text",
+		"stanza:default": "1px 1px 3px 1px #eee",
+		"stanza:description": "style of table shadow"
+	},
+	{
+		"stanza:key": "--ruled-line",
+		"stanza:type": "text",
+		"stanza:default": "0.5px solid #eee",
+		"stanza:description": "style of ruled line"
+	},
+	{
+		"stanza:key": "--searchbox-radius",
+		"stanza:type": "text",
+		"stanza:default": "3px",
+		"stanza:description": "radius of search box"
+	},
+	{
+		"stanza:key": "--searchbox-border-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "border color of search box"
+	},
+	{
+		"stanza:key": "--searchbox-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "color of search box"
+	},
+	{
+		"stanza:key": "--table-height",
+		"stanza:type": "text",
+		"stanza:default": "400px",
+		"stanza:description": "height of table"
+	},
+	{
+		"stanza:key": "--searchbtn-height",
+		"stanza:type": "text",
+		"stanza:default": "20px",
+		"stanza:description": "height of search button"
+	},
+	{
+		"stanza:key": "--searchbtn-width",
+		"stanza:type": "text",
+		"stanza:default": "20px",
+		"stanza:description": "width of search button"
+	},
+	{
+		"stanza:key": "--searchbox-height",
+		"stanza:type": "text",
+		"stanza:default": "20px",
+		"stanza:description": "height of search box"
+	},
+	{
+		"stanza:key": "--searchbox-width",
+		"stanza:type": "text",
+		"stanza:default": "164px",
+		"stanza:description": "width of search box"
+	},
+	{
+		"stanza:key": "--searchbox-font-size",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "font size of search box"
+	},
+	{
+		"stanza:key": "--searchbox-font-color",
+		"stanza:type": "text",
+		"stanza:default": "#707070",
+		"stanza:description": "font color of search box"
+	},
+	{
+		"stanza:key": "--searchbox-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color of search box"
+	},
+	{
+		"stanza:key": "--searchbtn-border-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "border color of search button"
+	},
+	{
+		"stanza:key": "--searchbtn-radius",
+		"stanza:type": "text",
+		"stanza:default": "3px",
+		"stanza:description": "radius of search button"
+	},
+	{
+		"stanza:key": "--searchbtn-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "color of search button"
+	},
+	{
+		"stanza:key": "--searchbtn-img-width",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "width of search button image"
+	},
+	{
+		"stanza:key": "--searchbtn-img-height",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "height of search button image"
+	},
+	{
+		"stanza:key": "--searchimg-display",
+		"stanza:type": "text",
+		"stanza:default": "block",
+		"stanza:description": "display of search button image"
+	},
+	{
+		"stanza:key": "--searchtext-display",
+		"stanza:type": "text",
+		"stanza:default": "none",
+		"stanza:description": "display of search button text.(dafault: none)"
+	},
+	{
+		"stanza:key": "--searchtext-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "color of search button text"
+	},
+	{
+		"stanza:key": "--searchtext-font-size",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "font size of search button text"
+	},
+	{
+		"stanza:key": "--dlbtn-img-width",
+		"stanza:type": "text",
+		"stanza:default": "13px",
+		"stanza:description": "width of download button image"
+	},
+	{
+		"stanza:key": "--dlbtn-img-height",
+		"stanza:type": "text",
+		"stanza:default": "13px",
+		"stanza:description": "height of download button image"
+	},
+	{
+		"stanza:key": "--information-margin",
+		"stanza:type": "text",
+		"stanza:default": "0px 0px 10px 0px",
+		"stanza:description": "margin of information area"
+	},
+	{
+		"stanza:key": "--searchicon-display",
+		"stanza:type": "text",
+		"stanza:default": "inline-block",
+		"stanza:description": "display of search icon"
+	},
+	{
+		"stanza:key": "--filtericon-display",
+		"stanza:type": "text",
+		"stanza:default": "inline-block",
+		"stanza:description": "display of filter icon"
+	},
+	{
+		"stanza:key": "--sorticon-display",
+		"stanza:type": "text",
+		"stanza:default": "inline-block",
+		"stanza:description": "display of sort icon"
+	},
+	{
+		"stanza:key": "--thead-border-color",
+		"stanza:type": "text",
+		"stanza:default": "#000000",
+		"stanza:description": "border color of thead"
+	},
+	{
+		"stanza:key": "--thead-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "font size of labels"
+	},
+	{
+		"stanza:key": "--tbody-font-size",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "font size of labels"
+	},
+	{
+		"stanza:key": "--thead-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "font color of table header"
+	},
+	{
+		"stanza:key": "--thead-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "font weight of table header"
+	},
+	{
+		"stanza:key": "--thead-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color of table header"
+	},
+	{
+		"stanza:key": "--tbody-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "font color of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-right",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border right of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border bottom of table body"
+	},
+	{
+		"stanza:key": "--tbody-border-left",
+		"stanza:type": "text",
+		"stanza:default": "0px solid #333",
+		"stanza:description": "border left of table body"
+	},
+	{
+		"stanza:key": "--tbody-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color of table body"
+	},
+	{
+		"stanza:key": "--tbody-odd-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color of table body"
+	},
+	{
+		"stanza:key": "--tbody-even-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "background color of table body"
+	},
+	{
+		"stanza:key": "--showinfo-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"center",
+			"right"
+		],
+		"stanza:default": "center",
+		"stanza:description": "show info placement"
+	},
+	{
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica",
+		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+	},
+	{
+		"stanza:key": "--greeting-align",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"center",
+			"right"
+		],
+		"stanza:default": "center",
+		"stanza:description": "text align of greeting"
 	}
 ],
 	"stanza:usage": "<togostanza-table-pagination></togostanza-table-pagination>",
@@ -506,11 +861,11 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<div class=\"main\">\n  <div id=\"tableInfo\">\n    <div class=\"float_left\">\n      Showing\n      <span id=\"listStart\"></span>\n      ..\n      <span id=\"listEnd\"></span>\n      of\n      <span id=\"totalSize\">\n        entries\n      </span>\n    </div>\n    <div class=\"float_right\">\n      Page size:\n      <select id=\"pageSizeSelect\"></select>\n    </div>\n  </div>\n  <div id=\"paginationTop\"></div>\n  <div id=\"tableBody\"></div>\n  <div id=\"paginationBottom\"></div>\n</div>";
+    return "<div class=\"main\">\n  <div id=\"tableBody\"></div>\n  <div id=\"tableInfo\">\n    <div class=\"float_left\">\n      Showing\n      <span id=\"listStart\"></span>\n      ..\n      <span id=\"listEnd\"></span>\n      of\n      <span id=\"totalSize\">\n        entries\n      </span>\n    </div>\n    <div class=\"float_right\">\n      Page size:\n      <select id=\"pageSizeSelect\"></select>\n    </div>\n  </div>\n  <div id=\"paginationTop\"></div>\n</div>";
 },"useData":true}]
 ];
 
-var css = "div.main {\n  font-family: \"Arial\", sans-serif;\n}\n\ndiv#paginationTop,\ndiv#paginationBottom {\n  text-align: var(--button-align);\n  clear: both;\n  position: relative;\n}\n\ndiv.page_slider_div {\n  width: 100%;\n  height: 20px;\n  margin: 10px 0px 20px 0px;\n  text-align: left;\n}\n\ndiv.page_slider_bar {\n  width: calc(100% - 40px);\n  margin-left: 20px;\n  background-color: #bbbbbb;\n  /* slider bar color */\n  height: 4px;\n  position: relative;\n  top: 8px;\n}\n\nul.page_button_ul {\n  display: inline-block;\n  padding: 0px 20px 0px 20px;\n}\n\nul.page_slider_knob_ul {\n  margin: 0px;\n  display: inline-block;\n  padding: 0px;\n  position: relative;\n  top: -4px;\n}\n\nli.page_slider_knob,\nli.page_button {\n  background-color: var(--button-bg-color);\n  /* button default bg color */\n  color: var(--button-text-color);\n  /* button default font color */\n  text-align: center;\n  height: 20px;\n  padding-left: 14px;\n  padding-right: 14px;\n  list-style: none;\n  cursor: pointer;\n  user-select: none;\n  display: table-cell;\n  vertical-align: middle;\n  transform: translateX(0px);\n  /* for z-index conflict of slider range object */\n}\n\nli.current_button,\nli.onmouse_button {\n  background-color: var(--current-button-bg-color);\n  /* button active bg color */\n}\n\nli.inactive_button {\n  background-color: #cccccc;\n  /* button inactive bg color */\n}\n\nli.current_button,\nli.page_slider_knob,\nli.inactive_button {\n  cursor: default;\n}\n\nli.page_slider_knob {\n  border-radius: 10px;\n}\n\nli.prev_button {\n  transform: translateX(-10px);\n  border-radius: 10px;\n}\n\nli.next_button {\n  transform: translateX(10px);\n  border-radius: 10px;\n}\n\nli.first_button {\n  transform: translateX(-20px);\n  border-radius: 10px;\n}\n\nli.last_button {\n  transform: translateX(20px);\n  border-radius: 10px;\n}\n\nli.page_button_left {\n  padding-left: 24px;\n  border-radius: 10px 0px 0px 10px;\n}\n\nli.page_button_right {\n  padding-right: 24px;\n  border-radius: 0px 10px 10px 0px;\n}\n\ndiv.float_left {\n  float: left;\n}\n\ndiv.float_right {\n  float: right;\n}\n\ncanvas.slider_range {\n  width: 100%;\n  height: 100px;\n  position: absolute;\n  left: 0px;\n}";
+var css = "div.main {\n  font-family: \"Arial\", sans-serif;\n}\n\ndiv#paginationTop,\ndiv#paginationBottom {\n  text-align: var(--button-align);\n  clear: both;\n  position: relative;\n}\n\ndiv.page_slider_div {\n  width: 100%;\n  height: 20px;\n  margin: 10px 0px 20px 0px;\n  text-align: left;\n}\n\ndiv.page_slider_bar {\n  width: calc(100% - 40px);\n  margin-left: 20px;\n  background-color: #bbbbbb;\n  /* slider bar color */\n  height: 4px;\n  position: relative;\n  top: 8px;\n}\n\nul.page_button_ul {\n  display: inline-block;\n  padding: 0px 20px 0px 20px;\n}\n\nul.page_slider_knob_ul {\n  margin: 0px;\n  display: inline-block;\n  padding: 0px;\n  position: relative;\n  top: -4px;\n}\n\nli.page_slider_knob,\nli.page_button {\n  background-color: var(--button-bg-color);\n  /* button default bg color */\n  color: var(--button-text-color);\n  /* button default font color */\n  text-align: center;\n  height: 20px;\n  padding-left: 14px;\n  padding-right: 14px;\n  list-style: none;\n  cursor: pointer;\n  user-select: none;\n  display: table-cell;\n  vertical-align: middle;\n  transform: translateX(0px);\n  /* for z-index conflict of slider range object */\n}\n\nli.current_button,\nli.onmouse_button {\n  background-color: var(--current-button-bg-color);\n  /* button active bg color */\n}\n\nli.inactive_button {\n  background-color: #cccccc;\n  /* button inactive bg color */\n}\n\nli.current_button,\nli.page_slider_knob,\nli.inactive_button {\n  cursor: default;\n}\n\nli.page_slider_knob {\n  border-radius: 10px;\n  min-width: 44px;\n  box-sizing: border-box;\n  padding: 0;\n}\n\nli.prev_button {\n  transform: translateX(-10px);\n  border-radius: 10px;\n}\n\nli.next_button {\n  transform: translateX(10px);\n  border-radius: 10px;\n}\n\nli.first_button {\n  transform: translateX(-20px);\n  border-radius: 10px;\n}\n\nli.last_button {\n  transform: translateX(20px);\n  border-radius: 10px;\n}\n\nli.page_button_left {\n  padding-left: 24px;\n  border-radius: 10px 0px 0px 10px;\n}\n\nli.page_button_right {\n  padding-right: 24px;\n  border-radius: 0px 10px 10px 0px;\n}\n\ndiv.float_left {\n  float: left;\n}\n\ndiv.float_right {\n  float: right;\n}\n\ncanvas.slider_range {\n  width: 100%;\n  height: 100px;\n  position: absolute;\n  left: 0px;\n}\n\ndiv#tableInfo {\n  font-size: 12px;\n  margin-left: 4px;\n}\ndiv#tableInfo > div {\n  margin: 0.3em 0 1em;\n}";
 
 defineStanzaElement(tablePagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-table-pagination.js.map
