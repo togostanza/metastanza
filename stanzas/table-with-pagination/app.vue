@@ -233,7 +233,7 @@ export default defineComponent({
       const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
-          return query ? row.some((cell) => cell.value.includes(query)) : true;
+          return query ? row.some((cell) => String(cell.value).includes(query)) : true;
         })
         .filter((row) => {
           return queryByColumn
@@ -340,7 +340,7 @@ export default defineComponent({
     }
 
     function jumpToPage(num) {
-      state.pagination.currentPage = num;
+      state.pagination.currentPage = num ? num : 1;
     }
 
     function submitQuery(column, type, query) {

@@ -138,10 +138,12 @@ main {
         background-color: var(--currentbtn-background-color);
       }
       &:first-of-type {
-        border-radius: var(--paginationbtn-border-radius) 0 0 var(--paginationbtn-border-radius) !important;
+        border-top-left-radius: var(--paginationbtn-border-radius);
+        border-bottom-left-radius: var(--paginationbtn-border-radius);
       }
       &:last-of-type {
-        border-radius: 0 var(--paginationbtn-border-radius) var(--paginationbtn-border-radius) 0 !important;
+        border-top-right-radius: var(--paginationbtn-border-radius);
+        border-bottom-right-radius: var(--paginationbtn-border-radius);
         border-right: none;
       }
       &.currentBtn {
