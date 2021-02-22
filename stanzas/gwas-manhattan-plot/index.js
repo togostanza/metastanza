@@ -362,12 +362,14 @@ async function draw(stanza, params) {
           ];
         } else if (dragEnd - dragBegin > 5) {
           range = [
-            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]),
-            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]),
+            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
+            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
           ];
         }
         console.log("mouseup(end) dragBegin, dragEnd", dragBegin, dragEnd);
-        console.log("range", range);
+        console.log("mouseup(end) range", range);
         svg.select("#selector").remove(); //矩形を除去
         reRender();
         dragBegin = false;
