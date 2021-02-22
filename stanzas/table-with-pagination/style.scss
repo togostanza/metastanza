@@ -441,9 +441,9 @@ table {
       user-select: none;
       &:hover {
         cursor: pointer;
-  	color: var(--paginationbtn-font-color);
-	background-color: var(--paginationbtn-background-color);
-	border-color: var(--searchbox-border-color);
+        color: var(--paginationbtn-font-color);
+        background-color: var(--paginationbtn-background-color);
+        border-color: var(--searchbox-border-color);
       }
     }
   }

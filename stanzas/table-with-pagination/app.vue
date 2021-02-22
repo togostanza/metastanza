@@ -172,8 +172,8 @@
     </div>
   </div>
   <div class="pageSliderWrapper" ref="pageSliderWrapper">
-   <canvas class="pageSliderRange" height="50"></canvas>
-     <div class="pageSlider">
+  <canvas class="pageSliderRange" height="50"></canvas>
+    <div class="pageSlider">
       <div class="pageSliderBar"></div>
       <ul @mousedown="pageSlider.down">
         <li class="pageSliderKnob">1</li>
@@ -435,7 +435,7 @@ export default defineComponent({
         }
       }
     }
-    
+
     async function fetchData() {
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
