@@ -207,6 +207,7 @@ async function draw(stanza, params) {
     "X",
     "Y",
   ];
+
   const chromosomeNtLength = {
     hg38: {
       1: 248956422,
@@ -279,6 +280,7 @@ async function draw(stanza, params) {
     .attr("height", height);
   const plot_g = svg.append("g").attr("id", "plot_group");
   const axis_g = svg.append("g").attr("id", "axis");
+  const threshline_g = svg.append("g").attr("id", "thresh_line");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
 
@@ -664,8 +666,6 @@ async function draw(stanza, params) {
     //   );
     // });
 
-    // console.log("over_thresh_array", over_thresh_array);
-
     renderCanvas(variants, range);
 
     // x axis label
@@ -720,15 +720,14 @@ async function draw(stanza, params) {
           "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
         );
 
-      // overthresh-line (high_thresh)
       if (i === high_thresh) {
-        axis_g
+        threshline_g
           .append("path")
           .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
           .attr("class", "overthresh-line");
       }
     }
-    // overThreshLine.remove(); //overthrethlineを除去すると縦軸が取れなくなる
+    overThreshLine.remove();
 
     // y zero (low_thresh)
     ylabel_g
