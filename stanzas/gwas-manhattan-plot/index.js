@@ -78,8 +78,8 @@ export default async function gwasManhattanPlot(stanza, params) {
   //   stanza.root.querySelector("#chart")
   // );
   // console.log("dataset", dataset);
-  console.log("dataset", dataset);
-  console.log("variants", variants);
+  // console.log("dataset", dataset);
+  // console.log("variants", variants);
 
   // //get checked stage
   // const stageBtn = stanza.root.querySelectorAll(".stage-btn");
@@ -233,6 +233,30 @@ async function draw(stanza, params) {
       22: 50818468,
       X: 156040895,
       Y: 57227415,
+      // 1: 3000000000,
+      // 2: 3000000000,
+      // 3: 3000000000,
+      // 4: 3000000000,
+      // 5: 3000000000,
+      // 6: 3000000000,
+      // 7: 3000000000,
+      // 8: 3000000000,
+      // 9: 3000000000,
+      // 10: 3000000000,
+      // 11: 3000000000,
+      // 12: 3000000000,
+      // 13: 3000000000,
+      // 14: 3000000000,
+      // 15: 3000000000,
+      // 16: 3000000000,
+      // 17: 3000000000,
+      // 18: 3000000000,
+      // 19: 3000000000,
+      // 20: 3000000000,
+      // 21: 3000000000,
+      // 22: 3000000000,
+      // X: 3000000000,
+      // Y: 3000000000,
     },
   };
 
@@ -285,6 +309,7 @@ async function draw(stanza, params) {
         dragBegin = d3.pointer(e)[0];
         dragBeginVertical = d3.pointer(e)[1] <= 60 ? 60 : d3.pointer(e)[1];
         console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
+        console.log("mousedown(start) dragBegin", dragBegin);
         console.log("mousedown(start) d3.pointer(e)", d3.pointer(e));
         svg
           .append("rect")
@@ -328,19 +353,23 @@ async function draw(stanza, params) {
       if (dragBegin) {
         const dragEnd = d3.pointer(e)[0];
         // re-render //矩形サイズが5以下の場合、rangeを変更
-        if (-5 > dragEnd - dragBegin) {
+        if (5 > dragEnd - dragBegin) {
           range = [
-            (dragEnd / width) * (range[1] - range[0]) + range[0],
-            (dragBegin / width) * (range[1] - range[0]) + range[0],
+            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
+            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
           ];
         } else if (dragEnd - dragBegin > 5) {
           range = [
-            (dragBegin / width) * (range[1] - range[0]) + range[0],
-            (dragEnd / width) * (range[1] - range[0]) + range[0],
+            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]),
+            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]),
           ];
         }
-        reRender();
+        console.log("mouseup(end) dragBegin, dragEnd", dragBegin, dragEnd);
+        console.log("range", range);
         svg.select("#selector").remove(); //矩形を除去
+        reRender();
         dragBegin = false;
       }
       if (dragBeginVertical) {
@@ -633,7 +662,7 @@ async function draw(stanza, params) {
     //   );
     // });
 
-    console.log("over_thresh_array", over_thresh_array);
+    // console.log("over_thresh_array", over_thresh_array);
 
     renderCanvas(variants, range);
 
@@ -697,7 +726,7 @@ async function draw(stanza, params) {
           .attr("class", "overthresh-line");
       }
     }
-    overThreshLine.remove();
+    // overThreshLine.remove(); //overthrethlineを除去すると縦軸が取れなくなる
 
     // y zero (low_thresh)
     ylabel_g
@@ -723,6 +752,7 @@ async function draw(stanza, params) {
       .attr("transform", "translate(0, 0)");
 
     setRange(range);
+    // overThreshLine.remove();
   }
 
   function renderCanvas(variants, rangeVertical) {
