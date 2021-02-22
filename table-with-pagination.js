@@ -3331,8 +3331,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       createVNode("div", _hoisted_19, [
         _hoisted_20,
         createVNode("ul", {
-          onLoad: _cache[12] || (_cache[12] = (...args) => (_ctx.pageSlider.init && _ctx.pageSlider.init(...args))),
-          onMousedown: _cache[13] || (_cache[13] = (...args) => (_ctx.pageSlider.down && _ctx.pageSlider.down(...args)))
+          onMousedown: _cache[12] || (_cache[12] = (...args) => (_ctx.pageSlider.down && _ctx.pageSlider.down(...args)))
         }, [
           _hoisted_21
         ], 32 /* HYDRATE_EVENTS */)
@@ -3342,7 +3341,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? (openBlock(), createBlock("div", {
           key: 1,
           class: ['modalBackground', { black: _ctx.state.columnShowingTextSearch }],
-          onClick: _cache[14] || (_cache[14] = $event => (_ctx.closeModal()))
+          onClick: _cache[13] || (_cache[13] = $event => (_ctx.closeModal()))
         }, null, 2 /* CLASS */))
       : createCommentVNode("v-if", true)
   ], 64 /* STABLE_FRAGMENT */))
