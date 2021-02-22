@@ -403,3 +403,48 @@ table {
 .modal_bg-leave-active {
   transition: opacity 0.4s;
 }
+
+.pageSliderWrapper {
+  padding: 0px 0px 10px 0px;
+  > .pageSliderRange {
+    margin-left: 10px;
+  }
+}
+
+.pageSlider {
+  width: 100%;
+  text-align: left;
+  position: relative;
+  top: -16px;
+  > .pageSliderBar {
+    width: calc(100% - 20px);
+    margin-left: 10px;
+    background-color: #bbbbbb;
+    height: 4px;
+    position: relative;
+    top: 10px;
+    z-index: 0;
+  }
+  > ul {
+      padding: 0;
+      display: inline-block;
+      z-index: 2;
+    > li.pageSliderKnob {
+      color: var(--currentbtn-font-color);
+      background-color: var(--currentbtn-background-color);
+      border: var(--paginationbtn-border);
+      padding: var(--paginationbtn-padding);
+      font-size: var(--paginationbtn-font-size);
+      align-items: center;
+      display: inline;
+      border-radius: var(--paginationbtn-border-radius);
+      user-select: none;
+      &:hover {
+        cursor: pointer;
+  	color: var(--paginationbtn-font-color);
+	background-color: var(--paginationbtn-background-color);
+	border-color: var(--searchbox-border-color);
+      }
+    }
+  }
+}

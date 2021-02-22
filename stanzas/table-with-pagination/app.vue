@@ -135,9 +135,9 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span class="arrow double left" @click="state.pagination.currentPage = 1">
+      <span class="arrow double left" @click="state.pagination.currentPage = 1; pageSlider.click()">
       </span>
-      <span class="arrow left" @click="state.pagination.currentPage--"></span>
+      <span class="arrow left" @click="state.pagination.currentPage--; pageSlider.click()"></span>
     </template>
 
     <ul>
@@ -148,17 +148,17 @@
           'pagination',
           { currentBtn: state.pagination.currentPage === page },
         ]"
-        @click="state.pagination.currentPage = page"
+        @click="state.pagination.currentPage = page; pageSlider.click()"
       >
         {{ page }}
       </li>
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span class="arrow right" @click="state.pagination.currentPage++"></span>
+      <span class="arrow right" @click="state.pagination.currentPage++; pageSlider.click()"></span>
       <span
         class="arrow double right"
-        @click="state.pagination.currentPage = totalPages"></span>
+        @click="state.pagination.currentPage = totalPages; pageSlider.click()"></span>
     </template>
 
     <div class="pageNumber">
@@ -171,6 +171,17 @@
       of {{ totalPages }}
     </div>
   </div>
+  <div class="pageSliderWrapper" ref="pageSliderWrapper">
+   <canvas class="pageSliderRange" height="50"></canvas>
+     <div class="pageSlider">
+      <div class="pageSliderBar"></div>
+      <ul
+      @load="pageSlider.init"
+	@mousedown="pageSlider.down">
+        <li class="pageSliderKnob">1</li>
+      </ul>
+    </div>
+  </div>
 
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
@@ -180,7 +191,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onMounted } from "vue";
+import { defineComponent, reactive, computed, onMounted, onUpdated, ref} from "vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -226,6 +237,13 @@ export default defineComponent({
       jumpToNumberInput: "",
 
       rangeInputs: {},
+
+      knobDrag: false,
+      knobX: 0,
+      startX: 0,
+      knob: false,
+      canvas: false,
+      sliderBarWidth: 0,
     });
 
     const filteredRows = computed(() => {
@@ -354,6 +372,72 @@ export default defineComponent({
       state.columnShowingTextSearch = null;
     }
 
+    const pageSliderWrapper = ref(null);
+    const pageSlider = {
+      init: () => {
+	let wrapper = pageSliderWrapper.value;
+	if (!params.page_slider) wrapper.style.display = "none";
+	wrapper.onmousemove = pageSlider.move;
+        wrapper.onmouseup = pageSlider.up;
+      	state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
+	state.canvas = wrapper.getElementsByTagName("canvas")[0];
+	let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
+	state.sliderBarWidth = bar.offsetWidth;
+	pageSlider.setPage(state.knobX, state.pagination.currentPage);
+      },
+      down: (e) => {
+      	state.knobDrag = true;
+	state.startX = e.pageX;
+      },
+      move: (e) => {
+	if (state.knobDrag) {
+          let dragX = state.knobX + e.pageX - state.startX;
+          if (dragX < 0) {
+            dragX = 0;
+          }
+          if (dragX > state.sliderBarWidth) {
+            dragX = state.sliderBarWidth;
+          }
+          let page = Math.ceil((totalPages.value * dragX) / state.sliderBarWidth);
+          if (page < 1) {
+            page = 1;
+          }
+	  pageSlider.setPage(dragX, page);
+	}
+      },
+      up: (e) => {
+	if (state.knobDrag) {
+          state.knobX += e.pageX - state.startX;
+          state.pagination.currentPage = parseInt(state.knob.innerHTML);
+          state.knobDrag = false;
+	}
+      },
+      click: () => {
+        state.knobX = state.sliderBarWidth / (totalPages.value - 1) * (state.pagination.currentPage - 1);
+	pageSlider.setPage(state.knobX, state.pagination.currentPage);
+      },
+      setPage: (knobX, page) => {
+ 	state.knob.innerHTML = page;
+        state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
+	state.canvas.setAttribute("width", state.sliderBarWidth);
+	state.canvas.setAttribute("height", 50);
+	let pageButton = state.canvas.parentNode.parentNode
+	.getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
+        if (state.canvas.getContext) {
+    	  const ctx = state.canvas.getContext("2d");
+	  ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
+	  ctx.beginPath();
+	  ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
+	  ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
+	  ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
+	  ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
+	  ctx.closePath();
+	  ctx.fillStyle = "#dddddd";
+	  ctx.fill();
+        }
+      }
+    }
+
     async function fetchData() {
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
@@ -409,6 +493,7 @@ export default defineComponent({
     }
 
     onMounted(fetchData);
+    onUpdated(pageSlider.init);
 
     return {
       state,
@@ -421,6 +506,8 @@ export default defineComponent({
       jumpToPage,
       submitQuery,
       closeModal,
+      pageSliderWrapper,
+      pageSlider,
     };
   },
 });
