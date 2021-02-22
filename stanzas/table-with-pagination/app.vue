@@ -373,22 +373,22 @@ export default defineComponent({
     const pageSliderWrapper = ref(null);
     const pageSlider = {
       init: () => {
-	let wrapper = pageSliderWrapper.value;
-	if (!params.page_slider) wrapper.style.display = "none";
-	wrapper.onmousemove = pageSlider.move;
+        let wrapper = pageSliderWrapper.value;
+        if (!params.page_slider) wrapper.style.display = "none";
+        wrapper.onmousemove = pageSlider.move;
         wrapper.onmouseup = pageSlider.up;
-      	state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
-	state.canvas = wrapper.getElementsByTagName("canvas")[0];
-	let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
-	state.sliderBarWidth = bar.offsetWidth;
-	pageSlider.setPage(state.knobX, state.pagination.currentPage);
+        state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
+        state.canvas = wrapper.getElementsByTagName("canvas")[0];
+        let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
+        state.sliderBarWidth = bar.offsetWidth;
+        pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
       down: (e) => {
-      	state.knobDrag = true;
-	state.startX = e.pageX;
+        state.knobDrag = true;
+        state.startX = e.pageX;
       },
       move: (e) => {
-	if (state.knobDrag) {
+        if (state.knobDrag) {
           let dragX = state.knobX + e.pageX - state.startX;
           if (dragX < 0) {
             dragX = 0;
@@ -400,42 +400,42 @@ export default defineComponent({
           if (page < 1) {
             page = 1;
           }
-	  pageSlider.setPage(dragX, page);
-	}
+          pageSlider.setPage(dragX, page);
+        }
       },
       up: (e) => {
-	if (state.knobDrag) {
+        if (state.knobDrag) {
           state.knobX += e.pageX - state.startX;
           state.pagination.currentPage = parseInt(state.knob.innerHTML);
           state.knobDrag = false;
-	}
+        }
       },
       click: () => {
         state.knobX = state.sliderBarWidth / (totalPages.value - 1) * (state.pagination.currentPage - 1);
-	pageSlider.setPage(state.knobX, state.pagination.currentPage);
+        pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
       setPage: (knobX, page) => {
- 	state.knob.innerHTML = page;
+        state.knob.innerHTML = page;
         state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
-	state.canvas.setAttribute("width", state.sliderBarWidth);
-	state.canvas.setAttribute("height", 50);
-	let pageButton = state.canvas.parentNode.parentNode
-	.getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
+        state.canvas.setAttribute("width", state.sliderBarWidth);
+        state.canvas.setAttribute("height", 50);
+        let pageButton = state.canvas.parentNode.parentNode
+            .getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
         if (state.canvas.getContext) {
-    	  const ctx = state.canvas.getContext("2d");
-	  ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
-	  ctx.beginPath();
-	  ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
-	  ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
-	  ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
-	  ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
-	  ctx.closePath();
-	  ctx.fillStyle = "#dddddd";
-	  ctx.fill();
+          const ctx = state.canvas.getContext("2d");
+          ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
+          ctx.beginPath();
+          ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
+          ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
+          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
+          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
+          ctx.closePath();
+          ctx.fillStyle = "#dddddd";
+          ctx.fill();
         }
       }
     }
-
+    
     async function fetchData() {
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
