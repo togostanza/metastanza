@@ -135,9 +135,21 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span class="arrow double left" @click="state.pagination.currentPage = 1; pageSlider.click()">
+      <span
+        class="arrow double left"
+        @click="
+          state.pagination.currentPage = 1;
+          pageSlider.click();
+        "
+      >
       </span>
-      <span class="arrow left" @click="state.pagination.currentPage--; pageSlider.click()"></span>
+      <span
+        class="arrow left"
+        @click="
+          state.pagination.currentPage--;
+          pageSlider.click();
+        "
+      ></span>
     </template>
 
     <ul>
@@ -148,17 +160,30 @@
           'pagination',
           { currentBtn: state.pagination.currentPage === page },
         ]"
-        @click="state.pagination.currentPage = page; pageSlider.click()"
+        @click="
+          state.pagination.currentPage = page;
+          pageSlider.click();
+        "
       >
         {{ page }}
       </li>
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span class="arrow right" @click="state.pagination.currentPage++; pageSlider.click()"></span>
+      <span
+        class="arrow right"
+        @click="
+          state.pagination.currentPage++;
+          pageSlider.click();
+        "
+      ></span>
       <span
         class="arrow double right"
-        @click="state.pagination.currentPage = totalPages; pageSlider.click()"></span>
+        @click="
+          state.pagination.currentPage = totalPages;
+          pageSlider.click();
+        "
+      ></span>
     </template>
 
     <div class="pageNumber">
@@ -172,7 +197,7 @@
     </div>
   </div>
   <div class="pageSliderWrapper" ref="pageSliderWrapper">
-  <canvas class="pageSliderRange" height="50"></canvas>
+    <canvas class="pageSliderRange" height="50"></canvas>
     <div class="pageSlider">
       <div class="pageSliderBar"></div>
       <ul @mousedown="pageSlider.down">
@@ -189,7 +214,14 @@
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onMounted, onUpdated, ref} from "vue";
+import {
+  defineComponent,
+  reactive,
+  computed,
+  onMounted,
+  onUpdated,
+  ref,
+} from "vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -249,7 +281,9 @@ export default defineComponent({
       const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
-          return query ? row.some((cell) => String(cell.value).includes(query)) : true;
+          return query
+            ? row.some((cell) => String(cell.value).includes(query))
+            : true;
         })
         .filter((row) => {
           return queryByColumn
@@ -396,7 +430,9 @@ export default defineComponent({
           if (dragX > state.sliderBarWidth) {
             dragX = state.sliderBarWidth;
           }
-          let page = Math.ceil((totalPages.value * dragX) / state.sliderBarWidth);
+          let page = Math.ceil(
+            (totalPages.value * dragX) / state.sliderBarWidth
+          );
           if (page < 1) {
             page = 1;
           }
@@ -411,7 +447,9 @@ export default defineComponent({
         }
       },
       click: () => {
-        state.knobX = state.sliderBarWidth / (totalPages.value - 1) * (state.pagination.currentPage - 1);
+        state.knobX =
+          (state.sliderBarWidth / (totalPages.value - 1)) *
+          (state.pagination.currentPage - 1);
         pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
       setPage: (knobX, page) => {
@@ -420,21 +458,36 @@ export default defineComponent({
         state.canvas.setAttribute("width", state.sliderBarWidth);
         state.canvas.setAttribute("height", 50);
         let pageButton = state.canvas.parentNode.parentNode
-            .getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
+          .getElementsByClassName("paginationWrapper")[0]
+          .getElementsByTagName("ul")[0];
         if (state.canvas.getContext) {
           const ctx = state.canvas.getContext("2d");
-          ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
+          ctx.clearRect(
+            0,
+            0,
+            state.canvas.offsetWidth,
+            state.canvas.offsetHeight
+          );
           ctx.beginPath();
-          ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
-          ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
-          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
-          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
+          ctx.moveTo(knobX + state.knob.offsetWidth / 2 - 8, 50);
+          ctx.lineTo(knobX - state.knob.offsetWidth / 2 + 8, 50);
+          ctx.lineTo(
+            pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10,
+            0
+          );
+          ctx.lineTo(
+            pageButton.offsetLeft -
+              pageButton.parentNode.offsetLeft +
+              pageButton.offsetWidth -
+              10,
+            0
+          );
           ctx.closePath();
           ctx.fillStyle = "#dddddd";
           ctx.fill();
         }
-      }
-    }
+      },
+    };
 
     async function fetchData() {
       // const res = await fetch(params.table_data_api);

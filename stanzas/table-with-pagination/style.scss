@@ -157,7 +157,8 @@ main {
     width: 7px;
     height: 7px;
     border: 1px solid;
-    border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);
+    border-color: transparent transparent var(--arrowbtn-color)
+      var(--arrowbtn-color);
     transform: rotate(45deg);
     margin: 0 2px 0 6px;
     &.right {
@@ -167,7 +168,7 @@ main {
     &.double {
       position: relative;
       &:after {
-        content: '';
+        content: "";
         display: inline-block;
         width: 7px;
         height: 7px;
@@ -426,9 +427,9 @@ table {
     z-index: 0;
   }
   > ul {
-      padding: 0;
-      display: inline-block;
-      z-index: 2;
+    padding: 0;
+    display: inline-block;
+    z-index: 2;
     > li.pageSliderKnob {
       color: var(--currentbtn-font-color);
       background-color: var(--currentbtn-background-color);

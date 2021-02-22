@@ -21,16 +21,32 @@ const stages = Object.values(project);
 console.log("【stages】", stages);
 console.log("【...stages】", ...stages);
 
-const stage_names = Object.keys(...stages);
+const stage_info = stages[0];
+
+const stage_names = Object.keys(stage_info);
 console.log("【stage_names】", stage_names);
 
-// get stage information
-const stage_info = Object.values(...stages);
-console.log("【stage_info】", stage_info);
-
 // get condition of each stage
-const condition1 = stage_info[0].condition1;
-const condition2 = stage_info[0].condition2;
+const condition1 = stage_info[stage_names[0]].condition1;
+const condition2 = stage_info[stage_names[0]].condition2;
+
+let total_variants = []
+stage_names.forEach(stage => total_variants = total_variants.concat(stage_info[stage].variants))
+console.log('total_variants', total_variants)
+
+// get stage information
+const getVariants = () => {
+  let variantsArray = [];
+  stage_names.forEach(stage => {
+    if(stage_info[stage].checked){
+      variantsArray = variantsArray.concat(stage_info[stage].variants);
+    }
+  })
+  return variantsArray;
+}
+let variants = total_variants; //init
+
+// const condition2 = stage_info[0].condition2;
 
 // let variants_datum;
 // for (let i = 0; i < stage_info.length; i++) {
@@ -41,22 +57,6 @@ const condition2 = stage_info[0].condition2;
 //   console.log("【stage_info[i].variants】" + i, stage_info[i].variants);
 // }
 
-let variants = stage_info[0].variants; //init
-
-// adjust datas
-for (let i = 0; i < stage_info[0].variants.length; i++) {
-  // convert chromosome data from 'chrnum' to 'num'
-  let chr = stage_info[0].variants[i].chr;
-  chr = chr.replace("chr", "");
-  stage_info[0].variants[i].chr = chr;
-  // console.log(stage_info[0].variants[i].chr);
-
-  const pval = stage_info[0].variants[i]["p-value"];
-  String(pval);
-
-  const physical_pos = stage_info[0].variants[i]["stop"];
-  String(physical_pos);
-}
 
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
@@ -71,6 +71,48 @@ export default async function gwasManhattanPlot(stanza, params) {
       condition2,
     },
   });
+  
+  //append checkbox to filter stages
+  const stageList = stanza.root.querySelector("#stageList");
+  let li;
+  let input;
+  let label;
+  let stageCheckboxStatus = {};
+  
+  for(let i = 0; i < stage_names.length; i++){
+    li = document.createElement("li");
+    input = document.createElement("input");
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("class", "stage-btn");
+    input.setAttribute("name", "stage");
+    input.setAttribute("value",stage_names[i]);
+    input.setAttribute("checked",true);
+    input.setAttribute("data-stage",stage_names[i]);
+    label = document.createElement("label");
+    label.textContent = stage_names[i];
+    stageList.appendChild(li);
+    li.appendChild(input);
+    li.appendChild(label);
+    stage_info[stage_names[i]].checked = true;
+  }
+
+  console.log('stage_info',stage_info)
+  
+  // adjust datas
+  for (let i = 0; i < variants.length; i++) {
+    // convert chromosome data from 'chrnum' to 'num'
+    let chr = variants[i].chr;
+    chr = chr.replace("chr", "");
+    variants[i].chr = chr;
+    // console.log(variants[i].chr);
+  
+    const pval = variants[i]["p-value"];
+    String(pval);
+  
+    const physical_pos = variants[i]["stop"];
+    String(physical_pos);
+    
+  }
 
   // console.log(params.api); //when you put json url
   // const dataset = await getFormatedJson(
@@ -81,54 +123,8 @@ export default async function gwasManhattanPlot(stanza, params) {
   // console.log("dataset", dataset);
   // console.log("variants", variants);
 
-  // //get checked stage
-  // const stageBtn = stanza.root.querySelectorAll(".stage-btn");
-  // const stageLabel = stanza.root.querySelectorAll(".stage-label");
-  // for (let i = 0; i < stageBtn.length; i++) {
-  //   stageBtn[i].addEventListener("click", checkStage);
-  //   if (stageBtn[i].checked !== true) {
-  //     stageLabel[i].style.color = "#99acb2";
-  //   }
-  // }
 
-  // function checkStage() {
-  //   let flag = false;
-  //   for (let i = 0; i < stageBtn.length; i++) {
-  //     stageLabel[i].style.color = "#99acb2";
-  //     if (stageBtn[i].checked) {
-  //       flag = true;
-  //       variants = stage_info[i].variants;
-  //       stageLabel[i].style.color = "#000000";
-  //       console.log(variants);
-  //     }
-  //   }
-  //   if (!flag) {
-  //     for (let i = 0; i < stageBtn.length; i++) {
-  //       stageBtn[i].checked = false;
-  //     }
-  //   }
-  // }
-
-  // const allBtn = stanza.root.querySelectorAll(".allBtn");
-  // allBtn[0].addEventListener("click", selectAll);
-  // allBtn[1].addEventListener("click", clearAll);
-
-  // function selectAll() {
-  //   for (let i = 0; i < stageBtn.length; i++) {
-  //     stageBtn[i].checked = true;
-  //     stageLabel[i].style.color = "#000000";
-  //   }
-  //   // checkStage();
-  // }
-  // function clearAll() {
-  //   for (let i = 0; i < stageBtn.length; i++) {
-  //     stageBtn[i].checked = false;
-  //     stageLabel[i].style.color = "#99acb2";
-  //   }
-  //   // checkStage();
-  // }
-
-  if (typeof stage_info[0].variants === "object") {
+  if (typeof variants === "object") {
     draw(stanza, params);
     appendDlButton(
       stanza.root.querySelector("#chart"),
@@ -555,7 +551,21 @@ async function draw(stanza, params) {
 
   reRender();
 
+  //listen stage checkbox event
+  const stageBtn = stanza.root.querySelectorAll(".stage-btn");
+  console.log('stageBtn', stageBtn)
+  for(let i = 0; i<stageBtn.length; i++){
+    stageBtn[i].addEventListener("change", (e) => {
+      console.log('CLICKED')
+      let stageName = e.path[0].getAttribute("data-stage");
+      stage_info[stageName].checked = stageBtn[i].checked;
+      variants = getVariants()
+      reRender()
+    });
+  }
+
   function reRender() {
+    console.log('variants.length', variants.length)
     if (range[0] === undefined) {
       range = [
         0,
@@ -693,7 +703,7 @@ async function draw(stanza, params) {
       .attr("y", areaHeight + 20);
 
     // y axis label
-    const overThreshLine = stanza.root.querySelector(".overthresh-line");
+    const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
 
     for (
       let i = Math.floor(rangeVertical[0]) + 1;
@@ -727,7 +737,9 @@ async function draw(stanza, params) {
           .attr("class", "overthresh-line");
       }
     }
-    overThreshLine.remove();
+    for(let i=0; i<overThreshLine.length; i++){
+      overThreshLine[i].remove();
+    }
 
     // y zero (low_thresh)
     ylabel_g
