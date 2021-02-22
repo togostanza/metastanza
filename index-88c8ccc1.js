@@ -1991,6 +1991,7 @@ const createHook = (lifecycle) => (hook, target = currentInstance) =>
 // post-create lifecycle registrations are noops during SSR
 !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 const onMounted = createHook("m" /* MOUNTED */);
+const onUpdated = createHook("u" /* UPDATED */);
 const onBeforeUnmount = createHook("bum" /* BEFORE_UNMOUNT */);
 const onUnmounted = createHook("um" /* UNMOUNTED */);
 // initial value for watchers to trigger on undefined initial values
@@ -8463,5 +8464,5 @@ function isObjectLike(value) {
 
 var lodash_zip = zip;
 
-export { Fragment as F, Transition as T, onUnmounted as a, createBlock as b, computed$1 as c, openBlock as d, defineComponent as e, reactive as f, lodash_orderby as g, resolveComponent as h, createVNode as i, withModifiers as j, withDirectives as k, lodash_zip as l, withCtx as m, renderList as n, onMounted as o, createCommentVNode as p, withKeys as q, ref as r, createTextVNode as s, toRefs as t, toDisplayString as u, vModelText as v, watch as w, mergeProps as x, vModelCheckbox as y, createApp as z };
-//# sourceMappingURL=index-793980dd.js.map
+export { createApp as A, Fragment as F, Transition as T, onUnmounted as a, createBlock as b, computed$1 as c, openBlock as d, defineComponent as e, reactive as f, onUpdated as g, lodash_orderby as h, resolveComponent as i, createVNode as j, withModifiers as k, lodash_zip as l, withDirectives as m, withCtx as n, onMounted as o, renderList as p, createCommentVNode as q, ref as r, withKeys as s, toRefs as t, createTextVNode as u, vModelText as v, watch as w, toDisplayString as x, mergeProps as y, vModelCheckbox as z };
+//# sourceMappingURL=index-88c8ccc1.js.map
