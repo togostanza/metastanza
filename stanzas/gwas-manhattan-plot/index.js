@@ -5,21 +5,15 @@ import data from "../gwas-manhattan-plot/gwas.var2.json";
 const dataset = data.dataset;
 // study name
 const study_name = Object.keys(dataset)[0]; //(single per a json)
-console.log("【study_name】", study_name);
 
 //project data and project names(each of them are single per a json)
-let project = Object.values(dataset)[0];
-project = project[0];
-console.log("【project】", project);
+let project = Object.values(dataset)[0][0];
 
-let project_name = Object.keys(project);
-project_name = project_name[0];
-console.log("【project_name】", project_name);
+let project_name = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
 console.log("【stages】", stages);
-console.log("【...stages】", ...stages);
 
 const stage_info = stages[0];
 
@@ -45,18 +39,6 @@ const getVariants = () => {
   return variantsArray;
 }
 let variants = total_variants; //init
-
-// const condition2 = stage_info[0].condition2;
-
-// let variants_datum;
-// for (let i = 0; i < stage_info.length; i++) {
-//   console.log("【stage_names】" + i, stage_names[i]);
-//   console.log("【stage_info】" + i, stage_info[i]);
-//   console.log("【condition1】" + i, stage_info[i].condition1);
-//   console.log("【condition2】" + i, stage_info[i].condition2);
-//   console.log("【stage_info[i].variants】" + i, stage_info[i].variants);
-// }
-
 
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
@@ -119,7 +101,6 @@ export default async function gwasManhattanPlot(stanza, params) {
   //   params.api,
   //   stanza.root.querySelector("#chart")
   // );
-  // console.log("dataset", dataset);
   // console.log("dataset", dataset);
   // console.log("variants", variants);
 
@@ -230,30 +211,6 @@ async function draw(stanza, params) {
       22: 50818468,
       X: 156040895,
       Y: 57227415,
-      // 1: 3000000000,
-      // 2: 3000000000,
-      // 3: 3000000000,
-      // 4: 3000000000,
-      // 5: 3000000000,
-      // 6: 3000000000,
-      // 7: 3000000000,
-      // 8: 3000000000,
-      // 9: 3000000000,
-      // 10: 3000000000,
-      // 11: 3000000000,
-      // 12: 3000000000,
-      // 13: 3000000000,
-      // 14: 3000000000,
-      // 15: 3000000000,
-      // 16: 3000000000,
-      // 17: 3000000000,
-      // 18: 3000000000,
-      // 19: 3000000000,
-      // 20: 3000000000,
-      // 21: 3000000000,
-      // 22: 3000000000,
-      // X: 3000000000,
-      // Y: 3000000000,
     },
   };
 
@@ -350,7 +307,7 @@ async function draw(stanza, params) {
     .on("mouseup", function (e) {
       if (dragBegin) {
         const dragEnd = d3.pointer(e)[0];
-        // re-render //矩形サイズが5以下の場合、rangeを変更
+        // re-render
         if (5 > dragEnd - dragBegin) {
           range = [
             ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
@@ -366,56 +323,35 @@ async function draw(stanza, params) {
               range[0],
           ];
         }
-        console.log("mouseup(end) dragBegin, dragEnd", dragBegin, dragEnd);
-        console.log("mouseup(end) range", range);
-        svg.select("#selector").remove(); //矩形を除去
+        svg.select("#selector").remove();
         reRender();
         dragBegin = false;
       }
       if (dragBeginVertical) {
         const dragEndVertical = d3.pointer(e)[1] > 370 ? 370 : d3.pointer(e)[1]; //一時的
-        // console.log('mouseup(end) dragBeginVertical', dragBeginVertical)
-        // console.log('mouseup(end) dragEndVertical', dragEndVertical)
-        // console.log('mouseup(end)) d3.pointer(e)',d3.pointer(e))
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
         if (0 > dragEndVertical - dragBeginVertical) {
-          // if (-5 > dragEndVertical - dragBeginVertical) {
-          // console.log('mouseup(end) rangeVertical', rangeVertical)
-          // console.log('mouseup(end) dragBeginVertical', dragBeginVertical)
-          // console.log('mouseup(end) dragEndVertical', dragEndVertical)
           const maxLog =
             rangeVertical[1] -
             ((dragEndVertical - 60) / 310) * rangeVerticalLength;
           const minLog =
             rangeVertical[1] -
             ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-          console.log("mouseup(end)2nd rangeVertical", rangeVertical);
           rangeVertical = [minLog, maxLog];
-          // console.log('minLog', minLog)
-          // console.log('maxLog', maxLog)
         } else if (dragEndVertical - dragBeginVertical > 0) {
-          // } else if (dragEndVertical - dragBeginVertical > 5) {
-          // console.log('mouseup(end) dragBeginVertical', dragBeginVertical)
-          // console.log('mouseup(end) dragEndVertical', dragEndVertical)
-          // console.log('mouseup(end) rangeVertical', rangeVertical)
           const maxLog =
             rangeVertical[1] -
             ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
           const minLog =
             rangeVertical[1] -
             ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-          console.log("mouseup(end)2nd rangeVertical", rangeVertical);
           rangeVertical = [minLog, maxLog];
-          // console.log('minLog', minLog)
-          // console.log('maxLog', maxLog)
         }
         reRender();
-        svg.select("#selector").remove(); //矩形を除去
+        svg.select("#selector").remove();
         dragBegin = false;
         dragBeginVertical = false;
-        // console.log('rangeVertical',rangeVertical)
-        // console.log('range',range)
       }
     });
 
@@ -546,6 +482,7 @@ async function draw(stanza, params) {
     .attr("value", "reset")
     .on("click", function () {
       range = [];
+      rangeVertical = [];
       reRender();
     });
 
