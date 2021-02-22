@@ -175,9 +175,7 @@
    <canvas class="pageSliderRange" height="50"></canvas>
      <div class="pageSlider">
       <div class="pageSliderBar"></div>
-      <ul
-      @load="pageSlider.init"
-	@mousedown="pageSlider.down">
+      <ul @mousedown="pageSlider.down">
         <li class="pageSliderKnob">1</li>
       </ul>
     </div>
