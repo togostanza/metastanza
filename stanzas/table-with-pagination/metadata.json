@@ -17,13 +17,13 @@
   "stanza:parameter": [
     {
       "stanza:key": "table_data_api",
-      "stanza:example": "https://sparql-support.dbcls.jp/rest/api/metastanza_table_example",
+      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
       "stanza:description": "table data api",
       "stanza:required": true
     },
     {
       "stanza:key": "limit",
-      "stanza:example": "10",
+      "stanza:example": "5",
       "stanza:description": "table page size",
       "stanza:required": true
     },
@@ -37,6 +37,12 @@
       "stanza:key": "params",
       "stanza:example": "taxonomy='9606'",
       "stanza:description": "parameters for table data api",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "page_slider",
+      "stanza:example": "1",
+      "stanza:description": "Page slider on/off",
       "stanza:required": false
     },
     {
@@ -381,7 +387,7 @@
     {
       "stanza:key": "--pagination-padding",
       "stanza:type": "text",
-      "stanza:default": "30px 0px 0px 0px",
+      "stanza:default": "12px 0px 0px 0px",
       "stanza:description": "padding of pagination"
     },
     {
@@ -413,14 +419,8 @@
     {
       "stanza:key": "--paginationbtn-border",
       "stanza:type": "text",
-      "stanza:default": "1px solid #fff",
+      "stanza:default": "1px solid rgba(0, 0, 0, .1)",
       "stanza:description": "border style of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-border-bottom",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #fff",
-      "stanza:description": "border-bottom style of pagination button"
     },
     {
       "stanza:key": "--paginationbtn-border-radius",
@@ -429,15 +429,9 @@
       "stanza:description": "border radius of pagination button"
     },
     {
-      "stanza:key": "--paginationbtn-margin",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "margin of pagination button"
-    },
-    {
       "stanza:key": "--paginationbtn-padding",
       "stanza:type": "text",
-      "stanza:default": "4px",
+      "stanza:default": "2px 8px",
       "stanza:description": "padding of pagination button"
     },
     {
@@ -447,21 +441,15 @@
       "stanza:description": "font size of pagination button"
     },
     {
-      "stanza:key": "--edge-paginationbtn-border-radius",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "border radius of edge pagination button"
-    },
-    {
       "stanza:key": "--currentbtn-font-color",
       "stanza:type": "color",
-      "stanza:default": "#002559",
+      "stanza:default": "#ffffff",
       "stanza:description": "font color of pagination button.(at current page)"
     },
     {
       "stanza:key": "--currentbtn-background-color",
       "stanza:type": "color",
-      "stanza:default": "#D5E1E8",
+      "stanza:default": "#256d80",
       "stanza:description": "background color of pagination button.(at current page)"
     },
     {
@@ -469,30 +457,6 @@
       "stanza:type": "text",
       "stanza:default": "1px solid #DDDDDD",
       "stanza:description": "border style of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-border-bottom",
-      "stanza:type": "text",
-      "stanza:default": "0px solid #DDDDDD",
-      "stanza:description": "border-bottom style of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-border-radius",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "border radius of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-padding",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "padding of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-margin",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "margin of pagination button.(at current page)"
     },
     {
       "stanza:key": "--arrowbtn-color",

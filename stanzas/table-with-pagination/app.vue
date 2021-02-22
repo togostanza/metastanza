@@ -16,37 +16,47 @@
         />
       </button>
     </form>
-    <div
-      v-if="state.columnShowingTextSearch !== null"
-      class="textSearchByColumnWrapper"
-    >
-      <p class="title">
-        Search for "{{ state.columnShowingTextSearch.label }}"
-      </p>
-      <form
-        class="textSearchWrapper"
-        @submit.prevent="
-          submitQuery(
-            state.columnShowingTextSearch.label,
-            state.queryInputByColumn
-          )
-        "
+    <transition name="modal">
+      <div
+        v-if="state.columnShowingTextSearch !== null"
+        class="textSearchByColumnWrapper modal"
       >
-        <input
-          id="queryInputByColumn"
-          v-model="state.queryInputByColumn"
-          type="text"
-          placeholder="Search for keywords..."
-          name="queryInputByColumn"
-        />
-        <button class="searchBtn" type="submit">
-          <img
-            src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-            alt="search"
+        <p class="title">
+          Search for "{{ state.columnShowingTextSearch.label }}"
+        </p>
+        <form
+          v-if="state.columnShowingTextSearch.type === 'literal'"
+          class="textSearchWrapper"
+          @submit.prevent="
+            submitQuery(
+              state.columnShowingTextSearch.label,
+              state.columnShowingTextSearch.type,
+              state.queryInputByColumn
+            )
+          "
+        >
+          <input
+            id="queryInputByColumn"
+            v-model="state.queryInputByColumn"
+            type="text"
+            placeholder="Search for keywords..."
+            name="queryInputByColumn"
           />
-        </button>
-      </form>
-    </div>
+          <button class="searchBtn" type="submit">
+            <img
+              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
+              alt="search"
+            />
+          </button>
+        </form>
+        <div v-if="state.columnShowingTextSearch.type === 'number'">
+          <Slider
+            v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
+            v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
+          ></Slider>
+        </div>
+      </div>
+    </transition>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
         src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
@@ -125,12 +135,9 @@
   </table>
   <div class="paginationWrapper">
     <template v-if="state.pagination.currentPage !== 1">
-      <span class="arrow left" @click="state.pagination.currentPage = 1"
-        >&lt;
+      <span class="arrow double left" @click="state.pagination.currentPage = 1; pageSlider.click()">
       </span>
-      <span class="singleArrow left" @click="state.pagination.currentPage--"
-        >&lt;&lt;</span
-      >
+      <span class="arrow left" @click="state.pagination.currentPage--; pageSlider.click()"></span>
     </template>
 
     <ul>
@@ -139,24 +146,19 @@
         :key="page"
         :class="[
           'pagination',
-          { active: state.pagination.currentPage === page },
+          { currentBtn: state.pagination.currentPage === page },
         ]"
-        @click="state.pagination.currentPage = page"
+        @click="state.pagination.currentPage = page; pageSlider.click()"
       >
         {{ page }}
       </li>
     </ul>
 
     <template v-if="state.pagination.currentPage !== totalPages">
-      <span class="singleArrow right" @click="state.pagination.currentPage++"
-        >&gt;</span
-      >
-
+      <span class="arrow right" @click="state.pagination.currentPage++; pageSlider.click()"></span>
       <span
-        class="arrow right"
-        @click="state.pagination.currentPage = totalPages"
-        >&gt;&gt;</span
-      >
+        class="arrow double right"
+        @click="state.pagination.currentPage = totalPages; pageSlider.click()"></span>
     </template>
 
     <div class="pageNumber">
@@ -169,6 +171,15 @@
       of {{ totalPages }}
     </div>
   </div>
+  <div class="pageSliderWrapper" ref="pageSliderWrapper">
+  <canvas class="pageSliderRange" height="50"></canvas>
+    <div class="pageSlider">
+      <div class="pageSliderBar"></div>
+      <ul @mousedown="pageSlider.down">
+        <li class="pageSliderKnob">1</li>
+      </ul>
+    </div>
+  </div>
 
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
@@ -178,17 +189,21 @@
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onMounted } from "vue";
+import { defineComponent, reactive, computed, onMounted, onUpdated, ref} from "vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import zip from "lodash.zip";
+import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
+import data from "./assets/tableDataWithNumber.json";
 
 export default defineComponent({
+  components: {
+    Slider,
+  },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
-
   setup(params) {
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -199,6 +214,7 @@ export default defineComponent({
       query: "",
       queryByColumn: {
         column: null,
+        type: null,
         query: "",
       },
       columnShowingFilters: null,
@@ -217,6 +233,15 @@ export default defineComponent({
       queryInput: "",
       queryInputByColumn: "",
       jumpToNumberInput: "",
+
+      rangeInputs: {},
+
+      knobDrag: false,
+      knobX: 0,
+      startX: 0,
+      knob: false,
+      canvas: false,
+      sliderBarWidth: 0,
     });
 
     const filteredRows = computed(() => {
@@ -224,7 +249,7 @@ export default defineComponent({
       const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
-          return query ? row.some((cell) => cell.value.includes(query)) : true;
+          return query ? row.some((cell) => String(cell.value).includes(query)) : true;
         })
         .filter((row) => {
           return queryByColumn
@@ -233,6 +258,17 @@ export default defineComponent({
                   cell.column.label === state.queryByColumn.column &&
                   cell.value.includes(queryByColumn)
               )
+            : true;
+        })
+        .filter((row) => {
+          return Object.keys(state.rangeInputs).length !== 0
+            ? row.some((cell) => {
+                return (
+                  cell.column.type === "number" &&
+                  cell.value >= state.rangeInputs[cell.column.id].value[0] &&
+                  cell.value <= state.rangeInputs[cell.column.id].value[1]
+                );
+              })
             : true;
         })
         .filter((row) => {
@@ -270,8 +306,7 @@ export default defineComponent({
     const rowsInCurrentPage = computed(() => {
       const startIndex =
         (state.pagination.currentPage - 1) * state.pagination.perPage;
-      const endIndex = startIndex + state.pagination.perPage;
-
+      const endIndex = Number(startIndex) + Number(state.pagination.perPage);
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
@@ -321,11 +356,12 @@ export default defineComponent({
     }
 
     function jumpToPage(num) {
-      state.pagination.currentPage = num;
+      state.pagination.currentPage = num ? num : 1;
     }
 
-    function submitQuery(column, query) {
+    function submitQuery(column, type, query) {
       state.queryByColumn.column = column;
+      state.queryByColumn.type = type;
       state.queryByColumn.query = query;
     }
 
@@ -334,9 +370,75 @@ export default defineComponent({
       state.columnShowingTextSearch = null;
     }
 
+    const pageSliderWrapper = ref(null);
+    const pageSlider = {
+      init: () => {
+        let wrapper = pageSliderWrapper.value;
+        if (!params.page_slider) wrapper.style.display = "none";
+        wrapper.onmousemove = pageSlider.move;
+        wrapper.onmouseup = pageSlider.up;
+        state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
+        state.canvas = wrapper.getElementsByTagName("canvas")[0];
+        let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
+        state.sliderBarWidth = bar.offsetWidth;
+        pageSlider.setPage(state.knobX, state.pagination.currentPage);
+      },
+      down: (e) => {
+        state.knobDrag = true;
+        state.startX = e.pageX;
+      },
+      move: (e) => {
+        if (state.knobDrag) {
+          let dragX = state.knobX + e.pageX - state.startX;
+          if (dragX < 0) {
+            dragX = 0;
+          }
+          if (dragX > state.sliderBarWidth) {
+            dragX = state.sliderBarWidth;
+          }
+          let page = Math.ceil((totalPages.value * dragX) / state.sliderBarWidth);
+          if (page < 1) {
+            page = 1;
+          }
+          pageSlider.setPage(dragX, page);
+        }
+      },
+      up: (e) => {
+        if (state.knobDrag) {
+          state.knobX += e.pageX - state.startX;
+          state.pagination.currentPage = parseInt(state.knob.innerHTML);
+          state.knobDrag = false;
+        }
+      },
+      click: () => {
+        state.knobX = state.sliderBarWidth / (totalPages.value - 1) * (state.pagination.currentPage - 1);
+        pageSlider.setPage(state.knobX, state.pagination.currentPage);
+      },
+      setPage: (knobX, page) => {
+        state.knob.innerHTML = page;
+        state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
+        state.canvas.setAttribute("width", state.sliderBarWidth);
+        state.canvas.setAttribute("height", 50);
+        let pageButton = state.canvas.parentNode.parentNode
+            .getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
+        if (state.canvas.getContext) {
+          const ctx = state.canvas.getContext("2d");
+          ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
+          ctx.beginPath();
+          ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
+          ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
+          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
+          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
+          ctx.closePath();
+          ctx.fillStyle = "#dddddd";
+          ctx.fill();
+        }
+      }
+    }
+
     async function fetchData() {
-      const res = await fetch(params.table_data_api);
-      const data = await res.json();
+      // const res = await fetch(params.table_data_api);
+      // const data = await res.json();
 
       state.responseJSON = data;
 
@@ -345,12 +447,16 @@ export default defineComponent({
       const columns = zip(vars, labels, order, href)
         .map(([_var, label, _order, _href]) => {
           const values = data.body.map((row) => row[_var].value);
-
+          const datam = data.body[0];
+          if (datam[_var].type === "number") {
+            state.rangeInputs[_var] = { value: [0, 0], min: 0, max: 0 };
+          }
           return {
             id: _var,
             label,
             order: _order,
             href: _href,
+            type: datam[_var].type,
 
             filters: uniq(values).map((value) => {
               return {
@@ -363,9 +469,18 @@ export default defineComponent({
         .filter((column) => column.label !== null);
 
       state.columns = orderBy(columns, ["order"]);
-
       state.allRows = data.body.map((row) => {
         return columns.map((column) => {
+          if (column.type === "number") {
+            if (row[column.id].value < state.rangeInputs[column.id].min) {
+              state.rangeInputs[column.id].min = row[column.id].value;
+            } else if (
+              row[column.id].value > state.rangeInputs[column.id].max
+            ) {
+              state.rangeInputs[column.id].max = row[column.id].value;
+              state.rangeInputs[column.id].value[1] = row[column.id].value;
+            }
+          }
           return {
             column,
             value: row[column.id].value,
@@ -376,6 +491,7 @@ export default defineComponent({
     }
 
     onMounted(fetchData);
+    onUpdated(pageSlider.init);
 
     return {
       state,
@@ -388,6 +504,8 @@ export default defineComponent({
       jumpToPage,
       submitQuery,
       closeModal,
+      pageSliderWrapper,
+      pageSlider,
     };
   },
 });
