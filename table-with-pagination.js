@@ -2980,7 +2980,7 @@ var script = defineComponent({
         }
       }
     };
-    
+
     async function fetchData() {
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
