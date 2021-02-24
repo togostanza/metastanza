@@ -1,1325 +1,452 @@
-{
-  "head": {
-    "vars": [
-      "id",
-      "uniprot",
-      "mnemonic",
-      "name",
-      "location_name",
-      "location_uniprot"
-    ],
-    "labels": [
-      "Acccession",
-      null,
-      "Mnemonic",
-      "Protein name",
-      "Subcellular location",
-      null
-    ],
-    "order": [0, -1, 1, 2, 3, -1],
-    "href": ["uniprot", null, null, null, "location_uniprot", null],
-    "rowspan": [false, false, false, false, true, false]
+[
+  {
+    "id": "Q9BSA9",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9BSA9",
+    "mnemonic": "mnemonic",
+    "name": "Endosomal/lysosomal potassium channel TMEM175",
+    "mass": 213,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
   },
-  "body": [
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9BSA9"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9BSA9"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 213
-      },
-      "name": {
-        "type": "literal",
-        "value": "Endosomal/lysosomal potassium channel TMEM175"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q14457"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q14457"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 253
-      },
-      "name": {
-        "type": "literal",
-        "value": "Beclin-1"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P61077"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P61077"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 640
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ubiquitin-conjugating enzyme E2 D3"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q99732"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q99732"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 637
-      },
-      "name": {
-        "type": "literal",
-        "value": "Lipopolysaccharide-induced tumor necrosis factor-alpha factor"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q96EK6"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q96EK6"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 688
-      },
-      "name": {
-        "type": "literal",
-        "value": "Glucosamine 6-phosphate N-acetyltransferase"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P20339"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P20339"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 416
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ras-related protein Rab-5A"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P51149"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P51149"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 391
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ras-related protein Rab-7a"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9NP79"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9NP79"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 343
-      },
-      "name": {
-        "type": "literal",
-        "value": "Vacuolar protein sorting-associated protein VTA1 homolog"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q16620"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q16620"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 608
-      },
-      "name": {
-        "type": "literal",
-        "value": "BDNF/NT-3 growth factors receptor"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q96FZ7"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q96FZ7"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 320
-      },
-      "name": {
-        "type": "literal",
-        "value": "Charged multivesicular body protein 6"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9NZZ3"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9NZZ3"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 611
-      },
-      "name": {
-        "type": "literal",
-        "value": "Charged multivesicular body protein 5"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P51795"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P51795"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 24
-      },
-      "name": {
-        "type": "literal",
-        "value": "H(+)/Cl(-) exchange transporter 5"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P51797"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P51797"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 706
-      },
-      "name": {
-        "type": "literal",
-        "value": "Chloride transport protein 6"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P04440"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P04440"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 478
-      },
-      "name": {
-        "type": "literal",
-        "value": "HLA class II histocompatibility antigen, DP beta 1 chain"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P20036"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P20036"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 433
-      },
-      "name": {
-        "type": "literal",
-        "value": "HLA class II histocompatibility antigen, DP alpha 1 chain"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9UBB6"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9UBB6"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 277
-      },
-      "name": {
-        "type": "literal",
-        "value": "Neurochondrin"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P61026"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P61026"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 609
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ras-related protein Rab-10"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q86WG5"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q86WG5"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 682
-      },
-      "name": {
-        "type": "literal",
-        "value": "Myotubularin-related protein 13"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q6UXF1"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q6UXF1"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 503
-      },
-      "name": {
-        "type": "literal",
-        "value": "Transmembrane protein 108"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9Y2I7"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9Y2I7"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 505
-      },
-      "name": {
-        "type": "literal",
-        "value": "1-phosphatidylinositol 3-phosphate 5-kinase"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q8IZ08"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q8IZ08"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 55
-      },
-      "name": {
-        "type": "literal",
-        "value": "G-protein coupled receptor 135"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P11279"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P11279"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 179
-      },
-      "name": {
-        "type": "literal",
-        "value": "Lysosome-associated membrane glycoprotein 1"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q8IY34"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q8IY34"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 18
-      },
-      "name": {
-        "type": "literal",
-        "value": "Solute carrier family 15 member 3"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "O15440"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/O15440"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 370
-      },
-      "name": {
-        "type": "literal",
-        "value": "Multidrug resistance-associated protein 5"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P49281"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P49281"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 198
-      },
-      "name": {
-        "type": "literal",
-        "value": "Natural resistance-associated macrophage protein 2"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9UJY4"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9UJY4"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 162
-      },
-      "name": {
-        "type": "literal",
-        "value": "ADP-ribosylation factor-binding protein GGA2"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9UJY5"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9UJY5"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 373
-      },
-      "name": {
-        "type": "literal",
-        "value": "ADP-ribosylation factor-binding protein GGA1"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9Y328"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9Y328"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 295
-      },
-      "name": {
-        "type": "literal",
-        "value": "Neuronal vesicle trafficking-associated protein 2"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q92673"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q92673"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 716
-      },
-      "name": {
-        "type": "literal",
-        "value": "Sortilin-related receptor"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9Y287"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9Y287"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 77
-      },
-      "name": {
-        "type": "literal",
-        "value": "Integral membrane protein 2B"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9BXJ7"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9BXJ7"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 292
-      },
-      "name": {
-        "type": "literal",
-        "value": "Protein amnionless"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9P2R3"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9P2R3"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 195
-      },
-      "name": {
-        "type": "literal",
-        "value": "Rabankyrin-5"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P62330"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P62330"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 552
-      },
-      "name": {
-        "type": "literal",
-        "value": "ADP-ribosylation factor 6"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q86VI4"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q86VI4"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 657
-      },
-      "name": {
-        "type": "literal",
-        "value": "Lysosomal-associated transmembrane protein 4B"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q2KHT3"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q2KHT3"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 574
-      },
-      "name": {
-        "type": "literal",
-        "value": "Protein CLEC16A"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q15057"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q15057"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 684
-      },
-      "name": {
-        "type": "literal",
-        "value": "Arf-GAP with coiled-coil, ANK repeat and PH domain-containing protein 2"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9UL26"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9UL26"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 701
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ras-related protein Rab-22A"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q13596"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q13596"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 429
-      },
-      "name": {
-        "type": "literal",
-        "value": "Sorting nexin-1"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9NZD8"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9NZD8"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 759
-      },
-      "name": {
-        "type": "literal",
-        "value": "Maspardin"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P34810"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P34810"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 310
-      },
-      "name": {
-        "type": "literal",
-        "value": "Macrosialin"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q99523"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q99523"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 222
-      },
-      "name": {
-        "type": "literal",
-        "value": "Sortilin"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q96H20"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q96H20"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 768
-      },
-      "name": {
-        "type": "literal",
-        "value": "Vacuolar-sorting protein SNF8"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9BZJ8"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9BZJ8"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 7
-      },
-      "name": {
-        "type": "literal",
-        "value": "G-protein coupled receptor 61"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9NZ52"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9NZ52"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 780
-      },
-      "name": {
-        "type": "literal",
-        "value": "ADP-ribosylation factor-binding protein GGA3"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q9Y5X0"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q9Y5X0"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 508
-      },
-      "name": {
-        "type": "literal",
-        "value": "Sorting nexin-10"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P00533"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P00533"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 292
-      },
-      "name": {
-        "type": "literal",
-        "value": "Epidermal growth factor receptor"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "P40818"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/P40818"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 718
-      },
-      "name": {
-        "type": "literal",
-        "value": "Ubiquitin carboxyl-terminal hydrolase 8"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q8N1B4"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q8N1B4"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 680
-      },
-      "name": {
-        "type": "literal",
-        "value": "Vacuolar protein sorting-associated protein 52 homolog"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q96GS6"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q96GS6"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 400
-      },
-      "name": {
-        "type": "literal",
-        "value": "Alpha/beta hydrolase domain-containing protein 17A"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    },
-    {
-      "id": {
-        "type": "literal",
-        "value": "Q96J02"
-      },
-      "uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/uniprot/Q96J02"
-      },
-      "mnemonic": {
-        "type": "number",
-        "value": 116
-      },
-      "name": {
-        "type": "literal",
-        "value": "E3 ubiquitin-protein ligase Itchy homolog"
-      },
-      "location_name": {
-        "type": "literal",
-        "value": "Endosome membrane"
-      },
-      "location_uniprot": {
-        "type": "uri",
-        "value": "http://purl.uniprot.org/locations/100"
-      }
-    }
-  ]
-}
+  {
+    "id": "Q14457",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q14457",
+    "mnemonic": "mnemonic",
+    "name": "Beclin-1",
+    "mass": 253,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P61077",
+    "uniprot": "http://purl.uniprot.org/uniprot/P61077",
+    "mnemonic": "mnemonic",
+    "name": "Ubiquitin-conjugating enzyme E2 D3",
+    "mass": 640,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q99732",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q99732",
+    "mnemonic": "mnemonic",
+    "name": "Lipopolysaccharide-induced tumor necrosis factor-alpha factor",
+    "mass": 637,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q96EK6",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q96EK6",
+    "mnemonic": "mnemonic",
+    "name": "Glucosamine 6-phosphate N-acetyltransferase",
+    "mass": 688,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P20339",
+    "uniprot": "http://purl.uniprot.org/uniprot/P20339",
+    "mnemonic": "mnemonic",
+    "name": "Ras-related protein Rab-5A",
+    "mass": 416,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P51149",
+    "uniprot": "http://purl.uniprot.org/uniprot/P51149",
+    "mnemonic": "mnemonic",
+    "name": "Ras-related protein Rab-7a",
+    "mass": 391,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9NP79",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9NP79",
+    "mnemonic": "mnemonic",
+    "name": "Vacuolar protein sorting-associated protein VTA1 homolog",
+    "mass": 343,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q16620",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q16620",
+    "mnemonic": "mnemonic",
+    "name": "BDNF/NT-3 growth factors receptor",
+    "mass": 608,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q96FZ7",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q96FZ7",
+    "mnemonic": "mnemonic",
+    "name": "Charged multivesicular body protein 6",
+    "mass": 320,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9NZZ3",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9NZZ3",
+    "mnemonic": "mnemonic",
+    "name": "Charged multivesicular body protein 5",
+    "mass": 611,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P51795",
+    "uniprot": "http://purl.uniprot.org/uniprot/P51795",
+    "mnemonic": "mnemonic",
+    "name": "H(+)/Cl(-) exchange transporter 5",
+    "mass": 24,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P51797",
+    "uniprot": "http://purl.uniprot.org/uniprot/P51797",
+    "mnemonic": "mnemonic",
+    "name": "Chloride transport protein 6",
+    "mass": 706,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P04440",
+    "uniprot": "http://purl.uniprot.org/uniprot/P04440",
+    "mnemonic": "mnemonic",
+    "name": "HLA class II histocompatibility antigen, DP beta 1 chain",
+    "mass": 478,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P20036",
+    "uniprot": "http://purl.uniprot.org/uniprot/P20036",
+    "mnemonic": "mnemonic",
+    "name": "HLA class II histocompatibility antigen, DP alpha 1 chain",
+    "mass": 433,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9UBB6",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9UBB6",
+    "mnemonic": "mnemonic",
+    "name": "Neurochondrin",
+    "mass": 277,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P61026",
+    "uniprot": "http://purl.uniprot.org/uniprot/P61026",
+    "mnemonic": "mnemonic",
+    "name": "Ras-related protein Rab-10",
+    "mass": 609,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q86WG5",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q86WG5",
+    "mnemonic": "mnemonic",
+    "name": "Myotubularin-related protein 13",
+    "mass": 682,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q6UXF1",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q6UXF1",
+    "mnemonic": "mnemonic",
+    "name": "Transmembrane protein 108",
+    "mass": 503,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9Y2I7",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9Y2I7",
+    "mnemonic": "mnemonic",
+    "name": "1-phosphatidylinositol 3-phosphate 5-kinase",
+    "mass": 505,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q8IZ08",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q8IZ08",
+    "mnemonic": "mnemonic",
+    "name": "G-protein coupled receptor 135",
+    "mass": 55,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P11279",
+    "uniprot": "http://purl.uniprot.org/uniprot/P11279",
+    "mnemonic": "mnemonic",
+    "name": "Lysosome-associated membrane glycoprotein 1",
+    "mass": 179,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q8IY34",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q8IY34",
+    "mnemonic": "mnemonic",
+    "name": "Solute carrier family 15 member 3",
+    "mass": 18,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "O15440",
+    "uniprot": "http://purl.uniprot.org/uniprot/O15440",
+    "mnemonic": "mnemonic",
+    "name": "Multidrug resistance-associated protein 5",
+    "mass": 370,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P49281",
+    "uniprot": "http://purl.uniprot.org/uniprot/P49281",
+    "mnemonic": "mnemonic",
+    "name": "Natural resistance-associated macrophage protein 2",
+    "mass": 198,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9UJY4",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9UJY4",
+    "mnemonic": "mnemonic",
+    "name": "ADP-ribosylation factor-binding protein GGA2",
+    "mass": 162,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9UJY5",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9UJY5",
+    "mnemonic": "mnemonic",
+    "name": "ADP-ribosylation factor-binding protein GGA1",
+    "mass": 373,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9Y328",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9Y328",
+    "mnemonic": "mnemonic",
+    "name": "Neuronal vesicle trafficking-associated protein 2",
+    "mass": 295,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q92673",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q92673",
+    "mnemonic": "mnemonic",
+    "name": "Sortilin-related receptor",
+    "mass": 716,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9Y287",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9Y287",
+    "mnemonic": "mnemonic",
+    "name": "Integral membrane protein 2B",
+    "mass": 77,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9BXJ7",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9BXJ7",
+    "mnemonic": "mnemonic",
+    "name": "Protein amnionless",
+    "mass": 292,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9P2R3",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9P2R3",
+    "mnemonic": "mnemonic",
+    "name": "Rabankyrin-5",
+    "mass": 195,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P62330",
+    "uniprot": "http://purl.uniprot.org/uniprot/P62330",
+    "mnemonic": "mnemonic",
+    "name": "ADP-ribosylation factor 6",
+    "mass": 552,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q86VI4",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q86VI4",
+    "mnemonic": "mnemonic",
+    "name": "Lysosomal-associated transmembrane protein 4B",
+    "mass": 657,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q2KHT3",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q2KHT3",
+    "mnemonic": "mnemonic",
+    "name": "Protein CLEC16A",
+    "mass": 574,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q15057",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q15057",
+    "mnemonic": "mnemonic",
+    "name": "Arf-GAP with coiled-coil, ANK repeat and PH domain-containing protein 2",
+    "mass": 684,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9UL26",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9UL26",
+    "mnemonic": "mnemonic",
+    "name": "Ras-related protein Rab-22A",
+    "mass": 701,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q13596",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q13596",
+    "mnemonic": "mnemonic",
+    "name": "Sorting nexin-1",
+    "mass": 429,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9NZD8",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9NZD8",
+    "mnemonic": "mnemonic",
+    "name": "Maspardin",
+    "mass": 759,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P34810",
+    "uniprot": "http://purl.uniprot.org/uniprot/P34810",
+    "mnemonic": "mnemonic",
+    "name": "Macrosialin",
+    "mass": 310,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q99523",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q99523",
+    "mnemonic": "mnemonic",
+    "name": "Sortilin",
+    "mass": 222,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q96H20",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q96H20",
+    "mnemonic": "mnemonic",
+    "name": "Vacuolar-sorting protein SNF8",
+    "mass": 768,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9BZJ8",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9BZJ8",
+    "mnemonic": "mnemonic",
+    "name": "G-protein coupled receptor 61",
+    "mass": 7,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9NZ52",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9NZ52",
+    "mnemonic": "mnemonic",
+    "name": "ADP-ribosylation factor-binding protein GGA3",
+    "mass": 780,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q9Y5X0",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q9Y5X0",
+    "mnemonic": "mnemonic",
+    "name": "Sorting nexin-10",
+    "mass": 508,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P00533",
+    "uniprot": "http://purl.uniprot.org/uniprot/P00533",
+    "mnemonic": "mnemonic",
+    "name": "Epidermal growth factor receptor",
+    "mass": 292,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "P40818",
+    "uniprot": "http://purl.uniprot.org/uniprot/P40818",
+    "mnemonic": "mnemonic",
+    "name": "Ubiquitin carboxyl-terminal hydrolase 8",
+    "mass": 718,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q8N1B4",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q8N1B4",
+    "mnemonic": "mnemonic",
+    "name": "Vacuolar protein sorting-associated protein 52 homolog",
+    "mass": 680,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q96GS6",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q96GS6",
+    "mnemonic": "mnemonic",
+    "name": "Alpha/beta hydrolase domain-containing protein 17A",
+    "mass": 400,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  },
+  {
+    "id": "Q96J02",
+    "uniprot": "http://purl.uniprot.org/uniprot/Q96J02",
+    "mnemonic": "mnemonic",
+    "name": "E3 ubiquitin-protein ligase Itchy homolog",
+    "mass": 116,
+    "location_name": "Endosome membrane",
+    "location_uniprot": "http://purl.uniprot.org/locations/100"
+  }
+]
