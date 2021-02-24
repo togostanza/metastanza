@@ -4,7 +4,7 @@ import data from "../gwas-manhattan-plot/gwas.var2.json";
 
 // study name(single per a json)
 const dataset = data.dataset;
-const study_name = Object.keys(dataset)[0]; 
+const study_name = Object.keys(dataset)[0];
 
 //project data and project names(single per a json)
 const project = Object.values(dataset)[0][0];
