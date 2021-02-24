@@ -11256,7 +11256,7 @@ var data = {
 
 // study name(single per a json)
 const dataset$1 = data.dataset;
-const study_name = Object.keys(dataset$1)[0]; 
+const study_name = Object.keys(dataset$1)[0];
 
 //project data and project names(single per a json)
 const project = Object.values(dataset$1)[0][0];
