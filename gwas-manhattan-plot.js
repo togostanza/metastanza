@@ -11260,7 +11260,6 @@ const study_name = Object.keys(dataset$1)[0];
 
 //project data and project names(single per a json)
 const project = Object.values(dataset$1)[0][0];
-
 const project_name = Object.keys(project)[0];
 
 // stage data and stage names
@@ -11303,7 +11302,6 @@ async function gwasManhattanPlot(stanza, params) {
       title: params["title"],
       study_name,
       project_name,
-      // stage_name,
       condition1,
       condition2,
     },
@@ -11363,7 +11361,6 @@ async function gwasManhattanPlot(stanza, params) {
       "manhattan_plot",
       stanza
     );
-    // selectAll();
   }
 }
 
@@ -11398,7 +11395,13 @@ async function draw(stanza, params) {
     params.label_key = "label";
   }
   const low_thresh = parseFloat(params.low_thresh);
+  // let high_thresh = parseFloat(params.high_thresh);
   const high_thresh = parseFloat(params.high_thresh);
+  let threshold = stanza.root.querySelector("#threshold");
+  threshold.addEventListener("input", function () {
+    high_thresh = parseFloat(threshold.value);
+    reRender();
+  });
   const even_and_odd = params.even_and_odd === "true";
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
@@ -11919,7 +11922,6 @@ async function draw(stanza, params) {
           "d",
           "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
         );
-
       if (i === high_thresh) {
         threshline_g
           .append("path")
@@ -12625,11 +12627,11 @@ var templates = [
     + alias4(((helper = (helper = lookupProperty(helpers,"study_name") || (depth0 != null ? lookupProperty(depth0,"study_name") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"study_name","hash":{},"data":data,"loc":{"start":{"line":14,"column":6},"end":{"line":14,"column":20}}}) : helper)))
     + "\n    </dd>\n    <dt id=\"project-name\">\n      project name\n    </dt>\n    <dd>\n      "
     + alias4(((helper = (helper = lookupProperty(helpers,"project_name") || (depth0 != null ? lookupProperty(depth0,"project_name") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_name","hash":{},"data":data,"loc":{"start":{"line":20,"column":6},"end":{"line":20,"column":22}}}) : helper)))
-    + "\n    </dd>\n    <dt id=\"stage-name\">\n      stage name\n    </dt>\n    <dd>\n      <ul id=\"stageList\">\n      </ul>\n      <button id=\"selectAllBtn\" class=\"allBtn\" type=\"button\" name=\"all\">\n        Select All\n      </button>\n      <button id=\"clearAllBtn\" class=\"allBtn\" type=\"button\" name=\"all\">\n        Clear All\n      </button>\n    </dd>\n  </dl>\n  <ul class=\"condition-list\">\n    <li id=\"condition1\">\n      <span>\n        condition1:\n      </span>\n      &ensp;"
-    + alias4(((helper = (helper = lookupProperty(helpers,"condition1") || (depth0 != null ? lookupProperty(depth0,"condition1") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition1","hash":{},"data":data,"loc":{"start":{"line":94,"column":12},"end":{"line":94,"column":26}}}) : helper)))
+    + "\n    </dd>\n    <dt id=\"stage-name\">\n      stage name\n    </dt>\n    <dd>\n      <ul id=\"stageList\">\n      </ul>\n      <button id=\"selectAllBtn\" class=\"allBtn\" type=\"button\" name=\"all\">\n        Select All\n      </button>\n      <button id=\"clearAllBtn\" class=\"allBtn\" type=\"button\" name=\"all\">\n        Clear All\n      </button>\n    </dd>\n    <dt>\n      threshold\n    </dt>\n    <dd>\n      <input id=\"threshold\" type=\"text\" value=\"8\" />\n    </dd>\n  </dl>\n  <ul class=\"condition-list\">\n    <li id=\"condition1\">\n      <span>\n        condition1:\n      </span>\n      &ensp;"
+    + alias4(((helper = (helper = lookupProperty(helpers,"condition1") || (depth0 != null ? lookupProperty(depth0,"condition1") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition1","hash":{},"data":data,"loc":{"start":{"line":47,"column":12},"end":{"line":47,"column":26}}}) : helper)))
     + "\n    </li>\n    <li id=\"condition2\">\n      <span>\n        condition2:\n      </span>\n      &ensp;"
-    + alias4(((helper = (helper = lookupProperty(helpers,"condition2") || (depth0 != null ? lookupProperty(depth0,"condition2") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition2","hash":{},"data":data,"loc":{"start":{"line":100,"column":12},"end":{"line":100,"column":26}}}) : helper)))
-    + "\n    </li>\n  </ul>\n</section>\n\n\n<section class=\"chart-section\">\n  <div id=\"chart\"></div>\n  <div id=\"control\"></div>\n</section>\n\n<section class=\"table-section\">\n  <h2>\n    Top Loci\n  </h2>\n  <div id=\"table\"></div>\n</section>";
+    + alias4(((helper = (helper = lookupProperty(helpers,"condition2") || (depth0 != null ? lookupProperty(depth0,"condition2") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition2","hash":{},"data":data,"loc":{"start":{"line":53,"column":12},"end":{"line":53,"column":26}}}) : helper)))
+    + "\n    </li>\n  </ul>\n</section>\n\n<section class=\"chart-section\">\n  <div id=\"chart\"></div>\n  <div id=\"control\"></div>\n</section>\n\n<section class=\"table-section\">\n  <h2>\n    Top Loci\n  </h2>\n  <div id=\"table\"></div>\n</section>";
 },"useData":true}],
 ["table.html.hbs", {"1":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -12639,9 +12641,11 @@ var templates = [
         return undefined
     };
 
-  return "      <tr>\n        <td>\n          "
+  return "      <tr>\n        <td>\n          <a href=\"https://mgend.med.kyoto-u.ac.jp/gene/info/"
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"rsId") : stack1), depth0))
+    + "#locuszoom-link\">"
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"gene_name") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
+    + "</a>\n        </td>\n        <td>\n          "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"rsId") : stack1), depth0))
     + "\n        </td>\n        <td>\n          "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"chr") : stack1), depth0))
@@ -12668,7 +12672,7 @@ var templates = [
 },"useData":true,"useBlockParams":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 10px 5px 10px;\n  margin-bottom: 30px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 26pt;\n  font-weight: 400;\n  color: #000000;\n  margin-bottom: 10px;\n  padding: 0 20px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\n\ntext.axisLabel {\n  font-size: 10px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 12px;\n}\n\ncircle.ch_even {\n  fill: var(--ch-even-color);\n}\ncircle.ch_odd {\n  fill: var(--ch-odd-color);\n}\ncircle.ch_1 {\n  fill: var(--ch-1-color);\n}\ncircle.ch_2 {\n  fill: var(--ch-2-color);\n}\ncircle.ch_3 {\n  fill: var(--ch-3-color);\n}\ncircle.ch_4 {\n  fill: var(--ch-4-color);\n}\ncircle.ch_5 {\n  fill: var(--ch-5-color);\n}\ncircle.ch_6 {\n  fill: var(--ch-6-color);\n}\ncircle.ch_7 {\n  fill: var(--ch-7-color);\n}\ncircle.ch_8 {\n  fill: var(--ch-8-color);\n}\ncircle.ch_9 {\n  fill: var(--ch-9-color);\n}\ncircle.ch_10 {\n  fill: var(--ch-10-color);\n}\ncircle.ch_11 {\n  fill: var(--ch-11-color);\n}\ncircle.ch_12 {\n  fill: var(--ch-12-color);\n}\ncircle.ch_13 {\n  fill: var(--ch-13-color);\n}\ncircle.ch_14 {\n  fill: var(--ch-14-color);\n}\ncircle.ch_15 {\n  fill: var(--ch-15-color);\n}\ncircle.ch_16 {\n  fill: var(--ch-16-color);\n}\ncircle.ch_17 {\n  fill: var(--ch-17-color);\n}\ncircle.ch_18 {\n  fill: var(--ch-18-color);\n}\ncircle.ch_19 {\n  fill: var(--ch-19-color);\n}\ncircle.ch_20 {\n  fill: var(--ch-20-color);\n}\ncircle.ch_21 {\n  fill: var(--ch-21-color);\n}\ncircle.ch_22 {\n  fill: var(--ch-22-color);\n}\ncircle.ch_X {\n  fill: var(--ch-Y-color);\n}\ncircle.ch_Y {\n  fill: var(--ch-X-color);\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.info-section {\n  padding: 0 20px;\n  max-width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin-bottom: 60px;\n}\n.info-section .condition-list {\n  padding-bottom: 6px;\n}\n.info-section .condition-list li {\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n  line-height: 20px;\n}\n.info-section .condition-list li span {\n  font-size: 14px;\n  color: #2f4d76;\n}\n.info-section .datainfo-list dt {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd ul {\n  list-style: none;\n  display: flex;\n  padding: 0;\n}\n.info-section .datainfo-list dd ul li {\n  margin-right: 10px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n}\n\n.chart-section {\n  padding: 0 20px;\n}\n\n.table-section {\n  padding: 0 20px;\n  margin-top: 60px;\n}\n.table-section h2 {\n  padding: 0px;\n}\n.table-section table {\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 10px 5px 10px;\n  margin-bottom: 30px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 26pt;\n  font-weight: 400;\n  color: #000000;\n  margin-bottom: 10px;\n  padding: 0 20px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\n\ntext.axisLabel {\n  font-size: 10px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 12px;\n}\n\ncircle.ch_even {\n  fill: var(--ch-even-color);\n}\ncircle.ch_odd {\n  fill: var(--ch-odd-color);\n}\ncircle.ch_1 {\n  fill: var(--ch-1-color);\n}\ncircle.ch_2 {\n  fill: var(--ch-2-color);\n}\ncircle.ch_3 {\n  fill: var(--ch-3-color);\n}\ncircle.ch_4 {\n  fill: var(--ch-4-color);\n}\ncircle.ch_5 {\n  fill: var(--ch-5-color);\n}\ncircle.ch_6 {\n  fill: var(--ch-6-color);\n}\ncircle.ch_7 {\n  fill: var(--ch-7-color);\n}\ncircle.ch_8 {\n  fill: var(--ch-8-color);\n}\ncircle.ch_9 {\n  fill: var(--ch-9-color);\n}\ncircle.ch_10 {\n  fill: var(--ch-10-color);\n}\ncircle.ch_11 {\n  fill: var(--ch-11-color);\n}\ncircle.ch_12 {\n  fill: var(--ch-12-color);\n}\ncircle.ch_13 {\n  fill: var(--ch-13-color);\n}\ncircle.ch_14 {\n  fill: var(--ch-14-color);\n}\ncircle.ch_15 {\n  fill: var(--ch-15-color);\n}\ncircle.ch_16 {\n  fill: var(--ch-16-color);\n}\ncircle.ch_17 {\n  fill: var(--ch-17-color);\n}\ncircle.ch_18 {\n  fill: var(--ch-18-color);\n}\ncircle.ch_19 {\n  fill: var(--ch-19-color);\n}\ncircle.ch_20 {\n  fill: var(--ch-20-color);\n}\ncircle.ch_21 {\n  fill: var(--ch-21-color);\n}\ncircle.ch_22 {\n  fill: var(--ch-22-color);\n}\ncircle.ch_X {\n  fill: var(--ch-Y-color);\n}\ncircle.ch_Y {\n  fill: var(--ch-X-color);\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.info-section {\n  padding: 0 20px;\n  max-width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin-bottom: 60px;\n}\n.info-section .condition-list {\n  padding-bottom: 6px;\n}\n.info-section .condition-list li {\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n  line-height: 20px;\n}\n.info-section .condition-list li span {\n  font-size: 14px;\n  color: #2f4d76;\n}\n.info-section .datainfo-list dt {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd ul {\n  list-style: none;\n  display: flex;\n  padding: 0;\n}\n.info-section .datainfo-list dd ul li {\n  margin-right: 10px;\n}\n.info-section .datainfo-list dd #threshold {\n  width: 100px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n}\n\n.chart-section {\n  padding: 0 20px;\n}\n\n.table-section {\n  padding: 0 20px;\n  margin-top: 60px;\n}\n.table-section h2 {\n  padding: 0px;\n}\n.table-section table {\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}";
 
 defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map
