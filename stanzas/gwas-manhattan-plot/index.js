@@ -8,7 +8,6 @@ const study_name = Object.keys(dataset)[0];
 
 //project data and project names(single per a json)
 const project = Object.values(dataset)[0][0];
-
 const project_name = Object.keys(project)[0];
 
 // stage data and stage names
@@ -51,7 +50,6 @@ export default async function gwasManhattanPlot(stanza, params) {
       title: params["title"],
       study_name,
       project_name,
-      // stage_name,
       condition1,
       condition2,
     },
@@ -113,7 +111,6 @@ export default async function gwasManhattanPlot(stanza, params) {
       "manhattan_plot",
       stanza
     );
-    // selectAll();
   }
 }
 
@@ -148,7 +145,13 @@ async function draw(stanza, params) {
     params.label_key = "label";
   }
   const low_thresh = parseFloat(params.low_thresh);
+  // let high_thresh = parseFloat(params.high_thresh);
   const high_thresh = parseFloat(params.high_thresh);
+  let threshold = stanza.root.querySelector("#threshold");
+  threshold.addEventListener("input", function () {
+    high_thresh = parseFloat(threshold.value);
+    reRender();
+  });
   const even_and_odd = params.even_and_odd === "true";
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
@@ -677,7 +680,6 @@ async function draw(stanza, params) {
           "d",
           "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
         );
-
       if (i === high_thresh) {
         threshline_g
           .append("path")
