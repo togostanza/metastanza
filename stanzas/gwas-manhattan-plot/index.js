@@ -1,15 +1,15 @@
 import * as d3 from "d3";
-import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
+import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "../gwas-manhattan-plot/gwas.var2.json";
 
+// study name(single per a json)
 const dataset = data.dataset;
-// study name
-const study_name = Object.keys(dataset)[0]; //(single per a json)
+const study_name = Object.keys(dataset)[0]; 
 
-//project data and project names(each of them are single per a json)
-let project = Object.values(dataset)[0][0];
+//project data and project names(single per a json)
+const project = Object.values(dataset)[0][0];
 
-let project_name = Object.keys(project)[0];
+const project_name = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
@@ -62,7 +62,6 @@ export default async function gwasManhattanPlot(stanza, params) {
   let li;
   let input;
   let label;
-  let stageCheckboxStatus = {};
 
   for (let i = 0; i < stage_names.length; i++) {
     li = document.createElement("li");
@@ -496,7 +495,7 @@ async function draw(stanza, params) {
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
       console.log("CLICKED");
-      let stageName = e.path[0].getAttribute("data-stage");
+      const stageName = e.path[0].getAttribute("data-stage");
       stage_info[stageName].checked = stageBtn[i].checked;
       variants = getVariants();
       reRender();
@@ -550,7 +549,7 @@ async function draw(stanza, params) {
           }
           d.pos = pos + parseInt(d[position_key]);
         }
-        let logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
+        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
         return (
           range[0] <= d.pos &&
           d.pos <= range[1] &&
@@ -581,7 +580,7 @@ async function draw(stanza, params) {
         );
       })
       .attr("cy", function (d) {
-        let logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
+        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
         return (
           ((rangeVertical[1] - logValue) /
             (rangeVertical[1] - rangeVertical[0])) *
