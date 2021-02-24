@@ -44,6 +44,18 @@
       "stanza:example": "Title of this Table",
       "stanza:description": "Title of the table",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "columns",
+      "stanza:example": "[{\"id\":\"id\",\"type\":\"literal\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"type\":\"literal\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"type\":\"literal\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"type\":\"decimal\",\"label\":\"Mass\"},{\"id\":\"location_name\",\"type\":\"literal\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"rowspan\":true}]",
+      "stanza:description": "columns' options",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "order",
+      "stanza:example": "id,mnemonic,name,mass,location_name",
+      "stanza:description": "display columns' order",
+      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
