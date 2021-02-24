@@ -59,8 +59,8 @@
     },
     {
       "stanza:key": "high_thresh",
-      "stanza:example": "20",
-      "stanza:description": "highlight shreshold. =log10(p-value)",
+      "stanza:example": "8",
+      "stanza:description": "highlight threshold. =log10(p-value)",
       "stanza:required": false
     },
     {

@@ -1,64 +1,47 @@
 import * as d3 from "d3";
-import { getFormatedJson, appendDlButton } from "@/lib/metastanza_utils.js";
+import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "../gwas-manhattan-plot/gwas.var2.json";
 
-const a_dataset = data.a_dataset;
-// study name
-const study_name = Object.keys(a_dataset)[0]; //(single per a json)
-console.log("【study_name】", study_name);
+// study name(single per a json)
+const dataset = data.dataset;
+const study_name = Object.keys(dataset)[0];
 
-//project data and project names(each of them are single per a json)
-let project = Object.values(a_dataset)[0];
-project = project[0];
-console.log("【project】", project);
+//project data and project names(single per a json)
+const project = Object.values(dataset)[0][0];
 
-let project_name = Object.keys(project);
-project_name = project_name[0];
-console.log("【project_name】", project_name);
+const project_name = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
 console.log("【stages】", stages);
-console.log("【...stages】", ...stages);
-console.log("【...stages】", ...stages);
 
-const stage_names = Object.keys(...stages);
+const stage_info = stages[0];
+
+const stage_names = Object.keys(stage_info);
 console.log("【stage_names】", stage_names);
 
-// get stage information
-const stage_info = Object.values(...stages);
-console.log("【stage_info】", stage_info);
-
 // get condition of each stage
-const condition1 = stage_info[0].condition1;
-const condition2 = stage_info[0].condition2;
+const condition1 = stage_info[stage_names[0]].condition1;
+const condition2 = stage_info[stage_names[0]].condition2;
 
-// // variants
-// let variants_datum;
-for (let i = 0; i < stage_info.length; i++) {
-  console.log("【stage_names】" + i, stage_names[i]);
-  console.log("【stage_info】" + i, stage_info[i]);
-  console.log("【condition1】" + i, stage_info[i].condition1);
-  console.log("【condition2】" + i, stage_info[i].condition2);
-  console.log("【stage_info[i].variants】" + i, stage_info[i].variants);
-}
+let total_variants = [];
+stage_names.forEach(
+  (stage) =>
+    (total_variants = total_variants.concat(stage_info[stage].variants))
+);
+console.log("total_variants", total_variants);
 
-let variants = stage_info[0].variants; //init
-
-// // adjust datas
-// for (let i = 0; i < stage_info[0].variants.length; i++) {
-//   // convert chromosome data from 'chrnum' to 'num'
-//   let chr = stage_info[0].variants[i].chr;
-//   chr = chr.replace("chr", "");
-//   stage_info[0].variants[i].chr = chr;
-//   console.log(stage_info[0].variants[i].chr);
-
-//   const pval = stage_info[0].variants[i]["p-value"];
-//   String(pval);
-
-//   const physical_pos = stage_info[0].variants[i]["stop"];
-//   String(physical_pos);
-// }
+// get stage information
+const getVariants = () => {
+  let variantsArray = [];
+  stage_names.forEach((stage) => {
+    if (stage_info[stage].checked) {
+      variantsArray = variantsArray.concat(stage_info[stage].variants);
+    }
+  });
+  return variantsArray;
+};
+let variants = total_variants; //init
 
 export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
@@ -74,63 +57,55 @@ export default async function gwasManhattanPlot(stanza, params) {
     },
   });
 
-  console.log(params.api);
-  const dataset = await getFormatedJson(
-    params.api,
-    stanza.root.querySelector("#chart")
-  );
-  console.log("dataset", dataset);
-  console.log("a_dataset", a_dataset);
+  //append checkbox to filter stages
+  const stageList = stanza.root.querySelector("#stageList");
+  let li;
+  let input;
+  let label;
+
+  for (let i = 0; i < stage_names.length; i++) {
+    li = document.createElement("li");
+    input = document.createElement("input");
+    input.setAttribute("type", "checkbox");
+    input.setAttribute("class", "stage-btn");
+    input.setAttribute("name", "stage");
+    input.setAttribute("value", stage_names[i]);
+    input.setAttribute("checked", true);
+    input.setAttribute("data-stage", stage_names[i]);
+    label = document.createElement("label");
+    label.textContent = stage_names[i];
+    stageList.appendChild(li);
+    li.appendChild(input);
+    li.appendChild(label);
+    stage_info[stage_names[i]].checked = true;
+  }
+
+  console.log("stage_info", stage_info);
+
+  // adjust datas
+  for (let i = 0; i < variants.length; i++) {
+    // convert chromosome data from 'chrnum' to 'num'
+    let chr = variants[i].chr;
+    chr = chr.replace("chr", "");
+    variants[i].chr = chr;
+    // console.log(variants[i].chr);
+
+    const pval = variants[i]["p-value"];
+    String(pval);
+
+    const physical_pos = variants[i]["stop"];
+    String(physical_pos);
+  }
+
+  // console.log(params.api); //when you put json url
+  // const dataset = await getFormatedJson(
+  //   params.api,
+  //   stanza.root.querySelector("#chart")
+  // );
+  // console.log("dataset", dataset);
   // console.log("variants", variants);
 
-  // //get checked stage
-  const stageBtn = stanza.root.querySelectorAll(".stage-btn");
-  const stageLabel = stanza.root.querySelectorAll(".stage-label");
-  for (let i = 0; i < stageBtn.length; i++) {
-    stageBtn[i].addEventListener("click", checkStage);
-    if (stageBtn[i].checked !== true) {
-      stageLabel[i].style.color = "#99acb2";
-    }
-  }
-
-  function checkStage() {
-    let flag = false;
-    for (let i = 0; i < stageBtn.length; i++) {
-      stageLabel[i].style.color = "#99acb2";
-      if (stageBtn[i].checked) {
-        flag = true;
-        variants = stage_info[i].variants;
-        stageLabel[i].style.color = "#000000";
-        console.log(variants);
-      }
-    }
-    if (!flag) {
-      for (let i = 0; i < stageBtn.length; i++) {
-        stageBtn[i].checked = false;
-      }
-    }
-  }
-
-  const allBtn = stanza.root.querySelectorAll(".allBtn");
-  allBtn[0].addEventListener("click", selectAll);
-  allBtn[1].addEventListener("click", clearAll);
-
-  function selectAll() {
-    for (let i = 0; i < stageBtn.length; i++) {
-      stageBtn[i].checked = true;
-      stageLabel[i].style.color = "#000000";
-    }
-    // checkStage();
-  }
-  function clearAll() {
-    for (let i = 0; i < stageBtn.length; i++) {
-      stageBtn[i].checked = false;
-      stageLabel[i].style.color = "#99acb2";
-    }
-    // checkStage();
-  }
-
-  if (typeof stage_info[0].variants === "object") {
+  if (typeof variants === "object") {
     draw(stanza, params);
     appendDlButton(
       stanza.root.querySelector("#chart"),
@@ -138,14 +113,14 @@ export default async function gwasManhattanPlot(stanza, params) {
       "manhattan_plot",
       stanza
     );
-    selectAll();
+    // selectAll();
   }
 }
 
 async function draw(stanza, params) {
   const width = 800;
   const height = 400;
-  const marginLeft = 30;
+  const marginLeft = 40;
   const marginBottom = 30;
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
@@ -209,6 +184,7 @@ async function draw(stanza, params) {
     "X",
     "Y",
   ];
+
   const chromosomeNtLength = {
     hg38: {
       1: 248956422,
@@ -257,10 +233,13 @@ async function draw(stanza, params) {
     .attr("height", height);
   const plot_g = svg.append("g").attr("id", "plot_group");
   const axis_g = svg.append("g").attr("id", "axis");
+  const threshline_g = svg.append("g").attr("id", "thresh_line");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
+  const ytitle = svg.append("g").attr("id", "y_title");
 
   let range = []; // [begin position, end _position]
+  let rangeVertical = []; // [begin position, end _position]
   let max_log_p = 0;
   let max_log_p_int;
   let total;
@@ -277,54 +256,103 @@ async function draw(stanza, params) {
 
   // select range by drag
   let dragBegin = false;
+  let dragBeginVertical = false;
+  console.log("rangeVertical", rangeVertical);
+
   svg
     .on("mousedown", function (e) {
-      // d3.pointer(e)[1]はイベント発火時のy座標
       if (d3.pointer(e)[1] <= areaHeight) {
-        dragBegin = d3.pointer(e)[0]; //dragBeginの値を、イベント発火時のx座標とする
-        svg //矩形を作成・svgにappend
+        dragBegin = d3.pointer(e)[0];
+        dragBeginVertical = d3.pointer(e)[1] <= 60 ? 60 : d3.pointer(e)[1];
+        console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
+        console.log("mousedown(start) dragBegin", dragBegin);
+        console.log("mousedown(start) d3.pointer(e)", d3.pointer(e));
+        svg
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
           .attr("stroke", "black")
           .attr("x", dragBegin)
-          .attr("y", 0)
+          .attr("y", dragBeginVertical)
           .attr("width", 0)
-          .attr("height", areaHeight) //高さは描画範囲（y軸の選択なし）
+          .attr("height", 0)
           .attr("id", "selector");
       }
     })
     .on("mousemove", function (e) {
       if (dragBegin) {
-        const dragEnd = d3.pointer(e)[0]; //dragEndをイベント発火時のx座標とする
+        const dragEnd = d3.pointer(e)[0];
         if (dragBegin < dragEnd) {
-          svg.select("#selector").attr("width", dragEnd - dragBegin); //selecter（矩形）にwidthを付与
+          svg.select("#selector").attr("width", dragEnd - dragBegin);
         } else {
           svg
             .select("#selector")
-            .attr("x", dragEnd) //この場合、イベント発火時のx軸を再定義
+            .attr("x", dragEnd)
             .attr("width", dragBegin - dragEnd);
+        }
+      }
+      if (dragBeginVertical) {
+        const dragEndVertical =
+          d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
+        if (dragBeginVertical < dragEndVertical) {
+          svg
+            .select("#selector")
+            .attr("height", dragEndVertical - dragBeginVertical);
+        } else {
+          svg
+            .select("#selector")
+            .attr("y", dragEndVertical)
+            .attr("height", dragBeginVertical - dragEndVertical);
         }
       }
     })
     .on("mouseup", function (e) {
       if (dragBegin) {
         const dragEnd = d3.pointer(e)[0];
-        // re-render //⇦矩形サイズが5以下の場合、rangeを変更
-        if (-5 > dragEnd - dragBegin) {
+        // re-render
+        if (5 > dragEnd - dragBegin) {
           range = [
-            (dragEnd / width) * (range[1] - range[0]) + range[0],
-            (dragBegin / width) * (range[1] - range[0]) + range[0],
+            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
+            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
           ];
-          reRender();
         } else if (dragEnd - dragBegin > 5) {
           range = [
-            (dragBegin / width) * (range[1] - range[0]) + range[0],
-            (dragEnd / width) * (range[1] - range[0]) + range[0],
+            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
+            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
+              range[0],
           ];
-          reRender();
         }
-        svg.select("#selector").remove(); //矩形を除去
+        svg.select("#selector").remove();
+        reRender();
         dragBegin = false;
+      }
+      if (dragBeginVertical) {
+        const dragEndVertical = d3.pointer(e)[1] > 370 ? 370 : d3.pointer(e)[1]; //一時的
+        // re-render
+        const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
+        if (0 > dragEndVertical - dragBeginVertical) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragEndVertical - 60) / 310) * rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
+        } else if (dragEndVertical - dragBeginVertical > 0) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragEndVertical - 60) / 310) * rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
+        }
+        reRender();
+        svg.select("#selector").remove();
+        dragBegin = false;
+        dragBeginVertical = false;
       }
     });
 
@@ -455,12 +483,27 @@ async function draw(stanza, params) {
     .attr("value", "reset")
     .on("click", function () {
       range = [];
+      rangeVertical = [];
       reRender();
     });
 
   reRender();
 
+  //listen stage checkbox event
+  const stageBtn = stanza.root.querySelectorAll(".stage-btn");
+  console.log("stageBtn", stageBtn);
+  for (let i = 0; i < stageBtn.length; i++) {
+    stageBtn[i].addEventListener("change", (e) => {
+      console.log("CLICKED");
+      const stageName = e.path[0].getAttribute("data-stage");
+      stage_info[stageName].checked = stageBtn[i].checked;
+      variants = getVariants();
+      reRender();
+    });
+  }
+
   function reRender() {
+    console.log("variants.length", variants.length);
     if (range[0] === undefined) {
       range = [
         0,
@@ -472,124 +515,107 @@ async function draw(stanza, params) {
     }
 
     over_thresh_array = [];
-    max_log_p = 0;
+
+    const p_value_array = variants.map(
+      (variant) => Math.log10(parseFloat(variant["p-value"])) * -1
+    );
+    max_log_p = Math.max(...p_value_array);
+
+    if (max_log_p_int === undefined) {
+      max_log_p_int = Math.floor(max_log_p);
+    }
+
+    if (rangeVertical[0] === undefined) {
+      rangeVertical = [low_thresh, max_log_p_int];
+    }
 
     plot_g.html("");
     xlabel_g.html("");
     ylabel_g.html("");
-
-    for (let i = 0; i < stage_info.length; i++) {
-      // adjust data to apply
-      for (let j = 0; j < stage_info[i].variants.length; j++) {
-        let chr = stage_info[i].variants[j].chr;
-        chr = chr.replace("chr", "");
-        stage_info[i].variants[j].chr = chr;
-        // console.log(stage_info[i].variants[j].chr);
-
-        const pval = stage_info[i].variants[j]["p-value"];
-        String(pval);
-
-        const physical_pos = stage_info[i].variants[j]["stop"];
-        String(physical_pos);
-      }
-
-      const variants = stage_info[i].variants;
-      // draw(variants, stanza, params);
-      // if(stageBtn[i].checked){
-      //   draw(stage_info.variants[i],stanza,params);
-      // }
-      // }
-
-      plot_g
-        .selectAll(".plot")
-        .data(variants)
-        .enter()
-        // filter: display range
-        .filter(function (d) {
-          if (!d.pos) {
-            // calculate  accumulated position
-            let pos = 0;
-            for (const ch of chromosomes) {
-              if (ch === d[chromosome_key]) {
-                break;
-              }
-              pos += chromosomeNtLength.hg38[ch];
+    plot_g
+      .selectAll(".plot")
+      .data(variants)
+      .enter()
+      // filter: display range
+      .filter(function (d) {
+        if (!d.pos) {
+          // calculate  accumulated position
+          let pos = 0;
+          for (const ch of chromosomes) {
+            if (ch === d[chromosome_key]) {
+              break;
             }
-            d.pos = pos + parseInt(d[position_key]);
+            pos += chromosomeNtLength.hg38[ch];
           }
-          return range[0] <= d.pos && d.pos <= range[1];
-        })
-        // filter: low p-value
-        .filter(function (d) {
-          return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
-        })
-        .append("circle")
-        .attr("class", function (d) {
-          if (even_and_odd) {
-            let tmp = "even";
-            if (
-              d[chromosome_key] === "X" ||
-              parseInt(d[chromosome_key]) % 2 === 1
-            ) {
-              tmp = "odd";
-            }
-            return "plot ch_" + tmp;
-          }
-          return "plot ch_" + d[chromosome_key];
-        })
-        .attr("cx", function (d) {
-          return (
-            ((d.pos - range[0]) / (range[1] - range[0])) * areaWidth +
-            marginLeft
-          );
-        })
-        .attr("cy", function (d) {
-          // set max log(p-value)
-          if (max_log_p < Math.log10(parseFloat(d[p_value_key])) * -1) {
-            max_log_p = Math.log10(parseFloat(d[p_value_key])) * -1;
-          }
-          return areaHeight;
-        })
-        .attr("r", 2)
-        // filter: high p-value
-        .filter(function (d) {
-          if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
-            over_thresh_array.push(d);
-          }
-          return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
-        })
-        .classed("over-thresh-plot", true)
-        .on("mouseover", function (e, d) {
-          svg
-            .append("text")
-            .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
-            .attr("x", d3.pointer(e)[0] + 10)
-            .attr("y", d3.pointer(e)[1])
-            .attr("id", "popup_text");
-        })
-        .on("mouseout", function () {
-          svg.select("#popup_text").remove();
-        });
-
-      // set 'cy' from max log(p-value) (int)
-      if (max_log_p_int === undefined) {
-        max_log_p_int = Math.floor(max_log_p);
-      }
-      plot_g.selectAll(".plot").attr("cy", function (d) {
+          d.pos = pos + parseInt(d[position_key]);
+        }
+        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
         return (
-          areaHeight -
-          ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) *
-            areaHeight) /
-            max_log_p_int
+          range[0] <= d.pos &&
+          d.pos <= range[1] &&
+          rangeVertical[0] <= logValue &&
+          logValue <= rangeVertical[1]
         );
+      })
+      .filter(function (d) {
+        return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
+      })
+      .append("circle")
+      .attr("class", function (d) {
+        if (even_and_odd) {
+          let tmp = "even";
+          if (
+            d[chromosome_key] === "X" ||
+            parseInt(d[chromosome_key]) % 2 === 1
+          ) {
+            tmp = "odd";
+          }
+          return "plot ch_" + tmp;
+        }
+        return "plot ch_" + d[chromosome_key];
+      })
+      .attr("cx", function (d) {
+        return (
+          ((d.pos - range[0]) / (range[1] - range[0])) * areaWidth + marginLeft
+        );
+      })
+      .attr("cy", function (d) {
+        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
+        return (
+          ((rangeVertical[1] - logValue) /
+            (rangeVertical[1] - rangeVertical[0])) *
+            310 +
+          60
+        );
+      })
+      .attr("r", 2)
+      // filter: high p-value
+      .filter(function (d) {
+        if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
+          over_thresh_array.push(d);
+        }
+        return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
+      })
+      .classed("over-thresh-plot", true)
+      .on("mouseover", function (e, d) {
+        svg
+          .append("text")
+          .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
+          .attr("x", d3.pointer(e)[0] + 10)
+          .attr("y", d3.pointer(e)[1])
+          .attr("id", "popup_text");
+      })
+      .on("mouseout", function () {
+        svg.select("#popup_text").remove();
       });
-      console.log("plot" + i + "回目あと");
+    // plot_g.selectAll(".plot").attr("cy", function (d) {
+    //   return (
+    //     areaHeight - ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) * areaHeight) / max_log_p_int
+    //   );
+    // });
 
-      console.log("over_thresh_array", over_thresh_array);
+    renderCanvas(variants, range);
 
-      renderCanvas(variants, range);
-      console.log("rendercanvas" + i + "回目あと");
-    }
     // x axis label
     xlabel_g
       .selectAll(".xLabel")
@@ -615,38 +641,69 @@ async function draw(stanza, params) {
       .attr("y", areaHeight + 20);
 
     // y axis label
-    for (let i = Math.floor(low_thresh) + 1; i <= max_log_p_int; i++) {
-      const y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
-      ylabel_g
-        .append("text")
-        .text(i)
-        .attr("class", "axisLabel yLabel")
-        .attr("x", marginLeft - 16)
-        .attr("y", y)
-        .attr("text-anchor", "end");
+    const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
+
+    for (
+      let i = Math.floor(rangeVertical[0]) + 1;
+      i <= Math.ceil(rangeVertical[1]);
+      i++
+    ) {
+      const y =
+        areaHeight -
+        ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
+          (areaHeight - 60); //一時的に
+      // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
+      if (rangeVertical[1] - rangeVertical[0] < 30) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+      } else if (i % 2 === 0) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+      }
       ylabel_g
         .append("path")
         .attr("class", "axis-line")
         .attr(
           "d",
-          "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
+          "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
         );
 
-      // overthresh-line (high_thresh)
       if (i === high_thresh) {
-        // let y = areaHeight - ((i - low_thresh) * areaHeight) / max_log_p_int;
-        axis_g
-          .append("path") //x軸
+        threshline_g
+          .append("path")
           .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
           .attr("class", "overthresh-line");
       }
     }
+    for (let i = 0; i < overThreshLine.length; i++) {
+      overThreshLine[i].remove();
+    }
+
+    ytitle
+      .append("text")
+      .text("-log₁₀(p-value)")
+      .attr("class", "axis-title")
+      .attr("x", -areaHeight / 2)
+      .attr("y", marginLeft - 32)
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle");
+
     // y zero (low_thresh)
     ylabel_g
       .append("text")
-      .text(low_thresh)
+      .text(Math.floor(rangeVertical[0]))
       .attr("class", "axisLabel yLabel")
-      .attr("x", marginLeft - 16)
+      .attr("x", marginLeft - 12)
       .attr("y", areaHeight)
       .attr("text-anchor", "end");
     ylabel_g
@@ -654,7 +711,7 @@ async function draw(stanza, params) {
       .attr("class", "axis-line")
       .attr(
         "d",
-        "M " + (marginLeft - 10) + ", " + areaHeight + " H " + marginLeft + " Z"
+        "M " + (marginLeft - 8) + ", " + areaHeight + " H " + marginLeft + " Z"
       );
 
     // slider
@@ -665,14 +722,19 @@ async function draw(stanza, params) {
       .attr("transform", "translate(0, 0)");
 
     setRange(range);
+    // overThreshLine.remove();
   }
 
-  function renderCanvas(dataset, range) {
+  function renderCanvas(variants, rangeVertical) {
     if (canvas.node().getContext) {
       canvas.attr("width", (total / (range[1] - range[0])) * areaWidth);
+      canvas.attr(
+        "height",
+        (total / (rangeVertical[1] - rangeVertical[0])) * areaHeight
+      );
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
-      for (const d of dataset) {
+      for (const d of variants) {
         ctx.beginPath();
         if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
@@ -717,20 +779,6 @@ async function draw(stanza, params) {
       template: "table.html.hbs",
       selector: "#table",
       parameters: {
-        fields: [
-          {
-            label: "First name",
-            required: true,
-          },
-          {
-            label: "Middle name",
-            required: false,
-          },
-          {
-            label: "Last name",
-            required: true,
-          },
-        ],
         arrays: over_thresh_array,
       },
     });
@@ -748,7 +796,7 @@ async function draw(stanza, params) {
         break;
       }
       start += chromosomeNtLength.hg38[ch];
-      console.log(start + chromosomeNtLength.hg38[ch]);
+      // console.log(start + chromosomeNtLength.hg38[ch]);
     }
     ctrl_button.select("#range_text").html(text);
   }

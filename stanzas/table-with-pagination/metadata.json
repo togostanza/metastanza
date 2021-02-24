@@ -40,6 +40,12 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "page_slider",
+      "stanza:example": "1",
+      "stanza:description": "Page slider on/off",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "tableTitle",
       "stanza:example": "Title of this Table",
       "stanza:description": "Title of the table",

@@ -49,7 +49,7 @@ div#chart {
 path {
   &.axis-line {
     stroke: black;
-    stroke-width: 2px;
+    stroke-width: 1px;
   }
   &.overthresh-line {
     stroke: #dddddd;
@@ -70,6 +70,12 @@ text {
   &.yLabel {
     text-anchor: end;
     user-select: none;
+  }
+
+  &.axis-title {
+    user-select: none;
+    color: #000000;
+    font-size: 12px;
   }
 }
 
