@@ -24,20 +24,23 @@ console.log("【stage_names】", stage_names);
 const condition1 = stage_info[stage_names[0]].condition1;
 const condition2 = stage_info[stage_names[0]].condition2;
 
-let total_variants = []
-stage_names.forEach(stage => total_variants = total_variants.concat(stage_info[stage].variants))
-console.log('total_variants', total_variants)
+let total_variants = [];
+stage_names.forEach(
+  (stage) =>
+    (total_variants = total_variants.concat(stage_info[stage].variants))
+);
+console.log("total_variants", total_variants);
 
 // get stage information
 const getVariants = () => {
   let variantsArray = [];
-  stage_names.forEach(stage => {
-    if(stage_info[stage].checked){
+  stage_names.forEach((stage) => {
+    if (stage_info[stage].checked) {
       variantsArray = variantsArray.concat(stage_info[stage].variants);
     }
-  })
+  });
   return variantsArray;
-}
+};
 let variants = total_variants; //init
 
 export default async function gwasManhattanPlot(stanza, params) {
@@ -53,23 +56,23 @@ export default async function gwasManhattanPlot(stanza, params) {
       condition2,
     },
   });
-  
+
   //append checkbox to filter stages
   const stageList = stanza.root.querySelector("#stageList");
   let li;
   let input;
   let label;
   let stageCheckboxStatus = {};
-  
-  for(let i = 0; i < stage_names.length; i++){
+
+  for (let i = 0; i < stage_names.length; i++) {
     li = document.createElement("li");
     input = document.createElement("input");
     input.setAttribute("type", "checkbox");
     input.setAttribute("class", "stage-btn");
     input.setAttribute("name", "stage");
-    input.setAttribute("value",stage_names[i]);
-    input.setAttribute("checked",true);
-    input.setAttribute("data-stage",stage_names[i]);
+    input.setAttribute("value", stage_names[i]);
+    input.setAttribute("checked", true);
+    input.setAttribute("data-stage", stage_names[i]);
     label = document.createElement("label");
     label.textContent = stage_names[i];
     stageList.appendChild(li);
@@ -78,8 +81,8 @@ export default async function gwasManhattanPlot(stanza, params) {
     stage_info[stage_names[i]].checked = true;
   }
 
-  console.log('stage_info',stage_info)
-  
+  console.log("stage_info", stage_info);
+
   // adjust datas
   for (let i = 0; i < variants.length; i++) {
     // convert chromosome data from 'chrnum' to 'num'
@@ -87,13 +90,12 @@ export default async function gwasManhattanPlot(stanza, params) {
     chr = chr.replace("chr", "");
     variants[i].chr = chr;
     // console.log(variants[i].chr);
-  
+
     const pval = variants[i]["p-value"];
     String(pval);
-  
+
     const physical_pos = variants[i]["stop"];
     String(physical_pos);
-    
   }
 
   // console.log(params.api); //when you put json url
@@ -103,7 +105,6 @@ export default async function gwasManhattanPlot(stanza, params) {
   // );
   // console.log("dataset", dataset);
   // console.log("variants", variants);
-
 
   if (typeof variants === "object") {
     draw(stanza, params);
@@ -120,7 +121,7 @@ export default async function gwasManhattanPlot(stanza, params) {
 async function draw(stanza, params) {
   const width = 800;
   const height = 400;
-  const marginLeft = 30;
+  const marginLeft = 40;
   const marginBottom = 30;
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
@@ -236,6 +237,7 @@ async function draw(stanza, params) {
   const threshline_g = svg.append("g").attr("id", "thresh_line");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
+  const ytitle = svg.append("g").attr("id", "y_title");
 
   let range = []; // [begin position, end _position]
   let rangeVertical = []; // [begin position, end _position]
@@ -490,19 +492,19 @@ async function draw(stanza, params) {
 
   //listen stage checkbox event
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
-  console.log('stageBtn', stageBtn)
-  for(let i = 0; i<stageBtn.length; i++){
+  console.log("stageBtn", stageBtn);
+  for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
-      console.log('CLICKED')
+      console.log("CLICKED");
       let stageName = e.path[0].getAttribute("data-stage");
       stage_info[stageName].checked = stageBtn[i].checked;
-      variants = getVariants()
-      reRender()
+      variants = getVariants();
+      reRender();
     });
   }
 
   function reRender() {
-    console.log('variants.length', variants.length)
+    console.log("variants.length", variants.length);
     if (range[0] === undefined) {
       range = [
         0,
@@ -652,19 +654,29 @@ async function draw(stanza, params) {
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
           (areaHeight - 60); //一時的に
       // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
-      ylabel_g
-        .append("text")
-        .text(i)
-        .attr("class", "axisLabel yLabel")
-        .attr("x", marginLeft - 16)
-        .attr("y", y)
-        .attr("text-anchor", "end");
+      if (rangeVertical[1] - rangeVertical[0] < 30) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+      } else if (i % 2 === 0) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+      }
       ylabel_g
         .append("path")
         .attr("class", "axis-line")
         .attr(
           "d",
-          "M " + (marginLeft - 10) + ", " + y + " H " + marginLeft + " Z"
+          "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
         );
 
       if (i === high_thresh) {
@@ -674,16 +686,25 @@ async function draw(stanza, params) {
           .attr("class", "overthresh-line");
       }
     }
-    for(let i=0; i<overThreshLine.length; i++){
+    for (let i = 0; i < overThreshLine.length; i++) {
       overThreshLine[i].remove();
     }
+
+    ytitle
+      .append("text")
+      .text("-log₁₀(p-value)")
+      .attr("class", "axis-title")
+      .attr("x", -areaHeight / 2)
+      .attr("y", marginLeft - 32)
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle");
 
     // y zero (low_thresh)
     ylabel_g
       .append("text")
       .text(Math.floor(rangeVertical[0]))
       .attr("class", "axisLabel yLabel")
-      .attr("x", marginLeft - 16)
+      .attr("x", marginLeft - 12)
       .attr("y", areaHeight)
       .attr("text-anchor", "end");
     ylabel_g
@@ -691,7 +712,7 @@ async function draw(stanza, params) {
       .attr("class", "axis-line")
       .attr(
         "d",
-        "M " + (marginLeft - 10) + ", " + areaHeight + " H " + marginLeft + " Z"
+        "M " + (marginLeft - 8) + ", " + areaHeight + " H " + marginLeft + " Z"
       );
 
     // slider
