@@ -22,61 +22,8 @@
     <dt id="stage-name">
       stage name
     </dt>
-    {{!-- <dd>{{stage_name}}</dd> --}}
     <dd>
       <ul id="stageList">
-        {{! <li>
-          <input
-            type="checkbox"
-            id="discovery"
-            class="stage-btn"
-            name="stage"
-            value="discovery"
-            data-stage="0"
-          />
-          <label class="stage-label" for="discovery">
-            Discovery
-          </label>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            id="replication"
-            class="stage-btn"
-            name="stage"
-            value="replication"
-            data-stage="1"
-          />
-          <label class="stage-label" for="replication">
-            Replication
-          </label>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            id="combined"
-            class="stage-btn"
-            name="stage"
-            value="combined"
-            data-stage="2"
-          />
-          <label class="stage-label" for="combined">
-            Combined
-          </label>
-        </li>
-        <li>
-          <input
-            type="checkbox"
-            id="meta-analysis"
-            class="stage-btn"
-            name="stage"
-            value="meta-analysis"
-            data-stage="3"
-          />
-          <label class="stage-label" for="meta-analysis">
-            Meta-analysis
-          </label>
-        </li> }}
       </ul>
       <button id="selectAllBtn" class="allBtn" type="button" name="all">
         Select All
@@ -84,6 +31,12 @@
       <button id="clearAllBtn" class="allBtn" type="button" name="all">
         Clear All
       </button>
+    </dd>
+    <dt>
+      threshold
+    </dt>
+    <dd>
+      <input id="threshold" type="text" value="8" />
     </dd>
   </dl>
   <ul class="condition-list">
@@ -100,24 +53,7 @@
       &ensp;{{condition2}}
     </li>
   </ul>
-  {{!-- <dl class="condition-list">
-    <dt id="condition1">condition1:</dt>
-    <dd>{{condition1}}</dd>
-    <dt id="condition2">condition1:</dt>
-    <dd>{{condition2}}</dd>
-  </dl> --}}
 </section>
-
-{{!-- <section class="condition-section">
-  <ul class="condition-list">
-    <li id="condition1">
-      condition1: {{condition1}}
-    </li>
-    <li id="condition2">
-      condition2: {{condition2}}
-    </li>
-  </ul>
-</section> --}}
 
 <section class="chart-section">
   <div id="chart"></div>
