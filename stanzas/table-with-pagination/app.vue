@@ -25,7 +25,7 @@
           Search for "{{ state.columnShowingTextSearch.label }}"
         </p>
         <form
-          v-if="state.columnShowingTextSearch.type === 'literal'"
+          v-if="!state.columnShowingTextSearch.sliderFilter"
           class="textSearchWrapper"
           @submit.prevent="
             submitQuery(
@@ -49,11 +49,39 @@
             />
           </button>
         </form>
-        <div v-if="state.columnShowingTextSearch.type === 'number'">
+        <div v-if="state.columnShowingTextSearch.sliderFilter">
           <Slider
             v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
             v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
           ></Slider>
+          <div class="rangeInput">
+            <form
+              @submit.prevent="
+                setRangeFilters(state.columnShowingTextSearch.id)
+              "
+            >
+              <input
+                v-model="
+                  state.rangeInputs[state.columnShowingTextSearch.id].input[0]
+                "
+                type="text"
+                class="min"
+              />
+            </form>
+            <form
+              @submit.prevent="
+                setRangeFilters(state.columnShowingTextSearch.id)
+              "
+            >
+              <input
+                v-model="
+                  state.rangeInputs[state.columnShowingTextSearch.id].input[1]
+                "
+                type="text"
+                class="max"
+              />
+            </form>
+          </div>
         </div>
       </div>
     </transition>
@@ -225,7 +253,6 @@ import {
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
-import zip from "lodash.zip";
 import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
@@ -237,6 +264,8 @@ export default defineComponent({
   },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
   setup(params) {
+    const columns = JSON.parse(params.columns);
+    const orderedColumns = params.order.split(",");
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
@@ -298,7 +327,7 @@ export default defineComponent({
           return Object.keys(state.rangeInputs).length !== 0
             ? row.some((cell) => {
                 return (
-                  cell.column.type === "number" &&
+                  cell.column.sliderFilter &&
                   cell.value >= state.rangeInputs[cell.column.id].value[0] &&
                   cell.value <= state.rangeInputs[cell.column.id].value[1]
                 );
@@ -323,7 +352,6 @@ export default defineComponent({
           filtered,
           (cells) => {
             const cell = cells.find((cell) => cell.column === sortColumn);
-
             return cell.value;
           },
           [state.sorting.direction]
@@ -387,6 +415,11 @@ export default defineComponent({
       for (const filter of column.filters) {
         filter.checked = checked;
       }
+    }
+
+    function setRangeFilters(id) {
+      state.rangeInputs[id].value[0] = state.rangeInputs[id].input[0];
+      state.rangeInputs[id].value[1] = state.rangeInputs[id].input[1];
     }
 
     function jumpToPage(num) {
@@ -495,51 +528,47 @@ export default defineComponent({
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
 
-      state.responseJSON = data;
+      state.responseJSON = data; // for range filter test
 
-      const { vars, labels, order, href } = data.head;
-
-      const columns = zip(vars, labels, order, href)
-        .map(([_var, label, _order, _href]) => {
-          const values = data.body.map((row) => row[_var].value);
-          const datam = data.body[0];
-          if (datam[_var].type === "number") {
-            state.rangeInputs[_var] = { value: [0, 0], min: 0, max: 0 };
+      state.columns = orderedColumns.map((orderedColumn) => {
+        const filters = uniq(data.map((datam) => datam[orderedColumn])).map(
+          (value) => {
+            return {
+              value,
+              checked: true,
+            };
           }
-          return {
-            id: _var,
-            label,
-            order: _order,
-            href: _href,
-            type: datam[_var].type,
-
-            filters: uniq(values).map((value) => {
-              return {
-                value,
-                checked: true,
-              };
-            }),
+        );
+        const targetCol = columns.find((column) => column.id === orderedColumn);
+        if (targetCol.sliderFilter) {
+          const min = Math.min(...filters.map((filter) => filter.value));
+          const max = Math.max(...filters.map((filter) => filter.value));
+          state.rangeInputs[targetCol.id] = {
+            value: [min, max],
+            min,
+            max,
+            input: [min, max],
           };
-        })
-        .filter((column) => column.label !== null);
+        }
+        return {
+          id: orderedColumn,
+          label: targetCol.label,
+          filters,
+          sliderFilter: targetCol.sliderFilter ? true : false,
+          rowspan: targetCol.rowspan ? true : false,
+        };
+      });
 
-      state.columns = orderBy(columns, ["order"]);
-      state.allRows = data.body.map((row) => {
-        return columns.map((column) => {
-          if (column.type === "number") {
-            if (row[column.id].value < state.rangeInputs[column.id].min) {
-              state.rangeInputs[column.id].min = row[column.id].value;
-            } else if (
-              row[column.id].value > state.rangeInputs[column.id].max
-            ) {
-              state.rangeInputs[column.id].max = row[column.id].value;
-              state.rangeInputs[column.id].value[1] = row[column.id].value;
-            }
-          }
+      state.allRows = data.map((row) => {
+        return orderedColumns.map((orderedColumn) => {
+          const targetCol = columns.find(
+            (column) => column.id === orderedColumn
+          );
           return {
-            column,
-            value: row[column.id].value,
-            href: column.href ? row[column.href].value : null,
+            value: row[targetCol.id],
+            checked: true,
+            href: targetCol.link ? row[targetCol.link] : null,
+            column: state.columns.find((column) => column.id === orderedColumn),
           };
         });
       });
@@ -556,6 +585,7 @@ export default defineComponent({
       blobUrl,
       setSorting,
       setFilters,
+      setRangeFilters,
       jumpToPage,
       submitQuery,
       closeModal,
