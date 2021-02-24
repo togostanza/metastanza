@@ -290,7 +290,7 @@ async function barchart(stanza, params) {
         ],
       },
     ];
-  } else {
+  } else if (chartType === "stacked") {
     //stacked
     spec.data = [
       {

@@ -2794,7 +2794,9 @@ var script = defineComponent({
       const queryByColumn = state.queryByColumn.query;
       const filtered = state.allRows
         .filter((row) => {
-          return query ? row.some((cell) => String(cell.value).includes(query)) : true;
+          return query
+            ? row.some((cell) => String(cell.value).includes(query))
+            : true;
         })
         .filter((row) => {
           return queryByColumn
@@ -2941,7 +2943,9 @@ var script = defineComponent({
           if (dragX > state.sliderBarWidth) {
             dragX = state.sliderBarWidth;
           }
-          let page = Math.ceil((totalPages.value * dragX) / state.sliderBarWidth);
+          let page = Math.ceil(
+            (totalPages.value * dragX) / state.sliderBarWidth
+          );
           if (page < 1) {
             page = 1;
           }
@@ -2956,7 +2960,9 @@ var script = defineComponent({
         }
       },
       click: () => {
-        state.knobX = state.sliderBarWidth / (totalPages.value - 1) * (state.pagination.currentPage - 1);
+        state.knobX =
+          (state.sliderBarWidth / (totalPages.value - 1)) *
+          (state.pagination.currentPage - 1);
         pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
       setPage: (knobX, page) => {
@@ -2965,20 +2971,35 @@ var script = defineComponent({
         state.canvas.setAttribute("width", state.sliderBarWidth);
         state.canvas.setAttribute("height", 50);
         let pageButton = state.canvas.parentNode.parentNode
-            .getElementsByClassName("paginationWrapper")[0].getElementsByTagName("ul")[0];
+          .getElementsByClassName("paginationWrapper")[0]
+          .getElementsByTagName("ul")[0];
         if (state.canvas.getContext) {
           const ctx = state.canvas.getContext("2d");
-          ctx.clearRect(0, 0, state.canvas.offsetWidth, state.canvas.offsetHeight);
+          ctx.clearRect(
+            0,
+            0,
+            state.canvas.offsetWidth,
+            state.canvas.offsetHeight
+          );
           ctx.beginPath();
-          ctx.moveTo(knobX + state.knob.offsetWidth/2 - 8, 50);
-          ctx.lineTo(knobX - state.knob.offsetWidth/2 + 8, 50);
-          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10, 0);
-          ctx.lineTo(pageButton.offsetLeft - pageButton.parentNode.offsetLeft + pageButton.offsetWidth - 10, 0);
+          ctx.moveTo(knobX + state.knob.offsetWidth / 2 - 8, 50);
+          ctx.lineTo(knobX - state.knob.offsetWidth / 2 + 8, 50);
+          ctx.lineTo(
+            pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10,
+            0
+          );
+          ctx.lineTo(
+            pageButton.offsetLeft -
+              pageButton.parentNode.offsetLeft +
+              pageButton.offsetWidth -
+              10,
+            0
+          );
           ctx.closePath();
           ctx.fillStyle = "#dddddd";
           ctx.fill();
         }
-      }
+      },
     };
 
     async function fetchData() {
@@ -3277,11 +3298,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ? (openBlock(), createBlock(Fragment, { key: 0 }, [
             createVNode("span", {
               class: "arrow double left",
-              onClick: _cache[6] || (_cache[6] = $event => {_ctx.state.pagination.currentPage = 1; _ctx.pageSlider.click();})
+              onClick: _cache[6] || (_cache[6] = $event => {
+          _ctx.state.pagination.currentPage = 1;
+          _ctx.pageSlider.click();
+        })
             }),
             createVNode("span", {
               class: "arrow left",
-              onClick: _cache[7] || (_cache[7] = $event => {_ctx.state.pagination.currentPage--; _ctx.pageSlider.click();})
+              onClick: _cache[7] || (_cache[7] = $event => {
+          _ctx.state.pagination.currentPage--;
+          _ctx.pageSlider.click();
+        })
             })
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
@@ -3293,7 +3320,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           'pagination',
           { currentBtn: _ctx.state.pagination.currentPage === page },
         ],
-            onClick: $event => {_ctx.state.pagination.currentPage = page; _ctx.pageSlider.click();}
+            onClick: $event => {
+          _ctx.state.pagination.currentPage = page;
+          _ctx.pageSlider.click();
+        }
           }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, ["onClick"]))
         }), 128 /* KEYED_FRAGMENT */))
       ]),
@@ -3301,11 +3331,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ? (openBlock(), createBlock(Fragment, { key: 1 }, [
             createVNode("span", {
               class: "arrow right",
-              onClick: _cache[8] || (_cache[8] = $event => {_ctx.state.pagination.currentPage++; _ctx.pageSlider.click();})
+              onClick: _cache[8] || (_cache[8] = $event => {
+          _ctx.state.pagination.currentPage++;
+          _ctx.pageSlider.click();
+        })
             }),
             createVNode("span", {
               class: "arrow double right",
-              onClick: _cache[9] || (_cache[9] = $event => {_ctx.state.pagination.currentPage = _ctx.totalPages; _ctx.pageSlider.click();})
+              onClick: _cache[9] || (_cache[9] = $event => {
+          _ctx.state.pagination.currentPage = _ctx.totalPages;
+          _ctx.pageSlider.click();
+        })
             })
           ], 64 /* STABLE_FRAGMENT */))
         : createCommentVNode("v-if", true),
