@@ -2,7 +2,7 @@
   <div class="tableOption">
     <form
       class="textSearchWrapper"
-      @submit.prevent="state.query = state.queryInput"
+      @submit.prevent="setQueryInput()"
     >
       <input
         v-model="state.queryInput"
@@ -216,15 +216,18 @@
       ></span>
     </div>
 
-    <div class="pageNumber">
+    <form
+      class="pageNumber"
+      @submit.prevent="jumpToPage(state.jumpToNumberInput)"
+      >
       Page
       <input
         v-model.number="state.jumpToNumberInput"
         type="text"
-        @keydown.enter="jumpToPage(state.jumpToNumberInput)"
       />
       of {{ totalPages }}
-    </div>
+      <button>Go</button>
+    </form>
   </div>
   <div ref="pageSliderWrapper" class="pageSliderWrapper">
     <canvas class="pageSliderRange" height="50"></canvas>
@@ -421,10 +424,17 @@ export default defineComponent({
     function setRangeFilters(id) {
       state.rangeInputs[id].value[0] = state.rangeInputs[id].input[0];
       state.rangeInputs[id].value[1] = state.rangeInputs[id].input[1];
+      state.rangeInputs[id].input=[null, null]
+    }
+
+    function setQueryInput() {
+      state.query = state.queryInput
+      state.queryInput = ""
     }
 
     function jumpToPage(num) {
       state.pagination.currentPage = num ? num : 1;
+      state.jumpToNumberInput = ""
     }
 
     function submitQuery(column, type, query) {
@@ -559,7 +569,7 @@ export default defineComponent({
             value: [min, max],
             min,
             max,
-            input: [min, max],
+            input: [null, null],
           };
         }
         return {
@@ -595,6 +605,7 @@ export default defineComponent({
       setSorting,
       setFilters,
       setRangeFilters,
+      setQueryInput,
       jumpToPage,
       submitQuery,
       closeModal,
