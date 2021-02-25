@@ -164,7 +164,7 @@
     </tbody>
   </table>
   <div class="paginationWrapper">
-    <template v-if="state.pagination.currentPage !== 1">
+    <div :class="['arrowWrapper', {show: state.pagination.currentPage !== 1}]">
       <span
         class="arrow double left"
         @click="
@@ -180,7 +180,7 @@
           pageSlider.click();
         "
       ></span>
-    </template>
+    </div>
 
     <ul>
       <li
@@ -199,7 +199,7 @@
       </li>
     </ul>
 
-    <template v-if="state.pagination.currentPage !== totalPages">
+    <div :class="['arrowWrapper', {show: state.pagination.currentPage !== totalPages}]">
       <span
         class="arrow right"
         @click="
@@ -214,7 +214,7 @@
           pageSlider.click();
         "
       ></span>
-    </template>
+    </div>
 
     <div class="pageNumber">
       Page
