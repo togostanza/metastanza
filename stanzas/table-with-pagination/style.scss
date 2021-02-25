@@ -394,7 +394,7 @@ table {
         background-size: 8px 8px;
         &.searchIcon {
           display: var(--searchicon-display);
-          margin-left: 2px;
+          margin-left: 1px;
           background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);
           &.active {
             background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);
@@ -402,7 +402,6 @@ table {
         }
         &.filterIcon {
           display: var(--filtericon-display);
-          margin-left: 2px;
           background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
           &.active {
             background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);
