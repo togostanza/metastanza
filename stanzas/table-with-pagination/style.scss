@@ -134,6 +134,14 @@ main {
         color: var(--searchbox-font-color);
       }
     }
+    > button {
+      @include button;
+      display: inline-block;
+      margin-left: 3px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }
 
