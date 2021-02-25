@@ -106,6 +106,7 @@
             @click="setSorting(column)"
           ></span>
           <span
+            v-if="column.searchType !== 'decimal'"
             :class="[
               'icon',
               'filterIcon',
