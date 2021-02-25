@@ -16,7 +16,7 @@
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
-      "stanza:key": "table_data_api",
+      "stanza:key": "table-data-api",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
       "stanza:description": "table data api",
       "stanza:required": true
@@ -53,7 +53,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"sliderFilter\":true},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"rowspan\":true}]",
+      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"decimal\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"rowspan\":true}]",
       "stanza:description": "columns' options",
       "stanza:required": false
     }
