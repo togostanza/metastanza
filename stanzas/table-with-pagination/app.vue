@@ -24,32 +24,7 @@
         <p class="title">
           Search for "{{ state.columnShowingTextSearch.label }}"
         </p>
-        <form
-          v-if="!state.columnShowingTextSearch.sliderFilter"
-          class="textSearchWrapper"
-          @submit.prevent="
-            submitQuery(
-              state.columnShowingTextSearch.label,
-              state.columnShowingTextSearch.type,
-              state.queryInputByColumn
-            )
-          "
-        >
-          <input
-            id="queryInputByColumn"
-            v-model="state.queryInputByColumn"
-            type="text"
-            placeholder="Search for keywords..."
-            name="queryInputByColumn"
-          />
-          <button class="searchBtn" type="submit">
-            <img
-              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-              alt="search"
-            />
-          </button>
-        </form>
-        <div v-if="state.columnShowingTextSearch.sliderFilter">
+        <div v-if="state.columnShowingTextSearch.searchType === 'decimal'">
           <Slider
             v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
             v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
@@ -83,6 +58,31 @@
             </form>
           </div>
         </div>
+        <form
+          v-else
+          class="textSearchWrapper"
+          @submit.prevent="
+            submitQuery(
+              state.columnShowingTextSearch.label,
+              state.columnShowingTextSearch.type,
+              state.queryInputByColumn
+            )
+          "
+        >
+          <input
+            id="queryInputByColumn"
+            v-model="state.queryInputByColumn"
+            type="text"
+            placeholder="Search for keywords..."
+            name="queryInputByColumn"
+          />
+          <button class="searchBtn" type="submit">
+            <img
+              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
+              alt="search"
+            />
+          </button>
+        </form>
       </div>
     </transition>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
@@ -326,7 +326,7 @@ export default defineComponent({
           return Object.keys(state.rangeInputs).length !== 0
             ? row.some((cell) => {
                 return (
-                  cell.column.sliderFilter &&
+                  cell.column.searchType === 'decimal' &&
                   cell.value >= state.rangeInputs[cell.column.id].value[0] &&
                   cell.value <= state.rangeInputs[cell.column.id].value[1]
                 );
@@ -524,7 +524,7 @@ export default defineComponent({
     };
 
     async function fetchData() {
-      // const res = await fetch(params.table_data_api);
+      // const res = await fetch(params["table-data-api"]);
       // const data = await res.json();
 
       state.responseJSON = data;
@@ -538,7 +538,7 @@ export default defineComponent({
             };
           }
         );
-        if (column.sliderFilter) {
+        if (column.type === "decimal") {
           const min = Math.min(...filters.map((filter) => filter.value));
           const max = Math.max(...filters.map((filter) => filter.value));
           state.rangeInputs[column.id] = {
@@ -552,7 +552,7 @@ export default defineComponent({
           id: column.id,
           label: column.label,
           filters,
-          sliderFilter: column.sliderFilter ? true : false,
+          searchType: column.type,
           rowspan: column.rowspan ? true : false,
         };
       });
