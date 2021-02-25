@@ -56,12 +56,6 @@
       "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"sliderFilter\":true},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"rowspan\":true}]",
       "stanza:description": "columns' options",
       "stanza:required": false
-    },
-    {
-      "stanza:key": "order",
-      "stanza:example": "id,mnemonic,name,mass,location_name",
-      "stanza:description": "display columns' order",
-      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",

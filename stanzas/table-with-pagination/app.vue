@@ -256,7 +256,7 @@ import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
-import data from "./assets/tableDataWithNumber.json";
+import data from "./assets/tableDataWithNumber.json"; // for range filter test
 
 export default defineComponent({
   components: {
@@ -265,7 +265,6 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
   setup(params) {
     const columns = JSON.parse(params.columns);
-    const orderedColumns = params.order.split(",");
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
@@ -528,10 +527,10 @@ export default defineComponent({
       // const res = await fetch(params.table_data_api);
       // const data = await res.json();
 
-      state.responseJSON = data; // for range filter test
+      state.responseJSON = data;
 
-      state.columns = orderedColumns.map((orderedColumn) => {
-        const filters = uniq(data.map((datam) => datam[orderedColumn])).map(
+      state.columns =  columns.map((column) => {
+        const filters = uniq(data.map((datam) => datam[column.id])).map(
           (value) => {
             return {
               value,
@@ -539,11 +538,10 @@ export default defineComponent({
             };
           }
         );
-        const targetCol = columns.find((column) => column.id === orderedColumn);
-        if (targetCol.sliderFilter) {
+        if (column.sliderFilter) {
           const min = Math.min(...filters.map((filter) => filter.value));
           const max = Math.max(...filters.map((filter) => filter.value));
-          state.rangeInputs[targetCol.id] = {
+          state.rangeInputs[column.id] = {
             value: [min, max],
             min,
             max,
@@ -551,24 +549,21 @@ export default defineComponent({
           };
         }
         return {
-          id: orderedColumn,
-          label: targetCol.label,
+          id: column.id,
+          label: column.label,
           filters,
-          sliderFilter: targetCol.sliderFilter ? true : false,
-          rowspan: targetCol.rowspan ? true : false,
+          sliderFilter: column.sliderFilter ? true : false,
+          rowspan: column.rowspan ? true : false,
         };
       });
 
       state.allRows = data.map((row) => {
-        return orderedColumns.map((orderedColumn) => {
-          const targetCol = columns.find(
-            (column) => column.id === orderedColumn
-          );
+        return state.columns.map((column) => {
           return {
-            value: row[targetCol.id],
+            value: row[column.id],
             checked: true,
-            href: targetCol.link ? row[targetCol.link] : null,
-            column: state.columns.find((column) => column.id === orderedColumn),
+            href: column.link ? row[column.link] : null,
+            column
           };
         });
       });
