@@ -109,12 +109,13 @@
             :class="[
               'icon',
               'filterIcon',
-              { active: column === state.columnShowingFilters },
+              { isShowing: column === state.columnShowingFilters },
+              { active: column.filters.some(filter => !filter.checked) },
             ]"
             @click="state.columnShowingFilters = column"
           ></span>
           <span
-            class="icon searchIcon"
+            :class="['icon', 'searchIcon', { active: isSearchOn(column) }]"
             @click="state.columnShowingTextSearch = column"
           ></span>
           <div
@@ -326,7 +327,7 @@ export default defineComponent({
           return Object.keys(state.rangeInputs).length !== 0
             ? row.some((cell) => {
                 return (
-                  cell.column.searchType === 'decimal' &&
+                  cell.column.searchType === "decimal" &&
                   cell.value >= state.rangeInputs[cell.column.id].value[0] &&
                   cell.value <= state.rangeInputs[cell.column.id].value[1]
                 );
@@ -436,6 +437,18 @@ export default defineComponent({
       state.columnShowingTextSearch = null;
     }
 
+    function isSearchOn(column) {
+      return (
+        (state.queryByColumn.column === column.label &&
+          state.queryByColumn.query !== "") ||
+        (Object.keys(state.rangeInputs).some((id) => id === column.id) &&
+          (state.rangeInputs[column.id].value[0] !==
+            state.rangeInputs[column.id].min ||
+            state.rangeInputs[column.id].value[1] !==
+              state.rangeInputs[column.id].max))
+      );
+    }
+
     const pageSliderWrapper = ref(null);
     const pageSlider = {
       init: () => {
@@ -529,7 +542,7 @@ export default defineComponent({
 
       state.responseJSON = data;
 
-      state.columns =  columns.map((column) => {
+      state.columns = columns.map((column) => {
         const filters = uniq(data.map((datam) => datam[column.id])).map(
           (value) => {
             return {
@@ -563,7 +576,7 @@ export default defineComponent({
             value: row[column.id],
             checked: true,
             href: column.link ? row[column.link] : null,
-            column
+            column,
           };
         });
       });
@@ -584,6 +597,7 @@ export default defineComponent({
       jumpToPage,
       submitQuery,
       closeModal,
+      isSearchOn,
       pageSliderWrapper,
       pageSlider,
     };
