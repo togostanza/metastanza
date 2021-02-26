@@ -185,12 +185,6 @@
       "stanza:description": "bar color"
     },
     {
-      "stanza:key": "--emphasized-color",
-      "stanza:type": "color",
-      "stanza:default": "#FA8C84",
-      "stanza:description": "Emphasized color when you hover on labels and rects"
-    },
-    {
       "stanza:key": "--font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",

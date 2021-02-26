@@ -1,45 +1,33 @@
 import vegaEmbed from "vega-embed";
 
 export default async function devLinechart(stanza, params) {
-  const spec = await fetch(
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
+  const vegaJson = await fetch(
     "https://vega.github.io/vega/examples/line-chart.vg.json"
   ).then((res) => res.json());
 
   //width、height、padding
-  spec.width = params["width"];
-  spec.height = params["height"];
-  spec.padding = params["padding"];
-
-  //delete default controller
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
   const groupVariable = params["group-variable"];
 
-  spec.data = [
+  const data = [
     {
       name: "table",
       url: params["your-data"],
-      // values: [
-      //   {"x": 0, "y": 28, "c":0}, {"x": 0, "y": 20, "c":1},
-      //   {"x": 1, "y": 43, "c":0}, {"x": 1, "y": 35, "c":1},
-      //   {"x": 2, "y": 81, "c":0}, {"x": 2, "y": 10, "c":1},
-      //   {"x": 3, "y": 19, "c":0}, {"x": 3, "y": 15, "c":1},
-      //   {"x": 4, "y": 52, "c":0}, {"x": 4, "y": 48, "c":1},
-      //   {"x": 5, "y": 24, "c":0}, {"x": 5, "y": 28, "c":1},
-      //   {"x": 6, "y": 87, "c":0}, {"x": 6, "y": 66, "c":1},
-      //   {"x": 7, "y": 17, "c":0}, {"x": 7, "y": 27, "c":1},
-      //   {"x": 8, "y": 68, "c":0}, {"x": 8, "y": 16, "c":1},
-      //   {"x": 9, "y": 49, "c":0}, {"x": 9, "y": 25, "c":1}
-      // ]
     },
   ];
+
   //scale
-  spec.scales = [
+  const scales = [
     {
       name: "x",
       type: "point",
@@ -70,48 +58,28 @@ export default async function devLinechart(stanza, params) {
   ];
 
   //axes
-  spec.axes = [
+  const axes = [
     {
       scale: "x",
       orient: params["xaxis-orient"],
       domainColor: "var(--axis-color)",
-      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--axis-width"
-      ),
+      domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
-      ),
-      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-opacity"
-      ),
-      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
-      ),
+      gridDash: css("--grid-dash"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
       ticks: params["xtick"] === "true",
       // tickCount: params["xtick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-size"
-      ),
-      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-width"
-      ),
+      tickSize: css("--tick-size"),
+      tickWidth: css("--tick-width"),
       title: labelVariable,
       titleColor: "var(--title-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
-      ),
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-size"),
+      titleFontWeight: css("--title-weight"),
+      titlePadding: Number(css("--title-padding")),
       zindex: 1,
       encode: {
         labels: {
@@ -121,16 +89,8 @@ export default async function devLinechart(stanza, params) {
             dx: { value: params["xlabel-horizonal-offset"] },
             dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
-              ),
-            },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-size") },
           },
         },
       },
@@ -139,43 +99,23 @@ export default async function devLinechart(stanza, params) {
       scale: "y",
       orient: params["yaxis-orient"],
       domainColor: "var(--axis-color)",
-      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--axis-width"
-      ),
+      domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
-      ),
-      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-opacity"
-      ),
-      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
-      ),
+      gridDash: css("--grid-dash"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
       ticks: params["ytick"] === "true",
       // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-size"
-      ),
-      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-width"
-      ),
+      tickSize: css("--tick-size"),
+      tickWidth: css("--tick-width"),
       title: valueVariable,
       titleColor: "var(--title-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
-      ),
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-size"),
+      titleFontWeight: css("--title-weight"),
+      titlePadding: Number(css("--title-padding")),
       zindex: 0,
       encode: {
         labels: {
@@ -185,16 +125,8 @@ export default async function devLinechart(stanza, params) {
             dx: { value: params["ylabel-horizonal-offset"] },
             dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
-              ),
-            },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-size") },
           },
         },
       },
@@ -202,7 +134,7 @@ export default async function devLinechart(stanza, params) {
   ];
 
   // legend
-  spec.legends = [
+  const legends = [
     {
       fill: "color",
       orient: "none",
@@ -214,31 +146,17 @@ export default async function devLinechart(stanza, params) {
       encode: {
         title: {
           update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
+            font: { value: css("--font-family") },
             fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
+              value: css("--legendtitle-size"),
             },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
+            fontWeight: { value: css("--legendtitle-weight") },
           },
         },
         labels: {
           interactive: true,
           update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
+            font: { value: css("--legend-font") },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--legendlabel-size"
@@ -252,7 +170,7 @@ export default async function devLinechart(stanza, params) {
   ];
 
   //marks
-  spec.marks = [
+  const marks = [
     {
       type: "group",
       from: {
@@ -272,9 +190,7 @@ export default async function devLinechart(stanza, params) {
               y: { scale: "y", field: valueVariable },
               stroke: { scale: "color", field: groupVariable },
               strokeWidth: {
-                value: getComputedStyle(stanza.root.host).getPropertyValue(
-                  "--line-width"
-                ),
+                value: css("--line-width"),
               },
             },
             update: {
@@ -287,6 +203,24 @@ export default async function devLinechart(stanza, params) {
       ],
     },
   ];
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: width,
+    height: height,
+    padding: padding,
+    signals: vegaJson.signals,
+    data: data,
+    scales: scales,
+    axes: axes,
+    legends: legends,
+    marks: marks,
+  };
+
+  //delete default controller
+  for (const signal of vegaJson.signals) {
+    delete signal.bind;
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {

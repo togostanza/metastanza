@@ -1,26 +1,25 @@
 import vegaEmbed from "vega-embed";
 
 export default async function tree(stanza, params) {
-  const spec = await fetch(
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
+  const vegaJson = await fetch(
     "https://vega.github.io/vega/examples/tree-layout.vg.json"
   ).then((res) => res.json());
 
-  //width、height、padding
-  spec.width = params["width"];
-  spec.height = params["height"];
-  spec.padding = params["padding"];
-
-  //delete default controller
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
+  //width,height,padding
+  const width = Number(params["width"]);
+  const height = Number(params["height"]);
+  const padding = Number(params["padding"]);
 
   //data
   const labelVariable = params["label-variable"]; //"name"
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
-  spec.data = [
+  const data = [
     {
       name: "tree",
       url: params["your-data"],
@@ -54,7 +53,7 @@ export default async function tree(stanza, params) {
   ];
 
   //scales
-  spec.scales = [
+  const scales = [
     {
       name: "color",
       type: "ordinal",
@@ -72,7 +71,7 @@ export default async function tree(stanza, params) {
   ];
 
   //legend
-  spec.legends = [
+  const legends = [
     {
       fill: "color",
       title: params["legend-title"],
@@ -82,36 +81,16 @@ export default async function tree(stanza, params) {
       encode: {
         title: {
           update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-size"
-              ),
-            },
-            fontWeight: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendtitle-weight"
-              ),
-            },
+            font: { value: css("--legend-font") },
+            fontSize: { value: css("--legendtitle-size") },
+            fontWeight: { value: css("--legendtitle-weight") },
           },
         },
         labels: {
           interactive: true,
           update: {
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legend-font"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
+            font: { value: css("--legend-font") },
+            fontSize: { value: css("--legendlabel-size") },
           },
           text: { field: "value" },
         },
@@ -119,16 +98,7 @@ export default async function tree(stanza, params) {
           update: {
             shape: { value: params["symbol-shape"] },
             stroke: { value: "var(--stroke-color)" },
-            strokeWidth: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--stroke-width"
-              ),
-            },
-            opacity: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--opacity"
-              ),
-            },
+            strokeWidth: { value: css("--stroke-width") },
           },
         },
       },
@@ -136,7 +106,7 @@ export default async function tree(stanza, params) {
   ];
 
   //marks
-  spec.marks = [
+  const marks = [
     {
       type: "path",
       from: { data: "links" },
@@ -153,9 +123,7 @@ export default async function tree(stanza, params) {
       encode: {
         enter: {
           size: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--node-size"
-            ),
+            value: css("--node-size"),
           },
           stroke: { value: "var(--stroke-color)" },
         },
@@ -164,11 +132,7 @@ export default async function tree(stanza, params) {
           y: { field: "y" },
           fill: { scale: "color", field: "depth" },
           stroke: { value: "var(--stroke-color)" },
-          strokeWidth: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--stroke-width"
-            ),
-          },
+          strokeWidth: { value: css("--stroke-width") },
         },
       },
     },
@@ -178,16 +142,8 @@ export default async function tree(stanza, params) {
       encode: {
         enter: {
           text: { field: labelVariable },
-          font: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--font-family"
-            ),
-          },
-          fontSize: {
-            value: getComputedStyle(stanza.root.host).getPropertyValue(
-              "--label-size"
-            ),
-          },
+          font: { value: css("--font-family") },
+          fontSize: { value: css("--label-size") },
           baseline: { value: "middle" },
         },
         update: {
@@ -197,15 +153,27 @@ export default async function tree(stanza, params) {
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
           fill: { value: "var(--label-color)" },
-          // strokeWidth: {
-          //   value: getComputedStyle(stanza.root.host).getPropertyValue(
-          //     "--stroke-width"
-          //   ),
-          // },
         },
       },
     },
   ];
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: width,
+    height: height,
+    padding: padding,
+    signals: vegaJson.signals,
+    data: data,
+    scales: scales,
+    legends: legends,
+    marks: marks,
+  };
+
+  //delete default controller
+  for (const signal of vegaJson.signals) {
+    delete signal.bind;
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {

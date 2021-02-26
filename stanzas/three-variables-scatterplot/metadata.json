@@ -16,12 +16,6 @@
   "stanza:updated": "2020-11-06",
   "stanza:parameter": [
     {
-      "stanza:key": "src-url",
-      "stanza:example": "https://vega.github.io/vega/examples/scatter-plot.vg.json",
-      "stanza:description": "source url which returns Vega specification compliant JSON",
-      "stanza:required": true
-    },
-    {
       "stanza:key": "your-data",
       "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
       "stanza:description": "JSON data url which you want to draw",
@@ -130,12 +124,6 @@
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Plot colot."
-    },
-    {
-      "stanza:key": "--emphasized-color",
-      "stanza:type": "color",
-      "stanza:default": "#FF5C5C",
-      "stanza:description": "Emphasized color."
     },
     {
       "stanza:key": "--font-family",

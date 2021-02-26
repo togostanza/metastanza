@@ -1,41 +1,26 @@
 import vegaEmbed from "vega-embed";
 
 export default async function piechart(stanza, params) {
-  const spec = await fetch(
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
+  const vegaJson = await fetch(
     "https://vega.github.io/vega/examples/pie-chart.vg.json"
   ).then((res) => res.json());
 
-  //width・height・padding
-  // spec.width = params["width"]
-  // spec.height = params["height"]
-  // spec.autosize = params["autosize"]
-  spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
-
-  //delete default controller
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
-
-  //innerpadding
-  spec.signals[2].value = params["inner-padding-angle"];
-  spec.signals[3].value = params["inner-radius"];
+  //width,height,padding
+  const width = Number(params["width"]);
+  const height = Number(params["height"]);
+  const padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
-
-  spec.data = [
+  const data = [
     {
       name: "table",
       url: params["your-data"],
-      // values: [
-      //   { id: 1, field: 4 },
-      //   { id: 2, field: 6 },
-      //   { id: 3, field: 10 },
-      //   { id: 4, field: 3 },
-      //   { id: 5, field: 7 },
-      //   { id: 6, field: 8 },
-      // ],
       transform: [
         {
           type: "pie",
@@ -49,7 +34,7 @@ export default async function piechart(stanza, params) {
   ];
 
   // scales(color scheme)
-  spec.scales = [
+  const scales = [
     {
       name: "color",
       type: "ordinal",
@@ -66,7 +51,7 @@ export default async function piechart(stanza, params) {
   ];
 
   //legend
-  spec.legends = [
+  const legends = [
     {
       fill: "color",
       orient: "none",
@@ -74,34 +59,20 @@ export default async function piechart(stanza, params) {
       legendY: "5",
       title: labelVariable,
       titleColor: "var(--legendtitle-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-weight"
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--legendtitle-size"),
+      titleFontWeight: css("--legendtitle-weight"),
       labelColor: "var(--legendlabel-color)",
-      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
-      ),
+      labelFont: css("--font-family"),
+      labelFontSize: css("--legendlabel-size"),
       symbolType: params["symbol-shape"],
-      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-color"
-      ),
-      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-width"
-      ),
+      symbolStrokeColor: css("--stroke-color"),
+      symbolStrokeWidth: css("--stroke-width"),
     },
   ];
 
   //marks
-  spec.marks = [
+  const marks = [
     {
       type: "arc",
       from: { data: "table" },
@@ -125,6 +96,24 @@ export default async function piechart(stanza, params) {
       },
     },
   ];
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: width,
+    height: height,
+    padding: padding,
+    autosize: "none",
+    signals: vegaJson.signals,
+    data: data,
+    scales: scales,
+    legends: legends,
+    marks: marks,
+  };
+
+  //delete default controller
+  for (const signal of vegaJson.signals) {
+    delete signal.bind;
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {

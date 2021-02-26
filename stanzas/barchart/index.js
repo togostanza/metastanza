@@ -1,75 +1,71 @@
 import vegaEmbed from "vega-embed";
-// import stackedBarJson from "./stacked.json";
-// import groupedBarJson from "./grouped.json";
 
 export default async function barchart(stanza, params) {
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
   const chartType = params["chart-type"];
-
-  const spec = { $schema: "https://vega.github.io/schema/vega/v5.json" };
-  // switch(chartType){
-  //   case "stacked":
-  //     spec = Object.values(stackedBarJson)[0];
-  //     break;
-  //   case "grouped":
-  //     spec = Object.values(groupedBarJson)[0];
-  //     break;
-  // }
 
   //width,height,padding
   const width = Number(params["width"]);
   const height = Number(params["height"]);
   const padding = Number(params["padding"]);
-  spec.width = width;
-  spec.height = height;
-  spec.padding = padding;
 
   //data
   const labelVariable = params["label-variable"]; //x
   const valueVariable = params["value-variable"]; //y
   const groupVariable = params["group-variable"]; //z
 
+  function constructData(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          {
+            name: "table",
+            url: params["your-data"],
+          },
+        ];
+      case "stacked":
+        return [
+          {
+            name: "table",
+            url: params["your-data"],
+            transform: [
+              {
+                type: "stack",
+                field: valueVariable,
+                groupby: [labelVariable],
+                sort: { field: groupVariable },
+              },
+            ],
+          },
+        ];
+    }
+  }
+  console.log(constructData(chartType));
+
   //axes
-  spec.axes = [
+  const axes = [
     {
       scale: "xscale",
       orient: params["xaxis-orient"],
       domainColor: "var(--axis-color)",
-      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--axis-width"
-      ),
+      domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
-      ),
-      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-opacity"
-      ),
-      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
-      ),
+      gridDash: css("--grid-dash"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
       ticks: params["xtick"] === "true",
       tickColor: "var(--tick-color)",
-      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-size"
-      ),
-      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-width"
-      ),
+      tickSize: css("--tick-size"),
+      tickWidth: css("--tick-width"),
       title: labelVariable,
       titleColor: "var(--title-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
-      ),
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-size"),
+      titleFontWeight: css("--title-weight"),
+      titlePadding: Number(css("--title-padding")),
       encode: {
         labels: {
           interactive: true,
@@ -78,16 +74,8 @@ export default async function barchart(stanza, params) {
             dx: { value: params["xlabel-horizonal-offset"] },
             dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
-            font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
-            },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
-              ),
-            },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-size") },
           },
         },
       },
@@ -96,42 +84,22 @@ export default async function barchart(stanza, params) {
       scale: "yscale",
       orient: params["yaxis-orient"],
       domainColor: "var(--axis-color)",
-      domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--axis-width"
-      ),
+      domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
-      ),
-      gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-opacity"
-      ),
-      gridWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-width"
-      ),
+      gridDash: css("--grid-dash"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
       ticks: params["ytick"] === "true",
       tickColor: "var(--tick-color)",
-      tickSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-size"
-      ),
-      tickWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--tick-width"
-      ),
+      tickSize: css("--tick-size"),
+      tickWidth: css("--tick-width"),
       title: valueVariable,
       titleColor: "var(--title-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
-      ),
-      titlePadding: Number(
-        getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-size"),
+      titleFontWeight: css("--title-weight"),
+      titlePadding: Number(css("--title-padding")),
       zindex: 0,
       encode: {
         labels: {
@@ -142,19 +110,10 @@ export default async function barchart(stanza, params) {
             dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-color)" },
             font: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--font-family"
-              ),
+              value: css("--font-family"),
             },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
-              ),
-            },
+            fontSize: { value: css("--label-size") },
             // limit: 1
-          },
-          hover: {
-            fill: { value: "var(--emphasized-color)" },
           },
         },
       },
@@ -162,7 +121,7 @@ export default async function barchart(stanza, params) {
   ];
 
   // legend
-  spec.legends = [
+  const legends = [
     {
       fill: "color",
       orient: "none",
@@ -170,181 +129,157 @@ export default async function barchart(stanza, params) {
       legendY: "0",
       title: groupVariable,
       titleColor: "var(--legendtitle-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-weight"
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--legendtitle-size"),
+      titleFontWeight: css("--legendtitle-weight"),
       labelColor: "var(--legendlabel-color)",
-      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
-      ),
-      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-color"
-      ),
-      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-width"
-      ),
+      labelFont: css("--font-family"),
+      labelFontSize: css("--legendlabel-size"),
+      symbolStrokeColor: css("--stroke-color"),
+      symbolStrokeWidth: css("--stroke-width"),
     },
   ];
 
-  spec.scales = [
-    {
-      name: "color",
-      type: "ordinal",
-      domain: { data: "table", field: groupVariable },
-      range: [
-        "var(--series-0-color)",
-        "var(--series-1-color)",
-        "var(--series-2-color)",
-        "var(--series-3-color)",
-        "var(--series-4-color)",
-        "var(--series-5-color)",
-      ],
-    },
-  ];
+  const colorScale = {
+    name: "color",
+    type: "ordinal",
+    domain: { data: "table", field: groupVariable },
+    range: [
+      "var(--series-0-color)",
+      "var(--series-1-color)",
+      "var(--series-2-color)",
+      "var(--series-3-color)",
+      "var(--series-4-color)",
+      "var(--series-5-color)",
+    ],
+  };
 
-  if (chartType === "grouped") {
-    spec.data = [
-      {
-        name: "table",
-        url: params["your-data"],
-      },
-    ];
-
-    //scales
-    spec.scales[1] = {
-      name: "xscale",
-      type: "linear",
-      domain: { data: "table", field: valueVariable },
-      range: "width",
-    };
-
-    spec.scales[2] = {
-      name: "yscale",
-      type: "band",
-      domain: { data: "table", field: labelVariable },
-      range: "height",
-      padding: 0.2,
-      paddingInner: params["padding-inner"],
-      paddingOuter: params["padding-outer"],
-    };
-
-    //marks
-    spec.marks = [
-      {
-        type: "group",
-        from: {
-          facet: {
-            data: "table",
-            name: "facet",
-            groupby: labelVariable,
-          },
-        },
-        encode: {
-          enter: {
-            y: { scale: "yscale", field: labelVariable },
-          },
-        },
-        signals: [{ name: "height", update: "bandwidth('yscale')" }],
-        scales: [
+  function constructScale(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          colorScale,
           {
-            name: "pos",
+            name: "xscale",
+            type: "linear",
+            domain: { data: "table", field: valueVariable },
+            range: "width",
+          },
+          {
+            name: "yscale",
             type: "band",
+            domain: { data: "table", field: labelVariable },
             range: "height",
-            domain: { data: "facet", field: groupVariable },
+            padding: 0.2,
+            paddingInner: params["padding-inner"],
+            paddingOuter: params["padding-outer"],
           },
-        ],
-        marks: [
+        ];
+      case "stacked":
+        return [
+          colorScale,
+          ,
           {
-            name: "bars",
-            from: { data: "facet" },
-            type: "rect",
+            name: "xscale",
+            type: "band",
+            range: "width",
+            domain: { data: "table", field: labelVariable },
+            paddingInner: params["padding-inner"],
+            paddingOuter: params["padding-outer"],
+          },
+          {
+            name: "yscale",
+            type: "linear",
+            range: "height",
+            nice: true,
+            zero: true,
+            domain: { data: "table", field: "y1" },
+          },
+        ];
+    }
+  }
+
+  function constructMark(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          {
+            type: "group",
+            from: {
+              facet: {
+                data: "table",
+                name: "facet",
+                groupby: labelVariable,
+              },
+            },
             encode: {
               enter: {
-                y: { scale: "pos", field: groupVariable },
-                height: { scale: "pos", band: 1 },
-                x: { scale: "xscale", field: valueVariable },
-                x2: { scale: "xscale", value: 0 },
-                fill: { scale: "color", field: groupVariable },
-                stroke: { value: "var(--stroke-color)" },
-                strokeWidth: {
-                  value: getComputedStyle(stanza.root.host).getPropertyValue(
-                    "--stroke-width"
-                  ),
+                y: { scale: "yscale", field: labelVariable },
+              },
+            },
+            signals: [{ name: "height", update: "bandwidth('yscale')" }],
+            scales: [
+              {
+                name: "pos",
+                type: "band",
+                range: "height",
+                domain: { data: "facet", field: groupVariable },
+              },
+            ],
+            marks: [
+              {
+                name: "bars",
+                from: { data: "facet" },
+                type: "rect",
+                encode: {
+                  enter: {
+                    y: { scale: "pos", field: groupVariable },
+                    height: { scale: "pos", band: 1 },
+                    x: { scale: "xscale", field: valueVariable },
+                    x2: { scale: "xscale", value: 0 },
+                    fill: { scale: "color", field: groupVariable },
+                    stroke: { value: "var(--stroke-color)" },
+                    strokeWidth: {
+                      value: css("--stroke-width"),
+                    },
+                  },
                 },
               },
-            },
+            ],
           },
-        ],
-      },
-    ];
-  } else if (chartType === "stacked") {
-    //stacked
-    spec.data = [
-      {
-        name: "table",
-        url: params["your-data"],
-        transform: [
+        ];
+      case "stacked":
+        return [
           {
-            type: "stack",
-            field: valueVariable,
-            groupby: [labelVariable],
-            sort: { field: groupVariable },
-          },
-        ],
-      },
-    ];
-
-    //scales
-    spec.scales[1] = {
-      name: "xscale",
-      type: "band",
-      range: "width",
-      domain: { data: "table", field: labelVariable },
-      // "domain": ["Evidence at protein level", "Evidence at transcript level", "Inferred from homology","Predicted", "Uncertain"]
-      paddingInner: params["padding-inner"],
-      paddingOuter: params["padding-outer"],
-    };
-
-    (spec.scales[2] = {
-      name: "yscale",
-      type: "linear",
-      range: "height",
-      nice: true,
-      zero: true,
-      domain: { data: "table", field: "y1" },
-    }),
-      //marks
-      (spec.marks = [
-        {
-          type: "group",
-          from: { data: "table" },
-          encode: {
-            enter: {
-              x: { scale: "xscale", field: labelVariable },
-              width: { scale: "xscale", band: params["bar-width"] },
-              y: { scale: "yscale", field: "y0" },
-              y2: { scale: "yscale", field: "y1" },
-              fill: { scale: "color", field: groupVariable },
-              stroke: { value: "var(--stroke-color)" },
-              strokeWidth: {
-                value: getComputedStyle(stanza.root.host).getPropertyValue(
-                  "--stroke-width"
-                ),
+            type: "group",
+            from: { data: "table" },
+            encode: {
+              enter: {
+                x: { scale: "xscale", field: labelVariable },
+                width: { scale: "xscale", band: params["bar-width"] },
+                y: { scale: "yscale", field: "y0" },
+                y2: { scale: "yscale", field: "y1" },
+                fill: { scale: "color", field: groupVariable },
+                stroke: { value: "var(--stroke-color)" },
+                strokeWidth: { value: css("--stroke-width") },
               },
             },
           },
-        },
-      ]);
+        ];
+    }
   }
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: width,
+    height: height,
+    padding: padding,
+    data: constructData(chartType),
+    scales: constructScale(chartType),
+    axes: axes,
+    legends: legends,
+    marks: constructMark(chartType),
+  };
 
   const el = stanza.root.querySelector("main");
   const opts = {
