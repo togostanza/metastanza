@@ -274,13 +274,13 @@ async function barchart(stanza, params) {
 
   const spec = {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: width,
-    height: height,
-    padding: padding,
+    width,
+    height,
+    padding,
     data: constructData(chartType),
     scales: constructScale(chartType),
-    axes: axes,
-    legends: legends,
+    axes,
+    legends,
     marks: constructMark(chartType),
   };
 

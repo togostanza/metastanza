@@ -195,14 +195,14 @@ async function threeVariablesScatterplot(stanza, params) {
 
   const spec = {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: width,
-    height: height,
-    padding: padding,
-    data: data,
-    scales: scales,
-    axes: axes,
-    legends: legends,
-    marks: marks,
+    width,
+    height,
+    padding,
+    data,
+    scales,
+    axes,
+    legends,
+    marks,
   };
 
   const el = stanza.root.querySelector("main");
