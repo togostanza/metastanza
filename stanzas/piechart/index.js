@@ -99,15 +99,15 @@ export default async function piechart(stanza, params) {
 
   const spec = {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: width,
-    height: height,
-    padding: padding,
+    width,
+    height,
+    padding,
     autosize: "none",
     signals: vegaJson.signals,
-    data: data,
-    scales: scales,
-    legends: legends,
-    marks: marks,
+    data,
+    scales,
+    legends,
+    marks,
   };
 
   //delete default controller

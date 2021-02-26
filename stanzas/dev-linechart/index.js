@@ -206,15 +206,15 @@ export default async function devLinechart(stanza, params) {
 
   const spec = {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: width,
-    height: height,
-    padding: padding,
+    width,
+    height,
+    padding,
     signals: vegaJson.signals,
-    data: data,
-    scales: scales,
-    axes: axes,
-    legends: legends,
-    marks: marks,
+    data,
+    scales,
+    axes,
+    legends,
+    marks,
   };
 
   //delete default controller

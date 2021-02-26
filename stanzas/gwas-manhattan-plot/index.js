@@ -146,8 +146,8 @@ async function draw(stanza, params) {
   }
   const low_thresh = parseFloat(params.low_thresh);
   // let high_thresh = parseFloat(params.high_thresh);
-  const high_thresh = parseFloat(params.high_thresh);
-  let threshold = stanza.root.querySelector("#threshold");
+  let high_thresh = parseFloat(params.high_thresh);
+  const threshold = stanza.root.querySelector("#threshold");
   threshold.addEventListener("input", function () {
     high_thresh = parseFloat(threshold.value);
     reRender();

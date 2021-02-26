@@ -159,13 +159,13 @@ export default async function twoVariablesScatterplot(stanza, params) {
 
   const spec = {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    width: width,
-    height: height,
-    padding: padding,
-    data: data,
-    scales: scales,
-    axes: axes,
-    marks: marks,
+    width,
+    height,
+    padding,
+    data,
+    scales,
+    axes,
+    marks,
   };
 
   const el = stanza.root.querySelector("main");
