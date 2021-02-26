@@ -449,15 +449,23 @@ export default defineComponent({
     }
 
     function isSearchOn(column) {
-      return (
-        (state.queryByColumn.column === column.label &&
-          state.queryByColumn.query !== "") ||
-        (Object.keys(state.rangeInputs).some((id) => id === column.id) &&
-          (state.rangeInputs[column.id].value[0] !==
-            state.rangeInputs[column.id].min ||
+      switch (column.searchType) {
+        case "decimal":
+          if (!state.rangeInputs[column.id]) {
+            return false;
+          }
+          return (
+            state.rangeInputs[column.id].value[0] !==
+              state.rangeInputs[column.id].min ||
             state.rangeInputs[column.id].value[1] !==
-              state.rangeInputs[column.id].max))
-      );
+              state.rangeInputs[column.id].max
+          );
+        default:
+          return (
+            state.queryByColumn.column === column.label &&
+            state.queryByColumn.query !== ""
+          );
+      }
     }
 
     const pageSliderWrapper = ref(null);
@@ -555,22 +563,22 @@ export default defineComponent({
       const columns = params.columns
         ? JSON.parse(params.columns)
         : Object.keys(data[0]).map((key) => {
-            let column = { id: key, label: key }
-            if(typeof data[0][key] === "number") {
-              column.type = "decimal"
+            let column = { id: key, label: key };
+            if (typeof data[0][key] === "number") {
+              column.type = "decimal";
             }
             return column;
           });
 
       state.columns = columns.map((column) => {
-        const filters = uniq(data.map((datam) => datam[column.id])).sort().map(
-          (value) => {
+        const filters = uniq(data.map((datam) => datam[column.id]))
+          .sort()
+          .map((value) => {
             return {
               value,
               checked: true,
             };
-          }
-        );
+          });
         if (column.type === "decimal") {
           const min = Math.min(...filters.map((filter) => filter.value));
           const max = Math.max(...filters.map((filter) => filter.value));
@@ -586,7 +594,7 @@ export default defineComponent({
           label: column.label,
           filters,
           searchType: column.type,
-          rowspan: column.rowspan ? true : false,
+          rowspan: column.rowspan,
         };
       });
 
