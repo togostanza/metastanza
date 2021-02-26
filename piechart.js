@@ -4,41 +4,26 @@ import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
 
 async function piechart(stanza, params) {
-  const spec = await fetch(
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
+  const vegaJson = await fetch(
     "https://vega.github.io/vega/examples/pie-chart.vg.json"
   ).then((res) => res.json());
 
-  //width・height・padding
-  // spec.width = params["width"]
-  // spec.height = params["height"]
-  // spec.autosize = params["autosize"]
-  spec.padding = { left: 5, top: 5, right: 150, bottom: 30 };
-
-  //delete default controller
-  for (const signal of spec.signals) {
-    delete signal.bind;
-  }
-
-  //innerpadding
-  spec.signals[2].value = params["inner-padding-angle"];
-  spec.signals[3].value = params["inner-radius"];
+  //width,height,padding
+  const width = Number(params["width"]);
+  const height = Number(params["height"]);
+  const padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
-
-  spec.data = [
+  const data = [
     {
       name: "table",
       url: params["your-data"],
-      // values: [
-      //   { id: 1, field: 4 },
-      //   { id: 2, field: 6 },
-      //   { id: 3, field: 10 },
-      //   { id: 4, field: 3 },
-      //   { id: 5, field: 7 },
-      //   { id: 6, field: 8 },
-      // ],
       transform: [
         {
           type: "pie",
@@ -52,7 +37,7 @@ async function piechart(stanza, params) {
   ];
 
   // scales(color scheme)
-  spec.scales = [
+  const scales = [
     {
       name: "color",
       type: "ordinal",
@@ -69,7 +54,7 @@ async function piechart(stanza, params) {
   ];
 
   //legend
-  spec.legends = [
+  const legends = [
     {
       fill: "color",
       orient: "none",
@@ -77,34 +62,20 @@ async function piechart(stanza, params) {
       legendY: "5",
       title: labelVariable,
       titleColor: "var(--legendtitle-color)",
-      titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-size"
-      ),
-      titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendtitle-weight"
-      ),
+      titleFont: css("--font-family"),
+      titleFontSize: css("--legendtitle-size"),
+      titleFontWeight: css("--legendtitle-weight"),
       labelColor: "var(--legendlabel-color)",
-      labelFont: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--font-family"
-      ),
-      labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
-      ),
+      labelFont: css("--font-family"),
+      labelFontSize: css("--legendlabel-size"),
       symbolType: params["symbol-shape"],
-      symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-color"
-      ),
-      symbolStrokeWidth: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--stroke-width"
-      ),
+      symbolStrokeColor: css("--stroke-color"),
+      symbolStrokeWidth: css("--stroke-width"),
     },
   ];
 
   //marks
-  spec.marks = [
+  const marks = [
     {
       type: "arc",
       from: { data: "table" },
@@ -128,6 +99,24 @@ async function piechart(stanza, params) {
       },
     },
   ];
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width: width,
+    height: height,
+    padding: padding,
+    autosize: "none",
+    signals: vegaJson.signals,
+    data: data,
+    scales: scales,
+    legends: legends,
+    marks: marks,
+  };
+
+  //delete default controller
+  for (const signal of vegaJson.signals) {
+    delete signal.bind;
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -157,7 +146,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "your-data",
-		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
@@ -175,7 +164,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "width",
-		"stanza:example": "400",
+		"stanza:example": "200",
 		"stanza:description": "Width of your stanza"
 	},
 	{
@@ -193,18 +182,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": "none",
 		"stanza:description": ""
-	},
-	{
-		"stanza:key": "inner-padding-angle",
-		"stanza:example": "0",
-		"stanza:description": "Angle of inner padding.(0-0.1)",
-		"stanza:required": false
-	},
-	{
-		"stanza:key": "inner-radius",
-		"stanza:example": "0",
-		"stanza:description": "Inner radius of your pie.(0-99)",
-		"stanza:required": false
 	},
 	{
 		"stanza:key": "symbol-shape",

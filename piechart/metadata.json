@@ -18,7 +18,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "your-data",
-      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_chart?chromosome=1",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Source url of your data.",
       "stanza:required": true
     },
@@ -36,7 +36,7 @@
     },
     {
       "stanza:key": "width",
-      "stanza:example": "400",
+      "stanza:example": "200",
       "stanza:description": "Width of your stanza"
     },
     {
@@ -54,18 +54,6 @@
       "stanza:type": "number",
       "stanza:example": "none",
       "stanza:description": ""
-    },
-    {
-      "stanza:key": "inner-padding-angle",
-      "stanza:example": "0",
-      "stanza:description": "Angle of inner padding.(0-0.1)",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "inner-radius",
-      "stanza:example": "0",
-      "stanza:description": "Inner radius of your pie.(0-99)",
-      "stanza:required": false
     },
     {
       "stanza:key": "symbol-shape",
