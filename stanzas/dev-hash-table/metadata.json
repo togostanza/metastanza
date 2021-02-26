@@ -2,35 +2,29 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table-with-pagination",
-  "stanza:label": "table with pagination",
-  "stanza:definition": "Table with pagination for MetaStanza",
+  "@id": "dev-hash-table",
+  "stanza:label": "dev hash table",
+  "stanza:definition": "Hash Table for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
-  "stanza:provider": "Togostanza",
+  "stanza:provider": "penqe",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
+  "stanza:author": "reikahirahara",
+  "stanza:address": "reikahirahara@gmail.com",
   "stanza:contributor": [],
-  "stanza:created": "2020-12-09",
-  "stanza:updated": "2020-12-09",
+  "stanza:created": "2021-02-19",
+  "stanza:updated": "2021-02-19",
   "stanza:parameter": [
     {
       "stanza:key": "table_data_api",
-      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
+      "stanza:example": "http://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash?dataset=DS810_1",
       "stanza:description": "table data api",
       "stanza:required": true
     },
     {
       "stanza:key": "limit",
-      "stanza:example": "5",
+      "stanza:example": "10",
       "stanza:description": "table page size",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "offset",
-      "stanza:example": "0",
-      "stanza:description": "page numbere",
       "stanza:required": true
     },
     {
@@ -40,27 +34,9 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "page_slider",
-      "stanza:example": "1",
-      "stanza:description": "Page slider on/off",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "tableTitle",
       "stanza:example": "Title of this Table",
       "stanza:description": "Title of the table",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"id\",\"type\":\"literal\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"type\":\"literal\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"type\":\"literal\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"type\":\"decimal\",\"label\":\"Mass\"},{\"id\":\"location_name\",\"type\":\"literal\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"rowspan\":true}]",
-      "stanza:description": "columns' options",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "order",
-      "stanza:example": "id,mnemonic,name,mass,location_name",
-      "stanza:description": "display columns' order",
       "stanza:required": false
     }
   ],
@@ -167,6 +143,12 @@
       "stanza:type": "color",
       "stanza:default": "#fff",
       "stanza:description": "color of search box"
+    },
+    {
+      "stanza:key": "--table-height",
+      "stanza:type": "text",
+      "stanza:default": "400px",
+      "stanza:description": "height of table"
     },
     {
       "stanza:key": "--searchbtn-height",
@@ -301,28 +283,10 @@
       "stanza:description": "display of sort icon"
     },
     {
-      "stanza:key": "--thead-border-top",
+      "stanza:key": "--thead-border-color",
       "stanza:type": "text",
-      "stanza:default": "1px solid #eee",
-      "stanza:description": "border top of thead"
-    },
-    {
-      "stanza:key": "--thead-border-right",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #eee",
-      "stanza:description": "border right of thead"
-    },
-    {
-      "stanza:key": "--thead-border-bottom",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #eee",
-      "stanza:description": "border bottom of thead"
-    },
-    {
-      "stanza:key": "--thead-border-left",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #eee",
-      "stanza:description": "border left of thead"
+      "stanza:default": "#eee",
+      "stanza:description": "border color of thead"
     },
     {
       "stanza:key": "--thead-font-size",
@@ -397,84 +361,11 @@
       "stanza:description": "background color of table body"
     },
     {
-      "stanza:key": "--pagination-padding",
-      "stanza:type": "text",
-      "stanza:default": "12px 0px 0px 0px",
-      "stanza:description": "padding of pagination"
-    },
-    {
-      "stanza:key": "--pagination-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "pagination placement"
-    },
-    {
       "stanza:key": "--showinfo-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "center", "right"],
       "stanza:default": "center",
       "stanza:description": "show info placement"
-    },
-    {
-      "stanza:key": "--paginationbtn-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#002559",
-      "stanza:description": "font color of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-background-color",
-      "stanza:type": "color",
-      "stanza:default": "#ffffff",
-      "stanza:description": "background color of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-border",
-      "stanza:type": "text",
-      "stanza:default": "1px solid rgba(0, 0, 0, .1)",
-      "stanza:description": "border style of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-border-radius",
-      "stanza:type": "text",
-      "stanza:default": "4px",
-      "stanza:description": "border radius of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-padding",
-      "stanza:type": "text",
-      "stanza:default": "2px 8px",
-      "stanza:description": "padding of pagination button"
-    },
-    {
-      "stanza:key": "--paginationbtn-font-size",
-      "stanza:type": "text",
-      "stanza:default": "10px",
-      "stanza:description": "font size of pagination button"
-    },
-    {
-      "stanza:key": "--currentbtn-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#ffffff",
-      "stanza:description": "font color of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-background-color",
-      "stanza:type": "color",
-      "stanza:default": "#256d80",
-      "stanza:description": "background color of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--currentbtn-border",
-      "stanza:type": "text",
-      "stanza:default": "1px solid #DDDDDD",
-      "stanza:description": "border style of pagination button.(at current page)"
-    },
-    {
-      "stanza:key": "--arrowbtn-color",
-      "stanza:type": "color",
-      "stanza:default": "#002559",
-      "stanza:description": "color of pagination arrow button."
     },
     {
       "stanza:key": "--font-family",
