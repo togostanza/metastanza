@@ -1,9 +1,6 @@
 <template>
   <div class="tableOption">
-    <form
-      class="textSearchWrapper"
-      @submit.prevent="setQueryInput()"
-    >
+    <form class="textSearchWrapper" @submit.prevent="setQueryInput()">
       <input
         v-model="state.queryInput"
         type="text"
@@ -111,7 +108,7 @@
               'icon',
               'filterIcon',
               { isShowing: column === state.columnShowingFilters },
-              { active: column.filters.some(filter => !filter.checked) },
+              { active: column.filters.some((filter) => !filter.checked) },
             ]"
             @click="state.columnShowingFilters = column"
           ></span>
@@ -164,7 +161,9 @@
     </tbody>
   </table>
   <div class="paginationWrapper">
-    <div :class="['arrowWrapper', {show: state.pagination.currentPage !== 1}]">
+    <div
+      :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
+    >
       <span
         class="arrow double left"
         @click="
@@ -199,7 +198,12 @@
       </li>
     </ul>
 
-    <div :class="['arrowWrapper', {show: state.pagination.currentPage !== totalPages}]">
+    <div
+      :class="[
+        'arrowWrapper',
+        { show: state.pagination.currentPage !== totalPages },
+      ]"
+    >
       <span
         class="arrow right"
         @click="
@@ -219,12 +223,9 @@
     <form
       class="pageNumber"
       @submit.prevent="jumpToPage(state.jumpToNumberInput)"
-      >
+    >
       Page
-      <input
-        v-model.number="state.jumpToNumberInput"
-        type="text"
-      />
+      <input v-model.number="state.jumpToNumberInput" type="text" />
       of {{ totalPages }}
       <button>Go</button>
     </form>
@@ -269,7 +270,6 @@ export default defineComponent({
   },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
   setup(params) {
-    const columns = JSON.parse(params.columns);
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
@@ -424,17 +424,17 @@ export default defineComponent({
     function setRangeFilters(id) {
       state.rangeInputs[id].value[0] = state.rangeInputs[id].input[0];
       state.rangeInputs[id].value[1] = state.rangeInputs[id].input[1];
-      state.rangeInputs[id].input=[null, null]
+      state.rangeInputs[id].input = [null, null];
     }
 
     function setQueryInput() {
-      state.query = state.queryInput
-      state.queryInput = ""
+      state.query = state.queryInput;
+      state.queryInput = "";
     }
 
     function jumpToPage(num) {
       state.pagination.currentPage = num ? num : 1;
-      state.jumpToNumberInput = ""
+      state.jumpToNumberInput = "";
     }
 
     function submitQuery(column, type, query) {
@@ -552,9 +552,18 @@ export default defineComponent({
       // const data = await res.json();
 
       state.responseJSON = data;
+      const columns = params.columns
+        ? JSON.parse(params.columns)
+        : Object.keys(data[0]).map((key) => {
+            let column = { id: key, label: key }
+            if(typeof data[0][key] === "number") {
+              column.type = "decimal"
+            }
+            return column;
+          });
 
       state.columns = columns.map((column) => {
-        const filters = uniq(data.map((datam) => datam[column.id])).map(
+        const filters = uniq(data.map((datam) => datam[column.id])).sort().map(
           (value) => {
             return {
               value,
