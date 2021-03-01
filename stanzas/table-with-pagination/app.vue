@@ -160,86 +160,60 @@
       </tr>
     </tbody>
   </table>
-  <div class="paginationWrapper">
-    <div
-      :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
-    >
-      <span
-        class="arrow double left"
-        @click="
-          state.pagination.currentPage = 1;
-          pageSlider.click();
-        "
+  <div class="paginationWrapper" ref="paginationWrapper">
+    <div class="serialPagination">
+      <div
+        :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
       >
-      </span>
-      <span
-        class="arrow left"
-        @click="
-          state.pagination.currentPage--;
-          pageSlider.click();
-        "
-      ></span>
-    </div>
+        <span class="arrow double left" @click="state.pagination.currentPage = 1">
+        </span>
+        <span class="arrow left" @click="state.pagination.currentPage--"></span>
+      </div>
 
-    <ul>
-      <li
-        v-for="page in surroundingPages"
-        :key="page"
-        :class="[
-          'pagination',
-          { currentBtn: state.pagination.currentPage === page },
-        ]"
-        @click="
-          state.pagination.currentPage = page;
-          pageSlider.click();
-        "
-      >
-        {{ page }}
-      </li>
-    </ul>
-
-    <div
-      :class="[
-        'arrowWrapper',
-        { show: state.pagination.currentPage !== totalPages },
-      ]"
-    >
-      <span
-        class="arrow right"
-        @click="
-          state.pagination.currentPage++;
-          pageSlider.click();
-        "
-      ></span>
-      <span
-        class="arrow double right"
-        @click="
-          state.pagination.currentPage = totalPages;
-          pageSlider.click();
-        "
-      ></span>
-    </div>
-
-    <form
-      class="pageNumber"
-      @submit.prevent="jumpToPage(state.jumpToNumberInput)"
-    >
-      Page
-      <input v-model.number="state.jumpToNumberInput" type="text" />
-      of {{ totalPages }}
-      <button>Go</button>
-    </form>
-  </div>
-  <div ref="pageSliderWrapper" class="pageSliderWrapper">
-    <canvas class="pageSliderRange" height="50"></canvas>
-    <div class="pageSlider">
-      <div class="pageSliderBar"></div>
-      <ul @mousedown="pageSlider.down">
-        <li class="pageSliderKnob">1</li>
+      <ul class="paginationNumList">
+        <li
+          v-for="page in surroundingPages"
+          :key="page"
+          :class="[
+            'pagination',
+            { currentBtn: state.pagination.currentPage === page },
+          ]"
+          @click="state.pagination.currentPage = page"
+        >
+          {{ page }}
+        </li>
       </ul>
-    </div>
-  </div>
 
+      <div
+        :class="[
+          'arrowWrapper',
+          { show: state.pagination.currentPage !== totalPages },
+        ]"
+      >
+        <span class="arrow right" @click="state.pagination.currentPage++"></span>
+        <span
+          class="arrow double right"
+          @click="state.pagination.currentPage = totalPages"
+        ></span>
+      </div>
+
+      <form
+        class="pageNumber"
+        @submit.prevent="jumpToPage(state.jumpToNumberInput)"
+      >
+        Page
+        <input v-model.number="state.jumpToNumberInput" type="text" />
+        of {{ totalPages }}
+        <button>Go</button>
+      </form>
+    </div>
+    <canvas class="pageSliderRange"></canvas>
+    <Slider
+      v-model="state.pagination.currentPage"
+      v-bind="{ min: 1, max: totalPages }"
+      class="pageSlider">
+    </Slider>
+  </div>
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
     :class="['modalBackground', { black: state.columnShowingTextSearch }]"
@@ -301,12 +275,12 @@ export default defineComponent({
 
       rangeInputs: {},
 
-      knobDrag: false,
-      knobX: 0,
-      startX: 0,
-      knob: false,
-      canvas: false,
-      sliderBarWidth: 0,
+      // knobDrag: false,
+      // knobX: 0,
+      // startX: 0,
+      // knob: false,
+      // canvas: false,
+      // sliderBarWidth: 0,
     });
 
     const filteredRows = computed(() => {
@@ -409,6 +383,28 @@ export default defineComponent({
       return URL.createObjectURL(blob);
     });
 
+    const paginationWrapper = ref(null)
+    function fillPaginaionRange () {
+      const canvas = paginationWrapper.value.getElementsByClassName("pageSliderRange")[0]
+      canvas.width = paginationWrapper.value.clientWidth
+      canvas.height = 50
+      if (canvas.getContext) {
+        const serialPagination = paginationWrapper.value.getElementsByClassName("paginationNumList")[0]
+        const serialPaginationX = serialPagination.offsetLeft
+        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0]
+        const knobTranslate = knob.style.transform.match(/translate\((.+)%,(.+)\)/)[1].split(",")[0]
+        const knobX = (1000 + Number(knobTranslate)) / 1000 * canvas.clientWidth
+        const ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.moveTo(serialPaginationX - serialPagination.parentNode.offsetLeft, 0);
+        ctx.lineTo(serialPaginationX - serialPagination.parentNode.offsetLeft + 111, 0);
+        ctx.lineTo(knobX, 50);
+        ctx.closePath();
+        ctx.fillStyle = "#dddddd";
+        ctx.fill();
+      }
+    }
+
     function setSorting(column) {
       state.sorting.column = column;
       state.sorting.direction =
@@ -468,93 +464,6 @@ export default defineComponent({
       }
     }
 
-    const pageSliderWrapper = ref(null);
-    const pageSlider = {
-      init: () => {
-        const wrapper = pageSliderWrapper.value;
-        if (!params.page_slider) {
-          wrapper.style.display = "none";
-        }
-        wrapper.onmousemove = pageSlider.move;
-        wrapper.onmouseup = pageSlider.up;
-        state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
-        state.canvas = wrapper.getElementsByTagName("canvas")[0];
-        const bar = wrapper.getElementsByClassName("pageSliderBar")[0];
-        state.sliderBarWidth = bar.offsetWidth;
-        pageSlider.setPage(state.knobX, state.pagination.currentPage);
-      },
-      down: (e) => {
-        state.knobDrag = true;
-        state.startX = e.pageX;
-      },
-      move: (e) => {
-        if (state.knobDrag) {
-          let dragX = state.knobX + e.pageX - state.startX;
-          if (dragX < 0) {
-            dragX = 0;
-          }
-          if (dragX > state.sliderBarWidth) {
-            dragX = state.sliderBarWidth;
-          }
-          let page = Math.ceil(
-            (totalPages.value * dragX) / state.sliderBarWidth
-          );
-          if (page < 1) {
-            page = 1;
-          }
-          pageSlider.setPage(dragX, page);
-        }
-      },
-      up: (e) => {
-        if (state.knobDrag) {
-          state.knobX += e.pageX - state.startX;
-          state.pagination.currentPage = parseInt(state.knob.innerHTML);
-          state.knobDrag = false;
-        }
-      },
-      click: () => {
-        state.knobX =
-          (state.sliderBarWidth / (totalPages.value - 1)) *
-          (state.pagination.currentPage - 1);
-        pageSlider.setPage(state.knobX, state.pagination.currentPage);
-      },
-      setPage: (knobX, page) => {
-        state.knob.innerHTML = page;
-        state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
-        state.canvas.setAttribute("width", state.sliderBarWidth);
-        state.canvas.setAttribute("height", 50);
-        const pageButton = state.canvas.parentNode.parentNode
-          .getElementsByClassName("paginationWrapper")[0]
-          .getElementsByTagName("ul")[0];
-        if (state.canvas.getContext) {
-          const ctx = state.canvas.getContext("2d");
-          ctx.clearRect(
-            0,
-            0,
-            state.canvas.offsetWidth,
-            state.canvas.offsetHeight
-          );
-          ctx.beginPath();
-          ctx.moveTo(knobX + state.knob.offsetWidth / 2 - 8, 50);
-          ctx.lineTo(knobX - state.knob.offsetWidth / 2 + 8, 50);
-          ctx.lineTo(
-            pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10,
-            0
-          );
-          ctx.lineTo(
-            pageButton.offsetLeft -
-              pageButton.parentNode.offsetLeft +
-              pageButton.offsetWidth -
-              10,
-            0
-          );
-          ctx.closePath();
-          ctx.fillStyle = "#dddddd";
-          ctx.fill();
-        }
-      },
-    };
-
     async function fetchData() {
       // const res = await fetch(params["table-data-api"]);
       // const data = await res.json();
@@ -611,7 +520,7 @@ export default defineComponent({
     }
 
     onMounted(fetchData);
-    onUpdated(pageSlider.init);
+    onUpdated(fillPaginaionRange);
 
     return {
       state,
@@ -619,6 +528,8 @@ export default defineComponent({
       rowsInCurrentPage,
       surroundingPages,
       blobUrl,
+      paginationWrapper,
+      fillPaginaionRange,
       setSorting,
       setFilters,
       setRangeFilters,
@@ -627,8 +538,6 @@ export default defineComponent({
       submitQuery,
       closeModal,
       isSearchOn,
-      pageSliderWrapper,
-      pageSlider,
     };
   },
 });

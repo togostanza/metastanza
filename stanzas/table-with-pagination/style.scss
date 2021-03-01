@@ -39,107 +39,137 @@ main {
 }
 
 .paginationWrapper {
-  padding: var(--pagination-padding);
-  display: flex;
-  justify-content: var(--pagination-placement);
-  align-items: center;
-  > ul {
+  > .serialPagination {
+    padding: var(--pagination-padding);
     display: flex;
-    padding: 0;
-    > li {
-      color: var(--paginationbtn-font-color);
-      background-color: var(--paginationbtn-background-color);
-      border-right: var(--paginationbtn-border);
-      padding: var(--paginationbtn-padding);
-      font-size: var(--paginationbtn-font-size);
+    justify-content: var(--pagination-placement);
+    align-items: center;
+    > ul {
       display: flex;
-      align-items: center;
-      &:hover {
-        cursor: pointer;
-        color: var(--currentbtn-font-color);
-        background-color: var(--currentbtn-background-color);
-      }
-      &:first-of-type {
-        border-top-left-radius: var(--paginationbtn-border-radius);
-        border-bottom-left-radius: var(--paginationbtn-border-radius);
-      }
-      &:last-of-type {
-        border-top-right-radius: var(--paginationbtn-border-radius);
-        border-bottom-right-radius: var(--paginationbtn-border-radius);
-        border-right: none;
-      }
-      &.currentBtn {
-        color: var(--currentbtn-font-color);
-        background-color: var(--currentbtn-background-color);
-      }
-    }
-  }
-  > .arrowWrapper {
-    min-width: 30px;
-    visibility: hidden;
-    &.show {
-      visibility: visible;
-    }
-    > .arrow {
-      display: inline-block;
-      width: 7px;
-      min-width: 7px;
-      height: 7px;
-      border: 1px solid;
-      border-color: transparent transparent var(--arrowbtn-color)
-        var(--arrowbtn-color);
-      transform: rotate(45deg);
-      margin: 0 2px 0 6px;
-      &.right {
-        transform: rotate(-135deg);
-        margin: 0 6px 0 2px;
-      }
-      &.double {
-        position: relative;
-        &:after {
-          content: "";
-          display: inline-block;
-          width: 7px;
-          height: 7px;
-          border: 1px solid;
-          border-color: transparent transparent var(--arrowbtn-color)
-            var(--arrowbtn-color);
-          transform: rotate(0deg);
-          top: 30%;
-          left: -80%;
-          position: absolute;
-          box-sizing: border-box;
+      padding: 0;
+      > li {
+        color: var(--paginationbtn-font-color);
+        background-color: var(--paginationbtn-background-color);
+        border-right: var(--paginationbtn-border);
+        padding: var(--paginationbtn-padding);
+        font-size: var(--paginationbtn-font-size);
+        display: flex;
+        align-items: center;
+        &:hover {
+          cursor: pointer;
+          color: var(--currentbtn-font-color);
+          background-color: var(--currentbtn-background-color);
         }
-        &.right:after {
-          transform: rotate(0deg);
+        &:first-of-type {
+          border-top-left-radius: var(--paginationbtn-border-radius);
+          border-bottom-left-radius: var(--paginationbtn-border-radius);
+        }
+        &:last-of-type {
+          border-top-right-radius: var(--paginationbtn-border-radius);
+          border-bottom-right-radius: var(--paginationbtn-border-radius);
+          border-right: none;
+        }
+        &.currentBtn {
+          color: var(--currentbtn-font-color);
+          background-color: var(--currentbtn-background-color);
         }
       }
-      &:hover {
-        cursor: pointer;
+    }
+    > .arrowWrapper {
+      min-width: 30px;
+      visibility: hidden;
+      &.show {
+        visibility: visible;
+      }
+      > .arrow {
+        display: inline-block;
+        width: 7px;
+        min-width: 7px;
+        height: 7px;
+        border: 1px solid;
+        border-color: transparent transparent var(--arrowbtn-color)
+          var(--arrowbtn-color);
+        transform: rotate(45deg);
+        margin: 0 2px 0 6px;
+        &.right {
+          transform: rotate(-135deg);
+          margin: 0 6px 0 2px;
+        }
+        &.double {
+          position: relative;
+          &:after {
+            content: "";
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border: 1px solid;
+            border-color: transparent transparent var(--arrowbtn-color)
+              var(--arrowbtn-color);
+            transform: rotate(0deg);
+            top: 30%;
+            left: -80%;
+            position: absolute;
+            box-sizing: border-box;
+          }
+          &.right:after {
+            transform: rotate(0deg);
+          }
+        }
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
-  }
-  > .pageNumber {
-    margin-left: 20px;
-    > input[type="text"] {
-      width: 40px;
-      height: var(--searchbox-height);
-      border: 1px solid var(--searchbox-border-color);
-      border-radius: var(--searchbox-radius);
-      font-size: var(--searchbox-font-size);
-      color: var(--searchbox-font-color);
-      background-color: var(--searchbox-background-color);
-      &::placeholder {
-        padding: 0px 0px 0px 4px;
+    > .pageNumber {
+      margin-left: 20px;
+      > input[type="text"] {
+        width: 40px;
+        height: var(--searchbox-height);
+        border: 1px solid var(--searchbox-border-color);
+        border-radius: var(--searchbox-radius);
+        font-size: var(--searchbox-font-size);
         color: var(--searchbox-font-color);
+        background-color: var(--searchbox-background-color);
+        &::placeholder {
+          padding: 0px 0px 0px 4px;
+          color: var(--searchbox-font-color);
+        }
+      }
+      > button {
+        @include button;
+        display: inline-block;
+        margin-left: 3px;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
-    > button {
-      @include button;
-      display: inline-block;
-      margin-left: 3px;
-      &:hover {
-        cursor: pointer;
+  }
+  .pageSlider {
+    height: 4px;
+    margin-top: -5px;
+    .slider-connects {
+      background-color: #bbbbbb;
+      .slider-connect {
+        background-color: #bbbbbb;
+      }
+    }
+    .slider-handle {
+      > .slider-tooltip {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        bottom: auto;
+        line-height: 1.3;
+        color: var(--currentbtn-font-color);
+        background-color: var(--currentbtn-background-color);
+        border: var(--paginationbtn-border);
+        padding: var(--paginationbtn-padding);
+        font-size: var(--paginationbtn-font-size);
+        border-radius: var(--paginationbtn-border-radius);
+        &:before {
+          display: none;
+        }
       }
     }
   }
@@ -258,52 +288,6 @@ main {
   z-index: 2;
   &.black {
     background-color: rgba(0, 0, 0, 0.3);
-  }
-}
-
-
-.pageSliderWrapper {
-  padding: 0px 0px 10px 0px;
-  > .pageSliderRange {
-    margin-left: 10px;
-  }
-}
-
-.pageSlider {
-  width: 100%;
-  text-align: left;
-  position: relative;
-  top: -16px;
-  > .pageSliderBar {
-    width: calc(100% - 20px);
-    margin-left: 10px;
-    background-color: #bbbbbb;
-    height: 4px;
-    position: relative;
-    top: 10px;
-    z-index: 0;
-  }
-  > ul {
-    padding: 0;
-    display: inline-block;
-    z-index: 2;
-    > li.pageSliderKnob {
-      color: var(--currentbtn-font-color);
-      background-color: var(--currentbtn-background-color);
-      border: var(--paginationbtn-border);
-      padding: var(--paginationbtn-padding);
-      font-size: var(--paginationbtn-font-size);
-      align-items: center;
-      display: inline;
-      border-radius: var(--paginationbtn-border-radius);
-      user-select: none;
-      &:hover {
-        cursor: pointer;
-        color: var(--paginationbtn-font-color);
-        background-color: var(--paginationbtn-background-color);
-        border-color: var(--searchbox-border-color);
-      }
-    }
   }
 }
 
@@ -496,49 +480,4 @@ table {
 .modal_bg-enter-active,
 .modal_bg-leave-active {
   transition: opacity 0.4s;
-}
-
-.pageSliderWrapper {
-  padding: 0px 0px 10px 0px;
-  > .pageSliderRange {
-    margin-left: 10px;
-  }
-}
-
-.pageSlider {
-  width: 100%;
-  text-align: left;
-  position: relative;
-  top: -16px;
-  > .pageSliderBar {
-    width: calc(100% - 20px);
-    margin-left: 10px;
-    background-color: #bbbbbb;
-    height: 4px;
-    position: relative;
-    top: 10px;
-    z-index: 0;
-  }
-  > ul {
-    padding: 0;
-    display: inline-block;
-    z-index: 2;
-    > li.pageSliderKnob {
-      color: var(--currentbtn-font-color);
-      background-color: var(--currentbtn-background-color);
-      border: var(--paginationbtn-border);
-      padding: var(--paginationbtn-padding);
-      font-size: var(--paginationbtn-font-size);
-      align-items: center;
-      display: inline;
-      border-radius: var(--paginationbtn-border-radius);
-      user-select: none;
-      &:hover {
-        cursor: pointer;
-        color: var(--paginationbtn-font-color);
-        background-color: var(--paginationbtn-background-color);
-        border-color: var(--searchbox-border-color);
-      }
-    }
-  }
 }
