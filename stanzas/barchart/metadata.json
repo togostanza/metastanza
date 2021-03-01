@@ -23,7 +23,7 @@
     },
     {
       "stanza:key": "your-data",
-      "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Source url of your data.",
       "stanza:required": true
     },

@@ -239,9 +239,7 @@ export default async function barchart(stanza, params) {
                     x2: { scale: "xscale", value: 0 },
                     fill: { scale: "color", field: groupVariable },
                     stroke: { value: "var(--stroke-color)" },
-                    strokeWidth: {
-                      value: css("--stroke-width"),
-                    },
+                    strokeWidth: { value: css("--stroke-width") },
                   },
                 },
               },

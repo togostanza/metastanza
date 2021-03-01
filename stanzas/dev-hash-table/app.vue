@@ -1,6 +1,6 @@
 <template>
   <div class="tableWrapper">
-  <!-- <div class="tableWrapper" @scroll="handleScroll"> -->
+    <!-- <div class="tableWrapper" @scroll="handleScroll"> -->
     <!-- <table v-if="state.allRows">
       <thead>
         <tr>
@@ -55,9 +55,7 @@ export default defineComponent({
 
     async function fetchData() {
       state.isFetchingData = true;
-      const res = await fetch(
-        `${params.table_data_api}`
-      );
+      const res = await fetch(`${params.table_data_api}`);
       // const data = await res.json();
       console.log("res", res);
 
