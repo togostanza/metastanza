@@ -5,6 +5,7 @@
         v-model="state.queryInput"
         type="text"
         placeholder="Search for keywords..."
+        class="textSearchInput"
       />
       <button class="searchBtn" type="submit">
         <img
@@ -67,7 +68,6 @@
           "
         >
           <input
-            id="queryInputByColumn"
             v-model="state.queryInputByColumn"
             type="text"
             placeholder="Search for keywords..."
@@ -139,8 +139,8 @@
                 </li>
               </ul>
               <div class="toggleAllButton">
-                <button @click="setFilters(column, true)">Select All</button>
-                <button @click="setFilters(column, false)">Clear</button>
+                <button class="selectAll" @click="setFilters(column, true)">Select All</button>
+                <button class="clear" @click="setFilters(column, false)">Clear</button>
               </div>
             </div>
           </div>
@@ -160,12 +160,15 @@
       </tr>
     </tbody>
   </table>
-  <div class="paginationWrapper" ref="paginationWrapper">
+  <div ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div
         :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
       >
-        <span class="arrow double left" @click="state.pagination.currentPage = 1">
+        <span
+          class="arrow double left"
+          @click="state.pagination.currentPage = 1"
+        >
         </span>
         <span class="arrow left" @click="state.pagination.currentPage--"></span>
       </div>
@@ -190,7 +193,10 @@
           { show: state.pagination.currentPage !== totalPages },
         ]"
       >
-        <span class="arrow right" @click="state.pagination.currentPage++"></span>
+        <span
+          class="arrow right"
+          @click="state.pagination.currentPage++"
+        ></span>
         <span
           class="arrow double right"
           @click="state.pagination.currentPage = totalPages"
@@ -202,7 +208,7 @@
         @submit.prevent="jumpToPage(state.jumpToNumberInput)"
       >
         Page
-        <input v-model.number="state.jumpToNumberInput" type="text" />
+        <input v-model.number="state.jumpToNumberInput" type="text" class="jumpToNumberInput"/>
         of {{ totalPages }}
         <button>Go</button>
       </form>
@@ -211,7 +217,8 @@
     <Slider
       v-model="state.pagination.currentPage"
       v-bind="{ min: 1, max: totalPages }"
-      class="pageSlider">
+      class="pageSlider"
+    >
     </Slider>
   </div>
   <div
@@ -383,21 +390,36 @@ export default defineComponent({
       return URL.createObjectURL(blob);
     });
 
-    const paginationWrapper = ref(null)
-    function fillPaginaionRange () {
-      const canvas = paginationWrapper.value.getElementsByClassName("pageSliderRange")[0]
-      canvas.width = paginationWrapper.value.clientWidth
-      canvas.height = 50
+    const paginationWrapper = ref(null);
+    function fillPaginaionRange() {
+      const canvas = paginationWrapper.value.getElementsByClassName(
+        "pageSliderRange"
+      )[0];
+      canvas.width = paginationWrapper.value.clientWidth;
+      canvas.height = 50;
       if (canvas.getContext) {
-        const serialPagination = paginationWrapper.value.getElementsByClassName("paginationNumList")[0]
-        const serialPaginationX = serialPagination.offsetLeft
-        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0]
-        const knobTranslate = knob.style.transform.match(/translate\((.+)%,(.+)\)/)[1].split(",")[0]
-        const knobX = (1000 + Number(knobTranslate)) / 1000 * canvas.clientWidth
-        const ctx = canvas.getContext('2d');
+        const serialPagination = paginationWrapper.value.getElementsByClassName(
+          "paginationNumList"
+        )[0];
+        const serialPaginationX = serialPagination.offsetLeft;
+        const knob = paginationWrapper.value.getElementsByClassName(
+          "slider-origin"
+        )[0];
+        const knobTranslate = knob.style.transform
+          .match(/translate\((.+)%,(.+)\)/)[1]
+          .split(",")[0];
+        const knobX =
+          ((1000 + Number(knobTranslate)) / 1000) * canvas.clientWidth;
+        const ctx = canvas.getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(serialPaginationX - serialPagination.parentNode.offsetLeft, 0);
-        ctx.lineTo(serialPaginationX - serialPagination.parentNode.offsetLeft + 111, 0);
+        ctx.moveTo(
+          serialPaginationX - serialPagination.parentNode.offsetLeft,
+          0
+        );
+        ctx.lineTo(
+          serialPaginationX - serialPagination.parentNode.offsetLeft + 111,
+          0
+        );
         ctx.lineTo(knobX, 50);
         ctx.closePath();
         ctx.fillStyle = "#dddddd";
@@ -472,7 +494,7 @@ export default defineComponent({
       const columns = params.columns
         ? JSON.parse(params.columns)
         : Object.keys(data[0]).map((key) => {
-            let column = { id: key, label: key };
+            const column = { id: key, label: key };
             if (typeof data[0][key] === "number") {
               column.type = "decimal";
             }
