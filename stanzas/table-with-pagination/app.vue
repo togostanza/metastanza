@@ -25,7 +25,10 @@
         <div v-if="state.columnShowingTextSearch.searchType === 'decimal'">
           <Slider
             v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
-            v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
+            v-bind="{
+              min: state.rangeInputs[state.columnShowingTextSearch.id].min,
+              max: state.rangeInputs[state.columnShowingTextSearch.id].max,
+            }"
           ></Slider>
           <div class="rangeInput">
             <form
@@ -139,8 +142,12 @@
                 </li>
               </ul>
               <div class="toggleAllButton">
-                <button class="selectAll" @click="setFilters(column, true)">Select All</button>
-                <button class="clear" @click="setFilters(column, false)">Clear</button>
+                <button class="selectAll" @click="setFilters(column, true)">
+                  Select All
+                </button>
+                <button class="clear" @click="setFilters(column, false)">
+                  Clear
+                </button>
               </div>
             </div>
           </div>
@@ -208,7 +215,11 @@
         @submit.prevent="jumpToPage(state.jumpToNumberInput)"
       >
         Page
-        <input v-model.number="state.jumpToNumberInput" type="text" class="jumpToNumberInput"/>
+        <input
+          v-model.number="state.jumpToNumberInput"
+          type="text"
+          class="jumpToNumberInput"
+        />
         of {{ totalPages }}
         <button>Go</button>
       </form>
