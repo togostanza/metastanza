@@ -25,10 +25,8 @@
         <div v-if="state.columnShowingTextSearch.searchType === 'decimal'">
           <Slider
             v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
-            v-bind="{
-              min: state.rangeInputs[state.columnShowingTextSearch.id].min,
-              max: state.rangeInputs[state.columnShowingTextSearch.id].max,
-            }"
+            :min="state.rangeInputs[state.columnShowingTextSearch.id].min"
+            :max="state.rangeInputs[state.columnShowingTextSearch.id].max"
           ></Slider>
           <div class="rangeInput">
             <form
@@ -227,7 +225,8 @@
     <canvas class="pageSliderRange"></canvas>
     <Slider
       v-model="state.pagination.currentPage"
-      v-bind="{ min: 1, max: totalPages }"
+      :min="1"
+      :max="totalPages"
       class="pageSlider"
     >
     </Slider>
