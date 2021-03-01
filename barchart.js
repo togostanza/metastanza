@@ -242,9 +242,7 @@ async function barchart(stanza, params) {
                     x2: { scale: "xscale", value: 0 },
                     fill: { scale: "color", field: groupVariable },
                     stroke: { value: "var(--stroke-color)" },
-                    strokeWidth: {
-                      value: css("--stroke-width"),
-                    },
+                    strokeWidth: { value: css("--stroke-width") },
                   },
                 },
               },
@@ -317,7 +315,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "your-data",
-		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of your data.",
 		"stanza:required": true
 	},
