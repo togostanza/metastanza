@@ -312,11 +312,16 @@ export default defineComponent({
         })
         .filter((row) => {
           return row.some((cell) => {
-            return (
-              cell.column.searchType === "number" &&
-              cell.value >= cell.column.rangeMinMax[0] &&
-              cell.value <= cell.column.rangeMinMax[1]
-            );
+            switch(cell.column.searchType) {
+              case "number" :
+                return (
+                  cell.column.searchType === "number" &&
+                  cell.value >= cell.column.rangeMinMax[0] &&
+                  cell.value <= cell.column.rangeMinMax[1]
+                );
+              default:
+                return true
+            }
           })
         })
         .filter((row) => {
@@ -480,15 +485,19 @@ export default defineComponent({
       // const data = await res.json();
 
       state.responseJSON = data;
-      const columns = params.columns
-        ? JSON.parse(params.columns)
-        : Object.keys(data[0]).map((key) => {
-            const column = { id: key, label: key };
-            if (typeof data[0][key] === "number") {
-              column.type = "number";
-            }
-            return column;
-          });
+      let columns = []
+      if(params.columns) {
+        columns = JSON.parse(params.columns)
+      } else if (data.length !== 0) {
+        const firstRow = data[0];
+        columns = Object.entries(firstRow).map(([key, value]) => {
+          return {
+            id:    key,
+            label: key,
+            type: null
+          };
+        });
+      }
 
       state.columns = columns.map((column) => {
         const filters = uniq(data.map((datam) => datam[column.id]))
@@ -499,8 +508,10 @@ export default defineComponent({
               checked: true,
             };
           });
-        const minValue = column.type === "number" ? Math.min(...filters.map((filter) => filter.value)) : null;
-        const maxValue = column.type === "number" ? Math.max(...filters.map((filter) => filter.value)) : null;
+        const filterValues = filters.map((filter) => filter.value)
+        const minValue = column.type === "number" ? Math.min(...filterValues) : null;
+        const maxValue = column.type === "number" ? Math.max(...filterValues) : null;
+
         return {
           id: column.id,
           label: column.label,
@@ -514,7 +525,6 @@ export default defineComponent({
           inputtingPageMax: null,
         };
       });
-      console.log('state.columns', state.columns)
 
       state.allRows = data.map((row) => {
         return state.columns.map((column) => {
