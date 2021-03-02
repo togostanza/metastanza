@@ -350,15 +350,15 @@ table {
               height: 12px;
               top: -4px;
               right: -6px;
+              .slider-tooltip {
+                border: 1px solid var(--thead-font-color);
+                background: var(--thead-font-color);
+                padding: 0 6px;
+                line-height: 1.4em;
+                bottom: 20px;
+              }
             }
 
-            .slider-tooltip {
-              border: 1px solid var(--thead-font-color);
-              background: var(--thead-font-color);
-              padding: 0 6px;
-              line-height: 1.4em;
-              bottom: 20px;
-            }
           }
 
           .rangeInput {

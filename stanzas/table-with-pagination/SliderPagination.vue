@@ -2,14 +2,14 @@
   <div ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div
-        :class="['arrowWrapper', { show: prop.pagination.currentPage !== 1 }]"
+        :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
       >
         <span
           class="arrow double left"
-          @click="prop.pagination.currentPage = 1"
+          @click="state.pagination.currentPage = 1"
         >
         </span>
-        <span class="arrow left" @click="prop.pagination.currentPage--"></span>
+        <span class="arrow left" @click="state.pagination.currentPage--"></span>
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
@@ -18,9 +18,9 @@
           :key="page"
           :class="[
             'pagination',
-            { currentBtn: prop.pagination.currentPage === page },
+            { currentBtn: state.pagination.currentPage === page },
           ]"
-          @click="prop.pagination.currentPage = page"
+          @click="state.pagination.currentPage = page"
         >
           {{ page }}
         </li>
@@ -29,16 +29,13 @@
       <div
         :class="[
           'arrowWrapper',
-          { show: prop.pagination.currentPage !== prop.totalPages },
+          { show: state.pagination.currentPage !== prop.totalPages },
         ]"
       >
-        <span
-          class="arrow right"
-          @click="prop.pagination.currentPage++"
-        ></span>
+        <span class="arrow right" @click="state.pagination.currentPage++"></span>
         <span
           class="arrow double right"
-          @click="prop.pagination.currentPage = prop.totalPages"
+          @click="state.pagination.currentPage = prop.totalPages"
         ></span>
       </div>
 
@@ -58,7 +55,7 @@
     </div>
     <canvas ref="canvas" class="canvas"></canvas>
     <Slider
-      v-model="prop.pagination.currentPage"
+      v-model="state.pagination.currentPage"
       :min="1"
       :max="prop.totalPages"
       class="pageSlider"
@@ -68,13 +65,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  computed,
-  onUpdated,
-  ref,
-} from "vue";
+import { defineComponent, reactive, computed, onUpdated, ref } from "vue";
 
 import Slider from "@vueform/slider";
 
@@ -84,17 +75,18 @@ export default defineComponent({
   },
   props: {
     prop: {
-      type: Object
-    }
+      type: Object,
+      default: () => {}
+    },
   },
   setup(props) {
     const state = reactive({
-      jumpToNumberInput: ""
-    })
+      jumpToNumberInput: "",
+      pagination: props.prop.pagination
+    });
     const surroundingPages = computed(() => {
-      const {pagination} = props.prop
-      const {totalPages} = props.prop
-      const {currentPage} = pagination;
+      const { totalPages } = props.prop;
+      const { currentPage } = state.pagination;
       let start, end;
       if (currentPage <= 3) {
         start = 1;
@@ -110,19 +102,21 @@ export default defineComponent({
     });
 
     function jumpToPage(num) {
-      props.prop.pagination.currentPage = num ? num : 1;
+      state.pagination.currentPage = num ? num : 1;
       state.jumpToNumberInput = "";
     }
 
     const paginationWrapper = ref(null);
     const canvas = ref(null);
-    const paginationNumList = ref(null)
+    const paginationNumList = ref(null);
     function fillPaginaionRange() {
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
       if (canvas.value.getContext) {
         const paginationNumListX = paginationNumList.value.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0];
+        const knob = paginationWrapper.value.getElementsByClassName(
+          "slider-origin"
+        )[0];
         const knobTranslate = knob.style.transform
           .match(/translate\((.+)%,(.+)\)/)[1]
           .split(",")[0];
@@ -135,7 +129,9 @@ export default defineComponent({
           0
         );
         ctx.lineTo(
-          paginationNumListX - paginationNumList.value.parentNode.offsetLeft + 111,
+          paginationNumListX -
+            paginationNumList.value.parentNode.offsetLeft +
+            111,
           0
         );
         ctx.lineTo(knobX, 50);
@@ -145,7 +141,7 @@ export default defineComponent({
       }
     }
 
-    onUpdated(fillPaginaionRange)
+    onUpdated(fillPaginaionRange);
 
     return {
       surroundingPages,
@@ -154,8 +150,8 @@ export default defineComponent({
       paginationWrapper,
       fillPaginaionRange,
       canvas,
-      paginationNumList
-    }
-  }
+      paginationNumList,
+    };
+  },
 });
 </script>

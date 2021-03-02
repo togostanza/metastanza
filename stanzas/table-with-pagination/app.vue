@@ -160,9 +160,7 @@
       </tr>
     </tbody>
   </table>
-  <SliderPagination
-    :prop="{ pagination: state.pagination, totalPages }"
-  />
+  <SliderPagination :prop="{ pagination: state.pagination, totalPages }" />
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
     :class="['modalBackground', { black: state.columnShowingTextSearch }]"
@@ -171,12 +169,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  computed,
-  onMounted
-} from "vue";
+import { defineComponent, reactive, computed, onMounted } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
 
@@ -366,7 +359,7 @@ export default defineComponent({
         columns = JSON.parse(params.columns);
       } else if (data.length !== 0) {
         const firstRow = data[0];
-        columns = Object.entries(firstRow).map(([key, value]) => {
+        columns = Object.keys(firstRow).map((key) => {
           return {
             id: key,
             label: key,
