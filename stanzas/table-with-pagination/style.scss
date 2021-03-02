@@ -187,93 +187,36 @@ main {
       height: var(--dlbtn-img-height);
     }
   }
-  .textSearchWrapper {
+}
+
+.textSearchWrapper {
+  height: var(--searchbox-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > input[type="text"] {
+    margin-right: 3px;
     height: var(--searchbox-height);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > input[type="text"] {
-      margin-right: 3px;
-      height: var(--searchbox-height);
-      width: var(--searchbox-width);
-      border: 1px solid var(--searchbox-border-color);
-      border-radius: var(--searchbox-radius);
-      font-size: var(--searchbox-font-size);
+    width: var(--searchbox-width);
+    border: 1px solid var(--searchbox-border-color);
+    border-radius: var(--searchbox-radius);
+    font-size: var(--searchbox-font-size);
+    color: var(--searchbox-font-color);
+    background-color: var(--searchbox-background-color);
+    &::placeholder {
+      padding: 0px 0px 0px 4px;
       color: var(--searchbox-font-color);
-      background-color: var(--searchbox-background-color);
-      &::placeholder {
-        padding: 0px 0px 0px 4px;
-        color: var(--searchbox-font-color);
-      }
-    }
-    > .searchBtn {
-      @include button;
-      margin-right: 2px;
-      height: var(--searchbtn-height);
-      width: var(--searchbtn-width);
-      > img {
-        width: var(--searchbtn-img-width);
-        height: var(--searchbtn-img-height);
-        display: var(--searchimg-display); //block;
-      }
     }
   }
-  > .textSearchByColumnWrapper {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    background: #ffffff;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-    > p.title {
-      display: block;
-      padding: 6px 16px;
-      background-color: var(--thead-font-color);
-      color: #ffffff;
-    }
-    > .textSearchWrapper {
-      padding: 26px 40px 26px 20px;
-      > input[name="queryInputByColumn"] {
-        margin-right: 4px;
-      }
-    }
-    #slider {
-      margin: 60px 40px 10px;
-      width: 230px;
-      .slider-connect {
-        background-color: var(--thead-font-color);
-      }
-    }
-
-    .slider-horizontal {
-      .slider-handle {
-        width: 12px;
-        height: 12px;
-        top: -4px;
-        right: -6px;
-      }
-
-      .slider-tooltip {
-        border: 1px solid var(--thead-font-color);
-        background: var(--thead-font-color);
-        padding: 0 6px;
-        line-height: 1.4em;
-        bottom: 20px;
-      }
-    }
-
-    .rangeInput {
-      width: 242px;
-      margin: 0 34px 30px;
-      display: flex;
-      justify-content: space-between;
-      > form {
-        width: 20%;
-        input[type="text"] {
-          width: 100%;
-        }
-      }
+  > .searchBtn {
+    @include button;
+    margin-right: 2px;
+    height: var(--searchbtn-height);
+    width: var(--searchbtn-width);
+    > img {
+      width: var(--searchbtn-img-width);
+      height: var(--searchbtn-img-height);
+      display: var(--searchimg-display); //block;
     }
   }
 }
@@ -369,6 +312,64 @@ table {
                 &:last-of-type {
                   width: 40%;
                 }
+              }
+            }
+          }
+        }
+        > .textSearchByColumnWrapper {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 3;
+          background: #ffffff;
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+          > p.title {
+            display: block;
+            padding: 6px 16px;
+            background-color: var(--thead-font-color);
+            color: #ffffff;
+          }
+          > .textSearchWrapper {
+            padding: 26px 40px 26px 20px;
+            > input[name="queryInputByColumn"] {
+              margin-right: 4px;
+            }
+          }
+          #slider {
+            margin: 60px 40px 10px;
+            width: 230px;
+            .slider-connect {
+              background-color: var(--thead-font-color);
+            }
+          }
+
+          .slider-horizontal {
+            .slider-handle {
+              width: 12px;
+              height: 12px;
+              top: -4px;
+              right: -6px;
+            }
+
+            .slider-tooltip {
+              border: 1px solid var(--thead-font-color);
+              background: var(--thead-font-color);
+              padding: 0 6px;
+              line-height: 1.4em;
+              bottom: 20px;
+            }
+          }
+
+          .rangeInput {
+            width: 242px;
+            margin: 0 34px 30px;
+            display: flex;
+            justify-content: space-between;
+            > form {
+              width: 20%;
+              input[type="text"] {
+                width: 100%;
               }
             }
           }
