@@ -86,7 +86,9 @@
               class="textSearchByColumnWrapper modal"
             >
               <p class="title">
-                <template v-if="state.columnShowingTextSearch.searchType === 'number'">
+                <template
+                  v-if="state.columnShowingTextSearch.searchType === 'number'"
+                >
                   Set {{ state.columnShowingTextSearch.label }} range
                 </template>
                 <template v-else>
@@ -100,22 +102,14 @@
                   :max="column.maxValue"
                 ></Slider>
                 <div class="rangeInput">
-                  <form
-                    @submit.prevent="
-                      setRangeFilters(column)
-                    "
-                  >
+                  <form @submit.prevent="setRangeFilters(column)">
                     <input
                       v-model="column.inputtingPageMin"
                       type="text"
                       class="min"
                     />
                   </form>
-                  <form
-                    @submit.prevent="
-                      setRangeFilters(column)
-                    "
-                  >
+                  <form @submit.prevent="setRangeFilters(column)">
                     <input
                       v-model="column.inputtingPageMax"
                       type="text"
@@ -166,72 +160,9 @@
       </tr>
     </tbody>
   </table>
-  <div ref="paginationWrapper" class="paginationWrapper">
-    <div class="serialPagination">
-      <div
-        :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
-      >
-        <span
-          class="arrow double left"
-          @click="state.pagination.currentPage = 1"
-        >
-        </span>
-        <span class="arrow left" @click="state.pagination.currentPage--"></span>
-      </div>
-
-      <ul class="paginationNumList">
-        <li
-          v-for="page in surroundingPages"
-          :key="page"
-          :class="[
-            'pagination',
-            { currentBtn: state.pagination.currentPage === page },
-          ]"
-          @click="state.pagination.currentPage = page"
-        >
-          {{ page }}
-        </li>
-      </ul>
-
-      <div
-        :class="[
-          'arrowWrapper',
-          { show: state.pagination.currentPage !== totalPages },
-        ]"
-      >
-        <span
-          class="arrow right"
-          @click="state.pagination.currentPage++"
-        ></span>
-        <span
-          class="arrow double right"
-          @click="state.pagination.currentPage = totalPages"
-        ></span>
-      </div>
-
-      <form
-        class="pageNumber"
-        @submit.prevent="jumpToPage(state.jumpToNumberInput)"
-      >
-        Page
-        <input
-          v-model.number="state.jumpToNumberInput"
-          type="text"
-          class="jumpToNumberInput"
-        />
-        of {{ totalPages }}
-        <button>Go</button>
-      </form>
-    </div>
-    <canvas class="pageSliderRange"></canvas>
-    <Slider
-      v-model="state.pagination.currentPage"
-      :min="1"
-      :max="totalPages"
-      class="pageSlider"
-    >
-    </Slider>
-  </div>
+  <SliderPagination
+    :prop="{ pagination: state.pagination, totalPages }"
+  />
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
     :class="['modalBackground', { black: state.columnShowingTextSearch }]"
@@ -244,10 +175,10 @@ import {
   defineComponent,
   reactive,
   computed,
-  onMounted,
-  onUpdated,
-  ref,
+  onMounted
 } from "vue";
+
+import SliderPagination from "./SliderPagination.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -259,6 +190,7 @@ import data from "./assets/tableDataWithNumber.json"; // for range filter test
 export default defineComponent({
   components: {
     Slider,
+    SliderPagination,
   },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
   setup(params) {
@@ -289,7 +221,6 @@ export default defineComponent({
 
       queryInput: "",
       queryInputByColumn: "",
-      jumpToNumberInput: "",
     });
 
     const filteredRows = computed(() => {
@@ -312,17 +243,17 @@ export default defineComponent({
         })
         .filter((row) => {
           return row.some((cell) => {
-            switch(cell.column.searchType) {
-              case "number" :
+            switch (cell.column.searchType) {
+              case "number":
                 return (
                   cell.column.searchType === "number" &&
                   cell.value >= cell.column.rangeMinMax[0] &&
                   cell.value <= cell.column.rangeMinMax[1]
                 );
               default:
-                return true
+                return true;
             }
-          })
+          });
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -361,25 +292,6 @@ export default defineComponent({
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
-    const surroundingPages = computed(() => {
-      const currentPage = state.pagination.currentPage;
-
-      let start, end;
-
-      if (currentPage <= 3) {
-        start = 1;
-        end = Math.min(start + 4, totalPages.value);
-      } else if (totalPages.value - currentPage <= 3) {
-        end = totalPages.value;
-        start = Math.max(end - 4, 1);
-      } else {
-        start = Math.max(currentPage - 2, 1);
-        end = Math.min(currentPage + 2, totalPages.value);
-      }
-
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-    });
-
     const blobUrl = computed(() => {
       const json = state.responseJSON;
 
@@ -394,37 +306,6 @@ export default defineComponent({
       return URL.createObjectURL(blob);
     });
 
-    const paginationWrapper = ref(null);
-    function fillPaginaionRange() {
-      const canvas = paginationWrapper.value.getElementsByClassName("pageSliderRange")[0]; //refにする、親から掘らない
-      canvas.width = paginationWrapper.value.clientWidth;
-      canvas.height = 50;
-      if (canvas.getContext) {
-        const serialPagination = paginationWrapper.value.getElementsByClassName("paginationNumList")[0];
-        const serialPaginationX = serialPagination.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0];
-        const knobTranslate = knob.style.transform
-          .match(/translate\((.+)%,(.+)\)/)[1]
-          .split(",")[0];
-        const knobX =
-          ((1000 + Number(knobTranslate)) / 1000) * canvas.clientWidth;
-        const ctx = canvas.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(
-          serialPaginationX - serialPagination.parentNode.offsetLeft,
-          0
-        );
-        ctx.lineTo(
-          serialPaginationX - serialPagination.parentNode.offsetLeft + 111,
-          0
-        );
-        ctx.lineTo(knobX, 50);
-        ctx.closePath();
-        ctx.fillStyle = "#dddddd";
-        ctx.fill();
-      }
-    }
-
     function setSorting(column) {
       state.sorting.column = column;
       state.sorting.direction =
@@ -438,20 +319,15 @@ export default defineComponent({
     }
 
     function setRangeFilters(column) {
-      column.rangeMinMax[0] = column.inputtingPageMin
-      column.rangeMinMax[1] = column.inputtingPageMax
-      column.inputtingPageMin = null
-      column.inputtingPageMax = null
+      column.rangeMinMax[0] = column.inputtingPageMin;
+      column.rangeMinMax[1] = column.inputtingPageMax;
+      column.inputtingPageMin = null;
+      column.inputtingPageMax = null;
     }
 
     function setQueryInput() {
       state.query = state.queryInput;
       state.queryInput = "";
-    }
-
-    function jumpToPage(num) {
-      state.pagination.currentPage = num ? num : 1;
-      state.jumpToNumberInput = "";
     }
 
     function submitQuery(column, type, query) {
@@ -485,16 +361,16 @@ export default defineComponent({
       // const data = await res.json();
 
       state.responseJSON = data;
-      let columns = []
-      if(params.columns) {
-        columns = JSON.parse(params.columns)
+      let columns = [];
+      if (params.columns) {
+        columns = JSON.parse(params.columns);
       } else if (data.length !== 0) {
         const firstRow = data[0];
         columns = Object.entries(firstRow).map(([key, value]) => {
           return {
-            id:    key,
+            id: key,
             label: key,
-            type: null
+            type: null,
           };
         });
       }
@@ -508,9 +384,11 @@ export default defineComponent({
               checked: true,
             };
           });
-        const filterValues = filters.map((filter) => filter.value)
-        const minValue = column.type === "number" ? Math.min(...filterValues) : null;
-        const maxValue = column.type === "number" ? Math.max(...filterValues) : null;
+        const filterValues = filters.map((filter) => filter.value);
+        const minValue =
+          column.type === "number" ? Math.min(...filterValues) : null;
+        const maxValue =
+          column.type === "number" ? Math.max(...filterValues) : null;
 
         return {
           id: column.id,
@@ -539,21 +417,16 @@ export default defineComponent({
     }
 
     onMounted(fetchData);
-    onUpdated(fillPaginaionRange);
 
     return {
       state,
       totalPages,
       rowsInCurrentPage,
-      surroundingPages,
       blobUrl,
-      paginationWrapper,
-      fillPaginaionRange,
       setSorting,
       setFilters,
       setRangeFilters,
       setQueryInput,
-      jumpToPage,
       submitQuery,
       closeModal,
       isSearchOn,
