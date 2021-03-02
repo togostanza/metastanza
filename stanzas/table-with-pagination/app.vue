@@ -14,75 +14,6 @@
         />
       </button>
     </form>
-    <transition name="modal">
-      <div
-        v-if="state.columnShowingTextSearch !== null"
-        class="textSearchByColumnWrapper modal"
-      >
-        <p class="title">
-          Search for "{{ state.columnShowingTextSearch.label }}"
-        </p>
-        <div v-if="state.columnShowingTextSearch.searchType === 'decimal'">
-          <Slider
-            v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
-            :min="state.rangeInputs[state.columnShowingTextSearch.id].min"
-            :max="state.rangeInputs[state.columnShowingTextSearch.id].max"
-          ></Slider>
-          <div class="rangeInput">
-            <form
-              @submit.prevent="
-                setRangeFilters(state.columnShowingTextSearch.id)
-              "
-            >
-              <input
-                v-model="
-                  state.rangeInputs[state.columnShowingTextSearch.id].input[0]
-                "
-                type="text"
-                class="min"
-              />
-            </form>
-            <form
-              @submit.prevent="
-                setRangeFilters(state.columnShowingTextSearch.id)
-              "
-            >
-              <input
-                v-model="
-                  state.rangeInputs[state.columnShowingTextSearch.id].input[1]
-                "
-                type="text"
-                class="max"
-              />
-            </form>
-          </div>
-        </div>
-        <form
-          v-else
-          class="textSearchWrapper"
-          @submit.prevent="
-            submitQuery(
-              state.columnShowingTextSearch.label,
-              state.columnShowingTextSearch.type,
-              state.queryInputByColumn
-            )
-          "
-        >
-          <input
-            v-model="state.queryInputByColumn"
-            type="text"
-            placeholder="Search for keywords..."
-            name="queryInputByColumn"
-          />
-          <button class="searchBtn" type="submit">
-            <img
-              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-              alt="search"
-            />
-          </button>
-        </form>
-      </div>
-    </transition>
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
         src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
@@ -104,7 +35,7 @@
             @click="setSorting(column)"
           ></span>
           <span
-            v-if="column.searchType !== 'decimal'"
+            v-if="column.searchType !== 'number'"
             :class="[
               'icon',
               'filterIcon',
@@ -149,6 +80,76 @@
               </div>
             </div>
           </div>
+          <transition name="modal">
+            <div
+              v-if="column === state.columnShowingTextSearch"
+              class="textSearchByColumnWrapper modal"
+            >
+              <p class="title">
+                <template v-if="state.columnShowingTextSearch.searchType === 'number'">
+                  Set {{ state.columnShowingTextSearch.label }} range
+                </template>
+                <template v-else>
+                  Search for "{{ state.columnShowingTextSearch.label }}"
+                </template>
+              </p>
+              <div v-if="state.columnShowingTextSearch.searchType === 'number'">
+                <Slider
+                  v-model="column.rangeMinMax"
+                  :min="column.minValue"
+                  :max="column.maxValue"
+                ></Slider>
+                <div class="rangeInput">
+                  <form
+                    @submit.prevent="
+                      setRangeFilters(column)
+                    "
+                  >
+                    <input
+                      v-model="column.inputtingPageMin"
+                      type="text"
+                      class="min"
+                    />
+                  </form>
+                  <form
+                    @submit.prevent="
+                      setRangeFilters(column)
+                    "
+                  >
+                    <input
+                      v-model="column.inputtingPageMax"
+                      type="text"
+                      class="max"
+                    />
+                  </form>
+                </div>
+              </div>
+              <form
+                v-else
+                class="textSearchWrapper"
+                @submit.prevent="
+                  submitQuery(
+                    state.columnShowingTextSearch.label,
+                    state.columnShowingTextSearch.type,
+                    state.queryInputByColumn
+                  )
+                "
+              >
+                <input
+                  v-model="state.queryInputByColumn"
+                  type="text"
+                  placeholder="Search for keywords..."
+                  name="queryInputByColumn"
+                />
+                <button class="searchBtn" type="submit">
+                  <img
+                    src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
+                    alt="search"
+                  />
+                </button>
+              </form>
+            </div>
+          </transition>
         </th>
       </tr>
     </thead>
@@ -289,15 +290,6 @@ export default defineComponent({
       queryInput: "",
       queryInputByColumn: "",
       jumpToNumberInput: "",
-
-      rangeInputs: {},
-
-      // knobDrag: false,
-      // knobX: 0,
-      // startX: 0,
-      // knob: false,
-      // canvas: false,
-      // sliderBarWidth: 0,
     });
 
     const filteredRows = computed(() => {
@@ -319,15 +311,13 @@ export default defineComponent({
             : true;
         })
         .filter((row) => {
-          return Object.keys(state.rangeInputs).length !== 0
-            ? row.some((cell) => {
-                return (
-                  cell.column.searchType === "decimal" &&
-                  cell.value >= state.rangeInputs[cell.column.id].value[0] &&
-                  cell.value <= state.rangeInputs[cell.column.id].value[1]
-                );
-              })
-            : true;
+          return row.some((cell) => {
+            return (
+              cell.column.searchType === "number" &&
+              cell.value >= cell.column.rangeMinMax[0] &&
+              cell.value <= cell.column.rangeMinMax[1]
+            );
+          })
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -339,7 +329,6 @@ export default defineComponent({
               : valuesForFilter.includes(cell.value);
           });
         });
-
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
@@ -402,19 +391,13 @@ export default defineComponent({
 
     const paginationWrapper = ref(null);
     function fillPaginaionRange() {
-      const canvas = paginationWrapper.value.getElementsByClassName(
-        "pageSliderRange"
-      )[0];
+      const canvas = paginationWrapper.value.getElementsByClassName("pageSliderRange")[0]; //refにする、親から掘らない
       canvas.width = paginationWrapper.value.clientWidth;
       canvas.height = 50;
       if (canvas.getContext) {
-        const serialPagination = paginationWrapper.value.getElementsByClassName(
-          "paginationNumList"
-        )[0];
+        const serialPagination = paginationWrapper.value.getElementsByClassName("paginationNumList")[0];
         const serialPaginationX = serialPagination.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName(
-          "slider-origin"
-        )[0];
+        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0];
         const knobTranslate = knob.style.transform
           .match(/translate\((.+)%,(.+)\)/)[1]
           .split(",")[0];
@@ -449,10 +432,11 @@ export default defineComponent({
       }
     }
 
-    function setRangeFilters(id) {
-      state.rangeInputs[id].value[0] = state.rangeInputs[id].input[0];
-      state.rangeInputs[id].value[1] = state.rangeInputs[id].input[1];
-      state.rangeInputs[id].input = [null, null];
+    function setRangeFilters(column) {
+      column.rangeMinMax[0] = column.inputtingPageMin
+      column.rangeMinMax[1] = column.inputtingPageMax
+      column.inputtingPageMin = null
+      column.inputtingPageMax = null
     }
 
     function setQueryInput() {
@@ -478,15 +462,10 @@ export default defineComponent({
 
     function isSearchOn(column) {
       switch (column.searchType) {
-        case "decimal":
-          if (!state.rangeInputs[column.id]) {
-            return false;
-          }
+        case "number":
           return (
-            state.rangeInputs[column.id].value[0] !==
-              state.rangeInputs[column.id].min ||
-            state.rangeInputs[column.id].value[1] !==
-              state.rangeInputs[column.id].max
+            column.minValue !== column.rangeMinMax[0] ||
+            column.maxValue !== column.rangeMinMax[1]
           );
         default:
           return (
@@ -506,7 +485,7 @@ export default defineComponent({
         : Object.keys(data[0]).map((key) => {
             const column = { id: key, label: key };
             if (typeof data[0][key] === "number") {
-              column.type = "decimal";
+              column.type = "number";
             }
             return column;
           });
@@ -520,24 +499,22 @@ export default defineComponent({
               checked: true,
             };
           });
-        if (column.type === "decimal") {
-          const min = Math.min(...filters.map((filter) => filter.value));
-          const max = Math.max(...filters.map((filter) => filter.value));
-          state.rangeInputs[column.id] = {
-            value: [min, max],
-            min,
-            max,
-            input: [null, null],
-          };
-        }
+        const minValue = column.type === "number" ? Math.min(...filters.map((filter) => filter.value)) : null;
+        const maxValue = column.type === "number" ? Math.max(...filters.map((filter) => filter.value)) : null;
         return {
           id: column.id,
           label: column.label,
           filters,
           searchType: column.type,
           rowspan: column.rowspan,
+          minValue,
+          maxValue,
+          rangeMinMax: [minValue, maxValue],
+          inputtingPageMin: null,
+          inputtingPageMax: null,
         };
       });
+      console.log('state.columns', state.columns)
 
       state.allRows = data.map((row) => {
         return state.columns.map((column) => {
