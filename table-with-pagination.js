@@ -1115,7 +1115,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "table-data-api",
-		"stanza:example": "http://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
 		"stanza:description": "table data api",
 		"stanza:required": true
 	},
