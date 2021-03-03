@@ -52,8 +52,7 @@ var script = defineComponent({
     function fillPaginaionRange() {
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
-      const totalPages = props.totalPages;
-
+      const { totalPages } = props;
       if (canvas.value.getContext && totalPages > 5) {
         const paginationNumListX = paginationNumList.value.offsetLeft;
         const knob = paginationWrapper.value.getElementsByClassName(
@@ -1596,7 +1595,7 @@ var metadata = {
 ]
 };
 
-// import data from "./assets/tableDataWithNumber.json";
+// import data from "./assets/tableDataWithNumber.json"; // for range filter test
 
 var script$1 = defineComponent({
   components: {
@@ -1767,7 +1766,7 @@ var script$1 = defineComponent({
       state.pagination.currentPage = currentPage;
     }
     async function fetchData() {
-      const res = await fetch(params.tableDataApi);
+      const res = await fetch(params["tableDataApi"]);
       const data = await res.json();
 
       state.responseJSON = data;
