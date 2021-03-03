@@ -163,7 +163,10 @@
       </tr>
     </tbody>
   </table>
-  <SliderPagination :prop="{ pagination: state.pagination, totalPages }" />
+  <SliderPagination
+    :pagination="state.pagination"
+    :totalPages="totalPages"
+  />
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
     :class="['modalBackground', { black: state.columnShowingTextSearch }]"
