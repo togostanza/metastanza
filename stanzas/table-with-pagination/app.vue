@@ -100,7 +100,9 @@
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
-                  @change="submitQuery(column, column.searchType, column.rangeMinMax)"
+                  @change="
+                    submitQuery(column, column.searchType, column.rangeMinMax)
+                  "
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
@@ -227,7 +229,7 @@ export default defineComponent({
             : true;
         })
         .filter((row) => {
-          switch(state.queryByColumn.searchType) {
+          switch (state.queryByColumn.searchType) {
             case "number":
               return row.some((cell) => {
                 return (
