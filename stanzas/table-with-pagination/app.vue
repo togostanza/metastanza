@@ -100,6 +100,7 @@
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
+                  @change="submitQuery(column, column.searchType, column.rangeMinMax)"
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
@@ -124,7 +125,7 @@
                 @submit.prevent="
                   submitQuery(
                     state.columnShowingTextSearch.label,
-                    state.columnShowingTextSearch.type,
+                    state.columnShowingTextSearch.searchType,
                     state.queryInputByColumn
                   )
                 "
@@ -196,7 +197,7 @@ export default defineComponent({
       query: "",
       queryByColumn: {
         column: null,
-        type: null,
+        searchType: null,
         query: "",
       },
       columnShowingFilters: null,
@@ -226,27 +227,24 @@ export default defineComponent({
             : true;
         })
         .filter((row) => {
-          return queryByColumn
-            ? row.some(
-                (cell) =>
-                  cell.column.label === state.queryByColumn.column &&
-                  cell.value.includes(queryByColumn)
-              )
-            : true;
-        })
-        .filter((row) => {
-          return row.some((cell) => {
-            switch (cell.column.searchType) {
-              case "number":
+          switch(state.queryByColumn.searchType) {
+            case "number":
+              return row.some((cell) => {
                 return (
                   cell.column.searchType === "number" &&
                   cell.value >= cell.column.rangeMinMax[0] &&
                   cell.value <= cell.column.rangeMinMax[1]
                 );
-              default:
-                return true;
-            }
-          });
+              });
+            default:
+              return queryByColumn
+                ? row.some(
+                    (cell) =>
+                      cell.column.label === state.queryByColumn.column &&
+                      cell.value.includes(queryByColumn)
+                  )
+                : true;
+          }
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -320,12 +318,12 @@ export default defineComponent({
 
     function setQueryInput() {
       state.query = state.queryInput;
-      state.queryInput = "";
+      // state.queryInput = "";
     }
 
     function submitQuery(column, type, query) {
       state.queryByColumn.column = column;
-      state.queryByColumn.type = type;
+      state.queryByColumn.searchType = type;
       state.queryByColumn.query = query;
     }
 
