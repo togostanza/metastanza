@@ -2,14 +2,14 @@
   <div ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div
-        :class="['arrowWrapper', { show: state.pagination.currentPage !== 1 }]"
+        :class="['arrowWrapper', { show: state.currentPage !== 1 }]"
       >
         <span
           class="arrow double left"
-          @click="state.pagination.currentPage = 1"
+          @click="state.currentPage = 1"
         >
         </span>
-        <span class="arrow left" @click="state.pagination.currentPage--"></span>
+        <span class="arrow left" @click="state.currentPage--"></span>
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
@@ -18,9 +18,9 @@
           :key="page"
           :class="[
             'pagination',
-            { currentBtn: state.pagination.currentPage === page },
+            { currentBtn: state.currentPage === page },
           ]"
-          @click="state.pagination.currentPage = page"
+          @click="state.currentPage = page"
         >
           {{ page }}
         </li>
@@ -29,16 +29,16 @@
       <div
         :class="[
           'arrowWrapper',
-          { show: state.pagination.currentPage !== totalPages },
+          { show: state.currentPage !== totalPages },
         ]"
       >
         <span
           class="arrow right"
-          @click="state.pagination.currentPage++"
+          @click="state.currentPage++"
         ></span>
         <span
           class="arrow double right"
-          @click="state.pagination.currentPage = totalPages"
+          @click="state.currentPage = totalPages"
         ></span>
       </div>
 
@@ -59,7 +59,7 @@
     <canvas ref="canvas" class="canvas"></canvas>
     <Slider
       v-if="totalPages > 5"
-      v-model="state.pagination.currentPage"
+      v-model="state.currentPage"
       :min="1"
       :max="totalPages"
       class="pageSlider"
@@ -78,23 +78,23 @@ export default defineComponent({
     Slider,
   },
   props: {
-    pagination: {
-      type: Object,
-      default: () => {},
+    currentPage: {
+      type: Number,
+      default: 1,
     },
     totalPages: {
       type: Number,
-      default: 0
+      default: 1
     }
   },
-  setup(props) {
+  setup(props, context) {
     const state = reactive({
       jumpToNumberInput: "",
-      pagination: props.pagination,
+      currentPage: props.currentPage,
     });
     const surroundingPages = computed(() => {
       const { totalPages } = props;
-      const { currentPage } = state.pagination;
+      const { currentPage } = props;
       let start, end;
       if (currentPage <= 3) {
         start = 1;
@@ -110,7 +110,7 @@ export default defineComponent({
     });
 
     function jumpToPage(num) {
-      state.pagination.currentPage = num ? num : 1;
+      state.currentPage = num ? num : 1;
       state.jumpToNumberInput = "";
     }
 
@@ -151,6 +151,9 @@ export default defineComponent({
     }
 
     onUpdated(fillPaginaionRange);
+    onUpdated(() => {
+      context.emit("updateCurrentPage", state.currentPage)
+    });
 
     return {
       surroundingPages,

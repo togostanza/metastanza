@@ -164,8 +164,9 @@
     </tbody>
   </table>
   <SliderPagination
-    :pagination="state.pagination"
+    :currentPage="state.pagination.currentPage"
     :totalPages="totalPages"
+    @updateCurrentPage="updateCurrentPage"
   />
   <div
     v-if="state.columnShowingFilters || state.columnShowingTextSearch"
@@ -351,6 +352,11 @@ export default defineComponent({
       }
     }
 
+    function updateCurrentPage(currentPage) {
+      console.log('currentPage', currentPage)
+      state.pagination.currentPage = currentPage;
+    };
+
     async function fetchData() {
       // const res = await fetch(params["table-data-api"]);
       // const data = await res.json();
@@ -425,6 +431,7 @@ export default defineComponent({
       submitQuery,
       closeModal,
       isSearchOn,
+      updateCurrentPage
     };
   },
 });
