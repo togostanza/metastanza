@@ -32,7 +32,10 @@
           { show: state.pagination.currentPage !== prop.totalPages },
         ]"
       >
-        <span class="arrow right" @click="state.pagination.currentPage++"></span>
+        <span
+          class="arrow right"
+          @click="state.pagination.currentPage++"
+        ></span>
         <span
           class="arrow double right"
           @click="state.pagination.currentPage = prop.totalPages"
@@ -77,13 +80,13 @@ export default defineComponent({
   props: {
     prop: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
   },
   setup(props) {
     const state = reactive({
       jumpToNumberInput: "",
-      pagination: props.prop.pagination
+      pagination: props.prop.pagination,
     });
     const surroundingPages = computed(() => {
       const { totalPages } = props.prop;
