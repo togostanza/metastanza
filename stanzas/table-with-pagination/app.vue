@@ -318,7 +318,6 @@ export default defineComponent({
 
     function setQueryInput() {
       state.query = state.queryInput;
-      // state.queryInput = "";
     }
 
     function submitQuery(column, type, query) {

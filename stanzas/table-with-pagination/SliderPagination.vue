@@ -55,6 +55,7 @@
     </div>
     <canvas ref="canvas" class="canvas"></canvas>
     <Slider
+      v-if="prop.totalPages > 5"
       v-model="state.pagination.currentPage"
       :min="1"
       :max="prop.totalPages"
@@ -112,7 +113,8 @@ export default defineComponent({
     function fillPaginaionRange() {
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
-      if (canvas.value.getContext) {
+      const { totalPages } = props.prop;
+      if (canvas.value.getContext && totalPages > 5) {
         const paginationNumListX = paginationNumList.value.offsetLeft;
         const knob = paginationWrapper.value.getElementsByClassName(
           "slider-origin"
