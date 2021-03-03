@@ -178,7 +178,6 @@ export default async function barchart(stanza, params) {
       case "stacked":
         return [
           colorScale,
-          ,
           {
             name: "xscale",
             type: "band",

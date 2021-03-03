@@ -33,9 +33,6 @@
 <script>
 import { defineComponent, reactive, onMounted } from "vue";
 
-import orderBy from "lodash.orderby";
-import zip from "lodash.zip";
-
 import metadata from "./metadata.json";
 
 export default defineComponent({

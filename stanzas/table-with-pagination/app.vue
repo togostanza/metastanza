@@ -196,7 +196,7 @@
       of {{ totalPages }}
     </div>
   </div>
-  <div class="pageSliderWrapper" ref="pageSliderWrapper">
+  <div ref="pageSliderWrapper" class="pageSliderWrapper">
     <canvas class="pageSliderRange" height="50"></canvas>
     <div class="pageSlider">
       <div class="pageSliderBar"></div>
@@ -407,13 +407,15 @@ export default defineComponent({
     const pageSliderWrapper = ref(null);
     const pageSlider = {
       init: () => {
-        let wrapper = pageSliderWrapper.value;
-        if (!params.page_slider) wrapper.style.display = "none";
+        const wrapper = pageSliderWrapper.value;
+        if (!params.page_slider) {
+          wrapper.style.display = "none";
+        }
         wrapper.onmousemove = pageSlider.move;
         wrapper.onmouseup = pageSlider.up;
         state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
         state.canvas = wrapper.getElementsByTagName("canvas")[0];
-        let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
+        const bar = wrapper.getElementsByClassName("pageSliderBar")[0];
         state.sliderBarWidth = bar.offsetWidth;
         pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
@@ -457,7 +459,7 @@ export default defineComponent({
         state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
         state.canvas.setAttribute("width", state.sliderBarWidth);
         state.canvas.setAttribute("height", 50);
-        let pageButton = state.canvas.parentNode.parentNode
+        const pageButton = state.canvas.parentNode.parentNode
           .getElementsByClassName("paginationWrapper")[0]
           .getElementsByTagName("ul")[0];
         if (state.canvas.getContext) {
