@@ -29,7 +29,7 @@
       <div
         :class="[
           'arrowWrapper',
-          { show: state.pagination.currentPage !== prop.totalPages },
+          { show: state.pagination.currentPage !== totalPages },
         ]"
       >
         <span
@@ -38,7 +38,7 @@
         ></span>
         <span
           class="arrow double right"
-          @click="state.pagination.currentPage = prop.totalPages"
+          @click="state.pagination.currentPage = totalPages"
         ></span>
       </div>
 
@@ -52,16 +52,16 @@
           type="text"
           class="jumpToNumberInput"
         />
-        of {{ prop.totalPages }}
+        of {{ totalPages }}
         <button>Go</button>
       </form>
     </div>
     <canvas ref="canvas" class="canvas"></canvas>
     <Slider
-      v-if="prop.totalPages > 5"
+      v-if="totalPages > 5"
       v-model="state.pagination.currentPage"
       :min="1"
-      :max="prop.totalPages"
+      :max="totalPages"
       class="pageSlider"
     >
     </Slider>
@@ -78,18 +78,22 @@ export default defineComponent({
     Slider,
   },
   props: {
-    prop: {
+    pagination: {
       type: Object,
       default: () => {},
     },
+    totalPages: {
+      type: Number,
+      default: 0
+    }
   },
   setup(props) {
     const state = reactive({
       jumpToNumberInput: "",
-      pagination: props.prop.pagination,
+      pagination: props.pagination,
     });
     const surroundingPages = computed(() => {
-      const { totalPages } = props.prop;
+      const { totalPages } = props;
       const { currentPage } = state.pagination;
       let start, end;
       if (currentPage <= 3) {
@@ -116,7 +120,7 @@ export default defineComponent({
     function fillPaginaionRange() {
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
-      const { totalPages } = props.prop;
+      const { totalPages } = props;
       if (canvas.value.getContext && totalPages > 5) {
         const paginationNumListX = paginationNumList.value.offsetLeft;
         const knob = paginationWrapper.value.getElementsByClassName(
