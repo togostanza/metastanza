@@ -87,6 +87,7 @@ export default defineComponent({
       default: 1
     }
   },
+  emits: ["updateCurrentPage"],
   setup(props, context) {
     const state = reactive({
       jumpToNumberInput: "",

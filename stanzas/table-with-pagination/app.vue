@@ -353,7 +353,6 @@ export default defineComponent({
     }
 
     function updateCurrentPage(currentPage) {
-      console.log('currentPage', currentPage)
       state.pagination.currentPage = currentPage;
     };
 
