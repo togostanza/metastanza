@@ -185,7 +185,7 @@ import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
-import data from "./assets/tableDataWithNumber.json"; // for range filter test
+// import data from "./assets/tableDataWithNumber.json"; // for range filter test
 
 export default defineComponent({
   components: {
@@ -357,8 +357,8 @@ export default defineComponent({
     };
 
     async function fetchData() {
-      // const res = await fetch(params["table-data-api"]);
-      // const data = await res.json();
+      const res = await fetch(params["tableDataApi"]);
+      const data = await res.json();
 
       state.responseJSON = data;
       let columns = [];
