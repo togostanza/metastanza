@@ -1,5 +1,6 @@
 import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { t as toRefs, f as ref, g as computed, o as onMounted, h as onUnmounted, w as watch, c as createBlock, b as openBlock, d as defineComponent, r as reactive, i as onUpdated, l as lodash_zip, j as lodash_orderby, k as resolveComponent, m as createVNode, n as withModifiers, p as withDirectives, v as vModelText, T as Transition, q as withCtx, F as Fragment, s as renderList, a as createCommentVNode, u as withKeys, x as createTextVNode, y as toDisplayString, z as mergeProps, A as vModelCheckbox, e as createApp } from './index-5c0a52f8.js';
+import { t as toRefs, f as ref, g as computed, o as onMounted, h as onUnmounted, w as watch, c as createBlock, b as openBlock, d as defineComponent, r as reactive, i as onUpdated, j as resolveComponent, k as createVNode, l as withModifiers, m as withDirectives, v as vModelText, T as Transition, n as withCtx, F as Fragment, p as renderList, a as createCommentVNode, q as withKeys, s as createTextVNode, u as toDisplayString, x as mergeProps, y as vModelCheckbox, e as createApp } from './runtime-dom.esm-bundler-fc1abf0f.js';
+import { l as lodash_zip, a as lodash_orderby } from './index-247a4eda.js';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -2037,13 +2038,15 @@ var script = defineComponent({
     const pageSliderWrapper = ref(null);
     const pageSlider = {
       init: () => {
-        let wrapper = pageSliderWrapper.value;
-        if (!params.page_slider) wrapper.style.display = "none";
+        const wrapper = pageSliderWrapper.value;
+        if (!params.page_slider) {
+          wrapper.style.display = "none";
+        }
         wrapper.onmousemove = pageSlider.move;
         wrapper.onmouseup = pageSlider.up;
         state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
         state.canvas = wrapper.getElementsByTagName("canvas")[0];
-        let bar = wrapper.getElementsByClassName("pageSliderBar")[0];
+        const bar = wrapper.getElementsByClassName("pageSliderBar")[0];
         state.sliderBarWidth = bar.offsetWidth;
         pageSlider.setPage(state.knobX, state.pagination.currentPage);
       },
@@ -2087,7 +2090,7 @@ var script = defineComponent({
         state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
         state.canvas.setAttribute("width", state.sliderBarWidth);
         state.canvas.setAttribute("height", 50);
-        let pageButton = state.canvas.parentNode.parentNode
+        const pageButton = state.canvas.parentNode.parentNode
           .getElementsByClassName("paginationWrapper")[0]
           .getElementsByTagName("ul")[0];
         if (state.canvas.getContext) {
@@ -2235,8 +2238,8 @@ const _hoisted_14 = { class: "paginationWrapper" };
 const _hoisted_15 = { class: "pageNumber" };
 const _hoisted_16 = /*#__PURE__*/createTextVNode(" Page ");
 const _hoisted_17 = {
-  class: "pageSliderWrapper",
-  ref: "pageSliderWrapper"
+  ref: "pageSliderWrapper",
+  class: "pageSliderWrapper"
 };
 const _hoisted_18 = /*#__PURE__*/createVNode("canvas", {
   class: "pageSliderRange",

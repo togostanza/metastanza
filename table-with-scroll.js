@@ -1,5 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { d as defineComponent, r as reactive, o as onMounted, l as lodash_zip, j as lodash_orderby, c as createBlock, m as createVNode, F as Fragment, s as renderList, a as createCommentVNode, b as openBlock, y as toDisplayString, e as createApp } from './index-5c0a52f8.js';
+import { d as defineComponent, r as reactive, o as onMounted, c as createBlock, k as createVNode, F as Fragment, p as renderList, a as createCommentVNode, b as openBlock, u as toDisplayString, e as createApp } from './runtime-dom.esm-bundler-fc1abf0f.js';
+import { l as lodash_zip, a as lodash_orderby } from './index-247a4eda.js';
 
 var metadata = {
 	"@context": {
