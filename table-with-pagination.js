@@ -1727,10 +1727,10 @@ var script$1 = defineComponent({
     }
 
     function setRangeFilters(column) {
-      column.rangeMinMax[0] = column.inputtingPageMin;
-      column.rangeMinMax[1] = column.inputtingPageMax;
-      column.inputtingPageMin = null;
-      column.inputtingPageMax = null;
+      column.rangeMinMax[0] = column.inputtingRangeMin;
+      column.rangeMinMax[1] = column.inputtingRangeMax;
+      column.inputtingRangeMin = null;
+      column.inputtingRangeMax = null;
     }
 
     function setQueryInput() {
@@ -2021,22 +2021,22 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                       onSubmit: withModifiers($event => (_ctx.setRangeFilters(column)), ["prevent"])
                                     }, [
                                       withDirectives(createVNode("input", {
-                                        "onUpdate:modelValue": $event => (column.inputtingPageMin = $event),
+                                        "onUpdate:modelValue": $event => (column.inputtingRangeMin = $event),
                                         type: "text",
                                         class: "min"
                                       }, null, 8 /* PROPS */, ["onUpdate:modelValue"]), [
-                                        [vModelText, column.inputtingPageMin]
+                                        [vModelText, column.inputtingRangeMin]
                                       ])
                                     ], 40 /* PROPS, HYDRATE_EVENTS */, ["onSubmit"]),
                                     createVNode("form", {
                                       onSubmit: withModifiers($event => (_ctx.setRangeFilters(column)), ["prevent"])
                                     }, [
                                       withDirectives(createVNode("input", {
-                                        "onUpdate:modelValue": $event => (column.inputtingPageMax = $event),
+                                        "onUpdate:modelValue": $event => (column.inputtingRangeMax = $event),
                                         type: "text",
                                         class: "max"
                                       }, null, 8 /* PROPS */, ["onUpdate:modelValue"]), [
-                                        [vModelText, column.inputtingPageMax]
+                                        [vModelText, column.inputtingRangeMax]
                                       ])
                                     ], 40 /* PROPS, HYDRATE_EVENTS */, ["onSubmit"])
                                   ])
