@@ -118,7 +118,7 @@ export default defineComponent({
     const paginationWrapper = ref(null);
     const canvas = ref(null);
     const paginationNumList = ref(null);
-    function fillPaginaionRange() {
+    function drawKnobArrow() {
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
       const { totalPages } = props;
@@ -151,7 +151,7 @@ export default defineComponent({
       }
     }
 
-    onUpdated(fillPaginaionRange);
+    onUpdated(drawKnobArrow);
     onUpdated(() => {
       context.emit("updateCurrentPage", state.currentPage)
     });
@@ -161,7 +161,7 @@ export default defineComponent({
       jumpToPage,
       state,
       paginationWrapper,
-      fillPaginaionRange,
+      drawKnobArrow,
       canvas,
       paginationNumList,
     };
