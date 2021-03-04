@@ -25,8 +25,8 @@ var script = defineComponent({
       currentPage: props.currentPage,
     });
     const surroundingPages = computed(() => {
-      const { totalPages } = props;
-      const { currentPage } = props;
+      const totalPages = props.totalPages;
+      const currentPage = props.currentPage;
       let start, end;
       if (currentPage <= 3) {
         start = 1;
@@ -112,7 +112,6 @@ const _hoisted_3 = {
 const _hoisted_4 = /*#__PURE__*/createTextVNode(" Page ");
 const _hoisted_5 = /*#__PURE__*/createVNode("button", null, "Go", -1 /* HOISTED */);
 const _hoisted_6 = {
-  key: 0,
   ref: "canvas",
   class: "canvas"
 };
@@ -120,7 +119,7 @@ const _hoisted_6 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Slider = resolveComponent("Slider");
 
-  return (_ctx.totalPages > 0)
+  return (_ctx.totalPages > 1)
     ? (openBlock(), createBlock("div", _hoisted_1, [
         createVNode("div", _hoisted_2, [
           createVNode("div", {
@@ -178,17 +177,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ], 32 /* HYDRATE_EVENTS */)
         ]),
         (_ctx.totalPages > 5)
-          ? (openBlock(), createBlock("canvas", _hoisted_6, null, 512 /* NEED_PATCH */))
-          : createCommentVNode("v-if", true),
-        (_ctx.totalPages > 5)
-          ? (openBlock(), createBlock(_component_Slider, {
-              key: 1,
-              modelValue: _ctx.state.currentPage,
-              "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (_ctx.state.currentPage = $event)),
-              min: 1,
-              max: _ctx.totalPages,
-              class: "pageSlider"
-            }, null, 8 /* PROPS */, ["modelValue", "max"]))
+          ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+              createVNode("canvas", _hoisted_6, null, 512 /* NEED_PATCH */),
+              createVNode(_component_Slider, {
+                modelValue: _ctx.state.currentPage,
+                "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (_ctx.state.currentPage = $event)),
+                min: 1,
+                max: _ctx.totalPages,
+                class: "pageSlider"
+              }, null, 8 /* PROPS */, ["modelValue", "max"])
+            ], 64 /* STABLE_FRAGMENT */))
           : createCommentVNode("v-if", true)
       ], 512 /* NEED_PATCH */))
     : createCommentVNode("v-if", true)
