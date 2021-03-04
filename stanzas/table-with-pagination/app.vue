@@ -61,13 +61,15 @@
               <p class="filterWindowTitle">{{ column.label }}</p>
               <ul>
                 <li v-for="filter in column.filters" :key="filter.value">
-                  <input
-                    :id="filter.value"
-                    v-model="filter.checked"
-                    type="checkbox"
-                    name="items"
-                  />
-                  <label :for="filter.id">{{ filter.value }}</label>
+                  <label :for="filter.id">
+                    <input
+                      :id="filter.value"
+                      v-model="filter.checked"
+                      type="checkbox"
+                      name="items"
+                    />
+                    {{ filter.value }}
+                  </label>
                 </li>
               </ul>
               <div class="toggleAllButton">
@@ -221,6 +223,7 @@ export default defineComponent({
 
       queryInput: "",
       queryInputByColumn: "",
+      isFiltering: false
     });
 
     const filteredRows = computed(() => {
