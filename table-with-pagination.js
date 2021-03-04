@@ -15,8 +15,8 @@ var script = defineComponent({
     },
     totalPages: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
@@ -42,6 +42,9 @@ var script = defineComponent({
     });
 
     function jumpToPage(num) {
+      if (num < 1 || num > props.totalPages) {
+        return;
+      }
       state.currentPage = num ? num : 1;
       state.jumpToNumberInput = "";
     }
@@ -49,40 +52,37 @@ var script = defineComponent({
     const paginationWrapper = ref(null);
     const canvas = ref(null);
     const paginationNumList = ref(null);
-    function fillPaginaionRange() {
+    function drawKnobArrow() {
+      const totalPages = props.totalPages;
+      if (totalPages <= 5) {
+        return;
+      }
+
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
-      const { totalPages } = props;
-      if (canvas.value.getContext && totalPages > 5) {
-        const paginationNumListX = paginationNumList.value.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName(
-          "slider-origin"
-        )[0];
-        const knobTranslate = knob.style.transform
-          .match(/translate\((.+)%,(.+)\)/)[1]
-          .split(",")[0];
-        const knobX =
-          ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
-        const ctx = canvas.value.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(
-          paginationNumListX - paginationNumList.value.parentNode.offsetLeft,
-          0
-        );
-        ctx.lineTo(
-          paginationNumListX -
-            paginationNumList.value.parentNode.offsetLeft +
-            111,
-          0
-        );
-        ctx.lineTo(knobX, 50);
-        ctx.closePath();
-        ctx.fillStyle = "#dddddd";
-        ctx.fill();
-      }
+      const paginationNumListX = paginationNumList.value.offsetLeft;
+      const knob = paginationWrapper.value.getElementsByClassName(
+        "slider-origin"
+      )[0];
+      const knobTranslate = knob.style.transform
+        .match(/translate\((.+)%,(.+)\)/)[1]
+        .split(",")[0];
+      const knobX =
+        ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+      const ctx = canvas.value.getContext("2d");
+      ctx.beginPath();
+      ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
+      ctx.lineTo(
+        paginationNumListX - paginationWrapper.value.offsetLeft + 111,
+        0
+      );
+      ctx.lineTo(knobX, 50);
+      ctx.closePath();
+      ctx.fillStyle = "#dddddd";
+      ctx.fill();
     }
 
-    onUpdated(fillPaginaionRange);
+    onUpdated(drawKnobArrow);
     onUpdated(() => {
       context.emit("updateCurrentPage", state.currentPage);
     });
@@ -92,7 +92,7 @@ var script = defineComponent({
       jumpToPage,
       state,
       paginationWrapper,
-      fillPaginaionRange,
+      drawKnobArrow,
       canvas,
       paginationNumList,
     };
@@ -100,6 +100,7 @@ var script = defineComponent({
 });
 
 const _hoisted_1 = {
+  key: 0,
   ref: "paginationWrapper",
   class: "paginationWrapper"
 };
@@ -111,6 +112,7 @@ const _hoisted_3 = {
 const _hoisted_4 = /*#__PURE__*/createTextVNode(" Page ");
 const _hoisted_5 = /*#__PURE__*/createVNode("button", null, "Go", -1 /* HOISTED */);
 const _hoisted_6 = {
+  key: 0,
   ref: "canvas",
   class: "canvas"
 };
@@ -118,80 +120,78 @@ const _hoisted_6 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Slider = resolveComponent("Slider");
 
-  return (openBlock(), createBlock("div", _hoisted_1, [
-    createVNode("div", _hoisted_2, [
-      createVNode("div", {
-        class: ['arrowWrapper', { show: _ctx.state.currentPage !== 1 }]
-      }, [
-        createVNode("span", {
-          class: "arrow double left",
-          onClick: _cache[1] || (_cache[1] = $event => (_ctx.state.currentPage = 1))
-        }),
-        createVNode("span", {
-          class: "arrow left",
-          onClick: _cache[2] || (_cache[2] = $event => (_ctx.state.currentPage--))
-        })
-      ], 2 /* CLASS */),
-      createVNode("ul", _hoisted_3, [
-        (openBlock(true), createBlock(Fragment, null, renderList(_ctx.surroundingPages, (page) => {
-          return (openBlock(), createBlock("li", {
-            key: page,
-            class: [
-            'pagination',
-            { currentBtn: _ctx.state.currentPage === page },
-          ],
-            onClick: $event => (_ctx.state.currentPage = page)
-          }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, ["onClick"]))
-        }), 128 /* KEYED_FRAGMENT */))
-      ], 512 /* NEED_PATCH */),
-      createVNode("div", {
-        class: [
-          'arrowWrapper',
-          { show: _ctx.state.currentPage !== _ctx.totalPages },
-        ]
-      }, [
-        createVNode("span", {
-          class: "arrow right",
-          onClick: _cache[3] || (_cache[3] = $event => (_ctx.state.currentPage++))
-        }),
-        createVNode("span", {
-          class: "arrow double right",
-          onClick: _cache[4] || (_cache[4] = $event => (_ctx.state.currentPage = _ctx.totalPages))
-        })
-      ], 2 /* CLASS */),
-      createVNode("form", {
-        class: "pageNumber",
-        onSubmit: _cache[6] || (_cache[6] = withModifiers($event => (_ctx.jumpToPage(_ctx.state.jumpToNumberInput)), ["prevent"]))
-      }, [
-        _hoisted_4,
-        withDirectives(createVNode("input", {
-          "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => (_ctx.state.jumpToNumberInput = $event)),
-          type: "text",
-          class: "jumpToNumberInput"
-        }, null, 512 /* NEED_PATCH */), [
-          [
-            vModelText,
-            _ctx.state.jumpToNumberInput,
-            void 0,
-            { number: true }
-          ]
+  return (_ctx.totalPages > 0)
+    ? (openBlock(), createBlock("div", _hoisted_1, [
+        createVNode("div", _hoisted_2, [
+          createVNode("div", {
+            class: ['arrowWrapper', { show: _ctx.state.currentPage !== 1 }]
+          }, [
+            createVNode("span", {
+              class: "arrow double left",
+              onClick: _cache[1] || (_cache[1] = $event => (_ctx.state.currentPage = 1))
+            }),
+            createVNode("span", {
+              class: "arrow left",
+              onClick: _cache[2] || (_cache[2] = $event => (_ctx.state.currentPage--))
+            })
+          ], 2 /* CLASS */),
+          createVNode("ul", _hoisted_3, [
+            (openBlock(true), createBlock(Fragment, null, renderList(_ctx.surroundingPages, (page) => {
+              return (openBlock(), createBlock("li", {
+                key: page,
+                class: ['pagination', { currentBtn: _ctx.state.currentPage === page }],
+                onClick: $event => (_ctx.state.currentPage = page)
+              }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, ["onClick"]))
+            }), 128 /* KEYED_FRAGMENT */))
+          ], 512 /* NEED_PATCH */),
+          createVNode("div", {
+            class: ['arrowWrapper', { show: _ctx.state.currentPage !== _ctx.totalPages }]
+          }, [
+            createVNode("span", {
+              class: "arrow right",
+              onClick: _cache[3] || (_cache[3] = $event => (_ctx.state.currentPage++))
+            }),
+            createVNode("span", {
+              class: "arrow double right",
+              onClick: _cache[4] || (_cache[4] = $event => (_ctx.state.currentPage = _ctx.totalPages))
+            })
+          ], 2 /* CLASS */),
+          createVNode("form", {
+            class: "pageNumber",
+            onSubmit: _cache[6] || (_cache[6] = withModifiers($event => (_ctx.jumpToPage(_ctx.state.jumpToNumberInput)), ["prevent"]))
+          }, [
+            _hoisted_4,
+            withDirectives(createVNode("input", {
+              "onUpdate:modelValue": _cache[5] || (_cache[5] = $event => (_ctx.state.jumpToNumberInput = $event)),
+              type: "text",
+              class: "jumpToNumberInput"
+            }, null, 512 /* NEED_PATCH */), [
+              [
+                vModelText,
+                _ctx.state.jumpToNumberInput,
+                void 0,
+                { number: true }
+              ]
+            ]),
+            createTextVNode(" of " + toDisplayString(_ctx.totalPages) + " ", 1 /* TEXT */),
+            _hoisted_5
+          ], 32 /* HYDRATE_EVENTS */)
         ]),
-        createTextVNode(" of " + toDisplayString(_ctx.totalPages) + " ", 1 /* TEXT */),
-        _hoisted_5
-      ], 32 /* HYDRATE_EVENTS */)
-    ]),
-    createVNode("canvas", _hoisted_6, null, 512 /* NEED_PATCH */),
-    (_ctx.totalPages > 5)
-      ? (openBlock(), createBlock(_component_Slider, {
-          key: 0,
-          modelValue: _ctx.state.currentPage,
-          "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (_ctx.state.currentPage = $event)),
-          min: 1,
-          max: _ctx.totalPages,
-          class: "pageSlider"
-        }, null, 8 /* PROPS */, ["modelValue", "max"]))
-      : createCommentVNode("v-if", true)
-  ], 512 /* NEED_PATCH */))
+        (_ctx.totalPages > 5)
+          ? (openBlock(), createBlock("canvas", _hoisted_6, null, 512 /* NEED_PATCH */))
+          : createCommentVNode("v-if", true),
+        (_ctx.totalPages > 5)
+          ? (openBlock(), createBlock(_component_Slider, {
+              key: 1,
+              modelValue: _ctx.state.currentPage,
+              "onUpdate:modelValue": _cache[7] || (_cache[7] = $event => (_ctx.state.currentPage = $event)),
+              min: 1,
+              max: _ctx.totalPages,
+              class: "pageSlider"
+            }, null, 8 /* PROPS */, ["modelValue", "max"]))
+          : createCommentVNode("v-if", true)
+      ], 512 /* NEED_PATCH */))
+    : createCommentVNode("v-if", true)
 }
 
 script.render = render;
@@ -1631,6 +1631,7 @@ var script$1 = defineComponent({
 
       queryInput: "",
       queryInputByColumn: "",
+      isFiltering: false,
     });
 
     const filteredRows = computed(() => {
@@ -1765,15 +1766,16 @@ var script$1 = defineComponent({
     function updateCurrentPage(currentPage) {
       state.pagination.currentPage = currentPage;
     }
+
     async function fetchData() {
       const res = await fetch(params["tableDataApi"]);
       const data = await res.json();
 
       state.responseJSON = data;
-      let columns = [];
+      let columns;
       if (params.columns) {
         columns = JSON.parse(params.columns);
-      } else if (data.length !== 0) {
+      } else if (data.length > 0) {
         const firstRow = data[0];
         columns = Object.keys(firstRow).map((key) => {
           return {
@@ -1782,6 +1784,8 @@ var script$1 = defineComponent({
             type: null,
           };
         });
+      } else {
+        columns = [];
       }
 
       state.columns = columns.map((column) => {
@@ -1808,8 +1812,8 @@ var script$1 = defineComponent({
           minValue,
           maxValue,
           rangeMinMax: [minValue, maxValue],
-          inputtingPageMin: null,
-          inputtingPageMax: null,
+          inputtingRangeMin: null,
+          inputtingRangeMax: null,
         };
       });
 
@@ -1839,7 +1843,7 @@ var script$1 = defineComponent({
       submitQuery,
       closeModal,
       isSearchOn,
-      updateCurrentPage
+      updateCurrentPage,
     };
   },
 });
@@ -1959,17 +1963,19 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               return (openBlock(), createBlock("li", {
                                 key: filter.value
                               }, [
-                                withDirectives(createVNode("input", {
-                                  id: filter.value,
-                                  "onUpdate:modelValue": $event => (filter.checked = $event),
-                                  type: "checkbox",
-                                  name: "items"
-                                }, null, 8 /* PROPS */, ["id", "onUpdate:modelValue"]), [
-                                  [vModelCheckbox, filter.checked]
-                                ]),
                                 createVNode("label", {
                                   for: filter.id
-                                }, toDisplayString(filter.value), 9 /* TEXT, PROPS */, ["for"])
+                                }, [
+                                  withDirectives(createVNode("input", {
+                                    id: filter.value,
+                                    "onUpdate:modelValue": $event => (filter.checked = $event),
+                                    type: "checkbox",
+                                    name: "items"
+                                  }, null, 8 /* PROPS */, ["id", "onUpdate:modelValue"]), [
+                                    [vModelCheckbox, filter.checked]
+                                  ]),
+                                  createTextVNode(" " + toDisplayString(filter.value), 1 /* TEXT */)
+                                ], 8 /* PROPS */, ["for"])
                               ]))
                             }), 128 /* KEYED_FRAGMENT */))
                           ]),
@@ -2090,10 +2096,10 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         ]))
       : createCommentVNode("v-if", true),
     createVNode(_component_SliderPagination, {
-      currentPage: _ctx.state.pagination.currentPage,
-      totalPages: _ctx.totalPages,
+      "current-page": _ctx.state.pagination.currentPage,
+      "total-pages": _ctx.totalPages,
       onUpdateCurrentPage: _ctx.updateCurrentPage
-    }, null, 8 /* PROPS */, ["currentPage", "totalPages", "onUpdateCurrentPage"]),
+    }, null, 8 /* PROPS */, ["current-page", "total-pages", "onUpdateCurrentPage"]),
     (_ctx.state.columnShowingFilters || _ctx.state.columnShowingTextSearch)
       ? (openBlock(), createBlock("div", {
           key: 1,
@@ -2118,7 +2124,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n/* Functional styling;\n* These styles are required for noUiSlider to function.\n* You don't need to change these rules to apply your design.\n*/\n.slider-target,\n.slider-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-target {\n  position: relative;\n}\n\n.slider-base,\n.slider-connects {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n\n/* Wrapper for all connect elements.\n*/\n.slider-connects {\n  overflow: hidden;\n  z-index: 0;\n}\n\n.slider-connect,\n.slider-origin {\n  will-change: transform;\n  position: absolute;\n  z-index: 1;\n  top: 0;\n  right: 0;\n  -ms-transform-origin: 0 0;\n  -webkit-transform-origin: 0 0;\n  -webkit-transform-style: preserve-3d;\n  transform-origin: 0 0;\n  transform-style: flat;\n}\n\n.slider-connect {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-origin {\n  height: 10%;\n  width: 10%;\n}\n\n/* Offset direction\n*/\n.slider-txt-dir-rtl.slider-horizontal .slider-origin {\n  left: 0;\n  right: auto;\n}\n\n/* Give origins 0 height/width so they don't interfere with clicking the\n* connect elements.\n*/\n.slider-vertical .slider-origin {\n  width: 0;\n}\n\n.slider-horizontal .slider-origin {\n  height: 0;\n}\n\n.slider-handle {\n  -webkit-backface-visibility: hidden;\n  backface-visibility: hidden;\n  position: absolute;\n}\n\n.slider-touch-area {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-state-tap .slider-connect,\n.slider-state-tap .slider-origin {\n  -webkit-transition: transform 0.3s;\n  transition: transform 0.3s;\n}\n\n.slider-state-drag * {\n  cursor: inherit !important;\n}\n\n/* Slider size and handle placement;\n*/\n.slider-horizontal {\n  height: 6px;\n}\n\n.slider-horizontal .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -6px;\n  right: -8px;\n}\n\n.slider-vertical {\n  width: 6px;\n  height: 300px;\n}\n\n.slider-vertical .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -8px;\n  right: -6px;\n}\n\n.slider-txt-dir-rtl.slider-horizontal .slider-handle {\n  left: -8px;\n  right: auto;\n}\n\n/* Styling;\n* Giving the connect element a border radius causes issues with using transform: scale\n*/\n.slider-base {\n  background-color: #d4e0e7;\n  border-radius: 3px;\n}\n\n.slider-connects {\n  border-radius: 3px;\n}\n\n.slider-connect {\n  background: #41b883;\n  cursor: pointer;\n}\n\n/* Handles and cursors;\n*/\n.slider-draggable {\n  cursor: ew-resize;\n}\n\n.slider-vertical .slider-draggable {\n  cursor: ns-resize;\n}\n\n.slider-handle {\n  width: 16px;\n  height: 16px;\n  border-radius: 50%;\n  background: #fff;\n  border: 0;\n  right: -8px;\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);\n  cursor: grab;\n}\n.slider-handle:focus {\n  outline: none;\n}\n\n.slider-active {\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.42);\n  cursor: grabbing;\n}\n\n/* Disabled state;\n*/\n[disabled] .slider-connect {\n  background: #B8B8B8;\n}\n\n[disabled].slider-target,\n[disabled].slider-handle,\n[disabled] .slider-handle {\n  cursor: not-allowed;\n}\n\n[disabled] .slider-tooltip {\n  background: #B8B8B8;\n  border-color: #B8B8B8;\n}\n\n.slider-tooltip {\n  position: absolute;\n  display: block;\n  font-size: 14px;\n  font-weight: 500;\n  white-space: nowrap;\n  padding: 2px 5px;\n  min-width: 20px;\n  text-align: center;\n  color: #fff;\n  border-radius: 5px;\n  border: 1px solid #41b883;\n  background: #41b883;\n}\n\n.slider-horizontal .slider-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 24px;\n}\n.slider-horizontal .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  bottom: -10px;\n  left: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-top-color: inherit;\n  transform: translate(-50%);\n}\n\n.slider-vertical .slider-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 24px;\n}\n.slider-vertical .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  right: -10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-left-color: inherit;\n  transform: translateY(-50%);\n}\n\n.slider-horizontal .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(50%, 0);\n  transform: translate(50%, 0);\n  left: auto;\n  bottom: 14px;\n}\n\n.slider-vertical .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(0, -18px);\n  transform: translate(0, -18px);\n  top: auto;\n  right: 18px;\n}\n\n/* Base;\n*\n*/\n.slider-pips,\n.slider-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-pips {\n  position: absolute;\n  color: #999;\n}\n\n/* Values;\n*\n*/\n.slider-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n\n.slider-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n\n/* Markings;\n*\n*/\n.slider-marker {\n  position: absolute;\n  background: #CCC;\n}\n\n.slider-marker-sub {\n  background: #AAA;\n}\n\n.slider-marker-large {\n  background: #AAA;\n}\n\n/* Horizontal layout;\n*\n*/\n.slider-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n\n.slider-value-horizontal {\n  -webkit-transform: translate(-50%, 50%);\n  transform: translate(-50%, 50%);\n}\n.slider-rtl .slider-value-horizontal {\n  -webkit-transform: translate(50%, 50%);\n  transform: translate(50%, 50%);\n}\n\n.slider-marker-horizontal.slider-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n\n.slider-marker-horizontal.slider-marker-sub {\n  height: 10px;\n}\n\n.slider-marker-horizontal.slider-marker-large {\n  height: 15px;\n}\n\n/* Vertical layout;\n*\n*/\n.slider-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n\n.slider-value-vertical {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  padding-left: 25px;\n}\n.slider-rtl .slider-value-vertical {\n  -webkit-transform: translate(0, 50%);\n  transform: translate(0, 50%);\n}\n\n.slider-marker-vertical.slider-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n\n.slider-marker-vertical.slider-marker-sub {\n  width: 10px;\n}\n\n.slider-marker-vertical.slider-marker-large {\n  width: 15px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.paginationWrapper > .serialPagination {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n  align-items: center;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border-right: var(--paginationbtn-border);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n  display: flex;\n  align-items: center;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:hover {\n  cursor: pointer;\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:first-of-type {\n  border-top-left-radius: var(--paginationbtn-border-radius);\n  border-bottom-left-radius: var(--paginationbtn-border-radius);\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:last-of-type {\n  border-top-right-radius: var(--paginationbtn-border-radius);\n  border-bottom-right-radius: var(--paginationbtn-border-radius);\n  border-right: none;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination.currentBtn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > .serialPagination > .arrowWrapper {\n  min-width: 30px;\n  visibility: hidden;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper.show {\n  visibility: visible;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow {\n  display: inline-block;\n  width: 7px;\n  min-width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n  margin: 0 2px 0 6px;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.right {\n  transform: rotate(-135deg);\n  margin: 0 6px 0 2px;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double {\n  position: relative;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double:after {\n  content: \"\";\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(0deg);\n  top: 30%;\n  left: -80%;\n  position: absolute;\n  box-sizing: border-box;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double.right:after {\n  transform: rotate(0deg);\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow:hover {\n  cursor: pointer;\n}\n.paginationWrapper > .serialPagination > .pageNumber {\n  margin-left: 20px;\n}\n.paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput {\n  width: 40px;\n  height: var(--searchbox-height);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.paginationWrapper > .serialPagination > .pageNumber > button {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  display: inline-block;\n  margin-left: 3px;\n}\n.paginationWrapper > .serialPagination > .pageNumber > button:hover {\n  cursor: pointer;\n}\n.paginationWrapper .pageSlider {\n  height: 4px;\n  margin-top: -5px;\n}\n.paginationWrapper .pageSlider .slider-connects {\n  background-color: #bbbbbb;\n}\n.paginationWrapper .pageSlider .slider-connects .slider-connect {\n  background-color: #bbbbbb;\n}\n.paginationWrapper .pageSlider .slider-handle > .slider-tooltip {\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  bottom: auto;\n  line-height: 1.3;\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--paginationbtn-border);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n  border-radius: var(--paginationbtn-border-radius);\n}\n.paginationWrapper .pageSlider .slider-handle > .slider-tooltip:before {\n  display: none;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n\n.textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.textSearchWrapper > .searchBtn {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n}\n.textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n.modalBackground.black {\n  background-color: rgba(0, 0, 0, 0.3);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n  white-space: nowrap;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  top: 2px;\n  left: -22px;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n  border-radius: var(--searchbox-radius);\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {\n  padding: 4px 8px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 9px 8px;\n  margin: 9px 8px 6px;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  border-radius: 3px;\n  max-height: 400px;\n  overflow: auto;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > input[type=checkbox] {\n  margin-top: 1px;\n  margin-right: 6px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {\n  display: flex;\n  justify-content: center;\n  padding: 0 8px;\n  margin-bottom: 9px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  padding: 3px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:first-of-type,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:first-of-type {\n  margin-right: 4px;\n  width: 60%;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:last-of-type,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:last-of-type {\n  width: 40%;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > p.title {\n  display: block;\n  padding: 6px 16px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > .textSearchWrapper {\n  padding: 26px 40px 26px 20px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > .textSearchWrapper > input[name=queryInputByColumn] {\n  margin-right: 4px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper #slider {\n  margin: 60px 40px 10px;\n  width: 230px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {\n  background-color: var(--thead-font-color);\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {\n  width: 12px;\n  height: 12px;\n  top: -4px;\n  right: -6px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle .slider-tooltip {\n  border: 1px solid var(--thead-font-color);\n  background: var(--thead-font-color);\n  padding: 0 6px;\n  line-height: 1.4em;\n  bottom: 20px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput {\n  width: 242px;\n  margin: 0 34px 30px;\n  display: flex;\n  justify-content: space-between;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput > form {\n  width: 20%;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput > form input[type=text] {\n  width: 100%;\n}\ntable > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {\n  left: auto;\n  right: 11px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 10px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center;\n  margin-bottom: -2px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.searchIcon {\n  display: var(--searchicon-display);\n  margin-left: 1px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);\n}\ntable > thead > tr .icon.searchIcon.active {\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.filterIcon.active {\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);\n}\ntable > thead > tr .icon.filterIcon.isShowing {\n  z-index: 3;\n  position: relative;\n  background-color: var(--thead-font-color);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}\n\n.modal-enter-from,\n.modal-leave-to {\n  opacity: 0;\n  margin-top: -20px;\n}\n\n.modal-enter-active,\n.modal-leave-active {\n  transition: opacity 0.4s, margin-top 0.4s;\n}\n\n.modal_bg-enter-from,\n.modal_bg-leave-to {\n  opacity: 0;\n}\n\n.modal_bg-enter-active,\n.modal_bg-leave-active {\n  transition: opacity 0.4s;\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n/* Functional styling;\n* These styles are required for noUiSlider to function.\n* You don't need to change these rules to apply your design.\n*/\n.slider-target,\n.slider-target * {\n  -webkit-touch-callout: none;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n  -webkit-user-select: none;\n  -ms-touch-action: none;\n  touch-action: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  user-select: none;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-target {\n  position: relative;\n}\n\n.slider-base,\n.slider-connects {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  z-index: 1;\n}\n\n/* Wrapper for all connect elements.\n*/\n.slider-connects {\n  overflow: hidden;\n  z-index: 0;\n}\n\n.slider-connect,\n.slider-origin {\n  will-change: transform;\n  position: absolute;\n  z-index: 1;\n  top: 0;\n  right: 0;\n  -ms-transform-origin: 0 0;\n  -webkit-transform-origin: 0 0;\n  -webkit-transform-style: preserve-3d;\n  transform-origin: 0 0;\n  transform-style: flat;\n}\n\n.slider-connect {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-origin {\n  height: 10%;\n  width: 10%;\n}\n\n/* Offset direction\n*/\n.slider-txt-dir-rtl.slider-horizontal .slider-origin {\n  left: 0;\n  right: auto;\n}\n\n/* Give origins 0 height/width so they don't interfere with clicking the\n* connect elements.\n*/\n.slider-vertical .slider-origin {\n  width: 0;\n}\n\n.slider-horizontal .slider-origin {\n  height: 0;\n}\n\n.slider-handle {\n  -webkit-backface-visibility: hidden;\n  backface-visibility: hidden;\n  position: absolute;\n}\n\n.slider-touch-area {\n  height: 100%;\n  width: 100%;\n}\n\n.slider-state-tap .slider-connect,\n.slider-state-tap .slider-origin {\n  -webkit-transition: transform 0.3s;\n  transition: transform 0.3s;\n}\n\n.slider-state-drag * {\n  cursor: inherit !important;\n}\n\n/* Slider size and handle placement;\n*/\n.slider-horizontal {\n  height: 6px;\n}\n\n.slider-horizontal .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -6px;\n  right: -8px;\n}\n\n.slider-vertical {\n  width: 6px;\n  height: 300px;\n}\n\n.slider-vertical .slider-handle {\n  width: 16px;\n  height: 16px;\n  top: -8px;\n  right: -6px;\n}\n\n.slider-txt-dir-rtl.slider-horizontal .slider-handle {\n  left: -8px;\n  right: auto;\n}\n\n/* Styling;\n* Giving the connect element a border radius causes issues with using transform: scale\n*/\n.slider-base {\n  background-color: #d4e0e7;\n  border-radius: 3px;\n}\n\n.slider-connects {\n  border-radius: 3px;\n}\n\n.slider-connect {\n  background: #41b883;\n  cursor: pointer;\n}\n\n/* Handles and cursors;\n*/\n.slider-draggable {\n  cursor: ew-resize;\n}\n\n.slider-vertical .slider-draggable {\n  cursor: ns-resize;\n}\n\n.slider-handle {\n  width: 16px;\n  height: 16px;\n  border-radius: 50%;\n  background: #fff;\n  border: 0;\n  right: -8px;\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);\n  cursor: grab;\n}\n.slider-handle:focus {\n  outline: none;\n}\n\n.slider-active {\n  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.42);\n  cursor: grabbing;\n}\n\n/* Disabled state;\n*/\n[disabled] .slider-connect {\n  background: #B8B8B8;\n}\n\n[disabled].slider-target,\n[disabled].slider-handle,\n[disabled] .slider-handle {\n  cursor: not-allowed;\n}\n\n[disabled] .slider-tooltip {\n  background: #B8B8B8;\n  border-color: #B8B8B8;\n}\n\n.slider-tooltip {\n  position: absolute;\n  display: block;\n  font-size: 14px;\n  font-weight: 500;\n  white-space: nowrap;\n  padding: 2px 5px;\n  min-width: 20px;\n  text-align: center;\n  color: #fff;\n  border-radius: 5px;\n  border: 1px solid #41b883;\n  background: #41b883;\n}\n\n.slider-horizontal .slider-tooltip {\n  -webkit-transform: translate(-50%, 0);\n  transform: translate(-50%, 0);\n  left: 50%;\n  bottom: 24px;\n}\n.slider-horizontal .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  bottom: -10px;\n  left: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-top-color: inherit;\n  transform: translate(-50%);\n}\n\n.slider-vertical .slider-tooltip {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  top: 50%;\n  right: 24px;\n}\n.slider-vertical .slider-tooltip:before {\n  content: \"\";\n  position: absolute;\n  right: -10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border: 5px solid transparent;\n  border-left-color: inherit;\n  transform: translateY(-50%);\n}\n\n.slider-horizontal .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(50%, 0);\n  transform: translate(50%, 0);\n  left: auto;\n  bottom: 14px;\n}\n\n.slider-vertical .slider-origin > .slider-tooltip {\n  -webkit-transform: translate(0, -18px);\n  transform: translate(0, -18px);\n  top: auto;\n  right: 18px;\n}\n\n/* Base;\n*\n*/\n.slider-pips,\n.slider-pips * {\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n\n.slider-pips {\n  position: absolute;\n  color: #999;\n}\n\n/* Values;\n*\n*/\n.slider-value {\n  position: absolute;\n  white-space: nowrap;\n  text-align: center;\n}\n\n.slider-value-sub {\n  color: #ccc;\n  font-size: 10px;\n}\n\n/* Markings;\n*\n*/\n.slider-marker {\n  position: absolute;\n  background: #CCC;\n}\n\n.slider-marker-sub {\n  background: #AAA;\n}\n\n.slider-marker-large {\n  background: #AAA;\n}\n\n/* Horizontal layout;\n*\n*/\n.slider-pips-horizontal {\n  padding: 10px 0;\n  height: 80px;\n  top: 100%;\n  left: 0;\n  width: 100%;\n}\n\n.slider-value-horizontal {\n  -webkit-transform: translate(-50%, 50%);\n  transform: translate(-50%, 50%);\n}\n.slider-rtl .slider-value-horizontal {\n  -webkit-transform: translate(50%, 50%);\n  transform: translate(50%, 50%);\n}\n\n.slider-marker-horizontal.slider-marker {\n  margin-left: -1px;\n  width: 2px;\n  height: 5px;\n}\n\n.slider-marker-horizontal.slider-marker-sub {\n  height: 10px;\n}\n\n.slider-marker-horizontal.slider-marker-large {\n  height: 15px;\n}\n\n/* Vertical layout;\n*\n*/\n.slider-pips-vertical {\n  padding: 0 10px;\n  height: 100%;\n  top: 0;\n  left: 100%;\n}\n\n.slider-value-vertical {\n  -webkit-transform: translate(0, -50%);\n  transform: translate(0, -50%);\n  padding-left: 25px;\n}\n.slider-rtl .slider-value-vertical {\n  -webkit-transform: translate(0, 50%);\n  transform: translate(0, 50%);\n}\n\n.slider-marker-vertical.slider-marker {\n  width: 5px;\n  height: 2px;\n  margin-top: -1px;\n}\n\n.slider-marker-vertical.slider-marker-sub {\n  width: 10px;\n}\n\n.slider-marker-vertical.slider-marker-large {\n  width: 15px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.paginationWrapper > .serialPagination {\n  padding: var(--pagination-padding);\n  display: flex;\n  justify-content: var(--pagination-placement);\n  align-items: center;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList {\n  display: flex;\n  padding: 0;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination {\n  color: var(--paginationbtn-font-color);\n  background-color: var(--paginationbtn-background-color);\n  border-right: var(--paginationbtn-border);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n  display: flex;\n  align-items: center;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:hover {\n  cursor: pointer;\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:first-of-type {\n  border-top-left-radius: var(--paginationbtn-border-radius);\n  border-bottom-left-radius: var(--paginationbtn-border-radius);\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:last-of-type {\n  border-top-right-radius: var(--paginationbtn-border-radius);\n  border-bottom-right-radius: var(--paginationbtn-border-radius);\n  border-right: none;\n}\n.paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination.currentBtn {\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n}\n.paginationWrapper > .serialPagination > .arrowWrapper {\n  min-width: 30px;\n  visibility: hidden;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper.show {\n  visibility: visible;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow {\n  display: inline-block;\n  width: 7px;\n  min-width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(45deg);\n  margin: 0 2px 0 6px;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.right {\n  transform: rotate(-135deg);\n  margin: 0 6px 0 2px;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double {\n  position: relative;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double:after {\n  content: \"\";\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--arrowbtn-color) var(--arrowbtn-color);\n  transform: rotate(0deg);\n  top: 30%;\n  left: -80%;\n  position: absolute;\n  box-sizing: border-box;\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow.double.right:after {\n  transform: rotate(0deg);\n}\n.paginationWrapper > .serialPagination > .arrowWrapper > .arrow:hover {\n  cursor: pointer;\n}\n.paginationWrapper > .serialPagination > .pageNumber {\n  margin-left: 20px;\n}\n.paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput {\n  width: 40px;\n  height: var(--searchbox-height);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.paginationWrapper > .serialPagination > .pageNumber > button {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  display: inline-block;\n  margin-left: 3px;\n}\n.paginationWrapper > .serialPagination > .pageNumber > button:hover {\n  cursor: pointer;\n}\n.paginationWrapper .pageSlider {\n  height: 4px;\n  margin-top: -5px;\n}\n.paginationWrapper .pageSlider .slider-connects {\n  background-color: #bbbbbb;\n}\n.paginationWrapper .pageSlider .slider-connects .slider-connect {\n  background-color: #bbbbbb;\n}\n.paginationWrapper .pageSlider .slider-handle > .slider-tooltip {\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  bottom: auto;\n  line-height: 1.3;\n  color: var(--currentbtn-font-color);\n  background-color: var(--currentbtn-background-color);\n  border: var(--paginationbtn-border);\n  padding: var(--paginationbtn-padding);\n  font-size: var(--paginationbtn-font-size);\n  border-radius: var(--paginationbtn-border-radius);\n}\n.paginationWrapper .pageSlider .slider-handle > .slider-tooltip:before {\n  display: none;\n}\n\n.tableOption {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin: var(--information-margin);\n}\n.tableOption > .downloadBtn > img {\n  width: var(--dlbtn-img-width);\n  height: var(--dlbtn-img-height);\n}\n\n.textSearchWrapper {\n  height: var(--searchbox-height);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.textSearchWrapper > input[type=text] {\n  margin-right: 3px;\n  height: var(--searchbox-height);\n  width: var(--searchbox-width);\n  border: 1px solid var(--searchbox-border-color);\n  border-radius: var(--searchbox-radius);\n  font-size: var(--searchbox-font-size);\n  color: var(--searchbox-font-color);\n  background-color: var(--searchbox-background-color);\n}\n.textSearchWrapper > input[type=text]::placeholder {\n  padding: 0px 0px 0px 4px;\n  color: var(--searchbox-font-color);\n}\n.textSearchWrapper > .searchBtn {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  margin-right: 2px;\n  height: var(--searchbtn-height);\n  width: var(--searchbtn-width);\n}\n.textSearchWrapper > .searchBtn > img {\n  width: var(--searchbtn-img-width);\n  height: var(--searchbtn-img-height);\n  display: var(--searchimg-display);\n}\n\n.modalBackground {\n  width: 100vw;\n  height: 100vh;\n  position: fixed;\n  top: 0;\n  left: 0;\n  z-index: 2;\n}\n.modalBackground.black {\n  background-color: rgba(0, 0, 0, 0.3);\n}\n\ntable {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n  border-top: var(--thead-border-top);\n  border-right: var(--thead-border-right);\n  border-left: var(--thead-border-left);\n  border-bottom: var(--thead-border-bottom);\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n  white-space: nowrap;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > thead > tr > th > .filterWrapper {\n  display: inline-block;\n  position: relative;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow {\n  position: absolute;\n  top: 2px;\n  left: -22px;\n  z-index: 3;\n  width: auto;\n  height: auto;\n  background-color: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n  border-radius: var(--searchbox-radius);\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {\n  padding: 4px 8px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul {\n  padding: 9px 8px;\n  margin: 9px 8px 6px;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  border-radius: 3px;\n  max-height: 400px;\n  overflow: auto;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li {\n  display: flex;\n  margin-bottom: 8px;\n  line-height: 1.4em;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > label {\n  display: flex;\n  align-items: center;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > ul > li > label > input[type=checkbox] {\n  margin-right: 6px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {\n  display: flex;\n  justify-content: center;\n  padding: 0 8px;\n  margin-bottom: 9px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {\n  border: 1px solid var(--searchbtn-border-color);\n  border-radius: var(--searchbtn-radius);\n  background-color: var(--searchbtn-color);\n  color: #ffffff;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  white-space: nowrap;\n  padding: 3px 10px;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:first-of-type,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:first-of-type {\n  margin-right: 4px;\n  width: 60%;\n}\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:last-of-type,\ntable > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:last-of-type {\n  width: 40%;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  z-index: 3;\n  background: #ffffff;\n  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > p.title {\n  display: block;\n  padding: 6px 16px;\n  background-color: var(--thead-font-color);\n  color: #ffffff;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > .textSearchWrapper {\n  padding: 26px 40px 26px 20px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper > .textSearchWrapper > input[name=queryInputByColumn] {\n  margin-right: 4px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper #slider {\n  margin: 60px 40px 10px;\n  width: 230px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {\n  background-color: var(--thead-font-color);\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {\n  width: 12px;\n  height: 12px;\n  top: -4px;\n  right: -6px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle .slider-tooltip {\n  border: 1px solid var(--thead-font-color);\n  background: var(--thead-font-color);\n  padding: 0 6px;\n  line-height: 1.4em;\n  bottom: 20px;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput {\n  width: 242px;\n  margin: 0 34px 30px;\n  display: flex;\n  justify-content: space-between;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput > form {\n  width: 20%;\n}\ntable > thead > tr > th > .textSearchByColumnWrapper .rangeInput > form input[type=text] {\n  width: 100%;\n}\ntable > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {\n  left: auto;\n  right: 11px;\n}\ntable > thead > tr .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 10px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center;\n  margin-bottom: -2px;\n  background-size: 8px 8px;\n}\ntable > thead > tr .icon.searchIcon {\n  display: var(--searchicon-display);\n  margin-left: 1px;\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);\n}\ntable > thead > tr .icon.searchIcon.active {\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);\n}\ntable > thead > tr .icon.filterIcon {\n  display: var(--filtericon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);\n}\ntable > thead > tr .icon.filterIcon.active {\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);\n}\ntable > thead > tr .icon.filterIcon.isShowing {\n  z-index: 3;\n  position: relative;\n  background-color: var(--thead-font-color);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);\n}\ntable > thead > tr .icon.sortIcon {\n  display: var(--sorticon-display);\n  background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);\n}\ntable > thead > tr .icon.sortIcon.desc {\n  background-image: url(../../assets/gray-sort-des.svg);\n}\ntable > thead > tr .icon.sortIcon.asc {\n  background-image: url(../../assets/gray-sort-asc.svg);\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}\n\n.modal-enter-from,\n.modal-leave-to {\n  opacity: 0;\n  margin-top: -20px;\n}\n\n.modal-enter-active,\n.modal-leave-active {\n  transition: opacity 0.4s, margin-top 0.4s;\n}\n\n.modal_bg-enter-from,\n.modal_bg-leave-to {\n  opacity: 0;\n}\n\n.modal_bg-enter-active,\n.modal_bg-leave-active {\n  transition: opacity 0.4s;\n}";
 
 defineStanzaElement(tableWithPagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table-with-pagination.js.map
