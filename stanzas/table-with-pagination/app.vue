@@ -361,10 +361,10 @@ export default defineComponent({
       const data = await res.json();
 
       state.responseJSON = data;
-      let columns = [];
+      let columns;
       if (params.columns) {
         columns = JSON.parse(params.columns);
-      } else if (data.length !== 0) {
+      } else if (data.length > 0) {
         const firstRow = data[0];
         columns = Object.keys(firstRow).map((key) => {
           return {
@@ -373,6 +373,8 @@ export default defineComponent({
             type: null,
           };
         });
+      } else {
+        columns = []
       }
 
       state.columns = columns.map((column) => {
@@ -399,8 +401,8 @@ export default defineComponent({
           minValue,
           maxValue,
           rangeMinMax: [minValue, maxValue],
-          inputtingPageMin: null,
-          inputtingPageMax: null,
+          inputtingRangeMin: null,
+          inputtingRangeMax: null,
         };
       });
 
