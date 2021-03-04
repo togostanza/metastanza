@@ -1,5 +1,5 @@
 <template>
-  <div v-if="totalPages > 0" ref="paginationWrapper" class="paginationWrapper">
+  <div v-if="totalPages > 1" ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div :class="['arrowWrapper', { show: state.currentPage !== 1 }]">
         <span class="arrow double left" @click="state.currentPage = 1"> </span>
