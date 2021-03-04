@@ -41,15 +41,16 @@
         <button>Go</button>
       </form>
     </div>
-    <canvas v-if="totalPages > 5" ref="canvas" class="canvas"></canvas>
-    <Slider
-      v-if="totalPages > 5"
-      v-model="state.currentPage"
-      :min="1"
-      :max="totalPages"
-      class="pageSlider"
-    >
-    </Slider>
+    <template v-if="totalPages > 5">
+      <canvas ref="canvas" class="canvas"></canvas>
+      <Slider
+        v-model="state.currentPage"
+        :min="1"
+        :max="totalPages"
+        class="pageSlider"
+      >
+      </Slider>
+    </template>
   </div>
 </template>
 
