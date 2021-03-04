@@ -73,7 +73,7 @@ var script = defineComponent({
       ctx.beginPath();
       ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
       ctx.lineTo(
-        paginationNumListX - paginationWrapper.value.offsetLeft + 111,
+        paginationNumListX - paginationWrapper.value.offsetLeft + paginationNumList.value.clientWidth,
         0
       );
       ctx.lineTo(knobX, 50);
