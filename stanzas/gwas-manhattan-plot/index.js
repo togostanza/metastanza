@@ -654,9 +654,13 @@ async function draw(stanza, params) {
       const y =
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
-          (areaHeight - 60); //一時的に
+          (areaHeight - 60); //temporary
       // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
-      if (rangeVertical[1] - rangeVertical[0] < 30) {
+      //calucurate display of scale(set 18 ticks)
+      const scaleNum = rangeVertical[1] - rangeVertical[0];
+      const tickNum = 18; //Tick number to display.(set by manual)
+      const tickInterval = Math.floor(scaleNum / tickNum);
+      if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g
           .append("text")
           .text(i)
@@ -664,22 +668,47 @@ async function draw(stanza, params) {
           .attr("x", marginLeft - 12)
           .attr("y", y)
           .attr("text-anchor", "end");
-      } else if (i % 2 === 0) {
         ylabel_g
-          .append("text")
-          .text(i)
-          .attr("class", "axisLabel yLabel")
-          .attr("x", marginLeft - 12)
-          .attr("y", y)
-          .attr("text-anchor", "end");
+          .append("path")
+          .attr("class", "axis-line")
+          .attr(
+            "d",
+            "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+          );
+      } else if (scaleNum >= tickNum) {
+        if (i % tickInterval === 0) {
+          ylabel_g
+            .append("text")
+            .text(i)
+            .attr("class", "axisLabel yLabel")
+            .attr("x", marginLeft - 12)
+            .attr("y", y)
+            .attr("text-anchor", "end");
+          ylabel_g
+            .append("path")
+            .attr("class", "axis-line")
+            .attr(
+              "d",
+              "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+            );
+        }
       }
-      ylabel_g
-        .append("path")
-        .attr("class", "axis-line")
-        .attr(
-          "d",
-          "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-        );
+      // } else if (i % 2 === 0) {
+      //   ylabel_g
+      //     .append("text")
+      //     .text(i)
+      //     .attr("class", "axisLabel yLabel")
+      //     .attr("x", marginLeft - 12)
+      //     .attr("y", y)
+      //     .attr("text-anchor", "end");
+      // }
+      // ylabel_g
+      //   .append("path")
+      //   .attr("class", "axis-line")
+      //   .attr(
+      //     "d",
+      //     "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+      //   );
       if (i === high_thresh) {
         threshline_g
           .append("path")
