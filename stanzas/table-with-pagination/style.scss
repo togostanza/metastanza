@@ -290,9 +290,12 @@ table {
                 display: flex;
                 margin-bottom: 8px;
                 line-height: 1.4em;
-                > input[type="checkbox"] {
-                  margin-top: 1px;
-                  margin-right: 6px;
+                > label {
+                  display: flex;
+                  align-items: center;
+                  > input[type="checkbox"] {
+                    margin-right: 6px;
+                  }
                 }
               }
             }
