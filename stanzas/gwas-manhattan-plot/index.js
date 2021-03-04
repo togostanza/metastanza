@@ -658,7 +658,7 @@ async function draw(stanza, params) {
       // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
       //calucurate display of scale(set 18 ticks)
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 18; //Tick number to display.(set by manual)
+      const tickNum = params["ytick-number"]; //Tick number to display.(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
       if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g

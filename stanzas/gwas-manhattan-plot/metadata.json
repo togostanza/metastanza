@@ -68,6 +68,12 @@
       "stanza:example": false,
       "stanza:description": "color type",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "ytick-number",
+      "stanza:example": 18,
+      "stanza:description": "yscale tick number to display",
+      "stanza:required": true
     }
   ],
   "stanza:about-link-placement": "bottom-right",
