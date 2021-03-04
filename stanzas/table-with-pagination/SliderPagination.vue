@@ -79,8 +79,8 @@ export default defineComponent({
       currentPage: props.currentPage,
     });
     const surroundingPages = computed(() => {
-      const { totalPages } = props;
-      const { currentPage } = props;
+      const totalPages = props.totalPages;
+      const currentPage = props.currentPage;
       let start, end;
       if (currentPage <= 3) {
         start = 1;
