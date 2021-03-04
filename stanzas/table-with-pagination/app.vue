@@ -166,8 +166,8 @@
     </tbody>
   </table>
   <SliderPagination
-    :currentPage="state.pagination.currentPage"
-    :totalPages="totalPages"
+    :current-page="state.pagination.currentPage"
+    :total-pages="totalPages"
     @updateCurrentPage="updateCurrentPage"
   />
   <div
@@ -223,7 +223,7 @@ export default defineComponent({
 
       queryInput: "",
       queryInputByColumn: "",
-      isFiltering: false
+      isFiltering: false,
     });
 
     const filteredRows = computed(() => {
@@ -357,7 +357,7 @@ export default defineComponent({
 
     function updateCurrentPage(currentPage) {
       state.pagination.currentPage = currentPage;
-    };
+    }
 
     async function fetchData() {
       const res = await fetch(params["tableDataApi"]);
@@ -377,7 +377,7 @@ export default defineComponent({
           };
         });
       } else {
-        columns = []
+        columns = [];
       }
 
       state.columns = columns.map((column) => {
@@ -435,7 +435,7 @@ export default defineComponent({
       submitQuery,
       closeModal,
       isSearchOn,
-      updateCurrentPage
+      updateCurrentPage,
     };
   },
 });

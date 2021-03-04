@@ -1,14 +1,8 @@
 <template>
-  <div ref="paginationWrapper" class="paginationWrapper">
+  <div v-if="totalPages > 0" ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
-      <div
-        :class="['arrowWrapper', { show: state.currentPage !== 1 }]"
-      >
-        <span
-          class="arrow double left"
-          @click="state.currentPage = 1"
-        >
-        </span>
+      <div :class="['arrowWrapper', { show: state.currentPage !== 1 }]">
+        <span class="arrow double left" @click="state.currentPage = 1"> </span>
         <span class="arrow left" @click="state.currentPage--"></span>
       </div>
 
@@ -16,10 +10,7 @@
         <li
           v-for="page in surroundingPages"
           :key="page"
-          :class="[
-            'pagination',
-            { currentBtn: state.currentPage === page },
-          ]"
+          :class="['pagination', { currentBtn: state.currentPage === page }]"
           @click="state.currentPage = page"
         >
           {{ page }}
@@ -27,15 +18,9 @@
       </ul>
 
       <div
-        :class="[
-          'arrowWrapper',
-          { show: state.currentPage !== totalPages },
-        ]"
+        :class="['arrowWrapper', { show: state.currentPage !== totalPages }]"
       >
-        <span
-          class="arrow right"
-          @click="state.currentPage++"
-        ></span>
+        <span class="arrow right" @click="state.currentPage++"></span>
         <span
           class="arrow double right"
           @click="state.currentPage = totalPages"
@@ -56,7 +41,7 @@
         <button>Go</button>
       </form>
     </div>
-    <canvas ref="canvas" class="canvas"></canvas>
+    <canvas v-if="totalPages > 5" ref="canvas" class="canvas"></canvas>
     <Slider
       v-if="totalPages > 5"
       v-model="state.currentPage"
@@ -84,8 +69,8 @@ export default defineComponent({
     },
     totalPages: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
@@ -111,6 +96,9 @@ export default defineComponent({
     });
 
     function jumpToPage(num) {
+      if (num < 1 || num > props.totalPages) {
+        return;
+      }
       state.currentPage = num ? num : 1;
       state.jumpToNumberInput = "";
     }
@@ -119,41 +107,38 @@ export default defineComponent({
     const canvas = ref(null);
     const paginationNumList = ref(null);
     function drawKnobArrow() {
+      const totalPages = props.totalPages;
+      if (totalPages <= 5) {
+        return;
+      }
+
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
-      const { totalPages } = props;
-      if (totalPages > 5) {
-        const paginationNumListX = paginationNumList.value.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName(
-          "slider-origin"
-        )[0];
-        const knobTranslate = knob.style.transform
-          .match(/translate\((.+)%,(.+)\)/)[1]
-          .split(",")[0];
-        const knobX =
-          ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
-        const ctx = canvas.value.getContext("2d");
-        ctx.beginPath();
-        ctx.moveTo(
-          paginationNumListX - paginationWrapper.value.offsetLeft,
-          0
-        );
-        ctx.lineTo(
-          paginationNumListX -
-            paginationWrapper.value.offsetLeft +
-            111,
-          0
-        );
-        ctx.lineTo(knobX, 50);
-        ctx.closePath();
-        ctx.fillStyle = "#dddddd";
-        ctx.fill();
-      }
+      const paginationNumListX = paginationNumList.value.offsetLeft;
+      const knob = paginationWrapper.value.getElementsByClassName(
+        "slider-origin"
+      )[0];
+      const knobTranslate = knob.style.transform
+        .match(/translate\((.+)%,(.+)\)/)[1]
+        .split(",")[0];
+      const knobX =
+        ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+      const ctx = canvas.value.getContext("2d");
+      ctx.beginPath();
+      ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
+      ctx.lineTo(
+        paginationNumListX - paginationWrapper.value.offsetLeft + 111,
+        0
+      );
+      ctx.lineTo(knobX, 50);
+      ctx.closePath();
+      ctx.fillStyle = "#dddddd";
+      ctx.fill();
     }
 
     onUpdated(drawKnobArrow);
     onUpdated(() => {
-      context.emit("updateCurrentPage", state.currentPage)
+      context.emit("updateCurrentPage", state.currentPage);
     });
 
     return {
