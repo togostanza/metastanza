@@ -122,7 +122,7 @@ export default defineComponent({
       canvas.value.width = paginationWrapper.value.clientWidth;
       canvas.value.height = 50;
       const { totalPages } = props;
-      if (canvas.value.getContext && totalPages > 5) {
+      if (totalPages > 5) {
         const paginationNumListX = paginationNumList.value.offsetLeft;
         const knob = paginationWrapper.value.getElementsByClassName(
           "slider-origin"
@@ -135,12 +135,12 @@ export default defineComponent({
         const ctx = canvas.value.getContext("2d");
         ctx.beginPath();
         ctx.moveTo(
-          paginationNumListX - paginationNumList.value.parentNode.offsetLeft,
+          paginationNumListX - paginationWrapper.value.offsetLeft,
           0
         );
         ctx.lineTo(
           paginationNumListX -
-            paginationNumList.value.parentNode.offsetLeft +
+            paginationWrapper.value.offsetLeft +
             111,
           0
         );
