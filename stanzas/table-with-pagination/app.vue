@@ -109,14 +109,14 @@
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
                     <input
-                      v-model="column.inputtingPageMin"
+                      v-model="column.inputtingRangeMin"
                       type="text"
                       class="min"
                     />
                   </form>
                   <form @submit.prevent="setRangeFilters(column)">
                     <input
-                      v-model="column.inputtingPageMax"
+                      v-model="column.inputtingRangeMax"
                       type="text"
                       class="max"
                     />
@@ -319,10 +319,10 @@ export default defineComponent({
     }
 
     function setRangeFilters(column) {
-      column.rangeMinMax[0] = column.inputtingPageMin;
-      column.rangeMinMax[1] = column.inputtingPageMax;
-      column.inputtingPageMin = null;
-      column.inputtingPageMax = null;
+      column.rangeMinMax[0] = column.inputtingRangeMin;
+      column.rangeMinMax[1] = column.inputtingRangeMax;
+      column.inputtingRangeMin = null;
+      column.inputtingRangeMax = null;
     }
 
     function setQueryInput() {
