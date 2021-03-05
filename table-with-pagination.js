@@ -73,7 +73,9 @@ var script = defineComponent({
       ctx.beginPath();
       ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
       ctx.lineTo(
-        paginationNumListX - paginationWrapper.value.offsetLeft + paginationNumList.value.clientWidth,
+        paginationNumListX -
+          paginationWrapper.value.offsetLeft +
+          paginationNumList.value.clientWidth,
         0
       );
       ctx.lineTo(knobX, 50);
@@ -1609,11 +1611,7 @@ var script$1 = defineComponent({
       allRows: [],
 
       query: "",
-      queryByColumn: {
-        column: null,
-        searchType: null,
-        query: "",
-      },
+      queriesByColumn: [],
       columnShowingFilters: null,
       columnShowingTextSearch: null,
 
@@ -1628,13 +1626,12 @@ var script$1 = defineComponent({
       },
 
       queryInput: "",
-      queryInputByColumn: "",
       isFiltering: false,
     });
 
     const filteredRows = computed(() => {
       const query = state.query;
-      const queryByColumn = state.queryByColumn.query;
+      const queriesByColumn = state.queriesByColumn;
       const filtered = state.allRows
         .filter((row) => {
           return query
@@ -1642,24 +1639,26 @@ var script$1 = defineComponent({
             : true;
         })
         .filter((row) => {
-          switch (state.queryByColumn.searchType) {
-            case "number":
-              return row.some((cell) => {
-                return (
-                  cell.column.searchType === "number" &&
-                  cell.value >= cell.column.rangeMinMax[0] &&
-                  cell.value <= cell.column.rangeMinMax[1]
-                );
-              });
-            default:
-              return queryByColumn
-                ? row.some(
-                    (cell) =>
-                      cell.column.label === state.queryByColumn.column &&
-                      cell.value.includes(queryByColumn)
-                  )
-                : true;
-          }
+          return queriesByColumn.length > 0
+            ? row.every((cell) => {
+                switch (cell.column.searchType) {
+                  case "number": {
+                    return (
+                      cell.value >= cell.column.rangeMinMax[0] &&
+                      cell.value <= cell.column.rangeMinMax[1]
+                    );
+                  }
+                  default: {
+                    const query = queriesByColumn.find(
+                      (query) => query.id === cell.column.id
+                    );
+                    return query
+                      ? cell.value.includes(query.queryInputByColumn)
+                      : true;
+                  }
+                }
+              })
+            : true;
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -1735,10 +1734,19 @@ var script$1 = defineComponent({
       state.query = state.queryInput;
     }
 
-    function submitQuery(column, type, query) {
-      state.queryByColumn.column = column;
-      state.queryByColumn.searchType = type;
-      state.queryByColumn.query = query;
+    function submitQuery(column) {
+      if (isSearchOn(column)) {
+        state.queriesByColumn.push({
+          id: column.id,
+          searchType: column.searchType,
+          queryInputByColumn: column.queryInputByColumn,
+          rangeMinMax: column.rangeMinMax,
+        });
+      } else {
+        state.queriesByColumn = state.queriesByColumn.filter(
+          (query) => query.id !== column.id
+        );
+      }
     }
 
     function closeModal() {
@@ -1755,8 +1763,8 @@ var script$1 = defineComponent({
           );
         default:
           return (
-            state.queryByColumn.column === column.label &&
-            state.queryByColumn.query !== ""
+            column.queryInputByColumn !== null
+            // state.queriesByColumn.some(query => query === column)
           );
       }
     }
@@ -1785,7 +1793,6 @@ var script$1 = defineComponent({
       } else {
         columns = [];
       }
-
       state.columns = columns.map((column) => {
         const filters = lodash_uniq(data.map((datam) => datam[column.id]))
           .sort()
@@ -1812,6 +1819,7 @@ var script$1 = defineComponent({
           rangeMinMax: [minValue, maxValue],
           inputtingRangeMin: null,
           inputtingRangeMax: null,
+          queryInputByColumn: null,
         };
       });
 
@@ -1995,24 +2003,22 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                       (column === _ctx.state.columnShowingTextSearch)
                         ? (openBlock(), createBlock("div", _hoisted_8, [
                             createVNode("p", _hoisted_9, [
-                              (_ctx.state.columnShowingTextSearch.searchType === 'number')
+                              (column.searchType === 'number')
                                 ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                                    createTextVNode(" Set " + toDisplayString(_ctx.state.columnShowingTextSearch.label) + " range ", 1 /* TEXT */)
+                                    createTextVNode(" Set " + toDisplayString(column.label) + " range ", 1 /* TEXT */)
                                   ], 64 /* STABLE_FRAGMENT */))
                                 : (openBlock(), createBlock(Fragment, { key: 1 }, [
-                                    createTextVNode(" Search for \"" + toDisplayString(_ctx.state.columnShowingTextSearch.label) + "\" ", 1 /* TEXT */)
+                                    createTextVNode(" Search for \"" + toDisplayString(column.label) + "\" ", 1 /* TEXT */)
                                   ], 64 /* STABLE_FRAGMENT */))
                             ]),
-                            (_ctx.state.columnShowingTextSearch.searchType === 'number')
+                            (column.searchType === 'number')
                               ? (openBlock(), createBlock("div", _hoisted_10, [
                                   createVNode(_component_Slider, {
                                     modelValue: column.rangeMinMax,
                                     "onUpdate:modelValue": $event => (column.rangeMinMax = $event),
                                     min: column.minValue,
                                     max: column.maxValue,
-                                    onChange: $event => (
-                    _ctx.submitQuery(column, column.searchType, column.rangeMinMax)
-                  )
+                                    onChange: $event => (_ctx.submitQuery(column))
                                   }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min", "max", "onChange"]),
                                   createVNode("div", _hoisted_11, [
                                     createVNode("form", {
@@ -2042,24 +2048,18 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               : (openBlock(), createBlock("form", {
                                   key: 1,
                                   class: "textSearchWrapper",
-                                  onSubmit: _cache[4] || (_cache[4] = withModifiers($event => (
-                  _ctx.submitQuery(
-                    _ctx.state.columnShowingTextSearch.label,
-                    _ctx.state.columnShowingTextSearch.searchType,
-                    _ctx.state.queryInputByColumn
-                  )
-                ), ["prevent"]))
+                                  onSubmit: withModifiers($event => (_ctx.submitQuery(column)), ["prevent"])
                                 }, [
                                   withDirectives(createVNode("input", {
-                                    "onUpdate:modelValue": _cache[3] || (_cache[3] = $event => (_ctx.state.queryInputByColumn = $event)),
+                                    "onUpdate:modelValue": $event => (column.queryInputByColumn = $event),
                                     type: "text",
                                     placeholder: "Search for keywords...",
                                     name: "queryInputByColumn"
-                                  }, null, 512 /* NEED_PATCH */), [
-                                    [vModelText, _ctx.state.queryInputByColumn]
+                                  }, null, 8 /* PROPS */, ["onUpdate:modelValue"]), [
+                                    [vModelText, column.queryInputByColumn]
                                   ]),
                                   _hoisted_12
-                                ], 32 /* HYDRATE_EVENTS */))
+                                ], 40 /* PROPS, HYDRATE_EVENTS */, ["onSubmit"]))
                           ]))
                         : createCommentVNode("v-if", true)
                     ]),
@@ -2102,7 +2102,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
       ? (openBlock(), createBlock("div", {
           key: 1,
           class: ['modalBackground', { black: _ctx.state.columnShowingTextSearch }],
-          onClick: _cache[5] || (_cache[5] = $event => (_ctx.closeModal()))
+          onClick: _cache[3] || (_cache[3] = $event => (_ctx.closeModal()))
         }, null, 2 /* CLASS */))
       : createCommentVNode("v-if", true)
   ], 64 /* STABLE_FRAGMENT */))
