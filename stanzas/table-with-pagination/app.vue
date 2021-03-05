@@ -88,23 +88,17 @@
               class="textSearchByColumnWrapper modal"
             >
               <p class="title">
-                <template
-                  v-if="column.searchType === 'number'"
-                >
+                <template v-if="column.searchType === 'number'">
                   Set {{ column.label }} range
                 </template>
-                <template v-else>
-                  Search for "{{ column.label }}"
-                </template>
+                <template v-else> Search for "{{ column.label }}" </template>
               </p>
               <div v-if="column.searchType === 'number'">
                 <Slider
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
-                  @change="
-                    submitQuery(column)
-                  "
+                  @change="submitQuery(column)"
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
@@ -126,9 +120,7 @@
               <form
                 v-else
                 class="textSearchWrapper"
-                @submit.prevent="
-                  submitQuery(column)
-                "
+                @submit.prevent="submitQuery(column)"
               >
                 <input
                   v-model="column.queryInputByColumn"
@@ -229,18 +221,24 @@ export default defineComponent({
         .filter((row) => {
           return queriesByColumn.length > 0
             ? row.every((cell) => {
-              switch (cell.column.searchType) {
-                case "number":
-                  return (cell.value >= cell.column.rangeMinMax[0] &&
-                  cell.value <= cell.column.rangeMinMax[1])
-                default:
-                  const query = queriesByColumn.find(query => query.id === cell.column.id)
-                  return query
-                    ? cell.value.includes(query.queryInputByColumn)
-                    : true
-              }
-            })
-            : true
+                switch (cell.column.searchType) {
+                  case "number": {
+                    return (
+                      cell.value >= cell.column.rangeMinMax[0] &&
+                      cell.value <= cell.column.rangeMinMax[1]
+                    );
+                  }
+                  default: {
+                    const query = queriesByColumn.find(
+                      (query) => query.id === cell.column.id
+                    );
+                    return query
+                      ? cell.value.includes(query.queryInputByColumn)
+                      : true;
+                  }
+                }
+              })
+            : true;
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -317,15 +315,17 @@ export default defineComponent({
     }
 
     function submitQuery(column) {
-      if(isSearchOn(column)) {
+      if (isSearchOn(column)) {
         state.queriesByColumn.push({
           id: column.id,
           searchType: column.searchType,
           queryInputByColumn: column.queryInputByColumn,
-          rangeMinMax: column.rangeMinMax
-        })
+          rangeMinMax: column.rangeMinMax,
+        });
       } else {
-        state.queriesByColumn = state.queriesByColumn.filter(query => query.id !== column.id)
+        state.queriesByColumn = state.queriesByColumn.filter(
+          (query) => query.id !== column.id
+        );
       }
     }
 
@@ -399,7 +399,7 @@ export default defineComponent({
           rangeMinMax: [minValue, maxValue],
           inputtingRangeMin: null,
           inputtingRangeMax: null,
-          queryInputByColumn: null
+          queryInputByColumn: null,
         };
       });
 

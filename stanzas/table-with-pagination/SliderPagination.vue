@@ -128,7 +128,9 @@ export default defineComponent({
       ctx.beginPath();
       ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
       ctx.lineTo(
-        paginationNumListX - paginationWrapper.value.offsetLeft + paginationNumList.value.clientWidth,
+        paginationNumListX -
+          paginationWrapper.value.offsetLeft +
+          paginationNumList.value.clientWidth,
         0
       );
       ctx.lineTo(knobX, 50);
