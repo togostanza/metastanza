@@ -55,6 +55,9 @@ path {
     stroke: #dddddd;
     stroke-width: 2px;
   }
+  &.background-fill {
+    stroke: red;
+  }
 }
 
 text {
@@ -203,6 +206,19 @@ svg#dl_button {
   .hover {
     opacity: 1;
   }
+}
+
+div .tooltip {
+  position: absolute;
+  text-align: center;
+  width: 80px;
+  height: 30px;
+  padding: 2px;
+  font-size: 14px;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 .info-section {

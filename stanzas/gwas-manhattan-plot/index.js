@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "../gwas-manhattan-plot/gwas.var2.json";
+import { area } from "d3";
 
 // study name(single per a json)
 const dataset = data.dataset;
@@ -80,7 +81,7 @@ export default async function gwasManhattanPlot(stanza, params) {
 
   console.log("stage_info", stage_info);
 
-  // adjust datas
+  // adjust datum
   for (let i = 0; i < variants.length; i++) {
     // convert chromosome data from 'chrnum' to 'num'
     let chr = variants[i].chr;
@@ -214,8 +215,38 @@ async function draw(stanza, params) {
       22: 50818468,
       X: 156040895,
       Y: 57227415,
-    },
+
+    }
   };
+  const chromosomeSumLength = {};
+  Object.keys(chromosomeNtLength).forEach(ref => {
+    chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce((acc, chr) => chromosomeNtLength[ref][chr] + acc, 0);
+    // console.log('ref',ref)
+    // console.log('chromosomeSumLength[ref]',chromosomeSumLength[ref])
+  });
+  console.log("chromosomeSumLength.hg38",chromosomeSumLength.hg38)
+
+  console.log(chromosomeNtLength.hg38)
+  console.log(Object.values(chromosomeNtLength.hg38));
+  const chromosomeArray = Object.values(chromosomeNtLength.hg38);
+// expected output: Array ["248956422", 242193529, 198295559, ... ,]
+  const chromosomeStartPosition = {};
+  let startPos = 0;
+  for (let i=0; i<chromosomeArray.length; i++) {
+    let chr = chromosomes[i];
+    console.log('chr',chr);
+    console.log('startPos',startPos)
+    if(chr === "1"){
+      chromosomeStartPosition[chr] = 0;
+    } else {
+      startPos += chromosomeArray[i-1];
+      console.log(startPos)
+      chromosomeStartPosition[chr] = startPos;
+    }
+  }
+  console.log('chromosomeStartPosition',chromosomeStartPosition);
+
+  const yCategoricalScale = [4, 8, 12, 16, 20, 100, 180, 260, 340, 420];
 
   const canvas_div = d3
     .select(chart_element)
@@ -233,13 +264,19 @@ async function draw(stanza, params) {
     .select(chart_element)
     .append("svg")
     .attr("width", width)
-    .attr("height", height);
-  const plot_g = svg.append("g").attr("id", "plot_group");
-  const axis_g = svg.append("g").attr("id", "axis");
-  const threshline_g = svg.append("g").attr("id", "thresh_line");
+    .attr("height", height)
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
+  const plot_g = svg.append("g").attr("id", "plot_group");
+  const threshline_g = svg.append("g").attr("id", "thresh_line");
+  const axis_g = svg.append("g").attr("id", "axis");
   const ytitle = svg.append("g").attr("id", "y_title");
+  // const tooltip = svg.append("g").attr("class", "tooltip");
+  // const tooltip = d3.select("body").append("div").attr("class", "tooltip");
+  const div = svg.append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
 
   let range = []; // [begin position, end _position]
   let rangeVertical = []; // [begin position, end _position]
@@ -532,9 +569,10 @@ async function draw(stanza, params) {
       rangeVertical = [low_thresh, max_log_p_int];
     }
 
-    plot_g.html("");
     xlabel_g.html("");
     ylabel_g.html("");
+    plot_g.html("");
+
     plot_g
       .selectAll(".plot")
       .data(variants)
@@ -602,6 +640,11 @@ async function draw(stanza, params) {
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
         svg
+          // .append("rect")
+          // .append("text",d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
+          // .attr("x", d3.pointer(e)[0] + 10)
+          // .attr("y", d3.pointer(e)[1])
+          // .attr("id", "popup_text");
           .append("text")
           .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
           .attr("x", d3.pointer(e)[0] + 10)
@@ -609,6 +652,7 @@ async function draw(stanza, params) {
           .attr("id", "popup_text");
       })
       .on("mouseout", function () {
+        // tooltip.style("visibility", "hidden");
         svg.select("#popup_text").remove();
       });
     // plot_g.selectAll(".plot").attr("cy", function (d) {
@@ -618,6 +662,7 @@ async function draw(stanza, params) {
     // });
 
     renderCanvas(variants, range);
+
 
     // x axis label
     xlabel_g
@@ -643,9 +688,37 @@ async function draw(stanza, params) {
       })
       .attr("y", areaHeight + 20);
 
+    // x axis label
+    xlabel_g
+      .selectAll(".xBackground")
+      .data(chromosomes)
+      .enter()
+      .append("rect")
+      .attr("class", "axisLabel xBackground")
+      .attr("x", function (d) {
+        //chromosomeSumLength.hg38
+        const selectedWidth = range[1] - range[0];
+        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        return (
+          (chromosomeStartPosition[d] / (range[1] - range[0])) * areaWidth + marginLeft
+        );
+      })
+      .attr("y", marginBottom * 2)
+      .attr("width", function(d){
+        const selectedWidth = range[1] - range[0];
+        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
+      })
+      .attr("height",areaHeight - marginBottom * 2)
+      .attr("fill", function(d){
+        if(d % 2 === 0 || d === "Y"){
+          return "#EEEEEE"
+        }else if(d % 2 !== 0 || d === "X"){
+          return "#FFFFFF"
+        }
+      });
     // y axis label
     const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
-
     for (
       let i = Math.floor(rangeVertical[0]) + 1;
       i <= Math.ceil(rangeVertical[1]);
@@ -658,7 +731,7 @@ async function draw(stanza, params) {
       // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
       //calucurate display of scale(set 18 ticks)
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = params["ytick-number"]; //Tick number to display.(set by manual)
+      const tickNum = 18; //Tick number to display.(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
       if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g
@@ -693,22 +766,6 @@ async function draw(stanza, params) {
             );
         }
       }
-      // } else if (i % 2 === 0) {
-      //   ylabel_g
-      //     .append("text")
-      //     .text(i)
-      //     .attr("class", "axisLabel yLabel")
-      //     .attr("x", marginLeft - 12)
-      //     .attr("y", y)
-      //     .attr("text-anchor", "end");
-      // }
-      // ylabel_g
-      //   .append("path")
-      //   .attr("class", "axis-line")
-      //   .attr(
-      //     "d",
-      //     "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-      //   );
       if (i === high_thresh) {
         threshline_g
           .append("path")
