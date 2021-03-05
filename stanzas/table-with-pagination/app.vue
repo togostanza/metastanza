@@ -89,21 +89,21 @@
             >
               <p class="title">
                 <template
-                  v-if="state.columnShowingTextSearch.searchType === 'number'"
+                  v-if="column.searchType === 'number'"
                 >
-                  Set {{ state.columnShowingTextSearch.label }} range
+                  Set {{ column.label }} range
                 </template>
                 <template v-else>
-                  Search for "{{ state.columnShowingTextSearch.label }}"
+                  Search for "{{ column.label }}"
                 </template>
               </p>
-              <div v-if="state.columnShowingTextSearch.searchType === 'number'">
+              <div v-if="column.searchType === 'number'">
                 <Slider
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
                   @change="
-                    submitQuery(column, column.searchType, column.rangeMinMax)
+                    submitQuery(column)
                   "
                 ></Slider>
                 <div class="rangeInput">
@@ -127,15 +127,11 @@
                 v-else
                 class="textSearchWrapper"
                 @submit.prevent="
-                  submitQuery(
-                    state.columnShowingTextSearch.label,
-                    state.columnShowingTextSearch.searchType,
-                    state.queryInputByColumn
-                  )
+                  submitQuery(column)
                 "
               >
                 <input
-                  v-model="state.queryInputByColumn"
+                  v-model="column.queryInputByColumn"
                   type="text"
                   placeholder="Search for keywords..."
                   name="queryInputByColumn"
@@ -203,11 +199,7 @@ export default defineComponent({
       allRows: [],
 
       query: "",
-      queryByColumn: {
-        column: null,
-        searchType: null,
-        query: "",
-      },
+      queriesByColumn: [],
       columnShowingFilters: null,
       columnShowingTextSearch: null,
 
@@ -222,13 +214,12 @@ export default defineComponent({
       },
 
       queryInput: "",
-      queryInputByColumn: "",
       isFiltering: false,
     });
 
     const filteredRows = computed(() => {
       const query = state.query;
-      const queryByColumn = state.queryByColumn.query;
+      const queriesByColumn = state.queriesByColumn;
       const filtered = state.allRows
         .filter((row) => {
           return query
@@ -236,24 +227,20 @@ export default defineComponent({
             : true;
         })
         .filter((row) => {
-          switch (state.queryByColumn.searchType) {
-            case "number":
-              return row.some((cell) => {
-                return (
-                  cell.column.searchType === "number" &&
-                  cell.value >= cell.column.rangeMinMax[0] &&
-                  cell.value <= cell.column.rangeMinMax[1]
-                );
-              });
-            default:
-              return queryByColumn
-                ? row.some(
-                    (cell) =>
-                      cell.column.label === state.queryByColumn.column &&
-                      cell.value.includes(queryByColumn)
-                  )
-                : true;
-          }
+          return queriesByColumn.length > 0
+            ? row.every((cell) => {
+              switch (cell.column.searchType) {
+                case "number":
+                  return (cell.value >= cell.column.rangeMinMax[0] &&
+                  cell.value <= cell.column.rangeMinMax[1])
+                default:
+                  const query = queriesByColumn.find(query => query.id === cell.column.id)
+                  return query
+                    ? cell.value.includes(query.queryInputByColumn)
+                    : true
+              }
+            })
+            : true
         })
         .filter((row) => {
           return row.every((cell) => {
@@ -329,10 +316,17 @@ export default defineComponent({
       state.query = state.queryInput;
     }
 
-    function submitQuery(column, type, query) {
-      state.queryByColumn.column = column;
-      state.queryByColumn.searchType = type;
-      state.queryByColumn.query = query;
+    function submitQuery(column) {
+      if(isSearchOn(column)) {
+        state.queriesByColumn.push({
+          id: column.id,
+          searchType: column.searchType,
+          queryInputByColumn: column.queryInputByColumn,
+          rangeMinMax: column.rangeMinMax
+        })
+      } else {
+        state.queriesByColumn = state.queriesByColumn.filter(query => query.id !== column.id)
+      }
     }
 
     function closeModal() {
@@ -349,8 +343,8 @@ export default defineComponent({
           );
         default:
           return (
-            state.queryByColumn.column === column.label &&
-            state.queryByColumn.query !== ""
+            column.queryInputByColumn !== null
+            // state.queriesByColumn.some(query => query === column)
           );
       }
     }
@@ -379,7 +373,6 @@ export default defineComponent({
       } else {
         columns = [];
       }
-
       state.columns = columns.map((column) => {
         const filters = uniq(data.map((datam) => datam[column.id]))
           .sort()
@@ -406,6 +399,7 @@ export default defineComponent({
           rangeMinMax: [minValue, maxValue],
           inputtingRangeMin: null,
           inputtingRangeMax: null,
+          queryInputByColumn: null
         };
       });
 
