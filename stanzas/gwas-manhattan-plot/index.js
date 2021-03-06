@@ -47,7 +47,6 @@ export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      greeting: `Hello, ${params["say-to"]}!`,
       title: params["title"],
       study_name,
       project_name,
@@ -148,11 +147,7 @@ async function draw(stanza, params) {
   const low_thresh = parseFloat(params.low_thresh);
   // let high_thresh = parseFloat(params.high_thresh);
   let high_thresh = parseFloat(params.high_thresh);
-  const threshold = stanza.root.querySelector("#threshold");
-  threshold.addEventListener("input", function () {
-    high_thresh = parseFloat(threshold.value);
-    reRender();
-  });
+
   const even_and_odd = params.even_and_odd === "true";
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
@@ -494,6 +489,13 @@ async function draw(stanza, params) {
     .append("div")
     .attr("id", "ctrl_button");
   ctrl_button
+    .append("span")
+    .attr("class", "info-key")
+    .text("Position:  ")
+    .append("span")
+    .attr("class", "range-text")
+    .attr("id", "range_text");
+  ctrl_button
     .append("input")
     .attr("type", "button")
     .attr("value", "-")
@@ -526,7 +528,6 @@ async function draw(stanza, params) {
       range = [begin, end];
       reRender();
     });
-  ctrl_button.append("span").attr("id", "range_text");
   ctrl_button
     .append("input")
     .attr("type", "button")
@@ -536,6 +537,21 @@ async function draw(stanza, params) {
       rangeVertical = [];
       reRender();
     });
+  ctrl_button
+    .append("label")
+    .attr("class", "info-key -threshold")
+    .text("Threshold:  ")
+    .append("input")
+    .attr("class", "threshold-input")
+    .attr("id", "threshold")
+    .attr("type", "text")
+    .attr("value", "8");
+
+  const threshold = stanza.root.querySelector("#threshold");
+  threshold.addEventListener("input", function () {
+    high_thresh = parseFloat(threshold.value);
+    reRender();
+  });
 
   reRender();
 
@@ -882,10 +898,10 @@ async function draw(stanza, params) {
     let text = "";
     for (const ch of chromosomes) {
       if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) {
-        text += " Ch." + ch + ":" + Math.floor(range[0]);
+        text += " chr:" + ch + ":" + Math.floor(range[0]);
       }
       if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
-        text += " - Ch." + ch + ":" + Math.floor(range[1] - start);
+        text += " - chr:" + ch + ":" + Math.floor(range[1] - start);
         break;
       }
       start += chromosomeNtLength.hg38[ch];

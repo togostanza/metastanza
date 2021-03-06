@@ -4,10 +4,21 @@
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
+//Variables
+$COLOR_GREY: #707070;
+$COLOR_LIGHTGREY: #99acb2;
+$COLOR_DARKBLUE: #2f4d76;
+$BORDER: 1.5px solid $COLOR_LIGHTGREY;
+
 // common styles
 * {
   margin: 0;
   font-family: "Arial", sans-serif;
+}
+
+main {
+  padding: none !important;
+  background-color: #ffffff;
 }
 
 li {
@@ -15,27 +26,25 @@ li {
 }
 
 h1 {
-  padding: 10px 5px 10px;
-  margin-bottom: 30px;
+  padding: 15px 0px 12px 15px;
   font-size: 22px;
   font-weight: 400;
   color: #2f4d76;
   background-color: #f2f5f7;
-  // border: 1px #c3d2d9 solid;
-  // border-bottom: none;
 }
 
 h2 {
-  font-size: 26pt;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 600;
   color: #000000;
-  margin-bottom: 10px;
-  padding: 0 20px;
+  margin-bottom: 12px;
+  padding: 0px;
 }
 
-// specific styles
-main {
-  padding: 1rem 2rem;
+hr {
+  height: 1px;
+  background-color: $COLOR_GREY;
+  border: none;
 }
 
 div#chart {
@@ -62,7 +71,7 @@ path {
 
 text {
   &.axisLabel {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   &.xLabel {
@@ -78,7 +87,7 @@ text {
   &.axis-title {
     user-select: none;
     color: #000000;
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -209,12 +218,13 @@ svg#dl_button {
 }
 
 .tooltip {
+  box-sizing: border-box;
   position: absolute;
-  padding: 15px;
+  padding: 12px;
   width: 170px;
-  height: 110px;
+  height: 120px;
   background: #f6f6f6;
-  border: 1px solid #99acb2;
+  border: $BORDER;
   -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -224,60 +234,55 @@ svg#dl_button {
   font-weight: 600;
   .tooltip-chr {
     color: #2f4d76;
-    font-size: 18.67px;
+    font-size: 14px;
   }
   .tooltip-info {
     padding: 0px;
     li {
-      font-size: 14px;
+      font-size: 12px;
       color: #000000;
       .tooltip-key {
-        color: #99acb2;
+        color: $COLOR_LIGHTGREY;
       }
     }
   }
 }
 
 .info-section {
-  padding: 0 20px;
+  padding: 20px 30px;
   max-width: 800px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 60px;
-  .condition-list {
-    padding-bottom: 6px;
-    li {
-      font-size: 16px;
-      position: relative;
-      top: -3px;
-      line-height: 20px;
-      span {
-        font-size: 14px;
-        color: #2f4d76;
-      }
-    }
-  }
   .datainfo-list {
-    dt {
-      color: #2f4d76;
+    .info-key {
+      display: inline-block;
+      color: $COLOR_LIGHTGREY;
       font-size: 14px;
+      font-weight: 600;
+      &.first-condition-name {
+        display: inline-block;
+        position: relative;
+        top: -3px;
+      }
+      &.second-condition-name {
+        display: inline-block;
+        position: relative;
+        top: -3px;
+      }
     }
     dd {
       padding-bottom: 6px;
       font-size: 16px;
       position: relative;
       top: -3px;
-      ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        li {
-          margin-right: 10px;
-        }
+      &.first-condition-value {
+        display: inline-block;
+        padding: 0px 20px 0px 0px;
       }
-      #threshold {
-        width: 100px;
+      &.second-condition-value {
+        display: inline-block;
+        padding: 0px;
       }
     }
   }
@@ -307,29 +312,84 @@ div#dl_list {
 }
 
 #ctrl_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   input {
     background-color: #ffffff;
-    border: 1px solid #99acb2;
+    border: $BORDER;
     border-radius: 2px;
     margin-right: 1px;
     height: 20px;
   }
   #range_text {
     margin: 0px 4px 0px 2px;
+    font-size: 14px;
+    color: $COLOR_DARKBLUE;
+    font-weight: 600;
+  }
+  .info-key {
+    display: inline-block;
+    margin-right: 6px;
+    color: $COLOR_LIGHTGREY;
+    font-size: 14px;
+    font-weight: 600;
+    .threshold-input {
+      width: 60px;
+      height: 18px;
+      padding: 0px 5px 0px 0px;
+      margin: 0px;
+      border: $BORDER;
+      border-radius: 2px;
+      text-align: right;
+    }
+    &.-threshold {
+      margin-left: 40px;
+    }
   }
 }
 
 .chart-section {
-  padding: 0 20px;
+  width: 100%;
+  padding: 20px 30px;
+  dl {
+    display: flex;
+    justify-content: flex-end;
+    .info-key {
+      display: inline-block;
+      margin-top: -1px;
+      padding-right: 6px;
+      color: $COLOR_LIGHTGREY;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    dd {
+      ul {
+        list-style: none;
+        display: flex;
+        // justify-content: flex-end;
+        padding: 0;
+        li {
+          margin-right: 10px;
+          font-size: 12px;
+          display: flex;
+          justify-content: bottom;
+          input {
+            margin: 3px 6px 0px 0px;
+          }
+          label {
+            margin-top: 2px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .table-section {
-  padding: 0 20px;
-  margin-top: 60px;
-  h2 {
-    padding: 0px;
-  }
+  padding: 20px 30px;
   table {
+    width: 800px;
     margin: 10px auto 0px 0px;
     border: var(--table-border);
     border-collapse: collapse;
@@ -363,6 +423,7 @@ div#dl_list {
           padding: 10px 20px;
           text-align: left;
           border-left: var(--ruled-line);
+          font-size: var(--tbody-font-size);
           &:first-of-type {
             border-left: none;
           }

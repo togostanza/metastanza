@@ -1,64 +1,56 @@
 <h1 id="manhattan-title">
   GWAS Study View
 </h1>
-<h2>
-  {{title}}
-</h2>
 
 <section class="info-section">
   <dl class="datainfo-list">
-    <dt id="study-name">
+    <dt id="study-name" class="info-key">
       study name
     </dt>
     <dd>
       {{study_name}}
     </dd>
-    <dt id="project-name">
+    <dt id="project-name" class="info-key">
       project name
     </dt>
     <dd>
       {{project_name}}
     </dd>
-    <dt id="stage-name">
-      stage name
+    <dt id="firstCondition" class="info-key first-condition-name">
+      condition1:
+    </dt>
+    <dd class="first-condition-value">
+      &ensp;{{condition1}}
+    </dd>
+    <dt id="secondCondition" class="info-key second-condition-name">
+      condition2:
+    </dt>
+    <dd class="second-condition-value">
+      &ensp;{{condition2}}
+    </dd>
+  </dl>
+</section>
+
+<hr />
+
+<section class="chart-section">
+  <h2>
+    Manhattan Plot
+  </h2>
+  <dl>
+    <dt id="stage-name" class="info-key">
+      stages:
     </dt>
     <dd>
       <ul id="stageList">
       </ul>
-      {{! <button id="selectAllBtn" class="allBtn" type="button" name="all">
-        Select All
-      </button>
-      <button id="clearAllBtn" class="allBtn" type="button" name="all">
-        Clear All
-      </button> }}
-    </dd>
-    <dt>
-      threshold
-    </dt>
-    <dd>
-      <input id="threshold" type="text" value="8" />
     </dd>
   </dl>
-  <ul class="condition-list">
-    <li id="condition1">
-      <span>
-        condition1:
-      </span>
-      &ensp;{{condition1}}
-    </li>
-    <li id="condition2">
-      <span>
-        condition2:
-      </span>
-      &ensp;{{condition2}}
-    </li>
-  </ul>
-</section>
-
-<section class="chart-section">
   <div id="chart"></div>
   <div id="control"></div>
 </section>
+
+<hr />
 
 <section class="table-section">
   <h2>
