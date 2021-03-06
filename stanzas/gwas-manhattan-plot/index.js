@@ -215,36 +215,38 @@ async function draw(stanza, params) {
       22: 50818468,
       X: 156040895,
       Y: 57227415,
-
-    }
+    },
   };
   const chromosomeSumLength = {};
-  Object.keys(chromosomeNtLength).forEach(ref => {
-    chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce((acc, chr) => chromosomeNtLength[ref][chr] + acc, 0);
+  Object.keys(chromosomeNtLength).forEach((ref) => {
+    chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce(
+      (acc, chr) => chromosomeNtLength[ref][chr] + acc,
+      0
+    );
     // console.log('ref',ref)
     // console.log('chromosomeSumLength[ref]',chromosomeSumLength[ref])
   });
-  console.log("chromosomeSumLength.hg38",chromosomeSumLength.hg38)
+  console.log("chromosomeSumLength.hg38", chromosomeSumLength.hg38);
 
-  console.log(chromosomeNtLength.hg38)
+  console.log(chromosomeNtLength.hg38);
   console.log(Object.values(chromosomeNtLength.hg38));
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
-// expected output: Array ["248956422", 242193529, 198295559, ... ,]
+  // expected output: Array ["248956422", 242193529, 198295559, ... ,]
   const chromosomeStartPosition = {};
   let startPos = 0;
-  for (let i=0; i<chromosomeArray.length; i++) {
+  for (let i = 0; i < chromosomeArray.length; i++) {
     let chr = chromosomes[i];
-    console.log('chr',chr);
-    console.log('startPos',startPos)
-    if(chr === "1"){
+    console.log("chr", chr);
+    console.log("startPos", startPos);
+    if (chr === "1") {
       chromosomeStartPosition[chr] = 0;
     } else {
-      startPos += chromosomeArray[i-1];
-      console.log(startPos)
+      startPos += chromosomeArray[i - 1];
+      console.log(startPos);
       chromosomeStartPosition[chr] = startPos;
     }
   }
-  console.log('chromosomeStartPosition',chromosomeStartPosition);
+  console.log("chromosomeStartPosition", chromosomeStartPosition);
 
   const yCategoricalScale = [4, 8, 12, 16, 20, 100, 180, 260, 340, 420];
 
@@ -264,19 +266,17 @@ async function draw(stanza, params) {
     .select(chart_element)
     .append("svg")
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height);
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
   const plot_g = svg.append("g").attr("id", "plot_group");
   const threshline_g = svg.append("g").attr("id", "thresh_line");
   const axis_g = svg.append("g").attr("id", "axis");
   const ytitle = svg.append("g").attr("id", "y_title");
-  // const tooltip = svg.append("g").attr("class", "tooltip");
-  // const tooltip = d3.select("body").append("div").attr("class", "tooltip");
-  const div = svg.append("div")
-  .attr("class", "tooltip")
-  .style("opacity", 0);
-
+  const tooltip = d3
+    .select(chart_element)
+    .append("div")
+    .attr("class", "tooltip");
 
   let range = []; // [begin position, end _position]
   let rangeVertical = []; // [begin position, end _position]
@@ -293,6 +293,16 @@ async function draw(stanza, params) {
     .append("path")
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
+
+  //y title
+  ytitle
+    .append("text")
+    .text("-log₁₀(p-value)")
+    .attr("class", "axis-title")
+    .attr("x", -areaHeight / 2)
+    .attr("y", marginLeft - 32)
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "middle");
 
   // select range by drag
   let dragBegin = false;
@@ -639,21 +649,24 @@ async function draw(stanza, params) {
       })
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
-        svg
-          // .append("rect")
-          // .append("text",d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
-          // .attr("x", d3.pointer(e)[0] + 10)
-          // .attr("y", d3.pointer(e)[1])
-          // .attr("id", "popup_text");
-          .append("text")
-          .text(d[label_key]) //.text(d.dbSNP_RS_ID + ", " + d.Symbol)
-          .attr("x", d3.pointer(e)[0] + 10)
-          .attr("y", d3.pointer(e)[1])
-          .attr("id", "popup_text");
+        const pval = d["p-value"];
+        console.log(pval);
+        tooltip
+          .style("display", "block")
+          .style("left", `${d3.pointer(e)[0] + 8}px`)
+          .style(
+            "top",
+            `${d3.pointer(e)[1]}px`
+          ).html(`<p class="tooltip-chr">chr.${d.chr}:${d.start}</p>
+                <ul class="tooltip-info">
+                  <li><span class="tooltip-key">rsId:&nbsp;</span>${d.rsId}</li>
+                  <li><span class="tooltip-key">Gene name:&nbsp;</span>${d.gene_name}</li>
+                  <li><span class="tooltip-key">Ref/Alt:&nbsp;</span>${d.ref}/${d.alt}</li>
+                  <li><span class="tooltip-key">P-value:&nbsp;</span>${d["p-value"]}</li>
+                </ul>`);
       })
       .on("mouseout", function () {
-        // tooltip.style("visibility", "hidden");
-        svg.select("#popup_text").remove();
+        tooltip.style("display", "none");
       });
     // plot_g.selectAll(".plot").attr("cy", function (d) {
     //   return (
@@ -662,7 +675,6 @@ async function draw(stanza, params) {
     // });
 
     renderCanvas(variants, range);
-
 
     // x axis label
     xlabel_g
@@ -700,21 +712,23 @@ async function draw(stanza, params) {
         const selectedWidth = range[1] - range[0];
         // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (
-          (chromosomeStartPosition[d] / (range[1] - range[0])) * areaWidth + marginLeft
+          (chromosomeStartPosition[d] / (range[1] - range[0])) * areaWidth +
+          marginLeft
         );
       })
       .attr("y", marginBottom * 2)
-      .attr("width", function(d){
+      .attr("width", function (d) {
         const selectedWidth = range[1] - range[0];
         // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
-      .attr("height",areaHeight - marginBottom * 2)
-      .attr("fill", function(d){
-        if(d % 2 === 0 || d === "Y"){
-          return "#EEEEEE"
-        }else if(d % 2 !== 0 || d === "X"){
-          return "#FFFFFF"
+      .attr("opacity", "0.4")
+      .attr("height", areaHeight - marginBottom * 2)
+      .attr("fill", function (d) {
+        if (d % 2 === 0 || d === "Y") {
+          return "#EEEEEE";
+        } else if (d % 2 !== 0 || d === "X") {
+          return "#FFFFFF";
         }
       });
     // y axis label
@@ -776,15 +790,6 @@ async function draw(stanza, params) {
     for (let i = 0; i < overThreshLine.length; i++) {
       overThreshLine[i].remove();
     }
-
-    ytitle
-      .append("text")
-      .text("-log₁₀(p-value)")
-      .attr("class", "axis-title")
-      .attr("x", -areaHeight / 2)
-      .attr("y", marginLeft - 32)
-      .attr("transform", "rotate(-90)")
-      .attr("text-anchor", "middle");
 
     // y zero (low_thresh)
     ylabel_g

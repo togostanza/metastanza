@@ -208,17 +208,34 @@ svg#dl_button {
   }
 }
 
-div .tooltip {
+.tooltip {
   position: absolute;
-  text-align: center;
-  width: 80px;
-  height: 30px;
-  padding: 2px;
-  font-size: 14px;
-  background: lightsteelblue;
-  border: 0px;
-  border-radius: 8px;
-  pointer-events: none;
+  padding: 15px;
+  width: 170px;
+  height: 110px;
+  background: #f6f6f6;
+  border: 1px solid #99acb2;
+  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: none;
+  font-family: "Arial", sans-serif;
+  font-weight: 600;
+  .tooltip-chr {
+    color: #2f4d76;
+    font-size: 18.67px;
+  }
+  .tooltip-info {
+    padding: 0px;
+    li {
+      font-size: 14px;
+      color: #000000;
+      .tooltip-key {
+        color: #99acb2;
+      }
+    }
+  }
 }
 
 .info-section {
