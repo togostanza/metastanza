@@ -226,18 +226,15 @@ async function draw(stanza, params) {
   console.log(chromosomeNtLength.hg38);
   console.log(Object.values(chromosomeNtLength.hg38));
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
-  // expected output: Array ["248956422", 242193529, 198295559, ... ,]
   const chromosomeStartPosition = {};
   let startPos = 0;
   for (let i = 0; i < chromosomeArray.length; i++) {
     let chr = chromosomes[i];
-    console.log("chr", chr);
-    console.log("startPos", startPos);
     if (chr === "1") {
       chromosomeStartPosition[chr] = 0;
     } else {
       startPos += chromosomeArray[i - 1];
-      console.log(startPos);
+      // console.log(startPos);
       chromosomeStartPosition[chr] = startPos;
     }
   }
@@ -724,7 +721,6 @@ async function draw(stanza, params) {
       .append("rect")
       .attr("class", "axisLabel xBackground")
       .attr("x", function (d) {
-        //chromosomeSumLength.hg38
         const selectedWidth = range[1] - range[0];
         // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (
@@ -754,32 +750,18 @@ async function draw(stanza, params) {
       i <= Math.ceil(rangeVertical[1]);
       i++
     ) {
-      const y =
+      let y =
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
           (areaHeight - 60); //temporary
       // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
       //calucurate display of scale(set 18 ticks)
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 18; //Tick number to display.(set by manual)
+      const tickNum = 20; //Tick number to display.(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
-      if (rangeVertical[1] - rangeVertical[0] < tickNum) {
-        ylabel_g
-          .append("text")
-          .text(i)
-          .attr("class", "axisLabel yLabel")
-          .attr("x", marginLeft - 12)
-          .attr("y", y)
-          .attr("text-anchor", "end");
-        ylabel_g
-          .append("path")
-          .attr("class", "axis-line")
-          .attr(
-            "d",
-            "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-          );
-      } else if (scaleNum >= tickNum) {
-        if (i % tickInterval === 0) {
+      if (rangeVertical[1] - rangeVertical[0] <= 36) {
+        //40- low thresh
+        if (rangeVertical[1] - rangeVertical[0] < tickNum) {
           ylabel_g
             .append("text")
             .text(i)
@@ -794,6 +776,76 @@ async function draw(stanza, params) {
               "d",
               "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
             );
+        } else if (scaleNum >= tickNum) {
+          if (i % tickInterval === 0) {
+            ylabel_g
+              .append("text")
+              .text(i)
+              .attr("class", "axisLabel yLabel")
+              .attr("x", marginLeft - 12)
+              .attr("y", y)
+              .attr("text-anchor", "end");
+            ylabel_g
+              .append("path")
+              .attr("class", "axis-line")
+              .attr(
+                "d",
+                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+              );
+          }
+        }
+      } else if (rangeVertical[1] - rangeVertical[0] > 36) {
+        console.log(
+          "rangeVertical[0],rangeVertical[1]",
+          rangeVertical[0],
+          rangeVertical[1]
+        );
+        const drawHeight = areaHeight - 60;
+        const herfDrawHeight = drawHeight / 2;
+        if (i <= 20 && i % 4 === 0) {
+          y =
+            areaHeight -
+            (((i - rangeVertical[0]) / (20 - rangeVertical[0])) * drawHeight) /
+              2;
+          ylabel_g
+            .append("text")
+            .text(i)
+            .attr("class", "axisLabel yLabel")
+            .attr("x", marginLeft - 12)
+            .attr("y", y)
+            .attr("text-anchor", "end");
+          ylabel_g
+            .append("path")
+            .attr("class", "axis-line")
+            .attr(
+              "d",
+              "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+            );
+        } else if (i > 20) {
+          const shrinkedInterval = (rangeVertical[1] - 20) / 4; //13
+          if ((i - 20) % shrinkedInterval === 0) {
+            console.log("shrinkedInterval", shrinkedInterval);
+            const shrinkedScalePos =
+              (drawHeight / 2) * ((i - 20) / (rangeVertical[1] - 20));
+            console.log("shrinkedScalePos", shrinkedScalePos);
+            console.log("herfDrawHeight", herfDrawHeight);
+            y = areaHeight - (shrinkedScalePos + herfDrawHeight);
+            console.log("y", y);
+            ylabel_g
+              .append("text")
+              .text(i)
+              .attr("class", "axisLabel yLabel")
+              .attr("x", marginLeft - 12)
+              .attr("y", y)
+              .attr("text-anchor", "end");
+            ylabel_g
+              .append("path")
+              .attr("class", "axis-line")
+              .attr(
+                "d",
+                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+              );
+          }
         }
       }
       if (i === high_thresh) {
