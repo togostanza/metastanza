@@ -1,5 +1,4 @@
 <template>
-{{ state.pagination.currentPage }}
   <div class="tableOption">
     <form
       class="textSearchWrapper"
@@ -106,7 +105,6 @@
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
-                  @change="column.rangeMinMax = $event"
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
@@ -439,12 +437,7 @@ function createColumnState(columnDef, values) {
 
     function filter(val) {
       const selected = filters.filter(({ checked }) => checked);
-
-      if (selected.length === 0) {
-        return true;
-      } else {
-        return selected.some(({ value }) => value === val);
-      }
+      return selected.some(({ value }) => value === val);
     }
 
     return {
