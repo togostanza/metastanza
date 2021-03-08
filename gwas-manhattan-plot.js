@@ -1,10 +1,10 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import './index-b2de29ee.js';
-import { a as appendDlButton, s as select } from './metastanza_utils-09a3be37.js';
-import { p as pointer, d as drag } from './drag-509def19.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import './index-b010e6ef.js';
+import { a as appendDlButton, s as select } from './metastanza_utils-fce6ca8a.js';
+import { p as pointer, d as drag } from './drag-6a2ba418.js';
 import './timer-be811b16.js';
 
-var dataset$1 = {
+var dataset = {
 	"B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究": [
 		{
 			blank: {
@@ -30185,15 +30185,15 @@ var dataset$1 = {
 	]
 };
 var data = {
-	dataset: dataset$1
+	dataset: dataset
 };
 
 // study name(single per a json)
-const dataset = data.dataset;
-const study_name = Object.keys(dataset)[0];
+const dataset$1 = data.dataset;
+const study_name = Object.keys(dataset$1)[0];
 
 //project data and project names(single per a json)
-const project = Object.values(dataset)[0][0];
+const project = Object.values(dataset$1)[0][0];
 const project_name = Object.keys(project)[0];
 
 // stage data and stage names
@@ -30274,9 +30274,9 @@ async function gwasManhattanPlot(stanza, params) {
     variants[i].chr = chr;
     // console.log(variants[i].chr);
 
-    variants[i]["p-value"];
+    const pval = variants[i]["p-value"];
 
-    variants[i]["stop"];
+    const physical_pos = variants[i]["stop"];
   }
 
   // console.log(params.api); //when you put json url
@@ -30980,11 +30980,6 @@ async function draw(stanza, params) {
   }
 }
 
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': gwasManhattanPlot
-});
-
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -31613,5 +31608,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 10px 5px 10px;\n  margin-bottom: 30px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 26pt;\n  font-weight: 400;\n  color: #000000;\n  margin-bottom: 10px;\n  padding: 0 20px;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\n\ntext.axisLabel {\n  font-size: 10px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 12px;\n}\n\ncircle.ch_even {\n  fill: var(--ch-even-color);\n}\ncircle.ch_odd {\n  fill: var(--ch-odd-color);\n}\ncircle.ch_1 {\n  fill: var(--ch-1-color);\n}\ncircle.ch_2 {\n  fill: var(--ch-2-color);\n}\ncircle.ch_3 {\n  fill: var(--ch-3-color);\n}\ncircle.ch_4 {\n  fill: var(--ch-4-color);\n}\ncircle.ch_5 {\n  fill: var(--ch-5-color);\n}\ncircle.ch_6 {\n  fill: var(--ch-6-color);\n}\ncircle.ch_7 {\n  fill: var(--ch-7-color);\n}\ncircle.ch_8 {\n  fill: var(--ch-8-color);\n}\ncircle.ch_9 {\n  fill: var(--ch-9-color);\n}\ncircle.ch_10 {\n  fill: var(--ch-10-color);\n}\ncircle.ch_11 {\n  fill: var(--ch-11-color);\n}\ncircle.ch_12 {\n  fill: var(--ch-12-color);\n}\ncircle.ch_13 {\n  fill: var(--ch-13-color);\n}\ncircle.ch_14 {\n  fill: var(--ch-14-color);\n}\ncircle.ch_15 {\n  fill: var(--ch-15-color);\n}\ncircle.ch_16 {\n  fill: var(--ch-16-color);\n}\ncircle.ch_17 {\n  fill: var(--ch-17-color);\n}\ncircle.ch_18 {\n  fill: var(--ch-18-color);\n}\ncircle.ch_19 {\n  fill: var(--ch-19-color);\n}\ncircle.ch_20 {\n  fill: var(--ch-20-color);\n}\ncircle.ch_21 {\n  fill: var(--ch-21-color);\n}\ncircle.ch_22 {\n  fill: var(--ch-22-color);\n}\ncircle.ch_X {\n  fill: var(--ch-Y-color);\n}\ncircle.ch_Y {\n  fill: var(--ch-X-color);\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  position: absolute;\n  top: 0px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.info-section {\n  padding: 0 20px;\n  max-width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n  margin-bottom: 60px;\n}\n.info-section .condition-list {\n  padding-bottom: 6px;\n}\n.info-section .condition-list li {\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n  line-height: 20px;\n}\n.info-section .condition-list li span {\n  font-size: 14px;\n  color: #2f4d76;\n}\n.info-section .datainfo-list dt {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd ul {\n  list-style: none;\n  display: flex;\n  padding: 0;\n}\n.info-section .datainfo-list dd ul li {\n  margin-right: 10px;\n}\n.info-section .datainfo-list dd #threshold {\n  width: 100px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n}\n\n.chart-section {\n  padding: 0 20px;\n}\n\n.table-section {\n  padding: 0 20px;\n  margin-top: 60px;\n}\n.table-section h2 {\n  padding: 0px;\n}\n.table-section table {\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map

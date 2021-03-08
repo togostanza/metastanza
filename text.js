@@ -1,6 +1,6 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import { g as getFormatedJson } from './metastanza_utils-09a3be37.js';
-import './index-b2de29ee.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { g as getFormatedJson } from './metastanza_utils-fce6ca8a.js';
+import './index-b010e6ef.js';
 import './timer-be811b16.js';
 
 async function text(stanza, params) {
@@ -19,11 +19,6 @@ async function text(stanza, params) {
     },
   });
 }
-
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': text
-});
 
 var metadata = {
 	"@context": {
@@ -140,5 +135,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  font-family: var(--font-family);\n  box-sizing: border-box;\n}\n\ntable {\n  display: block;\n  width: var(--text-width);\n  height: var(--text-height);\n  margin: var(--text-padding);\n  border: var(--table-border);\n}\ntable tbody tr td {\n  word-break: break-all;\n  color: var(--text-font-color);\n  font-size: var(--text-font-size);\n  font-weight: var(--text-font-weight);\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=text.js.map

@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import { d as defineComponent, r as reactive, o as onMounted, c as createBlock, a as createCommentVNode, b as openBlock, e as createApp } from './runtime-dom.esm-bundler-342be0d0.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { d as defineComponent, r as reactive, o as onMounted, c as createBlock, a as createCommentVNode, b as openBlock, e as createApp } from './runtime-dom.esm-bundler-fc1abf0f.js';
 
 var metadata = {
 	"@context": {
@@ -485,11 +485,6 @@ async function tableWithPagination(stanza, params) {
   createApp(script, params).mount(main);
 }
 
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': tableWithPagination
-});
-
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
@@ -507,5 +502,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--general-font-color);\n  font-family: var(--general-font-family);\n  font-size: var(--general-font-size);\n}\n\n#renderDiv {\n  width: 100%;\n}\n\n.container {\n  width: 100%;\n  max-width: 800px;\n}\n\n.tableWrapper {\n  height: var(--table-height);\n  overflow: auto;\n}\n.tableWrapper > table {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border-right: var(--table-border);\n  border-bottom: var(--table-border);\n  border-left: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\n.tableWrapper > table > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n}\n.tableWrapper > table > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n  position: sticky;\n  top: -1px;\n  background: #ffffff;\n}\n.tableWrapper > table > thead > tr > th:after {\n  content: \"\";\n  width: 100%;\n  height: 1px;\n  background-color: var(--thead-border-color);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n}\n.tableWrapper > table > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\n.tableWrapper > table > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\n.tableWrapper > table > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\n.tableWrapper > table > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\n.tableWrapper > table > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\n.tableWrapper > table > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\n.tableWrapper > table > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\n.tableWrapper > table > tbody > tr > td.loadingWrapper {\n  text-align: center;\n}\n.tableWrapper > table > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}\n\n.dotTyping {\n  position: relative;\n  left: -9999px;\n  display: inline-block;\n  width: 5px;\n  height: 5px;\n  border-radius: 50%;\n  background-color: var(--thead-font-color);\n  box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  animation: dot-typing 1.5s infinite linear;\n}\n\n@keyframes dot-typing {\n  0% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n  16.667% {\n    box-shadow: 9991.5px -5px 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n  33.333% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n  50% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px -5px 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n  66.667% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n  83.333% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px -5px 0 0 var(--thead-font-color);\n  }\n  100% {\n    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);\n  }\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(tableWithPagination, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-hash-table.js.map

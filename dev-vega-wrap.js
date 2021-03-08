@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import { V as View, p as parse$1 } from './vega.module-e560a735.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { V as View, p as parse$1 } from './vega.module-790256fb.js';
 import './timer-be811b16.js';
 
 async function devVegaWrap(stanza, params) {
@@ -33,11 +33,6 @@ async function devVegaWrap(stanza, params) {
 
   await view.runAsync();
 }
-
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': devVegaWrap
-});
 
 var metadata = {
 	"@context": {
@@ -129,5 +124,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(devVegaWrap, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-vega-wrap.js.map

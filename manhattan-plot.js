@@ -1,7 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import './index-b2de29ee.js';
-import { g as getFormatedJson, s as select } from './metastanza_utils-09a3be37.js';
-import { p as pointer, d as drag } from './drag-509def19.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import './index-b010e6ef.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-fce6ca8a.js';
+import { p as pointer, d as drag } from './drag-6a2ba418.js';
 import './timer-be811b16.js';
 
 async function manhattanPlot(stanza, params) {
@@ -447,11 +447,6 @@ async function draw(dataset, stanza, params) {
   }
 }
 
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': manhattanPlot
-});
-
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -696,5 +691,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\ndiv#chart {\n  position: relative;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 2px;\n}\n\ntext.axisLabel {\n  font-size: 10px;\n}\n\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\n\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\n\ncircle.ch_even {\n  fill: var(--ch-even-color);\n}\n\ncircle.ch_odd {\n  fill: var(--ch-odd-color);\n}\n\ncircle.ch_1 {\n  fill: var(--ch-1-color);\n}\n\ncircle.ch_2 {\n  fill: var(--ch-2-color);\n}\n\ncircle.ch_3 {\n  fill: var(--ch-3-color);\n}\n\ncircle.ch_4 {\n  fill: var(--ch-4-color);\n}\n\ncircle.ch_5 {\n  fill: var(--ch-5-color);\n}\n\ncircle.ch_6 {\n  fill: var(--ch-6-color);\n}\n\ncircle.ch_7 {\n  fill: var(--ch-7-color);\n}\n\ncircle.ch_8 {\n  fill: var(--ch-8-color);\n}\n\ncircle.ch_9 {\n  fill: var(--ch-9-color);\n}\n\ncircle.ch_10 {\n  fill: var(--ch-10-color);\n}\n\ncircle.ch_11 {\n  fill: var(--ch-11-color);\n}\n\ncircle.ch_12 {\n  fill: var(--ch-12-color);\n}\n\ncircle.ch_13 {\n  fill: var(--ch-13-color);\n}\n\ncircle.ch_14 {\n  fill: var(--ch-14-color);\n}\n\ncircle.ch_15 {\n  fill: var(--ch-15-color);\n}\n\ncircle.ch_16 {\n  fill: var(--ch-16-color);\n}\n\ncircle.ch_17 {\n  fill: var(--ch-17-color);\n}\n\ncircle.ch_18 {\n  fill: var(--ch-18-color);\n}\n\ncircle.ch_19 {\n  fill: var(--ch-19-color);\n}\n\ncircle.ch_20 {\n  fill: var(--ch-20-color);\n}\n\ncircle.ch_21 {\n  fill: var(--ch-21-color);\n}\n\ncircle.ch_22 {\n  fill: var(--ch-22-color);\n}\n\ncircle.ch_X {\n  fill: var(--ch-Y-color);\n}\n\ncircle.ch_Y {\n  fill: var(--ch-X-color);\n}\n\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(manhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=manhattan-plot.js.map

@@ -1,6 +1,6 @@
-import { d as defineStanzaElement } from './stanza-element-53e84797.js';
-import { g as getFormatedJson } from './metastanza_utils-09a3be37.js';
-import './index-b2de29ee.js';
+import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { g as getFormatedJson } from './metastanza_utils-fce6ca8a.js';
+import './index-b010e6ef.js';
 import './timer-be811b16.js';
 
 async function scorecard(stanza, params) {
@@ -19,11 +19,6 @@ async function scorecard(stanza, params) {
     },
   });
 }
-
-var stanzaModule = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  'default': scorecard
-});
 
 var metadata = {
 	"@context": {
@@ -152,5 +147,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
+defineStanzaElement(scorecard, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=scorecard.js.map
