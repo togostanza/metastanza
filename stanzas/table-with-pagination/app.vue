@@ -1,8 +1,11 @@
 <template>
   <div class="tableOption">
-    <form class="textSearchWrapper" @submit.prevent="setQueryInput()">
+    <form
+      class="textSearchWrapper"
+      @submit.prevent="state.queryForAllColumns.commit()"
+    >
       <input
-        v-model="state.queryInput"
+        v-model="state.queryForAllColumns.uncommitted"
         type="text"
         placeholder="Search for keywords..."
         class="textSearchInput"
@@ -39,17 +42,21 @@
             :class="[
               'icon',
               'filterIcon',
-              { isShowing: column === state.columnShowingFilters },
+              { isShowing: column.isFilterPopupShowing },
               { active: column.filters.some((filter) => !filter.checked) },
             ]"
-            @click="state.columnShowingFilters = column"
+            @click="column.isFilterPopupShowing = true"
           ></span>
           <span
-            :class="['icon', 'searchIcon', { active: isSearchOn(column) }]"
-            @click="state.columnShowingTextSearch = column"
+            :class="[
+              'icon',
+              'searchIcon',
+              { active: column.isSearchConditionGiven },
+            ]"
+            @click="column.isSearchModalShowing = true"
           ></span>
           <div
-            v-if="column === state.columnShowingFilters"
+            v-if="column.isFilterPopupShowing"
             class="filterWrapper"
           >
             <div
@@ -84,7 +91,7 @@
           </div>
           <transition name="modal">
             <div
-              v-if="column === state.columnShowingTextSearch"
+              v-if="column.isSearchModalShowing"
               class="textSearchByColumnWrapper modal"
             >
               <p class="title">
@@ -98,19 +105,19 @@
                   v-model="column.rangeMinMax"
                   :min="column.minValue"
                   :max="column.maxValue"
-                  @change="submitQuery(column)"
+                  @change="column.rangeMinMax = $event"
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
                     <input
-                      v-model="column.inputtingRangeMin"
+                      v-model.number="column.inputtingRangeMin"
                       type="text"
                       class="min"
                     />
                   </form>
                   <form @submit.prevent="setRangeFilters(column)">
                     <input
-                      v-model="column.inputtingRangeMax"
+                      v-model.number="column.inputtingRangeMax"
                       type="text"
                       class="max"
                     />
@@ -120,10 +127,10 @@
               <form
                 v-else
                 class="textSearchWrapper"
-                @submit.prevent="submitQuery(column)"
+                @submit.prevent="column.query.commit()"
               >
                 <input
-                  v-model="column.queryInputByColumn"
+                  v-model="column.query.uncommitted"
                   type="text"
                   placeholder="Search for keywords..."
                   name="queryInputByColumn"
@@ -159,14 +166,14 @@
     @updateCurrentPage="updateCurrentPage"
   />
   <div
-    v-if="state.columnShowingFilters || state.columnShowingTextSearch"
-    :class="['modalBackground', { black: state.columnShowingTextSearch }]"
+    v-if="isPopupOrModalShowing"
+    :class="['modalBackground', { black: isModalShowing }]"
     @click="closeModal()"
   ></div>
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onMounted } from "vue";
+import { defineComponent, reactive, ref, computed, onMounted } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
 
@@ -175,14 +182,15 @@ import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
-// import data from "./assets/tableDataWithNumber.json"; // for range filter test
 
 export default defineComponent({
   components: {
     Slider,
     SliderPagination,
   },
+
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+
   setup(params) {
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -190,10 +198,7 @@ export default defineComponent({
       columns: [],
       allRows: [],
 
-      query: "",
-      queriesByColumn: [],
-      columnShowingFilters: null,
-      columnShowingTextSearch: null,
+      queryForAllColumns: createBuffer(""),
 
       sorting: {
         active: null,
@@ -204,52 +209,17 @@ export default defineComponent({
         currentPage: 1,
         perPage: params.limit,
       },
-
-      queryInput: "",
-      isFiltering: false,
     });
 
     const filteredRows = computed(() => {
-      const query = state.query;
-      const queriesByColumn = state.queriesByColumn;
-      const filtered = state.allRows
-        .filter((row) => {
-          return query
-            ? row.some((cell) => String(cell.value).includes(query))
-            : true;
-        })
-        .filter((row) => {
-          return queriesByColumn.length > 0
-            ? row.every((cell) => {
-                switch (cell.column.searchType) {
-                  case "number": {
-                    return (
-                      cell.value >= cell.column.rangeMinMax[0] &&
-                      cell.value <= cell.column.rangeMinMax[1]
-                    );
-                  }
-                  default: {
-                    const query = queriesByColumn.find(
-                      (query) => query.id === cell.column.id
-                    );
-                    return query
-                      ? cell.value.includes(query.queryInputByColumn)
-                      : true;
-                  }
-                }
-              })
-            : true;
-        })
-        .filter((row) => {
-          return row.every((cell) => {
-            const valuesForFilter = cell.column.filters
-              .filter(({ checked }) => checked)
-              .map(({ value }) => value);
-            return valuesForFilter.length === 0
-              ? false
-              : valuesForFilter.includes(cell.value);
-          });
-        });
+      const queryForAllColumns = state.queryForAllColumns.committed;
+
+      const filtered = state.allRows.filter((row) => {
+        return (
+          searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
+        );
+      });
+
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
@@ -271,9 +241,11 @@ export default defineComponent({
     });
 
     const rowsInCurrentPage = computed(() => {
-      const startIndex =
-        (state.pagination.currentPage - 1) * state.pagination.perPage;
-      const endIndex = Number(startIndex) + Number(state.pagination.perPage);
+      const { currentPage, perPage } = state.pagination;
+
+      const startIndex = (currentPage - 1) * perPage;
+      const endIndex = Number(startIndex) + Number(perPage);
+
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
@@ -289,6 +261,20 @@ export default defineComponent({
       });
 
       return URL.createObjectURL(blob);
+    });
+
+    const isModalShowing = computed(() => {
+      return state.columns.some(
+        ({ isSearchModalShowing }) => isSearchModalShowing
+      );
+    });
+
+    const isPopupOrModalShowing = computed(() => {
+      return (
+        state.columns.some(
+          ({ isFilterPopupShowing }) => isFilterPopupShowing
+        ) || isModalShowing.value
+      );
     });
 
     function setSorting(column) {
@@ -310,42 +296,10 @@ export default defineComponent({
       column.inputtingRangeMax = null;
     }
 
-    function setQueryInput() {
-      state.query = state.queryInput;
-    }
-
-    function submitQuery(column) {
-      if (isSearchOn(column)) {
-        state.queriesByColumn.push({
-          id: column.id,
-          searchType: column.searchType,
-          queryInputByColumn: column.queryInputByColumn,
-          rangeMinMax: column.rangeMinMax,
-        });
-      } else {
-        state.queriesByColumn = state.queriesByColumn.filter(
-          (query) => query.id !== column.id
-        );
-      }
-    }
-
     function closeModal() {
-      state.columnShowingFilters = null;
-      state.columnShowingTextSearch = null;
-    }
-
-    function isSearchOn(column) {
-      switch (column.searchType) {
-        case "number":
-          return (
-            column.minValue !== column.rangeMinMax[0] ||
-            column.maxValue !== column.rangeMinMax[1]
-          );
-        default:
-          return (
-            column.queryInputByColumn !== null
-            // state.queriesByColumn.some(query => query === column)
-          );
+      for (const column of state.columns) {
+        column.isFilterPopupShowing = null;
+        column.isSearchModalShowing = null;
       }
     }
 
@@ -367,49 +321,24 @@ export default defineComponent({
           return {
             id: key,
             label: key,
-            type: null,
           };
         });
       } else {
         columns = [];
       }
-      state.columns = columns.map((column) => {
-        const filters = uniq(data.map((datam) => datam[column.id]))
-          .sort()
-          .map((value) => {
-            return {
-              value,
-              checked: true,
-            };
-          });
-        const filterValues = filters.map((filter) => filter.value);
-        const minValue =
-          column.type === "number" ? Math.min(...filterValues) : null;
-        const maxValue =
-          column.type === "number" ? Math.max(...filterValues) : null;
 
-        return {
-          id: column.id,
-          label: column.label,
-          filters,
-          searchType: column.type,
-          rowspan: column.rowspan,
-          minValue,
-          maxValue,
-          rangeMinMax: [minValue, maxValue],
-          inputtingRangeMin: null,
-          inputtingRangeMax: null,
-          queryInputByColumn: null,
-        };
+      state.columns = columns.map((column) => {
+        const values = data.map((obj) => obj[column.id]);
+
+        return createColumnState(column, values);
       });
 
       state.allRows = data.map((row) => {
         return state.columns.map((column) => {
           return {
-            value: row[column.id],
-            checked: true,
-            href: column.link ? row[column.link] : null,
             column,
+            value: column.parseValue(row[column.id]),
+            href: column.link ? row[column.link] : null,
           };
         });
       });
@@ -422,15 +351,124 @@ export default defineComponent({
       totalPages,
       rowsInCurrentPage,
       blobUrl,
+      isModalShowing,
+      isPopupOrModalShowing,
       setSorting,
       setFilters,
       setRangeFilters,
-      setQueryInput,
-      submitQuery,
       closeModal,
-      isSearchOn,
       updateCurrentPage,
     };
   },
 });
+
+function createBuffer(init) {
+  const committed   = ref(init);
+  const uncommitted = ref(init);
+
+  function commit() {
+    committed.value = uncommitted.value;
+  }
+
+  return {
+    committed,
+    uncommitted,
+    commit,
+  };
+}
+
+function createColumnState(columnDef, values) {
+  const baseProps = {
+    id: columnDef.id,
+    label: columnDef.label,
+    searchType: columnDef.type,
+    rowspan: columnDef.rowspan,
+  };
+
+  if (columnDef.type === "number") {
+    const nums = values.map(Number);
+    const minValue = Math.min(...nums);
+    const maxValue = Math.max(...nums);
+    const rangeMinMax = ref([minValue, maxValue]);
+
+    const isSearchConditionGiven = computed(() => {
+      const [min, max] = rangeMinMax.value;
+      return minValue !== min || maxValue !== max;
+    });
+
+    return {
+      ...baseProps,
+      parseValue: Number,
+      minValue,
+      maxValue,
+      rangeMinMax,
+      isSearchConditionGiven,
+      inputtingRangeMin: null,
+      inputtingRangeMax: null,
+      isSearchModalShowing: false,
+
+      isMatch(val) {
+        const [min, max] = rangeMinMax.value;
+
+        return val > min && val <= max;
+      },
+    };
+  } else {
+    const query = createBuffer("");
+    const isSearchConditionGiven = computed(() => query.committed.value !== "");
+
+    const filters = uniq(values)
+      .sort()
+      .map((value) => {
+        return reactive({
+          value,
+          checked: true,
+        });
+      });
+
+    function search(val) {
+      const q = query.committed.value;
+
+      return q ? val.includes(q) : true;
+    }
+
+    function filter(val) {
+      const selected = filters.filter(({ checked }) => checked);
+
+      if (selected.length === 0) {
+        return true;
+      } else {
+        return selected.some(({ value }) => value === val);
+      }
+    }
+
+    return {
+      ...baseProps,
+      parseValue: String,
+      query,
+      isSearchConditionGiven,
+      filters,
+      isFilterModalShowing: false,
+      isSearchModalShowing: false,
+
+      isMatch(val) {
+        return search(val) && filter(val);
+      },
+    };
+  }
+}
+
+function searchByAllColumns(row, query) {
+  if (!query) {
+    return true;
+  }
+
+  return row.some(({ value }) => String(value).includes(query));
+}
+
+function searchByEachColumn(row) {
+  return row.every((cell) => {
+    return cell.column.isMatch(cell.value);
+  });
+}
 </script>
