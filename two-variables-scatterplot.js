@@ -1,15 +1,14 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import './vega.module-9c8b3b23.js';
-import './dsv-cd3740c6.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
 
 async function twoVariablesScatterplot(stanza, params) {
   function css(key) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
+
+  // const vegaJson = await fetch(params["src-url"]).then((res) => res.json());
 
   //width,height,padding
   const width = Number(params["width"]);
@@ -20,12 +19,10 @@ async function twoVariablesScatterplot(stanza, params) {
   const xVariable = params["x-variable"];
   const yVariable = params["y-variable"];
 
-  const values = await loadData(params["data-url"], params["data-type"]);
-
   const data = [
     {
       name: "source",
-      values,
+      url: params["your-data"],
       transform: [
         {
           type: "filter",
@@ -200,15 +197,9 @@ var metadata = {
 	"stanza:updated": "2021-01-25",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "your-data",
 		"stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
 		"stanza:description": "Source url of your data.",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "data-url",
-		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
 		"stanza:required": true
 	},
 	{

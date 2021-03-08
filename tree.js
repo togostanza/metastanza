@@ -1,10 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import './vega.module-9c8b3b23.js';
-import './dsv-cd3740c6.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
 
 async function tree(stanza, params) {
   function css(key) {
@@ -25,12 +22,10 @@ async function tree(stanza, params) {
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
-  const values = await loadData(params["data-url"], params["data-type"]);
-
   const data = [
     {
       name: "tree",
-      values,
+      url: params["your-data"],
       transform: [
         {
           type: "stratify",
@@ -209,15 +204,9 @@ var metadata = {
 	"stanza:updated": "2020-11-26",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "your-data",
 		"stanza:example": "https://vega.github.io/vega/data/flare.json",
 		"stanza:description": "Source url of your data.",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "data-type",
-		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
 		"stanza:required": true
 	},
 	{

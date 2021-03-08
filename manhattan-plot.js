@@ -1,7 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './index-b010e6ef.js';
-import { g as getFormatedJson, s as select } from './metastanza_utils-fce6ca8a.js';
-import { p as pointer, d as drag } from './drag-6a2ba418.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-f0c71da7.js';
+import { p as pointer, d as drag } from './drag-f5d349cb.js';
 import './timer-be811b16.js';
 
 async function manhattanPlot(stanza, params) {

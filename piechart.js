@@ -1,10 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import './vega.module-9c8b3b23.js';
-import './dsv-cd3740c6.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
 
 async function piechart(stanza, params) {
   function css(key) {
@@ -23,13 +20,10 @@ async function piechart(stanza, params) {
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
-
-  const values = await loadData(params["data-url"], params["data-type"]);
-
   const data = [
     {
       name: "table",
-      values,
+      url: params["your-data"],
       transform: [
         {
           type: "pie",
@@ -151,15 +145,9 @@ var metadata = {
 	"stanza:updated": "2020-11-05",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "your-data",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of your data.",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "data-type",
-		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
 		"stanza:required": true
 	},
 	{

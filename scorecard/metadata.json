@@ -16,16 +16,10 @@
   "stanza:updated": "2020-12-02",
   "stanza:parameter": [
     {
-      "stanza:key": "data-url",
+      "stanza:key": "api",
       "stanza:example": "http://togogenome.org/sparqlist/api/togogenome_gene_length_nano?tax_id=9606&gene_id=BRCA1",
       "stanza:description": "Source url of your data.",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data-type",
-      "stanza:example": "json",
-      "stanza:description": "Type of your data.",
-      "stanza:required": true
+      "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
