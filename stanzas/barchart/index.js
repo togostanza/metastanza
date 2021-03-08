@@ -1,5 +1,5 @@
 import vegaEmbed from "vega-embed";
-import { loadData } from "@/lib/dataloader";
+import { loadData } from "@/lib/data-loader";
 
 export default async function barchart(stanza, params) {
   function css(key) {
