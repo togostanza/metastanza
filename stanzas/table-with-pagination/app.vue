@@ -1,8 +1,9 @@
 <template>
+{{ state.pagination.currentPage }}
   <div class="tableOption">
     <form
       class="textSearchWrapper"
-      @submit.prevent="state.queryForAllColumns.commit()"
+      @submit.prevent="sliderPagination.jumpToPage(1); state.queryForAllColumns.commit();"
     >
       <input
         v-model="state.queryForAllColumns.uncommitted"
@@ -127,7 +128,7 @@
               <form
                 v-else
                 class="textSearchWrapper"
-                @submit.prevent="column.query.commit()"
+                @submit.prevent="sliderPagination.jumpToPage(1); column.query.commit();"
               >
                 <input
                   v-model="column.query.uncommitted"
@@ -161,6 +162,7 @@
     </tbody>
   </table>
   <SliderPagination
+    ref="sliderPagination"
     :current-page="state.pagination.currentPage"
     :total-pages="totalPages"
     @updateCurrentPage="updateCurrentPage"
@@ -192,6 +194,8 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    const sliderPagination = ref()
+
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
@@ -347,6 +351,7 @@ export default defineComponent({
     onMounted(fetchData);
 
     return {
+      sliderPagination,
       state,
       totalPages,
       rowsInCurrentPage,
