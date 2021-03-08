@@ -53,7 +53,7 @@
               'searchIcon',
               { active: column.isSearchConditionGiven },
             ]"
-            @click="column.isSearchModalShowing = true"
+            @click="showModal(column)"
           ></span>
           <div
             v-if="column.isFilterPopupShowing"
@@ -298,6 +298,11 @@ export default defineComponent({
       column.inputtingRangeMax = null;
     }
 
+    function showModal(column) {
+      column.isSearchModalShowing = true;
+      column.query.uncommitted = column.query.committed;
+    }
+
     function closeModal() {
       for (const column of state.columns) {
         column.isFilterPopupShowing = null;
@@ -359,6 +364,7 @@ export default defineComponent({
       setSorting,
       setFilters,
       setRangeFilters,
+      showModal,
       closeModal,
       updateCurrentPage,
     };
