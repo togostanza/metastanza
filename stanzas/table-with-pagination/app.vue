@@ -102,9 +102,10 @@
               </p>
               <div v-if="column.searchType === 'number'">
                 <Slider
-                  v-model="column.rangeMinMax"
+                  :modelValue = column.range
                   :min="column.minValue"
                   :max="column.maxValue"
+                  @update="column.setRange"
                 ></Slider>
                 <div class="rangeInput">
                   <form @submit.prevent="setRangeFilters(column)">
@@ -292,15 +293,17 @@ export default defineComponent({
     }
 
     function setRangeFilters(column) {
-      column.rangeMinMax[0] = column.inputtingRangeMin;
-      column.rangeMinMax[1] = column.inputtingRangeMax;
+      column.rangeMin = column.inputtingRangeMin;
+      column.rangeMax = column.inputtingRangeMax;
       column.inputtingRangeMin = null;
       column.inputtingRangeMax = null;
     }
 
     function showModal(column) {
       column.isSearchModalShowing = true;
-      column.query.uncommitted = column.query.committed;
+      if(column.query) {
+        column.query.uncommitted = column.query.committed;
+      }
     }
 
     function closeModal() {
@@ -398,28 +401,35 @@ function createColumnState(columnDef, values) {
     const nums = values.map(Number);
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums);
-    const rangeMinMax = ref([minValue, maxValue]);
+    const rangeMin = ref(minValue);
+    const rangeMax = ref(maxValue);
+    const range = computed(() => [rangeMin.value, rangeMax.value]);
 
     const isSearchConditionGiven = computed(() => {
-      const [min, max] = rangeMinMax.value;
-      return minValue !== min || maxValue !== max;
+      return minValue !== rangeMin.value || maxValue !== rangeMax.value;
     });
+
+    function setRange([min, max]) {
+      rangeMin.value = min
+      rangeMax.value = max
+    }
 
     return {
       ...baseProps,
       parseValue: Number,
       minValue,
       maxValue,
-      rangeMinMax,
+      rangeMin,
+      rangeMax,
+      range,
+      setRange,
       isSearchConditionGiven,
       inputtingRangeMin: null,
       inputtingRangeMax: null,
       isSearchModalShowing: false,
 
       isMatch(val) {
-        const [min, max] = rangeMinMax.value;
-
-        return val > min && val <= max;
+        return val > rangeMin.value && val <= rangeMax.value;
       },
     };
   } else {
