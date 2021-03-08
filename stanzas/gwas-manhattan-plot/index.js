@@ -262,12 +262,12 @@ async function draw(stanza, params) {
     .append("svg")
     .attr("width", width)
     .attr("height", height);
+  const axis_g = svg.append("g").attr("id", "axis");
+  const ytitle = svg.append("g").attr("id", "y_title");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
   const plot_g = svg.append("g").attr("id", "plot_group");
   const threshline_g = svg.append("g").attr("id", "thresh_line");
-  const axis_g = svg.append("g").attr("id", "axis");
-  const ytitle = svg.append("g").attr("id", "y_title");
   const tooltip = d3
     .select(chart_element)
     .append("div")
@@ -290,6 +290,13 @@ async function draw(stanza, params) {
     .attr("class", "axis-line");
 
   //y title
+  // ytitle
+  //   .append("rect")
+  //   .attr("fill", "#FFFFFF")
+  //   .attr("x", "0")
+  //   .attr("y", "0")
+  //   .attr("width",marginLeft-1)
+  //   .attr("height",areaHeight)
   ytitle
     .append("text")
     .text("-log₁₀(p-value)")
@@ -776,16 +783,48 @@ async function draw(stanza, params) {
       .attr("class", "axisLabel xBackground")
       .attr("x", function (d) {
         const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
-        return (
-          (chromosomeStartPosition[d] / (range[1] - range[0])) * areaWidth +
-          marginLeft
-        );
+        console.log("selectedWidth", selectedWidth);
+        console.log("range", range);
+        console.log("d", d);
+        console.log("chromosomeStartPosition[d]", chromosomeStartPosition[d]);
+        const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        if (
+          chromosomeStartPosition[d] < range[0] &&
+          range[0] < chromosomeStartPosition[d + 1]
+        ) {
+          return (
+            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
+              areaWidth +
+            marginLeft
+          );
+        } else {
+          console.log("zoomRate", zoomRate);
+          console.log(
+            "chromosomeStartPosition[d] - range[0]",
+            chromosomeStartPosition[d] - range[0]
+          );
+          console.log(
+            "x return",
+            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
+              areaWidth +
+              marginLeft
+          );
+          return (
+            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
+              areaWidth +
+            marginLeft
+          );
+        }
       })
       .attr("y", marginBottom * 2)
       .attr("width", function (d) {
         const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        console.log("chromosomeNtLength.hg38[d]", chromosomeNtLength.hg38[d]);
+        console.log(
+          "width return",
+          (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth
+        );
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
       .attr("opacity", "0.4")
@@ -797,7 +836,14 @@ async function draw(stanza, params) {
           return "#FFFFFF";
         }
       });
+
     // y axis label
+    ylabel_g
+      .append("rect")
+      .attr("fill", "#FFFFFF")
+      .attr("width", marginLeft - 1)
+      .attr("height", areaHeight);
+
     const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
     for (
       let i = Math.floor(rangeVertical[0]) + 1;
