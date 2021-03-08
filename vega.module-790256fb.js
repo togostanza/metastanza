@@ -43635,5 +43635,5 @@ var vegaImport = /*#__PURE__*/Object.freeze({
   textMetrics: textMetrics
 });
 
-export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, isArray as d, isFunction as e, array as f, eventSelector as g, has as h, isNumber as i, identity as j, logger as l, mergeConfig as m, parse$1$1 as p, splitAccessPath as s, toSet as t, vegaImport as v, writeConfig as w };
-//# sourceMappingURL=vega.module-5c1fb2a7.js.map
+export { $, View as V, Warn as W, isString as a, isObject as b, isBoolean as c, dsvFormat as d, isArray as e, isFunction as f, array as g, has as h, isNumber as i, eventSelector as j, identity as k, logger as l, mergeConfig as m, parse$1$1 as p, splitAccessPath as s, toSet as t, vegaImport as v, writeConfig as w };
+//# sourceMappingURL=vega.module-790256fb.js.map

@@ -5529,6 +5529,33 @@ const withModifiers = (fn, modifiers) => {
         return fn(event, ...args);
     };
 };
+// Kept for 2.x compat.
+// Note: IE11 compat for `spacebar` and `del` is removed for now.
+const keyNames = {
+    esc: 'escape',
+    space: ' ',
+    up: 'arrow-up',
+    left: 'arrow-left',
+    right: 'arrow-right',
+    down: 'arrow-down',
+    delete: 'backspace'
+};
+/**
+ * @private
+ */
+const withKeys = (fn, modifiers) => {
+    return (event) => {
+        if (!('key' in event))
+            return;
+        const eventKey = hyphenate(event.key);
+        if (
+        // None of the provided key modifiers match the current event key
+        !modifiers.some(k => k === eventKey || keyNames[k] === eventKey)) {
+            return;
+        }
+        return fn(event);
+    };
+};
 
 const rendererOptions = extend({ patchProp, forcePatchProp }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
@@ -5567,5 +5594,5 @@ function normalizeContainer(container) {
     return container;
 }
 
-export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, withModifiers as m, withDirectives as n, onMounted as o, createTextVNode as p, toDisplayString as q, reactive as r, vModelCheckbox as s, toRefs as t, withCtx as u, vModelText as v, watch as w };
-//# sourceMappingURL=runtime-dom.esm-bundler-f42cac23.js.map
+export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, withModifiers as l, withDirectives as m, withCtx as n, onMounted as o, renderList as p, withKeys as q, reactive as r, createTextVNode as s, toRefs as t, toDisplayString as u, vModelText as v, watch as w, mergeProps as x, vModelCheckbox as y };
+//# sourceMappingURL=runtime-dom.esm-bundler-fc1abf0f.js.map

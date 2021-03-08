@@ -1,7 +1,86 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
+import { e as embed } from './vega-embed.module-776f3f07.js';
+import './index-b010e6ef.js';
+import { d as dsvFormat } from './vega.module-790256fb.js';
 import './timer-be811b16.js';
+
+var csv = dsvFormat(",");
+
+var csvParse = csv.parse;
+
+var tsv = dsvFormat("\t");
+
+var tsvParse = tsv.parse;
+
+function responseText(response) {
+  if (!response.ok) throw new Error(response.status + " " + response.statusText);
+  return response.text();
+}
+
+function text(input, init) {
+  return fetch(input, init).then(responseText);
+}
+
+function dsvParse(parse) {
+  return function(input, init, row) {
+    if (arguments.length === 2 && typeof init === "function") row = init, init = undefined;
+    return text(input, init).then(function(response) {
+      return parse(response, row);
+    });
+  };
+}
+
+var csv$1 = dsvParse(csvParse);
+var tsv$1 = dsvParse(tsvParse);
+
+// TODO: test
+function loadData(url, dataType = "json") {
+  switch (dataType) {
+    case "tsv":
+      return loadTSV(url);
+    case "csv":
+      return loadCSV(url);
+    case "sparql-results-json":
+      return loadSPARQL(url);
+    case "json":
+    default:
+      return loadJSON(url);
+  }
+}
+
+function loadTSV(url) {
+  // expect TSV data with a header line
+  return tsv$1(url);
+}
+
+function loadCSV(url) {
+  // expect CSV data with a header line
+  return csv$1(url);
+}
+
+async function loadJSON(url) {
+  const res = await fetch(url);
+  return await res.json();
+}
+
+function loadSPARQL(url) {
+  const json = loadJSON(url);
+  return sparql2table(json);
+}
+
+// TODO: test & improve
+function sparql2table(json) {
+  const head = json.head.vars;
+  const data = json.results.bindings;
+
+  return data.map((item) => {
+    const row = {};
+    head.forEach((key) => {
+      row[key] = item[key].value;
+    });
+    return row;
+  });
+}
 
 async function barchart(stanza, params) {
   function css(key) {
@@ -19,20 +98,22 @@ async function barchart(stanza, params) {
   const valueVariable = params["value-variable"]; //y
   const groupVariable = params["group-variable"]; //z
 
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   function constructData(chartType) {
     switch (chartType) {
       case "grouped":
         return [
           {
             name: "table",
-            url: params["your-data"],
+            values,
           },
         ];
       case "stacked":
         return [
           {
             name: "table",
-            url: params["your-data"],
+            values,
             transform: [
               {
                 type: "stack",
@@ -313,9 +394,22 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "your-data",
+		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of your data.",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
+		"stanza:example": "json",
+		"stanza:description": "Type of data.",
 		"stanza:required": true
 	},
 	{

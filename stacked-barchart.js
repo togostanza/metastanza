@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-80d1ecde.js';
-import './vega.module-5c1fb2a7.js';
+import { e as embed } from './vega-embed.module-776f3f07.js';
+import './vega.module-790256fb.js';
 import './timer-be811b16.js';
 
 async function stackedBarchart(stanza, params) {
