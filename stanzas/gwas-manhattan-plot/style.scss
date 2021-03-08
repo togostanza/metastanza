@@ -204,7 +204,7 @@ circle {
 
 svg#dl_button {
   position: absolute;
-  top: 0px;
+  top: -58px;
   right: 0px;
 
   .circle_g {
@@ -372,10 +372,13 @@ div#dl_list {
         // justify-content: flex-end;
         padding: 0;
         li {
-          margin-right: 10px;
+          margin-right: 6px;
           font-size: 12px;
           display: flex;
           justify-content: bottom;
+          &:last-child {
+            margin-right: 0px;
+          }
           input {
             margin: 3px 6px 0px 0px;
             display: none;
@@ -401,16 +404,16 @@ div#dl_list {
           input[checked="true"] + label[data-stage="Discovery"] {
             background-color: #3d6589;
           }
-          input[checked="true"] + label[data-stage="Replication"] {
+          input[checked="true"] + label[data-stage="replication"] {
             background-color: #ed707e;
           }
-          input[checked="true"] + label[data-stage="Combined"] {
+          input[checked="true"] + label[data-stage="combined"] {
             background-color: #eab64e;
           }
-          input[checked="true"] + label[data-stage="Combined"] {
+          input[checked="true"] + label[data-stage="meta-analysis"] {
             background-color: #52b1c1;
           }
-          input[checked="true"] + label[data-stage="Not-provided"] {
+          input[checked="true"] + label[data-stage="not-provided"] {
             background-color: #62b28c;
           }
           input[checked="false"] + label {

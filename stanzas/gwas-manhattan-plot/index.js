@@ -782,12 +782,8 @@ async function draw(stanza, params) {
       .append("rect")
       .attr("class", "axisLabel xBackground")
       .attr("x", function (d) {
-        const selectedWidth = range[1] - range[0];
-        console.log("selectedWidth", selectedWidth);
-        console.log("range", range);
-        console.log("d", d);
-        console.log("chromosomeStartPosition[d]", chromosomeStartPosition[d]);
-        const zoomRate = selectedWidth / chromosomeSumLength.hg38;
+        // const selectedWidth = range[1] - range[0];
+        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         if (
           chromosomeStartPosition[d] < range[0] &&
           range[0] < chromosomeStartPosition[d + 1]
@@ -798,17 +794,6 @@ async function draw(stanza, params) {
             marginLeft
           );
         } else {
-          console.log("zoomRate", zoomRate);
-          console.log(
-            "chromosomeStartPosition[d] - range[0]",
-            chromosomeStartPosition[d] - range[0]
-          );
-          console.log(
-            "x return",
-            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
-              areaWidth +
-              marginLeft
-          );
           return (
             ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
               areaWidth +
@@ -818,13 +803,8 @@ async function draw(stanza, params) {
       })
       .attr("y", marginBottom * 2)
       .attr("width", function (d) {
-        const selectedWidth = range[1] - range[0];
-        const zoomRate = selectedWidth / chromosomeSumLength.hg38;
-        console.log("chromosomeNtLength.hg38[d]", chromosomeNtLength.hg38[d]);
-        console.log(
-          "width return",
-          (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth
-        );
+        // const selectedWidth = range[1] - range[0];
+        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
       .attr("opacity", "0.4")
