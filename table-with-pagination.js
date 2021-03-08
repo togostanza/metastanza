@@ -1704,15 +1704,17 @@ var script$1 = defineComponent({
     }
 
     function setRangeFilters(column) {
-      column.rangeMinMax[0] = column.inputtingRangeMin;
-      column.rangeMinMax[1] = column.inputtingRangeMax;
+      column.rangeMin = column.inputtingRangeMin;
+      column.rangeMax = column.inputtingRangeMax;
       column.inputtingRangeMin = null;
       column.inputtingRangeMax = null;
     }
 
     function showModal(column) {
       column.isSearchModalShowing = true;
-      column.query.uncommitted = column.query.committed;
+      if(column.query) {
+        column.query.uncommitted = column.query.committed;
+      }
     }
 
     function closeModal() {
@@ -1810,28 +1812,35 @@ function createColumnState(columnDef, values) {
     const nums = values.map(Number);
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums);
-    const rangeMinMax = ref([minValue, maxValue]);
+    const rangeMin = ref(minValue);
+    const rangeMax = ref(maxValue);
+    const range = computed(() => [rangeMin.value, rangeMax.value]);
 
     const isSearchConditionGiven = computed(() => {
-      const [min, max] = rangeMinMax.value;
-      return minValue !== min || maxValue !== max;
+      return minValue !== rangeMin.value || maxValue !== rangeMax.value;
     });
+
+    function setRange([min, max]) {
+      rangeMin.value = min;
+      rangeMax.value = max;
+    }
 
     return {
       ...baseProps,
       parseValue: Number,
       minValue,
       maxValue,
-      rangeMinMax,
+      rangeMin,
+      rangeMax,
+      range,
+      setRange,
       isSearchConditionGiven,
       inputtingRangeMin: null,
       inputtingRangeMax: null,
       isSearchModalShowing: false,
 
       isMatch(val) {
-        const [min, max] = rangeMinMax.value;
-
-        return val > min && val <= max;
+        return val > rangeMin.value && val <= rangeMax.value;
       },
     };
   } else {
@@ -2052,11 +2061,11 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                             (column.searchType === 'number')
                               ? (openBlock(), createBlock("div", _hoisted_10, [
                                   createVNode(_component_Slider, {
-                                    modelValue: column.rangeMinMax,
-                                    "onUpdate:modelValue": $event => (column.rangeMinMax = $event),
+                                    modelValue: column.range,
                                     min: column.minValue,
-                                    max: column.maxValue
-                                  }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min", "max"]),
+                                    max: column.maxValue,
+                                    onUpdate: column.setRange
+                                  }, null, 8 /* PROPS */, ["modelValue", "min", "max", "onUpdate"]),
                                   createVNode("div", _hoisted_11, [
                                     createVNode("form", {
                                       onSubmit: withModifiers($event => (_ctx.setRangeFilters(column)), ["prevent"])
