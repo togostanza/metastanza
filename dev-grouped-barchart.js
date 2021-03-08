@@ -1,6 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-776f3f07.js';
-import './vega.module-790256fb.js';
+import { e as embed } from './vega-embed.module-8c506186.js';
+import './vega.module-9c8b3b23.js';
+import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
 
 async function devGroupedBarchart(stanza, params) {

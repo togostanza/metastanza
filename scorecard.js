@@ -1,10 +1,11 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { g as getFormatedJson } from './metastanza_utils-fce6ca8a.js';
+import { l as loadData } from './load-data-cc489077.js';
 import './index-b010e6ef.js';
 import './timer-be811b16.js';
+import './dsv-cd3740c6.js';
 
 async function scorecard(stanza, params) {
-  const dataset = await getFormatedJson(params.api);
+  const dataset = await loadData(params["data-url"], params["data-type"]);
   console.log(dataset);
   console.log(Object.values(dataset)[0]);
   stanza.render({
@@ -39,10 +40,16 @@ var metadata = {
 	"stanza:updated": "2020-12-02",
 	"stanza:parameter": [
 	{
-		"stanza:key": "api",
+		"stanza:key": "data-url",
 		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_gene_length_nano?tax_id=9606&gene_id=BRCA1",
 		"stanza:description": "Source url of your data.",
-		"stanza:required": false
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "data-type",
+		"stanza:example": "json",
+		"stanza:description": "Type of your data.",
+		"stanza:required": true
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",

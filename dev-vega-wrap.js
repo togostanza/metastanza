@@ -1,5 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { V as View, p as parse$1 } from './vega.module-790256fb.js';
+import { V as View, p as parse$1 } from './vega.module-9c8b3b23.js';
+import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
 
 async function devVegaWrap(stanza, params) {

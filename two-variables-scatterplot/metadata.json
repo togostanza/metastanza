@@ -16,9 +16,15 @@
   "stanza:updated": "2021-01-25",
   "stanza:parameter": [
     {
-      "stanza:key": "your-data",
+      "stanza:key": "data-url",
       "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
       "stanza:description": "Source url of your data.",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "json",
+      "stanza:description": "Type of your data.",
       "stanza:required": true
     },
     {

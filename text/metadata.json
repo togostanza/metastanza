@@ -16,10 +16,16 @@
   "stanza:updated": "2020-12-02",
   "stanza:parameter": [
     {
-      "stanza:key": "api",
+      "stanza:key": "data-url",
       "stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
       "stanza:description": "Source url of your data.",
-      "stanza:required": false
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:example": "json",
+      "stanza:description": "Type of your data.",
+      "stanza:required": true
     }
   ],
   "stanza:about-link-placement": "bottom-right",
