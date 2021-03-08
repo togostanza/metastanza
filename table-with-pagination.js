@@ -1604,6 +1604,8 @@ var script$1 = defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    const sliderPagination = ref();
+
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
@@ -1759,6 +1761,7 @@ var script$1 = defineComponent({
     onMounted(fetchData);
 
     return {
+      sliderPagination,
       state,
       totalPages,
       rowsInCurrentPage,
@@ -1929,10 +1932,11 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_SliderPagination = resolveComponent("SliderPagination");
 
   return (openBlock(), createBlock(Fragment, null, [
+    createTextVNode(toDisplayString(_ctx.state.pagination.currentPage) + " ", 1 /* TEXT */),
     createVNode("div", _hoisted_1$1, [
       createVNode("form", {
         class: "textSearchWrapper",
-        onSubmit: _cache[2] || (_cache[2] = withModifiers($event => (_ctx.state.queryForAllColumns.commit()), ["prevent"]))
+        onSubmit: _cache[2] || (_cache[2] = withModifiers($event => {_ctx.sliderPagination.jumpToPage(1); _ctx.state.queryForAllColumns.commit();}, ["prevent"]))
       }, [
         withDirectives(createVNode("input", {
           "onUpdate:modelValue": _cache[1] || (_cache[1] = $event => (_ctx.state.queryForAllColumns.uncommitted = $event)),
@@ -2092,7 +2096,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                               : (openBlock(), createBlock("form", {
                                   key: 1,
                                   class: "textSearchWrapper",
-                                  onSubmit: withModifiers($event => (column.query.commit()), ["prevent"])
+                                  onSubmit: withModifiers($event => {_ctx.sliderPagination.jumpToPage(1); column.query.commit();}, ["prevent"])
                                 }, [
                                   withDirectives(createVNode("input", {
                                     "onUpdate:modelValue": $event => (column.query.uncommitted = $event),
@@ -2138,6 +2142,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         ]))
       : createCommentVNode("v-if", true),
     createVNode(_component_SliderPagination, {
+      ref: "sliderPagination",
       "current-page": _ctx.state.pagination.currentPage,
       "total-pages": _ctx.totalPages,
       onUpdateCurrentPage: _ctx.updateCurrentPage
