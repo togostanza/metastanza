@@ -1,4 +1,5 @@
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
 export default async function devLinechart(stanza, params) {
   function css(key) {
@@ -19,10 +20,12 @@ export default async function devLinechart(stanza, params) {
   const valueVariable = params["value-variable"];
   const groupVariable = params["group-variable"];
 
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   const data = [
     {
       name: "table",
-      url: params["your-data"],
+      values
     },
   ];
 
