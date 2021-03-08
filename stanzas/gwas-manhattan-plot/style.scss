@@ -92,115 +92,41 @@ text {
 }
 
 circle {
-  &.ch_even {
-    fill: var(--ch-even-color);
+  &.discovery {
+    fill: #3d6589;
   }
-
-  &.ch_odd {
-    fill: var(--ch-odd-color);
+  &.replication {
+    fill: #ed707e;
   }
-
-  &.ch_1 {
-    fill: var(--ch-1-color);
+  &.combined {
+    fill: #eab64e;
   }
-
-  &.ch_2 {
-    fill: var(--ch-2-color);
+  &.meta-analysis {
+    fill: #52b1c1;
   }
-
-  &.ch_3 {
-    fill: var(--ch-3-color);
+  &.not-provided {
+    fill: #62b28c;
   }
-
-  &.ch_4 {
-    fill: var(--ch-4-color);
-  }
-
-  &.ch_5 {
-    fill: var(--ch-5-color);
-  }
-
-  &.ch_6 {
-    fill: var(--ch-6-color);
-  }
-
-  &.ch_7 {
-    fill: var(--ch-7-color);
-  }
-
-  &.ch_8 {
-    fill: var(--ch-8-color);
-  }
-
-  &.ch_9 {
-    fill: var(--ch-9-color);
-  }
-
-  &.ch_10 {
-    fill: var(--ch-10-color);
-  }
-
-  &.ch_11 {
-    fill: var(--ch-11-color);
-  }
-
-  &.ch_12 {
-    fill: var(--ch-12-color);
-  }
-
-  &.ch_13 {
-    fill: var(--ch-13-color);
-  }
-
-  &.ch_14 {
-    fill: var(--ch-14-color);
-  }
-
-  &.ch_15 {
-    fill: var(--ch-15-color);
-  }
-
-  &.ch_16 {
-    fill: var(--ch-16-color);
-  }
-
-  &.ch_17 {
-    fill: var(--ch-17-color);
-  }
-
-  &.ch_18 {
-    fill: var(--ch-18-color);
-  }
-
-  &.ch_19 {
-    fill: var(--ch-19-color);
-  }
-
-  &.ch_20 {
-    fill: var(--ch-20-color);
-  }
-
-  &.ch_21 {
-    fill: var(--ch-21-color);
-  }
-
-  &.ch_22 {
-    fill: var(--ch-22-color);
-  }
-
-  &.ch_X {
-    fill: var(--ch-Y-color);
-  }
-
-  &.ch_Y {
-    fill: var(--ch-X-color);
-  }
-
   &.over-thresh-plot {
     fill: var(--over-thresh-color);
     cursor: default;
   }
 }
+// circle[stage = "Discovery"] {
+//   fill: #3d6589
+// }
+// circle[stage = "replication"] {
+//   fill: #ed707e
+// }
+// circle[stage = "combined"] {
+//   fill: #eab64e
+// }
+// circle[stage = "meta-analysis"] {
+//   fill: #52b1c1
+// }
+// circle[stage = "not-provided"] {
+//   fill: #62b28c
+// }
 
 svg#dl_button {
   position: absolute;

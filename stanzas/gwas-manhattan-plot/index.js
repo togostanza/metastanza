@@ -24,6 +24,13 @@ console.log("【stage_names】", stage_names);
 const condition1 = stage_info[stage_names[0]].condition1;
 const condition2 = stage_info[stage_names[0]].condition2;
 
+//add stage information to each plot
+for (let i = 0; i < stage_names.length; i++) {
+  for (let j = 0; j < stages[0][stage_names[i]].variants.length; j++) {
+    stages[0][stage_names[i]].variants[j].stage = stage_names[i];
+  }
+}
+//combine variants to display
 let total_variants = [];
 stage_names.forEach(
   (stage) =>
@@ -663,6 +670,7 @@ async function draw(stanza, params) {
       .enter()
       // filter: display range
       .filter(function (d) {
+        // console.log('plotのd。ここにstage情報を持たせたい！',d)
         if (!d.pos) {
           // calculate  accumulated position
           let pos = 0;
@@ -687,17 +695,7 @@ async function draw(stanza, params) {
       })
       .append("circle")
       .attr("class", function (d) {
-        if (even_and_odd) {
-          let tmp = "even";
-          if (
-            d[chromosome_key] === "X" ||
-            parseInt(d[chromosome_key]) % 2 === 1
-          ) {
-            tmp = "odd";
-          }
-          return "plot ch_" + tmp;
-        }
-        return "plot ch_" + d[chromosome_key];
+        return d["stage"].toLowerCase();
       })
       .attr("cx", function (d) {
         return (
@@ -724,7 +722,7 @@ async function draw(stanza, params) {
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
         const pval = d["p-value"];
-        console.log(pval);
+        // console.log(pval);
         tooltip
           .style("display", "block")
           .style("left", `${d3.pointer(e)[0] + 8}px`)
