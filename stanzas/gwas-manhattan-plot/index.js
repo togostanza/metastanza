@@ -66,12 +66,15 @@ export default async function gwasManhattanPlot(stanza, params) {
     input = document.createElement("input");
     input.setAttribute("type", "checkbox");
     input.setAttribute("class", "stage-btn");
+    input.setAttribute("id", `${stage_names[i]}Btn`);
     input.setAttribute("name", "stage");
     input.setAttribute("value", stage_names[i]);
     input.setAttribute("checked", true);
     input.setAttribute("data-stage", stage_names[i]);
     label = document.createElement("label");
     label.textContent = stage_names[i];
+    label.setAttribute("for", `${stage_names[i]}Btn`);
+    label.setAttribute("data-stage", stage_names[i]);
     stageList.appendChild(li);
     li.appendChild(input);
     li.appendChild(label);
@@ -371,25 +374,69 @@ async function draw(stanza, params) {
         dragBegin = false;
       }
       if (dragBeginVertical) {
-        const dragEndVertical = d3.pointer(e)[1] > 370 ? 370 : d3.pointer(e)[1]; //一時的
+        const dragEndVertical = d3.pointer(e)[1] > 370 ? 370 : d3.pointer(e)[1]; //temporary
+        console.log("dragEndVertical mousedown(end)", dragEndVertical);
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
-        if (0 > dragEndVertical - dragBeginVertical) {
-          const maxLog =
-            rangeVertical[1] -
-            ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-          const minLog =
-            rangeVertical[1] -
-            ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-          rangeVertical = [minLog, maxLog];
-        } else if (dragEndVertical - dragBeginVertical > 0) {
-          const maxLog =
-            rangeVertical[1] -
-            ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-          const minLog =
-            rangeVertical[1] -
-            ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-          rangeVertical = [minLog, maxLog];
+        if (rangeVerticalLength < 36) {
+          if (0 > dragEndVertical - dragBeginVertical) {
+            const maxLog =
+              rangeVertical[1] -
+              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
+            const minLog =
+              rangeVertical[1] -
+              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
+            rangeVertical = [minLog, maxLog];
+          } else if (dragEndVertical - dragBeginVertical > 0) {
+            const maxLog =
+              rangeVertical[1] -
+              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
+            const minLog =
+              rangeVertical[1] -
+              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
+            rangeVertical = [minLog, maxLog];
+          }
+        } else if (rangeVerticalLength >= 36) {
+          if (dragBeginVertical < 215) {
+            console.log(
+              "mousedown shrink dragBeginVertical",
+              dragBeginVertical
+            );
+            if (dragEndVertical < 215) {
+              if (dragBeginVertical > dragEndVertical) {
+                const maxLog =
+                  rangeVertical[1] -
+                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
+                const minLog =
+                  rangeVertical[1] -
+                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
+                rangeVertical = [minLog, maxLog];
+                console.log("case 1 rangeVertical", rangeVertical);
+              } else if (dragEndVertical > dragBeginVertical) {
+                const maxLog =
+                  rangeVertical[1] -
+                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
+                const minLog =
+                  rangeVertical[1] -
+                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
+                rangeVertical = [minLog, maxLog];
+                console.log("case 2 rangeVertical", rangeVertical);
+              }
+            } else if (dragEndVertical > 215) {
+              if (dragEndVertical > dragBeginVertical) {
+                const maxLog =
+                  rangeVertical[1] -
+                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
+                const minLog =
+                  rangeVertical[1] -
+                  (((dragEndVertical - 60 - 155) / 155) *
+                    (20 - rangeVertical[0]) +
+                    (rangeVertical[1] - 20));
+                rangeVertical = [minLog, maxLog];
+                console.log("case 3 rangeVertical", rangeVertical);
+              }
+            }
+          }
         }
         reRender();
         svg.select("#selector").remove();
@@ -560,13 +607,20 @@ async function draw(stanza, params) {
       console.log("CLICKED");
       const stageName = e.path[0].getAttribute("data-stage");
       stage_info[stageName].checked = stageBtn[i].checked;
+      console.log(
+        "605:stage_info[stageName].checked",
+        stage_info[stageName].checked
+      );
+      console.log("606:stageBtn[i].checked", stageBtn[i].checked);
       variants = getVariants();
       reRender();
+      console.log("609:stageBtn[i].checked", stageBtn[i].checked);
+      // console.log('615:stageBtn[i].checked',stageBtn[i].checked)
     });
   }
 
   function reRender() {
-    console.log("variants.length", variants.length);
+    // console.log("variants.length", variants.length);
     if (range[0] === undefined) {
       range = [
         0,
@@ -759,7 +813,7 @@ async function draw(stanza, params) {
       const scaleNum = rangeVertical[1] - rangeVertical[0];
       const tickNum = 20; //Tick number to display.(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
-      if (rangeVertical[1] - rangeVertical[0] <= 36) {
+      if (rangeVertical[1] - rangeVertical[0] <= 36 || rangeVertical[0] >= 20) {
         //40- low thresh
         if (rangeVertical[1] - rangeVertical[0] < tickNum) {
           ylabel_g
@@ -795,11 +849,11 @@ async function draw(stanza, params) {
           }
         }
       } else if (rangeVertical[1] - rangeVertical[0] > 36) {
-        console.log(
-          "rangeVertical[0],rangeVertical[1]",
-          rangeVertical[0],
-          rangeVertical[1]
-        );
+        // console.log(
+        //   "rangeVertical[0],rangeVertical[1]",
+        //   rangeVertical[0],
+        //   rangeVertical[1]
+        // );
         const drawHeight = areaHeight - 60;
         const herfDrawHeight = drawHeight / 2;
         if (i <= 20 && i % 4 === 0) {
@@ -821,16 +875,22 @@ async function draw(stanza, params) {
               "d",
               "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
             );
+          // console.log('hoge')
         } else if (i > 20) {
-          const shrinkedInterval = (rangeVertical[1] - 20) / 4; //13
+          // console.log('fuga')
+          const shrinkedInterval = (Math.ceil(rangeVertical[1]) - 20) / 4; //13
+          // console.log('shrinkedInterval',shrinkedInterval)
+          // console.log('rangeVertical[1]',rangeVertical[1])
+          // console.log('Math.ceil((i - 20) % shrinkedInterval)',Math.ceil((i - 20) % shrinkedInterval));
           if ((i - 20) % shrinkedInterval === 0) {
-            console.log("shrinkedInterval", shrinkedInterval);
+            // console.log('piyo')
+            // console.log("shrinkedInterval", shrinkedInterval);
             const shrinkedScalePos =
               (drawHeight / 2) * ((i - 20) / (rangeVertical[1] - 20));
-            console.log("shrinkedScalePos", shrinkedScalePos);
-            console.log("herfDrawHeight", herfDrawHeight);
+            // console.log("shrinkedScalePos", shrinkedScalePos);
+            // console.log("herfDrawHeight", herfDrawHeight);
             y = areaHeight - (shrinkedScalePos + herfDrawHeight);
-            console.log("y", y);
+            // console.log("y", y);
             ylabel_g
               .append("text")
               .text(i)
@@ -936,6 +996,7 @@ async function draw(stanza, params) {
     }
     canvas.style("display", "none");
 
+    console.log("over_thresh_array", over_thresh_array);
     stanza.render({
       template: "table.html.hbs",
       selector: "#table",
