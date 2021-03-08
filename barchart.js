@@ -34,8 +34,8 @@ var csv$1 = dsvParse(csvParse);
 var tsv$1 = dsvParse(tsvParse);
 
 // TODO: test
-function loadData(url, dataType = "json") {
-  switch (dataType) {
+function loadData(url, type = "json") {
+  switch (type) {
     case "tsv":
       return loadTSV(url);
     case "csv":
