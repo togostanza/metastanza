@@ -1,6 +1,6 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-776f3f07.js';
-import './vega.module-790256fb.js';
+import { d as defineStanzaElement } from './stanza-element-53e84797.js';
+import { e as embed } from './vega-embed.module-2e1847ea.js';
+import './vega.module-e560a735.js';
 import './timer-be811b16.js';
 
 async function devLinechart(stanza, params) {
@@ -231,6 +231,11 @@ async function devLinechart(stanza, params) {
   };
   await embed(el, spec, opts);
 }
+
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': devLinechart
+});
 
 var metadata = {
 	"@context": {
@@ -536,5 +541,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}";
 
-defineStanzaElement(devLinechart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-linechart.js.map

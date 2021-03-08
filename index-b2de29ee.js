@@ -69,7 +69,7 @@ function selection_select(select) {
     }
   }
 
-  return new Selection(subgroups, this._parents);
+  return new Selection$1(subgroups, this._parents);
 }
 
 function array(x) {
@@ -108,7 +108,7 @@ function selection_selectAll(select) {
     }
   }
 
-  return new Selection(subgroups, parents);
+  return new Selection$1(subgroups, parents);
 }
 
 function matcher(selector) {
@@ -168,7 +168,7 @@ function selection_filter(match) {
     }
   }
 
-  return new Selection(subgroups, this._parents);
+  return new Selection$1(subgroups, this._parents);
 }
 
 function sparse(update) {
@@ -176,7 +176,7 @@ function sparse(update) {
 }
 
 function selection_enter() {
-  return new Selection(this._enter || this._groups.map(sparse), this._parents);
+  return new Selection$1(this._enter || this._groups.map(sparse), this._parents);
 }
 
 function EnterNode(parent, datum) {
@@ -308,14 +308,14 @@ function selection_data(value, key) {
     }
   }
 
-  update = new Selection(update, parents);
+  update = new Selection$1(update, parents);
   update._enter = enter;
   update._exit = exit;
   return update;
 }
 
 function selection_exit() {
-  return new Selection(this._exit || this._groups.map(sparse), this._parents);
+  return new Selection$1(this._exit || this._groups.map(sparse), this._parents);
 }
 
 function selection_join(onenter, onupdate, onexit) {
@@ -327,7 +327,7 @@ function selection_join(onenter, onupdate, onexit) {
 }
 
 function selection_merge(selection) {
-  if (!(selection instanceof Selection)) throw new Error("invalid merge");
+  if (!(selection instanceof Selection$1)) throw new Error("invalid merge");
 
   for (var groups0 = this._groups, groups1 = selection._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) {
     for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) {
@@ -341,7 +341,7 @@ function selection_merge(selection) {
     merges[j] = groups0[j];
   }
 
-  return new Selection(merges, this._parents);
+  return new Selection$1(merges, this._parents);
 }
 
 function selection_order() {
@@ -374,7 +374,7 @@ function selection_sort(compare) {
     sortgroup.sort(compareNode);
   }
 
-  return new Selection(sortgroups, this._parents).order();
+  return new Selection$1(sortgroups, this._parents).order();
 }
 
 function ascending(a, b) {
@@ -425,31 +425,31 @@ function selection_each(callback) {
   return this;
 }
 
-function attrRemove(name) {
+function attrRemove$1(name) {
   return function() {
     this.removeAttribute(name);
   };
 }
 
-function attrRemoveNS(fullname) {
+function attrRemoveNS$1(fullname) {
   return function() {
     this.removeAttributeNS(fullname.space, fullname.local);
   };
 }
 
-function attrConstant(name, value) {
+function attrConstant$1(name, value) {
   return function() {
     this.setAttribute(name, value);
   };
 }
 
-function attrConstantNS(fullname, value) {
+function attrConstantNS$1(fullname, value) {
   return function() {
     this.setAttributeNS(fullname.space, fullname.local, value);
   };
 }
 
-function attrFunction(name, value) {
+function attrFunction$1(name, value) {
   return function() {
     var v = value.apply(this, arguments);
     if (v == null) this.removeAttribute(name);
@@ -457,7 +457,7 @@ function attrFunction(name, value) {
   };
 }
 
-function attrFunctionNS(fullname, value) {
+function attrFunctionNS$1(fullname, value) {
   return function() {
     var v = value.apply(this, arguments);
     if (v == null) this.removeAttributeNS(fullname.space, fullname.local);
@@ -476,9 +476,9 @@ function selection_attr(name, value) {
   }
 
   return this.each((value == null
-      ? (fullname.local ? attrRemoveNS : attrRemove) : (typeof value === "function"
-      ? (fullname.local ? attrFunctionNS : attrFunction)
-      : (fullname.local ? attrConstantNS : attrConstant)))(fullname, value));
+      ? (fullname.local ? attrRemoveNS$1 : attrRemove$1) : (typeof value === "function"
+      ? (fullname.local ? attrFunctionNS$1 : attrFunction$1)
+      : (fullname.local ? attrConstantNS$1 : attrConstant$1)))(fullname, value));
 }
 
 function defaultView(node) {
@@ -487,19 +487,19 @@ function defaultView(node) {
       || node.defaultView; // node is a Document
 }
 
-function styleRemove(name) {
+function styleRemove$1(name) {
   return function() {
     this.style.removeProperty(name);
   };
 }
 
-function styleConstant(name, value, priority) {
+function styleConstant$1(name, value, priority) {
   return function() {
     this.style.setProperty(name, value, priority);
   };
 }
 
-function styleFunction(name, value, priority) {
+function styleFunction$1(name, value, priority) {
   return function() {
     var v = value.apply(this, arguments);
     if (v == null) this.style.removeProperty(name);
@@ -510,9 +510,9 @@ function styleFunction(name, value, priority) {
 function selection_style(name, value, priority) {
   return arguments.length > 1
       ? this.each((value == null
-            ? styleRemove : typeof value === "function"
-            ? styleFunction
-            : styleConstant)(name, value, priority == null ? "" : priority))
+            ? styleRemove$1 : typeof value === "function"
+            ? styleFunction$1
+            : styleConstant$1)(name, value, priority == null ? "" : priority))
       : styleValue(this.node(), name);
 }
 
@@ -630,13 +630,13 @@ function textRemove() {
   this.textContent = "";
 }
 
-function textConstant(value) {
+function textConstant$1(value) {
   return function() {
     this.textContent = value;
   };
 }
 
-function textFunction(value) {
+function textFunction$1(value) {
   return function() {
     var v = value.apply(this, arguments);
     this.textContent = v == null ? "" : v;
@@ -647,8 +647,8 @@ function selection_text(value) {
   return arguments.length
       ? this.each(value == null
           ? textRemove : (typeof value === "function"
-          ? textFunction
-          : textConstant)(value))
+          ? textFunction$1
+          : textConstant$1)(value))
       : this.node().textContent;
 }
 
@@ -853,21 +853,21 @@ function* selection_iterator() {
 
 var root = [null];
 
-function Selection(groups, parents) {
+function Selection$1(groups, parents) {
   this._groups = groups;
   this._parents = parents;
 }
 
 function selection() {
-  return new Selection([[document.documentElement]], root);
+  return new Selection$1([[document.documentElement]], root);
 }
 
 function selection_selection() {
   return this;
 }
 
-Selection.prototype = selection.prototype = {
-  constructor: Selection,
+Selection$1.prototype = selection.prototype = {
+  constructor: Selection$1,
   select: selection_select,
   selectAll: selection_selectAll,
   selectChild: selection_selectChild,
@@ -1173,19 +1173,19 @@ function interpolate(a, b) {
       : interpolateString)(a, b);
 }
 
-function attrRemove$1(name) {
+function attrRemove(name) {
   return function() {
     this.removeAttribute(name);
   };
 }
 
-function attrRemoveNS$1(fullname) {
+function attrRemoveNS(fullname) {
   return function() {
     this.removeAttributeNS(fullname.space, fullname.local);
   };
 }
 
-function attrConstant$1(name, interpolate, value1) {
+function attrConstant(name, interpolate, value1) {
   var string00,
       string1 = value1 + "",
       interpolate0;
@@ -1197,7 +1197,7 @@ function attrConstant$1(name, interpolate, value1) {
   };
 }
 
-function attrConstantNS$1(fullname, interpolate, value1) {
+function attrConstantNS(fullname, interpolate, value1) {
   var string00,
       string1 = value1 + "",
       interpolate0;
@@ -1209,7 +1209,7 @@ function attrConstantNS$1(fullname, interpolate, value1) {
   };
 }
 
-function attrFunction$1(name, interpolate, value) {
+function attrFunction(name, interpolate, value) {
   var string00,
       string10,
       interpolate0;
@@ -1224,7 +1224,7 @@ function attrFunction$1(name, interpolate, value) {
   };
 }
 
-function attrFunctionNS$1(fullname, interpolate, value) {
+function attrFunctionNS(fullname, interpolate, value) {
   var string00,
       string10,
       interpolate0;
@@ -1242,9 +1242,9 @@ function attrFunctionNS$1(fullname, interpolate, value) {
 function transition_attr(name, value) {
   var fullname = namespace(name), i = fullname === "transform" ? interpolateTransformSvg : interpolate;
   return this.attrTween(name, typeof value === "function"
-      ? (fullname.local ? attrFunctionNS$1 : attrFunction$1)(fullname, i, tweenValue(this, "attr." + name, value))
-      : value == null ? (fullname.local ? attrRemoveNS$1 : attrRemove$1)(fullname)
-      : (fullname.local ? attrConstantNS$1 : attrConstant$1)(fullname, i, value));
+      ? (fullname.local ? attrFunctionNS : attrFunction)(fullname, i, tweenValue(this, "attr." + name, value))
+      : value == null ? (fullname.local ? attrRemoveNS : attrRemove)(fullname)
+      : (fullname.local ? attrConstantNS : attrConstant)(fullname, i, value));
 }
 
 function attrInterpolate(name, i) {
@@ -1479,10 +1479,10 @@ function transition_selectAll(select) {
   return new Transition(subgroups, parents, name, id);
 }
 
-var Selection$1 = selection.prototype.constructor;
+var Selection = selection.prototype.constructor;
 
 function transition_selection() {
-  return new Selection$1(this._groups, this._parents);
+  return new Selection(this._groups, this._parents);
 }
 
 function styleNull(name, interpolate) {
@@ -1498,13 +1498,13 @@ function styleNull(name, interpolate) {
   };
 }
 
-function styleRemove$1(name) {
+function styleRemove(name) {
   return function() {
     this.style.removeProperty(name);
   };
 }
 
-function styleConstant$1(name, interpolate, value1) {
+function styleConstant(name, interpolate, value1) {
   var string00,
       string1 = value1 + "",
       interpolate0;
@@ -1516,7 +1516,7 @@ function styleConstant$1(name, interpolate, value1) {
   };
 }
 
-function styleFunction$1(name, interpolate, value) {
+function styleFunction(name, interpolate, value) {
   var string00,
       string10,
       interpolate0;
@@ -1536,7 +1536,7 @@ function styleMaybeRemove(id, name) {
   return function() {
     var schedule = set(this, id),
         on = schedule.on,
-        listener = schedule.value[key] == null ? remove || (remove = styleRemove$1(name)) : undefined;
+        listener = schedule.value[key] == null ? remove || (remove = styleRemove(name)) : undefined;
 
     // If this node shared a dispatch with the previous node,
     // just assign the updated shared dispatch and we’re done!
@@ -1551,12 +1551,12 @@ function transition_style(name, value, priority) {
   var i = (name += "") === "transform" ? interpolateTransformCss : interpolate;
   return value == null ? this
       .styleTween(name, styleNull(name, i))
-      .on("end.style." + name, styleRemove$1(name))
+      .on("end.style." + name, styleRemove(name))
     : typeof value === "function" ? this
-      .styleTween(name, styleFunction$1(name, i, tweenValue(this, "style." + name, value)))
+      .styleTween(name, styleFunction(name, i, tweenValue(this, "style." + name, value)))
       .each(styleMaybeRemove(this._id, name))
     : this
-      .styleTween(name, styleConstant$1(name, i, value), priority)
+      .styleTween(name, styleConstant(name, i, value), priority)
       .on("end.style." + name, null);
 }
 
@@ -1585,13 +1585,13 @@ function transition_styleTween(name, value, priority) {
   return this.tween(key, styleTween(name, value, priority == null ? "" : priority));
 }
 
-function textConstant$1(value) {
+function textConstant(value) {
   return function() {
     this.textContent = value;
   };
 }
 
-function textFunction$1(value) {
+function textFunction(value) {
   return function() {
     var value1 = value(this);
     this.textContent = value1 == null ? "" : value1;
@@ -1600,8 +1600,8 @@ function textFunction$1(value) {
 
 function transition_text(value) {
   return this.tween("text", typeof value === "function"
-      ? textFunction$1(tweenValue(this, "text", value))
-      : textConstant$1(value == null ? "" : value + ""));
+      ? textFunction(tweenValue(this, "text", value))
+      : textConstant(value == null ? "" : value + ""));
 }
 
 function textInterpolate(i) {
@@ -1770,5 +1770,5 @@ function selection_transition(name) {
 selection.prototype.interrupt = selection_interrupt;
 selection.prototype.transition = selection_transition;
 
-export { Selection as S, root as r };
-//# sourceMappingURL=index-b010e6ef.js.map
+export { Selection$1 as S, root as r };
+//# sourceMappingURL=index-b2de29ee.js.map

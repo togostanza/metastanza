@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { d as defineStanzaElement } from './stanza-element-53e84797.js';
 
 function devColumnTreeView(stanza, params) {
   const fetchReq = (query, callback, depth) => {
@@ -323,6 +323,11 @@ function devColumnTreeView(stanza, params) {
   fetchReq(firstQuery, renderFirst, 0);
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': devColumnTreeView
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -397,5 +402,5 @@ var templates = [
 
 var css = "";
 
-defineStanzaElement(devColumnTreeView, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-column-tree-view.js.map

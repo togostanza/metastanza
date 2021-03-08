@@ -1,6 +1,6 @@
-import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { g as getFormatedJson } from './metastanza_utils-fce6ca8a.js';
-import './index-b010e6ef.js';
+import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-53e84797.js';
+import { g as getFormatedJson } from './metastanza_utils-09a3be37.js';
+import './index-b2de29ee.js';
 import './timer-be811b16.js';
 
 /**
@@ -1557,6 +1557,11 @@ function draw(dataset, stanza, element) {
   }
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': tableBody
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -1611,5 +1616,5 @@ var templates = [
 
 var css = "table {\n  width: 100%;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  border-right: var(--table-border);\n  border-bottom: var(--table-border);\n  border-left: var(--table-border);\n  box-shadow: var(--table-shadow);\n}\ntable > thead {\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  color: var(--thead-font-color);\n  margin-bottom: 0;\n}\ntable > thead > tr > th {\n  color: var(--thead-font-color);\n  font-weight: var(--thead-font-weight);\n  padding: 10px;\n  position: sticky;\n  top: -1px;\n  background: #ffffff;\n  border-bottom: var(--thead-border-color);\n}\ntable > thead > tr > th:after {\n  content: \"\";\n  width: 100%;\n  height: 1px;\n  background-color: var(--thead-border-color);\n  position: absolute;\n  left: 0;\n  bottom: 0;\n}\ntable > thead > tr > th:first-child {\n  background-color: var(--thead-background-color);\n  padding-left: 20px;\n  padding-right: 20px;\n}\ntable > tbody {\n  font-size: var(--tbody-font-size);\n  color: var(--tbody-font-color);\n  background-color: var(--tbody-background-color);\n  border-right: var(--tbody-border-right);\n  border-bottom: var(--tbody-border-bottom);\n  border-left: var(--tbody-border-left);\n}\ntable > tbody > tr:nth-child(odd) {\n  background-color: var(--tbody-odd-background-color);\n}\ntable > tbody > tr:nth-child(even) {\n  background-color: var(--tbody-even-background-color);\n}\ntable > tbody > tr > td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n  padding: 10px;\n}\ntable > tbody > tr > td:first-child {\n  padding-left: 20px;\n}\ntable > tbody > tr > td:last-child {\n  padding-right: 20px;\n}\ntable > tbody > tr > td.loadingWrapper {\n  text-align: center;\n}\ntable > tbody > tr:last-of-type > td {\n  border-bottom: none;\n}";
 
-defineStanzaElement(tableBody, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=dev-table-body.js.map

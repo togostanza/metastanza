@@ -1,16 +1,16 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-776f3f07.js';
-import './index-b010e6ef.js';
-import { d as dsvFormat } from './vega.module-790256fb.js';
+import { d as defineStanzaElement } from './stanza-element-53e84797.js';
+import { e as embed } from './vega-embed.module-2e1847ea.js';
+import './index-b2de29ee.js';
+import { d as dsvFormat } from './vega.module-e560a735.js';
 import './timer-be811b16.js';
 
-var csv = dsvFormat(",");
+var csv$1 = dsvFormat(",");
 
-var csvParse = csv.parse;
+var csvParse = csv$1.parse;
 
-var tsv = dsvFormat("\t");
+var tsv$1 = dsvFormat("\t");
 
-var tsvParse = tsv.parse;
+var tsvParse = tsv$1.parse;
 
 function responseText(response) {
   if (!response.ok) throw new Error(response.status + " " + response.statusText);
@@ -30,8 +30,8 @@ function dsvParse(parse) {
   };
 }
 
-var csv$1 = dsvParse(csvParse);
-var tsv$1 = dsvParse(tsvParse);
+var csv = dsvParse(csvParse);
+var tsv = dsvParse(tsvParse);
 
 // TODO: test
 function loadData(url, type = "json") {
@@ -50,12 +50,12 @@ function loadData(url, type = "json") {
 
 function loadTSV(url) {
   // expect TSV data with a header line
-  return tsv$1(url);
+  return tsv(url);
 }
 
 function loadCSV(url) {
   // expect CSV data with a header line
-  return csv$1(url);
+  return csv(url);
 }
 
 async function loadJSON(url) {
@@ -368,6 +368,11 @@ async function barchart(stanza, params) {
   };
   await embed(el, spec, opts);
 }
+
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': barchart
+});
 
 var metadata = {
 	"@context": {
@@ -727,5 +732,5 @@ var templates = [
 
 var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}";
 
-defineStanzaElement(barchart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=barchart.js.map
