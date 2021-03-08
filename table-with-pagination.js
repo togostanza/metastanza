@@ -1710,6 +1710,11 @@ var script$1 = defineComponent({
       column.inputtingRangeMax = null;
     }
 
+    function showModal(column) {
+      column.isSearchModalShowing = true;
+      column.query.uncommitted = column.query.committed;
+    }
+
     function closeModal() {
       for (const column of state.columns) {
         column.isFilterPopupShowing = null;
@@ -1771,6 +1776,7 @@ var script$1 = defineComponent({
       setSorting,
       setFilters,
       setRangeFilters,
+      showModal,
       closeModal,
       updateCurrentPage,
     };
@@ -1849,12 +1855,7 @@ function createColumnState(columnDef, values) {
 
     function filter(val) {
       const selected = filters.filter(({ checked }) => checked);
-
-      if (selected.length === 0) {
-        return true;
-      } else {
-        return selected.some(({ value }) => value === val);
-      }
+      return selected.some(({ value }) => value === val);
     }
 
     return {
@@ -1932,7 +1933,6 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_SliderPagination = resolveComponent("SliderPagination");
 
   return (openBlock(), createBlock(Fragment, null, [
-    createTextVNode(toDisplayString(_ctx.state.pagination.currentPage) + " ", 1 /* TEXT */),
     createVNode("div", _hoisted_1$1, [
       createVNode("form", {
         class: "textSearchWrapper",
@@ -1991,7 +1991,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               'searchIcon',
               { active: column.isSearchConditionGiven },
             ],
-                    onClick: $event => (column.isSearchModalShowing = true)
+                    onClick: $event => (_ctx.showModal(column))
                   }, null, 10 /* CLASS, PROPS */, ["onClick"]),
                   (column.isFilterPopupShowing)
                     ? (openBlock(), createBlock("div", _hoisted_5$1, [
@@ -2055,9 +2055,8 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
                                     modelValue: column.rangeMinMax,
                                     "onUpdate:modelValue": $event => (column.rangeMinMax = $event),
                                     min: column.minValue,
-                                    max: column.maxValue,
-                                    onChange: $event => (column.rangeMinMax = $event)
-                                  }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min", "max", "onChange"]),
+                                    max: column.maxValue
+                                  }, null, 8 /* PROPS */, ["modelValue", "onUpdate:modelValue", "min", "max"]),
                                   createVNode("div", _hoisted_11, [
                                     createVNode("form", {
                                       onSubmit: withModifiers($event => (_ctx.setRangeFilters(column)), ["prevent"])
