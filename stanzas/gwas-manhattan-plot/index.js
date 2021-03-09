@@ -927,10 +927,10 @@ async function draw(stanza, params) {
   }
 
   function Pagination() {
-    const prevButton = stanza.root.querySelector("#prevBtn");
-    const nextButton = stanza.root.querySelector("#nextBtn");
-    const firstButton = stanza.root.querySelector("#firstBtn");
-    const lastButton = stanza.root.querySelector("#lastBtn");
+    const prevBtn = stanza.root.querySelector("#prevBtn");
+    const nextBtn = stanza.root.querySelector("#nextBtn");
+    const firstBtn = stanza.root.querySelector("#firstBtn");
+    const lastBtn = stanza.root.querySelector("#lastBtn");
     const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
 
     let current_page = 1;
@@ -945,10 +945,10 @@ async function draw(stanza, params) {
     };
 
     let addEventListeners = function () {
-      prevButton.addEventListener("click", prevPage);
-      nextButton.addEventListener("click", nextPage);
-      // firstButton.addEventListener("click", firstPage);
-      // lastButton.addEventListener("click", lastPage);
+      prevBtn.addEventListener("click", prevPage);
+      nextBtn.addEventListener("click", nextPage);
+      firstBtn.addEventListener("click", firstPage);
+      lastBtn.addEventListener("click", lastPage);
     };
 
     let selectedPage = function () {
@@ -978,34 +978,33 @@ async function draw(stanza, params) {
             pageNumber[i].style.display = "none";
           }
         }
-        prevButton.style.display = "flex";
-        // firstButton.style.display = "flex";
-        nextButton.style.display = "flex";
-        // lastButton.style.display = "flex";
+        prevBtn.style.display = "flex";
+        firstBtn.style.display = "flex";
+        nextBtn.style.display = "flex";
+        lastBtn.style.display = "flex";
 
         //display of prev/next button
         if (current_page == 1) {
-          prevButton.style.display = "none";
-          // firstButton.style.display = "none";
+          prevBtn.style.display = "none";
+          firstBtn.style.display = "none";
         } else if (current_page == pageNumber) {
-          nextButton.style.display = "none";
-          // lastButton.style.display = "none";
+          nextBtn.style.display = "none";
+          lastBtn.style.display = "none";
         }
       }
     };
 
     let checkButtonOpacity = function () {
       current_page == 1
-        ? prevButton.classList.add("opacity")
-        : prevButton.classList.remove("opacity");
+        ? prevBtn.classList.add("opacity")
+        : prevBtn.classList.remove("opacity");
       current_page == numPages()
-        ? nextButton.classList.add("opacity")
-        : nextButton.classList.remove("opacity");
+        ? nextBtn.classList.add("opacity")
+        : nextBtn.classList.remove("opacity");
     };
 
     let changePage = function (page) {
       const listingTable = stanza.root.querySelector("#listingTable");
-      // const listingTableHead = stanza.root.querySelector('#listingTableHead');
 
       if (page < 1) {
         page = 1;
@@ -1036,9 +1035,9 @@ async function draw(stanza, params) {
           const td = document.createElement("td");
           if (over_thresh_array[i][`${tableHeadArray[j]}`]) {
             if (tableHeadArray[j] === "gene_name") {
-              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">hoge</a>`;
-              // geneName.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
-              // td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${over_thresh_array[i][`${tableHeadArray[j]}`]}</a>`;
+              const displayedGeneName =
+                over_thresh_array[i][`${tableHeadArray[j]}`];
+              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${displayedGeneName}</a>`;
             } else {
               td.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
             }
@@ -1048,7 +1047,6 @@ async function draw(stanza, params) {
           tr.appendChild(td);
         }
         listingTable.appendChild(tr);
-        //   // listingTable.innerHTML += "<div class='objectBlock'>" + over_thresh_array[i].adName + "</div>";
       }
       checkButtonOpacity();
       selectedPage();
@@ -1070,19 +1068,19 @@ async function draw(stanza, params) {
       }
     };
 
-    // let firstPage = function () {
-    //   if (current_page != 1) {
-    //     current_page = 1;
-    //     changePage(current_page);
-    //   }
-    // };
+    let firstPage = function () {
+      if (current_page != 1) {
+        current_page = 1;
+        changePage(current_page);
+      }
+    };
 
-    // let lastPage = function () {
-    //   if (current_page != numPages()) {
-    //     current_page = numPages();
-    //     changePage(current_page);
-    //   }
-    // };
+    let lastPage = function () {
+      if (current_page != numPages()) {
+        current_page = numPages();
+        changePage(current_page);
+      }
+    };
 
     let clickPage = function () {
       stanza.root.addEventListener("click", function (e) {
@@ -1104,7 +1102,6 @@ async function draw(stanza, params) {
 
       for (let i = 1; i < numPages() + 1; i++) {
         console.log("current_page", current_page);
-        // for(let i = current_page; i < 5 + 1; i++) {
         pageNumber.innerHTML +=
           `<span class="click-page-number page-btn" id= "page${i}">` +
           i +
