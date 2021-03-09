@@ -108,35 +108,37 @@ export default defineComponent({
     const canvas = ref(null);
     const paginationNumList = ref(null);
     function drawKnobArrow() {
-      const totalPages = props.totalPages;
-      if (totalPages <= 5) {
-        return;
-      }
+      setTimeout(() => {
+        const totalPages = props.totalPages;
+        if (totalPages <= 5) {
+          return;
+        }
 
-      canvas.value.width = paginationWrapper.value.clientWidth;
-      canvas.value.height = 50;
-      const paginationNumListX = paginationNumList.value.offsetLeft;
-      const knob = paginationWrapper.value.getElementsByClassName(
-        "slider-origin"
-      )[0];
-      const knobTranslate = knob.style.transform
-        .match(/translate\((.+)%,(.+)\)/)[1]
-        .split(",")[0];
-      const knobX =
-        ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
-      const ctx = canvas.value.getContext("2d");
-      ctx.beginPath();
-      ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
-      ctx.lineTo(
-        paginationNumListX -
-          paginationWrapper.value.offsetLeft +
-          paginationNumList.value.clientWidth,
-        0
-      );
-      ctx.lineTo(knobX, 50);
-      ctx.closePath();
-      ctx.fillStyle = "#dddddd";
-      ctx.fill();
+        canvas.value.width = paginationWrapper.value.clientWidth;
+        canvas.value.height = 50;
+        const paginationNumListX = paginationNumList.value.offsetLeft;
+        const knob = paginationWrapper.value.getElementsByClassName(
+          "slider-origin"
+        )[0];
+        const knobTranslate = knob.style.transform
+          .match(/translate\((.+)%,(.+)\)/)[1]
+          .split(",")[0];
+        const knobX =
+          ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+        const ctx = canvas.value.getContext("2d");
+        ctx.beginPath();
+        ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
+        ctx.lineTo(
+          paginationNumListX -
+            paginationWrapper.value.offsetLeft +
+            paginationNumList.value.clientWidth,
+          0
+        );
+        ctx.lineTo(knobX, 50);
+        ctx.closePath();
+        ctx.fillStyle = "#dddddd";
+        ctx.fill();
+      }, 0)
     }
 
     onUpdated(drawKnobArrow);
