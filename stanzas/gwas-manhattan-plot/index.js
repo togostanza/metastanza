@@ -20,8 +20,6 @@ const project_name = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
-console.log("【stages】", stages);
-
 const stage_info = stages[0];
 
 let stage_names = Object.keys(stage_info);
@@ -52,7 +50,6 @@ stage_names.forEach(
   (stage) =>
     (total_variants = total_variants.concat(stage_info[stage].variants))
 );
-console.log("total_variants", total_variants);
 
 // get stage information
 const getVariants = () => {
@@ -118,8 +115,6 @@ export default async function gwasManhattanPlot(stanza, params) {
     secondConditionList.appendChild(td);
   }
 
-  console.log("stage_info", stage_info);
-
   // adjust datum
   for (let i = 0; i < variants.length; i++) {
     // convert chromosome data from 'chrnum' to 'num'
@@ -150,6 +145,7 @@ async function draw(stanza, params) {
   const height = 400;
   const marginLeft = 40;
   const marginBottom = 30;
+  const paddingTop = 10;
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
 
@@ -322,7 +318,8 @@ async function draw(stanza, params) {
     .on("mousedown", function (e) {
       if (d3.pointer(e)[1] <= areaHeight) {
         dragBegin = d3.pointer(e)[0];
-        dragBeginVertical = d3.pointer(e)[1] <= 60 ? 60 : d3.pointer(e)[1];
+        dragBeginVertical =
+          d3.pointer(e)[1] <= paddingTop ? paddingTop : d3.pointer(e)[1];
         console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
         console.log("mousedown(start) dragBegin", dragBegin);
         console.log("mousedown(start) d3.pointer(e)", d3.pointer(e));
@@ -388,69 +385,31 @@ async function draw(stanza, params) {
         dragBegin = false;
       }
       if (dragBeginVertical) {
-        const dragEndVertical = d3.pointer(e)[1] > 370 ? 370 : d3.pointer(e)[1]; //temporary
+        const dragEndVertical =
+          d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
         console.log("dragEndVertical mousedown(end)", dragEndVertical);
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
-        if (rangeVerticalLength < 36) {
-          if (0 > dragEndVertical - dragBeginVertical) {
-            const maxLog =
-              rangeVertical[1] -
-              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-            const minLog =
-              rangeVertical[1] -
-              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-            rangeVertical = [minLog, maxLog];
-          } else if (dragEndVertical - dragBeginVertical > 0) {
-            const maxLog =
-              rangeVertical[1] -
-              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-            const minLog =
-              rangeVertical[1] -
-              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-            rangeVertical = [minLog, maxLog];
-          }
-        } else if (rangeVerticalLength >= 36) {
-          if (dragBeginVertical < 215) {
-            console.log(
-              "mousedown shrink dragBeginVertical",
-              dragBeginVertical
-            );
-            if (dragEndVertical < 215) {
-              if (dragBeginVertical > dragEndVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                rangeVertical = [minLog, maxLog];
-                console.log("case 1 rangeVertical", rangeVertical);
-              } else if (dragEndVertical > dragBeginVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
-                rangeVertical = [minLog, maxLog];
-                console.log("case 2 rangeVertical", rangeVertical);
-              }
-            } else if (dragEndVertical > 215) {
-              if (dragEndVertical > dragBeginVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  (((dragEndVertical - 60 - 155) / 155) *
-                    (20 - rangeVertical[0]) +
-                    (rangeVertical[1] - 20));
-                rangeVertical = [minLog, maxLog];
-                console.log("case 3 rangeVertical", rangeVertical);
-              }
-            }
-          }
+        if (0 > dragEndVertical - dragBeginVertical) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
+        } else if (dragEndVertical - dragBeginVertical > 0) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
         }
         reRender();
         pagination.init();
@@ -704,8 +663,8 @@ async function draw(stanza, params) {
         return (
           ((rangeVertical[1] - logValue) /
             (rangeVertical[1] - rangeVertical[0])) *
-            310 +
-          60
+            (areaHeight - paddingTop) +
+          paddingTop
         );
       })
       .attr("r", 2)
@@ -787,12 +746,12 @@ async function draw(stanza, params) {
           );
         }
       })
-      .attr("y", marginBottom * 2)
+      .attr("y", paddingTop)
       .attr("width", function (d) {
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
       .attr("opacity", "0.4")
-      .attr("height", areaHeight - marginBottom * 2)
+      .attr("height", areaHeight - paddingTop)
       .attr("fill", function (d) {
         if (d % 2 === 0 || d === "Y") {
           return "#EEEEEE";
@@ -817,11 +776,10 @@ async function draw(stanza, params) {
       let y =
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
-          (areaHeight - 60); //temporary
-      // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
-      //calucurate display of scale(set 18 ticks)
+          (areaHeight - paddingTop);
+      //calucurate display of scale
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 20; //Tick number to display.(set by manual)
+      const tickNum = 20; //Tick number to display(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
       if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g
@@ -1133,6 +1091,7 @@ async function draw(stanza, params) {
           e.target.classList.contains("click-page-number")
         ) {
           current_page = e.target.textContent;
+          console.log("current_page", current_page);
           pageNumbers();
           changePage(current_page);
         }
