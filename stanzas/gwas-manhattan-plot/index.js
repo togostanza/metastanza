@@ -39,14 +39,6 @@ stage_names = fixed_order_stage_names.filter((stage_name) => {
   }
 });
 
-// get condition of each stage
-const condition1 = stage_info[stage_names[0]].condition1;
-const condition2 = stage_info[stage_names[0]].condition2;
-// for (let i = 0; i < stage_names.length; i++) {
-//   const firstCondition = stage_info[stage_names[i]].condition1;
-//   const secondCondition = stage_info[stage_names[i]].condition2;
-// }
-
 //add stage information to each plot
 for (let i = 0; i < stage_names.length; i++) {
   for (let j = 0; j < stages[0][stage_names[i]].variants.length; j++) {
@@ -78,11 +70,8 @@ export default async function gwasManhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      title: params["title"],
       study_name,
       project_name,
-      condition1,
-      condition2,
     },
   });
 
@@ -121,7 +110,7 @@ export default async function gwasManhattanPlot(stanza, params) {
     td.innerText = stage_info[stage_names[i]].condition1;
     firstConditionList.appendChild(td);
   }
-  
+
   for (let i = 0; i < stage_names.length; i++) {
     td = document.createElement("td");
     td.setAttribute("class", "condition-key");
@@ -137,7 +126,6 @@ export default async function gwasManhattanPlot(stanza, params) {
     let chr = variants[i].chr;
     chr = chr.replace("chr", "");
     variants[i].chr = chr;
-    // console.log(variants[i].chr);
 
     const pval = variants[i]["p-value"];
     String(pval);
@@ -188,7 +176,6 @@ async function draw(stanza, params) {
     params.label_key = "label";
   }
   const low_thresh = parseFloat(params.low_thresh);
-  // let high_thresh = parseFloat(params.high_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
   const even_and_odd = params.even_and_odd === "true";
@@ -196,9 +183,6 @@ async function draw(stanza, params) {
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
   const label_key = params.label_key;
-
-  console.log(label_key);
-  // console.log(variants[0].rsId);
 
   const chromosomes = [
     "1",
@@ -261,13 +245,8 @@ async function draw(stanza, params) {
       (acc, chr) => chromosomeNtLength[ref][chr] + acc,
       0
     );
-    // console.log('ref',ref)
-    // console.log('chromosomeSumLength[ref]',chromosomeSumLength[ref])
   });
-  console.log("chromosomeSumLength.hg38", chromosomeSumLength.hg38);
 
-  console.log(chromosomeNtLength.hg38);
-  console.log(Object.values(chromosomeNtLength.hg38));
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
   let startPos = 0;
@@ -277,13 +256,9 @@ async function draw(stanza, params) {
       chromosomeStartPosition[chr] = 0;
     } else {
       startPos += chromosomeArray[i - 1];
-      // console.log(startPos);
       chromosomeStartPosition[chr] = startPos;
     }
   }
-  console.log("chromosomeStartPosition", chromosomeStartPosition);
-
-  const yCategoricalScale = [4, 8, 12, 16, 20, 100, 180, 260, 340, 420];
 
   const canvas_div = d3
     .select(chart_element)
@@ -478,6 +453,7 @@ async function draw(stanza, params) {
           }
         }
         reRender();
+        pagination.init();
         svg.select("#selector").remove();
         dragBegin = false;
         dragBeginVertical = false;
@@ -561,6 +537,7 @@ async function draw(stanza, params) {
             const move = (delta / areaWidth) * total;
             range = [range[0] + move, range[1] + move];
             reRender();
+            pagination.init();
             dragBegin = false;
           }
         })
@@ -600,6 +577,7 @@ async function draw(stanza, params) {
       }
       range = [begin, end];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("input")
@@ -610,6 +588,7 @@ async function draw(stanza, params) {
       const end = range[1] - (range[1] - range[0]) / 4;
       range = [begin, end];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("input")
@@ -619,6 +598,7 @@ async function draw(stanza, params) {
       range = [];
       rangeVertical = [];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("label")
@@ -634,6 +614,7 @@ async function draw(stanza, params) {
   threshold.addEventListener("input", function () {
     high_thresh = parseFloat(threshold.value);
     reRender();
+    pagination.init();
   });
 
   reRender();
@@ -647,6 +628,7 @@ async function draw(stanza, params) {
       stage_info[stageName].checked = stageBtn[i].checked;
       variants = getVariants();
       reRender();
+      pagination.init();
     });
   }
 
@@ -686,7 +668,6 @@ async function draw(stanza, params) {
       .enter()
       // filter: display range
       .filter(function (d) {
-        // console.log('plotのd。ここにstage情報を持たせたい！',d)
         if (!d.pos) {
           // calculate  accumulated position
           let pos = 0;
@@ -738,14 +719,13 @@ async function draw(stanza, params) {
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
         const pval = d["p-value"];
-        // console.log(pval);
         tooltip
           .style("display", "block")
           .style("left", `${d3.pointer(e)[0] + 8}px`)
           .style(
             "top",
             `${d3.pointer(e)[1]}px`
-          ).html(`<p class="tooltip-chr">chr.${d.chr}:${d.start}</p>
+          ).html(`<p class="tooltip-chr">chr${d.chr}:${d.start}</p>
                 <ul class="tooltip-info">
                   <li><span class="tooltip-key">rsId:&nbsp;</span>${d.rsId}</li>
                   <li><span class="tooltip-key">Gene name:&nbsp;</span>${d.gene_name}</li>
@@ -756,12 +736,6 @@ async function draw(stanza, params) {
       .on("mouseout", function () {
         tooltip.style("display", "none");
       });
-    // plot_g.selectAll(".plot").attr("cy", function (d) {
-    //   return (
-    //     areaHeight - ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) * areaHeight) / max_log_p_int
-    //   );
-    // });
-
     renderCanvas(variants, range);
 
     // x axis label
@@ -982,6 +956,10 @@ async function draw(stanza, params) {
       .attr("width", ((range[1] - range[0]) / total) * areaWidth)
       .attr("transform", "translate(0, 0)");
 
+    const totalOverThreshVariants = stanza.root.querySelector(
+      "#totalOverThreshVariants"
+    );
+    totalOverThreshVariants.innerText = over_thresh_array.length;
     setRange(range);
     // overThreshLine.remove();
   }
@@ -1037,13 +1015,6 @@ async function draw(stanza, params) {
     canvas.style("display", "none");
 
     console.log("over_thresh_array", over_thresh_array);
-    stanza.render({
-      template: "table.html.hbs",
-      selector: "#table",
-      parameters: {
-        arrays: over_thresh_array,
-      },
-    });
   }
 
   function setRange(range) {
@@ -1051,10 +1022,10 @@ async function draw(stanza, params) {
     let text = "";
     for (const ch of chromosomes) {
       if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) {
-        text += " chr:" + ch + ":" + Math.floor(range[0]);
+        text += " chr" + ch + ":" + Math.floor(range[0]);
       }
       if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
-        text += " - chr:" + ch + ":" + Math.floor(range[1] - start);
+        text += " - chr" + ch + ":" + Math.floor(range[1] - start);
         break;
       }
       start += chromosomeNtLength.hg38[ch];
@@ -1062,4 +1033,196 @@ async function draw(stanza, params) {
     }
     ctrl_button.select("#range_text").html(text);
   }
+
+  function Pagination() {
+    const prevButton = stanza.root.querySelector("#prevBtn");
+    const nextButton = stanza.root.querySelector("#nextBtn");
+    const firstButton = stanza.root.querySelector("#firstBtn");
+    const lastButton = stanza.root.querySelector("#lastBtn");
+    const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
+
+    let current_page = 1;
+    let records_per_page = 20;
+
+    this.init = function () {
+      changePage(1);
+      pageNumbers();
+      selectedPage();
+      clickPage();
+      addEventListeners();
+    };
+
+    let addEventListeners = function () {
+      prevButton.addEventListener("click", prevPage);
+      nextButton.addEventListener("click", nextPage);
+      // firstButton.addEventListener("click", firstPage);
+      // lastButton.addEventListener("click", lastPage);
+    };
+
+    let selectedPage = function () {
+      let pageNumber = stanza.root
+        .querySelector("#pageNumber")
+        .getElementsByClassName("click-page-number");
+      for (let i = 0; i < pageNumber.length; i++) {
+        //selected page button opacity
+        if (i == current_page - 1) {
+          pageNumber[i].style.color = "#FFFFFF";
+          pageNumber[i].style["background-color"] = "#377CB5";
+        } else {
+          pageNumber[i].style.color = "#377CB5";
+          pageNumber[i].style["background-color"] = "#F9F9F9";
+        }
+        //selected page button placement
+        if (current_page <= 5 && 5 <= i) {
+          pageNumber[i].style.display = "none";
+        } else if (5 < current_page) {
+          if (i < current_page - 3 || current_page + 1 < i) {
+            pageNumber[i].style.display = "none";
+          }
+          if (
+            pageNumber.length - current_page < 5 &&
+            pageNumber.length - 5 < i
+          ) {
+            pageNumber[i].style.display = "none";
+          }
+        }
+        prevButton.style.display = "flex";
+        // firstButton.style.display = "flex";
+        nextButton.style.display = "flex";
+        // lastButton.style.display = "flex";
+
+        //display of prev/next button
+        if (current_page == 1) {
+          prevButton.style.display = "none";
+          // firstButton.style.display = "none";
+        } else if (current_page == pageNumber) {
+          nextButton.style.display = "none";
+          // lastButton.style.display = "none";
+        }
+      }
+    };
+
+    let checkButtonOpacity = function () {
+      current_page == 1
+        ? prevButton.classList.add("opacity")
+        : prevButton.classList.remove("opacity");
+      current_page == numPages()
+        ? nextButton.classList.add("opacity")
+        : nextButton.classList.remove("opacity");
+    };
+
+    let changePage = function (page) {
+      const listingTable = stanza.root.querySelector("#listingTable");
+      // const listingTableHead = stanza.root.querySelector('#listingTableHead');
+
+      if (page < 1) {
+        page = 1;
+      }
+      if (page > numPages() - 1) {
+        page = numPages();
+      }
+
+      listingTable.innerHTML = "";
+
+      const tableHeadArray = [
+        "gene_name",
+        "rsId",
+        "chr",
+        "pos",
+        "ref",
+        "alt",
+        "p-value",
+      ];
+
+      for (
+        let i = (page - 1) * records_per_page;
+        i < page * records_per_page && i < over_thresh_array.length;
+        i++
+      ) {
+        const tr = document.createElement("tr");
+        for (let j = 0; j < tableHeadArray.length; j++) {
+          const td = document.createElement("td");
+          if (over_thresh_array[i][`${tableHeadArray[j]}`]) {
+            if (tableHeadArray[j] === "gene_name") {
+              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">hoge</a>`;
+              // geneName.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
+              // td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${over_thresh_array[i][`${tableHeadArray[j]}`]}</a>`;
+            } else {
+              td.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
+            }
+          } else {
+            td.innerText = "";
+          }
+          tr.appendChild(td);
+        }
+        listingTable.appendChild(tr);
+        //   // listingTable.innerHTML += "<div class='objectBlock'>" + over_thresh_array[i].adName + "</div>";
+      }
+      checkButtonOpacity();
+      selectedPage();
+    };
+
+    let prevPage = function () {
+      if (current_page > 1) {
+        current_page--;
+        pageNumbers();
+        changePage(current_page);
+      }
+    };
+
+    let nextPage = function () {
+      if (current_page < numPages()) {
+        current_page++;
+        pageNumbers();
+        changePage(current_page);
+      }
+    };
+
+    // let firstPage = function () {
+    //   if (current_page != 1) {
+    //     current_page = 1;
+    //     changePage(current_page);
+    //   }
+    // };
+
+    // let lastPage = function () {
+    //   if (current_page != numPages()) {
+    //     current_page = numPages();
+    //     changePage(current_page);
+    //   }
+    // };
+
+    let clickPage = function () {
+      stanza.root.addEventListener("click", function (e) {
+        if (
+          e.target.nodeName == "SPAN" &&
+          e.target.classList.contains("click-page-number")
+        ) {
+          current_page = e.target.textContent;
+          pageNumbers();
+          changePage(current_page);
+        }
+      });
+    };
+
+    let pageNumbers = function () {
+      let pageNumber = stanza.root.querySelector("#pageNumber");
+      pageNumber.innerHTML = "";
+
+      for (let i = 1; i < numPages() + 1; i++) {
+        console.log("current_page", current_page);
+        // for(let i = current_page; i < 5 + 1; i++) {
+        pageNumber.innerHTML +=
+          `<span class="click-page-number page-btn" id= "page${i}">` +
+          i +
+          "</span>";
+      }
+    };
+
+    let numPages = function () {
+      return Math.ceil(over_thresh_array.length / records_per_page);
+    };
+  }
+  let pagination = new Pagination();
+  pagination.init();
 }

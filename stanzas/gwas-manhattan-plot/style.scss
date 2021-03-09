@@ -5,9 +5,16 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
 //Variables
+$COLOR_WHITE: #ffffff;
 $COLOR_GREY: #707070;
 $COLOR_LIGHTGREY: #99acb2;
+$COLOR_BLUE: #377cb5;
 $COLOR_DARKBLUE: #2f4d76;
+$COLOR_DISCOVERY: #3d6589;
+$COLOR_REPLICATION: #ed707e;
+$COLOR_COMBINED: #eab64e;
+$COLOR_META_ANARYSIS: #52b1c1;
+$COLOR_NOT_PROVIDED: #62b28c;
 $BORDER: 1.5px solid $COLOR_LIGHTGREY;
 
 // common styles
@@ -18,9 +25,8 @@ $BORDER: 1.5px solid $COLOR_LIGHTGREY;
 
 main {
   padding: none !important;
-  background-color: #ffffff;
+  background-color: $COLOR_WHITE;
 }
-
 li {
   list-style: none;
 }
@@ -29,7 +35,7 @@ h1 {
   padding: 15px 0px 12px 15px;
   font-size: 22px;
   font-weight: 400;
-  color: #2f4d76;
+  color: $COLOR_DARKBLUE;
   background-color: #f2f5f7;
 }
 
@@ -49,7 +55,6 @@ hr {
 
 div#chart {
   position: relative;
-
   svg {
     cursor: crosshair;
   }
@@ -93,19 +98,19 @@ text {
 
 circle {
   &.discovery {
-    fill: #3d6589;
+    fill: $COLOR_DISCOVERY;
   }
   &.replication {
-    fill: #ed707e;
+    fill: $COLOR_REPLICATION;
   }
   &.combined {
-    fill: #eab64e;
+    fill: $COLOR_COMBINED;
   }
   &.meta-analysis {
-    fill: #52b1c1;
+    fill: $COLOR_META_ANARYSIS;
   }
   &.not-provided {
-    fill: #62b28c;
+    fill: $COLOR_NOT_PROVIDED;
   }
   &.over-thresh-plot {
     fill: var(--over-thresh-color);
@@ -145,7 +150,7 @@ svg#dl_button {
   font-family: "Arial", sans-serif;
   font-weight: 600;
   .tooltip-chr {
-    color: #2f4d76;
+    color: $COLOR_DARKBLUE;
     font-size: 14px;
   }
   .tooltip-info {
@@ -215,7 +220,6 @@ div#dl_list {
     li {
       cursor: pointer;
       padding: 0px 10px 0px 10px;
-
       &.hover {
         background-color: #dddddd;
       }
@@ -228,7 +232,7 @@ div#dl_list {
   align-items: center;
   justify-content: center;
   input {
-    background-color: #ffffff;
+    background-color: $COLOR_WHITE;
     border: $BORDER;
     border-radius: 2px;
     margin-right: 1px;
@@ -287,7 +291,7 @@ div#dl_list {
           &:last-child {
             padding: 0px;
           }
-          &.condition-key{
+          &.condition-key {
             color: $COLOR_GREY;
           }
           input {
@@ -302,32 +306,32 @@ div#dl_list {
               padding: 1px 8.5px;
               border: $BORDER;
               border-radius: 4px;
-              background-color: #ffffff;
+              background-color: $COLOR_WHITE;
               &:before {
                 content: "− ";
               }
             }
             &:checked + label {
               padding: 2px 10px;
-              color: #ffffff;
+              color: $COLOR_WHITE;
               border: none;
               &:before {
                 content: "+ ";
               }
               &[data-stage="Discovery"] {
-                background-color: #3d6589;
+                background-color: $COLOR_DISCOVERY;
               }
               &[data-stage="replication"] {
-                background-color: #ed707e;
+                background-color: $COLOR_REPLICATION;
               }
               &[data-stage="combined"] {
-                background-color: #eab64e;
+                background-color: $COLOR_COMBINED;
               }
               &[data-stage="meta-analysis"] {
-                background-color: #52b1c1;
+                background-color: $COLOR_META_ANARYSIS;
               }
               &[data-stage="not-provided"] {
-                background-color: #62b28c;
+                background-color: $COLOR_NOT_PROVIDED;
               }
             }
           }
@@ -340,6 +344,21 @@ div#dl_list {
 .table-section {
   width: 800px;
   padding: 20px 30px;
+  .total-overthresh-variants {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    .info-key {
+      display: inline-block;
+      color: $COLOR_LIGHTGREY;
+      font-size: 14px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+    .info-value {
+      display: inline-block;
+    }
+  }
   table {
     width: 800px;
     margin: 10px auto 0px 0px;
@@ -367,7 +386,6 @@ div#dl_list {
     tbody {
       background-color: var(--tbody-background-color);
       tr {
-        // border-bottom: var(--ruled-line);
         &:nth-last-of-type(odd) {
           background-color: #e6ebef;
         }
@@ -380,6 +398,31 @@ div#dl_list {
             border-left: none;
           }
         }
+      }
+    }
+  }
+  .pagination-block {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    cursor: pointer;
+    .page-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 -0.5px;
+      width: 30px;
+      height: 32px;
+      color: $COLOR_LIGHTGREY;
+      background-color: #f9f9f9;
+      border: $BORDER;
+    }
+    .page-number {
+      display: flex;
+      .page-btn {
+        display: flex;
+        width: 30px;
+        height: 32px;
       }
     }
   }

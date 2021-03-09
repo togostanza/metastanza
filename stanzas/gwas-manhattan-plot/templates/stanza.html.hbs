@@ -5,13 +5,13 @@
 <section class="info-section">
   <dl class="datainfo-list">
     <dt id="study-name" class="info-key">
-      study name
+      study name:
     </dt>
     <dd>
       {{study_name}}
     </dd>
     <dt id="project-name" class="info-key">
-      project name
+      project name:
     </dt>
     <dd>
       {{project_name}}
@@ -54,5 +54,52 @@
   <h2>
     Top Loci
   </h2>
-  <div id="table"></div>
+  <dl class="total-overthresh-variants">
+    <dt class="info-key">
+      Total Variants:
+    </dt>
+    <dd id="totalOverThreshVariants" class="info-value"></dd>
+  </dl>
+  <div class="pagination">
+    <table>
+      <thead id="listingTableHead">
+        <tr>
+          <th>
+            Gene name
+          </th>
+          <th>
+            rsId
+          </th>
+          <th>
+            Chromosome
+          </th>
+          <th>
+            position
+          </th>
+          <th>
+            Ref
+          </th>
+          <th>
+            Alt
+          </th>
+          <th>
+            P-value
+          </th>
+        </tr>
+      </thead>
+      <tbody id="listingTable">
+      </tbody>
+    </table>
+    <div class="pagination-block">
+      {{! <span class="page-btn" id="firstBtn">&lt;&lt;</span> }}
+      <span class="page-btn" id="prevBtn">
+        &lt;
+      </span>
+      <span class="page-number" id="pageNumber"></span>
+      <span class="page-btn" id="nextBtn">
+        &gt;
+      </span>
+      {{! <span class="page-btn" id="lastBtn">&gt;&gt;</span> }}
+    </div>
+  </div>
 </section>
