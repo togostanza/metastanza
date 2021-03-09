@@ -1,5 +1,5 @@
 import { c as createCommonjsModule } from './stanza-element-b0afeab3.js';
-import { h as has, i as isNumber, a as isString, w as writeConfig, s as splitAccessPath, $, t as toSet, b as isObject, c as isBoolean$1, l as logger, W as Warn, d as isArray, e as isFunction, f as array, m as mergeConfig, g as eventSelector, j as identity, v as vegaImport } from './vega.module-5c1fb2a7.js';
+import { h as has, i as isNumber, a as isString, w as writeConfig, s as splitAccessPath, $, t as toSet, b as isObject, c as isBoolean$1, l as logger, W as Warn, d as isArray, e as isFunction, f as array, m as mergeConfig, g as eventSelector, j as identity, v as vegaImport } from './vega.module-9c8b3b23.js';
 
 /*!
  * https://github.com/Starcounter-Jack/JSON-Patch
@@ -24850,4 +24850,4 @@ function _embed(el, spec, opts = {}, loader) {
 }
 
 export { embed as e };
-//# sourceMappingURL=vega-embed.module-80d1ecde.js.map
+//# sourceMappingURL=vega-embed.module-8c506186.js.map
