@@ -770,8 +770,6 @@ async function draw(stanza, params) {
       .append("rect")
       .attr("class", "axisLabel xBackground")
       .attr("x", function (d) {
-        // const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         if (
           chromosomeStartPosition[d] < range[0] &&
           range[0] < chromosomeStartPosition[d + 1]
@@ -791,8 +789,6 @@ async function draw(stanza, params) {
       })
       .attr("y", marginBottom * 2)
       .attr("width", function (d) {
-        // const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
       .attr("opacity", "0.4")
@@ -827,9 +823,23 @@ async function draw(stanza, params) {
       const scaleNum = rangeVertical[1] - rangeVertical[0];
       const tickNum = 20; //Tick number to display.(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
-      if (rangeVertical[1] - rangeVertical[0] <= 36 || rangeVertical[0] >= 20) {
-        //40- low thresh
-        if (rangeVertical[1] - rangeVertical[0] < tickNum) {
+      if (rangeVertical[1] - rangeVertical[0] < tickNum) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+        ylabel_g
+          .append("path")
+          .attr("class", "axis-line")
+          .attr(
+            "d",
+            "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+          );
+      } else if (scaleNum >= tickNum) {
+        if (i % tickInterval === 0) {
           ylabel_g
             .append("text")
             .text(i)
@@ -844,82 +854,6 @@ async function draw(stanza, params) {
               "d",
               "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
             );
-        } else if (scaleNum >= tickNum) {
-          if (i % tickInterval === 0) {
-            ylabel_g
-              .append("text")
-              .text(i)
-              .attr("class", "axisLabel yLabel")
-              .attr("x", marginLeft - 12)
-              .attr("y", y)
-              .attr("text-anchor", "end");
-            ylabel_g
-              .append("path")
-              .attr("class", "axis-line")
-              .attr(
-                "d",
-                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-              );
-          }
-        }
-      } else if (rangeVertical[1] - rangeVertical[0] > 36) {
-        // console.log(
-        //   "rangeVertical[0],rangeVertical[1]",
-        //   rangeVertical[0],
-        //   rangeVertical[1]
-        // );
-        const drawHeight = areaHeight - 60;
-        const herfDrawHeight = drawHeight / 2;
-        if (i <= 20 && i % 4 === 0) {
-          y =
-            areaHeight -
-            (((i - rangeVertical[0]) / (20 - rangeVertical[0])) * drawHeight) /
-              2;
-          ylabel_g
-            .append("text")
-            .text(i)
-            .attr("class", "axisLabel yLabel")
-            .attr("x", marginLeft - 12)
-            .attr("y", y)
-            .attr("text-anchor", "end");
-          ylabel_g
-            .append("path")
-            .attr("class", "axis-line")
-            .attr(
-              "d",
-              "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-            );
-          // console.log('hoge')
-        } else if (i > 20) {
-          // console.log('fuga')
-          const shrinkedInterval = (Math.ceil(rangeVertical[1]) - 20) / 4; //13
-          // console.log('shrinkedInterval',shrinkedInterval)
-          // console.log('rangeVertical[1]',rangeVertical[1])
-          // console.log('Math.ceil((i - 20) % shrinkedInterval)',Math.ceil((i - 20) % shrinkedInterval));
-          if ((i - 20) % shrinkedInterval === 0) {
-            // console.log('piyo')
-            // console.log("shrinkedInterval", shrinkedInterval);
-            const shrinkedScalePos =
-              (drawHeight / 2) * ((i - 20) / (rangeVertical[1] - 20));
-            // console.log("shrinkedScalePos", shrinkedScalePos);
-            // console.log("herfDrawHeight", herfDrawHeight);
-            y = areaHeight - (shrinkedScalePos + herfDrawHeight);
-            // console.log("y", y);
-            ylabel_g
-              .append("text")
-              .text(i)
-              .attr("class", "axisLabel yLabel")
-              .attr("x", marginLeft - 12)
-              .attr("y", y)
-              .attr("text-anchor", "end");
-            ylabel_g
-              .append("path")
-              .attr("class", "axis-line")
-              .attr(
-                "d",
-                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-              );
-          }
         }
       }
       if (i === high_thresh) {
