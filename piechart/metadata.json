@@ -17,15 +17,9 @@
   "stanza:updated": "2020-11-05",
   "stanza:parameter": [
     {
-      "stanza:key": "data-url",
+      "stanza:key": "your-data",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Source url of your data.",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data-type",
-      "stanza:example": "json",
-      "stanza:description": "Type of your data.",
       "stanza:required": true
     },
     {

@@ -1,11 +1,12 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { l as loadData } from './load-data-cc489077.js';
-import './index-b010e6ef.js';
+import { g as getFormatedJson } from './metastanza_utils-f0c71da7.js';
 import './timer-be811b16.js';
-import './dsv-cd3740c6.js';
 
 async function text(stanza, params) {
-  const dataset = await loadData(params["data-url"], params["data-type"]);
+  const dataset = await getFormatedJson(
+    params.api
+    // stanza.root.querySelector("#chart")
+  );
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
@@ -37,16 +38,10 @@ var metadata = {
 	"stanza:updated": "2020-12-02",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "api",
 		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
 		"stanza:description": "Source url of your data.",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "data-type",
-		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
-		"stanza:required": true
+		"stanza:required": false
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",

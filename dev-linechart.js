@@ -1,10 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import './vega.module-9c8b3b23.js';
-import './dsv-cd3740c6.js';
+import { e as embed } from './vega-embed.module-80d1ecde.js';
+import './vega.module-5c1fb2a7.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
 
 async function devLinechart(stanza, params) {
   function css(key) {
@@ -25,12 +22,10 @@ async function devLinechart(stanza, params) {
   const valueVariable = params["value-variable"];
   const groupVariable = params["group-variable"];
 
-  const values = await loadData(params["data-url"], params["data-type"]);
-
   const data = [
     {
       name: "table",
-      values
+      url: params["your-data"],
     },
   ];
 
@@ -256,15 +251,9 @@ var metadata = {
 	"stanza:updated": "2020-11-07",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "your-data",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
-		"stanza:description": "source url of data",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "data-type",
-		"stanza:example": "json",
-		"stanza:description": "type of data",
+		"stanza:description": "source url which returns Vega specification compliant JSON",
 		"stanza:required": true
 	},
 	{

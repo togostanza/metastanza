@@ -16,15 +16,9 @@
   "stanza:updated": "2020-11-07",
   "stanza:parameter": [
     {
-      "stanza:key": "data-url",
+      "stanza:key": "your-data",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
-      "stanza:description": "source url of data",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data-type",
-      "stanza:example": "json",
-      "stanza:description": "type of data",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
       "stanza:required": true
     },
     {
