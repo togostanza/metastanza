@@ -1,6 +1,7 @@
-import { getFormatedJson } from "@/lib/metastanza_utils.js";
+import loadData from "@/lib/load-data";
+
 export default async function scorecard(stanza, params) {
-  const dataset = await getFormatedJson(params.api);
+  const dataset = await loadData(params["data-url"], params["data-type"]);
   console.log(dataset);
   console.log(Object.values(dataset)[0]);
   stanza.render({

@@ -1,4 +1,5 @@
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
 export default async function piechart(stanza, params) {
   function css(key) {
@@ -17,10 +18,13 @@ export default async function piechart(stanza, params) {
   //data
   const labelVariable = params["label-variable"];
   const valueVariable = params["value-variable"];
+
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   const data = [
     {
       name: "table",
-      url: params["your-data"],
+      values,
       transform: [
         {
           type: "pie",

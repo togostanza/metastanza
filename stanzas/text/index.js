@@ -1,10 +1,7 @@
-import { getFormatedJson } from "@/lib/metastanza_utils.js";
+import loadData from "@/lib/load-data";
 
 export default async function text(stanza, params) {
-  const dataset = await getFormatedJson(
-    params.api
-    // stanza.root.querySelector("#chart")
-  );
+  const dataset = await loadData(params["data-url"], params["data-type"]);
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {

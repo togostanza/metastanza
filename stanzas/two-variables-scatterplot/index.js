@@ -1,11 +1,10 @@
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
 export default async function twoVariablesScatterplot(stanza, params) {
   function css(key) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
-
-  // const vegaJson = await fetch(params["src-url"]).then((res) => res.json());
 
   //width,height,padding
   const width = Number(params["width"]);
@@ -16,10 +15,12 @@ export default async function twoVariablesScatterplot(stanza, params) {
   const xVariable = params["x-variable"];
   const yVariable = params["y-variable"];
 
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   const data = [
     {
       name: "source",
-      url: params["your-data"],
+      values,
       transform: [
         {
           type: "filter",

@@ -1,4 +1,5 @@
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
 export default async function barchart(stanza, params) {
   function css(key) {
@@ -16,20 +17,22 @@ export default async function barchart(stanza, params) {
   const valueVariable = params["value-variable"]; //y
   const groupVariable = params["group-variable"]; //z
 
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   function constructData(chartType) {
     switch (chartType) {
       case "grouped":
         return [
           {
             name: "table",
-            url: params["your-data"],
+            values,
           },
         ];
       case "stacked":
         return [
           {
             name: "table",
-            url: params["your-data"],
+            values,
             transform: [
               {
                 type: "stack",

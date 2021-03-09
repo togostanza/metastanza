@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - remove-head-from-table-data
 
 jobs:
   deploy:

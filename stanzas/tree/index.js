@@ -1,4 +1,5 @@
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
 export default async function tree(stanza, params) {
   function css(key) {
@@ -19,10 +20,12 @@ export default async function tree(stanza, params) {
   const parentVariable = params["parent-variable"]; //"parent"
   const idVariable = params["id-variable"]; //"id-variable"
 
+  const values = await loadData(params["data-url"], params["data-type"]);
+
   const data = [
     {
       name: "tree",
-      url: params["your-data"],
+      values,
       transform: [
         {
           type: "stratify",
