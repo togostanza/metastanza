@@ -112,23 +112,9 @@ circle {
     cursor: default;
   }
 }
-// circle[stage = "Discovery"] {
-//   fill: #3d6589
-// }
-// circle[stage = "replication"] {
-//   fill: #ed707e
-// }
-// circle[stage = "combined"] {
-//   fill: #eab64e
-// }
-// circle[stage = "meta-analysis"] {
-//   fill: #52b1c1
-// }
-// circle[stage = "not-provided"] {
-//   fill: #62b28c
-// }
 
 svg#dl_button {
+  display: none;
   position: absolute;
   top: -58px;
   right: 0px;
@@ -177,7 +163,6 @@ svg#dl_button {
 .info-section {
   padding: 20px 30px;
   width: 800px;
-  // max-width: 800px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -279,77 +264,72 @@ div#dl_list {
 .chart-section {
   width: 800px;
   padding: 20px 30px;
-  dl {
+  table {
     width: 800px;
     display: flex;
     justify-content: flex-end;
-    .info-key {
-      display: inline-block;
-      margin-top: -1px;
-      padding-right: 6px;
-      color: $COLOR_LIGHTGREY;
-      font-size: 14px;
-      font-weight: 600;
-    }
-    dd {
-      ul {
-        list-style: none;
-        display: flex;
-        // justify-content: flex-end;
-        padding: 0;
-        li {
-          margin-right: 6px;
-          font-size: 12px;
-          display: flex;
-          justify-content: bottom;
+    border-collapse: collapse;
+    tbody {
+      tr {
+        font-size: 12px;
+        td {
+          padding: 0px 24px 0px 0px;
+          &.info-key {
+            display: inline-block;
+            width: 75px;
+            text-align: right;
+            margin-top: -1px;
+            padding-right: 12px;
+            color: $COLOR_LIGHTGREY;
+            font-size: 12px;
+            font-weight: 600;
+          }
           &:last-child {
-            margin-right: 0px;
+            padding: 0px;
+          }
+          &.condition-key{
+            color: $COLOR_GREY;
           }
           input {
             margin: 3px 6px 0px 0px;
             display: none;
-          }
-          input[checked="true"] + label:before {
-            content: "+ ";
-          }
-          input[checked="false"] + label:before {
-            content: "− ";
-          }
-          label {
-            margin-top: 2px;
-            height: 18px;
-            // background-color: #3D6589;
-            font-size: 12px;
-            color: white;
-            padding: 0px 10px;
-            border-radius: 4px;
-            // &::before{
-            //   content: "+ ";
-            // }
-          }
-          input[checked="true"] + label[data-stage="Discovery"] {
-            background-color: #3d6589;
-          }
-          input[checked="true"] + label[data-stage="replication"] {
-            background-color: #ed707e;
-          }
-          input[checked="true"] + label[data-stage="combined"] {
-            background-color: #eab64e;
-          }
-          input[checked="true"] + label[data-stage="meta-analysis"] {
-            background-color: #52b1c1;
-          }
-          input[checked="true"] + label[data-stage="not-provided"] {
-            background-color: #62b28c;
-          }
-          input[checked="false"] + label {
-            background-color: #ffffff;
-          }
-          input[checked="false"] + label {
-            color: $COLOR_LIGHTGREY;
-          }
-          input[checked="false"] + label {
-            border: $BORDER;
+            + label {
+              box-sizing: border-box;
+              margin-top: 2px;
+              height: 18px;
+              font-size: 12px;
+              color: $COLOR_LIGHTGREY;
+              padding: 1px 8.5px;
+              border: $BORDER;
+              border-radius: 4px;
+              background-color: #ffffff;
+              &:before {
+                content: "− ";
+              }
+            }
+            &:checked + label {
+              padding: 2px 10px;
+              color: #ffffff;
+              border: none;
+              &:before {
+                content: "+ ";
+              }
+              &[data-stage="Discovery"] {
+                background-color: #3d6589;
+              }
+              &[data-stage="replication"] {
+                background-color: #ed707e;
+              }
+              &[data-stage="combined"] {
+                background-color: #eab64e;
+              }
+              &[data-stage="meta-analysis"] {
+                background-color: #52b1c1;
+              }
+              &[data-stage="not-provided"] {
+                background-color: #62b28c;
+              }
+            }
           }
         }
       }

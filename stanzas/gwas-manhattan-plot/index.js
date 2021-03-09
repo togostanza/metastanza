@@ -1,7 +1,14 @@
 import * as d3 from "d3";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "../gwas-manhattan-plot/gwas.var2.json";
-import { area } from "d3";
+
+//when you put json url
+// console.log(params.api);
+// const dataset = await getFormatedJson(
+//   params.api,
+//   stanza.root.querySelector("#chart")
+// );
+// console.log("dataset", dataset);
 
 // study name(single per a json)
 const dataset = data.dataset;
@@ -17,12 +24,28 @@ console.log("【stages】", stages);
 
 const stage_info = stages[0];
 
-const stage_names = Object.keys(stage_info);
-console.log("【stage_names】", stage_names);
+let stage_names = Object.keys(stage_info);
+const fixed_order_stage_names = [
+  "Discovery",
+  "replication",
+  "combined",
+  "meta-analysis",
+];
+stage_names = fixed_order_stage_names.filter((stage_name) => {
+  if (stage_info[stage_name]) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 // get condition of each stage
 const condition1 = stage_info[stage_names[0]].condition1;
 const condition2 = stage_info[stage_names[0]].condition2;
+// for (let i = 0; i < stage_names.length; i++) {
+//   const firstCondition = stage_info[stage_names[i]].condition1;
+//   const secondCondition = stage_info[stage_names[i]].condition2;
+// }
 
 //add stage information to each plot
 for (let i = 0; i < stage_names.length; i++) {
@@ -30,6 +53,7 @@ for (let i = 0; i < stage_names.length; i++) {
     stages[0][stage_names[i]].variants[j].stage = stage_names[i];
   }
 }
+
 //combine variants to display
 let total_variants = [];
 stage_names.forEach(
@@ -62,14 +86,17 @@ export default async function gwasManhattanPlot(stanza, params) {
     },
   });
 
-  //append checkbox to filter stages
+  //append checkbox and its conditions to filter stages
   const stageList = stanza.root.querySelector("#stageList");
-  let li;
+  const firstConditionList = stanza.root.querySelector("#firstConditionList");
+  const secondConditionList = stanza.root.querySelector("#secondConditionList");
+
+  let td;
   let input;
   let label;
 
   for (let i = 0; i < stage_names.length; i++) {
-    li = document.createElement("li");
+    td = document.createElement("td");
     input = document.createElement("input");
     input.setAttribute("type", "checkbox");
     input.setAttribute("class", "stage-btn");
@@ -82,10 +109,24 @@ export default async function gwasManhattanPlot(stanza, params) {
     label.textContent = stage_names[i];
     label.setAttribute("for", `${stage_names[i]}Btn`);
     label.setAttribute("data-stage", stage_names[i]);
-    stageList.appendChild(li);
-    li.appendChild(input);
-    li.appendChild(label);
+    stageList.appendChild(td);
+    td.appendChild(input);
+    td.appendChild(label);
     stage_info[stage_names[i]].checked = true;
+  }
+
+  for (let i = 0; i < stage_names.length; i++) {
+    td = document.createElement("td");
+    td.setAttribute("class", "condition-key");
+    td.innerText = stage_info[stage_names[i]].condition1;
+    firstConditionList.appendChild(td);
+  }
+  
+  for (let i = 0; i < stage_names.length; i++) {
+    td = document.createElement("td");
+    td.setAttribute("class", "condition-key");
+    td.innerText = stage_info[stage_names[i]].condition2;
+    secondConditionList.appendChild(td);
   }
 
   console.log("stage_info", stage_info);
@@ -104,14 +145,6 @@ export default async function gwasManhattanPlot(stanza, params) {
     const physical_pos = variants[i]["stop"];
     String(physical_pos);
   }
-
-  // console.log(params.api); //when you put json url
-  // const dataset = await getFormatedJson(
-  //   params.api,
-  //   stanza.root.querySelector("#chart")
-  // );
-  // console.log("dataset", dataset);
-  // console.log("variants", variants);
 
   if (typeof variants === "object") {
     draw(stanza, params);
@@ -296,14 +329,6 @@ async function draw(stanza, params) {
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
 
-  //y title
-  // ytitle
-  //   .append("rect")
-  //   .attr("fill", "#FFFFFF")
-  //   .attr("x", "0")
-  //   .attr("y", "0")
-  //   .attr("width",marginLeft-1)
-  //   .attr("height",areaHeight)
   ytitle
     .append("text")
     .text("-log₁₀(p-value)")
@@ -618,23 +643,14 @@ async function draw(stanza, params) {
   console.log("stageBtn", stageBtn);
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
-      console.log("CLICKED");
       const stageName = e.path[0].getAttribute("data-stage");
       stage_info[stageName].checked = stageBtn[i].checked;
-      console.log(
-        "605:stage_info[stageName].checked",
-        stage_info[stageName].checked
-      );
-      console.log("606:stageBtn[i].checked", stageBtn[i].checked);
       variants = getVariants();
       reRender();
-      console.log("609:stageBtn[i].checked", stageBtn[i].checked);
-      // console.log('615:stageBtn[i].checked',stageBtn[i].checked)
     });
   }
 
   function reRender() {
-    // console.log("variants.length", variants.length);
     if (range[0] === undefined) {
       range = [
         0,

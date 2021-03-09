@@ -16,18 +16,6 @@
     <dd>
       {{project_name}}
     </dd>
-    <dt id="firstCondition" class="info-key first-condition-name">
-      condition1:
-    </dt>
-    <dd class="first-condition-value">
-      &ensp;{{condition1}}
-    </dd>
-    <dt id="secondCondition" class="info-key second-condition-name">
-      condition2:
-    </dt>
-    <dd class="second-condition-value">
-      &ensp;{{condition2}}
-    </dd>
   </dl>
 </section>
 
@@ -37,15 +25,25 @@
   <h2>
     Manhattan Plot
   </h2>
-  <dl>
-    <dt id="stage-name" class="info-key">
-      stages:
-    </dt>
-    <dd>
-      <ul id="stageList">
-      </ul>
-    </dd>
-  </dl>
+  <table>
+    <tbody>
+      <tr id="stageList">
+        <td class="info-key">
+          Stages:
+        </td>
+      </tr>
+      <tr id="firstConditionList">
+        <td class="info-key">
+          Condition1:
+        </td>
+      </tr>
+      <tr id="secondConditionList">
+        <td class="info-key">
+          Condition2:
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <div id="chart"></div>
   <div id="control"></div>
 </section>
