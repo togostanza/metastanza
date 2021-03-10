@@ -168,9 +168,9 @@ async function draw(stanza, params) {
   if (params.p_value_key === "") {
     params.p_value__key = "p-value";
   }
-  if (params.label_key === "") {
-    params.label_key = "label";
-  }
+  // if (params.label_key === "") {
+  //   params.label_key = "label";
+  // }
   const low_thresh = parseFloat(params.low_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
@@ -178,7 +178,7 @@ async function draw(stanza, params) {
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
-  const label_key = params.label_key;
+  // const label_key = params.label_key;
 
   const chromosomes = [
     "1",
@@ -934,7 +934,7 @@ async function draw(stanza, params) {
     const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
 
     let current_page = 1;
-    let records_per_page = 20;
+    let records_per_page = params["records_per_page"];
 
     this.init = function () {
       changePage(1);
