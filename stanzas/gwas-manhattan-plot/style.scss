@@ -327,71 +327,73 @@ div#dl_list {
       }
     }
   }
-  table {
-    width: 800px;
-    margin: 10px auto 0px 0px;
-    border: $BORDER;
-    border-collapse: collapse;
-    thead {
-      height: 40px;
-      color: var(--thead-font-color);
-      background-color: var(--thead-background-color);
-      font-size: var(--thead-font-size);
-      border-bottom: $BORDER;
-      margin-bottom: 0;
-      padding: 8px 8px 0 8px;
-      tr {
+  .pagination {
+    table {
+      width: 800px;
+      margin: 10px auto 0px 0px;
+      border: $BORDER;
+      border-collapse: collapse;
+      thead {
         height: 40px;
-        th {
-          padding: 10px 20px;
-          text-align: left;
+        color: var(--thead-font-color);
+        background-color: var(--thead-background-color);
+        font-size: var(--thead-font-size);
+        border-bottom: $BORDER;
+        margin-bottom: 0;
+        padding: 8px 8px 0 8px;
+        tr {
+          height: 40px;
+          th {
+            padding: 10px 20px;
+            text-align: left;
+          }
         }
       }
-    }
-    tbody {
-      background-color: var(--tbody-odd-background-color);
-      tr {
-        height: 40px;
-        &:nth-last-of-type(odd) {
-          background-color: var(--tbody-even-background-color);
-        }
-        td {
-          padding: 10px 20px;
-          text-align: left;
-          border-left: 0.5px solid #d2dae2;
-          font-size: var(--tbody-font-size);
-          &:first-of-type {
-            border-left: none;
+      tbody {
+        background-color: var(--tbody-odd-background-color);
+        tr {
+          height: 40px;
+          &:nth-last-of-type(odd) {
+            background-color: var(--tbody-even-background-color);
+          }
+          td {
+            padding: 10px 20px;
+            text-align: left;
+            border-left: 0.5px solid #d2dae2;
+            font-size: var(--tbody-font-size);
+            &:first-of-type {
+              border-left: none;
+            }
           }
         }
       }
     }
-  }
-  .pagination-block {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    cursor: pointer;
-    .page-btn {
+    .pagination-block {
       display: flex;
       justify-content: center;
-      align-items: center;
-      margin: 0 -0.5px;
-      width: 30px;
-      height: 32px;
-      color: $COLOR_LIGHTGREY;
-      background-color: #f9f9f9;
-      border: $BORDER;
-    }
-    .page-number {
-      display: flex;
+      margin-top: 15px;
+      cursor: pointer;
       .page-btn {
         display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 -0.5px;
         width: 30px;
         height: 32px;
-        &.current {
-          color: $COLOR_WHITE;
-          background-color: $COLOR_BLUE;
+        color: $COLOR_LIGHTGREY;
+        background-color: #f9f9f9;
+        border: $BORDER;
+      }
+      .page-number {
+        display: flex;
+        .page-btn {
+          display: flex;
+          width: 30px;
+          height: 32px;
+          &.current {
+            color: $COLOR_WHITE;
+            background-color: $COLOR_BLUE;
+          }
         }
       }
     }
