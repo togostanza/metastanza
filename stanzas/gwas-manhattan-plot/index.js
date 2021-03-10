@@ -28,7 +28,7 @@ const fixed_order_stage_names = [
   "replication",
   "combined",
   "meta-analysis",
-  "not provided",
+  "not-provided",
 ];
 stage_names = fixed_order_stage_names.filter((stage_name) => {
   if (stage_info[stage_name]) {

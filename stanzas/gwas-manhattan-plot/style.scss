@@ -16,12 +16,12 @@ $COLOR_COMBINED: var(--combined-color);
 $COLOR_META_ANARYSIS: var(--meta-analysis-color);
 $COLOR_NOT_PROVIDED: var(--not-provided-color);
 $BORDER: 1.5px solid $COLOR_LIGHTGREY;
-$FONT_FAMMILY: var(--font-family);
+$FONT_FAMILY: var(--font-family);
 
 // common styles
 * {
   margin: 0;
-  font-family: $FONT_FAMMILY;
+  font-family: $FONT_FAMILY;
 }
 
 main {
@@ -212,12 +212,10 @@ div#dl_list {
   top: 35px;
   right: 6px;
   width: fit-content;
-
   ul {
     list-style-type: none;
     margin: 0px;
     padding: 0px;
-
     li {
       cursor: pointer;
       padding: 0px 10px 0px 10px;
@@ -334,12 +332,6 @@ div#dl_list {
     margin: 10px auto 0px 0px;
     border: $BORDER;
     border-collapse: collapse;
-    tr {
-      height: 40px;
-    }
-    td {
-      padding: 10px 20px;
-    }
     thead {
       height: 40px;
       color: var(--thead-font-color);
@@ -348,14 +340,18 @@ div#dl_list {
       border-bottom: $BORDER;
       margin-bottom: 0;
       padding: 8px 8px 0 8px;
-      tr th {
-        padding: 10px 20px;
-        text-align: left;
+      tr {
+        height: 40px;
+        th {
+          padding: 10px 20px;
+          text-align: left;
+        }
       }
     }
     tbody {
       background-color: var(--tbody-odd-background-color);
       tr {
+        height: 40px;
         &:nth-last-of-type(odd) {
           background-color: var(--tbody-even-background-color);
         }
@@ -394,8 +390,8 @@ div#dl_list {
         width: 30px;
         height: 32px;
         &.current {
-          color: #ffffff;
-          background-color: #377cb5;
+          color: $COLOR_WHITE;
+          background-color: $COLOR_BLUE;
         }
       }
     }
