@@ -17,8 +17,8 @@
   "stanza:parameter": [
     {
       "stanza:key": "api",
-      "stanza:example": "https://db-dev.jpostdb.org/test/gwas_test.json",
-      "stanza:description": "api (https://db-dev.jpostdb.org/test/gwas_test.json)",
+      "stanza:example": "",
+      "stanza:description": "api(json)",
       "stanza:required": true
     },
     {
