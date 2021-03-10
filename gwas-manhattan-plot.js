@@ -30492,7 +30492,6 @@ async function draw(stanza, params) {
   // select range by drag
   let dragBegin = false;
   let dragBeginVertical = false;
-  console.log("rangeVertical", rangeVertical);
 
   svg
     .on("mousedown", function (e) {
@@ -30500,9 +30499,6 @@ async function draw(stanza, params) {
         dragBegin = pointer(e)[0];
         dragBeginVertical =
           pointer(e)[1] <= paddingTop ? paddingTop : pointer(e)[1];
-        console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
-        console.log("mousedown(start) dragBegin", dragBegin);
-        console.log("mousedown(start) d3.pointer(e)", pointer(e));
         svg
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
@@ -30567,7 +30563,6 @@ async function draw(stanza, params) {
       if (dragBeginVertical) {
         const dragEndVertical =
           pointer(e)[1] > areaHeight ? areaHeight : pointer(e)[1];
-        console.log("dragEndVertical mousedown(end)", dragEndVertical);
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
         if (0 > dragEndVertical - dragBeginVertical) {
@@ -30754,7 +30749,7 @@ async function draw(stanza, params) {
 
   //listen stage checkbox event
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
-  console.log("stageBtn", stageBtn);
+
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
       const stageName = e.path[0].getAttribute("data-stage");
@@ -31079,8 +31074,6 @@ async function draw(stanza, params) {
       );
     }
     canvas.style("display", "none");
-
-    console.log("over_thresh_array", over_thresh_array);
   }
 
   function setRange(range) {
@@ -31095,100 +31088,53 @@ async function draw(stanza, params) {
         break;
       }
       start += chromosomeNtLength.hg38[ch];
-      // console.log(start + chromosomeNtLength.hg38[ch]);
     }
     ctrl_button.select("#range_text").html(text);
   }
 
   function Pagination() {
+    const pageBtns = stanza.root.querySelectorAll(".page-btn");
     const prevBtn = stanza.root.querySelector("#prevBtn");
     const nextBtn = stanza.root.querySelector("#nextBtn");
     const firstBtn = stanza.root.querySelector("#firstBtn");
     const lastBtn = stanza.root.querySelector("#lastBtn");
-    const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
 
     let current_page = 1;
-    let records_per_page = 20;
+    const records_per_page = 20;
+    const total_pages = Math.ceil(over_thresh_array.length / records_per_page);
+
 
     this.init = function () {
-      changePage(1);
-      pageNumbers();
-      selectedPage();
-      clickPage();
+      updateTable(1);
       addEventListeners();
     };
 
-    let addEventListeners = function () {
-      prevBtn.addEventListener("click", prevPage);
-      nextBtn.addEventListener("click", nextPage);
-      firstBtn.addEventListener("click", firstPage);
-      lastBtn.addEventListener("click", lastPage);
-    };
-
-    let selectedPage = function () {
-      let pageNumber = stanza.root
-        .querySelector("#pageNumber")
-        .getElementsByClassName("click-page-number");
-      for (let i = 0; i < pageNumber.length; i++) {
-        //selected page button opacity
-        if (i == current_page - 1) {
-          pageNumber[i].style.color = "#FFFFFF";
-          pageNumber[i].style["background-color"] = "#377CB5";
-        } else {
-          pageNumber[i].style.color = "#377CB5";
-          pageNumber[i].style["background-color"] = "#F9F9F9";
-        }
-        //selected page button placement
-        if (current_page <= 5 && 5 <= i) {
-          pageNumber[i].style.display = "none";
-        } else if (5 < current_page) {
-          if (i < current_page - 3 || current_page + 1 < i) {
-            pageNumber[i].style.display = "none";
-          }
-          if (
-            pageNumber.length - current_page < 5 &&
-            pageNumber.length - 5 < i
-          ) {
-            pageNumber[i].style.display = "none";
-          }
-        }
-        prevBtn.style.display = "flex";
-        firstBtn.style.display = "flex";
-        nextBtn.style.display = "flex";
-        lastBtn.style.display = "flex";
-
-        //display of prev/next button
-        if (current_page == 1) {
-          prevBtn.style.display = "none";
-          firstBtn.style.display = "none";
-        } else if (current_page == pageNumber) {
-          nextBtn.style.display = "none";
-          lastBtn.style.display = "none";
-        }
+    const surroundingPages = function () {
+      let start, end;
+      if (current_page <= 3) {
+        start = 1;
+        end = Math.min(start + 4, total_pages);
+      } else if (total_pages - current_page <= 3) {
+        end = total_pages;
+        start = Math.max(end - 4, 1);
+      } else {
+        start = Math.max(current_page - 2, 1);
+        end = Math.min(current_page + 2, total_pages);
       }
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
 
-    let checkButtonOpacity = function () {
-      current_page == 1
-        ? prevBtn.classList.add("opacity")
-        : prevBtn.classList.remove("opacity");
-      current_page == numPages()
-        ? nextBtn.classList.add("opacity")
-        : nextBtn.classList.remove("opacity");
+    const addEventListeners = function () {
+      prevBtn.addEventListener("click", () => {updateTable(current_page - 1);});
+      nextBtn.addEventListener("click", () => {updateTable(current_page + 1);});
+      firstBtn.addEventListener("click", () => {updateTable(1);});
+      lastBtn.addEventListener("click", () => {updateTable(total_pages);});
     };
 
-    let changePage = function (page) {
+    const updateTable = function (page) {
+      current_page = page;
       const listingTable = stanza.root.querySelector("#listingTable");
-
-      if (page < 1) {
-        page = 1;
-      }
-      if (page > numPages() - 1) {
-        page = numPages();
-      }
-
       listingTable.innerHTML = "";
-
       const tableHeadArray = [
         "gene_name",
         "rsId",
@@ -31222,69 +31168,39 @@ async function draw(stanza, params) {
         }
         listingTable.appendChild(tr);
       }
-      checkButtonOpacity();
-      selectedPage();
+
+      updatePagination();
     };
 
-    let prevPage = function () {
-      if (current_page > 1) {
-        current_page--;
-        pageNumbers();
-        changePage(current_page);
-      }
-    };
-
-    let nextPage = function () {
-      if (current_page < numPages()) {
-        current_page++;
-        pageNumbers();
-        changePage(current_page);
-      }
-    };
-
-    let firstPage = function () {
-      if (current_page != 1) {
-        current_page = 1;
-        changePage(current_page);
-      }
-    };
-
-    let lastPage = function () {
-      if (current_page != numPages()) {
-        current_page = numPages();
-        changePage(current_page);
-      }
-    };
-
-    let clickPage = function () {
-      stanza.root.addEventListener("click", function (e) {
-        if (
-          e.target.nodeName == "SPAN" &&
-          e.target.classList.contains("click-page-number")
-        ) {
-          current_page = e.target.textContent;
-          console.log("current_page", current_page);
-          pageNumbers();
-          changePage(current_page);
-        }
-      });
-    };
-
-    let pageNumbers = function () {
+    const updatePagination = function () {
       let pageNumber = stanza.root.querySelector("#pageNumber");
       pageNumber.innerHTML = "";
+      const surrounding_pages = surroundingPages();
 
-      for (let i = 1; i < numPages() + 1; i++) {
-        console.log("current_page", current_page);
-        pageNumber.innerHTML +=
-          `<span class="click-page-number page-btn" id= "page${i}">` +
-          i +
-          "</span>";
+      for(const i of surrounding_pages) {
+        const page_num = document.createElement("span");
+        page_num.innerText = i;
+        page_num.setAttribute("class", "page-btn");
+
+        if (i === current_page) {
+          page_num.classList.add("current");
+        }
+
+        page_num.addEventListener("click", () => { updateTable(i); });
+        pageNumber.append(page_num);
       }
-    };
+      pageBtns.forEach(pageBtns => pageBtns.style.display = "flex");
 
-    let numPages = function () {
-      return Math.ceil(over_thresh_array.length / records_per_page);
+      if(current_page === 1) {
+        firstBtn.style.display = "none";
+        prevBtn.style.display = "none";
+      }
+
+      if(current_page === total_pages) {
+        nextBtn.style.display = "none";
+        lastBtn.style.display = "none";
+      }
+
     };
   }
   let pagination = new Pagination();
@@ -31571,7 +31487,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: #3d6589;\n}\ncircle.replication {\n  fill: #ed707e;\n}\ncircle.combined {\n  fill: #eab64e;\n}\ncircle.meta-analysis {\n  fill: #52b1c1;\n}\ncircle.not-provided {\n  fill: #62b28c;\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=Discovery] {\n  background-color: #3d6589;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: #ed707e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: #eab64e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: #52b1c1;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: #62b28c;\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}";
+var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: #3d6589;\n}\ncircle.replication {\n  fill: #ed707e;\n}\ncircle.combined {\n  fill: #eab64e;\n}\ncircle.meta-analysis {\n  fill: #52b1c1;\n}\ncircle.not-provided {\n  fill: #62b28c;\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=Discovery] {\n  background-color: #3d6589;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: #ed707e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: #eab64e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: #52b1c1;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: #62b28c;\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}\n.table-section .pagination-block .page-number .page-btn.current {\n  color: #ffffff;\n  background-color: #377CB5;\n}";
 
 defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map
