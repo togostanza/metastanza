@@ -312,7 +312,6 @@ async function draw(stanza, params) {
   // select range by drag
   let dragBegin = false;
   let dragBeginVertical = false;
-  console.log("rangeVertical", rangeVertical);
 
   svg
     .on("mousedown", function (e) {
@@ -320,9 +319,6 @@ async function draw(stanza, params) {
         dragBegin = d3.pointer(e)[0];
         dragBeginVertical =
           d3.pointer(e)[1] <= paddingTop ? paddingTop : d3.pointer(e)[1];
-        console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
-        console.log("mousedown(start) dragBegin", dragBegin);
-        console.log("mousedown(start) d3.pointer(e)", d3.pointer(e));
         svg
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
@@ -387,7 +383,6 @@ async function draw(stanza, params) {
       if (dragBeginVertical) {
         const dragEndVertical =
           d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
-        console.log("dragEndVertical mousedown(end)", dragEndVertical);
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
         if (0 > dragEndVertical - dragBeginVertical) {
@@ -580,7 +575,7 @@ async function draw(stanza, params) {
 
   //listen stage checkbox event
   const stageBtn = stanza.root.querySelectorAll(".stage-btn");
-  console.log("stageBtn", stageBtn);
+
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
       const stageName = e.path[0].getAttribute("data-stage");
@@ -905,8 +900,6 @@ async function draw(stanza, params) {
       );
     }
     canvas.style("display", "none");
-
-    console.log("over_thresh_array", over_thresh_array);
   }
 
   function setRange(range) {
@@ -921,100 +914,53 @@ async function draw(stanza, params) {
         break;
       }
       start += chromosomeNtLength.hg38[ch];
-      // console.log(start + chromosomeNtLength.hg38[ch]);
     }
     ctrl_button.select("#range_text").html(text);
   }
 
   function Pagination() {
+    const pageBtns = stanza.root.querySelectorAll(".page-btn")
     const prevBtn = stanza.root.querySelector("#prevBtn");
     const nextBtn = stanza.root.querySelector("#nextBtn");
     const firstBtn = stanza.root.querySelector("#firstBtn");
     const lastBtn = stanza.root.querySelector("#lastBtn");
-    const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
 
     let current_page = 1;
-    let records_per_page = 20;
+    const records_per_page = 20;
+    const total_pages = Math.ceil(over_thresh_array.length / records_per_page)
+
 
     this.init = function () {
-      changePage(1);
-      pageNumbers();
-      selectedPage();
-      clickPage();
+      updateTable(1);
       addEventListeners();
     };
 
-    let addEventListeners = function () {
-      prevBtn.addEventListener("click", prevPage);
-      nextBtn.addEventListener("click", nextPage);
-      firstBtn.addEventListener("click", firstPage);
-      lastBtn.addEventListener("click", lastPage);
-    };
-
-    let selectedPage = function () {
-      let pageNumber = stanza.root
-        .querySelector("#pageNumber")
-        .getElementsByClassName("click-page-number");
-      for (let i = 0; i < pageNumber.length; i++) {
-        //selected page button opacity
-        if (i == current_page - 1) {
-          pageNumber[i].style.color = "#FFFFFF";
-          pageNumber[i].style["background-color"] = "#377CB5";
-        } else {
-          pageNumber[i].style.color = "#377CB5";
-          pageNumber[i].style["background-color"] = "#F9F9F9";
-        }
-        //selected page button placement
-        if (current_page <= 5 && 5 <= i) {
-          pageNumber[i].style.display = "none";
-        } else if (5 < current_page) {
-          if (i < current_page - 3 || current_page + 1 < i) {
-            pageNumber[i].style.display = "none";
-          }
-          if (
-            pageNumber.length - current_page < 5 &&
-            pageNumber.length - 5 < i
-          ) {
-            pageNumber[i].style.display = "none";
-          }
-        }
-        prevBtn.style.display = "flex";
-        firstBtn.style.display = "flex";
-        nextBtn.style.display = "flex";
-        lastBtn.style.display = "flex";
-
-        //display of prev/next button
-        if (current_page == 1) {
-          prevBtn.style.display = "none";
-          firstBtn.style.display = "none";
-        } else if (current_page == pageNumber) {
-          nextBtn.style.display = "none";
-          lastBtn.style.display = "none";
-        }
+    const surroundingPages = function () {
+      let start, end;
+      if (current_page <= 3) {
+        start = 1;
+        end = Math.min(start + 4, total_pages);
+      } else if (total_pages - current_page <= 3) {
+        end = total_pages;
+        start = Math.max(end - 4, 1);
+      } else {
+        start = Math.max(current_page - 2, 1);
+        end = Math.min(current_page + 2, total_pages);
       }
+      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    }
+
+    const addEventListeners = function () {
+      prevBtn.addEventListener("click", () => {updateTable(current_page - 1)});
+      nextBtn.addEventListener("click", () => {updateTable(current_page + 1)});
+      firstBtn.addEventListener("click", () => {updateTable(1)});
+      lastBtn.addEventListener("click", () => {updateTable(total_pages)});
     };
 
-    let checkButtonOpacity = function () {
-      current_page == 1
-        ? prevBtn.classList.add("opacity")
-        : prevBtn.classList.remove("opacity");
-      current_page == numPages()
-        ? nextBtn.classList.add("opacity")
-        : nextBtn.classList.remove("opacity");
-    };
-
-    let changePage = function (page) {
+    const updateTable = function (page) {
+      current_page = page
       const listingTable = stanza.root.querySelector("#listingTable");
-
-      if (page < 1) {
-        page = 1;
-      }
-      if (page > numPages() - 1) {
-        page = numPages();
-      }
-
       listingTable.innerHTML = "";
-
       const tableHeadArray = [
         "gene_name",
         "rsId",
@@ -1048,70 +994,40 @@ async function draw(stanza, params) {
         }
         listingTable.appendChild(tr);
       }
-      checkButtonOpacity();
-      selectedPage();
-    };
 
-    let prevPage = function () {
-      if (current_page > 1) {
-        current_page--;
-        pageNumbers();
-        changePage(current_page);
-      }
-    };
+      updatePagination()
+    }
 
-    let nextPage = function () {
-      if (current_page < numPages()) {
-        current_page++;
-        pageNumbers();
-        changePage(current_page);
-      }
-    };
-
-    let firstPage = function () {
-      if (current_page != 1) {
-        current_page = 1;
-        changePage(current_page);
-      }
-    };
-
-    let lastPage = function () {
-      if (current_page != numPages()) {
-        current_page = numPages();
-        changePage(current_page);
-      }
-    };
-
-    let clickPage = function () {
-      stanza.root.addEventListener("click", function (e) {
-        if (
-          e.target.nodeName == "SPAN" &&
-          e.target.classList.contains("click-page-number")
-        ) {
-          current_page = e.target.textContent;
-          console.log("current_page", current_page);
-          pageNumbers();
-          changePage(current_page);
-        }
-      });
-    };
-
-    let pageNumbers = function () {
+    const updatePagination = function () {
       let pageNumber = stanza.root.querySelector("#pageNumber");
       pageNumber.innerHTML = "";
+      const surrounding_pages = surroundingPages()
 
-      for (let i = 1; i < numPages() + 1; i++) {
-        console.log("current_page", current_page);
-        pageNumber.innerHTML +=
-          `<span class="click-page-number page-btn" id= "page${i}">` +
-          i +
-          "</span>";
+      for(const i of surrounding_pages) {
+        const page_num = document.createElement("span")
+        page_num.innerText = i
+        page_num.setAttribute("class", "page-btn")
+
+        if (i === current_page) {
+          page_num.classList.add("current")
+        }
+
+        page_num.addEventListener("click", () => { updateTable(i) })
+        pageNumber.append(page_num)
       }
-    };
+      pageBtns.forEach(pageBtns => pageBtns.style.display = "flex")
 
-    let numPages = function () {
-      return Math.ceil(over_thresh_array.length / records_per_page);
-    };
+      if(current_page === 1) {
+        firstBtn.style.display = "none"
+        prevBtn.style.display = "none"
+      }
+
+      if(current_page === total_pages) {
+        nextBtn.style.display = "none"
+        lastBtn.style.display = "none"
+      }
+
+    }
   }
   let pagination = new Pagination();
   pagination.init();
