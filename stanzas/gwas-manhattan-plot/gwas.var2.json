@@ -3,7 +3,7 @@
     "B型肝炎に関する統合的臨床ゲノムデータベースの構築を目指す研究": [
       {
         "blank": {
-          "Discovery": {
+          "discovery": {
             "condition1": "not provided",
             "condition2": "hepatitis B",
             "variants": [
