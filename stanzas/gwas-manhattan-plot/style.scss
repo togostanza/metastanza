@@ -424,6 +424,10 @@ div#dl_list {
         display: flex;
         width: 30px;
         height: 32px;
+        &.current {
+          color: #ffffff;
+          background-color: #377CB5;
+        }
       }
     }
   }
