@@ -30352,9 +30352,9 @@ async function draw(stanza, params) {
   if (params.p_value_key === "") {
     params.p_value__key = "p-value";
   }
-  if (params.label_key === "") {
-    params.label_key = "label";
-  }
+  // if (params.label_key === "") {
+  //   params.label_key = "label";
+  // }
   const low_thresh = parseFloat(params.low_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
@@ -30362,7 +30362,7 @@ async function draw(stanza, params) {
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
-  const label_key = params.label_key;
+  // const label_key = params.label_key;
 
   const chromosomes = [
     "1",
@@ -31100,7 +31100,8 @@ async function draw(stanza, params) {
     const lastBtn = stanza.root.querySelector("#lastBtn");
 
     let current_page = 1;
-    const records_per_page = 20;
+    let records_per_page = params["records_per_page"];
+    // const records_per_page = 20;
     const total_pages = Math.ceil(over_thresh_array.length / records_per_page);
 
 
@@ -31250,15 +31251,9 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "label_key",
-		"stanza:example": "rsId",
-		"stanza:description": "key to a label in data frame. default: 'label'",
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "low_thresh",
 		"stanza:example": "4",
-		"stanza:description": "filtering threshold. =log10(p-value) default: 0.5",
+		"stanza:description": "filtering threshold. =log10(p-value) default: 4",
 		"stanza:required": false
 	},
 	{
@@ -31268,43 +31263,43 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "ytick-number",
-		"stanza:example": 18,
-		"stanza:description": "yscale tick number to display",
-		"stanza:required": true
+		"stanza:key": "records_per_page",
+		"stanza:example": "20",
+		"stanza:description": "records per a page to display on table.",
+		"stanza:required": false
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--over-thresh-color",
+		"stanza:key": "--discovery-color",
 		"stanza:type": "color",
-		"stanza:default": "#ff0000",
-		"stanza:description": "chromosome plot"
+		"stanza:default": "#3d6589",
+		"stanza:description": "plot color of discovery stage"
 	},
 	{
-		"stanza:key": "--table-border",
-		"stanza:type": "text",
-		"stanza:default": "1.5px solid #98acb2",
-		"stanza:description": "style of table border"
+		"stanza:key": "--replication-color",
+		"stanza:type": "color",
+		"stanza:default": "#ed707e",
+		"stanza:description": "plot color of replication stage"
 	},
 	{
-		"stanza:key": "--ruled-line",
-		"stanza:type": "text",
-		"stanza:default": "0.5px solid #d2dae2",
-		"stanza:description": "style of ruled line"
+		"stanza:key": "--combined-color",
+		"stanza:type": "color",
+		"stanza:default": "#eab64e",
+		"stanza:description": "plot color of combined stage"
 	},
 	{
-		"stanza:key": "--stack-line",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #98acb2",
-		"stanza:description": "style of stack line"
+		"stanza:key": "--meta-analysis-color",
+		"stanza:type": "color",
+		"stanza:default": "#52b1c1",
+		"stanza:description": "plot color of meta-analysis stage"
 	},
 	{
-		"stanza:key": "--information-margin",
-		"stanza:type": "text",
-		"stanza:default": "0px 0px 10px 0px",
-		"stanza:description": "margin of information area"
+		"stanza:key": "--not-provided-color",
+		"stanza:type": "color",
+		"stanza:default": "#62b28c",
+		"stanza:description": "plot color of not-provided stage"
 	},
 	{
 		"stanza:key": "--thead-font-size",
@@ -31334,138 +31329,25 @@ var metadata = {
 		"stanza:key": "--thead-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#C2E3F2",
-		"stanza:description": "background color of table header"
+		"stanza:description": "background color of table header(even row)"
 	},
 	{
-		"stanza:key": "--thead-padding",
-		"stanza:type": "text",
-		"stanza:default": "8px 8px 0 8px",
-		"stanza:description": "padding of thead"
-	},
-	{
-		"stanza:key": "--tbody-background-color",
+		"stanza:key": "--tbody-even-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#F0F4F7",
-		"stanza:description": "background color of table body"
+		"stanza:default": "#F2F5F7",
+		"stanza:description": "background color of table header(even row)"
 	},
 	{
-		"stanza:key": "--pagination-padding",
-		"stanza:type": "text",
-		"stanza:default": "30px 0px 0px 0px",
-		"stanza:description": "padding of pagination"
-	},
-	{
-		"stanza:key": "--showinfo-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "show info placement"
-	},
-	{
-		"stanza:key": "--paginationbtn-font-color",
+		"stanza:key": "--tbody-odd-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#002559",
-		"stanza:description": "font color of pagination button"
+		"stanza:default": "#e6ebef",
+		"stanza:description": "background color of table header(odd row)"
 	},
 	{
-		"stanza:key": "--paginationbtn-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#ffffff",
-		"stanza:description": "background color of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-border",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
-		"stanza:default": "1px solid #fff",
-		"stanza:description": "border style of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #fff",
-		"stanza:description": "border-bottom style of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-border-radius",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "border radius of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-margin",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "margin of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-padding",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "padding of pagination button"
-	},
-	{
-		"stanza:key": "--paginationbtn-font-size",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "font size of pagination button"
-	},
-	{
-		"stanza:key": "--currentbtn-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#002559",
-		"stanza:description": "font color of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#D5E1E8",
-		"stanza:description": "background color of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-border",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #DDDDDD",
-		"stanza:description": "border style of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #DDDDDD",
-		"stanza:description": "border-bottom style of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-border-radius",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "border radius of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-padding",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "padding of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--currentbtn-margin",
-		"stanza:type": "text",
-		"stanza:default": "4px",
-		"stanza:description": "margin of pagination button.(at current page)"
-	},
-	{
-		"stanza:key": "--arrowbtn-color",
-		"stanza:type": "color",
-		"stanza:default": "#002559",
-		"stanza:description": "color of pagination arrow button."
-	},
-	{
-		"stanza:key": "--label-font",
-		"stanza:type": "text",
-		"stanza:default": "Helvetica",
-		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+		"stanza:default": "Arial",
+		"stanza:description": "font family"
 	}
 ]
 };
@@ -31487,7 +31369,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: #3d6589;\n}\ncircle.replication {\n  fill: #ed707e;\n}\ncircle.combined {\n  fill: #eab64e;\n}\ncircle.meta-analysis {\n  fill: #52b1c1;\n}\ncircle.not-provided {\n  fill: #62b28c;\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=Discovery] {\n  background-color: #3d6589;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: #ed707e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: #eab64e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: #52b1c1;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: #62b28c;\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}\n.table-section .pagination-block .page-number .page-btn.current {\n  color: #ffffff;\n  background-color: #377CB5;\n}";
+var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: var(--font-family);\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: var(--discovery-color);\n}\ncircle.replication {\n  fill: var(--replication-color);\n}\ncircle.combined {\n  fill: var(--combined-color);\n}\ncircle.meta-analysis {\n  fill: var(--meta-analysis-color);\n}\ncircle.not-provided {\n  fill: var(--not-provided-color);\n}\ncircle.over-thresh-plot {\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=Discovery] {\n  background-color: var(--discovery-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: var(--replication-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: var(--combined-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: var(--meta-analysis-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: var(--not-provided-color);\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: 1.5px solid #99acb2;\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: 1.5px solid #99acb2;\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-odd-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: var(--tbody-even-background-color);\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: 0.5px solid #d2dae2;\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}\n.table-section .pagination-block .page-number .page-btn.current {\n  color: #ffffff;\n  background-color: #377CB5;\n}";
 
 defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map
