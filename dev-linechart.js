@@ -30,7 +30,7 @@ async function devLinechart(stanza, params) {
   const data = [
     {
       name: "table",
-      values
+      values,
     },
   ];
 

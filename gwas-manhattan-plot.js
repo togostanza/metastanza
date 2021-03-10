@@ -30188,6 +30188,14 @@ var data = {
 	dataset: dataset
 };
 
+//when you put json url
+// console.log(params.api);
+// const dataset = await getFormatedJson(
+//   params.api,
+//   stanza.root.querySelector("#chart")
+// );
+// console.log("dataset", dataset);
+
 // study name(single per a json)
 const dataset$1 = data.dataset;
 const study_name = Object.keys(dataset$1)[0];
@@ -30198,16 +30206,22 @@ const project_name = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
-console.log("【stages】", stages);
-
 const stage_info = stages[0];
 
-const stage_names = Object.keys(stage_info);
-console.log("【stage_names】", stage_names);
-
-// get condition of each stage
-const condition1 = stage_info[stage_names[0]].condition1;
-const condition2 = stage_info[stage_names[0]].condition2;
+let stage_names = Object.keys(stage_info);
+const fixed_order_stage_names = [
+  "Discovery",
+  "replication",
+  "combined",
+  "meta-analysis",
+];
+stage_names = fixed_order_stage_names.filter((stage_name) => {
+  if (stage_info[stage_name]) {
+    return true;
+  } else {
+    return false;
+  }
+});
 
 //add stage information to each plot
 for (let i = 0; i < stage_names.length; i++) {
@@ -30215,13 +30229,13 @@ for (let i = 0; i < stage_names.length; i++) {
     stages[0][stage_names[i]].variants[j].stage = stage_names[i];
   }
 }
+
 //combine variants to display
 let total_variants = [];
 stage_names.forEach(
   (stage) =>
     (total_variants = total_variants.concat(stage_info[stage].variants))
 );
-console.log("total_variants", total_variants);
 
 // get stage information
 const getVariants = () => {
@@ -30239,22 +30253,22 @@ async function gwasManhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      title: params["title"],
       study_name,
       project_name,
-      condition1,
-      condition2,
     },
   });
 
-  //append checkbox to filter stages
+  //append checkbox and its conditions to filter stages
   const stageList = stanza.root.querySelector("#stageList");
-  let li;
+  const firstConditionList = stanza.root.querySelector("#firstConditionList");
+  const secondConditionList = stanza.root.querySelector("#secondConditionList");
+
+  let td;
   let input;
   let label;
 
   for (let i = 0; i < stage_names.length; i++) {
-    li = document.createElement("li");
+    td = document.createElement("td");
     input = document.createElement("input");
     input.setAttribute("type", "checkbox");
     input.setAttribute("class", "stage-btn");
@@ -30267,13 +30281,25 @@ async function gwasManhattanPlot(stanza, params) {
     label.textContent = stage_names[i];
     label.setAttribute("for", `${stage_names[i]}Btn`);
     label.setAttribute("data-stage", stage_names[i]);
-    stageList.appendChild(li);
-    li.appendChild(input);
-    li.appendChild(label);
+    stageList.appendChild(td);
+    td.appendChild(input);
+    td.appendChild(label);
     stage_info[stage_names[i]].checked = true;
   }
 
-  console.log("stage_info", stage_info);
+  for (let i = 0; i < stage_names.length; i++) {
+    td = document.createElement("td");
+    td.setAttribute("class", "condition-key");
+    td.innerText = stage_info[stage_names[i]].condition1;
+    firstConditionList.appendChild(td);
+  }
+
+  for (let i = 0; i < stage_names.length; i++) {
+    td = document.createElement("td");
+    td.setAttribute("class", "condition-key");
+    td.innerText = stage_info[stage_names[i]].condition2;
+    secondConditionList.appendChild(td);
+  }
 
   // adjust datum
   for (let i = 0; i < variants.length; i++) {
@@ -30281,20 +30307,11 @@ async function gwasManhattanPlot(stanza, params) {
     let chr = variants[i].chr;
     chr = chr.replace("chr", "");
     variants[i].chr = chr;
-    // console.log(variants[i].chr);
 
     const pval = variants[i]["p-value"];
 
     const physical_pos = variants[i]["stop"];
   }
-
-  // console.log(params.api); //when you put json url
-  // const dataset = await getFormatedJson(
-  //   params.api,
-  //   stanza.root.querySelector("#chart")
-  // );
-  // console.log("dataset", dataset);
-  // console.log("variants", variants);
 
   if (typeof variants === "object") {
     draw(stanza, params);
@@ -30312,6 +30329,7 @@ async function draw(stanza, params) {
   const height = 400;
   const marginLeft = 40;
   const marginBottom = 30;
+  const paddingTop = 10;
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
 
@@ -30338,7 +30356,6 @@ async function draw(stanza, params) {
     params.label_key = "label";
   }
   const low_thresh = parseFloat(params.low_thresh);
-  // let high_thresh = parseFloat(params.high_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
   const even_and_odd = params.even_and_odd === "true";
@@ -30346,9 +30363,6 @@ async function draw(stanza, params) {
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
   const label_key = params.label_key;
-
-  console.log(label_key);
-  // console.log(variants[0].rsId);
 
   const chromosomes = [
     "1",
@@ -30405,19 +30419,13 @@ async function draw(stanza, params) {
       Y: 57227415,
     },
   };
-  const chromosomeSumLength = {};
   Object.keys(chromosomeNtLength).forEach((ref) => {
-    chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce(
+    Object.keys(chromosomeNtLength[ref]).reduce(
       (acc, chr) => chromosomeNtLength[ref][chr] + acc,
       0
     );
-    // console.log('ref',ref)
-    // console.log('chromosomeSumLength[ref]',chromosomeSumLength[ref])
   });
-  console.log("chromosomeSumLength.hg38", chromosomeSumLength.hg38);
 
-  console.log(chromosomeNtLength.hg38);
-  console.log(Object.values(chromosomeNtLength.hg38));
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
   let startPos = 0;
@@ -30427,11 +30435,9 @@ async function draw(stanza, params) {
       chromosomeStartPosition[chr] = 0;
     } else {
       startPos += chromosomeArray[i - 1];
-      // console.log(startPos);
       chromosomeStartPosition[chr] = startPos;
     }
   }
-  console.log("chromosomeStartPosition", chromosomeStartPosition);
 
   const canvas_div = select(chart_element)
     .append("div")
@@ -30474,14 +30480,6 @@ async function draw(stanza, params) {
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
 
-  //y title
-  // ytitle
-  //   .append("rect")
-  //   .attr("fill", "#FFFFFF")
-  //   .attr("x", "0")
-  //   .attr("y", "0")
-  //   .attr("width",marginLeft-1)
-  //   .attr("height",areaHeight)
   ytitle
     .append("text")
     .text("-log₁₀(p-value)")
@@ -30500,7 +30498,8 @@ async function draw(stanza, params) {
     .on("mousedown", function (e) {
       if (pointer(e)[1] <= areaHeight) {
         dragBegin = pointer(e)[0];
-        dragBeginVertical = pointer(e)[1] <= 60 ? 60 : pointer(e)[1];
+        dragBeginVertical =
+          pointer(e)[1] <= paddingTop ? paddingTop : pointer(e)[1];
         console.log("mousedown(start) dragBeginVertical", dragBeginVertical);
         console.log("mousedown(start) dragBegin", dragBegin);
         console.log("mousedown(start) d3.pointer(e)", pointer(e));
@@ -30566,71 +30565,34 @@ async function draw(stanza, params) {
         dragBegin = false;
       }
       if (dragBeginVertical) {
-        const dragEndVertical = pointer(e)[1] > 370 ? 370 : pointer(e)[1]; //temporary
+        const dragEndVertical =
+          pointer(e)[1] > areaHeight ? areaHeight : pointer(e)[1];
         console.log("dragEndVertical mousedown(end)", dragEndVertical);
         // re-render
         const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
-        if (rangeVerticalLength < 36) {
-          if (0 > dragEndVertical - dragBeginVertical) {
-            const maxLog =
-              rangeVertical[1] -
-              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-            const minLog =
-              rangeVertical[1] -
-              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-            rangeVertical = [minLog, maxLog];
-          } else if (dragEndVertical - dragBeginVertical > 0) {
-            const maxLog =
-              rangeVertical[1] -
-              ((dragBeginVertical - 60) / 310) * rangeVerticalLength;
-            const minLog =
-              rangeVertical[1] -
-              ((dragEndVertical - 60) / 310) * rangeVerticalLength;
-            rangeVertical = [minLog, maxLog];
-          }
-        } else if (rangeVerticalLength >= 36) {
-          if (dragBeginVertical < 215) {
-            console.log(
-              "mousedown shrink dragBeginVertical",
-              dragBeginVertical
-            );
-            if (dragEndVertical < 215) {
-              if (dragBeginVertical > dragEndVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                rangeVertical = [minLog, maxLog];
-                console.log("case 1 rangeVertical", rangeVertical);
-              } else if (dragEndVertical > dragBeginVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  ((dragEndVertical - 60) / 155) * (rangeVertical[1] - 20);
-                rangeVertical = [minLog, maxLog];
-                console.log("case 2 rangeVertical", rangeVertical);
-              }
-            } else if (dragEndVertical > 215) {
-              if (dragEndVertical > dragBeginVertical) {
-                const maxLog =
-                  rangeVertical[1] -
-                  ((dragBeginVertical - 60) / 155) * (rangeVertical[1] - 20);
-                const minLog =
-                  rangeVertical[1] -
-                  (((dragEndVertical - 60 - 155) / 155) *
-                    (20 - rangeVertical[0]) +
-                    (rangeVertical[1] - 20));
-                rangeVertical = [minLog, maxLog];
-                console.log("case 3 rangeVertical", rangeVertical);
-              }
-            }
-          }
+        if (0 > dragEndVertical - dragBeginVertical) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
+        } else if (dragEndVertical - dragBeginVertical > 0) {
+          const maxLog =
+            rangeVertical[1] -
+            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          const minLog =
+            rangeVertical[1] -
+            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+              rangeVerticalLength;
+          rangeVertical = [minLog, maxLog];
         }
         reRender();
+        pagination.init();
         svg.select("#selector").remove();
         dragBegin = false;
         dragBeginVertical = false;
@@ -30712,6 +30674,7 @@ async function draw(stanza, params) {
             const move = (delta / areaWidth) * total;
             range = [range[0] + move, range[1] + move];
             reRender();
+            pagination.init();
             dragBegin = false;
           }
         })
@@ -30747,6 +30710,7 @@ async function draw(stanza, params) {
       }
       range = [begin, end];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("input")
@@ -30757,6 +30721,7 @@ async function draw(stanza, params) {
       const end = range[1] - (range[1] - range[0]) / 4;
       range = [begin, end];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("input")
@@ -30766,6 +30731,7 @@ async function draw(stanza, params) {
       range = [];
       rangeVertical = [];
       reRender();
+      pagination.init();
     });
   ctrl_button
     .append("label")
@@ -30781,6 +30747,7 @@ async function draw(stanza, params) {
   threshold.addEventListener("input", function () {
     high_thresh = parseFloat(threshold.value);
     reRender();
+    pagination.init();
   });
 
   reRender();
@@ -30790,23 +30757,15 @@ async function draw(stanza, params) {
   console.log("stageBtn", stageBtn);
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
-      console.log("CLICKED");
       const stageName = e.path[0].getAttribute("data-stage");
       stage_info[stageName].checked = stageBtn[i].checked;
-      console.log(
-        "605:stage_info[stageName].checked",
-        stage_info[stageName].checked
-      );
-      console.log("606:stageBtn[i].checked", stageBtn[i].checked);
       variants = getVariants();
       reRender();
-      console.log("609:stageBtn[i].checked", stageBtn[i].checked);
-      // console.log('615:stageBtn[i].checked',stageBtn[i].checked)
+      pagination.init();
     });
   }
 
   function reRender() {
-    // console.log("variants.length", variants.length);
     if (range[0] === undefined) {
       range = [
         0,
@@ -30842,7 +30801,6 @@ async function draw(stanza, params) {
       .enter()
       // filter: display range
       .filter(function (d) {
-        // console.log('plotのd。ここにstage情報を持たせたい！',d)
         if (!d.pos) {
           // calculate  accumulated position
           let pos = 0;
@@ -30879,8 +30837,8 @@ async function draw(stanza, params) {
         return (
           ((rangeVertical[1] - logValue) /
             (rangeVertical[1] - rangeVertical[0])) *
-            310 +
-          60
+            (areaHeight - paddingTop) +
+          paddingTop
         );
       })
       .attr("r", 2)
@@ -30894,14 +30852,13 @@ async function draw(stanza, params) {
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
         const pval = d["p-value"];
-        // console.log(pval);
         tooltip
           .style("display", "block")
           .style("left", `${pointer(e)[0] + 8}px`)
           .style(
             "top",
             `${pointer(e)[1]}px`
-          ).html(`<p class="tooltip-chr">chr.${d.chr}:${d.start}</p>
+          ).html(`<p class="tooltip-chr">chr${d.chr}:${d.start}</p>
                 <ul class="tooltip-info">
                   <li><span class="tooltip-key">rsId:&nbsp;</span>${d.rsId}</li>
                   <li><span class="tooltip-key">Gene name:&nbsp;</span>${d.gene_name}</li>
@@ -30912,12 +30869,6 @@ async function draw(stanza, params) {
       .on("mouseout", function () {
         tooltip.style("display", "none");
       });
-    // plot_g.selectAll(".plot").attr("cy", function (d) {
-    //   return (
-    //     areaHeight - ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) * areaHeight) / max_log_p_int
-    //   );
-    // });
-
     renderCanvas(variants, range);
 
     // x axis label
@@ -30952,8 +30903,6 @@ async function draw(stanza, params) {
       .append("rect")
       .attr("class", "axisLabel xBackground")
       .attr("x", function (d) {
-        // const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         if (
           chromosomeStartPosition[d] < range[0] &&
           range[0] < chromosomeStartPosition[d + 1]
@@ -30971,14 +30920,12 @@ async function draw(stanza, params) {
           );
         }
       })
-      .attr("y", marginBottom * 2)
+      .attr("y", paddingTop)
       .attr("width", function (d) {
-        // const selectedWidth = range[1] - range[0];
-        // const zoomRate = selectedWidth / chromosomeSumLength.hg38;
         return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
       })
       .attr("opacity", "0.4")
-      .attr("height", areaHeight - marginBottom * 2)
+      .attr("height", areaHeight - paddingTop)
       .attr("fill", function (d) {
         if (d % 2 === 0 || d === "Y") {
           return "#EEEEEE";
@@ -31003,15 +30950,28 @@ async function draw(stanza, params) {
       let y =
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
-          (areaHeight - 60); //temporary
-      // const y = areaHeight - ((i - rangeVertical[0]) * areaHeight) / rangeVertical[1];
-      //calucurate display of scale(set 18 ticks)
+          (areaHeight - paddingTop);
+      //calucurate display of scale
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 20; //Tick number to display.(set by manual)
+      const tickNum = 20; //Tick number to display(set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
-      if (rangeVertical[1] - rangeVertical[0] <= 36 || rangeVertical[0] >= 20) {
-        //40- low thresh
-        if (rangeVertical[1] - rangeVertical[0] < tickNum) {
+      if (rangeVertical[1] - rangeVertical[0] < tickNum) {
+        ylabel_g
+          .append("text")
+          .text(i)
+          .attr("class", "axisLabel yLabel")
+          .attr("x", marginLeft - 12)
+          .attr("y", y)
+          .attr("text-anchor", "end");
+        ylabel_g
+          .append("path")
+          .attr("class", "axis-line")
+          .attr(
+            "d",
+            "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
+          );
+      } else if (scaleNum >= tickNum) {
+        if (i % tickInterval === 0) {
           ylabel_g
             .append("text")
             .text(i)
@@ -31026,82 +30986,6 @@ async function draw(stanza, params) {
               "d",
               "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
             );
-        } else if (scaleNum >= tickNum) {
-          if (i % tickInterval === 0) {
-            ylabel_g
-              .append("text")
-              .text(i)
-              .attr("class", "axisLabel yLabel")
-              .attr("x", marginLeft - 12)
-              .attr("y", y)
-              .attr("text-anchor", "end");
-            ylabel_g
-              .append("path")
-              .attr("class", "axis-line")
-              .attr(
-                "d",
-                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-              );
-          }
-        }
-      } else if (rangeVertical[1] - rangeVertical[0] > 36) {
-        // console.log(
-        //   "rangeVertical[0],rangeVertical[1]",
-        //   rangeVertical[0],
-        //   rangeVertical[1]
-        // );
-        const drawHeight = areaHeight - 60;
-        const herfDrawHeight = drawHeight / 2;
-        if (i <= 20 && i % 4 === 0) {
-          y =
-            areaHeight -
-            (((i - rangeVertical[0]) / (20 - rangeVertical[0])) * drawHeight) /
-              2;
-          ylabel_g
-            .append("text")
-            .text(i)
-            .attr("class", "axisLabel yLabel")
-            .attr("x", marginLeft - 12)
-            .attr("y", y)
-            .attr("text-anchor", "end");
-          ylabel_g
-            .append("path")
-            .attr("class", "axis-line")
-            .attr(
-              "d",
-              "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-            );
-          // console.log('hoge')
-        } else if (i > 20) {
-          // console.log('fuga')
-          const shrinkedInterval = (Math.ceil(rangeVertical[1]) - 20) / 4; //13
-          // console.log('shrinkedInterval',shrinkedInterval)
-          // console.log('rangeVertical[1]',rangeVertical[1])
-          // console.log('Math.ceil((i - 20) % shrinkedInterval)',Math.ceil((i - 20) % shrinkedInterval));
-          if ((i - 20) % shrinkedInterval === 0) {
-            // console.log('piyo')
-            // console.log("shrinkedInterval", shrinkedInterval);
-            const shrinkedScalePos =
-              (drawHeight / 2) * ((i - 20) / (rangeVertical[1] - 20));
-            // console.log("shrinkedScalePos", shrinkedScalePos);
-            // console.log("herfDrawHeight", herfDrawHeight);
-            y = areaHeight - (shrinkedScalePos + herfDrawHeight);
-            // console.log("y", y);
-            ylabel_g
-              .append("text")
-              .text(i)
-              .attr("class", "axisLabel yLabel")
-              .attr("x", marginLeft - 12)
-              .attr("y", y)
-              .attr("text-anchor", "end");
-            ylabel_g
-              .append("path")
-              .attr("class", "axis-line")
-              .attr(
-                "d",
-                "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
-              );
-          }
         }
       }
       if (i === high_thresh) {
@@ -31138,6 +31022,10 @@ async function draw(stanza, params) {
       .attr("width", ((range[1] - range[0]) / total) * areaWidth)
       .attr("transform", "translate(0, 0)");
 
+    const totalOverThreshVariants = stanza.root.querySelector(
+      "#totalOverThreshVariants"
+    );
+    totalOverThreshVariants.innerText = over_thresh_array.length;
     setRange(range);
     // overThreshLine.remove();
   }
@@ -31193,13 +31081,6 @@ async function draw(stanza, params) {
     canvas.style("display", "none");
 
     console.log("over_thresh_array", over_thresh_array);
-    stanza.render({
-      template: "table.html.hbs",
-      selector: "#table",
-      parameters: {
-        arrays: over_thresh_array,
-      },
-    });
   }
 
   function setRange(range) {
@@ -31207,10 +31088,10 @@ async function draw(stanza, params) {
     let text = "";
     for (const ch of chromosomes) {
       if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) {
-        text += " chr:" + ch + ":" + Math.floor(range[0]);
+        text += " chr" + ch + ":" + Math.floor(range[0]);
       }
       if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
-        text += " - chr:" + ch + ":" + Math.floor(range[1] - start);
+        text += " - chr" + ch + ":" + Math.floor(range[1] - start);
         break;
       }
       start += chromosomeNtLength.hg38[ch];
@@ -31218,6 +31099,196 @@ async function draw(stanza, params) {
     }
     ctrl_button.select("#range_text").html(text);
   }
+
+  function Pagination() {
+    const prevBtn = stanza.root.querySelector("#prevBtn");
+    const nextBtn = stanza.root.querySelector("#nextBtn");
+    const firstBtn = stanza.root.querySelector("#firstBtn");
+    const lastBtn = stanza.root.querySelector("#lastBtn");
+    const clickPageNumber = stanza.root.querySelectorAll(".click-page-number");
+
+    let current_page = 1;
+    let records_per_page = 20;
+
+    this.init = function () {
+      changePage(1);
+      pageNumbers();
+      selectedPage();
+      clickPage();
+      addEventListeners();
+    };
+
+    let addEventListeners = function () {
+      prevBtn.addEventListener("click", prevPage);
+      nextBtn.addEventListener("click", nextPage);
+      firstBtn.addEventListener("click", firstPage);
+      lastBtn.addEventListener("click", lastPage);
+    };
+
+    let selectedPage = function () {
+      let pageNumber = stanza.root
+        .querySelector("#pageNumber")
+        .getElementsByClassName("click-page-number");
+      for (let i = 0; i < pageNumber.length; i++) {
+        //selected page button opacity
+        if (i == current_page - 1) {
+          pageNumber[i].style.color = "#FFFFFF";
+          pageNumber[i].style["background-color"] = "#377CB5";
+        } else {
+          pageNumber[i].style.color = "#377CB5";
+          pageNumber[i].style["background-color"] = "#F9F9F9";
+        }
+        //selected page button placement
+        if (current_page <= 5 && 5 <= i) {
+          pageNumber[i].style.display = "none";
+        } else if (5 < current_page) {
+          if (i < current_page - 3 || current_page + 1 < i) {
+            pageNumber[i].style.display = "none";
+          }
+          if (
+            pageNumber.length - current_page < 5 &&
+            pageNumber.length - 5 < i
+          ) {
+            pageNumber[i].style.display = "none";
+          }
+        }
+        prevBtn.style.display = "flex";
+        firstBtn.style.display = "flex";
+        nextBtn.style.display = "flex";
+        lastBtn.style.display = "flex";
+
+        //display of prev/next button
+        if (current_page == 1) {
+          prevBtn.style.display = "none";
+          firstBtn.style.display = "none";
+        } else if (current_page == pageNumber) {
+          nextBtn.style.display = "none";
+          lastBtn.style.display = "none";
+        }
+      }
+    };
+
+    let checkButtonOpacity = function () {
+      current_page == 1
+        ? prevBtn.classList.add("opacity")
+        : prevBtn.classList.remove("opacity");
+      current_page == numPages()
+        ? nextBtn.classList.add("opacity")
+        : nextBtn.classList.remove("opacity");
+    };
+
+    let changePage = function (page) {
+      const listingTable = stanza.root.querySelector("#listingTable");
+
+      if (page < 1) {
+        page = 1;
+      }
+      if (page > numPages() - 1) {
+        page = numPages();
+      }
+
+      listingTable.innerHTML = "";
+
+      const tableHeadArray = [
+        "gene_name",
+        "rsId",
+        "chr",
+        "pos",
+        "ref",
+        "alt",
+        "p-value",
+      ];
+
+      for (
+        let i = (page - 1) * records_per_page;
+        i < page * records_per_page && i < over_thresh_array.length;
+        i++
+      ) {
+        const tr = document.createElement("tr");
+        for (let j = 0; j < tableHeadArray.length; j++) {
+          const td = document.createElement("td");
+          if (over_thresh_array[i][`${tableHeadArray[j]}`]) {
+            if (tableHeadArray[j] === "gene_name") {
+              const displayedGeneName =
+                over_thresh_array[i][`${tableHeadArray[j]}`];
+              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${displayedGeneName}</a>`;
+            } else {
+              td.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
+            }
+          } else {
+            td.innerText = "";
+          }
+          tr.appendChild(td);
+        }
+        listingTable.appendChild(tr);
+      }
+      checkButtonOpacity();
+      selectedPage();
+    };
+
+    let prevPage = function () {
+      if (current_page > 1) {
+        current_page--;
+        pageNumbers();
+        changePage(current_page);
+      }
+    };
+
+    let nextPage = function () {
+      if (current_page < numPages()) {
+        current_page++;
+        pageNumbers();
+        changePage(current_page);
+      }
+    };
+
+    let firstPage = function () {
+      if (current_page != 1) {
+        current_page = 1;
+        changePage(current_page);
+      }
+    };
+
+    let lastPage = function () {
+      if (current_page != numPages()) {
+        current_page = numPages();
+        changePage(current_page);
+      }
+    };
+
+    let clickPage = function () {
+      stanza.root.addEventListener("click", function (e) {
+        if (
+          e.target.nodeName == "SPAN" &&
+          e.target.classList.contains("click-page-number")
+        ) {
+          current_page = e.target.textContent;
+          console.log("current_page", current_page);
+          pageNumbers();
+          changePage(current_page);
+        }
+      });
+    };
+
+    let pageNumbers = function () {
+      let pageNumber = stanza.root.querySelector("#pageNumber");
+      pageNumber.innerHTML = "";
+
+      for (let i = 1; i < numPages() + 1; i++) {
+        console.log("current_page", current_page);
+        pageNumber.innerHTML +=
+          `<span class="click-page-number page-btn" id= "page${i}">` +
+          i +
+          "</span>";
+      }
+    };
+
+    let numPages = function () {
+      return Math.ceil(over_thresh_array.length / records_per_page);
+    };
+  }
+  let pagination = new Pagination();
+  pagination.init();
 }
 
 var metadata = {
@@ -31243,12 +31314,6 @@ var metadata = {
 		"stanza:example": "https://db-dev.jpostdb.org/test/gwas_test.json",
 		"stanza:description": "api (https://db-dev.jpostdb.org/test/gwas_test.json)",
 		"stanza:required": true
-	},
-	{
-		"stanza:key": "title",
-		"stanza:example": "Manhattan plot",
-		"stanza:description": "title",
-		"stanza:required": false
 	},
 	{
 		"stanza:key": "chromosome_key",
@@ -31287,12 +31352,6 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "even_and_odd",
-		"stanza:example": false,
-		"stanza:description": "color type",
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "ytick-number",
 		"stanza:example": 18,
 		"stanza:description": "yscale tick number to display",
@@ -31305,162 +31364,6 @@ var metadata = {
 		"stanza:key": "--over-thresh-color",
 		"stanza:type": "color",
 		"stanza:default": "#ff0000",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-even-color",
-		"stanza:type": "color",
-		"stanza:default": "#888888",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-odd-color",
-		"stanza:type": "color",
-		"stanza:default": "#444444",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-1-color",
-		"stanza:type": "color",
-		"stanza:default": "#ffb6b9",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-2-color",
-		"stanza:type": "color",
-		"stanza:default": "#fae3d9",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-3-color",
-		"stanza:type": "color",
-		"stanza:default": "#bbded6",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-4-color",
-		"stanza:type": "color",
-		"stanza:default": "#8ac6d1",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-5-color",
-		"stanza:type": "color",
-		"stanza:default": "#a39391",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-6-color",
-		"stanza:type": "color",
-		"stanza:default": "#716e77",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-7-color",
-		"stanza:type": "color",
-		"stanza:default": "#ecd6c7",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-8-color",
-		"stanza:type": "color",
-		"stanza:default": "#e79686",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-9-color",
-		"stanza:type": "color",
-		"stanza:default": "#cff09e",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-10-color",
-		"stanza:type": "color",
-		"stanza:default": "#a8dba8",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-11-color",
-		"stanza:type": "color",
-		"stanza:default": "#79bd9a",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-12-color",
-		"stanza:type": "color",
-		"stanza:default": "#3b8686",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-13-color",
-		"stanza:type": "color",
-		"stanza:default": "#a1bd93",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-14-color",
-		"stanza:type": "color",
-		"stanza:default": "#e1dda1",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-15-color",
-		"stanza:type": "color",
-		"stanza:default": "#90a9c6",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-16-color",
-		"stanza:type": "color",
-		"stanza:default": "#1794ac",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-17-color",
-		"stanza:type": "color",
-		"stanza:default": "#B9A7C2",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-18-color",
-		"stanza:type": "color",
-		"stanza:default": "#B6D0C9",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-19-color",
-		"stanza:type": "color",
-		"stanza:default": "#C2DFEA",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-20-color",
-		"stanza:type": "color",
-		"stanza:default": "#8C95AA",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-21-color",
-		"stanza:type": "color",
-		"stanza:default": "#C7AFBD",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-22-color",
-		"stanza:type": "color",
-		"stanza:default": "#a4bf5b",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-X-color",
-		"stanza:type": "color",
-		"stanza:default": "#79a2a6",
-		"stanza:description": "chromosome plot"
-	},
-	{
-		"stanza:key": "--ch-Y-color",
-		"stanza:type": "color",
-		"stanza:default": "#CCCC99",
 		"stanza:description": "chromosome plot"
 	},
 	{
@@ -31480,60 +31383,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "1px solid #98acb2",
 		"stanza:description": "style of stack line"
-	},
-	{
-		"stanza:key": "--searchbox-radius",
-		"stanza:type": "text",
-		"stanza:default": "3px",
-		"stanza:description": "radius of search box"
-	},
-	{
-		"stanza:key": "--searchbox-border-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "border color of search box"
-	},
-	{
-		"stanza:key": "--searchbox-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "color of search box"
-	},
-	{
-		"stanza:key": "--searchbtn-height",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "height of search button"
-	},
-	{
-		"stanza:key": "--searchbtn-width",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "width of search button"
-	},
-	{
-		"stanza:key": "--searchbox-height",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "height of search box"
-	},
-	{
-		"stanza:key": "--searchbox-width",
-		"stanza:type": "text",
-		"stanza:default": "164px",
-		"stanza:description": "width of search box"
-	},
-	{
-		"stanza:key": "--dlbtn-img-width",
-		"stanza:type": "text",
-		"stanza:default": "13px",
-		"stanza:description": "width of download button image"
-	},
-	{
-		"stanza:key": "--dlbtn-img-height",
-		"stanza:type": "text",
-		"stanza:default": "13px",
-		"stanza:description": "height of download button image"
 	},
 	{
 		"stanza:key": "--information-margin",
@@ -31588,17 +31437,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "30px 0px 0px 0px",
 		"stanza:description": "padding of pagination"
-	},
-	{
-		"stanza:key": "--pagination-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "pagination placement"
 	},
 	{
 		"stanza:key": "--showinfo-placement",
@@ -31725,56 +31563,15 @@ var templates = [
         return undefined
     };
 
-  return "<h1 id=\"manhattan-title\">\n  GWAS Study View\n</h1>\n\n<section class=\"info-section\">\n  <dl class=\"datainfo-list\">\n    <dt id=\"study-name\" class=\"info-key\">\n      study name\n    </dt>\n    <dd>\n      "
+  return "<h1 id=\"manhattan-title\">\n  GWAS Study View\n</h1>\n\n<section class=\"info-section\">\n  <dl class=\"datainfo-list\">\n    <dt id=\"study-name\" class=\"info-key\">\n      study name:\n    </dt>\n    <dd>\n      "
     + alias4(((helper = (helper = lookupProperty(helpers,"study_name") || (depth0 != null ? lookupProperty(depth0,"study_name") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"study_name","hash":{},"data":data,"loc":{"start":{"line":11,"column":6},"end":{"line":11,"column":20}}}) : helper)))
-    + "\n    </dd>\n    <dt id=\"project-name\" class=\"info-key\">\n      project name\n    </dt>\n    <dd>\n      "
+    + "\n    </dd>\n    <dt id=\"project-name\" class=\"info-key\">\n      project name:\n    </dt>\n    <dd>\n      "
     + alias4(((helper = (helper = lookupProperty(helpers,"project_name") || (depth0 != null ? lookupProperty(depth0,"project_name") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"project_name","hash":{},"data":data,"loc":{"start":{"line":17,"column":6},"end":{"line":17,"column":22}}}) : helper)))
-    + "\n    </dd>\n    <dt id=\"firstCondition\" class=\"info-key first-condition-name\">\n      condition1:\n    </dt>\n    <dd class=\"first-condition-value\">\n      &ensp;"
-    + alias4(((helper = (helper = lookupProperty(helpers,"condition1") || (depth0 != null ? lookupProperty(depth0,"condition1") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition1","hash":{},"data":data,"loc":{"start":{"line":23,"column":12},"end":{"line":23,"column":26}}}) : helper)))
-    + "\n    </dd>\n    <dt id=\"secondCondition\" class=\"info-key second-condition-name\">\n      condition2:\n    </dt>\n    <dd class=\"second-condition-value\">\n      &ensp;"
-    + alias4(((helper = (helper = lookupProperty(helpers,"condition2") || (depth0 != null ? lookupProperty(depth0,"condition2") : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"condition2","hash":{},"data":data,"loc":{"start":{"line":29,"column":12},"end":{"line":29,"column":26}}}) : helper)))
-    + "\n    </dd>\n  </dl>\n</section>\n\n<hr />\n\n<section class=\"chart-section\">\n  <h2>\n    Manhattan Plot\n  </h2>\n  <dl>\n    <dt id=\"stage-name\" class=\"info-key\">\n      stages:\n    </dt>\n    <dd>\n      <ul id=\"stageList\">\n      </ul>\n    </dd>\n  </dl>\n  <div id=\"chart\"></div>\n  <div id=\"control\"></div>\n</section>\n\n<hr />\n\n<section class=\"table-section\">\n  <h2>\n    Top Loci\n  </h2>\n  <div id=\"table\"></div>\n</section>";
-},"useData":true}],
-["table.html.hbs", {"1":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "      <tr>\n        <td>\n          <a\n            href=\"https://mgend.med.kyoto-u.ac.jp/gene/info/"
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"rsId") : stack1), depth0))
-    + "#locuszoom-link\"\n          >\n            "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"gene_name") : stack1), depth0))
-    + "\n          </a>\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"rsId") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"chr") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"stop") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"ref") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"alt") : stack1), depth0))
-    + "\n        </td>\n        <td>\n          "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"p-value") : stack1), depth0))
-    + "\n        </td>\n      </tr>\n";
-},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "<table>\n  <thead>\n    <tr>\n      <th>\n        Gene name\n      </th>\n      <th>\n        rsId\n      </th>\n      <th>\n        Chromosome\n      </th>\n      <th>\n        position\n      </th>\n      <th>\n        Ref\n      </th>\n      <th>\n        Alt\n      </th>\n      <th>\n        P-value\n      </th>\n    </tr>\n  </thead>\n  <tbody>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"arrays") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":28,"column":4},"end":{"line":58,"column":13}}})) != null ? stack1 : "")
-    + "  </tbody>\n</table>";
-},"useData":true,"useBlockParams":true}]
+    + "\n    </dd>\n  </dl>\n</section>\n\n<hr />\n\n<section class=\"chart-section\">\n  <h2>\n    Manhattan Plot\n  </h2>\n  <table>\n    <tbody>\n      <tr id=\"stageList\">\n        <td class=\"info-key\">\n          Stages:\n        </td>\n      </tr>\n      <tr id=\"firstConditionList\">\n        <td class=\"info-key\">\n          Condition1:\n        </td>\n      </tr>\n      <tr id=\"secondConditionList\">\n        <td class=\"info-key\">\n          Condition2:\n        </td>\n      </tr>\n    </tbody>\n  </table>\n  <div id=\"chart\"></div>\n  <div id=\"control\"></div>\n</section>\n\n<hr />\n\n<section class=\"table-section\">\n  <h2>\n    Top Loci\n  </h2>\n  <dl class=\"total-overthresh-variants\">\n    <dt class=\"info-key\">\n      Total Variants:\n    </dt>\n    <dd id=\"totalOverThreshVariants\" class=\"info-value\"></dd>\n  </dl>\n  <div class=\"pagination\">\n    <table>\n      <thead id=\"listingTableHead\">\n        <tr>\n          <th>\n            Gene name\n          </th>\n          <th>\n            rsId\n          </th>\n          <th>\n            Chromosome\n          </th>\n          <th>\n            position\n          </th>\n          <th>\n            Ref\n          </th>\n          <th>\n            Alt\n          </th>\n          <th>\n            P-value\n          </th>\n        </tr>\n      </thead>\n      <tbody id=\"listingTable\">\n      </tbody>\n    </table>\n    <div class=\"pagination-block\">\n      <span class=\"page-btn\" id=\"firstBtn\">\n        &lt;&lt;\n      </span>\n      <span class=\"page-btn\" id=\"prevBtn\">\n        &lt;\n      </span>\n      <span class=\"page-number\" id=\"pageNumber\"></span>\n      <span class=\"page-btn\" id=\"nextBtn\">\n        &gt;\n      </span>\n      <span class=\"page-btn\" id=\"lastBtn\">\n        &gt;&gt;\n      </span>\n    </div>\n  </div>\n</section>";
+},"useData":true}]
 ];
 
-var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: #3d6589;\n}\ncircle.replication {\n  fill: #ed707e;\n}\ncircle.combined {\n  fill: #eab64e;\n}\ncircle.meta-analysis {\n  fill: #52b1c1;\n}\ncircle.not-provided {\n  fill: #62b28c;\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section dl {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n}\n.chart-section dl .info-key {\n  display: inline-block;\n  margin-top: -1px;\n  padding-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.chart-section dl dd ul {\n  list-style: none;\n  display: flex;\n  padding: 0;\n}\n.chart-section dl dd ul li {\n  margin-right: 6px;\n  font-size: 12px;\n  display: flex;\n  justify-content: bottom;\n}\n.chart-section dl dd ul li:last-child {\n  margin-right: 0px;\n}\n.chart-section dl dd ul li input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section dl dd ul li input[checked=true] + label:before {\n  content: \"+ \";\n}\n.chart-section dl dd ul li input[checked=false] + label:before {\n  content: \"− \";\n}\n.chart-section dl dd ul li label {\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: white;\n  padding: 0px 10px;\n  border-radius: 4px;\n}\n.chart-section dl dd ul li input[checked=true] + label[data-stage=Discovery] {\n  background-color: #3d6589;\n}\n.chart-section dl dd ul li input[checked=true] + label[data-stage=replication] {\n  background-color: #ed707e;\n}\n.chart-section dl dd ul li input[checked=true] + label[data-stage=combined] {\n  background-color: #eab64e;\n}\n.chart-section dl dd ul li input[checked=true] + label[data-stage=meta-analysis] {\n  background-color: #52b1c1;\n}\n.chart-section dl dd ul li input[checked=true] + label[data-stage=not-provided] {\n  background-color: #62b28c;\n}\n.chart-section dl dd ul li input[checked=false] + label {\n  background-color: #ffffff;\n}\n.chart-section dl dd ul li input[checked=false] + label {\n  color: #99acb2;\n}\n.chart-section dl dd ul li input[checked=false] + label {\n  border: 1.5px solid #99acb2;\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}";
+var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: \"Arial\", sans-serif;\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: #3d6589;\n}\ncircle.replication {\n  fill: #ed707e;\n}\ncircle.combined {\n  fill: #eab64e;\n}\ncircle.meta-analysis {\n  fill: #52b1c1;\n}\ncircle.not-provided {\n  fill: #62b28c;\n}\ncircle.over-thresh-plot {\n  fill: var(--over-thresh-color);\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=Discovery] {\n  background-color: #3d6589;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: #ed707e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: #eab64e;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: #52b1c1;\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: #62b28c;\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: var(--table-border);\n  border-collapse: collapse;\n}\n.table-section table tr {\n  height: 40px;\n}\n.table-section table td {\n  padding: 10px 20px;\n}\n.table-section table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: var(--thead-padding);\n}\n.table-section table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section table tbody {\n  background-color: var(--tbody-background-color);\n}\n.table-section table tbody tr:nth-last-of-type(odd) {\n  background-color: #e6ebef;\n}\n.table-section table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: var(--ruled-line);\n  font-size: var(--tbody-font-size);\n}\n.table-section table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}";
 
 defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map
