@@ -119,7 +119,7 @@ export default async function gwasManhattanPlot(stanza, params) {
   // adjust datum
   for (let i = 0; i < variants.length; i++) {
     // convert chromosome data from 'chrnum' to 'num'
-    const chr = variants[i].chr;
+    let chr = variants[i].chr;
     chr = chr.replace("chr", "");
     variants[i].chr = chr;
 
@@ -986,7 +986,7 @@ async function draw(stanza, params) {
         for (let j = 0; j < tableHeadArray.length; j++) {
           const td = document.createElement("td");
           if (over_thresh_array[i][`${tableHeadArray[j]}`]) {
-            if (tableHeadArray[j] == "gene_name") {
+            if (tableHeadArray[j] === "gene_name") {
               const displayedGeneName =
                 over_thresh_array[i][`${tableHeadArray[j]}`];
               td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${displayedGeneName}</a>`;
@@ -1014,7 +1014,7 @@ async function draw(stanza, params) {
         page_num.innerText = i;
         page_num.setAttribute("class", "page-btn");
 
-        if (i == current_page) {
+        if (i === current_page) {
           page_num.classList.add("current");
         }
 
@@ -1025,12 +1025,12 @@ async function draw(stanza, params) {
       }
       pageBtns.forEach((pageBtns) => (pageBtns.style.display = "flex"));
 
-      if (current_page == 1) {
+      if (current_page === 1) {
         firstBtn.style.display = "none";
         prevBtn.style.display = "none";
       }
 
-      if (current_page == total_pages) {
+      if (current_page === total_pages) {
         nextBtn.style.display = "none";
         lastBtn.style.display = "none";
       }
