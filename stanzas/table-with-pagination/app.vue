@@ -1,146 +1,151 @@
 <template>
-  <div class="tableOption">
-    <input
-      v-model="state.queryForAllColumns"
-      type="text"
-      placeholder="Search for keywords..."
-      class="textSearchInput"
-    />
-    <a class="downloadBtn" :href="blobUrl" download="tableData">
-      <img
-        src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
-        alt="download"
-      />
-    </a>
-  </div>
-  <table v-if="state.allRows">
-    <thead>
-      <tr>
-        <th v-for="(column, i) in state.columns" :key="column.id">
-          {{ column.label }}
-          <span
-            :class="[
-              'icon',
-              'sortIcon',
-              state.sorting.column === column ? state.sorting.direction : '',
-            ]"
-            @click="setSorting(column)"
-          ></span>
-          <span
-            v-if="column.searchType === 'category'"
-            :class="[
-              'icon',
-              'filterIcon',
-              { isShowing: column.isFilterPopupShowing },
-              { active: column.filters.some((filter) => !filter.checked) },
-            ]"
-            @click="column.isFilterPopupShowing = true"
-          ></span>
-          <span
-            :class="[
-              'icon',
-              'searchIcon',
-              { active: column.isSearchConditionGiven },
-            ]"
-            @click="showModal(column)"
-          ></span>
-          <div v-if="column.isFilterPopupShowing" class="filterWrapper">
-            <div
-              :class="[
-                'filterWindow',
-                { lastCol: state.columns.length - 1 === i },
-              ]"
-            >
-              <p class="filterWindowTitle">{{ column.label }}</p>
-              <ul>
-                <li v-for="filter in column.filters" :key="filter.value">
-                  <label :for="filter.id">
-                    <input
-                      :id="filter.value"
-                      v-model="filter.checked"
-                      type="checkbox"
-                      name="items"
-                    />
-                    {{ filter.value }}
-                  </label>
-                </li>
-              </ul>
-              <div class="toggleAllButton">
-                <button class="selectAll" @click="setFilters(column, true)">
-                  Select All
-                </button>
-                <button class="clear" @click="setFilters(column, false)">
-                  Clear
-                </button>
-              </div>
-            </div>
-          </div>
-          <transition name="modal">
-            <div
-              v-if="column.isSearchModalShowing"
-              class="textSearchByColumnWrapper modal"
-            >
-              <p class="title">
-                <template v-if="column.searchType === 'number'">
-                  Set {{ column.label }} range
-                </template>
-                <template v-else> Search for "{{ column.label }}" </template>
-              </p>
-              <div v-if="column.searchType === 'number'">
-                <Slider
-                  :model-value="column.range"
-                  :min="column.minValue"
-                  :max="column.maxValue"
-                  :tooltips="false"
-                  @update="column.setRange"
-                ></Slider>
-                <div class="rangeInput">
-                  <input
-                    v-model="column.inputtingRangeMin"
-                    type="text"
-                    class="min"
-                    @keyup="setRangeFilters(column)"
-                  />
-                  <input
-                    v-model="column.inputtingRangeMax"
-                    type="text"
-                    class="max"
-                    @keyup="setRangeFilters(column)"
-                  />
+  <div class="wrapper">
+    <div class="tableWrapper">
+      <div class="tableOption">
+        <input
+          v-model="state.queryForAllColumns"
+          type="text"
+          placeholder="Search for keywords..."
+          class="textSearchInput"
+        />
+        <a class="downloadBtn" :href="blobUrl" download="tableData">
+          <img
+            src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
+            alt="download"
+          />
+        </a>
+      </div>
+      <table v-if="state.allRows">
+        <thead>
+          <tr>
+            <th v-for="(column, i) in state.columns" :key="column.id">
+              {{ column.label }}
+              <span
+                :class="[
+                  'icon',
+                  'sortIcon',
+                  state.sorting.column === column ? state.sorting.direction : '',
+                ]"
+                @click="setSorting(column)"
+              ></span>
+              <span
+                v-if="column.searchType === 'category'"
+                :class="[
+                  'icon',
+                  'filterIcon',
+                  { isShowing: column.isFilterPopupShowing },
+                  { active: column.filters.some((filter) => !filter.checked) },
+                ]"
+                @click="column.isFilterPopupShowing = true"
+              ></span>
+              <span
+                :class="[
+                  'icon',
+                  'searchIcon',
+                  { active: column.isSearchConditionGiven },
+                ]"
+                @click="showModal(column)"
+              ></span>
+              <div v-if="column.isFilterPopupShowing" class="filterWrapper">
+                <div
+                  :class="[
+                    'filterWindow',
+                    { lastCol: state.columns.length - 1 === i },
+                  ]"
+                >
+                  <p class="filterWindowTitle">{{ column.label }}</p>
+                  <ul>
+                    <li v-for="filter in column.filters" :key="filter.value">
+                      <label :for="filter.id">
+                        <input
+                          :id="filter.value"
+                          v-model="filter.checked"
+                          type="checkbox"
+                          name="items"
+                        />
+                        {{ filter.value }}
+                      </label>
+                    </li>
+                  </ul>
+                  <div class="toggleAllButton">
+                    <button class="selectAll" @click="setFilters(column, true)">
+                      Select All
+                    </button>
+                    <button class="clear" @click="setFilters(column, false)">
+                      Clear
+                    </button>
+                  </div>
                 </div>
               </div>
-              <input
-                v-else
-                v-model="column.query"
-                type="text"
-                placeholder="Search for keywords..."
-                name="queryInputByColumn"
-                class="textSearchInput"
-              />
-            </div>
-          </transition>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rowsInCurrentPage" :key="row.id">
-        <td v-for="cell in row" :key="cell.column.id">
-          <span v-if="cell.href">
-            <a :href="cell.href" target="_blank">{{ cell.value }}</a>
-          </span>
-          <span v-else>
-            {{ cell.value }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <SliderPagination
-    ref="sliderPagination"
-    :current-page="state.pagination.currentPage"
-    :total-pages="totalPages"
-    @updateCurrentPage="updateCurrentPage"
-  />
+              <transition name="modal">
+                <div
+                  v-if="column.isSearchModalShowing"
+                  class="textSearchByColumnWrapper modal"
+                >
+                  <p class="title">
+                    <template v-if="column.searchType === 'number'">
+                      Set {{ column.label }} range
+                    </template>
+                    <template v-else> Search for "{{ column.label }}" </template>
+                  </p>
+                  <div v-if="column.searchType === 'number'">
+                    <Slider
+                      :model-value="column.range"
+                      :min="column.minValue"
+                      :max="column.maxValue"
+                      :tooltips="false"
+                      @update="column.setRange"
+                    ></Slider>
+                    <div class="rangeInput">
+                      <input
+                        v-model="column.inputtingRangeMin"
+                        type="text"
+                        class="min"
+                        @keyup="setRangeFilters(column)"
+                      />
+                      <input
+                        v-model="column.inputtingRangeMax"
+                        type="text"
+                        class="max"
+                        @keyup="setRangeFilters(column)"
+                      />
+                    </div>
+                  </div>
+                  <input
+                    v-else
+                    v-model="column.query"
+                    type="text"
+                    placeholder="Search for keywords..."
+                    name="queryInputByColumn"
+                    class="textSearchInput"
+                  />
+                </div>
+              </transition>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rowsInCurrentPage" :key="row.id">
+            <td v-for="cell in row" :key="cell.column.id">
+              <span v-if="cell.href">
+                <a :href="cell.href" target="_blank">{{ cell.value }}</a>
+              </span>
+              <span v-else>
+                {{ cell.value }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <SliderPagination
+      ref="sliderPagination"
+      :current-page="state.pagination.currentPage"
+      :total-pages="totalPages"
+      :is-slider-on="pageSlider"
+      @updateCurrentPage="updateCurrentPage"
+    />
+  </div>
   <div
     v-if="isPopupOrModalShowing"
     :class="['modalBackground', { black: isModalShowing }]"

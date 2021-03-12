@@ -41,7 +41,7 @@
         <button>Go</button>
       </form>
     </div>
-    <template v-if="totalPages > 5">
+    <template v-if="isSliderOn === '1' && totalPages > 5">
       <canvas ref="canvas" class="canvas"></canvas>
       <Slider
         v-model="state.currentPage"
@@ -69,6 +69,10 @@ export default defineComponent({
       default: 1,
     },
     totalPages: {
+      type: Number,
+      default: 1,
+    },
+    isSliderOn: {
       type: Number,
       default: 1,
     },
@@ -141,7 +145,9 @@ export default defineComponent({
       }, 0);
     }
 
-    onUpdated(drawKnobArrow);
+    if(props.isSliderOn === '1') {
+      onUpdated(drawKnobArrow);
+    }
     onUpdated(() => {
       context.emit("updateCurrentPage", state.currentPage);
     });

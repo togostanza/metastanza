@@ -39,6 +39,7 @@ main {
 }
 
 .paginationWrapper {
+  margin-bottom: 15px;
   > .serialPagination {
     padding: var(--pagination-padding);
     display: flex;
@@ -145,48 +146,6 @@ main {
       }
     }
   }
-  .pageSlider {
-    height: 4px;
-    margin-top: -5px;
-    .slider-connects {
-      background-color: #bbbbbb;
-      .slider-connect {
-        background-color: #bbbbbb;
-      }
-    }
-    .slider-handle {
-      > .slider-tooltip {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        bottom: auto;
-        line-height: 1.3;
-        color: var(--currentbtn-font-color);
-        background-color: var(--currentbtn-background-color);
-        border: var(--paginationbtn-border);
-        padding: var(--paginationbtn-padding);
-        font-size: var(--paginationbtn-font-size);
-        border-radius: var(--paginationbtn-border-radius);
-        &:before {
-          display: none;
-        }
-      }
-    }
-  }
-}
-
-.tableOption {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin: var(--information-margin);
-  > .downloadBtn {
-    > img {
-      width: var(--dlbtn-img-width);
-      height: var(--dlbtn-img-height);
-    }
-  }
 }
 
 .textSearchInput[type="text"] {
@@ -217,227 +176,274 @@ main {
   }
 }
 
-table {
-  width: 100%;
-  text-align: left;
-  border-collapse: collapse;
-  margin: 0;
-  background-color: var(--background-color);
-  border: var(--table-border);
-  box-shadow: var(--table-shadow);
-  > thead {
-    background-color: var(--thead-background-color);
-    font-size: var(--thead-font-size);
-    color: var(--thead-font-color);
-    margin-bottom: 0;
-    border-top: var(--thead-border-top);
-    border-right: var(--thead-border-right);
-    border-left: var(--thead-border-left);
-    border-bottom: var(--thead-border-bottom);
-    > tr {
-      > th {
-        color: var(--thead-font-color);
-        font-weight: var(--thead-font-weight);
-        padding: 10px;
-        white-space: nowrap;
-        &:first-child {
-          background-color: var(--thead-background-color);
-          padding-left: 20px;
-          padding-right: 20px;
+.wrapper {
+  display: flex;
+  flex-direction: var(--table-pagination-order);
+  > .tableWrapper {
+    > .tableOption {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin: var(--information-margin);
+      > .downloadBtn {
+        > img {
+          width: var(--dlbtn-img-width);
+          height: var(--dlbtn-img-height);
         }
-        > .filterWrapper {
-          display: inline-block;
-          position: relative;
-          > div.filterWindow {
-            position: absolute;
-            top: 2px;
-            left: -22px;
-            z-index: 3;
-            width: auto;
-            height: auto;
-            background-color: #ffffff;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-            border-radius: var(--searchbox-radius);
-            > .filterWindowTitle {
-              padding: 4px 8px;
-              background-color: var(--thead-font-color);
-              color: #ffffff;
+      }
+    }
+    > table {
+      width: 100%;
+      text-align: left;
+      border-collapse: collapse;
+      margin: 0;
+      background-color: var(--background-color);
+      border: var(--table-border);
+      box-shadow: var(--table-shadow);
+      > thead {
+        background-color: var(--thead-background-color);
+        font-size: var(--thead-font-size);
+        color: var(--thead-font-color);
+        margin-bottom: 0;
+        border-top: var(--thead-border-top);
+        border-right: var(--thead-border-right);
+        border-left: var(--thead-border-left);
+        border-bottom: var(--thead-border-bottom);
+        > tr {
+          > th {
+            color: var(--thead-font-color);
+            font-weight: var(--thead-font-weight);
+            padding: 10px;
+            white-space: nowrap;
+            &:first-child {
+              background-color: var(--thead-background-color);
+              padding-left: 20px;
+              padding-right: 20px;
             }
-            > ul {
-              padding: 9px 8px;
-              margin: 9px 8px 6px;
-              border: 1px solid rgba(0, 0, 0, 0.2);
-              border-radius: 3px;
-              max-height: 400px;
-              overflow: auto;
-              > li {
-                display: flex;
-                margin-bottom: 8px;
-                line-height: 1.4em;
-                > label {
+            > .filterWrapper {
+              display: inline-block;
+              position: relative;
+              > div.filterWindow {
+                position: absolute;
+                top: 2px;
+                left: -22px;
+                z-index: 3;
+                width: auto;
+                height: auto;
+                background-color: #ffffff;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+                border-radius: var(--searchbox-radius);
+                > .filterWindowTitle {
+                  padding: 4px 8px;
+                  background-color: var(--thead-font-color);
+                  color: #ffffff;
+                }
+                > ul {
+                  padding: 9px 8px;
+                  margin: 9px 8px 6px;
+                  border: 1px solid rgba(0, 0, 0, 0.2);
+                  border-radius: 3px;
+                  max-height: 400px;
+                  overflow: auto;
+                  > li {
+                    display: flex;
+                    margin-bottom: 8px;
+                    line-height: 1.4em;
+                    > label {
+                      display: flex;
+                      align-items: center;
+                      > input[type="checkbox"] {
+                        margin-right: 6px;
+                      }
+                    }
+                  }
+                }
+                > .toggleAllButton {
                   display: flex;
-                  align-items: center;
-                  > input[type="checkbox"] {
-                    margin-right: 6px;
+                  justify-content: center;
+                  padding: 0 8px;
+                  margin-bottom: 9px;
+                  > button.selectAll,
+                  > button.clear {
+                    @include button;
+                    padding: 3px 10px;
+                    &:first-of-type {
+                      margin-right: 4px;
+                      width: 60%;
+                    }
+                    &:last-of-type {
+                      width: 40%;
+                    }
                   }
                 }
               }
             }
-            > .toggleAllButton {
-              display: flex;
-              justify-content: center;
-              padding: 0 8px;
-              margin-bottom: 9px;
-              > button.selectAll,
-              > button.clear {
-                @include button;
-                padding: 3px 10px;
-                &:first-of-type {
-                  margin-right: 4px;
-                  width: 60%;
+            > .textSearchByColumnWrapper {
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              z-index: 3;
+              background: #ffffff;
+              box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+              > p.title {
+                display: block;
+                padding: 6px 16px;
+                background-color: var(--thead-font-color);
+                color: #ffffff;
+              }
+              > input.textSearchInput[name="queryInputByColumn"] {
+                margin: 20px 30px;
+              }
+              #slider {
+                margin: 30px 40px 10px;
+                width: 230px;
+                .slider-connect {
+                  background-color: var(--thead-font-color);
                 }
-                &:last-of-type {
-                  width: 40%;
+              }
+
+              .slider-horizontal {
+                .slider-handle {
+                  width: 12px;
+                  height: 12px;
+                  top: -4px;
+                  right: -6px;
+                  .slider-tooltip {
+                    border: 1px solid var(--thead-font-color);
+                    background: var(--thead-font-color);
+                    padding: 0 6px;
+                    line-height: 1.4em;
+                    bottom: 20px;
+                  }
+                }
+              }
+
+              .rangeInput {
+                width: 242px;
+                margin: 0 34px 30px;
+                display: flex;
+                justify-content: space-between;
+                > input[type="text"] {
+                  width: 100%;
+                  &.min {
+                    margin-right: 10px;
+                  }
+                }
+              }
+            }
+            &:last-of-type {
+              > .filterWrapper {
+                > div.filterWindow {
+                  left: auto;
+                  right: 11px;
                 }
               }
             }
           }
-        }
-        > .textSearchByColumnWrapper {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 3;
-          background: #ffffff;
-          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-          > p.title {
-            display: block;
-            padding: 6px 16px;
-            background-color: var(--thead-font-color);
-            color: #ffffff;
-          }
-          > input.textSearchInput[name="queryInputByColumn"] {
-            margin: 20px 30px;
-          }
-          #slider {
-            margin: 30px 40px 10px;
-            width: 230px;
-            .slider-connect {
-              background-color: var(--thead-font-color);
-            }
-          }
-
-          .slider-horizontal {
-            .slider-handle {
-              width: 12px;
-              height: 12px;
-              top: -4px;
-              right: -6px;
-              .slider-tooltip {
-                border: 1px solid var(--thead-font-color);
-                background: var(--thead-font-color);
-                padding: 0 6px;
-                line-height: 1.4em;
-                bottom: 20px;
+          .icon {
+            cursor: pointer;
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 13px;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: -2px;
+            background-size: 8px 8px;
+            &.searchIcon {
+              display: var(--searchicon-display);
+              margin-left: 1px;
+              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);
+              &.active {
+                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);
               }
             }
-          }
-
-          .rangeInput {
-            width: 242px;
-            margin: 0 34px 30px;
-            display: flex;
-            justify-content: space-between;
-            > input[type="text"] {
-              width: 100%;
-              &.min {
-                margin-right: 10px;
+            &.filterIcon {
+              display: var(--filtericon-display);
+              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
+              &.active {
+                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);
+              }
+              &.isShowing {
+                z-index: 3;
+                position: relative;
+                background-color: var(--thead-font-color);
+                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);
               }
             }
-          }
-        }
-        &:last-of-type {
-          > .filterWrapper {
-            > div.filterWindow {
-              left: auto;
-              right: 11px;
+            &.sortIcon {
+              display: var(--sorticon-display);
+              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);
+              &.desc {
+                background-image: url(../../assets/gray-sort-des.svg);
+              }
+              &.asc {
+                background-image: url(../../assets/gray-sort-asc.svg);
+              }
             }
           }
         }
       }
-      .icon {
-        cursor: pointer;
-        content: "";
-        display: inline-block;
-        width: 10px;
-        height: 13px;
-        background-repeat: no-repeat;
-        background-position: center;
-        margin-bottom: -2px;
-        background-size: 8px 8px;
-        &.searchIcon {
-          display: var(--searchicon-display);
-          margin-left: 1px;
-          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);
-          &.active {
-            background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);
+      > tbody {
+        font-size: var(--tbody-font-size);
+        color: var(--tbody-font-color);
+        background-color: var(--tbody-background-color);
+        border-right: var(--tbody-border-right);
+        border-bottom: var(--tbody-border-bottom);
+        border-left: var(--tbody-border-left);
+        > tr {
+          &:nth-child(odd) {
+            background-color: var(--tbody-odd-background-color);
           }
-        }
-        &.filterIcon {
-          display: var(--filtericon-display);
-          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
-          &.active {
-            background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);
+          &:nth-child(even) {
+            background-color: var(--tbody-even-background-color);
           }
-          &.isShowing {
-            z-index: 3;
-            position: relative;
-            background-color: var(--thead-font-color);
-            background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);
+          > td {
+            border-bottom: var(--ruled-line);
+            border-collapse: collapse;
+            padding: 10px;
+            &:first-child {
+              padding-left: 20px;
+            }
+            &:last-child {
+              padding-right: 20px;
+            }
           }
-        }
-        &.sortIcon {
-          display: var(--sorticon-display);
-          background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);
-          &.desc {
-            background-image: url(../../assets/gray-sort-des.svg);
-          }
-          &.asc {
-            background-image: url(../../assets/gray-sort-asc.svg);
+          &:last-of-type {
+            > td {
+              border-bottom: none;
+            }
           }
         }
       }
     }
   }
-  > tbody {
-    font-size: var(--tbody-font-size);
-    color: var(--tbody-font-color);
-    background-color: var(--tbody-background-color);
-    border-right: var(--tbody-border-right);
-    border-bottom: var(--tbody-border-bottom);
-    border-left: var(--tbody-border-left);
-    > tr {
-      &:nth-child(odd) {
-        background-color: var(--tbody-odd-background-color);
+  .pageSlider {
+    height: 4px;
+    margin-top: -5px;
+    .slider-connects {
+      background-color: #bbbbbb;
+      .slider-connect {
+        background-color: #bbbbbb;
       }
-      &:nth-child(even) {
-        background-color: var(--tbody-even-background-color);
-      }
-      > td {
-        border-bottom: var(--ruled-line);
-        border-collapse: collapse;
-        padding: 10px;
-        &:first-child {
-          padding-left: 20px;
-        }
-        &:last-child {
-          padding-right: 20px;
-        }
-      }
-      &:last-of-type {
-        > td {
-          border-bottom: none;
+    }
+    .slider-handle {
+      > .slider-tooltip {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        bottom: auto;
+        line-height: 1.3;
+        color: var(--currentbtn-font-color);
+        background-color: var(--currentbtn-background-color);
+        border: var(--paginationbtn-border);
+        padding: var(--paginationbtn-padding);
+        font-size: var(--paginationbtn-font-size);
+        border-radius: var(--paginationbtn-border-radius);
+        &:before {
+          display: none;
         }
       }
     }
