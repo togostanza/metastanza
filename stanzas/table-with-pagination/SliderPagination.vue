@@ -1,50 +1,46 @@
 <template>
   <div v-if="totalPages > 1" ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
-      <div :class="['arrowWrapper', { show: state.currentPage !== 1 }]">
-        <span class="arrow double left" @click="state.currentPage = 1"> </span>
-        <span class="arrow left" @click="state.currentPage--"></span>
+      <div :class="['arrowWrapper', { show: currentPage !== 1 }]">
+        <span class="arrow double left" @click="currentPage = 1"> </span>
+        <span class="arrow left" @click="currentPage--"></span>
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
         <li
           v-for="page in surroundingPages"
           :key="page"
-          :class="['pagination', { currentBtn: state.currentPage === page }]"
-          @click="state.currentPage = page"
+          :class="['pagination', { currentBtn: currentPage === page }]"
+          @click="currentPage = page"
         >
           {{ page }}
         </li>
       </ul>
 
       <div
-        :class="['arrowWrapper', { show: state.currentPage !== totalPages }]"
+        :class="['arrowWrapper', { show: currentPage !== totalPages }]"
       >
-        <span class="arrow right" @click="state.currentPage++"></span>
+        <span class="arrow right" @click="currentPage++"></span>
         <span
           class="arrow double right"
-          @click="state.currentPage = totalPages"
+          @click="currentPage = totalPages"
         ></span>
       </div>
-
-      <form
-        class="pageNumber"
-        @submit.prevent="jumpToPage(state.jumpToNumberInput)"
-      >
+      <div class="pageNumber">
         Page
         <input
-          v-model.number="state.jumpToNumberInput"
+          v-model.number="jumpToNumberInput"
           type="text"
           class="jumpToNumberInput"
+          @keyup="jumpToPage()"
         />
         of {{ totalPages }}
-        <button>Go</button>
-      </form>
+      </div>
     </div>
     <template v-if="isSliderOn === '1' && totalPages > 5">
       <canvas ref="canvas" class="canvas"></canvas>
       <Slider
-        v-model="state.currentPage"
+        v-model="currentPage"
         :min="1"
         :max="totalPages"
         class="pageSlider"
@@ -55,7 +51,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, computed, onUpdated, ref } from "vue";
+import { defineComponent, computed, onUpdated, ref } from "vue";
 
 import Slider from "@vueform/slider";
 
@@ -73,16 +69,15 @@ export default defineComponent({
       default: 1,
     },
     isSliderOn: {
-      type: Number,
-      default: 1,
+      type: String,
+      default: "1",
     },
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
-    const state = reactive({
-      jumpToNumberInput: "",
-      currentPage: props.currentPage,
-    });
+    let currentPage = ref(props.currentPage)
+    let jumpToNumberInput = ref(currentPage)
+
     const surroundingPages = computed(() => {
       const totalPages = props.totalPages;
       const currentPage = props.currentPage;
@@ -100,12 +95,13 @@ export default defineComponent({
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     });
 
-    function jumpToPage(num) {
+    function jumpToPage() {
+      const num = jumpToNumberInput.value
       if (num < 1 || num > props.totalPages) {
         return;
       }
-      state.currentPage = num ? num : 1;
-      state.jumpToNumberInput = "";
+
+      currentPage.value = num;
     }
 
     const paginationWrapper = ref(null);
@@ -149,13 +145,14 @@ export default defineComponent({
       onUpdated(drawKnobArrow);
     }
     onUpdated(() => {
-      context.emit("updateCurrentPage", state.currentPage);
+      context.emit("updateCurrentPage", currentPage.value);
     });
 
     return {
       surroundingPages,
       jumpToPage,
-      state,
+      currentPage,
+      jumpToNumberInput,
       paginationWrapper,
       drawKnobArrow,
       canvas,
