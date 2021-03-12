@@ -339,7 +339,6 @@ export default defineComponent({
 
       state.columns = columns.map((column) => {
         const values = data.map((obj) => obj[column.id]);
-
         return createColumnState(column, values);
       });
 
@@ -348,14 +347,13 @@ export default defineComponent({
           return {
             column,
             value: column.parseValue(row[column.id]),
-            href: column.link ? row[column.link] : null,
+            href: column.href ? row[column.href] : null,
           };
         });
       });
     }
 
     onMounted(fetchData);
-
     return {
       sliderPagination,
       state,
@@ -395,6 +393,7 @@ function createColumnState(columnDef, values) {
     label: columnDef.label,
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
+    href: columnDef.link
   };
 
   if (columnDef.type === "number") {
