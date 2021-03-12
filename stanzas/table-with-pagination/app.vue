@@ -98,13 +98,13 @@
                     ></Slider>
                     <div class="rangeInput">
                       <input
-                        v-model="column.inputtingRangeMin"
+                        v-model.number="column.inputtingRangeMin"
                         type="text"
                         class="min"
                         @keyup="setRangeFilters(column)"
                       />
                       <input
-                        v-model="column.inputtingRangeMax"
+                        v-model.number="column.inputtingRangeMax"
                         type="text"
                         class="max"
                         @keyup="setRangeFilters(column)"
