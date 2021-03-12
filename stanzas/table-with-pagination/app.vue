@@ -27,7 +27,7 @@
             @click="setSorting(column)"
           ></span>
           <span
-            v-if="column.searchType !== 'number'"
+            v-if="column.searchType === 'category'"
             :class="[
               'icon',
               'filterIcon',
@@ -392,23 +392,25 @@ function createColumnState(columnDef, values) {
     const query = ref("");
     const isSearchConditionGiven = computed(() => query.value !== "")
 
-    const filters = uniq(values)
-      .sort()
-      .map((value) => {
-        return reactive({
-          value,
-          checked: true,
-        });
-      });
+    const filters = columnDef.type === "category" ?
+      uniq(values)
+        .sort()
+        .map((value) => {
+          return reactive({
+            value,
+            checked: true,
+          });
+        }) : null
 
-    function search(val) {
-      const q = query.value;
-      return q ? val.includes(q) : true;
-    }
 
     function filter(val) {
       const selected = filters.filter(({ checked }) => checked);
       return selected.some(({ value }) => value === val);
+    }
+
+    function search(val) {
+      const q = query.value;
+      return q ? val.includes(q) : true;
     }
 
     return {
@@ -421,7 +423,7 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
 
       isMatch(val) {
-        return search(val) && filter(val);
+        return columnDef.type === "category" ? search(val) && filter(val) : search(val);
       },
     };
   }
