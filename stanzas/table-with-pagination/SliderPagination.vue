@@ -138,7 +138,7 @@ export default defineComponent({
         ctx.closePath();
         ctx.fillStyle = "#dddddd";
         ctx.fill();
-      }, 0)
+      }, 0);
     }
 
     onUpdated(drawKnobArrow);
