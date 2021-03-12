@@ -40,13 +40,13 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "page_slider",
+      "stanza:key": "page-slider",
       "stanza:example": "1",
       "stanza:description": "Page slider on/off",
       "stanza:required": false
     },
     {
-      "stanza:key": "tableTitle",
+      "stanza:key": "table-title",
       "stanza:example": "Title of this Table",
       "stanza:description": "Title of the table",
       "stanza:required": false
@@ -395,6 +395,13 @@
       "stanza:type": "text",
       "stanza:default": "12px 0px 0px 0px",
       "stanza:description": "padding of pagination"
+    },
+    {
+      "stanza:key": "--table-pagination-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["column", "column-reverse"],
+      "stanza:default": "column",
+      "stanza:description": "placement between table and pagination"
     },
     {
       "stanza:key": "--pagination-placement",
