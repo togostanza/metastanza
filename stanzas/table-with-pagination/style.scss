@@ -321,7 +321,7 @@ table {
             margin: 20px 30px;
           }
           #slider {
-            margin: 60px 40px 10px;
+            margin: 30px 40px 10px;
             width: 230px;
             .slider-connect {
               background-color: var(--thead-font-color);
@@ -349,10 +349,10 @@ table {
             margin: 0 34px 30px;
             display: flex;
             justify-content: space-between;
-            > form {
-              width: 20%;
-              input[type="text"] {
-                width: 100%;
+            > input[type="text"] {
+              width: 100%;
+              &.min {
+                margin-right: 10px;
               }
             }
           }

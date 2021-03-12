@@ -91,23 +91,22 @@
                   :model-value="column.range"
                   :min="column.minValue"
                   :max="column.maxValue"
+                  :tooltips="false"
                   @update="column.setRange"
                 ></Slider>
                 <div class="rangeInput">
-                  <form @submit.prevent="setRangeFilters(column)">
-                    <input
-                      v-model.number="column.inputtingRangeMin"
-                      type="text"
-                      class="min"
-                    />
-                  </form>
-                  <form @submit.prevent="setRangeFilters(column)">
-                    <input
-                      v-model.number="column.inputtingRangeMax"
-                      type="text"
-                      class="max"
-                    />
-                  </form>
+                  <input
+                    v-model="column.inputtingRangeMin"
+                    type="text"
+                    class="min"
+                    @keyup="setRangeFilters(column)"
+                  />
+                  <input
+                    v-model="column.inputtingRangeMax"
+                    type="text"
+                    class="max"
+                    @keyup="setRangeFilters(column)"
+                  />
                 </div>
               </div>
               <input
@@ -268,10 +267,9 @@ export default defineComponent({
     }
 
     function setRangeFilters(column) {
+      if(column.inputtingRangeMin < column.minValue || column.inputtingRangeMax > column.maxValue) return
       column.rangeMin = column.inputtingRangeMin;
       column.rangeMax = column.inputtingRangeMax;
-      column.inputtingRangeMin = null;
-      column.inputtingRangeMax = null;
     }
 
     function showModal(column) {
@@ -360,6 +358,8 @@ function createColumnState(columnDef, values) {
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
+    let inputtingRangeMin = ref(rangeMin.value)
+    let inputtingRangeMax = ref(rangeMax.value)
 
     const isSearchConditionGiven = computed(() => {
       return minValue !== rangeMin.value || maxValue !== rangeMax.value;
@@ -368,6 +368,8 @@ function createColumnState(columnDef, values) {
     function setRange([min, max]) {
       rangeMin.value = min;
       rangeMax.value = max;
+      inputtingRangeMin.value = min;
+      inputtingRangeMax.value = max;
     }
 
     return {
@@ -380,8 +382,8 @@ function createColumnState(columnDef, values) {
       range,
       setRange,
       isSearchConditionGiven,
-      inputtingRangeMin: null,
-      inputtingRangeMax: null,
+      inputtingRangeMin,
+      inputtingRangeMax,
       isSearchModalShowing: false,
 
       isMatch(val) {
