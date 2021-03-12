@@ -1,22 +1,11 @@
 <template>
   <div class="tableOption">
-    <form
-      class="textSearchWrapper"
-      @submit.prevent="sliderPagination.jumpToPage(1); state.queryForAllColumns.commit();"
-    >
-      <input
-        v-model="state.queryForAllColumns.uncommitted"
-        type="text"
-        placeholder="Search for keywords..."
-        class="textSearchInput"
-      />
-      <button class="searchBtn" type="submit">
-        <img
-          src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-          alt="search"
-        />
-      </button>
-    </form>
+    <input
+      v-model="state.queryForAllColumns"
+      type="text"
+      placeholder="Search for keywords..."
+      class="textSearchInput"
+    />
     <a class="downloadBtn" :href="blobUrl" download="tableData">
       <img
         src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
@@ -55,10 +44,7 @@
             ]"
             @click="showModal(column)"
           ></span>
-          <div
-            v-if="column.isFilterPopupShowing"
-            class="filterWrapper"
-          >
+          <div v-if="column.isFilterPopupShowing" class="filterWrapper">
             <div
               :class="[
                 'filterWindow',
@@ -102,7 +88,7 @@
               </p>
               <div v-if="column.searchType === 'number'">
                 <Slider
-                  :modelValue = column.range
+                  :model-value="column.range"
                   :min="column.minValue"
                   :max="column.maxValue"
                   @update="column.setRange"
@@ -124,24 +110,14 @@
                   </form>
                 </div>
               </div>
-              <form
+              <input
                 v-else
-                class="textSearchWrapper"
-                @submit.prevent="sliderPagination.jumpToPage(1); column.query.commit();"
-              >
-                <input
-                  v-model="column.query.uncommitted"
-                  type="text"
-                  placeholder="Search for keywords..."
-                  name="queryInputByColumn"
-                />
-                <button class="searchBtn" type="submit">
-                  <img
-                    src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-                    alt="search"
-                  />
-                </button>
-              </form>
+                v-model="column.query"
+                type="text"
+                placeholder="Search for keywords..."
+                name="queryInputByColumn"
+                class="textSearchInput"
+              />
             </div>
           </transition>
         </th>
@@ -193,7 +169,7 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const sliderPagination = ref()
+    const sliderPagination = ref();
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -201,7 +177,7 @@ export default defineComponent({
       columns: [],
       allRows: [],
 
-      queryForAllColumns: createBuffer(""),
+      queryForAllColumns: "",
 
       sorting: {
         active: null,
@@ -215,8 +191,7 @@ export default defineComponent({
     });
 
     const filteredRows = computed(() => {
-      const queryForAllColumns = state.queryForAllColumns.committed;
-
+      const queryForAllColumns = state.queryForAllColumns;
       const filtered = state.allRows.filter((row) => {
         return (
           searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
@@ -301,9 +276,6 @@ export default defineComponent({
 
     function showModal(column) {
       column.isSearchModalShowing = true;
-      if(column.query) {
-        column.query.uncommitted = column.query.committed;
-      }
     }
 
     function closeModal() {
@@ -372,28 +344,13 @@ export default defineComponent({
   },
 });
 
-function createBuffer(init) {
-  const committed   = ref(init);
-  const uncommitted = ref(init);
-
-  function commit() {
-    committed.value = uncommitted.value;
-  }
-
-  return {
-    committed,
-    uncommitted,
-    commit,
-  };
-}
-
 function createColumnState(columnDef, values) {
   const baseProps = {
     id: columnDef.id,
     label: columnDef.label,
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
-    href: columnDef.link
+    href: columnDef.link,
   };
 
   if (columnDef.type === "number") {
@@ -409,8 +366,8 @@ function createColumnState(columnDef, values) {
     });
 
     function setRange([min, max]) {
-      rangeMin.value = min
-      rangeMax.value = max
+      rangeMin.value = min;
+      rangeMax.value = max;
     }
 
     return {
@@ -432,8 +389,8 @@ function createColumnState(columnDef, values) {
       },
     };
   } else {
-    const query = createBuffer("");
-    const isSearchConditionGiven = computed(() => query.committed.value !== "");
+    const query = ref("");
+    const isSearchConditionGiven = computed(() => query.value !== "")
 
     const filters = uniq(values)
       .sort()
@@ -445,8 +402,7 @@ function createColumnState(columnDef, values) {
       });
 
     function search(val) {
-      const q = query.committed.value;
-
+      const q = query.value;
       return q ? val.includes(q) : true;
     }
 
