@@ -5502,34 +5502,6 @@ function getCheckboxValue(el, checked) {
     return key in el ? el[key] : checked;
 }
 
-const systemModifiers = ['ctrl', 'shift', 'alt', 'meta'];
-const modifierGuards = {
-    stop: e => e.stopPropagation(),
-    prevent: e => e.preventDefault(),
-    self: e => e.target !== e.currentTarget,
-    ctrl: e => !e.ctrlKey,
-    shift: e => !e.shiftKey,
-    alt: e => !e.altKey,
-    meta: e => !e.metaKey,
-    left: e => 'button' in e && e.button !== 0,
-    middle: e => 'button' in e && e.button !== 1,
-    right: e => 'button' in e && e.button !== 2,
-    exact: (e, modifiers) => systemModifiers.some(m => e[`${m}Key`] && !modifiers.includes(m))
-};
-/**
- * @private
- */
-const withModifiers = (fn, modifiers) => {
-    return (event, ...args) => {
-        for (let i = 0; i < modifiers.length; i++) {
-            const guard = modifierGuards[modifiers[i]];
-            if (guard && guard(event, modifiers))
-                return;
-        }
-        return fn(event, ...args);
-    };
-};
-
 const rendererOptions = extend({ patchProp, forcePatchProp }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
 // in case the user only imports reactivity utilities from Vue.
@@ -5567,5 +5539,5 @@ function normalizeContainer(container) {
     return container;
 }
 
-export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, withModifiers as m, withDirectives as n, onMounted as o, createTextVNode as p, toDisplayString as q, reactive as r, vModelCheckbox as s, toRefs as t, withCtx as u, vModelText as v, watch as w };
-//# sourceMappingURL=runtime-dom.esm-bundler-f42cac23.js.map
+export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, withDirectives as m, createTextVNode as n, onMounted as o, toDisplayString as p, vModelCheckbox as q, reactive as r, withCtx as s, toRefs as t, vModelText as v, watch as w };
+//# sourceMappingURL=runtime-dom.esm-bundler-a9a95da9.js.map
