@@ -243,6 +243,7 @@ async function draw(stanza, params) {
       0
     );
   });
+  console.log("chromosomeSumLength", chromosomeSumLength.hg38);
 
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
@@ -419,21 +420,36 @@ async function draw(stanza, params) {
   const ctrl_svg = d3
     .select(control_element)
     .append("svg")
+    .attr("id", "slider_container")
     .attr("width", width)
-    .attr("height", 20);
+    .attr("height", 24);
   ctrl_svg
-    .append("path")
-    .attr("d", "M " + marginLeft + ", 10 H " + width + " Z")
-    .attr("stroke", "#888888")
-    .attr("stroke-width", "2px");
+    .append("text")
+    .text("chr:")
+    .attr("class", "info-key")
+    .attr("fill", "#99acb2")
+    .attr("x", 4)
+    .attr("y", 16)
+    .attr("width", 10)
+    .attr("height", 23);
+  ctrl_svg
+    .append("rect")
+    .attr("x", marginLeft)
+    .attr("y", 1)
+    .attr("width", areaWidth)
+    .attr("height", 23)
+    .attr("fill", "#FFFFFF")
+    .attr("stroke", "#99acb2")
+    .attr("stroke-width", "1px");
   ctrl_svg
     .append("rect")
     .attr("id", "slider")
     .attr("x", marginLeft)
-    .attr("y", 2)
+    .attr("y", 1)
     .attr("width", areaWidth)
-    .attr("height", 16)
+    .attr("height", 23)
     .attr("fill", "#C2E3F2")
+    .attr("stroke", "#99acb2")
     .call(
       d3
         .drag()
@@ -497,6 +513,51 @@ async function draw(stanza, params) {
           }
         })
     );
+
+  const sliderlabel_g = ctrl_svg.append("g").attr("id", "sliderLabel");
+
+  sliderlabel_g
+    .selectAll(".sliderLabel")
+    .data(chromosomes)
+    .enter()
+    .append("text")
+    .attr("class", "axisLabel sliderLabel")
+    .text(function (d) {
+      return d;
+    })
+    .attr("x", function (d) {
+      let pos = chromosomeNtLength.hg38[d] / 2;
+      for (const ch of chromosomes) {
+        if (ch === d) {
+          break;
+        }
+        pos += chromosomeNtLength.hg38[ch];
+      }
+      return (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
+    })
+    .attr("y", 18)
+    .attr("fill", "#2f4d76");
+
+  sliderlabel_g
+    .selectAll(".sliderLine")
+    .data(chromosomes)
+    .enter()
+    .append("path")
+    .attr("class", "slider-line")
+    .attr("d", function (d) {
+      let pos = chromosomeNtLength.hg38[d];
+      for (const ch of chromosomes) {
+        if (ch === d) {
+          break;
+        }
+        pos += chromosomeNtLength.hg38[ch];
+      }
+      const sliderLinePos =
+        (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
+      console.log("d", d);
+      console.log("sliderLinePos", sliderLinePos);
+      return "M " + sliderLinePos + ", " + 2 + " V " + 24 + " Z";
+    });
 
   // button
   const ctrl_button = d3
@@ -597,6 +658,7 @@ async function draw(stanza, params) {
       ];
       total = range[1];
     }
+    console.log(range);
 
     over_thresh_array = [];
 
@@ -716,7 +778,7 @@ async function draw(stanza, params) {
       })
       .attr("y", areaHeight + 20);
 
-    // x axis label
+    // chart background
     xlabel_g
       .selectAll(".xBackground")
       .data(chromosomes)
