@@ -101,13 +101,13 @@
                         v-model.number="column.inputtingRangeMin"
                         type="text"
                         class="min"
-                        @keyup="setRangeFilters(column)"
+                        @input="setRangeFilters(column)"
                       />
                       <input
                         v-model.number="column.inputtingRangeMax"
                         type="text"
                         class="max"
-                        @keyup="setRangeFilters(column)"
+                        @input="setRangeFilters(column)"
                       />
                     </div>
                   </div>
@@ -190,7 +190,7 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: params.limit,
+        perPage: Number(params.limit),
       },
     });
 
@@ -226,7 +226,7 @@ export default defineComponent({
       const { currentPage, perPage } = state.pagination;
 
       const startIndex = (currentPage - 1) * perPage;
-      const endIndex = Number(startIndex) + Number(perPage);
+      const endIndex = startIndex + perPage;
 
       return filteredRows.value.slice(startIndex, endIndex);
     });
@@ -293,7 +293,7 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const res = await fetch(params["tableDataApi"]);
+      const res = await fetch(params.tableDataApi);
       const data = await res.json();
 
       state.responseJSON = data;
@@ -367,7 +367,7 @@ function createColumnState(columnDef, values) {
     let inputtingRangeMax = ref(rangeMax.value)
 
     const isSearchConditionGiven = computed(() => {
-      return minValue !== rangeMin.value || maxValue !== rangeMax.value;
+      return minValue < rangeMin.value || maxValue > rangeMax.value;
     });
 
     function setRange([min, max]) {
