@@ -97,18 +97,30 @@
                       @update="column.setRange"
                     ></Slider>
                     <div class="rangeInput">
-                      <input
-                        v-model.number="column.inputtingRangeMin"
-                        type="text"
-                        class="min"
-                        @input="setRangeFilters(column)"
-                      />
-                      <input
-                        v-model.number="column.inputtingRangeMax"
-                        type="text"
-                        class="max"
-                        @input="setRangeFilters(column)"
-                      />
+                      <div>
+                        <span class="rangeInputLabel">
+                          From
+                          <span class="icon">&#xf0dd;</span>
+                        </span>
+                        <input
+                          v-model.number="column.inputtingRangeMin"
+                          type="text"
+                          class="min"
+                          @input="setRangeFilters(column)"
+                        />
+                      </div>
+                      <div>
+                        <span class="rangeInputLabel">
+                          To
+                          <span class="icon">&#xf0dd;</span>
+                        </span>
+                        <input
+                          v-model.number="column.inputtingRangeMax"
+                          type="text"
+                          class="max"
+                          @input="setRangeFilters(column)"
+                        />
+                      </div>
                     </div>
                   </div>
                   <input

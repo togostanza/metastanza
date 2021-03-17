@@ -245,6 +245,12 @@
       "stanza:description": "font size of search button text"
     },
     {
+      "stanza:key": "--rangeslider-knob-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "color of range slder knob"
+    },
+    {
       "stanza:key": "--dlbtn-img-width",
       "stanza:type": "text",
       "stanza:default": "13px",
