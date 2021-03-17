@@ -11,16 +11,18 @@
         <p class="entries">
           Show
           <select v-model="state.pagination.perPage">
-            <option v-for="size of pageSizeOption" :key="size" :value="size">{{ size }}</option>
+            <option v-for="size of pageSizeOption" :key="size" :value="size">
+              {{ size }}
+            </option>
           </select>
           entries
         </p>
         <div class="menuWrapper">
-          <span class="menuIcon" @click="state.isMenuOn = true">&#xe801;</span>
+          <span class="icon menu" @click="state.isMenuOn = true">&#xe801;</span>
           <ul v-if="state.isMenuOn" class="menu">
             <li v-for="url in blobUrls" :key="url.type">
               <a class="downloadBtn" :href="url.url" download="tableData">
-                {{`Download ${url.type}`}}
+                {{ `Download ${url.type}` }}
               </a>
             </li>
           </ul>
@@ -69,7 +71,7 @@
                   ]"
                 >
                   <p class="filterWindowTitle">{{ column.label }}</p>
-                  <ul>
+                  <ul class="filters">
                     <li v-for="filter in column.filters" :key="filter.value">
                       <label :for="filter.id">
                         <input
@@ -129,7 +131,7 @@
                       <div>
                         <span class="rangeInputLabel">
                           To
-                          <span class="icon">&#xf0dd;</span>
+                          <span class="icon arrow">&#xf0dd;</span>
                         </span>
                         <input
                           v-model.number="column.inputtingRangeMax"
@@ -203,7 +205,7 @@ export default defineComponent({
 
   setup(params) {
     const sliderPagination = ref();
-    const pageSizeOption = params.pageSizeOption.split(',').map(Number)
+    const pageSizeOption = params.pageSizeOption.split(",").map(Number);
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -300,7 +302,9 @@ export default defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) || isModalShowing.value || state.isMenuOn
+        ) ||
+        isModalShowing.value ||
+        state.isMenuOn
       );
     });
 
@@ -320,8 +324,9 @@ export default defineComponent({
       if (
         column.inputtingRangeMin < column.minValue ||
         column.inputtingRangeMax > column.maxValue
-      )
+      ) {
         return;
+      }
       column.rangeMin = column.inputtingRangeMin;
       column.rangeMax = column.inputtingRangeMax;
     }
@@ -335,7 +340,7 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
-      state.isMenuOn = false
+      state.isMenuOn = false;
     }
 
     function updateCurrentPage(currentPage) {
@@ -414,8 +419,8 @@ function createColumnState(columnDef, values) {
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
-    let inputtingRangeMin = ref(rangeMin.value);
-    let inputtingRangeMax = ref(rangeMax.value);
+    const inputtingRangeMin = ref(rangeMin.value);
+    const inputtingRangeMax = ref(rangeMax.value);
 
     const isSearchConditionGiven = computed(() => {
       return minValue < rangeMin.value || maxValue > rangeMax.value;
