@@ -8,6 +8,13 @@
           placeholder="Search for keywords..."
           class="textSearchInput"
         />
+        <p class="entries">
+          Show
+          <select v-model="state.pagination.perPage">
+            <option v-for="size of pageSizeOption" :key="size" :value="size">{{ size }}</option>
+          </select>
+          entries
+        </p>
         <div class="menuWrapper">
           <span class="menuIcon" @click="state.isMenuOn = true">&#xe801;</span>
           <ul v-if="state.isMenuOn" class="menu">
@@ -196,6 +203,7 @@ export default defineComponent({
 
   setup(params) {
     const sliderPagination = ref();
+    const pageSizeOption = params.pageSizeOption.split(',').map(Number)
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -212,7 +220,7 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: Number(params.tablePageSize),
+        perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
 
@@ -373,6 +381,7 @@ export default defineComponent({
     onMounted(fetchData);
     return {
       sliderPagination,
+      pageSizeOption,
       state,
       totalPages,
       rowsInCurrentPage,
