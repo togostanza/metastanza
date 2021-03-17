@@ -8,12 +8,16 @@
           placeholder="Search for keywords..."
           class="textSearchInput"
         />
-        <a class="downloadBtn" :href="blobUrl" download="tableData">
-          <img
-            src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
-            alt="download"
-          />
-        </a>
+        <div class="menuWrapper">
+          <span class="menuIcon" @click="state.isMenuOn = true">&#xe801;</span>
+          <ul v-if="state.isMenuOn" class="menu">
+            <li v-for="url in blobUrls" :key="url.type">
+              <a class="downloadBtn" :href="url.url" download="tableData">
+                {{`Download ${url.type}`}}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
       <table v-if="state.allRows">
         <thead>
@@ -24,7 +28,9 @@
                 :class="[
                   'icon',
                   'icon-sort',
-                  state.sorting.column === column ? state.sorting.direction : '',
+                  state.sorting.column === column
+                    ? state.sorting.direction
+                    : '',
                 ]"
                 @click="setSorting(column)"
               ></span>
@@ -35,7 +41,8 @@
                   { active: column.isSearchConditionGiven },
                 ]"
                 @click="showModal(column)"
-              >&#xe800;</span>
+                >&#xe800;</span
+              >
               <span
                 v-if="column.searchType === 'category'"
                 :class="[
@@ -45,7 +52,8 @@
                   { active: column.filters.some((filter) => !filter.checked) },
                 ]"
                 @click="column.isFilterPopupShowing = true"
-              >&#xf0b0;</span>
+                >&#xf0b0;</span
+              >
               <div v-if="column.isFilterPopupShowing" class="filterWrapper">
                 <div
                   :class="[
@@ -86,7 +94,9 @@
                     <template v-if="column.searchType === 'number'">
                       Set {{ column.label }} range
                     </template>
-                    <template v-else> Search for "{{ column.label }}" </template>
+                    <template v-else>
+                      Search for "{{ column.label }}"
+                    </template>
                   </p>
                   <div v-if="column.searchType === 'number'">
                     <Slider
@@ -203,8 +213,10 @@ export default defineComponent({
       pagination: {
         currentPage: 1,
         perPage: Number(params.tablePageSize),
-        isSliderOn: params.pageSlider
+        isSliderOn: params.pageSlider,
       },
+
+      isMenuOn: false,
     });
 
     const filteredRows = computed(() => {
@@ -244,18 +256,30 @@ export default defineComponent({
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
-    const blobUrl = computed(() => {
+    const blobUrls = computed(() => {
       const json = state.responseJSON;
-
       if (!json) {
         return null;
       }
 
-      const blob = new Blob([JSON.stringify(json, null, "  ")], {
+      const csv = json2csv(json);
+
+      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
         type: "application/json",
       });
+      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
 
-      return URL.createObjectURL(blob);
+      return [
+        {
+          type: "JSON",
+          url: URL.createObjectURL(jsonBlob),
+        },
+        {
+          type: "CSV",
+          url: URL.createObjectURL(csvBlob),
+        },
+      ];
     });
 
     const isModalShowing = computed(() => {
@@ -268,7 +292,7 @@ export default defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) || isModalShowing.value
+        ) || isModalShowing.value || state.isMenuOn
       );
     });
 
@@ -285,7 +309,11 @@ export default defineComponent({
     }
 
     function setRangeFilters(column) {
-      if(column.inputtingRangeMin < column.minValue || column.inputtingRangeMax > column.maxValue) return
+      if (
+        column.inputtingRangeMin < column.minValue ||
+        column.inputtingRangeMax > column.maxValue
+      )
+        return;
       column.rangeMin = column.inputtingRangeMin;
       column.rangeMax = column.inputtingRangeMax;
     }
@@ -299,6 +327,7 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
+      state.isMenuOn = false
     }
 
     function updateCurrentPage(currentPage) {
@@ -347,7 +376,7 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrl,
+      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
@@ -376,8 +405,8 @@ function createColumnState(columnDef, values) {
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
-    let inputtingRangeMin = ref(rangeMin.value)
-    let inputtingRangeMax = ref(rangeMax.value)
+    let inputtingRangeMin = ref(rangeMin.value);
+    let inputtingRangeMax = ref(rangeMax.value);
 
     const isSearchConditionGiven = computed(() => {
       return minValue < rangeMin.value || maxValue > rangeMax.value;
@@ -410,18 +439,19 @@ function createColumnState(columnDef, values) {
     };
   } else {
     const query = ref("");
-    const isSearchConditionGiven = computed(() => query.value !== "")
+    const isSearchConditionGiven = computed(() => query.value !== "");
 
-    const filters = columnDef.type === "category" ?
-      uniq(values)
-        .sort()
-        .map((value) => {
-          return reactive({
-            value,
-            checked: true,
-          });
-        }) : null
-
+    const filters =
+      columnDef.type === "category"
+        ? uniq(values)
+            .sort()
+            .map((value) => {
+              return reactive({
+                value,
+                checked: true,
+              });
+            })
+        : null;
 
     function filter(val) {
       const selected = filters.filter(({ checked }) => checked);
@@ -443,7 +473,9 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
 
       isMatch(val) {
-        return columnDef.type === "category" ? search(val) && filter(val) : search(val);
+        return columnDef.type === "category"
+          ? search(val) && filter(val)
+          : search(val);
       },
     };
   }
@@ -461,5 +493,21 @@ function searchByEachColumn(row) {
   return row.every((cell) => {
     return cell.column.isMatch(cell.value);
   });
+}
+
+function json2csv(json) {
+  var header = Object.keys(json[0]).join(",") + "\n";
+
+  var body = json
+    .map(function (d) {
+      return Object.keys(d)
+        .map(function (key) {
+          return d[key];
+        })
+        .join(",");
+    })
+    .join("\n");
+
+  return header + body;
 }
 </script>
