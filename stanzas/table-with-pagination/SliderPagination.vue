@@ -2,8 +2,8 @@
   <div v-if="totalPages > 1" ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div :class="['arrowWrapper', { show: currentPage !== 1 }]">
-        <span class="arrow double left" @click="currentPage = 1"> </span>
-        <span class="arrow left" @click="currentPage--"></span>
+        <span class="arrow double left" @click="updateCurrentPage(1)"> </span>
+        <span class="arrow left" @click="updateCurrentPage(currentPage - 1)"></span>
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
@@ -11,28 +11,26 @@
           v-for="page in surroundingPages"
           :key="page"
           :class="['pagination', { currentBtn: currentPage === page }]"
-          @click="currentPage = page"
+          @click="updateCurrentPage(page)"
         >
           {{ page }}
         </li>
       </ul>
 
-      <div
-        :class="['arrowWrapper', { show: currentPage !== totalPages }]"
-      >
-        <span class="arrow right" @click="currentPage++"></span>
+      <div :class="['arrowWrapper', { show: currentPage !== totalPages }]">
+        <span class="arrow right" @click="updateCurrentPage(currentPage + 1)"></span>
         <span
           class="arrow double right"
-          @click="currentPage = totalPages"
+          @click="updateCurrentPage(totalPages)"
         ></span>
       </div>
       <div class="pageNumber">
         Page
         <input
-          v-model.number="jumpToNumberInput"
+          :value="currentPage"
           type="text"
           class="jumpToNumberInput"
-          @keyup="jumpToPage()"
+          @input="updateCurrentPage(Number($event.target.value))"
         />
         of {{ totalPages }}
       </div>
@@ -40,13 +38,14 @@
     <template v-if="isSliderOn === 'true' && totalPages > 5">
       <canvas ref="canvas" class="canvas"></canvas>
       <Slider
-        v-model="currentPage"
+        v-model="inputtingCurrentPage"
         :min="1"
         :max="totalPages"
         class="pageSlider"
+        @update="updateCurrentPage(inputtingCurrentPage)"
       >
       </Slider>
-    </template>
+  </template>
   </div>
 </template>
 
@@ -71,12 +70,11 @@ export default defineComponent({
     isSliderOn: {
       type: String,
       default: "true",
-    }
+    },
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
-    let currentPage = ref(props.currentPage)
-    let jumpToNumberInput = ref(currentPage)
+    const inputtingCurrentPage = ref(1)
 
     const surroundingPages = computed(() => {
       const totalPages = props.totalPages;
@@ -95,15 +93,6 @@ export default defineComponent({
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     });
 
-    function jumpToPage() {
-      const num = jumpToNumberInput.value
-      if (num < 1 || num > props.totalPages) {
-        return;
-      }
-
-      currentPage.value = num;
-    }
-
     const paginationWrapper = ref(null);
     const canvas = ref(null);
     const paginationNumList = ref(null);
@@ -117,22 +106,33 @@ export default defineComponent({
         canvas.value.width = paginationWrapper.value.clientWidth;
         canvas.value.height = 50;
 
-        const sliderY = paginationWrapper.value.getElementsByClassName("pageSlider")[0].offsetTop;
-        const tablePaginationOrder = paginationNumList.value.offsetTop < sliderY ? 'column' : 'column-reverse'
+        const sliderY = paginationWrapper.value.getElementsByClassName(
+          "pageSlider"
+        )[0].offsetTop;
+        const tablePaginationOrder =
+          paginationNumList.value.offsetTop < sliderY
+            ? "column"
+            : "column-reverse";
 
         const paginationNumListX = paginationNumList.value.offsetLeft;
-        const paginationNumListY = tablePaginationOrder === "column" ? 0 : 50
+        const paginationNumListY = tablePaginationOrder === "column" ? 0 : 50;
 
-        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0];
+        const knob = paginationWrapper.value.getElementsByClassName(
+          "slider-origin"
+        )[0];
         const knobTranslate = knob.style.transform
           .match(/translate\((.+)%,(.+)\)/)[1]
           .split(",")[0];
-        const knobX = ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
-        const knobY = tablePaginationOrder === "column" ? 50 : 0
+        const knobX =
+          ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+        const knobY = tablePaginationOrder === "column" ? 50 : 0;
 
         const ctx = canvas.value.getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, paginationNumListY);
+        ctx.moveTo(
+          paginationNumListX - paginationWrapper.value.offsetLeft,
+          paginationNumListY
+        );
         ctx.lineTo(
           paginationNumListX -
             paginationWrapper.value.offsetLeft +
@@ -146,20 +146,20 @@ export default defineComponent({
       }, 0);
     }
 
-    if(props.isSliderOn === "true") {
+    function updateCurrentPage (num) {
+      context.emit("updateCurrentPage", num);
+    }
+
+    if (props.isSliderOn === "true") {
       onUpdated(drawKnobArrow);
     }
-    onUpdated(() => {
-      context.emit("updateCurrentPage", currentPage.value);
-    });
 
     return {
+      inputtingCurrentPage,
       surroundingPages,
-      jumpToPage,
-      currentPage,
-      jumpToNumberInput,
       paginationWrapper,
       drawKnobArrow,
+      updateCurrentPage,
       canvas,
       paginationNumList,
     };
