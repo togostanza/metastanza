@@ -22,9 +22,9 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "table-page-size",
-      "stanza:example": "20",
-      "stanza:description": "table page size",
+      "stanza:key": "page-size-option",
+      "stanza:example": "10,20,50,100",
+      "stanza:description": "page size list",
       "stanza:required": true
     },
     {

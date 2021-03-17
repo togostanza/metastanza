@@ -172,6 +172,11 @@
       justify-content: space-between;
       align-items: flex-end;
       margin: var(--information-margin);
+      > .entries {
+        margin-left: auto;
+        margin-right: 10px;
+        font-size: 10px;
+      }
       > .menuWrapper {
         position: relative;
         line-height: 1;
@@ -186,14 +191,15 @@
           position: absolute;
           top: 24px;
           right: 0px;
-          padding: 8px 12px;
+          padding: 8px 14px;
           background: #ffffff;
           box-shadow: 0 2px 8px 0 rgb(0 0 0 / 20%);
           z-index: 3;
           > li {
             > .downloadBtn {
               white-space: nowrap;
-              line-height: 20px;
+              line-height: 24px;
+              font-weight: bold
             }
           }
           &:before {
