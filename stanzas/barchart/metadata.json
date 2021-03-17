@@ -69,6 +69,19 @@
       "stanza:description": "Padding around your stanza"
     },
     {
+      "stanza:key": "menu-button-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+    },
+    {
       "stanza:key": "padding-inner",
       "stanza:example": "0.1",
       "stanza:description": "Padding between each bars. This mast be in the range[0,1]"
@@ -109,16 +122,6 @@
       "stanza:description": "Display of Y-ticks.(true or false)"
     },
     {
-      "stanza:key": "xtick-count",
-      "stanza:example": "nice",
-      "stanza:description": "Count of Y-ticks for quantitative scales. Acceptable data-types are Number, Stirng, and Object."
-    },
-    {
-      "stanza:key": "ytick-count",
-      "stanza:example": "nice",
-      "stanza:description": "Count of Y-ticks for quantitative scales. Acceptable data-types are Number, Stirng, and Object."
-    },
-    {
       "stanza:key": "xlabel-angle",
       "stanza:example": "0",
       "stanza:description": "Angle of X-labels.(in degree)"
@@ -127,26 +130,6 @@
       "stanza:key": "ylabel-angle",
       "stanza:example": "0",
       "stanza:description": "Angle of Y-labels.(in degree)"
-    },
-    {
-      "stanza:key": "xlabel-horizonal-offset",
-      "stanza:default": "60",
-      "stanza:description": "Horizonal offset of xlabels."
-    },
-    {
-      "stanza:key": "xlabel-vertical-offset",
-      "stanza:default": "0",
-      "stanza:description": "Vertical offset of xlabels."
-    },
-    {
-      "stanza:key": "ylabel-horizonal-offset",
-      "stanza:default": "5",
-      "stanza:description": "Horizonal offset of ylabels."
-    },
-    {
-      "stanza:key": "ylabel-vertical-offset",
-      "stanza:default": "5",
-      "stanza:description": "Vertical offset of ylabels."
     },
     {
       "stanza:key": "bar-width",

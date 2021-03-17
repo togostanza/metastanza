@@ -53,6 +53,19 @@
       "stanza:description": "Padding around your stanza"
     },
     {
+      "stanza:key": "menu-button-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+    },
+    {
       "stanza:key": "xaxis-orient",
       "stanza:example": "bottom",
       "stanza:description": "Orient of X-axis.(top or bottom)"

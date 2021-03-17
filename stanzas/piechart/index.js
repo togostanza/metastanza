@@ -1,5 +1,6 @@
 import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
+import { appendDlButton } from "@/lib/metastanza_utils.js";
 
 export default async function piechart(stanza, params) {
   function css(key) {
@@ -62,11 +63,11 @@ export default async function piechart(stanza, params) {
       legendX: "220",
       legendY: "5",
       title: labelVariable,
-      titleColor: "var(--legendtitle-color)",
+      titleColor: "var(--label-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--legendtitle-size"),
       titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--legendlabel-color)",
+      labelColor: "var(--label-color)",
       labelFont: css("--font-family"),
       labelFontSize: css("--legendlabel-size"),
       symbolType: params["symbol-shape"],
@@ -124,4 +125,31 @@ export default async function piechart(stanza, params) {
     renderer: "svg",
   };
   await vegaEmbed(el, spec, opts);
+
+  //menu button placement
+  appendDlButton(
+    stanza.root.querySelector(".chart-wrapper"),
+    stanza.root.querySelector("svg"),
+    "piechart",
+    stanza
+  );
+
+  const menuButton = stanza.root.querySelector("#dl_button");
+  switch (params["menu-button-placement"]) {
+    case "top-left":
+      menuButton.setAttribute("class", "dl-top-left");
+      break;
+    case "top-right":
+      menuButton.setAttribute("class", "dl-top-right");
+      break;
+    case "bottom-left":
+      menuButton.setAttribute("class", "dl-bottom-left");
+      break;
+    case "bottom-right":
+      menuButton.setAttribute("class", "dl-bottom-right");
+      break;
+    case "none":
+      menuButton.setAttribute("class", "dl-none");
+      break;
+  }
 }
