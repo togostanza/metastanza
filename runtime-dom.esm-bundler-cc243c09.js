@@ -5492,6 +5492,60 @@ function setChecked(el, { value, oldValue }, vnode) {
         el.checked = looseEqual(value, getCheckboxValue(el, true));
     }
 }
+const vModelSelect = {
+    created(el, { value, modifiers: { number } }, vnode) {
+        const isSetModel = isSet(value);
+        addEventListener(el, 'change', () => {
+            const selectedVal = Array.prototype.filter
+                .call(el.options, (o) => o.selected)
+                .map((o) => number ? toNumber(getValue(o)) : getValue(o));
+            el._assign(el.multiple
+                ? isSetModel
+                    ? new Set(selectedVal)
+                    : selectedVal
+                : selectedVal[0]);
+        });
+        el._assign = getModelAssigner(vnode);
+    },
+    // set value in mounted & updated because <select> relies on its children
+    // <option>s.
+    mounted(el, { value }) {
+        setSelected(el, value);
+    },
+    beforeUpdate(el, _binding, vnode) {
+        el._assign = getModelAssigner(vnode);
+    },
+    updated(el, { value }) {
+        setSelected(el, value);
+    }
+};
+function setSelected(el, value) {
+    const isMultiple = el.multiple;
+    if (isMultiple && !isArray(value) && !isSet(value)) {
+        return;
+    }
+    for (let i = 0, l = el.options.length; i < l; i++) {
+        const option = el.options[i];
+        const optionValue = getValue(option);
+        if (isMultiple) {
+            if (isArray(value)) {
+                option.selected = looseIndexOf(value, optionValue) > -1;
+            }
+            else {
+                option.selected = value.has(optionValue);
+            }
+        }
+        else {
+            if (looseEqual(getValue(option), value)) {
+                el.selectedIndex = i;
+                return;
+            }
+        }
+    }
+    if (!isMultiple) {
+        el.selectedIndex = -1;
+    }
+}
 // retrieve raw value set via :value bindings
 function getValue(el) {
     return '_value' in el ? el._value : el.value;
@@ -5539,5 +5593,5 @@ function normalizeContainer(container) {
     return container;
 }
 
-export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, withDirectives as m, createTextVNode as n, onMounted as o, toDisplayString as p, vModelCheckbox as q, reactive as r, withCtx as s, toRefs as t, vModelText as v, watch as w };
-//# sourceMappingURL=runtime-dom.esm-bundler-a9a95da9.js.map
+export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, createTextVNode as m, toDisplayString as n, onMounted as o, withDirectives as p, vModelSelect as q, reactive as r, vModelCheckbox as s, toRefs as t, withCtx as u, vModelText as v, watch as w };
+//# sourceMappingURL=runtime-dom.esm-bundler-cc243c09.js.map

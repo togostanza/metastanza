@@ -22,40 +22,20 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "limit",
-      "stanza:example": "20",
-      "stanza:description": "table page size",
+      "stanza:key": "page-size-option",
+      "stanza:example": "10,20,50,100",
+      "stanza:description": "page size list",
       "stanza:required": true
-    },
-    {
-      "stanza:key": "offset",
-      "stanza:example": "0",
-      "stanza:description": "page numbere",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "params",
-      "stanza:example": "taxonomy='9606'",
-      "stanza:description": "parameters for table data api",
-      "stanza:required": false
     },
     {
       "stanza:key": "page-slider",
-      "stanza:example": "1",
-      "stanza:description": "Page slider on/off",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "table-title",
-      "stanza:example": "Title of this Table",
-      "stanza:description": "Title of the table",
-      "stanza:required": false
+      "stanza:example": true,
+      "stanza:description": "Page slider on/off (true or false)"
     },
     {
       "stanza:key": "columns",
       "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\":true}]",
-      "stanza:description": "columns' options",
-      "stanza:required": false
+      "stanza:description": "columns' options"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -83,6 +63,12 @@
       "stanza:type": "color",
       "stanza:default": "#256d80",
       "stanza:description": "basic fill color"
+    },
+    {
+      "stanza:key": "--general-non-active-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(0, 0, 0, .3)",
+      "stanza:description": "general non active color"
     },
     {
       "stanza:key": "--emphasized-color",
@@ -259,16 +245,10 @@
       "stanza:description": "font size of search button text"
     },
     {
-      "stanza:key": "--dlbtn-img-width",
-      "stanza:type": "text",
-      "stanza:default": "13px",
-      "stanza:description": "width of download button image"
-    },
-    {
-      "stanza:key": "--dlbtn-img-height",
-      "stanza:type": "text",
-      "stanza:default": "13px",
-      "stanza:description": "height of download button image"
+      "stanza:key": "--rangeslider-knob-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "color of range slder knob"
     },
     {
       "stanza:key": "--information-margin",
@@ -391,16 +371,10 @@
       "stanza:description": "background color of table body"
     },
     {
-      "stanza:key": "--pagination-padding",
-      "stanza:type": "text",
-      "stanza:default": "12px 0px 0px 0px",
-      "stanza:description": "padding of pagination"
-    },
-    {
       "stanza:key": "--table-pagination-order",
       "stanza:type": "single-choice",
       "stanza:choice": ["column", "column-reverse"],
-      "stanza:default": "column",
+      "stanza:default": "column-reverse",
       "stanza:description": "placement between table and pagination"
     },
     {

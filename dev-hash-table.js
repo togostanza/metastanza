@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { d as defineComponent, r as reactive, o as onMounted, c as createBlock, a as createCommentVNode, b as openBlock, e as createApp } from './runtime-dom.esm-bundler-a9a95da9.js';
+import { d as defineComponent, r as reactive, o as onMounted, c as createBlock, a as createCommentVNode, b as openBlock, e as createApp } from './runtime-dom.esm-bundler-cc243c09.js';
 
 var metadata = {
 	"@context": {
