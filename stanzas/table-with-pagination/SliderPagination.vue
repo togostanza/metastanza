@@ -37,7 +37,7 @@
         of {{ totalPages }}
       </div>
     </div>
-    <template v-if="isSliderOn === '1' && totalPages > 5">
+    <template v-if="isSliderOn === 'true' && totalPages > 5">
       <canvas ref="canvas" class="canvas"></canvas>
       <Slider
         v-model="currentPage"
@@ -70,8 +70,8 @@ export default defineComponent({
     },
     isSliderOn: {
       type: String,
-      default: "1",
-    },
+      default: "true",
+    }
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
@@ -116,32 +116,37 @@ export default defineComponent({
 
         canvas.value.width = paginationWrapper.value.clientWidth;
         canvas.value.height = 50;
+
+        const sliderY = paginationWrapper.value.getElementsByClassName("pageSlider")[0].offsetTop;
+        const tablePaginationOrder = paginationNumList.value.offsetTop < sliderY ? 'column' : 'column-reverse'
+
         const paginationNumListX = paginationNumList.value.offsetLeft;
-        const knob = paginationWrapper.value.getElementsByClassName(
-          "slider-origin"
-        )[0];
+        const paginationNumListY = tablePaginationOrder === "column" ? 0 : 50
+
+        const knob = paginationWrapper.value.getElementsByClassName("slider-origin")[0];
         const knobTranslate = knob.style.transform
           .match(/translate\((.+)%,(.+)\)/)[1]
           .split(",")[0];
-        const knobX =
-          ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+        const knobX = ((1000 + Number(knobTranslate)) / 1000) * canvas.value.clientWidth;
+        const knobY = tablePaginationOrder === "column" ? 50 : 0
+
         const ctx = canvas.value.getContext("2d");
         ctx.beginPath();
-        ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, 0);
+        ctx.moveTo(paginationNumListX - paginationWrapper.value.offsetLeft, paginationNumListY);
         ctx.lineTo(
           paginationNumListX -
             paginationWrapper.value.offsetLeft +
             paginationNumList.value.clientWidth,
-          0
+          paginationNumListY
         );
-        ctx.lineTo(knobX, 50);
+        ctx.lineTo(knobX, knobY);
         ctx.closePath();
         ctx.fillStyle = "#dddddd";
         ctx.fill();
       }, 0);
     }
 
-    if(props.isSliderOn === '1') {
+    if(props.isSliderOn === "true") {
       onUpdated(drawKnobArrow);
     }
     onUpdated(() => {

@@ -23,29 +23,29 @@
               <span
                 :class="[
                   'icon',
-                  'sortIcon',
+                  'icon-sort',
                   state.sorting.column === column ? state.sorting.direction : '',
                 ]"
                 @click="setSorting(column)"
               ></span>
               <span
+                :class="[
+                  'icon',
+                  'icon-search',
+                  { active: column.isSearchConditionGiven },
+                ]"
+                @click="showModal(column)"
+              >&#xe800;</span>
+              <span
                 v-if="column.searchType === 'category'"
                 :class="[
                   'icon',
-                  'filterIcon',
+                  'icon-filter',
                   { isShowing: column.isFilterPopupShowing },
                   { active: column.filters.some((filter) => !filter.checked) },
                 ]"
                 @click="column.isFilterPopupShowing = true"
-              ></span>
-              <span
-                :class="[
-                  'icon',
-                  'searchIcon',
-                  { active: column.isSearchConditionGiven },
-                ]"
-                @click="showModal(column)"
-              ></span>
+              >&#xf0b0;</span>
               <div v-if="column.isFilterPopupShowing" class="filterWrapper">
                 <div
                   :class="[
@@ -142,7 +142,7 @@
       ref="sliderPagination"
       :current-page="state.pagination.currentPage"
       :total-pages="totalPages"
-      :is-slider-on="pageSlider"
+      :is-slider-on="state.pagination.isSliderOn"
       @updateCurrentPage="updateCurrentPage"
     />
   </div>
@@ -190,7 +190,8 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: Number(params.limit),
+        perPage: Number(params.tablePageSize),
+        isSliderOn: params.pageSlider
       },
     });
 

@@ -16,10 +16,6 @@
   white-space: nowrap;
 }
 
-main {
-  padding: 1rem 2rem;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -39,12 +35,14 @@ main {
 }
 
 .paginationWrapper {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: var(--table-pagination-order);
+  width: calc(100% - 30px);
+  margin: 10px auto;
   > .serialPagination {
-    padding: var(--pagination-padding);
     display: flex;
     justify-content: var(--pagination-placement);
-    align-items: center;
+    align-items: stretch;
     > ul.paginationNumList {
       display: flex;
       padding: 0;
@@ -298,10 +296,6 @@ main {
 
               .slider-horizontal {
                 .slider-handle {
-                  width: 12px;
-                  height: 12px;
-                  top: -4px;
-                  right: -6px;
                   .slider-tooltip {
                     border: 1px solid var(--thead-font-color);
                     background: var(--thead-font-color);
@@ -329,7 +323,7 @@ main {
               > .filterWrapper {
                 > div.filterWindow {
                   left: auto;
-                  right: 11px;
+                  right: 0px;
                 }
               }
             }
@@ -338,41 +332,44 @@ main {
             cursor: pointer;
             content: "";
             display: inline-block;
-            width: 10px;
-            height: 13px;
-            background-repeat: no-repeat;
-            background-position: center;
-            margin-bottom: -2px;
-            background-size: 8px 8px;
-            &.searchIcon {
-              display: var(--searchicon-display);
-              margin-left: 1px;
-              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search.svg);
-              &.active {
-                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-search-active.svg);
-              }
+            color: var(--general-non-active-color);
+            font-size: calc(var(--general-font-size) - 2px);
+            font-family: 'fontello';
+            &.active {
+              color: var(--emphasized-color);
             }
-            &.filterIcon {
+            &.icon-search {
+              display: var(--searchicon-display);
+              margin-left: 3px;
+            }
+            &.icon-filter {
               display: var(--filtericon-display);
-              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter.svg);
-              &.active {
-                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-filter-active.svg);
-              }
+              padding: 0 2px;
               &.isShowing {
                 z-index: 3;
                 position: relative;
                 background-color: var(--thead-font-color);
-                background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-filter.svg);
+                color: #ffffff
               }
             }
-            &.sortIcon {
+            &.icon-sort {
               display: var(--sorticon-display);
-              background-image: url(https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-sort.svg);
+              position: relative;
+              &::after {
+                font-family: 'fontello';
+                content: "\f0dc";
+              }
               &.desc {
-                background-image: url(../../assets/gray-sort-des.svg);
+                &::after {
+                  content: "\f0dd";
+                  color: var(--emphasized-color);
+                }
               }
               &.asc {
-                background-image: url(../../assets/gray-sort-asc.svg);
+                &::after {
+                  content: "\f0de";
+                  color: var(--emphasized-color);
+                }
               }
             }
           }
@@ -414,7 +411,8 @@ main {
   }
   .pageSlider {
     height: 4px;
-    margin-top: -5px;
+    margin: 0 auto;
+    width: 100%;
     .slider-connects {
       background-color: #bbbbbb;
       .slider-connect {

@@ -22,40 +22,20 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "limit",
+      "stanza:key": "table-page-size",
       "stanza:example": "20",
       "stanza:description": "table page size",
       "stanza:required": true
     },
     {
-      "stanza:key": "offset",
-      "stanza:example": "0",
-      "stanza:description": "page numbere",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "params",
-      "stanza:example": "taxonomy='9606'",
-      "stanza:description": "parameters for table data api",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "page-slider",
-      "stanza:example": "1",
-      "stanza:description": "Page slider on/off",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "table-title",
-      "stanza:example": "Title of this Table",
-      "stanza:description": "Title of the table",
-      "stanza:required": false
+      "stanza:example": true,
+      "stanza:description": "Page slider on/off (true or false)"
     },
     {
       "stanza:key": "columns",
       "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\":true}]",
-      "stanza:description": "columns' options",
-      "stanza:required": false
+      "stanza:description": "columns' options"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -83,6 +63,12 @@
       "stanza:type": "color",
       "stanza:default": "#256d80",
       "stanza:description": "basic fill color"
+    },
+    {
+      "stanza:key": "--general-non-active-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(0, 0, 0, .3)",
+      "stanza:description": "general non active color"
     },
     {
       "stanza:key": "--emphasized-color",
@@ -391,16 +377,10 @@
       "stanza:description": "background color of table body"
     },
     {
-      "stanza:key": "--pagination-padding",
-      "stanza:type": "text",
-      "stanza:default": "12px 0px 0px 0px",
-      "stanza:description": "padding of pagination"
-    },
-    {
       "stanza:key": "--table-pagination-order",
       "stanza:type": "single-choice",
       "stanza:choice": ["column", "column-reverse"],
-      "stanza:default": "column",
+      "stanza:default": "column-reverse",
       "stanza:description": "placement between table and pagination"
     },
     {
