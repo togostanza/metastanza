@@ -30420,12 +30420,14 @@ async function draw(stanza, params) {
       Y: 57227415,
     },
   };
+  const chromosomeSumLength = {};
   Object.keys(chromosomeNtLength).forEach((ref) => {
-    Object.keys(chromosomeNtLength[ref]).reduce(
+    chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce(
       (acc, chr) => chromosomeNtLength[ref][chr] + acc,
       0
     );
   });
+  console.log("chromosomeSumLength", chromosomeSumLength.hg38);
 
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
@@ -30598,21 +30600,36 @@ async function draw(stanza, params) {
   // slider
   const ctrl_svg = select(control_element)
     .append("svg")
+    .attr("id", "slider_container")
     .attr("width", width)
-    .attr("height", 20);
+    .attr("height", 24);
   ctrl_svg
-    .append("path")
-    .attr("d", "M " + marginLeft + ", 10 H " + width + " Z")
-    .attr("stroke", "#888888")
-    .attr("stroke-width", "2px");
+    .append("text")
+    .text("chr:")
+    .attr("class", "info-key")
+    .attr("fill", "#99acb2")
+    .attr("x", 4)
+    .attr("y", 16)
+    .attr("width", 10)
+    .attr("height", 23);
+  ctrl_svg
+    .append("rect")
+    .attr("x", marginLeft)
+    .attr("y", 1)
+    .attr("width", areaWidth)
+    .attr("height", 23)
+    .attr("fill", "#FFFFFF")
+    .attr("stroke", "#99acb2")
+    .attr("stroke-width", "1px");
   ctrl_svg
     .append("rect")
     .attr("id", "slider")
     .attr("x", marginLeft)
-    .attr("y", 2)
+    .attr("y", 1)
     .attr("width", areaWidth)
-    .attr("height", 16)
+    .attr("height", 23)
     .attr("fill", "#C2E3F2")
+    .attr("stroke", "#99acb2")
     .call(
       drag()
         .on("start", function (e) {
@@ -30675,6 +30692,51 @@ async function draw(stanza, params) {
           }
         })
     );
+
+  const sliderlabel_g = ctrl_svg.append("g").attr("id", "sliderLabel");
+
+  sliderlabel_g
+    .selectAll(".sliderLabel")
+    .data(chromosomes)
+    .enter()
+    .append("text")
+    .attr("class", "axisLabel sliderLabel")
+    .text(function (d) {
+      return d;
+    })
+    .attr("x", function (d) {
+      let pos = chromosomeNtLength.hg38[d] / 2;
+      for (const ch of chromosomes) {
+        if (ch === d) {
+          break;
+        }
+        pos += chromosomeNtLength.hg38[ch];
+      }
+      return (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
+    })
+    .attr("y", 18)
+    .attr("fill", "#2f4d76");
+
+  sliderlabel_g
+    .selectAll(".sliderLine")
+    .data(chromosomes)
+    .enter()
+    .append("path")
+    .attr("class", "slider-line")
+    .attr("d", function (d) {
+      let pos = chromosomeNtLength.hg38[d];
+      for (const ch of chromosomes) {
+        if (ch === d) {
+          break;
+        }
+        pos += chromosomeNtLength.hg38[ch];
+      }
+      const sliderLinePos =
+        (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
+      console.log("d", d);
+      console.log("sliderLinePos", sliderLinePos);
+      return "M " + sliderLinePos + ", " + 2 + " V " + 24 + " Z";
+    });
 
   // button
   const ctrl_button = select(control_element)
@@ -30771,6 +30833,7 @@ async function draw(stanza, params) {
       ];
       total = range[1];
     }
+    console.log(range);
 
     over_thresh_array = [];
 
@@ -30890,7 +30953,7 @@ async function draw(stanza, params) {
       })
       .attr("y", areaHeight + 20);
 
-    // x axis label
+    // chart background
     xlabel_g
       .selectAll(".xBackground")
       .data(chromosomes)
@@ -31375,7 +31438,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "@charset \"UTF-8\";\n/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n* {\n  margin: 0;\n  font-family: var(--font-family);\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: var(--discovery-color);\n}\ncircle.replication {\n  fill: var(--replication-color);\n}\ncircle.combined {\n  fill: var(--combined-color);\n}\ncircle.meta-analysis {\n  fill: var(--meta-analysis-color);\n}\ncircle.not-provided {\n  fill: var(--not-provided-color);\n}\ncircle.over-thresh-plot {\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=discovery] {\n  background-color: var(--discovery-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: var(--replication-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: var(--combined-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: var(--meta-analysis-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: var(--not-provided-color);\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .table-info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin-bottom: 20px;\n  height: 16px;\n}\n.table-section .table-info .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .table-info .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .table-info .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section .pagination table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: 1.5px solid #99acb2;\n  border-collapse: collapse;\n}\n.table-section .pagination table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: 1.5px solid #99acb2;\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n.table-section .pagination table thead tr {\n  height: 40px;\n}\n.table-section .pagination table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section .pagination table tbody {\n  background-color: var(--tbody-odd-background-color);\n}\n.table-section .pagination table tbody tr {\n  height: 40px;\n}\n.table-section .pagination table tbody tr:nth-last-of-type(odd) {\n  background-color: var(--tbody-even-background-color);\n}\n.table-section .pagination table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: 0.5px solid #d2dae2;\n  font-size: var(--tbody-font-size);\n}\n.table-section .pagination table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}\n.table-section .pagination .pagination-block .page-number .page-btn.current {\n  color: #ffffff;\n  background-color: #377cb5;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}";
+var css = "@charset \"UTF-8\";\nsummary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  border: solid 1px var(--label-color);\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n* {\n  margin: 0;\n  font-family: var(--font-family);\n}\n\nmain {\n  padding: none !important;\n  background-color: #ffffff;\n}\n\nli {\n  list-style: none;\n}\n\nh1 {\n  padding: 15px 0px 12px 15px;\n  font-size: 22px;\n  font-weight: 400;\n  color: #2f4d76;\n  background-color: #f2f5f7;\n}\n\nh2 {\n  font-size: 20px;\n  font-weight: 600;\n  color: #000000;\n  margin-bottom: 12px;\n  padding: 0px;\n}\n\nhr {\n  height: 1px;\n  background-color: #707070;\n  border: none;\n}\n\ndiv#chart {\n  position: relative;\n}\ndiv#chart svg {\n  cursor: crosshair;\n}\n\npath.axis-line {\n  stroke: black;\n  stroke-width: 1px;\n}\npath.overthresh-line {\n  stroke: #dddddd;\n  stroke-width: 2px;\n}\npath.slider-line {\n  stroke: #99acb2;\n  stroke-width: 1px;\n}\npath.background-fill {\n  stroke: red;\n}\n\ntext.axisLabel {\n  font-size: 12px;\n}\ntext.xLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.yLabel {\n  text-anchor: end;\n  user-select: none;\n}\ntext.sliderLabel {\n  text-anchor: middle;\n  user-select: none;\n}\ntext.axis-title {\n  user-select: none;\n  color: #000000;\n  font-size: 14px;\n}\n\ncircle.discovery {\n  fill: var(--discovery-color);\n}\ncircle.replication {\n  fill: var(--replication-color);\n}\ncircle.combined {\n  fill: var(--combined-color);\n}\ncircle.meta-analysis {\n  fill: var(--meta-analysis-color);\n}\ncircle.not-provided {\n  fill: var(--not-provided-color);\n}\ncircle.over-thresh-plot {\n  cursor: default;\n}\n\nsvg#dl_button {\n  display: none;\n  position: absolute;\n  top: -58px;\n  right: 0px;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.2;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\nsvg#slider_container {\n  margin-bottom: 14px;\n}\nsvg#slider_container .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n\n.tooltip {\n  box-sizing: border-box;\n  position: absolute;\n  padding: 12px;\n  width: 170px;\n  height: 120px;\n  background: #f6f6f6;\n  border: 1.5px solid #99acb2;\n  -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);\n  border-radius: 4px;\n  display: none;\n  font-family: \"Arial\", sans-serif;\n  font-weight: 600;\n}\n.tooltip .tooltip-chr {\n  color: #2f4d76;\n  font-size: 14px;\n}\n.tooltip .tooltip-info {\n  padding: 0px;\n}\n.tooltip .tooltip-info li {\n  font-size: 12px;\n  color: #000000;\n}\n.tooltip .tooltip-info li .tooltip-key {\n  color: #99acb2;\n}\n\n.info-section {\n  padding: 20px 30px;\n  width: 800px;\n  display: flex;\n  justify-content: space-between;\n  align-items: flex-end;\n}\n.info-section .datainfo-list .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n.info-section .datainfo-list .info-key.first-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list .info-key.second-condition-name {\n  display: inline-block;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd {\n  padding-bottom: 6px;\n  font-size: 16px;\n  position: relative;\n  top: -3px;\n}\n.info-section .datainfo-list dd.first-condition-value {\n  display: inline-block;\n  padding: 0px 20px 0px 0px;\n}\n.info-section .datainfo-list dd.second-condition-value {\n  display: inline-block;\n  padding: 0px;\n}\n\ndiv#dl_list {\n  border: solid 1px #000000;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  width: fit-content;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\n.chart-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.chart-section table {\n  width: 800px;\n  display: flex;\n  justify-content: flex-end;\n  border-collapse: collapse;\n}\n.chart-section table tbody tr {\n  font-size: 12px;\n}\n.chart-section table tbody tr td {\n  padding: 0px 24px 0px 0px;\n}\n.chart-section table tbody tr td.info-key {\n  display: inline-block;\n  width: 75px;\n  text-align: right;\n  margin-top: -1px;\n  padding-right: 12px;\n  color: #99acb2;\n  font-size: 12px;\n  font-weight: 600;\n}\n.chart-section table tbody tr td:last-child {\n  padding: 0px;\n}\n.chart-section table tbody tr td.condition-key {\n  color: #707070;\n}\n.chart-section table tbody tr td input {\n  margin: 3px 6px 0px 0px;\n  display: none;\n}\n.chart-section table tbody tr td input + label {\n  box-sizing: border-box;\n  margin-top: 2px;\n  height: 18px;\n  font-size: 12px;\n  color: #99acb2;\n  padding: 1px 8.5px;\n  border: 1.5px solid #99acb2;\n  border-radius: 4px;\n  background-color: #ffffff;\n}\n.chart-section table tbody tr td input + label:before {\n  content: \"− \";\n}\n.chart-section table tbody tr td input:checked + label {\n  padding: 2px 10px;\n  color: #ffffff;\n  border: none;\n}\n.chart-section table tbody tr td input:checked + label:before {\n  content: \"+ \";\n}\n.chart-section table tbody tr td input:checked + label[data-stage=discovery] {\n  background-color: var(--discovery-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=replication] {\n  background-color: var(--replication-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=combined] {\n  background-color: var(--combined-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {\n  background-color: var(--meta-analysis-color);\n}\n.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {\n  background-color: var(--not-provided-color);\n}\n\n.table-section {\n  width: 800px;\n  padding: 20px 30px;\n}\n.table-section .table-info {\n  display: flex;\n  justify-content: space-between;\n  align-items: baseline;\n  margin-bottom: 20px;\n  height: 16px;\n}\n.table-section .table-info .total-overthresh-variants {\n  display: flex;\n  justify-content: flex-end;\n  font-size: 14px;\n}\n.table-section .table-info .total-overthresh-variants .info-key {\n  display: inline-block;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n  margin-right: 6px;\n}\n.table-section .table-info .total-overthresh-variants .info-value {\n  display: inline-block;\n}\n.table-section .pagination table {\n  width: 800px;\n  margin: 10px auto 0px 0px;\n  border: 1.5px solid #99acb2;\n  border-collapse: collapse;\n}\n.table-section .pagination table thead {\n  height: 40px;\n  color: var(--thead-font-color);\n  background-color: var(--thead-background-color);\n  font-size: var(--thead-font-size);\n  border-bottom: 1.5px solid #99acb2;\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n.table-section .pagination table thead tr {\n  height: 40px;\n}\n.table-section .pagination table thead tr th {\n  padding: 10px 20px;\n  text-align: left;\n}\n.table-section .pagination table tbody {\n  background-color: var(--tbody-odd-background-color);\n}\n.table-section .pagination table tbody tr {\n  height: 40px;\n}\n.table-section .pagination table tbody tr:nth-last-of-type(odd) {\n  background-color: var(--tbody-even-background-color);\n}\n.table-section .pagination table tbody tr td {\n  padding: 10px 20px;\n  text-align: left;\n  border-left: 0.5px solid #d2dae2;\n  font-size: var(--tbody-font-size);\n}\n.table-section .pagination table tbody tr td:first-of-type {\n  border-left: none;\n}\n.table-section .pagination .pagination-block {\n  display: flex;\n  justify-content: center;\n  margin-top: 15px;\n  cursor: pointer;\n}\n.table-section .pagination .pagination-block .page-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  margin: 0 -0.5px;\n  width: 30px;\n  height: 32px;\n  color: #99acb2;\n  background-color: #f9f9f9;\n  border: 1.5px solid #99acb2;\n}\n.table-section .pagination .pagination-block .page-number {\n  display: flex;\n}\n.table-section .pagination .pagination-block .page-number .page-btn {\n  display: flex;\n  width: 30px;\n  height: 32px;\n}\n.table-section .pagination .pagination-block .page-number .page-btn.current {\n  color: #ffffff;\n  background-color: #377cb5;\n}\n\n#ctrl_button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#ctrl_button input {\n  background-color: #ffffff;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  margin-right: 1px;\n  height: 20px;\n}\n#ctrl_button #range_text {\n  margin: 0px 4px 0px 2px;\n  font-size: 14px;\n  color: #2f4d76;\n  font-weight: 600;\n}\n#ctrl_button .info-key {\n  display: inline-block;\n  margin-right: 6px;\n  color: #99acb2;\n  font-size: 14px;\n  font-weight: 600;\n}\n#ctrl_button .info-key .threshold-input {\n  width: 60px;\n  height: 18px;\n  padding: 0px 5px 0px 0px;\n  margin: 0px;\n  border: 1.5px solid #99acb2;\n  border-radius: 2px;\n  text-align: right;\n}\n#ctrl_button .info-key.-threshold {\n  margin-left: 40px;\n}";
 
 defineStanzaElement(gwasManhattanPlot, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=gwas-manhattan-plot.js.map
