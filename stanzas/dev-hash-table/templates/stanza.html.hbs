@@ -1,3 +1,6 @@
-<p class="greeting">
-  {{greeting}}
-</p>
+<dl>
+  {{#each dataset as |data|}}
+  <dt>{{ data.key }}</dt>
+  <dd>{{ data.value }}</dd>
+  {{/each}}
+</dl>
