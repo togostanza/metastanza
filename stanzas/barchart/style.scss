@@ -1,2 +1,77 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+
+//delete vega mark
+summary {
+  display: none;
+}
+
+//dl button style
+svg#dl_button {
+  position: absolute;
+  &.dl-top-left {
+    top: 20px;
+    left: 40px;
+  }
+  &.dl-top-right {
+    top: 20px;
+    right: 40px;
+  }
+  &.dl-bottom-left {
+    bottom: 20px;
+    left: 40px;
+  }
+  &.dl-bottom-right {
+    bottom: 20px;
+    right: 40px;
+  }
+  &.dl-none {
+    display: none;
+  }
+  .circle_g {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+  .hover {
+    opacity: 1;
+  }
+}
+
+div#dl_list {
+  width: fit-content;
+  position: absolute;
+  border: solid 1px var(--label-color);
+  background-color: #ffffff;
+  font-size: 12px;
+  font-family: var(--font-family);
+  &.dl-top-left {
+    top: 40px;
+    left: 50px;
+  }
+  &.dl-top-right {
+    top: 40px;
+    right: 50px;
+  }
+  &.dl-bottom-left {
+    bottom: 40px;
+    left: 50px;
+  }
+  &.dl-bottom-right {
+    bottom: 40px;
+    right: 50px;
+  }
+  &.dl-none {
+    display: none;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    li {
+      cursor: pointer;
+      padding: 0px 10px 0px 10px;
+      &.hover {
+        background-color: #dddddd;
+      }
+    }
+  }
+}

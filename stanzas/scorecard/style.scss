@@ -1,12 +1,21 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-// @use '@/common.scss';
+@use '@/common.scss';
+
+// main {
+//   padding: 1rem 2rem;
+// }
 
 .chart-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: 100%;
   height: 100%;
+  // padding: 1rem 2rem;
 }
 
+//dl button style
 svg#dl_button {
   position: absolute;
   &.dl-top-left {
@@ -40,12 +49,29 @@ svg#dl_button {
 div#dl_list {
   width: fit-content;
   position: absolute;
-  top: 35px;
-  right: 6px;
-  border: solid 1px #333333;
+  border: solid 1px #444444;
   background-color: #ffffff;
   font-size: 12px;
   font-family: var(--font-family);
+  &.dl-top-left {
+    top: 20px;
+    left: 10px;
+  }
+  &.dl-top-right {
+    top: 20px;
+    right: 10px;
+  }
+  &.dl-bottom-left {
+    bottom: 20px;
+    left: 10px;
+  }
+  &.dl-bottom-right {
+    bottom: 20px;
+    right: 10px;
+  }
+  &.dl-none {
+    display: none;
+  }
   ul {
     list-style-type: none;
     margin: 0px;

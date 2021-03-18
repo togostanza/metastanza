@@ -3,6 +3,10 @@ import { appendDlButton } from "@/lib/metastanza_utils.js";
 
 export default async function scorecard(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
+
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
@@ -12,13 +16,16 @@ export default async function scorecard(stanza, params) {
           value: Object.values(dataset)[0],
         },
       ],
+      width,
+      height,
+      padding,
     },
   });
 
   const main = stanza.root.querySelector("main");
   main.setAttribute(
     `style`,
-    `width: ${params["width"]}px; height: ${params["height"]}px; padding: ${params["padding"]}px;`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
 
   //menu button placement
@@ -30,21 +37,27 @@ export default async function scorecard(stanza, params) {
   );
 
   const menuButton = stanza.root.querySelector("#dl_button");
+  const menuList = stanza.root.querySelector("#dl_list");
   switch (params["menu-button-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
+      menuList.setAttribute("class", "dl-top-left");
       break;
     case "top-right":
       menuButton.setAttribute("class", "dl-top-right");
+      menuList.setAttribute("class", "dl-top-right");
       break;
     case "bottom-left":
       menuButton.setAttribute("class", "dl-bottom-left");
+      menuList.setAttribute("class", "dl-bottom-left");
       break;
     case "bottom-right":
       menuButton.setAttribute("class", "dl-bottom-right");
+      menuList.setAttribute("class", "dl-bottom-right");
       break;
     case "none":
       menuButton.setAttribute("class", "dl-none");
+      menuList.setAttribute("class", "dl-none");
       break;
   }
 }
