@@ -1,256 +1,219 @@
 <template>
-  <div class="tableOption">
-    <form
-      class="textSearchWrapper"
-      @submit.prevent="state.query = state.queryInput"
-    >
-      <input
-        v-model="state.queryInput"
-        type="text"
-        placeholder="Search for keywords..."
-      />
-      <button class="searchBtn" type="submit">
-        <img
-          src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-          alt="search"
+  <div class="wrapper">
+    <div class="tableWrapper">
+      <div class="tableOption">
+        <input
+          v-model="state.queryForAllColumns"
+          type="text"
+          placeholder="Search for keywords..."
+          class="textSearchInput"
         />
-      </button>
-    </form>
-    <transition name="modal">
-      <div
-        v-if="state.columnShowingTextSearch !== null"
-        class="textSearchByColumnWrapper modal"
-      >
-        <p class="title">
-          Search for "{{ state.columnShowingTextSearch.label }}"
+        <p class="entries">
+          Show
+          <select v-model="state.pagination.perPage">
+            <option v-for="size of pageSizeOption" :key="size" :value="size">
+              {{ size }}
+            </option>
+          </select>
+          entries
         </p>
-        <form
-          v-if="state.columnShowingTextSearch.type === 'literal'"
-          class="textSearchWrapper"
-          @submit.prevent="
-            submitQuery(
-              state.columnShowingTextSearch.label,
-              state.columnShowingTextSearch.type,
-              state.queryInputByColumn
-            )
-          "
-        >
-          <input
-            id="queryInputByColumn"
-            v-model="state.queryInputByColumn"
-            type="text"
-            placeholder="Search for keywords..."
-            name="queryInputByColumn"
-          />
-          <button class="searchBtn" type="submit">
-            <img
-              src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg"
-              alt="search"
-            />
-          </button>
-        </form>
-        <div v-if="state.columnShowingTextSearch.type === 'number'">
-          <Slider
-            v-model="state.rangeInputs[state.columnShowingTextSearch.id].value"
-            v-bind="state.rangeInputs[state.columnShowingTextSearch.id]"
-          ></Slider>
+        <div class="menuWrapper">
+          <span class="icon menu" @click="state.isMenuOn = true">&#xe801;</span>
+          <ul v-if="state.isMenuOn" class="menu">
+            <li v-for="url in blobUrls" :key="url.type">
+              <a class="downloadBtn" :href="url.url" download="tableData">
+                {{ `Download ${url.type}` }}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
-    </transition>
-    <a class="downloadBtn" :href="blobUrl" download="tableData">
-      <img
-        src="https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg"
-        alt="download"
-      />
-    </a>
-  </div>
-  <table v-if="state.allRows">
-    <thead>
-      <tr>
-        <th v-for="(column, i) in state.columns" :key="column.id">
-          {{ column.label }}
-          <span
-            :class="[
-              'icon',
-              'sortIcon',
-              state.sorting.column === column ? state.sorting.direction : '',
-            ]"
-            @click="setSorting(column)"
-          ></span>
-          <span
-            :class="[
-              'icon',
-              'filterIcon',
-              { active: column === state.columnShowingFilters },
-            ]"
-            @click="state.columnShowingFilters = column"
-          ></span>
-          <span
-            class="icon searchIcon"
-            @click="state.columnShowingTextSearch = column"
-          ></span>
-          <div
-            v-if="column === state.columnShowingFilters"
-            class="filterWrapper"
-          >
-            <div
-              :class="[
-                'filterWindow',
-                { lastCol: state.columns.length - 1 === i },
-              ]"
-            >
-              <p class="filterWindowTitle">{{ column.label }}</p>
-              <ul>
-                <li v-for="filter in column.filters" :key="filter.value">
-                  <input
-                    :id="filter.value"
-                    v-model="filter.checked"
-                    type="checkbox"
-                    name="items"
-                  />
-                  <label :for="filter.id">{{ filter.value }}</label>
-                </li>
-              </ul>
-              <div class="toggleAllButton">
-                <button @click="setFilters(column, true)">Select All</button>
-                <button @click="setFilters(column, false)">Clear</button>
+      <table v-if="state.allRows">
+        <thead>
+          <tr>
+            <th v-for="(column, i) in state.columns" :key="column.id">
+              {{ column.label }}
+              <span
+                :class="[
+                  'icon',
+                  'icon-sort',
+                  state.sorting.column === column
+                    ? state.sorting.direction
+                    : '',
+                ]"
+                @click="setSorting(column)"
+              ></span>
+              <span
+                :class="[
+                  'icon',
+                  'icon-search',
+                  { active: column.isSearchConditionGiven },
+                ]"
+                @click="showModal(column)"
+                >&#xe800;</span
+              >
+              <span
+                v-if="column.searchType === 'category'"
+                :class="[
+                  'icon',
+                  'icon-filter',
+                  { isShowing: column.isFilterPopupShowing },
+                  { active: column.filters.some((filter) => !filter.checked) },
+                ]"
+                @click="column.isFilterPopupShowing = true"
+                >&#xf0b0;</span
+              >
+              <div v-if="column.isFilterPopupShowing" class="filterWrapper">
+                <div
+                  :class="[
+                    'filterWindow',
+                    { lastCol: state.columns.length - 1 === i },
+                  ]"
+                >
+                  <p class="filterWindowTitle">{{ column.label }}</p>
+                  <ul class="filters">
+                    <li v-for="filter in column.filters" :key="filter.value">
+                      <label :for="filter.id">
+                        <input
+                          :id="filter.value"
+                          v-model="filter.checked"
+                          type="checkbox"
+                          name="items"
+                        />
+                        {{ filter.value }}
+                      </label>
+                    </li>
+                  </ul>
+                  <div class="toggleAllButton">
+                    <button class="selectAll" @click="setFilters(column, true)">
+                      Select All
+                    </button>
+                    <button class="clear" @click="setFilters(column, false)">
+                      Clear
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rowsInCurrentPage" :key="row.id">
-        <td v-for="cell in row" :key="cell.column.id">
-          <span v-if="cell.href">
-            <a :href="cell.href" target="_blank">{{ cell.value }}</a>
-          </span>
-          <span v-else>
-            {{ cell.value }}
-          </span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="paginationWrapper">
-    <template v-if="state.pagination.currentPage !== 1">
-      <span
-        class="arrow double left"
-        @click="
-          state.pagination.currentPage = 1;
-          pageSlider.click();
-        "
-      >
-      </span>
-      <span
-        class="arrow left"
-        @click="
-          state.pagination.currentPage--;
-          pageSlider.click();
-        "
-      ></span>
-    </template>
-
-    <ul>
-      <li
-        v-for="page in surroundingPages"
-        :key="page"
-        :class="[
-          'pagination',
-          { currentBtn: state.pagination.currentPage === page },
-        ]"
-        @click="
-          state.pagination.currentPage = page;
-          pageSlider.click();
-        "
-      >
-        {{ page }}
-      </li>
-    </ul>
-
-    <template v-if="state.pagination.currentPage !== totalPages">
-      <span
-        class="arrow right"
-        @click="
-          state.pagination.currentPage++;
-          pageSlider.click();
-        "
-      ></span>
-      <span
-        class="arrow double right"
-        @click="
-          state.pagination.currentPage = totalPages;
-          pageSlider.click();
-        "
-      ></span>
-    </template>
-
-    <div class="pageNumber">
-      Page
-      <input
-        v-model.number="state.jumpToNumberInput"
-        type="text"
-        @keydown.enter="jumpToPage(state.jumpToNumberInput)"
-      />
-      of {{ totalPages }}
+              <transition name="modal">
+                <div
+                  v-if="column.isSearchModalShowing"
+                  class="textSearchByColumnWrapper modal"
+                >
+                  <p class="title">
+                    <template v-if="column.searchType === 'number'">
+                      Set {{ column.label }} range
+                    </template>
+                    <template v-else>
+                      Search for "{{ column.label }}"
+                    </template>
+                  </p>
+                  <div v-if="column.searchType === 'number'">
+                    <Slider
+                      :model-value="column.range"
+                      :min="column.minValue"
+                      :max="column.maxValue"
+                      :tooltips="false"
+                      @update="column.setRange"
+                    ></Slider>
+                    <div class="rangeInput">
+                      <div>
+                        <span class="rangeInputLabel">
+                          From
+                          <span class="icon">&#xf0dd;</span>
+                        </span>
+                        <input
+                          v-model.number="column.inputtingRangeMin"
+                          type="text"
+                          class="min"
+                          @input="setRangeFilters(column)"
+                        />
+                      </div>
+                      <div>
+                        <span class="rangeInputLabel">
+                          To
+                          <span class="icon arrow">&#xf0dd;</span>
+                        </span>
+                        <input
+                          v-model.number="column.inputtingRangeMax"
+                          type="text"
+                          class="max"
+                          @input="setRangeFilters(column)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    v-else
+                    v-model="column.query"
+                    type="text"
+                    placeholder="Search for keywords..."
+                    name="queryInputByColumn"
+                    class="textSearchInput"
+                  />
+                </div>
+              </transition>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rowsInCurrentPage" :key="row.id">
+            <td v-for="cell in row" :key="cell.column.id">
+              <span v-if="cell.href">
+                <a :href="cell.href" target="_blank">{{ cell.value }}</a>
+              </span>
+              <span v-else>
+                {{ cell.value }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <SliderPagination
+      ref="sliderPagination"
+      :current-page="state.pagination.currentPage"
+      :total-pages="totalPages"
+      :is-slider-on="state.pagination.isSliderOn"
+      @updateCurrentPage="updateCurrentPage"
+    />
   </div>
-  <div ref="pageSliderWrapper" class="pageSliderWrapper">
-    <canvas class="pageSliderRange" height="50"></canvas>
-    <div class="pageSlider">
-      <div class="pageSliderBar"></div>
-      <ul @mousedown="pageSlider.down">
-        <li class="pageSliderKnob">1</li>
-      </ul>
-    </div>
-  </div>
-
   <div
-    v-if="state.columnShowingFilters || state.columnShowingTextSearch"
-    :class="['modalBackground', { black: state.columnShowingTextSearch }]"
+    v-if="isPopupOrModalShowing"
+    :class="['modalBackground', { black: isModalShowing }]"
     @click="closeModal()"
   ></div>
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  computed,
-  onMounted,
-  onUpdated,
-  ref,
-} from "vue";
+import { defineComponent, reactive, ref, computed, onMounted } from "vue";
+
+import SliderPagination from "./SliderPagination.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
-import zip from "lodash.zip";
 import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
-import data from "./assets/tableDataWithNumber.json";
 
 export default defineComponent({
   components: {
     Slider,
+    SliderPagination,
   },
+
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+
   setup(params) {
+    const sliderPagination = ref();
+    const pageSizeOption = params.pageSizeOption.split(",").map(Number);
+
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
 
       columns: [],
       allRows: [],
 
-      query: "",
-      queryByColumn: {
-        column: null,
-        type: null,
-        query: "",
-      },
-      columnShowingFilters: null,
-      columnShowingTextSearch: null,
+      queryForAllColumns: "",
 
       sorting: {
         active: null,
@@ -259,62 +222,20 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: params.limit,
+        perPage: pageSizeOption[0],
+        isSliderOn: params.pageSlider,
       },
 
-      queryInput: "",
-      queryInputByColumn: "",
-      jumpToNumberInput: "",
-
-      rangeInputs: {},
-
-      knobDrag: false,
-      knobX: 0,
-      startX: 0,
-      knob: false,
-      canvas: false,
-      sliderBarWidth: 0,
+      isMenuOn: false,
     });
 
     const filteredRows = computed(() => {
-      const query = state.query;
-      const queryByColumn = state.queryByColumn.query;
-      const filtered = state.allRows
-        .filter((row) => {
-          return query
-            ? row.some((cell) => String(cell.value).includes(query))
-            : true;
-        })
-        .filter((row) => {
-          return queryByColumn
-            ? row.some(
-                (cell) =>
-                  cell.column.label === state.queryByColumn.column &&
-                  cell.value.includes(queryByColumn)
-              )
-            : true;
-        })
-        .filter((row) => {
-          return Object.keys(state.rangeInputs).length !== 0
-            ? row.some((cell) => {
-                return (
-                  cell.column.type === "number" &&
-                  cell.value >= state.rangeInputs[cell.column.id].value[0] &&
-                  cell.value <= state.rangeInputs[cell.column.id].value[1]
-                );
-              })
-            : true;
-        })
-        .filter((row) => {
-          return row.every((cell) => {
-            const valuesForFilter = cell.column.filters
-              .filter(({ checked }) => checked)
-              .map(({ value }) => value);
-            return valuesForFilter.length === 0
-              ? false
-              : valuesForFilter.includes(cell.value);
-          });
-        });
+      const queryForAllColumns = state.queryForAllColumns;
+      const filtered = state.allRows.filter((row) => {
+        return (
+          searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
+        );
+      });
 
       const sortColumn = state.sorting.column;
 
@@ -323,7 +244,6 @@ export default defineComponent({
           filtered,
           (cells) => {
             const cell = cells.find((cell) => cell.column === sortColumn);
-
             return cell.value;
           },
           [state.sorting.direction]
@@ -338,43 +258,54 @@ export default defineComponent({
     });
 
     const rowsInCurrentPage = computed(() => {
-      const startIndex =
-        (state.pagination.currentPage - 1) * state.pagination.perPage;
-      const endIndex = Number(startIndex) + Number(state.pagination.perPage);
+      const { currentPage, perPage } = state.pagination;
+
+      const startIndex = (currentPage - 1) * perPage;
+      const endIndex = startIndex + perPage;
+
       return filteredRows.value.slice(startIndex, endIndex);
     });
 
-    const surroundingPages = computed(() => {
-      const currentPage = state.pagination.currentPage;
-
-      let start, end;
-
-      if (currentPage <= 3) {
-        start = 1;
-        end = Math.min(start + 4, totalPages.value);
-      } else if (totalPages.value - currentPage <= 3) {
-        end = totalPages.value;
-        start = Math.max(end - 4, 1);
-      } else {
-        start = Math.max(currentPage - 2, 1);
-        end = Math.min(currentPage + 2, totalPages.value);
-      }
-
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-    });
-
-    const blobUrl = computed(() => {
+    const blobUrls = computed(() => {
       const json = state.responseJSON;
-
       if (!json) {
         return null;
       }
 
-      const blob = new Blob([JSON.stringify(json, null, "  ")], {
+      const csv = json2csv(json);
+
+      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
         type: "application/json",
       });
+      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
 
-      return URL.createObjectURL(blob);
+      return [
+        {
+          type: "JSON",
+          url: URL.createObjectURL(jsonBlob),
+        },
+        {
+          type: "CSV",
+          url: URL.createObjectURL(csvBlob),
+        },
+      ];
+    });
+
+    const isModalShowing = computed(() => {
+      return state.columns.some(
+        ({ isSearchModalShowing }) => isSearchModalShowing
+      );
+    });
+
+    const isPopupOrModalShowing = computed(() => {
+      return (
+        state.columns.some(
+          ({ isFilterPopupShowing }) => isFilterPopupShowing
+        ) ||
+        isModalShowing.value ||
+        state.isMenuOn
+      );
     });
 
     function setSorting(column) {
@@ -389,179 +320,208 @@ export default defineComponent({
       }
     }
 
-    function jumpToPage(num) {
-      state.pagination.currentPage = num ? num : 1;
+    function setRangeFilters(column) {
+      if (
+        column.inputtingRangeMin < column.minValue ||
+        column.inputtingRangeMax > column.maxValue
+      ) {
+        return;
+      }
+      column.rangeMin = column.inputtingRangeMin;
+      column.rangeMax = column.inputtingRangeMax;
     }
 
-    function submitQuery(column, type, query) {
-      state.queryByColumn.column = column;
-      state.queryByColumn.type = type;
-      state.queryByColumn.query = query;
+    function showModal(column) {
+      column.isSearchModalShowing = true;
     }
 
     function closeModal() {
-      state.columnShowingFilters = null;
-      state.columnShowingTextSearch = null;
+      for (const column of state.columns) {
+        column.isFilterPopupShowing = null;
+        column.isSearchModalShowing = null;
+      }
+      state.isMenuOn = false;
     }
 
-    const pageSliderWrapper = ref(null);
-    const pageSlider = {
-      init: () => {
-        const wrapper = pageSliderWrapper.value;
-        if (!params.page_slider) {
-          wrapper.style.display = "none";
-        }
-        wrapper.onmousemove = pageSlider.move;
-        wrapper.onmouseup = pageSlider.up;
-        state.knob = wrapper.getElementsByClassName("pageSliderKnob")[0];
-        state.canvas = wrapper.getElementsByTagName("canvas")[0];
-        const bar = wrapper.getElementsByClassName("pageSliderBar")[0];
-        state.sliderBarWidth = bar.offsetWidth;
-        pageSlider.setPage(state.knobX, state.pagination.currentPage);
-      },
-      down: (e) => {
-        state.knobDrag = true;
-        state.startX = e.pageX;
-      },
-      move: (e) => {
-        if (state.knobDrag) {
-          let dragX = state.knobX + e.pageX - state.startX;
-          if (dragX < 0) {
-            dragX = 0;
-          }
-          if (dragX > state.sliderBarWidth) {
-            dragX = state.sliderBarWidth;
-          }
-          let page = Math.ceil(
-            (totalPages.value * dragX) / state.sliderBarWidth
-          );
-          if (page < 1) {
-            page = 1;
-          }
-          pageSlider.setPage(dragX, page);
-        }
-      },
-      up: (e) => {
-        if (state.knobDrag) {
-          state.knobX += e.pageX - state.startX;
-          state.pagination.currentPage = parseInt(state.knob.innerHTML);
-          state.knobDrag = false;
-        }
-      },
-      click: () => {
-        state.knobX =
-          (state.sliderBarWidth / (totalPages.value - 1)) *
-          (state.pagination.currentPage - 1);
-        pageSlider.setPage(state.knobX, state.pagination.currentPage);
-      },
-      setPage: (knobX, page) => {
-        state.knob.innerHTML = page;
-        state.knob.parentNode.style.transform = "translateX(" + knobX + "px)";
-        state.canvas.setAttribute("width", state.sliderBarWidth);
-        state.canvas.setAttribute("height", 50);
-        const pageButton = state.canvas.parentNode.parentNode
-          .getElementsByClassName("paginationWrapper")[0]
-          .getElementsByTagName("ul")[0];
-        if (state.canvas.getContext) {
-          const ctx = state.canvas.getContext("2d");
-          ctx.clearRect(
-            0,
-            0,
-            state.canvas.offsetWidth,
-            state.canvas.offsetHeight
-          );
-          ctx.beginPath();
-          ctx.moveTo(knobX + state.knob.offsetWidth / 2 - 8, 50);
-          ctx.lineTo(knobX - state.knob.offsetWidth / 2 + 8, 50);
-          ctx.lineTo(
-            pageButton.offsetLeft - pageButton.parentNode.offsetLeft - 10,
-            0
-          );
-          ctx.lineTo(
-            pageButton.offsetLeft -
-              pageButton.parentNode.offsetLeft +
-              pageButton.offsetWidth -
-              10,
-            0
-          );
-          ctx.closePath();
-          ctx.fillStyle = "#dddddd";
-          ctx.fill();
-        }
-      },
-    };
+    function updateCurrentPage(currentPage) {
+      state.pagination.currentPage = currentPage;
+    }
 
     async function fetchData() {
-      // const res = await fetch(params.table_data_api);
-      // const data = await res.json();
+      const res = await fetch(params.tableDataApi);
+      const data = await res.json();
 
       state.responseJSON = data;
-
-      const { vars, labels, order, href } = data.head;
-
-      const columns = zip(vars, labels, order, href)
-        .map(([_var, label, _order, _href]) => {
-          const values = data.body.map((row) => row[_var].value);
-          const datam = data.body[0];
-          if (datam[_var].type === "number") {
-            state.rangeInputs[_var] = { value: [0, 0], min: 0, max: 0 };
-          }
+      let columns;
+      if (params.columns) {
+        columns = JSON.parse(params.columns);
+      } else if (data.length > 0) {
+        const firstRow = data[0];
+        columns = Object.keys(firstRow).map((key) => {
           return {
-            id: _var,
-            label,
-            order: _order,
-            href: _href,
-            type: datam[_var].type,
-
-            filters: uniq(values).map((value) => {
-              return {
-                value,
-                checked: true,
-              };
-            }),
+            id: key,
+            label: key,
           };
-        })
-        .filter((column) => column.label !== null);
+        });
+      } else {
+        columns = [];
+      }
 
-      state.columns = orderBy(columns, ["order"]);
-      state.allRows = data.body.map((row) => {
-        return columns.map((column) => {
-          if (column.type === "number") {
-            if (row[column.id].value < state.rangeInputs[column.id].min) {
-              state.rangeInputs[column.id].min = row[column.id].value;
-            } else if (
-              row[column.id].value > state.rangeInputs[column.id].max
-            ) {
-              state.rangeInputs[column.id].max = row[column.id].value;
-              state.rangeInputs[column.id].value[1] = row[column.id].value;
-            }
-          }
+      state.columns = columns.map((column) => {
+        const values = data.map((obj) => obj[column.id]);
+        return createColumnState(column, values);
+      });
+
+      state.allRows = data.map((row) => {
+        return state.columns.map((column) => {
           return {
             column,
-            value: row[column.id].value,
-            href: column.href ? row[column.href].value : null,
+            value: column.parseValue(row[column.id]),
+            href: column.href ? row[column.href] : null,
           };
         });
       });
     }
 
     onMounted(fetchData);
-    onUpdated(pageSlider.init);
-
     return {
+      sliderPagination,
+      pageSizeOption,
       state,
       totalPages,
       rowsInCurrentPage,
-      surroundingPages,
-      blobUrl,
+      blobUrls,
+      isModalShowing,
+      isPopupOrModalShowing,
       setSorting,
       setFilters,
-      jumpToPage,
-      submitQuery,
+      setRangeFilters,
+      showModal,
       closeModal,
-      pageSliderWrapper,
-      pageSlider,
+      updateCurrentPage,
     };
   },
 });
+
+function createColumnState(columnDef, values) {
+  const baseProps = {
+    id: columnDef.id,
+    label: columnDef.label,
+    searchType: columnDef.type,
+    rowspan: columnDef.rowspan,
+    href: columnDef.link,
+  };
+
+  if (columnDef.type === "number") {
+    const nums = values.map(Number);
+    const minValue = Math.min(...nums);
+    const maxValue = Math.max(...nums);
+    const rangeMin = ref(minValue);
+    const rangeMax = ref(maxValue);
+    const range = computed(() => [rangeMin.value, rangeMax.value]);
+    const inputtingRangeMin = ref(rangeMin.value);
+    const inputtingRangeMax = ref(rangeMax.value);
+
+    const isSearchConditionGiven = computed(() => {
+      return minValue < rangeMin.value || maxValue > rangeMax.value;
+    });
+
+    function setRange([min, max]) {
+      rangeMin.value = min;
+      rangeMax.value = max;
+      inputtingRangeMin.value = min;
+      inputtingRangeMax.value = max;
+    }
+
+    return {
+      ...baseProps,
+      parseValue: Number,
+      minValue,
+      maxValue,
+      rangeMin,
+      rangeMax,
+      range,
+      setRange,
+      isSearchConditionGiven,
+      inputtingRangeMin,
+      inputtingRangeMax,
+      isSearchModalShowing: false,
+
+      isMatch(val) {
+        return val > rangeMin.value && val <= rangeMax.value;
+      },
+    };
+  } else {
+    const query = ref("");
+    const isSearchConditionGiven = computed(() => query.value !== "");
+
+    const filters =
+      columnDef.type === "category"
+        ? uniq(values)
+            .sort()
+            .map((value) => {
+              return reactive({
+                value,
+                checked: true,
+              });
+            })
+        : null;
+
+    function filter(val) {
+      const selected = filters.filter(({ checked }) => checked);
+      return selected.some(({ value }) => value === val);
+    }
+
+    function search(val) {
+      const q = query.value;
+      return q ? val.includes(q) : true;
+    }
+
+    return {
+      ...baseProps,
+      parseValue: String,
+      query,
+      isSearchConditionGiven,
+      filters,
+      isFilterModalShowing: false,
+      isSearchModalShowing: false,
+
+      isMatch(val) {
+        return columnDef.type === "category"
+          ? search(val) && filter(val)
+          : search(val);
+      },
+    };
+  }
+}
+
+function searchByAllColumns(row, query) {
+  if (!query) {
+    return true;
+  }
+
+  return row.some(({ value }) => String(value).includes(query));
+}
+
+function searchByEachColumn(row) {
+  return row.every((cell) => {
+    return cell.column.isMatch(cell.value);
+  });
+}
+
+function json2csv(json) {
+  var header = Object.keys(json[0]).join(",") + "\n";
+
+  var body = json
+    .map(function (d) {
+      return Object.keys(d)
+        .map(function (key) {
+          return d[key];
+        })
+        .join(",");
+    })
+    .join("\n");
+
+  return header + body;
+}
 </script>
