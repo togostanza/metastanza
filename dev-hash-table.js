@@ -7,15 +7,15 @@ import './dsv-cd3740c6.js';
 async function devHashTable(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
   stanza.render({
-    template: 'stanza.html.hbs',
+    template: "stanza.html.hbs",
     parameters: {
-      dataset: Object.entries(dataset[0]).map(datam => {
+      dataset: Object.entries(dataset[0]).map((datam) => {
         return {
           key: datam[0],
-          value: datam[1]
-        }
-      })
-    }
+          value: datam[1],
+        };
+      }),
+    },
   });
 }
 
@@ -70,11 +70,11 @@ var templates = [
         return undefined
     };
 
-  return "  <dt>"
+  return "    <dt>\n      "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
-    + "</dt>\n  <dd>"
+    + "\n    </dt>\n    <dd>\n      "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "</dd>\n";
+    + "\n    </dd>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -84,7 +84,7 @@ var templates = [
     };
 
   return "<dl>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"dataset") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":5,"column":11}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"dataset") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":9,"column":11}}})) != null ? stack1 : "")
     + "</dl>";
 },"useData":true,"useBlockParams":true}]
 ];
