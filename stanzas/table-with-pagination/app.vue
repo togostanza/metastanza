@@ -20,7 +20,7 @@
         <div class="menuWrapper">
           <font-awesome-icon
             icon="ellipsis-h"
-            class="icon"
+            class="menuIcon"
             @click="state.isMenuOn = true"
           />
           <ul v-if="state.isMenuOn" class="menu">
@@ -39,16 +39,20 @@
               {{ column.label }}
               <font-awesome-icon
                 v-if="state.sorting.column === column"
-                @click="setSorting(column)"
+                :key="`sort-${
+                  state.sorting.direction === 'asc' ? 'up' : 'down'
+                }`"
                 class="icon sort active"
-                :icon="`sort-${state.sorting.direction === 'asc' ? 'up' : 'down'}`"
-                :key="`sort-${state.sorting.direction === 'asc' ? 'up' : 'down'}`"
+                :icon="`sort-${
+                  state.sorting.direction === 'asc' ? 'up' : 'down'
+                }`"
+                @click="setSorting(column)"
               />
               <font-awesome-icon
                 v-else
-                @click="setSorting(column)"
                 class="icon sort"
                 icon="sort"
+                @click="setSorting(column)"
               />
 
               <font-awesome-icon
@@ -125,9 +129,7 @@
                     ></Slider>
                     <div class="rangeInput">
                       <div>
-                        <span class="rangeInputLabel">
-                          From
-                        </span>
+                        <span class="rangeInputLabel"> From </span>
                         <input
                           v-model.number="column.inputtingRangeMin"
                           type="text"
@@ -137,9 +139,7 @@
                       </div>
                       <span class="dash"></span>
                       <div>
-                        <span class="rangeInputLabel">
-                          To
-                        </span>
+                        <span class="rangeInputLabel"> To </span>
                         <input
                           v-model.number="column.inputtingRangeMax"
                           type="text"

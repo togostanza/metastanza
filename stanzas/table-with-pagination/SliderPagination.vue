@@ -3,7 +3,10 @@
     <div class="serialPagination">
       <div :class="['arrowWrapper', { show: currentPage !== 1 }]">
         <span class="arrow double left" @click="updateCurrentPage(1)"> </span>
-        <span class="arrow left" @click="updateCurrentPage(currentPage - 1)"></span>
+        <span
+          class="arrow left"
+          @click="updateCurrentPage(currentPage - 1)"
+        ></span>
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
@@ -18,7 +21,10 @@
       </ul>
 
       <div :class="['arrowWrapper', { show: currentPage !== totalPages }]">
-        <span class="arrow right" @click="updateCurrentPage(currentPage + 1)"></span>
+        <span
+          class="arrow right"
+          @click="updateCurrentPage(currentPage + 1)"
+        ></span>
         <span
           class="arrow double right"
           @click="updateCurrentPage(totalPages)"
@@ -45,7 +51,7 @@
         @update="updateCurrentPage(inputtingCurrentPage)"
       >
       </Slider>
-  </template>
+    </template>
   </div>
 </template>
 
@@ -74,7 +80,7 @@ export default defineComponent({
   },
   emits: ["updateCurrentPage"],
   setup(props, context) {
-    const inputtingCurrentPage = ref(1)
+    const inputtingCurrentPage = ref(1);
 
     const surroundingPages = computed(() => {
       const totalPages = props.totalPages;
@@ -146,7 +152,7 @@ export default defineComponent({
       }, 0);
     }
 
-    function updateCurrentPage (num) {
+    function updateCurrentPage(num) {
       context.emit("updateCurrentPage", num);
     }
 
