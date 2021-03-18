@@ -83,8 +83,8 @@
       > .menuWrapper {
         position: relative;
         line-height: 1;
-        > .menu {
-          font-size: 16px;
+        > .icon {
+          width: 16px;
           &:hover {
             cursor: pointer;
           }
@@ -97,6 +97,7 @@
           background: #ffffff;
           box-shadow: 0 2px 8px 0 rgb(0 0 0 / 20%);
           z-index: 3;
+          list-style: none;
           > li {
             > .downloadBtn {
               white-space: nowrap;
@@ -148,7 +149,7 @@
               position: relative;
               > div.filterWindow {
                 position: absolute;
-                top: 2px;
+                top: 0;
                 left: -22px;
                 z-index: 3;
                 width: auto;
@@ -247,23 +248,25 @@
                 margin: 0 34px 30px;
                 display: flex;
                 justify-content: space-between;
+                align-items: flex-end;
                 > div {
                   > .rangeInputLabel {
                     font-size: 10px;
                     display: block;
                     margin-left: 2px;
-                    > .icon.arrow {
-                      color: var(--series-0-color);
-                      transform: translateY(-2px);
-                    }
                   }
                   > input[type="text"] {
                     @include text-input;
                     width: 100%;
                   }
-                  &:first-of-type {
-                    margin-right: 10px;
-                  }
+                }
+                > .dash {
+                  width: 8px;
+                  height: 1px;
+                  background-color: var(--general-font-color);
+                  margin-left: 4px;
+                  margin-right: 4px;
+                  margin-bottom: calc(var(--searchbox-height) / 2);
                 }
               }
             }
@@ -280,16 +283,23 @@
             cursor: pointer;
             content: "";
             display: inline-block;
-            color: var(--general-non-active-color);
-            font-size: calc(var(--general-font-size) - 2px);
+            width: var(--general-font-size);
+            height: var(--general-font-size);
+            path {
+              color: var(--general-non-active-color);
+            }
             &.active {
-              color: var(--emphasized-color);
+              path {
+                color: var(--emphasized-color);
+              }
             }
-            &.icon-search {
+            &.search {
               display: var(--searchicon-display);
-              margin-left: 3px;
+              margin-left: 1px;
+              width: calc(var(--general-font-size) - 1px);
+              height: calc(var(--general-font-size) - 1px);
             }
-            &.icon-filter {
+            &.filter {
               display: var(--filtericon-display);
               padding: 0 2px;
               &.isShowing {
@@ -299,25 +309,9 @@
                 color: #ffffff;
               }
             }
-            &.icon-sort {
+            &.sort {
               display: var(--sorticon-display);
               position: relative;
-              &::after {
-                font-family: "fontello", sans-serif;
-                content: "\f0dc";
-              }
-              &.desc {
-                &::after {
-                  content: "\f0dd";
-                  color: var(--emphasized-color);
-                }
-              }
-              &.asc {
-                &::after {
-                  content: "\f0de";
-                  color: var(--emphasized-color);
-                }
-              }
             }
           }
         }
