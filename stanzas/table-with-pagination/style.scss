@@ -6,9 +6,9 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
 @mixin button {
-  border: 1px solid var(--searchbtn-border-color);
-  border-radius: var(--searchbtn-radius);
-  background-color: var(--searchbtn-color);
+  border: 1px solid var(--series-0-color);
+  border-radius: 3px;
+  background-color: var(--series-0-color);
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -17,12 +17,12 @@
 }
 
 @mixin text-input {
-  width: var(--searchbox-width);
-  height: var(--searchbox-height);
-  border: 1px solid var(--searchbox-border-color);
+  width: 164px;
+  height: 20px;
+  border: 1px solid var(--series-0-color);
   border-radius: var(--searchbox-radius);
-  font-size: var(--searchbox-font-size);
-  color: var(--searchbox-font-color);
+  font-size: var(--general-font-size);
+  color: var(--general-font-color);
   background-color: var(--searchbox-background-color);
   &::placeholder {
     padding: 0px 0px 0px 4px;
@@ -35,7 +35,7 @@
   margin: 0;
   list-style: none;
   color: var(--general-font-color);
-  font-family: var(--general-font-family);
+  font-family: var(--font-family);
   font-size: var(--general-font-size);
 }
 
@@ -74,11 +74,15 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      margin: var(--information-margin);
+      margin: 0px 0px 10px 0px;
       > .entries {
         margin-left: auto;
         margin-right: 10px;
-        font-size: 10px;
+        font-size: var(--general-font-color);
+        select {
+          border: 1px solid var(--series-0-color);
+          border-radius: var(--searchbox-radius);
+        }
       }
       > .menuWrapper {
         position: relative;
@@ -120,7 +124,6 @@
       text-align: left;
       border-collapse: collapse;
       margin: 0;
-      background-color: var(--background-color);
       border: var(--table-border);
       box-shadow: var(--table-shadow);
       > thead {
@@ -128,9 +131,6 @@
         font-size: var(--thead-font-size);
         color: var(--thead-font-color);
         margin-bottom: 0;
-        border-top: var(--thead-border-top);
-        border-right: var(--thead-border-right);
-        border-left: var(--thead-border-left);
         border-bottom: var(--thead-border-bottom);
         > tr {
           > th {
@@ -231,7 +231,7 @@
                   width: 14px;
                   height: 14px;
                   top: -5px;
-                  background-color: var(--rangeslider-knob-color);
+                  background-color: var(--series-0-color);
                   .slider-tooltip {
                     border: 1px solid var(--thead-font-color);
                     background: var(--thead-font-color);
@@ -280,17 +280,15 @@
             cursor: pointer;
             content: "";
             display: inline-block;
-            color: var(--general-non-active-color);
+            color: var(--non-active-color);
             font-size: calc(var(--general-font-size) - 2px);
             &.active {
-              color: var(--emphasized-color);
+              color: var(--active-color);
             }
             &.icon-search {
-              display: var(--searchicon-display);
               margin-left: 3px;
             }
             &.icon-filter {
-              display: var(--filtericon-display);
               padding: 0 2px;
               &.isShowing {
                 z-index: 3;
@@ -300,7 +298,6 @@
               }
             }
             &.icon-sort {
-              display: var(--sorticon-display);
               position: relative;
               &::after {
                 font-family: "fontello", sans-serif;
@@ -309,13 +306,13 @@
               &.desc {
                 &::after {
                   content: "\f0dd";
-                  color: var(--emphasized-color);
+                  color: var(--active-color);
                 }
               }
               &.asc {
                 &::after {
                   content: "\f0de";
-                  color: var(--emphasized-color);
+                  color: var(--active-color);
                 }
               }
             }
@@ -325,10 +322,7 @@
       > tbody {
         font-size: var(--tbody-font-size);
         color: var(--tbody-font-color);
-        background-color: var(--tbody-background-color);
-        border-right: var(--tbody-border-right);
-        border-bottom: var(--tbody-border-bottom);
-        border-left: var(--tbody-border-left);
+        font-weight: var(--tbody-font-weight);
         > tr {
           &:nth-child(odd) {
             background-color: var(--tbody-odd-background-color);
