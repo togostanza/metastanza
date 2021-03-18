@@ -144,16 +144,6 @@ svg#dl_button {
   }
 }
 
-svg#slider_container {
-  margin-bottom: 14px;
-  .info-key {
-    display: inline-block;
-    color: $COLOR_LIGHTGREY;
-    font-size: 14px;
-    font-weight: 600;
-  }
-}
-
 .tooltip {
   box-sizing: border-box;
   position: absolute;
@@ -454,5 +444,15 @@ div#dl_list {
     &.-threshold {
       margin-left: 40px;
     }
+  }
+}
+
+svg#slider_container {
+  margin-bottom: 14px;
+  .info-key {
+    display: inline-block;
+    color: $COLOR_LIGHTGREY;
+    font-size: 14px;
+    font-weight: 600;
   }
 }
