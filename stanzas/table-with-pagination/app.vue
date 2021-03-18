@@ -18,7 +18,11 @@
           entries
         </p>
         <div class="menuWrapper">
-          <span class="icon menu" @click="state.isMenuOn = true">&#xe801;</span>
+          <font-awesome-icon
+            icon="ellipsis-h"
+            class="menuIcon"
+            @click="state.isMenuOn = true"
+          />
           <ul v-if="state.isMenuOn" class="menu">
             <li v-for="url in blobUrls" :key="url.type">
               <a class="downloadBtn" :href="url.url" download="tableData">
@@ -33,36 +37,44 @@
           <tr>
             <th v-for="(column, i) in state.columns" :key="column.id">
               {{ column.label }}
-              <span
-                :class="[
-                  'icon',
-                  'icon-sort',
-                  state.sorting.column === column
-                    ? state.sorting.direction
-                    : '',
-                ]"
+              <font-awesome-icon
+                v-if="state.sorting.column === column"
+                :key="`sort-${
+                  state.sorting.direction === 'asc' ? 'up' : 'down'
+                }`"
+                class="icon sort active"
+                :icon="`sort-${
+                  state.sorting.direction === 'asc' ? 'up' : 'down'
+                }`"
                 @click="setSorting(column)"
-              ></span>
-              <span
+              />
+              <font-awesome-icon
+                v-else
+                class="icon sort"
+                icon="sort"
+                @click="setSorting(column)"
+              />
+
+              <font-awesome-icon
                 :class="[
                   'icon',
-                  'icon-search',
+                  'search',
                   { active: column.isSearchConditionGiven },
                 ]"
+                icon="search"
                 @click="showModal(column)"
-                >&#xe800;</span
-              >
-              <span
+              />
+              <font-awesome-icon
                 v-if="column.searchType === 'category'"
+                icon="filter"
                 :class="[
                   'icon',
-                  'icon-filter',
+                  'filter',
                   { isShowing: column.isFilterPopupShowing },
                   { active: column.filters.some((filter) => !filter.checked) },
                 ]"
                 @click="column.isFilterPopupShowing = true"
-                >&#xf0b0;</span
-              >
+              />
               <div v-if="column.isFilterPopupShowing" class="filterWrapper">
                 <div
                   :class="[
@@ -117,10 +129,7 @@
                     ></Slider>
                     <div class="rangeInput">
                       <div>
-                        <span class="rangeInputLabel">
-                          From
-                          <span class="icon">&#xf0dd;</span>
-                        </span>
+                        <span class="rangeInputLabel"> From </span>
                         <input
                           v-model.number="column.inputtingRangeMin"
                           type="text"
@@ -128,11 +137,9 @@
                           @input="setRangeFilters(column)"
                         />
                       </div>
+                      <span class="dash"></span>
                       <div>
-                        <span class="rangeInputLabel">
-                          To
-                          <span class="icon arrow">&#xf0dd;</span>
-                        </span>
+                        <span class="rangeInputLabel"> To </span>
                         <input
                           v-model.number="column.inputtingRangeMax"
                           type="text"
@@ -195,10 +202,27 @@ import Slider from "@vueform/slider";
 
 import metadata from "./metadata.json";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faEllipsisH,
+  faFilter,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faEllipsisH, faFilter, faSearch, faSort, faSortUp, faSortDown);
+
 export default defineComponent({
   components: {
     Slider,
     SliderPagination,
+    FontAwesomeIcon,
+    faSort,
+    faSortUp,
+    faSortDown,
   },
 
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
