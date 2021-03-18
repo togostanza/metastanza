@@ -5492,6 +5492,60 @@ function setChecked(el, { value, oldValue }, vnode) {
         el.checked = looseEqual(value, getCheckboxValue(el, true));
     }
 }
+const vModelSelect = {
+    created(el, { value, modifiers: { number } }, vnode) {
+        const isSetModel = isSet(value);
+        addEventListener(el, 'change', () => {
+            const selectedVal = Array.prototype.filter
+                .call(el.options, (o) => o.selected)
+                .map((o) => number ? toNumber(getValue(o)) : getValue(o));
+            el._assign(el.multiple
+                ? isSetModel
+                    ? new Set(selectedVal)
+                    : selectedVal
+                : selectedVal[0]);
+        });
+        el._assign = getModelAssigner(vnode);
+    },
+    // set value in mounted & updated because <select> relies on its children
+    // <option>s.
+    mounted(el, { value }) {
+        setSelected(el, value);
+    },
+    beforeUpdate(el, _binding, vnode) {
+        el._assign = getModelAssigner(vnode);
+    },
+    updated(el, { value }) {
+        setSelected(el, value);
+    }
+};
+function setSelected(el, value) {
+    const isMultiple = el.multiple;
+    if (isMultiple && !isArray(value) && !isSet(value)) {
+        return;
+    }
+    for (let i = 0, l = el.options.length; i < l; i++) {
+        const option = el.options[i];
+        const optionValue = getValue(option);
+        if (isMultiple) {
+            if (isArray(value)) {
+                option.selected = looseIndexOf(value, optionValue) > -1;
+            }
+            else {
+                option.selected = value.has(optionValue);
+            }
+        }
+        else {
+            if (looseEqual(getValue(option), value)) {
+                el.selectedIndex = i;
+                return;
+            }
+        }
+    }
+    if (!isMultiple) {
+        el.selectedIndex = -1;
+    }
+}
 // retrieve raw value set via :value bindings
 function getValue(el) {
     return '_value' in el ? el._value : el.value;
@@ -5501,61 +5555,6 @@ function getCheckboxValue(el, checked) {
     const key = checked ? '_trueValue' : '_falseValue';
     return key in el ? el[key] : checked;
 }
-
-const systemModifiers = ['ctrl', 'shift', 'alt', 'meta'];
-const modifierGuards = {
-    stop: e => e.stopPropagation(),
-    prevent: e => e.preventDefault(),
-    self: e => e.target !== e.currentTarget,
-    ctrl: e => !e.ctrlKey,
-    shift: e => !e.shiftKey,
-    alt: e => !e.altKey,
-    meta: e => !e.metaKey,
-    left: e => 'button' in e && e.button !== 0,
-    middle: e => 'button' in e && e.button !== 1,
-    right: e => 'button' in e && e.button !== 2,
-    exact: (e, modifiers) => systemModifiers.some(m => e[`${m}Key`] && !modifiers.includes(m))
-};
-/**
- * @private
- */
-const withModifiers = (fn, modifiers) => {
-    return (event, ...args) => {
-        for (let i = 0; i < modifiers.length; i++) {
-            const guard = modifierGuards[modifiers[i]];
-            if (guard && guard(event, modifiers))
-                return;
-        }
-        return fn(event, ...args);
-    };
-};
-// Kept for 2.x compat.
-// Note: IE11 compat for `spacebar` and `del` is removed for now.
-const keyNames = {
-    esc: 'escape',
-    space: ' ',
-    up: 'arrow-up',
-    left: 'arrow-left',
-    right: 'arrow-right',
-    down: 'arrow-down',
-    delete: 'backspace'
-};
-/**
- * @private
- */
-const withKeys = (fn, modifiers) => {
-    return (event) => {
-        if (!('key' in event))
-            return;
-        const eventKey = hyphenate(event.key);
-        if (
-        // None of the provided key modifiers match the current event key
-        !modifiers.some(k => k === eventKey || keyNames[k] === eventKey)) {
-            return;
-        }
-        return fn(event);
-    };
-};
 
 const rendererOptions = extend({ patchProp, forcePatchProp }, nodeOps);
 // lazy create the renderer - this makes core renderer logic tree-shakable
@@ -5594,5 +5593,5 @@ function normalizeContainer(container) {
     return container;
 }
 
-export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, withModifiers as l, withDirectives as m, withCtx as n, onMounted as o, renderList as p, withKeys as q, reactive as r, createTextVNode as s, toRefs as t, toDisplayString as u, vModelText as v, watch as w, mergeProps as x, vModelCheckbox as y };
-//# sourceMappingURL=runtime-dom.esm-bundler-fc1abf0f.js.map
+export { Fragment as F, Transition as T, createCommentVNode as a, openBlock as b, createBlock as c, defineComponent as d, createApp as e, ref as f, computed$1 as g, onUnmounted as h, onUpdated as i, resolveComponent as j, createVNode as k, renderList as l, createTextVNode as m, toDisplayString as n, onMounted as o, withDirectives as p, vModelSelect as q, reactive as r, vModelCheckbox as s, toRefs as t, withCtx as u, vModelText as v, watch as w };
+//# sourceMappingURL=runtime-dom.esm-bundler-cc243c09.js.map
