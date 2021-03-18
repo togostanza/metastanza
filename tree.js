@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { e as embed } from './vega-embed.module-8c506186.js';
 import { l as loadData } from './load-data-cc489077.js';
-import { a as appendDlButton } from './metastanza_utils-fce6ca8a.js';
+import { a as appendDlButton } from './metastanza_utils-b4d4e68b.js';
 import './vega.module-9c8b3b23.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -199,21 +199,27 @@ async function tree(stanza, params) {
   );
 
   const menuButton = stanza.root.querySelector("#dl_button");
+  const menuList = stanza.root.querySelector("#dl_list");
   switch (params["menu-button-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
+      menuList.setAttribute("class", "dl-top-left");
       break;
     case "top-right":
       menuButton.setAttribute("class", "dl-top-right");
+      menuList.setAttribute("class", "dl-top-right");
       break;
     case "bottom-left":
       menuButton.setAttribute("class", "dl-bottom-left");
+      menuList.setAttribute("class", "dl-bottom-left");
       break;
     case "bottom-right":
       menuButton.setAttribute("class", "dl-bottom-right");
+      menuList.setAttribute("class", "dl-bottom-right");
       break;
     case "none":
       menuButton.setAttribute("class", "dl-none");
+      menuList.setAttribute("class", "dl-none");
       break;
   }
 }
@@ -458,7 +464,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  top: 35px;\n  right: 6px;\n  border: solid 1px var(--label-color);\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}\n\nsummary {\n  display: none;\n}";
+var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  border: solid 1px var(--label-color);\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list.dl-top-left {\n  top: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-top-right {\n  top: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-bottom-left {\n  bottom: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-bottom-right {\n  bottom: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-none {\n  display: none;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}";
 
 defineStanzaElement(tree, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=tree.js.map
