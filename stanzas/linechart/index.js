@@ -2,7 +2,7 @@ import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 
-export default async function devLinechart(stanza, params) {
+export default async function linechart(stanza, params) {
   function css(key) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }

@@ -1,6 +1,6 @@
 import loadData from "@/lib/load-data";
 
-export default async function devHashTable(stanza, params) {
+export default async function hashTable(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
   stanza.render({
     template: "stanza.html.hbs",

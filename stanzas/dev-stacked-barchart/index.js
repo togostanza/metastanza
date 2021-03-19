@@ -1,6 +1,6 @@
 import vegaEmbed from "vega-embed";
 
-export default async function stackedBarchart(stanza, params) {
+export default async function devStackedBarchart(stanza, params) {
   const spec = await fetch(
     "https://vega.github.io/vega/examples/stacked-bar-chart.vg.json"
   ).then((res) => res.json());
