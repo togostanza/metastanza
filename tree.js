@@ -433,18 +433,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Stroke width."
-	},
-	{
-		"stanza:key": "--hover-stroke-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "stroke color of plot when you hover."
-	},
-	{
-		"stanza:key": "--hover-stroke-width",
-		"stanza:type": "number",
-		"stanza:default": "1",
-		"stanza:description": "stroke width of plot when you hover."
 	}
 ]
 };

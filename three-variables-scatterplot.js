@@ -367,26 +367,6 @@ var metadata = {
 		"stanza:description": "angle of Y-labels.(in degree)"
 	},
 	{
-		"stanza:key": "xlabel-horizonal-offset",
-		"stanza:default": "60",
-		"stanza:description": "Horizonal offset of xlabels."
-	},
-	{
-		"stanza:key": "xlabel-vertical-offset",
-		"stanza:default": "0",
-		"stanza:description": "Vertical offset of xlabels."
-	},
-	{
-		"stanza:key": "ylabel-horizonal-offset",
-		"stanza:default": "5",
-		"stanza:description": "Horizonal offset of ylabels."
-	},
-	{
-		"stanza:key": "ylabel-vertical-offset",
-		"stanza:default": "5",
-		"stanza:description": "Vertical offset of ylabels."
-	},
-	{
 		"stanza:key": "symbol-shape",
 		"stanza:example": "circle",
 		"stanza:description": "Shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"

@@ -84,16 +84,6 @@
       "stanza:description": "orient of Y-axis.(please select left or right)"
     },
     {
-      "stanza:key": "xaxis-title",
-      "stanza:example": "title of Xaxis",
-      "stanza:description": "title of X-axis"
-    },
-    {
-      "stanza:key": "yaxis-title",
-      "stanza:example": "title of Yaxis",
-      "stanza:description": "title of Y-axis"
-    },
-    {
       "stanza:key": "xgrid",
       "stanza:example": false,
       "stanza:description": "display of X-grids.(true or false)"

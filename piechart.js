@@ -219,11 +219,6 @@ var metadata = {
 		"stanza:description": "Height of your stanza"
 	},
 	{
-		"stanza:key": "padding",
-		"stanza:example": "50",
-		"stanza:description": "Padding around your stanza"
-	},
-	{
 		"stanza:key": "menu-button-placement",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
@@ -274,12 +269,6 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#f75976",
 		"stanza:description": "Color 6"
-	},
-	{
-		"stanza:key": "--emphasized-color",
-		"stanza:type": "color",
-		"stanza:default": "#fa8c84",
-		"stanza:description": "Emphasized color when you hover on labels and rects"
 	},
 	{
 		"stanza:key": "--font-family",

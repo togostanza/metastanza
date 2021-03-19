@@ -342,7 +342,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "chart-type",
-		"stanza:example": "grouped",
+		"stanza:example": "stacked",
 		"stanza:description": "Type of your barchart.(stacked, grouped)",
 		"stanza:required": true
 	},
