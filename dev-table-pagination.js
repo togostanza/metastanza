@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import './dev-table-body.js';
-import './metastanza_utils-6810f372.js';
+import './metastanza_utils-821a1061.js';
 import './index-b010e6ef.js';
 import './timer-be811b16.js';
 

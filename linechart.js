@@ -1,13 +1,13 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { e as embed } from './vega-embed.module-8c506186.js';
 import { l as loadData } from './load-data-d3554855.js';
-import { a as appendDlButton } from './metastanza_utils-6810f372.js';
+import { a as appendDlButton } from './metastanza_utils-821a1061.js';
 import './vega.module-9c8b3b23.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
 import './index-b010e6ef.js';
 
-async function devLinechart(stanza, params) {
+async function linechart(stanza, params) {
   function css(key) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
@@ -275,8 +275,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "dev-linechart",
-	"stanza:label": "dev linechart",
+	"@id": "linechart",
+	"stanza:label": "linechart",
 	"stanza:definition": "Vega wrapped linechart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -594,5 +594,5 @@ var templates = [
 
 var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  border: solid 1px #444444;\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list.dl-top-left {\n  top: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-top-right {\n  top: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-bottom-left {\n  bottom: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-bottom-right {\n  bottom: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-none {\n  display: none;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}";
 
-defineStanzaElement(devLinechart, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=dev-linechart.js.map
+defineStanzaElement(linechart, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=linechart.js.map

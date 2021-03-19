@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import './index-b010e6ef.js';
-import { a as appendDlButton, s as select } from './metastanza_utils-6810f372.js';
-import { p as pointer, d as drag } from './drag-8ab41432.js';
+import { a as appendDlButton, s as select } from './metastanza_utils-821a1061.js';
+import { p as pointer, d as drag } from './drag-b26fe7d5.js';
 import './timer-be811b16.js';
 
 var dataset = {

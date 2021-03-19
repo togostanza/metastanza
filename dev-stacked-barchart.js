@@ -4,7 +4,7 @@ import './vega.module-9c8b3b23.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
 
-async function stackedBarchart(stanza, params) {
+async function devStackedBarchart(stanza, params) {
   const spec = await fetch(
     "https://vega.github.io/vega/examples/stacked-bar-chart.vg.json"
   ).then((res) => res.json());
@@ -284,8 +284,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "stacked-barchart",
-	"stanza:label": "stacked barchart",
+	"@id": "dev-stacked-barchart",
+	"stanza:label": "dev stacked barchart",
 	"stanza:definition": "stacked barchart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
@@ -615,5 +615,5 @@ var templates = [
 
 var css = "main {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\nsummary {\n  display: none;\n}";
 
-defineStanzaElement(stackedBarchart, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=stacked-barchart.js.map
+defineStanzaElement(devStackedBarchart, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=dev-stacked-barchart.js.map

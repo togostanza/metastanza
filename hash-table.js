@@ -4,7 +4,7 @@ import './index-b010e6ef.js';
 import './timer-be811b16.js';
 import './dsv-cd3740c6.js';
 
-async function devHashTable(stanza, params) {
+async function hashTable(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
   stanza.render({
     template: "stanza.html.hbs",
@@ -23,8 +23,8 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "dev-hash-table",
-	"stanza:label": "Dev hash table",
+	"@id": "hash-table",
+	"stanza:label": "hash table",
 	"stanza:definition": "hash table for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
@@ -91,5 +91,5 @@ var templates = [
 
 var css = "main {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
-defineStanzaElement(devHashTable, {metadata, templates, css, url: import.meta.url});
-//# sourceMappingURL=dev-hash-table.js.map
+defineStanzaElement(hashTable, {metadata, templates, css, url: import.meta.url});
+//# sourceMappingURL=hash-table.js.map

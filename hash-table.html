@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>hash table</title>
+
+    <script type="module" src="./hash-table.js" async></script>
+
+    <script type="module">
+      import createHelpApp from './-togostanza/help-app.js';
+
+      const metadata = {"@context":{"stanza":"http://togostanza.org/resource/stanza#"},"@id":"hash-table","stanza:label":"hash table","stanza:definition":"hash table for MetaStanza","stanza:type":"Stanza","stanza:display":"Table","stanza:provider":"","stanza:license":"MIT","stanza:author":"reika0717","stanza:address":"hirahara@penqe.com","stanza:contributor":[],"stanza:created":"2021-03-18","stanza:updated":"2021-03-18","stanza:parameter":[{"stanza:key":"data-url","stanza:example":"http://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1","stanza:description":"Source url of your data.","stanza:required":true},{"stanza:key":"data-type","stanza:example":"json","stanza:description":"Type of your data.","stanza:required":true}],"stanza:about-link-placement":"bottom-right","stanza:style":[{"stanza:key":"--text-font-color","stanza:type":"color","stanza:default":"#4e5059","stanza:description":"Font color of text body."}]};
+      const readme   = "<h1>Dev hash table</h1>\n<p>Stanza description goes here. Edit <code>stanzas/dev-hash-table/README.md</code> to update.</p>\n";
+
+      createHelpApp({metadata, readme}).mount('body');
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>

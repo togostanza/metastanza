@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { l as loadData } from './load-data-d3554855.js';
-import { a as appendDlButton } from './metastanza_utils-6810f372.js';
+import { a as appendDlButton } from './metastanza_utils-821a1061.js';
 import './index-b010e6ef.js';
 import './timer-be811b16.js';
 import './dsv-cd3740c6.js';

@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "dev-hash-table",
-  "stanza:label": "Dev hash table",
+  "@id": "hash-table",
+  "stanza:label": "hash table",
   "stanza:definition": "hash table for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
