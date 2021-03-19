@@ -47,8 +47,7 @@ export default async function barchart(stanza, params) {
     }
   }
   console.log("constructData(chartType)",constructData(chartType));
-
-  //axes
+  console.log('chartType',chartType)
   const axes = [
     {
       scale: "xscale",
@@ -64,7 +63,7 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: valueVariable,
+      title: chartType === "grouped" ?  valueVariable : labelVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),
@@ -96,7 +95,7 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: labelVariable,
+      title: chartType === "grouped" ?  labelVariable : valueVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),
