@@ -46,7 +46,7 @@ export default async function barchart(stanza, params) {
         ];
     }
   }
-  console.log(constructData(chartType));
+  console.log("constructData(chartType)",constructData(chartType));
 
   //axes
   const axes = [
@@ -64,7 +64,7 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: labelVariable,
+      title: valueVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),
@@ -96,7 +96,7 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: valueVariable,
+      title: labelVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),
