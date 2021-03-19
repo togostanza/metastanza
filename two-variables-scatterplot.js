@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import { a as appendDlButton } from './metastanza_utils-b4d4e68b.js';
+import { l as loadData } from './load-data-d3554855.js';
+import { a as appendDlButton } from './metastanza_utils-6810f372.js';
 import './vega.module-9c8b3b23.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -240,7 +240,7 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "data-type",
 		"stanza:example": "json",
 		"stanza:description": "Type of your data.",
 		"stanza:required": true

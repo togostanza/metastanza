@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
 import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-cc489077.js';
-import { a as appendDlButton } from './metastanza_utils-b4d4e68b.js';
+import { l as loadData } from './load-data-d3554855.js';
+import { a as appendDlButton } from './metastanza_utils-6810f372.js';
 import './vega.module-9c8b3b23.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -51,9 +51,8 @@ async function barchart(stanza, params) {
         ];
     }
   }
-  console.log(constructData(chartType));
-
-  //axes
+  console.log("constructData(chartType)",constructData(chartType));
+  console.log('chartType',chartType);
   const axes = [
     {
       scale: "xscale",
@@ -69,7 +68,7 @@ async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: labelVariable,
+      title: chartType === "grouped" ?  valueVariable : labelVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),
@@ -101,7 +100,7 @@ async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: valueVariable,
+      title: chartType === "grouped" ?  labelVariable : valueVariable,
       titleColor: "var(--title-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-size"),

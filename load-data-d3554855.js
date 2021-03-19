@@ -60,8 +60,8 @@ async function loadJSON(url) {
   return await res.json();
 }
 
-function loadSPARQL(url) {
-  const json = loadJSON(url);
+async function loadSPARQL(url) {
+  const json = await loadJSON(url);
   return sparql2table(json);
 }
 
@@ -80,4 +80,4 @@ function sparql2table(json) {
 }
 
 export { loadData as l };
-//# sourceMappingURL=load-data-cc489077.js.map
+//# sourceMappingURL=load-data-d3554855.js.map

@@ -22,7 +22,7 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "data-url",
+      "stanza:key": "data-type",
       "stanza:example": "json",
       "stanza:description": "Type of your data.",
       "stanza:required": true
