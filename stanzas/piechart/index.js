@@ -111,7 +111,7 @@ export default async function piechart(stanza, params) {
     signals: vegaJson.signals,
     data,
     scales,
-    legends,
+    legends: params["legend"] === "false" ? [] : legends,
     marks,
   };
 

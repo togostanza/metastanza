@@ -32,60 +32,75 @@
     {
       "stanza:key": "x",
       "stanza:example": "Horsepower",
-      "stanza:description": "Variable for X axis."
+      "stanza:description": "Variable for X axis"
     },
     {
       "stanza:key": "y",
       "stanza:example": "Miles_per_Gallon",
-      "stanza:description": "Variable for Y axis."
+      "stanza:description": "Variable for Y axis"
     },
     {
       "stanza:key": "z",
       "stanza:example": "Acceleration",
-      "stanza:description": "Variable for Z axis"
+      "stanza:description": "Variable for Z axis  (If you will not use this variable, this parapeter should be set as none)"
     },
     {
       "stanza:key": "width",
-      "stanza:example": "400",
+      "stanza:type": "number",
+      "stanza:example": 400,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "200",
+      "stanza:type": "number",
+      "stanza:example": 200,
       "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
-      "stanza:example": "50",
+      "stanza:type": "number",
+      "stanza:example": 50,
       "stanza:description": "Padding"
     },
     {
       "stanza:key": "xaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
       "stanza:description": "Placement of X axis (top or bottom)"
     },
     {
       "stanza:key": "yaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "right"],
       "stanza:example": "left",
       "stanza:description": "Placement of Y axis (left or right)"
     },
     {
       "stanza:key": "xgrid",
-      "stanza:example": true,
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": false,
       "stanza:description": "Display of X grid (true or false)"
     },
     {
       "stanza:key": "ygrid",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Display of Y grid (true or false)"
     },
     {
       "stanza:key": "xtick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": false,
       "stanza:description": "Display of X tick (true or false)"
     },
     {
       "stanza:key": "ytick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Display of Y tick (true or false)"
     },
@@ -101,6 +116,8 @@
     },
     {
       "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Display of legend (true or false)"
     },
@@ -249,7 +266,7 @@
       "stanza:key": "--opacity",
       "stanza:type": "text",
       "stanza:default": "0.7",
-      "stanza:description": "opacity of each plots"
+      "stanza:description": "Plot opacity"
     }
   ]
 }

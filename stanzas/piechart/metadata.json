@@ -19,13 +19,15 @@
     {
       "stanza:key": "data-url",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_chart?chromosome=1",
-      "stanza:description": "Source url of data.",
+      "stanza:description": "Source url of data",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
-      "stanza:description": "Type of data.",
+      "stanza:description": "Type of data",
       "stanza:required": true
     },
     {
@@ -42,13 +44,22 @@
     },
     {
       "stanza:key": "width",
-      "stanza:example": "200",
+      "stanza:type": "number",
+      "stanza:example": 200,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "200",
+      "stanza:type": "number",
+      "stanza:example": 200,
       "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Display of legend (true or false)"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -142,7 +153,7 @@
       "stanza:key": "--border-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Border color."
+      "stanza:description": "Border color"
     },
     {
       "stanza:key": "--border-width",

@@ -2,23 +2,21 @@
   {{#each scorecards as |scorecard|}}
     <svg class="scorecard-svg">
       <text
+        id="scorecardKey"
         x="50%"
-        y="40"
         text-anchor="middle"
         font-family="var(--font-family)"
         fill="var(--key-font-color)"
-        font-size="var(--key-font-size)"
         font-weight="var(--key-font-weight)"
       >
         {{scorecard.key}}
       </text>
       <text
+        id="scorecardValue"
         x="50%"
-        y="80"
         text-anchor="middle"
         font-family="var(--font-family)"
         fill="var(--value-font-color)"
-        font-size="var(--value-font-size)"
         font-weight="var(--value-font-weight)"
       >
         {{scorecard.value}}

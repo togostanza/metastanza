@@ -23,24 +23,36 @@
     },
     {
       "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
       "stanza:description": "Type of data",
       "stanza:required": true
     },
     {
       "stanza:key": "width",
-      "stanza:example": "230",
+      "stanza:type": "number",
+      "stanza:example": 230,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "200",
+      "stanza:type": "number",
+      "stanza:example": 100,
       "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
-      "stanza:example": "0",
+      "stanza:type": "number",
+      "stanza:example": 0,
       "stanza:description": "Padding"
+    },
+    {
+      "stanza:key": "key-display",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Display of key (true or false)"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -79,7 +91,7 @@
     {
       "stanza:key": "--key-font-size",
       "stanza:type": "text",
-      "stanza:default": "16px",
+      "stanza:default": "16",
       "stanza:description": "Font size for key"
     },
     {
@@ -97,7 +109,7 @@
     {
       "stanza:key": "--value-font-size",
       "stanza:type": "text",
-      "stanza:default": "36px",
+      "stanza:default": "36",
       "stanza:description": "Font size for value"
     },
     {

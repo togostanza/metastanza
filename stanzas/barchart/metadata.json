@@ -17,6 +17,8 @@
   "stanza:parameter": [
     {
       "stanza:key": "chart-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["stacked", "grouped"],
       "stanza:example": "stacked",
       "stanza:description": "Type of barchart (stacked, grouped)",
       "stanza:required": true
@@ -55,17 +57,20 @@
     },
     {
       "stanza:key": "width",
-      "stanza:example": "400",
+      "stanza:type": "number",
+      "stanza:example": 400,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "300",
+      "stanza:type": "number",
+      "stanza:example": 300,
       "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
-      "stanza:example": "50",
+      "stanza:type": "number",
+      "stanza:example": 50,
       "stanza:description": "Padding"
     },
     {
@@ -80,31 +85,43 @@
     },
     {
       "stanza:key": "xaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
       "stanza:description": "Placement of X axis (top or bottom)"
     },
     {
       "stanza:key": "yaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "right"],
       "stanza:example": "left",
       "stanza:description": "Placement of Y axis (left or right)"
     },
     {
       "stanza:key": "xgrid",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": false,
       "stanza:description": "Display of X grid (true or false)"
     },
     {
       "stanza:key": "ygrid",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Display of Y grid (true or false)"
     },
     {
       "stanza:key": "xtick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": false,
       "stanza:description": "Display of X tick (true or false)"
     },
     {
       "stanza:key": "ytick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Display of Y tick (true or false)"
     },
@@ -124,6 +141,13 @@
       "stanza:description": "Bar width (0-1)"
     },
     {
+      "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Display of legend (true or false)"
+    },
+    {
       "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
@@ -134,7 +158,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
+      "stanza:description": "Placement of the menu button"
     }
   ],
   "stanza:about-link-placement": "bottom-right",

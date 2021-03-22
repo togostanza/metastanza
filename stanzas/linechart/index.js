@@ -206,7 +206,7 @@ export default async function linechart(stanza, params) {
     data,
     scales,
     axes,
-    legends,
+    legends: params["legend"] === "false" ? [] : legends,
     marks,
   };
 

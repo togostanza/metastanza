@@ -2,6 +2,10 @@ import loadData from "@/lib/load-data";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 
 export default async function scorecard(stanza, params) {
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
   const dataset = await loadData(params["data-url"], params["data-type"]);
   const width = params["width"];
   const height = params["height"];
@@ -22,11 +26,25 @@ export default async function scorecard(stanza, params) {
     },
   });
 
-  const main = stanza.root.querySelector("main");
-  main.setAttribute(
+  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
+  chartWrapper.setAttribute(
     `style`,
     `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
+
+  const key = stanza.root.querySelector("#scorecardKey");
+  const value = stanza.root.querySelector("#scorecardValue");
+  if (params["key-display"] === "false") {
+    key.setAttribute(`style`, `display: none;`);
+  }
+
+  key.setAttribute("y", Number(css("--key-font-size")));
+  value.setAttribute(
+    "y",
+    Number(css("--key-font-size")) + Number(css("--value-font-size"))
+  );
+  key.setAttribute("font-size", css("--key-font-size"));
+  value.setAttribute("font-size", css("--value-font-size"));
 
   //menu button placement
   appendDlButton(

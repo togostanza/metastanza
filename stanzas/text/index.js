@@ -1,7 +1,9 @@
 import loadData from "@/lib/load-data";
 
 export default async function text(stanza, params) {
-  stanza.importWebFontCSS('https://use.fontawesome.com/releases/v5.6.3/css/all.css');
+  stanza.importWebFontCSS(
+    "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+  );
   const dataset = await loadData(params["data-url"], params["data-type"]);
   const textBlob = new Blob([dataset.value], {
     type: "text/plain",
@@ -41,7 +43,10 @@ export default async function text(stanza, params) {
       menu.setAttribute("style", "flex-direction: column-reverse;");
       break;
     case "bottom-right":
-      menu.setAttribute("style", "justify-content flex-end; flex-direction: column-reverse;");
+      menu.setAttribute(
+        "style",
+        "justify-content flex-end; flex-direction: column-reverse;"
+      );
       break;
     case "none":
       menu.setAttribute("style", "display: none;");

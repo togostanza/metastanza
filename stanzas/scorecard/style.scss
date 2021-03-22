@@ -1,18 +1,21 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
 
-// main {
-//   padding: 1rem 2rem;
-// }
-
-.chart-wrapper {
+.group {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.chart-wrapper {
   position: relative;
-  width: 100%;
-  height: 100%;
-  // padding: 1rem 2rem;
+  .scorecard-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 //dl button style

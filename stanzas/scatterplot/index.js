@@ -204,7 +204,8 @@ export default async function scatterplot(stanza, params) {
     signals,
     scales,
     axes,
-    legends: zVariable == "none" || params["legend"] == "false" ? [] : legends,
+    legends:
+      zVariable === "none" || params["legend"] === "false" ? [] : legends,
     marks,
   };
 

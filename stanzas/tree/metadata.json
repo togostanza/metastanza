@@ -23,6 +23,8 @@
     },
     {
       "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
       "stanza:description": "Type of data",
       "stanza:required": true
@@ -47,17 +49,20 @@
     },
     {
       "stanza:key": "width",
-      "stanza:example": "600",
+      "stanza:type": "number",
+      "stanza:example": 600,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "1600",
+      "stanza:type": "number",
+      "stanza:example": 1600,
       "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
-      "stanza:example": "5",
+      "stanza:type": "number",
+      "stanza:example": 5,
       "stanza:description": "Padding"
     },
     {
