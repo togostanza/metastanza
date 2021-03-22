@@ -2,11 +2,16 @@
   <div v-if="totalPages > 1" ref="paginationWrapper" class="paginationWrapper">
     <div class="serialPagination">
       <div :class="['arrowWrapper', { show: currentPage !== 1 }]">
-        <span class="arrow double left" @click="updateCurrentPage(1)"> </span>
-        <span
+        <font-awesome-icon
+          class="arrow double left"
+          icon="angle-double-left"
+          @click="updateCurrentPage(1)"
+        />
+        <font-awesome-icon
           class="arrow left"
+          icon="angle-left"
           @click="updateCurrentPage(currentPage - 1)"
-        ></span>
+        />
       </div>
 
       <ul ref="paginationNumList" class="paginationNumList">
@@ -21,14 +26,16 @@
       </ul>
 
       <div :class="['arrowWrapper', { show: currentPage !== totalPages }]">
-        <span
+        <font-awesome-icon
           class="arrow right"
+          icon="angle-right"
           @click="updateCurrentPage(currentPage + 1)"
-        ></span>
-        <span
+        />
+        <font-awesome-icon
           class="arrow double right"
+          icon="angle-double-right"
           @click="updateCurrentPage(totalPages)"
-        ></span>
+        />
       </div>
       <div class="pageNumber">
         Page
@@ -60,9 +67,25 @@ import { defineComponent, computed, onUpdated, ref } from "vue";
 
 import Slider from "@vueform/slider";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faAngleRight,
+  faAngleDoubleRight,
+  faAngleLeft,
+  faAngleDoubleLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faAngleRight, faAngleDoubleRight, faAngleLeft, faAngleDoubleLeft);
+
 export default defineComponent({
   components: {
     Slider,
+    FontAwesomeIcon,
+    faAngleRight,
+    faAngleDoubleRight,
+    faAngleLeft,
+    faAngleDoubleLeft,
   },
   props: {
     currentPage: {

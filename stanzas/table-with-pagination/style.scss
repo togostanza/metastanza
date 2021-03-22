@@ -389,42 +389,21 @@
       > .arrowWrapper {
         min-width: 30px;
         visibility: hidden;
+        display: flex;
+        align-items: center;
         &.show {
           visibility: visible;
         }
         > .arrow {
           display: inline-block;
-          width: 7px;
-          min-width: 7px;
-          height: 7px;
-          border: 1px solid;
-          border-color: transparent transparent var(--pagination-arrow-color)
-            var(--pagination-arrow-color);
-          transform: rotate(45deg);
-          margin: 0 2px 0 6px;
-          &.right {
-            transform: rotate(-135deg);
-            margin: 0 6px 0 2px;
+          width: 15px;
+          height: 15px;
+          color: var(--pagination-arrow-color);
+          &.left {
+            margin-right: 2px;
           }
-          &.double {
-            position: relative;
-            &:after {
-              content: "";
-              display: inline-block;
-              width: 7px;
-              height: 7px;
-              border: 1px solid;
-              border-color: transparent transparent
-                var(--pagination-arrow-color) var(--pagination-arrow-color);
-              transform: rotate(0deg);
-              top: 30%;
-              left: -80%;
-              position: absolute;
-              box-sizing: border-box;
-            }
-            &.right:after {
-              transform: rotate(0deg);
-            }
+          &.right {
+            margin-left: 2px;
           }
           &:hover {
             cursor: pointer;
