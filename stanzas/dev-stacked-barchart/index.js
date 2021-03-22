@@ -70,7 +70,7 @@ export default async function devStackedBarchart(stanza, params) {
   spec.axes = [
     {
       scale: "x",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--axis-width"
@@ -138,7 +138,7 @@ export default async function devStackedBarchart(stanza, params) {
     },
     {
       scale: "y",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--axis-width"

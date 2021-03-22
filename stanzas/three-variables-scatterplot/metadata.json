@@ -71,12 +71,12 @@
       "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
     },
     {
-      "stanza:key": "xaxis-orient",
+      "stanza:key": "xaxis-placement",
       "stanza:example": "bottom",
       "stanza:description": "Orient of X-axis.(top or bottom)"
     },
     {
-      "stanza:key": "yaxis-orient",
+      "stanza:key": "yaxis-placement",
       "stanza:example": "left",
       "stanza:description": "Orient of Y-axis.(left or right)"
     },

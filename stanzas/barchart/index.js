@@ -14,9 +14,9 @@ export default async function barchart(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label-variable"]; //x
-  const valueVariable = params["value-variable"]; //y
-  const groupVariable = params["group-variable"]; //z
+  const labelVariable = params["category"]; //x
+  const valueVariable = params["value"]; //y
+  const groupVariable = params["group"]; //z
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -51,7 +51,7 @@ export default async function barchart(stanza, params) {
   const axes = [
     {
       scale: "xscale",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
@@ -83,7 +83,7 @@ export default async function barchart(stanza, params) {
     },
     {
       scale: "yscale",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
@@ -127,15 +127,15 @@ export default async function barchart(stanza, params) {
       legendX: width + 40,
       legendY: "0",
       title: groupVariable,
-      titleColor: "var(--legendtitle-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--legendtitle-size"),
-      titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--legendlabel-color)",
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legendlabel-size"),
-      symbolStrokeColor: css("--stroke-color"),
-      symbolStrokeWidth: css("--stroke-width"),
+      labelFontSize: css("--legend-font-size"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -236,8 +236,8 @@ export default async function barchart(stanza, params) {
                     x: { scale: "xscale", field: valueVariable },
                     x2: { scale: "xscale", value: 0 },
                     fill: { scale: "color", field: groupVariable },
-                    stroke: { value: "var(--stroke-color)" },
-                    strokeWidth: { value: css("--stroke-width") },
+                    stroke: { value: "var(--border-color)" },
+                    strokeWidth: { value: css("--border-width") },
                   },
                 },
               },
@@ -256,8 +256,8 @@ export default async function barchart(stanza, params) {
                 y: { scale: "yscale", field: "y0" },
                 y2: { scale: "yscale", field: "y1" },
                 fill: { scale: "color", field: groupVariable },
-                stroke: { value: "var(--stroke-color)" },
-                strokeWidth: { value: css("--stroke-width") },
+                stroke: { value: "var(--border-color)" },
+                strokeWidth: { value: css("--border-width") },
               },
             },
           },
@@ -293,7 +293,7 @@ export default async function barchart(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["togostanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");

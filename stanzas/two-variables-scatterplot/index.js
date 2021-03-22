@@ -57,7 +57,7 @@ export default async function twoVariablesScatterplot(stanza, params) {
   const axes = [
     {
       scale: "x",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       domain: true,
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
@@ -94,7 +94,7 @@ export default async function twoVariablesScatterplot(stanza, params) {
     },
     {
       scale: "y",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domain: true,
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),

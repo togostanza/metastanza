@@ -61,7 +61,7 @@ export default async function devGroupedBarchart(stanza, params) {
   spec.axes = [
     {
       scale: "yscale",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--axis-width"
@@ -134,7 +134,7 @@ export default async function devGroupedBarchart(stanza, params) {
     },
     {
       scale: "xscale",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       title: valueVariable,
       titleColor: "var(--title-color)",
       titlePadding: Number(

@@ -65,7 +65,7 @@ export default async function linechart(stanza, params) {
   const axes = [
     {
       scale: "x",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
@@ -101,7 +101,7 @@ export default async function linechart(stanza, params) {
     },
     {
       scale: "y",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
