@@ -49,13 +49,13 @@
       "stanza:description": "general font family"
     },
     {
-      "stanza:key": "--general-font-color",
+      "stanza:key": "--control-font-color",
       "stanza:type": "color",
       "stanza:default": "#707070",
       "stanza:description": "general font color"
     },
     {
-      "stanza:key": "--general-font-size",
+      "stanza:key": "--control-font-size",
       "stanza:type": "number",
       "stanza:default": "12px",
       "stanza:description": "general font size"
@@ -127,7 +127,7 @@
       "stanza:description": "style of ruled line"
     },
     {
-      "stanza:key": "--searchbox-radius",
+      "stanza:key": "--control-border-radius",
       "stanza:type": "text",
       "stanza:default": "3px",
       "stanza:description": "radius of search box"
@@ -139,7 +139,7 @@
       "stanza:description": "border color of search box"
     },
     {
-      "stanza:key": "--searchbox-background-color",
+      "stanza:key": "--control-background-color",
       "stanza:type": "color",
       "stanza:default": "#fff",
       "stanza:description": "color of search box"
@@ -187,7 +187,7 @@
       "stanza:description": "font color of search box"
     },
     {
-      "stanza:key": "--searchbox-background-color",
+      "stanza:key": "--control-background-color",
       "stanza:type": "color",
       "stanza:default": "#fff",
       "stanza:description": "background color of search box"

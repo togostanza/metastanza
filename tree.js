@@ -1,11 +1,11 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-d3554855.js';
-import { a as appendDlButton } from './metastanza_utils-821a1061.js';
-import './vega.module-9c8b3b23.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { e as embed } from './vega-embed.module-8f73515b.js';
+import { l as loadData } from './load-data-61d0d020.js';
+import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
+import './index-b2de29ee.js';
 
 async function tree(stanza, params) {
   function css(key) {
@@ -22,9 +22,9 @@ async function tree(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label-variable"]; //"name"
-  const parentVariable = params["parent-variable"]; //"parent"
-  const idVariable = params["id-variable"]; //"id-variable"
+  const labelVariable = params["label"]; //"name"
+  const parentVariable = params["parent-node"]; //"parent"
+  const idVariable = params["node"]; //"id-variable"
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -79,41 +79,6 @@ async function tree(stanza, params) {
     },
   ];
 
-  //legend
-  const legends = [
-    {
-      fill: "color",
-      title: params["legend-title"],
-      titleColor: "var(--legendtitle-color)",
-      labelColor: "var(--legendlabel-color)",
-      orient: "top-left",
-      encode: {
-        title: {
-          update: {
-            font: { value: css("--legend-font") },
-            fontSize: { value: css("--legendtitle-size") },
-            fontWeight: { value: css("--legendtitle-weight") },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: { value: css("--legend-font") },
-            fontSize: { value: css("--legendlabel-size") },
-          },
-          text: { field: "value" },
-        },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: { value: css("--stroke-width") },
-          },
-        },
-      },
-    },
-  ];
-
   //marks
   const marks = [
     {
@@ -140,8 +105,8 @@ async function tree(stanza, params) {
           x: { field: "x" },
           y: { field: "y" },
           fill: { scale: "color", field: "depth" },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: { value: css("--stroke-width") },
+          stroke: { value: "var(--border-color)" },
+          strokeWidth: { value: css("--border-width") },
         },
       },
     },
@@ -152,7 +117,7 @@ async function tree(stanza, params) {
         enter: {
           text: { field: labelVariable },
           font: { value: css("--font-family") },
-          fontSize: { value: css("--label-size") },
+          fontSize: { value: css("--label-font-size") },
           baseline: { value: "middle" },
         },
         update: {
@@ -161,7 +126,7 @@ async function tree(stanza, params) {
           dx: { signal: "datum.children ? -7 : 7" },
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
-          fill: { value: "var(--label-color)" },
+          fill: { value: "var(--label-font-color)" },
         },
       },
     },
@@ -175,7 +140,6 @@ async function tree(stanza, params) {
     signals: vegaJson.signals,
     data,
     scales,
-    legends,
     marks,
   };
 
@@ -194,13 +158,13 @@ async function tree(stanza, params) {
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
     stanza.root.querySelector("svg"),
-    "threevariable-scatter-plot",
+    "tree",
     stanza
   );
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");
@@ -224,13 +188,18 @@ async function tree(stanza, params) {
   }
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': tree
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "tree",
 	"stanza:label": "tree",
-	"stanza:definition": "Vega wrapped tree for MetaStanza",
+	"stanza:definition": "Tree chart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "tree",
 	"stanza:provider": "Togostanza",
@@ -245,61 +214,60 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://vega.github.io/vega/data/flare.json",
-		"stanza:description": "Source url of your data.",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
 		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
+		"stanza:description": "Type of data",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label-variable",
+		"stanza:key": "label",
 		"stanza:example": "name",
-		"stanza:description": "variable to be assigned as label",
+		"stanza:description": "Variable to be assigned as category",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "value-variable",
-		"stanza:example": "size",
-		"stanza:description": "variable to be assigned as value",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "parent-variable",
+		"stanza:key": "parent-node",
 		"stanza:example": "parent",
-		"stanza:description": "variable to be assigned as parent node",
+		"stanza:description": "Variable to be assigned as parent node",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "id-variable",
+		"stanza:key": "node",
 		"stanza:example": "id",
-		"stanza:description": "variable to be assigned as id",
+		"stanza:description": "Variable to be assigned as node",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "width",
-		"stanza:example": "600",
-		"stanza:description": "width of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 600,
+		"stanza:description": "Width"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:example": "1600",
-		"stanza:description": "height of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 1600,
+		"stanza:description": "Height"
 	},
 	{
 		"stanza:key": "padding",
-		"stanza:example": "5",
-		"stanza:description": "padding around your stanza"
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding"
 	},
 	{
-		"stanza:key": "legend-title",
-		"stanza:example": "Title of this legend",
-		"stanza:description": "title of legends"
-	},
-	{
-		"stanza:key": "menu-button-placement",
+		"stanza:key": "metastanza-menu-placement",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
 			"top-left",
@@ -309,7 +277,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+		"stanza:description": "Placement of the download button Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -318,121 +286,79 @@ var metadata = {
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
-		"stanza:description": "bar color"
+		"stanza:description": "Depth color 1"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
-		"stanza:description": "bar color"
+		"stanza:description": "Depth color 2"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
-		"stanza:description": "bar color"
+		"stanza:description": "Depth color 3"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#f5da64",
-		"stanza:description": "bar color"
+		"stanza:description": "Depth color 4"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#f57f5b",
-		"stanza:description": "bar color"
+		"stanza:description": "Depth color 5"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#f75976",
-		"stanza:description": "bar color"
-	},
-	{
-		"stanza:key": "--emphasized-color",
-		"stanza:type": "color",
-		"stanza:default": "#fa8c84",
-		"stanza:description": "Emphasized color when you hover on labels and rects"
+		"stanza:description": "Depth color 6"
 	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
+		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--label-color",
+		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "text color of each nodes"
+		"stanza:default": "#333333",
+		"stanza:description": "Font color of label"
 	},
 	{
-		"stanza:key": "--label-size",
+		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "11",
-		"stanza:description": "font size of the legend label"
+		"stanza:description": "Font size of label"
 	},
 	{
 		"stanza:key": "--branch-color",
 		"stanza:type": "color",
 		"stanza:default": "#AEB3BF",
-		"stanza:description": "Branch color."
+		"stanza:description": "Branch color"
 	},
 	{
 		"stanza:key": "--node-size",
 		"stanza:type": "number",
 		"stanza:default": "100",
-		"stanza:description": "Node size."
+		"stanza:description": "Node size"
 	},
 	{
-		"stanza:key": "--stroke-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "color of stroke"
-	},
-	{
-		"stanza:key": "--legendtitle-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "font color of the legend title"
-	},
-	{
-		"stanza:key": "--legendtitle-size",
-		"stanza:type": "number",
-		"stanza:default": "12",
-		"stanza:description": "Font size of the legend title"
-	},
-	{
-		"stanza:key": "--legendtitle-weight",
-		"stanza:type": "number",
-		"stanza:default": "400",
-		"stanza:description": "Font weight of the legend title"
-	},
-	{
-		"stanza:key": "--legendlabel-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "Font color of the legend label"
-	},
-	{
-		"stanza:key": "--legendlabel-size",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Font size of the legend label"
-	},
-	{
-		"stanza:key": "--stroke-color",
+		"stanza:key": "--border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Stroke color."
+		"stanza:description": "Border color"
 	},
 	{
-		"stanza:key": "--stroke-width",
+		"stanza:key": "--border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
-		"stanza:description": "Stroke width."
+		"stanza:description": "Border width"
 	}
 ]
 };
@@ -452,7 +378,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  border: solid 1px var(--label-color);\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list.dl-top-left {\n  top: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-top-right {\n  top: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-bottom-left {\n  bottom: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-bottom-right {\n  bottom: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-none {\n  display: none;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}";
-
-defineStanzaElement(tree, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=tree.js.map

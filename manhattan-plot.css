@@ -1,0 +1,134 @@
+main {
+  padding: 1rem 2rem;
+}
+
+div#chart {
+  position: relative;
+}
+
+path.axis-line {
+  stroke: black;
+  stroke-width: 2px;
+}
+
+text.axisLabel {
+  font-size: 10px;
+}
+
+text.xLabel {
+  text-anchor: middle;
+  user-select: none;
+}
+
+text.yLabel {
+  text-anchor: end;
+  user-select: none;
+}
+
+circle.ch_even {
+  fill: var(--ch-even-color);
+}
+
+circle.ch_odd {
+  fill: var(--ch-odd-color);
+}
+
+circle.ch_1 {
+  fill: var(--ch-1-color);
+}
+
+circle.ch_2 {
+  fill: var(--ch-2-color);
+}
+
+circle.ch_3 {
+  fill: var(--ch-3-color);
+}
+
+circle.ch_4 {
+  fill: var(--ch-4-color);
+}
+
+circle.ch_5 {
+  fill: var(--ch-5-color);
+}
+
+circle.ch_6 {
+  fill: var(--ch-6-color);
+}
+
+circle.ch_7 {
+  fill: var(--ch-7-color);
+}
+
+circle.ch_8 {
+  fill: var(--ch-8-color);
+}
+
+circle.ch_9 {
+  fill: var(--ch-9-color);
+}
+
+circle.ch_10 {
+  fill: var(--ch-10-color);
+}
+
+circle.ch_11 {
+  fill: var(--ch-11-color);
+}
+
+circle.ch_12 {
+  fill: var(--ch-12-color);
+}
+
+circle.ch_13 {
+  fill: var(--ch-13-color);
+}
+
+circle.ch_14 {
+  fill: var(--ch-14-color);
+}
+
+circle.ch_15 {
+  fill: var(--ch-15-color);
+}
+
+circle.ch_16 {
+  fill: var(--ch-16-color);
+}
+
+circle.ch_17 {
+  fill: var(--ch-17-color);
+}
+
+circle.ch_18 {
+  fill: var(--ch-18-color);
+}
+
+circle.ch_19 {
+  fill: var(--ch-19-color);
+}
+
+circle.ch_20 {
+  fill: var(--ch-20-color);
+}
+
+circle.ch_21 {
+  fill: var(--ch-21-color);
+}
+
+circle.ch_22 {
+  fill: var(--ch-22-color);
+}
+
+circle.ch_X {
+  fill: var(--ch-Y-color);
+}
+
+circle.ch_Y {
+  fill: var(--ch-X-color);
+}
+
+circle.over-thresh-plot {
+  fill: var(--over-thresh-color);
+}

@@ -18,72 +18,80 @@
     {
       "stanza:key": "data-url",
       "stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
-      "stanza:description": "Source url of your data.",
+      "stanza:description": "Source url of data",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
-      "stanza:description": "Type of your data.",
+      "stanza:description": "Type of data",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 800,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "text",
+      "stanza:example": "auto",
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Padding"
+    },
+    {
+      "stanza:key": "metastanza-menu-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
-    },
-    {
-      "stanza:key": "--text-width",
-      "stanza:type": "text",
-      "stanza:default": "800px",
-      "stanza:description": "Width of your stanza"
-    },
-    {
-      "stanza:key": "--text-height",
-      "stanza:type": "text",
-      "stanza:default": "auto",
-      "stanza:description": "Height of your stanza"
-    },
-    {
-      "stanza:key": "--text-padding",
-      "stanza:type": "text",
-      "stanza:default": "0 auto",
-      "stanza:description": "Padding of your stanza"
-    },
-    {
       "stanza:key": "--font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family."
+      "stanza:description": "Font family"
     },
     {
       "stanza:key": "--text-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Font color of text body."
+      "stanza:description": "Font color of text"
     },
     {
       "stanza:key": "--text-font-size",
       "stanza:type": "text",
       "stanza:default": "12px",
-      "stanza:description": "Font size of text body."
+      "stanza:description": "Font size of text"
     },
     {
       "stanza:key": "--text-font-weight",
       "stanza:type": "text",
       "stanza:default": "400",
-      "stanza:description": "Font weight of text body"
+      "stanza:description": "Font weight of text"
     },
     {
-      "stanza:key": "--table-border",
+      "stanza:key": "--text-border",
       "stanza:type": "text",
       "stanza:default": "0px solid #eeeeee",
-      "stanza:description": "Border style of text stanza"
+      "stanza:description": "Border style"
     }
   ]
 }

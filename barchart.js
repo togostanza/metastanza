@@ -1,11 +1,11 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-d3554855.js';
-import { a as appendDlButton } from './metastanza_utils-821a1061.js';
-import './vega.module-9c8b3b23.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { e as embed } from './vega-embed.module-8f73515b.js';
+import { l as loadData } from './load-data-61d0d020.js';
+import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
+import './index-b2de29ee.js';
 
 async function barchart(stanza, params) {
   function css(key) {
@@ -19,9 +19,9 @@ async function barchart(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label-variable"]; //x
-  const valueVariable = params["value-variable"]; //y
-  const groupVariable = params["group-variable"]; //z
+  const labelVariable = params["category"]; //x
+  const valueVariable = params["value"]; //y
+  const groupVariable = params["group"]; //z
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -56,55 +56,55 @@ async function barchart(stanza, params) {
   const axes = [
     {
       scale: "xscale",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash"),
+      gridDash: css("--grid-dash-length"),
       gridOpacity: css("--grid-opacity"),
       gridWidth: css("--grid-width"),
       ticks: params["xtick"] === "true",
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-size"),
+      tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: chartType === "grouped" ? valueVariable : labelVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--title-size"),
-      titleFontWeight: css("--title-weight"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: { value: css("--font-family") },
-            fontSize: { value: css("--label-size") },
+            fontSize: { value: css("--label-font-size") },
           },
         },
       },
     },
     {
       scale: "yscale",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash"),
+      gridDash: css("--grid-dash-length"),
       gridOpacity: css("--grid-opacity"),
       gridWidth: css("--grid-width"),
       ticks: params["ytick"] === "true",
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-size"),
+      tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: chartType === "grouped" ? labelVariable : valueVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--title-size"),
-      titleFontWeight: css("--title-weight"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
       zindex: 0,
       encode: {
@@ -112,11 +112,11 @@ async function barchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: css("--font-family"),
             },
-            fontSize: { value: css("--label-size") },
+            fontSize: { value: css("--label-font-size") },
             // limit: 1
           },
         },
@@ -128,19 +128,19 @@ async function barchart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "none",
-      legendX: width + 40,
+      orient: "right",
+      // legendX: width + 40,
       legendY: "0",
       title: groupVariable,
-      titleColor: "var(--legendtitle-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--legendtitle-size"),
-      titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--legendlabel-color)",
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legendlabel-size"),
-      symbolStrokeColor: css("--stroke-color"),
-      symbolStrokeWidth: css("--stroke-width"),
+      labelFontSize: css("--legend-font-size"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -241,8 +241,8 @@ async function barchart(stanza, params) {
                     x: { scale: "xscale", field: valueVariable },
                     x2: { scale: "xscale", value: 0 },
                     fill: { scale: "color", field: groupVariable },
-                    stroke: { value: "var(--stroke-color)" },
-                    strokeWidth: { value: css("--stroke-width") },
+                    stroke: { value: "var(--border-color)" },
+                    strokeWidth: { value: css("--border-width") },
                   },
                 },
               },
@@ -261,8 +261,8 @@ async function barchart(stanza, params) {
                 y: { scale: "yscale", field: "y0" },
                 y2: { scale: "yscale", field: "y1" },
                 fill: { scale: "color", field: groupVariable },
-                stroke: { value: "var(--stroke-color)" },
-                strokeWidth: { value: css("--stroke-width") },
+                stroke: { value: "var(--border-color)" },
+                strokeWidth: { value: css("--border-width") },
               },
             },
           },
@@ -278,7 +278,7 @@ async function barchart(stanza, params) {
     data: constructData(chartType),
     scales: constructScale(chartType),
     axes,
-    legends,
+    legends: params["legend"] === "false" ? [] : legends,
     marks: constructMark(chartType),
   };
 
@@ -298,7 +298,7 @@ async function barchart(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");
@@ -322,6 +322,11 @@ async function barchart(stanza, params) {
   }
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': barchart
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -342,14 +347,19 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "chart-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"stacked",
+			"grouped"
+		],
 		"stanza:example": "stacked",
-		"stanza:description": "Type of your barchart.(stacked, grouped)",
+		"stanza:description": "Type of barchart (stacked, grouped)",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-		"stanza:description": "Source url of your data.",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
@@ -362,44 +372,142 @@ var metadata = {
 			"sparql-results-json"
 		],
 		"stanza:example": "json",
-		"stanza:description": "Type of data.",
+		"stanza:description": "Type of data",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label-variable",
+		"stanza:key": "category",
 		"stanza:example": "chromosome",
-		"stanza:description": "Variable to be assigned as label.",
+		"stanza:description": "Variable to be assigned as category",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "value-variable",
+		"stanza:key": "value",
 		"stanza:example": "count",
-		"stanza:description": "Variable to be assigned as value.",
+		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "group-variable",
+		"stanza:key": "group",
 		"stanza:example": "category",
-		"stanza:description": "variable to be assigned as an identifier of a group.(If you will not use this variable, this parapeter should be set as none)",
+		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",
-		"stanza:example": "400",
-		"stanza:description": "Width of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 400,
+		"stanza:description": "Width"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:example": "300",
-		"stanza:description": "Height of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 300,
+		"stanza:description": "Height"
 	},
 	{
 		"stanza:key": "padding",
-		"stanza:example": "50",
-		"stanza:description": "Padding around your stanza"
+		"stanza:type": "number",
+		"stanza:example": 50,
+		"stanza:description": "Padding"
 	},
 	{
-		"stanza:key": "menu-button-placement",
+		"stanza:key": "padding-inner",
+		"stanza:example": "0.1",
+		"stanza:description": "Padding between each bars (Must be in the range[0,1])"
+	},
+	{
+		"stanza:key": "padding-outer",
+		"stanza:example": "0.4",
+		"stanza:description": "Padding outside of bar group (Must be in the range[0,1])"
+	},
+	{
+		"stanza:key": "xaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top",
+			"bottom"
+		],
+		"stanza:example": "bottom",
+		"stanza:description": "Placement of X axis (top or bottom)"
+	},
+	{
+		"stanza:key": "yaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"right"
+		],
+		"stanza:example": "left",
+		"stanza:description": "Placement of Y axis (left or right)"
+	},
+	{
+		"stanza:key": "xgrid",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": false,
+		"stanza:description": "Display of X grid (true or false)"
+	},
+	{
+		"stanza:key": "ygrid",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Display of Y grid (true or false)"
+	},
+	{
+		"stanza:key": "xtick",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": false,
+		"stanza:description": "Display of X tick (true or false)"
+	},
+	{
+		"stanza:key": "ytick",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Display of Y tick (true or false)"
+	},
+	{
+		"stanza:key": "xlabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "Angle of X label (in degree)"
+	},
+	{
+		"stanza:key": "ylabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "Angle of Y label (in degree)"
+	},
+	{
+		"stanza:key": "bar-width",
+		"stanza:example": "0.8",
+		"stanza:description": "Bar width (0-1)"
+	},
+	{
+		"stanza:key": "legend",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Display of legend (true or false)"
+	},
+	{
+		"stanza:key": "metastanza-menu-placement",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
 			"top-left",
@@ -409,62 +517,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
-	},
-	{
-		"stanza:key": "padding-inner",
-		"stanza:example": "0.1",
-		"stanza:description": "Padding between each bars. This mast be in the range[0,1]"
-	},
-	{
-		"stanza:key": "padding-outer",
-		"stanza:example": "0.4",
-		"stanza:description": "Padding outside of bar group. This mast be in the range[0,1]"
-	},
-	{
-		"stanza:key": "xaxis-orient",
-		"stanza:example": "bottom",
-		"stanza:description": "Orient of X-axis.(top or bottom)"
-	},
-	{
-		"stanza:key": "yaxis-orient",
-		"stanza:example": "left",
-		"stanza:description": "Orient of Y-axis.(left or right)"
-	},
-	{
-		"stanza:key": "xgrid",
-		"stanza:example": false,
-		"stanza:description": "Display of X-grids.(true or false)"
-	},
-	{
-		"stanza:key": "ygrid",
-		"stanza:example": true,
-		"stanza:description": "Display of Y-grids.(true or false)"
-	},
-	{
-		"stanza:key": "xtick",
-		"stanza:example": false,
-		"stanza:description": "Display of X-ticks.(true or false)"
-	},
-	{
-		"stanza:key": "ytick",
-		"stanza:example": true,
-		"stanza:description": "Display of Y-ticks.(true or false)"
-	},
-	{
-		"stanza:key": "xlabel-angle",
-		"stanza:example": "0",
-		"stanza:description": "Angle of X-labels.(in degree)"
-	},
-	{
-		"stanza:key": "ylabel-angle",
-		"stanza:example": "0",
-		"stanza:description": "Angle of Y-labels.(in degree)"
-	},
-	{
-		"stanza:key": "bar-width",
-		"stanza:example": "0.8",
-		"stanza:description": "Bar width.[0-1]"
+		"stanza:description": "Placement of the menu button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -473,55 +526,55 @@ var metadata = {
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
-		"stanza:description": "Bar color"
+		"stanza:description": "Group color 0"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
-		"stanza:description": "bar color"
+		"stanza:description": "Group color 1"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
-		"stanza:description": "bar color"
+		"stanza:description": "Group color 2"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#f5da64",
-		"stanza:description": "bar color"
+		"stanza:description": "Group color 3"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#f57f5b",
-		"stanza:description": "bar color"
+		"stanza:description": "Group color 4"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#f75976",
-		"stanza:description": "bar color"
+		"stanza:description": "Group color 5"
 	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
+		"stanza:description": "Font family"
 	},
 	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Axis color."
+		"stanza:description": "Axis color"
 	},
 	{
 		"stanza:key": "--axis-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "Axis width."
+		"stanza:description": "Axis width"
 	},
 	{
 		"stanza:key": "--grid-color",
@@ -530,16 +583,16 @@ var metadata = {
 		"stanza:description": "Grid color"
 	},
 	{
-		"stanza:key": "--grid-dash",
+		"stanza:key": "--grid-dash-length",
 		"stanza:type": "number",
 		"stanza:default": "",
-		"stanza:description": "Grid stroke dash.  Blank for solid lines."
+		"stanza:description": "Grid dash length (Blank for solid lines)"
 	},
 	{
 		"stanza:key": "--grid-opacity",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
-		"stanza:description": "Grid opacity.[0-1]"
+		"stanza:description": "Grid opacity (0-1)"
 	},
 	{
 		"stanza:key": "--grid-width",
@@ -554,94 +607,70 @@ var metadata = {
 		"stanza:description": "Tick color"
 	},
 	{
-		"stanza:key": "--tick-size",
+		"stanza:key": "--tick-length",
 		"stanza:type": "number",
 		"stanza:default": "1.5",
-		"stanza:description": "Tick length in pixel."
+		"stanza:description": "Tick length (in pixel)"
 	},
 	{
 		"stanza:key": "--tick-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
-		"stanza:description": "Tick width in pixel."
+		"stanza:description": "Tick width (in pixel)"
 	},
 	{
-		"stanza:key": "--title-color",
+		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Font color of titles."
+		"stanza:description": "Font color of title"
 	},
 	{
-		"stanza:key": "--title-size",
+		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "Font size of titles."
+		"stanza:description": "Font size of title"
 	},
 	{
-		"stanza:key": "--title-weight",
+		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of titles."
+		"stanza:description": "Font weight of title"
 	},
 	{
 		"stanza:key": "--title-padding",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Padding between axis labels and title."
+		"stanza:description": "Padding between label and title"
 	},
 	{
-		"stanza:key": "--label-color",
-		"stanza:type": "color",
-		"stanza:default": "#4e5059",
-		"stanza:description": "Label color."
-	},
-	{
-		"stanza:key": "--label-size",
+		"stanza:key": "--legend-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Font size of labels."
+		"stanza:description": "Font size of legend label"
 	},
 	{
-		"stanza:key": "--legendtitle-size",
-		"stanza:type": "number",
-		"stanza:default": "12",
-		"stanza:description": "font size of the legend title"
-	},
-	{
-		"stanza:key": "--legendtitle-weight",
-		"stanza:type": "number",
-		"stanza:default": "400",
-		"stanza:description": "font weight of the legend title"
-	},
-	{
-		"stanza:key": "--legendtitle-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "font color of the legend title"
-	},
-	{
-		"stanza:key": "--legendlabel-size",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "font size of the legend label"
-	},
-	{
-		"stanza:key": "--legendlabel-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "font color of the legend label"
-	},
-	{
-		"stanza:key": "--stroke-color",
+		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Stroke color."
+		"stanza:description": "Font color of label"
 	},
 	{
-		"stanza:key": "--stroke-width",
+		"stanza:key": "--label-font-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "Font size of label"
+	},
+	{
+		"stanza:key": "--border-color",
+		"stanza:type": "color",
+		"stanza:default": "#4e5059",
+		"stanza:description": "Border color"
+	},
+	{
+		"stanza:key": "--border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
-		"stanza:description": "Stroke width."
+		"stanza:description": "Border width"
 	}
 ]
 };
@@ -652,7 +681,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  border: solid 1px var(--label-color);\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list.dl-top-left {\n  top: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-top-right {\n  top: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-bottom-left {\n  bottom: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-bottom-right {\n  bottom: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-none {\n  display: none;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}";
-
-defineStanzaElement(barchart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=barchart.js.map

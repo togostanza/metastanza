@@ -22,19 +22,19 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "label-variable",
+      "stanza:key": "category",
       "stanza:example": "chromosome",
-      "stanza:description": "Variable to be assigned as label.",
+      "stanza:description": "Variable to be assigned as category.",
       "stanza:required": true
     },
     {
-      "stanza:key": "value-variable",
+      "stanza:key": "value",
       "stanza:example": "count",
       "stanza:description": "Variable to be assigned as value",
       "stanza:required": true
     },
     {
-      "stanza:key": "group-variable",
+      "stanza:key": "group",
       "stanza:example": "category",
       "stanza:description": "Variable to be assigned as an identifier of a group",
       "stanza:required": true
@@ -65,12 +65,12 @@
       "stanza:description": "Padding outside of bar group. This mast be in the range[0,1]"
     },
     {
-      "stanza:key": "xaxis-orient",
+      "stanza:key": "xaxis-placement",
       "stanza:example": "bottom",
       "stanza:description": "Orient of X-axis.(top or bottom)"
     },
     {
-      "stanza:key": "yaxis-orient",
+      "stanza:key": "yaxis-placement",
       "stanza:example": "left",
       "stanza:description": "Orient of Y-axis.(left or right)"
     },
@@ -199,16 +199,16 @@
       "stanza:description": "Grid color"
     },
     {
-      "stanza:key": "--grid-dash",
+      "stanza:key": "--grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
-      "stanza:description": "Grid stroke dash.  Blank for solid lines."
+      "stanza:description": "Grid dash length.  Blank for solid lines."
     },
     {
       "stanza:key": "--grid-opacity",
       "stanza:type": "number",
       "stanza:default": "0.5",
-      "stanza:description": "Grid opacity.[0-1]"
+      "stanza:description": "Grid opacity.(0-1)"
     },
     {
       "stanza:key": "--grid-width",
@@ -235,22 +235,22 @@
       "stanza:description": "Tick width in pixel."
     },
     {
-      "stanza:key": "--title-color",
+      "stanza:key": "--title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
       "stanza:description": "Font color of titles."
     },
     {
-      "stanza:key": "--title-size",
+      "stanza:key": "--title-font-size",
       "stanza:type": "number",
       "stanza:default": "12",
-      "stanza:description": "Font size of titles."
+      "stanza:description": "Font size of title."
     },
     {
-      "stanza:key": "--title-weight",
+      "stanza:key": "--title-font-weight",
       "stanza:type": "number",
       "stanza:default": "400",
-      "stanza:description": "Font weight of titles."
+      "stanza:description": "Font weight of title."
     },
     {
       "stanza:key": "--title-padding",
@@ -259,13 +259,13 @@
       "stanza:description": "Padding between axis labels and title."
     },
     {
-      "stanza:key": "--label-color",
+      "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
       "stanza:description": "Label color."
     },
     {
-      "stanza:key": "--label-size",
+      "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Font size of labels."
@@ -295,7 +295,7 @@
       "stanza:description": "Font color of the legend label"
     },
     {
-      "stanza:key": "--legendlabel-size",
+      "stanza:key": "--legend-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Font size of the legend label"

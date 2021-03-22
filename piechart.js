@@ -1,11 +1,11 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import { l as loadData } from './load-data-d3554855.js';
-import { a as appendDlButton } from './metastanza_utils-821a1061.js';
-import './vega.module-9c8b3b23.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { e as embed } from './vega-embed.module-8f73515b.js';
+import { l as loadData } from './load-data-61d0d020.js';
+import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
-import './index-b010e6ef.js';
+import './index-b2de29ee.js';
 
 async function piechart(stanza, params) {
   function css(key) {
@@ -22,8 +22,8 @@ async function piechart(stanza, params) {
   const padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
   //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
+  const labelVariable = params["category"];
+  const valueVariable = params["value"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -64,20 +64,20 @@ async function piechart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "none",
-      legendX: "220",
+      orient: "right",
+      // legendX: "220",
       legendY: "5",
       title: labelVariable,
-      titleColor: "var(--label-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--legendtitle-size"),
-      titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--label-color)",
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legendlabel-size"),
+      labelFontSize: css("--legend-font-size"),
       symbolType: params["symbol-shape"],
-      symbolStrokeColor: css("--stroke-color"),
-      symbolStrokeWidth: css("--stroke-width"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -100,8 +100,8 @@ async function piechart(stanza, params) {
           outerRadius: { signal: "width / 2" },
           cornerRadius: { signal: "cornerRadius" },
           fill: { scale: "color", field: labelVariable },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: { value: "var(--stroke-width)" },
+          stroke: { value: "var(--border-color)" },
+          strokeWidth: { value: "var(--border-width)" },
         },
       },
     },
@@ -116,7 +116,7 @@ async function piechart(stanza, params) {
     signals: vegaJson.signals,
     data,
     scales,
-    legends,
+    legends: params["legend"] === "false" ? [] : legends,
     marks,
   };
 
@@ -141,7 +141,7 @@ async function piechart(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");
@@ -165,6 +165,11 @@ async function piechart(stanza, params) {
   }
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': piechart
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -187,39 +192,58 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_chart?chromosome=1",
-		"stanza:description": "Source url of your data.",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
 		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
+		"stanza:description": "Type of data",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label-variable",
+		"stanza:key": "category",
 		"stanza:example": "category",
-		"stanza:description": "Variable to be assigned as label",
+		"stanza:description": "Variable to be assigned as category",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "value-variable",
+		"stanza:key": "value",
 		"stanza:example": "count",
 		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "width",
-		"stanza:example": "200",
-		"stanza:description": "Width of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 200,
+		"stanza:description": "Width"
 	},
 	{
 		"stanza:key": "height",
-		"stanza:example": "200",
-		"stanza:description": "Height of your stanza"
+		"stanza:type": "number",
+		"stanza:example": 200,
+		"stanza:description": "Height"
 	},
 	{
-		"stanza:key": "menu-button-placement",
+		"stanza:key": "legend",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Display of legend (true or false)"
+	},
+	{
+		"stanza:key": "metastanza-menu-placement",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
 			"top-left",
@@ -238,79 +262,85 @@ var metadata = {
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
-		"stanza:description": "Color 1"
+		"stanza:description": "Category color 0"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
-		"stanza:description": "Color 2"
+		"stanza:description": "Category color 1"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
-		"stanza:description": "Color 3"
+		"stanza:description": "Category color 2"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#f5da64",
-		"stanza:description": "Color 4"
+		"stanza:description": "Category color 3"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#f57f5b",
-		"stanza:description": "Color 5"
+		"stanza:description": "Category color 4"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#f75976",
-		"stanza:description": "Color 6"
+		"stanza:description": "Category color 5"
 	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
+		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--label-color",
+		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "Font color"
+		"stanza:default": "#4e5059",
+		"stanza:description": "Font color of title"
 	},
 	{
-		"stanza:key": "--legendtitle-size",
+		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "Font size of the legend title"
 	},
 	{
-		"stanza:key": "--legendtitle-weight",
+		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of the legend title"
+		"stanza:description": "Font weight of legend title"
 	},
 	{
-		"stanza:key": "--legendlabel-size",
+		"stanza:key": "--label-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "Font color of label"
+	},
+	{
+		"stanza:key": "--legend-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Font size of the legend label"
+		"stanza:description": "Font size of legend label"
 	},
 	{
-		"stanza:key": "--stroke-color",
+		"stanza:key": "--border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Stroke color."
+		"stanza:description": "Border color"
 	},
 	{
-		"stanza:key": "--stroke-width",
+		"stanza:key": "--border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
-		"stanza:description": "Stroke width."
+		"stanza:description": "Border width"
 	}
 ]
 };
@@ -330,7 +360,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "summary {\n  display: none;\n}\n\nsvg#dl_button {\n  position: absolute;\n}\nsvg#dl_button.dl-top-left {\n  top: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-top-right {\n  top: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-bottom-left {\n  bottom: 20px;\n  left: 40px;\n}\nsvg#dl_button.dl-bottom-right {\n  bottom: 20px;\n  right: 40px;\n}\nsvg#dl_button.dl-none {\n  display: none;\n}\nsvg#dl_button .circle_g {\n  cursor: pointer;\n  opacity: 0.5;\n}\nsvg#dl_button .hover {\n  opacity: 1;\n}\n\ndiv#dl_list {\n  width: fit-content;\n  position: absolute;\n  border: solid 1px #444444;\n  background-color: #ffffff;\n  font-size: 12px;\n  font-family: var(--font-family);\n}\ndiv#dl_list.dl-top-left {\n  top: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-top-right {\n  top: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-bottom-left {\n  bottom: 40px;\n  left: 50px;\n}\ndiv#dl_list.dl-bottom-right {\n  bottom: 40px;\n  right: 50px;\n}\ndiv#dl_list.dl-none {\n  display: none;\n}\ndiv#dl_list ul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n}\ndiv#dl_list ul li {\n  cursor: pointer;\n  padding: 0px 10px 0px 10px;\n}\ndiv#dl_list ul li.hover {\n  background-color: #dddddd;\n}";
-
-defineStanzaElement(piechart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=piechart.js.map

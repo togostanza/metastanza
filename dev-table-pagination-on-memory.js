@@ -1,7 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import './dev-table-body.js';
-import './metastanza_utils-821a1061.js';
-import './index-b010e6ef.js';
+import './metastanza_utils-4432665a.js';
+import './index-b2de29ee.js';
 import './timer-be811b16.js';
 
 function tablePaginationOnMemory(stanza, params) {
@@ -430,6 +430,11 @@ function tablePaginationOnMemory(stanza, params) {
   const waitingTimer = setInterval(checkChildStanza, 100);
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': tablePaginationOnMemory
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -509,7 +514,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "";
-
-defineStanzaElement(tablePaginationOnMemory, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=dev-table-pagination-on-memory.js.map

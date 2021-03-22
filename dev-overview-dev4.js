@@ -1,7 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import './index-b010e6ef.js';
-import { g as getFormatedJson, s as select } from './metastanza_utils-821a1061.js';
-import { l as lodash_mapvalues } from './index-eae00cc0.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import './index-b2de29ee.js';
+import { g as getFormatedJson, s as select } from './metastanza_utils-4432665a.js';
+import { l as lodash_mapvalues } from './index-5355f554.js';
 import './timer-be811b16.js';
 
 async function devOverviewDev3(stanza, params) {
@@ -321,6 +321,11 @@ async function draw(element, apis) {
   }
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': devOverviewDev3
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -417,7 +422,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "main {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ndiv#chart {\n  position: relative;\n}\n\ndiv.bar {\n  position: relative;\n}\n\n.bar-style-na {\n  fill: #dddddd;\n}\n\n.bar-style-0 {\n  fill: var(--series-0-color);\n}\n\n.bar-style-1 {\n  fill: var(--series-1-color);\n}\n\n.bar-style-2 {\n  fill: var(--series-2-color);\n}\n\n.bar-style-3 {\n  fill: var(--series-3-color);\n}\n\n.bar-style-4 {\n  fill: var(--series-4-color);\n}\n\n.bar-style-5 {\n  fill: var(--series-5-color);\n}\n\n.bar-style-6 {\n  fill: var(--series-6-color);\n}\n\n.bar-style-7 {\n  fill: var(--series-7-color);\n}\n\n.bar-style-8 {\n  fill: var(--series-8-color);\n}\n\n.bar-style-9 {\n  fill: var(--series-9-color);\n}\n\n.na-bar {\n  fill: #dddddd;\n  stroke: #888888;\n  stroke-width: 2px;\n}\n\n.selected-sign {\n  display: none;\n  fill: #e33512;\n}";
-
-defineStanzaElement(devOverviewDev3, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=dev-overview-dev4.js.map

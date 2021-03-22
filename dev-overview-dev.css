@@ -1,0 +1,62 @@
+main {
+  padding: 1rem 2rem;
+}
+
+p.greeting {
+  margin: 0;
+  font-size: 24px;
+  color: var(--greeting-color);
+  text-align: var(--greeting-align);
+}
+
+div#chart {
+  position: relative;
+}
+
+div.bar {
+  position: relative;
+}
+
+.bar-style-na {
+  fill: #dddddd;
+}
+
+.bar-style-0 {
+  fill: var(--series-0-color);
+}
+
+.bar-style-1 {
+  fill: var(--series-1-color);
+}
+
+.bar-style-2 {
+  fill: var(--series-2-color);
+}
+
+.bar-style-3 {
+  fill: var(--series-3-color);
+}
+
+.bar-style-4 {
+  fill: var(--series-4-color);
+}
+
+.bar-style-5 {
+  fill: var(--series-5-color);
+}
+
+.bar-style-6 {
+  fill: var(--series-6-color);
+}
+
+.bar-style-7 {
+  fill: var(--series-7-color);
+}
+
+.bar-style-8 {
+  fill: var(--series-8-color);
+}
+
+.bar-style-9 {
+  fill: var(--series-9-color);
+}

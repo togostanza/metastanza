@@ -1,0 +1,136 @@
+div.main {
+  font-family: "Arial", sans-serif;
+}
+
+div#paginationTop,
+div#paginationBottom {
+  text-align: var(--button-align);
+  clear: both;
+  position: relative;
+}
+
+div.page_slider_div {
+  width: 100%;
+  height: 20px;
+  margin: 10px 0px 20px 0px;
+  text-align: left;
+}
+
+div.page_slider_bar {
+  width: calc(100% - 40px);
+  margin-left: 20px;
+  background-color: #bbbbbb;
+  /* slider bar color */
+  height: 4px;
+  position: relative;
+  top: 8px;
+}
+
+ul.page_button_ul {
+  display: inline-block;
+  padding: 0px 20px 0px 20px;
+}
+
+ul.page_slider_knob_ul {
+  margin: 0px;
+  display: inline-block;
+  padding: 0px;
+  position: relative;
+  top: -4px;
+}
+
+li.page_slider_knob,
+li.page_button {
+  background-color: var(--button-bg-color);
+  /* button default bg color */
+  color: var(--button-text-color);
+  /* button default font color */
+  text-align: center;
+  height: 20px;
+  padding-left: 14px;
+  padding-right: 14px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  display: table-cell;
+  vertical-align: middle;
+  transform: translateX(0px);
+  /* for z-index conflict of slider range object */
+}
+
+li.current_button,
+li.onmouse_button {
+  background-color: var(--current-button-bg-color);
+  /* button active bg color */
+}
+
+li.inactive_button {
+  background-color: #cccccc;
+  /* button inactive bg color */
+}
+
+li.current_button,
+li.page_slider_knob,
+li.inactive_button {
+  cursor: default;
+}
+
+li.page_slider_knob {
+  border-radius: 10px;
+  min-width: 44px;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+li.prev_button {
+  transform: translateX(-10px);
+  border-radius: 10px;
+}
+
+li.next_button {
+  transform: translateX(10px);
+  border-radius: 10px;
+}
+
+li.first_button {
+  transform: translateX(-20px);
+  border-radius: 10px;
+}
+
+li.last_button {
+  transform: translateX(20px);
+  border-radius: 10px;
+}
+
+li.page_button_left {
+  padding-left: 24px;
+  border-radius: 10px 0px 0px 10px;
+}
+
+li.page_button_right {
+  padding-right: 24px;
+  border-radius: 0px 10px 10px 0px;
+}
+
+div.float_left {
+  float: left;
+}
+
+div.float_right {
+  float: right;
+}
+
+canvas.slider_range {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  left: 0px;
+}
+
+div#tableInfo {
+  font-size: 12px;
+  margin-left: 4px;
+}
+div#tableInfo > div {
+  margin: 0.3em 0 1em;
+}

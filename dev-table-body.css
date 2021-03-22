@@ -1,0 +1,71 @@
+table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin: 0;
+  background-color: var(--background-color);
+  border-right: var(--table-border);
+  border-bottom: var(--table-border);
+  border-left: var(--table-border);
+  box-shadow: var(--table-shadow);
+}
+table > thead {
+  background-color: var(--thead-background-color);
+  font-size: var(--thead-font-size);
+  color: var(--thead-font-color);
+  margin-bottom: 0;
+}
+table > thead > tr > th {
+  color: var(--thead-font-color);
+  font-weight: var(--thead-font-weight);
+  padding: 10px;
+  position: sticky;
+  top: -1px;
+  background: #ffffff;
+  border-bottom: var(--thead-border-color);
+}
+table > thead > tr > th:after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: var(--thead-border-color);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+table > thead > tr > th:first-child {
+  background-color: var(--thead-background-color);
+  padding-left: 20px;
+  padding-right: 20px;
+}
+table > tbody {
+  font-size: var(--tbody-font-size);
+  color: var(--tbody-font-color);
+  background-color: var(--tbody-background-color);
+  border-right: var(--tbody-border-right);
+  border-bottom: var(--tbody-border-bottom);
+  border-left: var(--tbody-border-left);
+}
+table > tbody > tr:nth-child(odd) {
+  background-color: var(--tbody-odd-background-color);
+}
+table > tbody > tr:nth-child(even) {
+  background-color: var(--tbody-even-background-color);
+}
+table > tbody > tr > td {
+  border-bottom: var(--ruled-line);
+  border-collapse: collapse;
+  padding: 10px;
+}
+table > tbody > tr > td:first-child {
+  padding-left: 20px;
+}
+table > tbody > tr > td:last-child {
+  padding-right: 20px;
+}
+table > tbody > tr > td.loadingWrapper {
+  text-align: center;
+}
+table > tbody > tr:last-of-type > td {
+  border-bottom: none;
+}

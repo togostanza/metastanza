@@ -1,6 +1,6 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { e as embed } from './vega-embed.module-8c506186.js';
-import './vega.module-9c8b3b23.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { e as embed } from './vega-embed.module-8f73515b.js';
+import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
 
@@ -14,9 +14,9 @@ async function devGroupedBarchart(stanza, params) {
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  const labelVariable = params["label-variable"]; //category
-  const valueVariable = params["value-variable"]; //value
-  const groupVariable = params["group-variable"]; //position?
+  const labelVariable = params["category"]; //category
+  const valueVariable = params["value"]; //value
+  const groupVariable = params["group"]; //position?
 
   spec.data = [
     {
@@ -65,7 +65,7 @@ async function devGroupedBarchart(stanza, params) {
   spec.axes = [
     {
       scale: "yscale",
-      orient: params["yaxis-orient"],
+      orient: params["yaxis-placement"],
       domainColor: "var(--axis-color)",
       domainWidth: getComputedStyle(stanza.root.host).getPropertyValue(
         "--axis-width"
@@ -73,7 +73,7 @@ async function devGroupedBarchart(stanza, params) {
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -90,12 +90,12 @@ async function devGroupedBarchart(stanza, params) {
         "--tick-width"
       ),
       title: labelVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
         "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
+        "--title-font-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-width"
@@ -111,7 +111,7 @@ async function devGroupedBarchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -119,7 +119,7 @@ async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
           },
@@ -138,16 +138,16 @@ async function devGroupedBarchart(stanza, params) {
     },
     {
       scale: "xscale",
-      orient: params["xaxis-orient"],
+      orient: params["xaxis-placement"],
       title: valueVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
       ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -166,7 +166,7 @@ async function devGroupedBarchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -174,7 +174,7 @@ async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
           },
@@ -188,12 +188,12 @@ async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
+                "--title-font-size"
               ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
+                "--title-font-weight"
               ),
             },
           },
@@ -235,7 +235,7 @@ async function devGroupedBarchart(stanza, params) {
         "--font-family"
       ),
       labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
+        "--legend-font-size"
       ),
       symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
         "--stroke-color"
@@ -327,6 +327,11 @@ async function devGroupedBarchart(stanza, params) {
   await embed(el, spec, opts);
 }
 
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': devGroupedBarchart
+});
+
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
@@ -352,19 +357,19 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label-variable",
+		"stanza:key": "category",
 		"stanza:example": "chromosome",
-		"stanza:description": "variable to be assigned as label",
+		"stanza:description": "Variable to be assigned as category",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "value-variable",
+		"stanza:key": "value",
 		"stanza:example": "count",
 		"stanza:description": "variable to be assigned as value",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "group-variable",
+		"stanza:key": "group",
 		"stanza:example": "category",
 		"stanza:description": "variable to be assigned as an identifier of a group",
 		"stanza:required": true
@@ -385,12 +390,12 @@ var metadata = {
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "xaxis-orient",
+		"stanza:key": "xaxis-placement",
 		"stanza:example": "bottom",
 		"stanza:description": "orient of X-axis.(please select top or bottom)"
 	},
 	{
-		"stanza:key": "yaxis-orient",
+		"stanza:key": "yaxis-placement",
 		"stanza:example": "left",
 		"stanza:description": "orient of Y-axis.(please select left or right)"
 	},
@@ -509,10 +514,10 @@ var metadata = {
 		"stanza:description": "grid color"
 	},
 	{
-		"stanza:key": "--grid-dash",
+		"stanza:key": "--grid-dash-length",
 		"stanza:type": "number",
 		"stanza:default": "",
-		"stanza:description": "grid stroke dash.  Blank for solid lines."
+		"stanza:description": "Grid dash length.  Blank for solid lines."
 	},
 	{
 		"stanza:key": "--grid-opacity",
@@ -545,37 +550,37 @@ var metadata = {
 		"stanza:description": "width of axis"
 	},
 	{
-		"stanza:key": "--title-size",
+		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "font size of titles"
+		"stanza:description": "Font size of title"
 	},
 	{
-		"stanza:key": "--title-color",
+		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#222222",
-		"stanza:description": "font color of title"
+		"stanza:description": "Font color of title"
 	},
 	{
-		"stanza:key": "--title-weight",
+		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "font weight of titles"
+		"stanza:description": "Font weight of title"
 	},
 	{
 		"stanza:key": "--title-padding",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "padding between axis labels and title.(in pixel)"
+		"stanza:description": "Padding between label and title"
 	},
 	{
-		"stanza:key": "--label-size",
+		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	},
 	{
-		"stanza:key": "--label-color",
+		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333",
 		"stanza:description": "label color"
@@ -605,7 +610,7 @@ var metadata = {
 		"stanza:description": "font color of the legend title"
 	},
 	{
-		"stanza:key": "--legendlabel-size",
+		"stanza:key": "--legend-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "font size of the legend label"
@@ -646,7 +651,5 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "main {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
-
-defineStanzaElement(devGroupedBarchart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=dev-grouped-barchart.js.map

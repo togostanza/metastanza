@@ -1,0 +1,825 @@
+/* Functional styling;
+* These styles are required for noUiSlider to function.
+* You don't need to change these rules to apply your design.
+*/
+.slider-target,
+.slider-target * {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-user-select: none;
+  -ms-touch-action: none;
+  touch-action: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.slider-target {
+  position: relative;
+}
+
+.slider-base,
+.slider-connects {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Wrapper for all connect elements.
+*/
+.slider-connects {
+  overflow: hidden;
+  z-index: 0;
+}
+
+.slider-connect,
+.slider-origin {
+  will-change: transform;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  -ms-transform-origin: 0 0;
+  -webkit-transform-origin: 0 0;
+  -webkit-transform-style: preserve-3d;
+  transform-origin: 0 0;
+  transform-style: flat;
+}
+
+.slider-connect {
+  height: 100%;
+  width: 100%;
+}
+
+.slider-origin {
+  height: 10%;
+  width: 10%;
+}
+
+/* Offset direction
+*/
+.slider-txt-dir-rtl.slider-horizontal .slider-origin {
+  left: 0;
+  right: auto;
+}
+
+/* Give origins 0 height/width so they don't interfere with clicking the
+* connect elements.
+*/
+.slider-vertical .slider-origin {
+  width: 0;
+}
+
+.slider-horizontal .slider-origin {
+  height: 0;
+}
+
+.slider-handle {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  position: absolute;
+}
+
+.slider-touch-area {
+  height: 100%;
+  width: 100%;
+}
+
+.slider-state-tap .slider-connect,
+.slider-state-tap .slider-origin {
+  -webkit-transition: transform 0.3s;
+  transition: transform 0.3s;
+}
+
+.slider-state-drag * {
+  cursor: inherit !important;
+}
+
+/* Slider size and handle placement;
+*/
+.slider-horizontal {
+  height: 6px;
+}
+
+.slider-horizontal .slider-handle {
+  width: 16px;
+  height: 16px;
+  top: -6px;
+  right: -8px;
+}
+
+.slider-vertical {
+  width: 6px;
+  height: 300px;
+}
+
+.slider-vertical .slider-handle {
+  width: 16px;
+  height: 16px;
+  top: -8px;
+  right: -6px;
+}
+
+.slider-txt-dir-rtl.slider-horizontal .slider-handle {
+  left: -8px;
+  right: auto;
+}
+
+/* Styling;
+* Giving the connect element a border radius causes issues with using transform: scale
+*/
+.slider-base {
+  background-color: #d4e0e7;
+  border-radius: 3px;
+}
+
+.slider-connects {
+  border-radius: 3px;
+}
+
+.slider-connect {
+  background: #41b883;
+  cursor: pointer;
+}
+
+/* Handles and cursors;
+*/
+.slider-draggable {
+  cursor: ew-resize;
+}
+
+.slider-vertical .slider-draggable {
+  cursor: ns-resize;
+}
+
+.slider-handle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0;
+  right: -8px;
+  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
+  cursor: grab;
+}
+.slider-handle:focus {
+  outline: none;
+}
+
+.slider-active {
+  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.42);
+  cursor: grabbing;
+}
+
+/* Disabled state;
+*/
+[disabled] .slider-connect {
+  background: #B8B8B8;
+}
+
+[disabled].slider-target,
+[disabled].slider-handle,
+[disabled] .slider-handle {
+  cursor: not-allowed;
+}
+
+[disabled] .slider-tooltip {
+  background: #B8B8B8;
+  border-color: #B8B8B8;
+}
+
+.slider-tooltip {
+  position: absolute;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 2px 5px;
+  min-width: 20px;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #41b883;
+  background: #41b883;
+}
+
+.slider-horizontal .slider-tooltip {
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+  left: 50%;
+  bottom: 24px;
+}
+.slider-horizontal .slider-tooltip:before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: inherit;
+  transform: translate(-50%);
+}
+
+.slider-vertical .slider-tooltip {
+  -webkit-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  top: 50%;
+  right: 24px;
+}
+.slider-vertical .slider-tooltip:before {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-left-color: inherit;
+  transform: translateY(-50%);
+}
+
+.slider-horizontal .slider-origin > .slider-tooltip {
+  -webkit-transform: translate(50%, 0);
+  transform: translate(50%, 0);
+  left: auto;
+  bottom: 14px;
+}
+
+.slider-vertical .slider-origin > .slider-tooltip {
+  -webkit-transform: translate(0, -18px);
+  transform: translate(0, -18px);
+  top: auto;
+  right: 18px;
+}
+
+/* Base;
+*
+*/
+.slider-pips,
+.slider-pips * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.slider-pips {
+  position: absolute;
+  color: #999;
+}
+
+/* Values;
+*
+*/
+.slider-value {
+  position: absolute;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.slider-value-sub {
+  color: #ccc;
+  font-size: 10px;
+}
+
+/* Markings;
+*
+*/
+.slider-marker {
+  position: absolute;
+  background: #CCC;
+}
+
+.slider-marker-sub {
+  background: #AAA;
+}
+
+.slider-marker-large {
+  background: #AAA;
+}
+
+/* Horizontal layout;
+*
+*/
+.slider-pips-horizontal {
+  padding: 10px 0;
+  height: 80px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+.slider-value-horizontal {
+  -webkit-transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%);
+}
+.slider-rtl .slider-value-horizontal {
+  -webkit-transform: translate(50%, 50%);
+  transform: translate(50%, 50%);
+}
+
+.slider-marker-horizontal.slider-marker {
+  margin-left: -1px;
+  width: 2px;
+  height: 5px;
+}
+
+.slider-marker-horizontal.slider-marker-sub {
+  height: 10px;
+}
+
+.slider-marker-horizontal.slider-marker-large {
+  height: 15px;
+}
+
+/* Vertical layout;
+*
+*/
+.slider-pips-vertical {
+  padding: 0 10px;
+  height: 100%;
+  top: 0;
+  left: 100%;
+}
+
+.slider-value-vertical {
+  -webkit-transform: translate(0, -50%);
+  transform: translate(0, -50%);
+  padding-left: 25px;
+}
+.slider-rtl .slider-value-vertical {
+  -webkit-transform: translate(0, 50%);
+  transform: translate(0, 50%);
+}
+
+.slider-marker-vertical.slider-marker {
+  width: 5px;
+  height: 2px;
+  margin-top: -1px;
+}
+
+.slider-marker-vertical.slider-marker-sub {
+  width: 10px;
+}
+
+.slider-marker-vertical.slider-marker-large {
+  width: 15px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  list-style: none;
+  color: var(--control-font-color);
+  font-family: var(--font-family);
+  font-size: var(--control-font-size);
+}
+
+#renderDiv {
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+}
+
+.textSearchInput[type=text] {
+  margin-right: 3px;
+  width: 164px;
+  height: 20px;
+  border: 1px solid var(--series-0-color);
+  border-radius: var(--control-border-radius);
+  font-size: var(--control-font-size);
+  color: var(--control-font-color);
+  background-color: var(--control-background-color);
+}
+.textSearchInput[type=text]::placeholder {
+  padding: 0px 0px 0px 4px;
+  color: var(--searchbox-font-color);
+}
+
+.modalBackground {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+.modalBackground.black {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: var(--vertical-pagination-placement);
+}
+.wrapper > .tableWrapper > .tableOption {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 0px 0px 10px 0px;
+}
+.wrapper > .tableWrapper > .tableOption > .entries {
+  margin-left: auto;
+  margin-right: 10px;
+  font-size: var(--control-font-color);
+}
+.wrapper > .tableWrapper > .tableOption > .entries select {
+  border: 1px solid var(--series-0-color);
+  border-radius: var(--control-border-radius);
+  height: 20px;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper {
+  position: relative;
+  line-height: 1;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper > .menuIcon {
+  width: 16px;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper > .menuIcon:hover {
+  cursor: pointer;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu {
+  position: absolute;
+  top: 24px;
+  right: 0px;
+  padding: 8px 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  list-style: none;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu > li > .downloadBtn {
+  white-space: nowrap;
+  line-height: 24px;
+  font-weight: bold;
+}
+.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu:before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 3px;
+  border: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid #ffffff;
+}
+.wrapper > .tableWrapper > table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  margin: 0;
+  border: var(--table-border);
+  box-shadow: var(--table-shadow);
+}
+.wrapper > .tableWrapper > table > thead {
+  background-color: var(--thead-background-color);
+  font-size: var(--thead-font-size);
+  color: var(--thead-font-color);
+  margin-bottom: 0;
+  border-bottom: var(--thead-border-bottom);
+}
+.wrapper > .tableWrapper > table > thead > tr > th {
+  color: var(--thead-font-color);
+  font-weight: var(--thead-font-weight);
+  padding: 10px;
+  white-space: nowrap;
+}
+.wrapper > .tableWrapper > table > thead > tr > th:first-child {
+  background-color: var(--thead-background-color);
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper {
+  display: inline-block;
+  position: relative;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow {
+  position: absolute;
+  top: 0;
+  left: -22px;
+  z-index: 3;
+  width: auto;
+  height: auto;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: var(--control-border-radius);
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {
+  padding: 4px 8px;
+  background-color: var(--thead-font-color);
+  color: #ffffff;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters {
+  padding: 9px 8px;
+  margin: 9px 8px 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  max-height: 400px;
+  overflow: auto;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li {
+  display: flex;
+  margin-bottom: 8px;
+  line-height: 1.4em;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label {
+  display: flex;
+  align-items: center;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label > input[type=checkbox] {
+  margin-right: 6px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {
+  display: flex;
+  justify-content: center;
+  padding: 0 8px;
+  margin-bottom: 9px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {
+  border: 1px solid var(--series-0-color);
+  border-radius: 3px;
+  background-color: var(--series-0-color);
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  padding: 3px 10px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:first-of-type,
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:first-of-type {
+  margin-right: 4px;
+  width: 60%;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:last-of-type,
+.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:last-of-type {
+  width: 40%;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: #ffffff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > p.title {
+  display: block;
+  padding: 6px 16px;
+  background-color: var(--thead-font-color);
+  color: #ffffff;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > input.textSearchInput[name=queryInputByColumn] {
+  margin: 20px 30px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider {
+  margin: 30px 40px 8px;
+  width: 230px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {
+  background-color: var(--thead-font-color);
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {
+  width: 14px;
+  height: 14px;
+  top: -5px;
+  background-color: var(--series-0-color);
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle .slider-tooltip {
+  border: 1px solid var(--thead-font-color);
+  background: var(--thead-font-color);
+  padding: 0 6px;
+  line-height: 1.4em;
+  bottom: 20px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput {
+  width: 242px;
+  margin: 0 34px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > .rangeInputLabel {
+  font-size: 10px;
+  display: block;
+  margin-left: 2px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text] {
+  width: 164px;
+  height: 20px;
+  border: 1px solid var(--series-0-color);
+  border-radius: var(--control-border-radius);
+  font-size: var(--control-font-size);
+  color: var(--control-font-color);
+  background-color: var(--control-background-color);
+  width: 100%;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text]::placeholder {
+  padding: 0px 0px 0px 4px;
+  color: var(--searchbox-font-color);
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > .dash {
+  width: 8px;
+  height: 1px;
+  background-color: var(--control-font-color);
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-bottom: 10px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {
+  left: auto;
+  right: 0px;
+}
+.wrapper > .tableWrapper > table > thead > tr .icon {
+  cursor: pointer;
+  content: "";
+  display: inline-block;
+  width: var(--control-font-size);
+  height: var(--control-font-size);
+}
+.wrapper > .tableWrapper > table > thead > tr .icon path {
+  color: var(--control-non-active-color);
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.active path {
+  color: var(--control-active-color);
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.search {
+  margin-left: 1px;
+  width: calc(var(--control-font-size) - 1px);
+  height: calc(var(--control-font-size) - 1px);
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.filter {
+  padding: 0 2px;
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing {
+  z-index: 3;
+  position: relative;
+  background-color: var(--thead-font-color);
+  color: #ffffff;
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.sort {
+  display: var(--sorticon-display);
+  position: relative;
+}
+.wrapper > .tableWrapper > table > tbody {
+  font-size: var(--tbody-font-size);
+  color: var(--tbody-font-color);
+  font-weight: var(--tbody-font-weight);
+}
+.wrapper > .tableWrapper > table > tbody > tr:nth-child(odd) {
+  background-color: var(--tbody-odd-background-color);
+}
+.wrapper > .tableWrapper > table > tbody > tr:nth-child(even) {
+  background-color: var(--tbody-even-background-color);
+}
+.wrapper > .tableWrapper > table > tbody > tr > td {
+  border-bottom: var(--ruled-line);
+  border-collapse: collapse;
+  padding: 10px;
+}
+.wrapper > .tableWrapper > table > tbody > tr > td:first-child {
+  padding-left: 20px;
+}
+.wrapper > .tableWrapper > table > tbody > tr > td:last-child {
+  padding-right: 20px;
+}
+.wrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
+  border-bottom: none;
+}
+.wrapper > .paginationWrapper {
+  display: flex;
+  flex-direction: var(--vertical-pagination-placement);
+  width: calc(100% - 30px);
+  margin: 10px auto;
+}
+.wrapper > .paginationWrapper > .serialPagination {
+  display: flex;
+  justify-content: var(--horizonal-pagination-placement);
+  align-items: stretch;
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList {
+  display: flex;
+  padding: 0;
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination {
+  color: var(--pagination-font-color);
+  background-color: var(--pagination-background-color);
+  border-right: var(--pagination-border);
+  padding: var(--pagination-padding);
+  font-size: var(--pagination-font-size);
+  display: flex;
+  align-items: center;
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:hover {
+  cursor: pointer;
+  color: var(--pagination-current-font-color);
+  background-color: var(--pagination-current-background-color);
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:first-of-type {
+  border-top-left-radius: var(--pagination-border-radius);
+  border-bottom-left-radius: var(--pagination-border-radius);
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination:last-of-type {
+  border-top-right-radius: var(--pagination-border-radius);
+  border-bottom-right-radius: var(--pagination-border-radius);
+  border-right: none;
+}
+.wrapper > .paginationWrapper > .serialPagination > ul.paginationNumList > li.pagination.currentBtn {
+  color: var(--pagination-current-font-color);
+  background-color: var(--pagination-current-background-color);
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper {
+  min-width: 30px;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper.show {
+  visibility: visible;
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  color: var(--pagination-arrow-color);
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow.left {
+  margin-right: 2px;
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow.right {
+  margin-left: 2px;
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow:hover {
+  cursor: pointer;
+}
+.wrapper > .paginationWrapper > .serialPagination > .pageNumber {
+  margin-left: 20px;
+}
+.wrapper > .paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput {
+  width: 164px;
+  height: 20px;
+  border: 1px solid var(--series-0-color);
+  border-radius: var(--control-border-radius);
+  font-size: var(--control-font-size);
+  color: var(--control-font-color);
+  background-color: var(--control-background-color);
+  width: 40px;
+}
+.wrapper > .paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput::placeholder {
+  padding: 0px 0px 0px 4px;
+  color: var(--searchbox-font-color);
+}
+.wrapper > .paginationWrapper > #slider.pageSlider {
+  height: 4px;
+  margin: 0 auto;
+  width: 100%;
+}
+.wrapper > .paginationWrapper > #slider.pageSlider .slider-connects {
+  background-color: #bbbbbb;
+}
+.wrapper > .paginationWrapper > #slider.pageSlider .slider-connects .slider-connect {
+  background-color: #bbbbbb;
+}
+.wrapper > .paginationWrapper > #slider.pageSlider .slider-handle > .slider-tooltip {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  bottom: auto;
+  line-height: 1.3;
+  color: var(--pagination-current-font-color);
+  background-color: var(--pagination-current-background-color);
+  border: var(--pagination-border);
+  padding: var(--pagination-padding);
+  font-size: var(--pagination-font-size);
+  border-radius: var(--pagination-border-radius);
+}
+.wrapper > .paginationWrapper > #slider.pageSlider .slider-handle > .slider-tooltip:before {
+  display: none;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  margin-top: -20px;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.4s, margin-top 0.4s;
+}
+
+.modal_bg-enter-from,
+.modal_bg-leave-to {
+  opacity: 0;
+}
+
+.modal_bg-enter-active,
+.modal_bg-leave-active {
+  transition: opacity 0.4s;
+}

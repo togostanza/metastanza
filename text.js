@@ -1,13 +1,14 @@
-import { d as defineStanzaElement } from './stanza-element-b0afeab3.js';
-import { l as loadData } from './load-data-d3554855.js';
-import './index-b010e6ef.js';
+import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { l as loadData } from './load-data-61d0d020.js';
+import './index-b2de29ee.js';
 import './timer-be811b16.js';
 import './dsv-cd3740c6.js';
 
 async function text(stanza, params) {
+  stanza.importWebFontCSS(
+    "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+  );
   const dataset = await loadData(params["data-url"], params["data-type"]);
-
-  console.log(dataset.value);
   const textBlob = new Blob([dataset.value], {
     type: "text/plain",
   });
@@ -26,7 +27,41 @@ async function text(stanza, params) {
       textUrl: URL.createObjectURL(textBlob),
     },
   });
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
+  const table = stanza.root.querySelector("table");
+  table.setAttribute(
+    `style`,
+    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
+  );
+
+  const menu = stanza.root.querySelector(".menu");
+  switch (params["metastanza-menu-placement"]) {
+    case "top-left":
+      break;
+    case "top-right":
+      menu.setAttribute("style", "justify-content: flex-end;");
+      break;
+    case "bottom-left":
+      menu.setAttribute("style", "flex-direction: column-reverse;");
+      break;
+    case "bottom-right":
+      menu.setAttribute(
+        "style",
+        "justify-content flex-end; flex-direction: column-reverse;"
+      );
+      break;
+    case "none":
+      menu.setAttribute("style", "display: none;");
+      break;
+  }
 }
+
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': text
+});
 
 var metadata = {
 	"@context": {
@@ -49,76 +84,85 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
-		"stanza:description": "Source url of your data.",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
 		"stanza:example": "json",
-		"stanza:description": "Type of your data.",
+		"stanza:description": "Type of data",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "width",
+		"stanza:type": "number",
+		"stanza:example": 800,
+		"stanza:description": "Width"
+	},
+	{
+		"stanza:key": "height",
+		"stanza:type": "text",
+		"stanza:example": "auto",
+		"stanza:description": "Height"
+	},
+	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 0,
+		"stanza:description": "Padding"
+	},
+	{
+		"stanza:key": "metastanza-menu-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top-left",
+			"top-right",
+			"bottom-left",
+			"bottom-right",
+			"none"
+		],
+		"stanza:example": "top-right",
+		"stanza:description": "Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--greeting-align",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "text align of greeting"
-	},
-	{
-		"stanza:key": "--text-width",
-		"stanza:type": "text",
-		"stanza:default": "800px",
-		"stanza:description": "Width of your stanza"
-	},
-	{
-		"stanza:key": "--text-height",
-		"stanza:type": "text",
-		"stanza:default": "auto",
-		"stanza:description": "Height of your stanza"
-	},
-	{
-		"stanza:key": "--text-padding",
-		"stanza:type": "text",
-		"stanza:default": "0 auto",
-		"stanza:description": "Padding of your stanza"
-	},
-	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
-		"stanza:description": "Font family."
+		"stanza:description": "Font family"
 	},
 	{
 		"stanza:key": "--text-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4e5059",
-		"stanza:description": "Font color of text body."
+		"stanza:description": "Font color of text"
 	},
 	{
 		"stanza:key": "--text-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
-		"stanza:description": "Font size of text body."
+		"stanza:description": "Font size of text"
 	},
 	{
 		"stanza:key": "--text-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of text body"
+		"stanza:description": "Font weight of text"
 	},
 	{
-		"stanza:key": "--table-border",
+		"stanza:key": "--text-border",
 		"stanza:type": "text",
 		"stanza:default": "0px solid #eeeeee",
-		"stanza:description": "Border style of text stanza"
+		"stanza:description": "Border style"
 	}
 ]
 };
@@ -136,19 +180,19 @@ var templates = [
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
     + "\n        </td>\n      </tr>\n    </tbody>\n  </table>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":12,"column":0},"end":{"line":22,"column":9}}})) != null ? stack1 : "");
+  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"menu\">\n  <a id=\"metastanzaMenuBtn\" href=\""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"textUrl") || (depth0 != null ? lookupProperty(depth0,"textUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"textUrl","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":9,"column":34},"end":{"line":9,"column":45}}}) : helper)))
+    + "\" download=\"text\">\n    <i class=\"fas fa-ellipsis-h\"></i>\n  </a>\n</div>\n\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":14,"column":0},"end":{"line":24,"column":9}}})) != null ? stack1 : "");
 },"useData":true,"useBlockParams":true}]
 ];
 
-var css = "main {\n  padding: 1rem 2rem;\n}\n\n* {\n  font-family: var(--font-family);\n  box-sizing: border-box;\n}\n\ntable {\n  display: block;\n  width: var(--text-width);\n  height: var(--text-height);\n  margin: var(--text-padding);\n  border: var(--table-border);\n}\ntable tbody tr td {\n  word-break: break-all;\n  color: var(--text-font-color);\n  font-size: var(--text-font-size);\n  font-weight: var(--text-font-weight);\n}";
-
-defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
 //# sourceMappingURL=text.js.map

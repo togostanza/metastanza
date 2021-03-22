@@ -1,0 +1,22 @@
+* {
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.menu {
+  display: flex;
+}
+.menu a {
+  color: var(--text-font-color);
+}
+
+table {
+  display: block;
+  border: var(--text-border);
+}
+table tbody tr td {
+  word-break: break-all;
+  color: var(--text-font-color);
+  font-size: var(--text-font-size);
+  font-weight: var(--text-font-weight);
+}
