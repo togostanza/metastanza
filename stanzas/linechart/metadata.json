@@ -48,6 +48,24 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "category-title",
+      "stanza:example": "",
+      "stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "value-title",
+      "stanza:example": "",
+      "stanza:description": "Title for value variable (In case of blank, 'value variable' name will be assigned)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "group-title",
+      "stanza:example": "",
+      "stanza:description": "Title for group variable (In case of blank, 'group variable' name will be assigned)",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 400,
@@ -116,6 +134,30 @@
       "stanza:key": "ylabel-angle",
       "stanza:example": "0",
       "stanza:description": "Angle of Y label (in degree)"
+    },
+    {
+      "stanza:key": "xlabel-padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Padding between X label and tick"
+    },
+    {
+      "stanza:key": "ylabel-padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Padding between Y label and tick"
+    },
+    {
+      "stanza:key": "xtitle-padding",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Padding between X title and label"
+    },
+    {
+      "stanza:key": "ytitle-padding",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Padding between Y title and label"
     },
     {
       "stanza:key": "legend",
@@ -253,12 +295,6 @@
       "stanza:type": "number",
       "stanza:default": "400",
       "stanza:description": "Font weight of title"
-    },
-    {
-      "stanza:key": "--title-padding",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Padding between label and title"
     },
     {
       "stanza:key": "--legend-font-size",

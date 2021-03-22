@@ -62,7 +62,10 @@ export default async function piechart(stanza, params) {
       orient: "right",
       // legendX: "220",
       legendY: "5",
-      title: labelVariable,
+      title:
+        params["category-title"] === ""
+          ? labelVariable
+          : params["category-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

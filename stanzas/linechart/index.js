@@ -78,20 +78,22 @@ export default async function linechart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
-      title: labelVariable,
+      title:
+        params["category-title"] === ""
+          ? labelVariable
+          : params["category-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
       zindex: 1,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            dx: { value: params["xlabel-horizonal-offset"] },
-            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: { value: css("--font-family") },
             fontSize: { value: css("--label-font-size") },
@@ -114,20 +116,20 @@ export default async function linechart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: valueVariable,
+      title:
+        params["value-title"] === "" ? valueVariable : params["value-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
       zindex: 0,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            dx: { value: params["ylabel-horizonal-offset"] },
-            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: { value: css("--font-family") },
             fontSize: { value: css("--label-font-size") },
@@ -144,7 +146,8 @@ export default async function linechart(stanza, params) {
       orient: "right",
       // legendX: width,
       legendY: -5,
-      title: groupVariable,
+      title:
+        params["group-title"] === "" ? groupVariable : params["group-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

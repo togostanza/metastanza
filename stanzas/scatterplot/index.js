@@ -82,20 +82,19 @@ export default async function scatterplot(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: xVariable,
+      title: params["x-title"] === "" ? xVariable : params["x-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
       zindex: 0,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            dx: { value: params["xlabel-horizonal-offset"] },
-            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: {
               value: css("--font-family"),
@@ -123,20 +122,19 @@ export default async function scatterplot(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: yVariable,
+      title: params["y-title"] === "" ? yVariable : params["y-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
       zindex: 0,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            dx: { value: params["ylabel-horizonal-offset"] },
-            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: {
               value: css("--font-family"),
@@ -155,7 +153,7 @@ export default async function scatterplot(stanza, params) {
     {
       size: "size",
       format: "s",
-      title: zVariable,
+      title: params["z-title"] === "" ? zVariable : params["z-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

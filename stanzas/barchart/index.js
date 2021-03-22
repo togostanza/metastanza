@@ -46,8 +46,7 @@ export default async function barchart(stanza, params) {
         ];
     }
   }
-  console.log("constructData(chartType)", constructData(chartType));
-  console.log("chartType", chartType);
+
   const axes = [
     {
       scale: "xscale",
@@ -64,11 +63,29 @@ export default async function barchart(stanza, params) {
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: chartType === "grouped" ? valueVariable : labelVariable,
+      // title: function(){
+      //   if(chartType === "grouped") {
+      //     if(params["value-title"]) {
+      //       return params["value-title"];
+      //     } else {
+      //       return valueVariable;
+      //     }
+      //   }else if(chartType === "stacked"){
+      //     if(params["category-title"] === "") {
+      //       console.log('hoge')
+      //       return labelVariable;
+      //     } else {
+      //       console.log('fuga')
+      //       return params["category-title"];
+      //     }
+      //   }
+      // },
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
       encode: {
         labels: {
           interactive: true,
@@ -100,7 +117,8 @@ export default async function barchart(stanza, params) {
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
       zindex: 0,
       encode: {
         labels: {
