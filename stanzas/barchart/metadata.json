@@ -124,7 +124,7 @@
       "stanza:description": "Bar width (0-1)"
     },
     {
-      "stanza:key": "togostanza-menu-placement",
+      "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
         "top-left",

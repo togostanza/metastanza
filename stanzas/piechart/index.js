@@ -59,20 +59,20 @@ export default async function piechart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "none",
-      legendX: "220",
+      orient: "right",
+      // legendX: "220",
       legendY: "5",
       title: labelVariable,
-      titleColor: "var(--label-font-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--legendtitle-size"),
-      titleFontWeight: css("--legendtitle-weight"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
       labelFontSize: css("--legend-font-size"),
       symbolType: params["symbol-shape"],
-      symbolStrokeColor: css("--stroke-color"),
-      symbolStrokeWidth: css("--stroke-width"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -95,8 +95,8 @@ export default async function piechart(stanza, params) {
           outerRadius: { signal: "width / 2" },
           cornerRadius: { signal: "cornerRadius" },
           fill: { scale: "color", field: labelVariable },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: { value: "var(--stroke-width)" },
+          stroke: { value: "var(--border-color)" },
+          strokeWidth: { value: "var(--border-width)" },
         },
       },
     },
@@ -136,7 +136,7 @@ export default async function piechart(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");

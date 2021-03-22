@@ -186,7 +186,7 @@ export default async function twoVariablesScatterplot(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["menu-button-placement"]) {
+  switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
       menuList.setAttribute("class", "dl-top-left");

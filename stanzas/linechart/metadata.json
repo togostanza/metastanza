@@ -101,7 +101,7 @@
       "stanza:description": "Angle of Y label (in degree)"
     },
     {
-      "stanza:key": "menu-button-placement",
+      "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
         "top-left",

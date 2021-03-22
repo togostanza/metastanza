@@ -43,7 +43,7 @@
       "stanza:description": "padding of your stanza"
     },
     {
-      "stanza:key": "menu-button-placement",
+      "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
         "top-left",
