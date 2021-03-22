@@ -12,9 +12,9 @@ export default async function threeVariablesScatterplot(stanza, params) {
   const height = Number(params["height"]);
   const padding = Number(params["padding"]);
 
-  const xVariable = params["x-variable"];
-  const yVariable = params["y-variable"];
-  const zVariable = params["z-variable"];
+  const xVariable = params["x"];
+  const yVariable = params["y"];
+  const zVariable = params["z"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -80,7 +80,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       ticks: params["xtick"] === "true",
       // tickCount: params["xtick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-size"),
+      tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: xVariable,
       titleColor: "var(--title-font-color)",
@@ -121,7 +121,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       ticks: params["ytick"] === "true",
       // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-size"),
+      tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: yVariable,
       titleColor: "var(--title-font-color)",
@@ -156,17 +156,17 @@ export default async function threeVariablesScatterplot(stanza, params) {
       size: "size",
       format: "s",
       title: zVariable,
-      titleColor: "var(--legendtitle-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--legendtitle-size"),
-      titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--legendlabel-color)",
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
       labelFontSize: css("--legend-font-size"),
       symbolType: params["symbol-shape"],
       symbolFillColor: "var(--series-0-color)",
-      symbolStrokeColor: css("--stroke-color"),
-      symbolStrokeWidth: css("--stroke-width"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -183,9 +183,9 @@ export default async function threeVariablesScatterplot(stanza, params) {
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
           size: { scale: "size", field: zVariable },
-          stroke: { value: "var(--stroke-color)" },
+          stroke: { value: "var(--border-color)" },
           strokeWidth: {
-            value: css("--stroke-width"),
+            value: css("--border-width"),
           },
           opacity: {
             value: css("--opacity"),
