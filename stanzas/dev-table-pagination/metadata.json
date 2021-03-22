@@ -71,7 +71,7 @@
     {
       "stanza:key": "--button-text-color",
       "stanza:type": "color",
-      "stanza:default": "#ffffff",
+      "stanza:default": "#FFFFFF",
       "stanza:description": "button text color"
     },
     {
@@ -190,7 +190,7 @@
       "stanza:description": "color of search box"
     },
     {
-      "stanza:key": "--table-height",
+      "stanza:key": "--height",
       "stanza:type": "text",
       "stanza:default": "400px",
       "stanza:description": "height of table"
