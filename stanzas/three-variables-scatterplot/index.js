@@ -25,7 +25,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       transform: [
         {
           type: "filter",
-          expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null && datum['${zVariable}'] != null`,
+          expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
         },
       ],
     },
@@ -204,7 +204,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
     signals,
     scales,
     axes,
-    legends,
+    legends: zVariable == "none" || params["legend"] == "false" ? [] : legends,
     marks,
   };
 

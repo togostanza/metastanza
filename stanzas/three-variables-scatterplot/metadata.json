@@ -60,19 +60,6 @@
       "stanza:description": "Padding"
     },
     {
-      "stanza:key": "metastanza-menu-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button (top-left, top-right, bottom-right, bottom-left, none)"
-    },
-    {
       "stanza:key": "xaxis-placement",
       "stanza:example": "bottom",
       "stanza:description": "Placement of X axis (top or bottom)"
@@ -113,9 +100,27 @@
       "stanza:description": "Angle of Y label (in degree)"
     },
     {
+      "stanza:key": "legend",
+      "stanza:example": true,
+      "stanza:description": "Display of legend (true or false)"
+    },
+    {
       "stanza:key": "symbol-shape",
       "stanza:example": "circle",
       "stanza:description": "Plot shape (circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"
+    },
+    {
+      "stanza:key": "metastanza-menu-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Placement of the download button (top-left, top-right, bottom-right, bottom-left, none)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
