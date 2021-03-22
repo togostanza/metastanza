@@ -2,7 +2,7 @@ import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 
-export default async function threeVariablesScatterplot(stanza, params) {
+export default async function devTwoVariablesScatterplot(stanza, params) {
   function css(key) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
@@ -12,9 +12,9 @@ export default async function threeVariablesScatterplot(stanza, params) {
   const height = Number(params["height"]);
   const padding = Number(params["padding"]);
 
-  const xVariable = params["x"];
-  const yVariable = params["y"];
-  const zVariable = params["z"];
+  //data
+  const xVariable = params["x-variable"];
+  const yVariable = params["y-variable"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -31,9 +31,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
     },
   ];
 
-  const signals = [];
-
-  //scales
+  // scales
   const scales = [
     {
       name: "x",
@@ -53,15 +51,6 @@ export default async function threeVariablesScatterplot(stanza, params) {
       domain: { data: "source", field: yVariable },
       range: "height",
     },
-    {
-      name: "size",
-      type: "linear",
-      round: true,
-      nice: false,
-      zero: true,
-      domain: { data: "source", field: zVariable },
-      range: [4, 361],
-    },
   ];
 
   //axes
@@ -80,7 +69,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       ticks: params["xtick"] === "true",
       // tickCount: params["xtick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-length"),
+      tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
       title: xVariable,
       titleColor: "var(--title-font-color)",
@@ -88,7 +77,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
-      zindex: 0,
+      zindex: 1,
       encode: {
         labels: {
           interactive: true,
@@ -97,12 +86,8 @@ export default async function threeVariablesScatterplot(stanza, params) {
             dx: { value: params["xlabel-horizonal-offset"] },
             dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
-            font: {
-              value: css("--font-family"),
-            },
-            fontSize: {
-              value: css("--label-font-size"),
-            },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-font-size") },
           },
         },
       },
@@ -121,7 +106,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       ticks: params["ytick"] === "true",
       // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-length"),
+      tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
       title: yVariable,
       titleColor: "var(--title-font-color)",
@@ -129,7 +114,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
-      zindex: 0,
+      zindex: 1,
       encode: {
         labels: {
           interactive: true,
@@ -138,35 +123,11 @@ export default async function threeVariablesScatterplot(stanza, params) {
             dx: { value: params["ylabel-horizonal-offset"] },
             dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
-            font: {
-              value: css("--font-family"),
-            },
-            fontSize: {
-              value: css("--label-font-size"),
-            },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-font-size") },
           },
         },
       },
-    },
-  ];
-
-  // legend
-  const legends = [
-    {
-      size: "size",
-      format: "s",
-      title: zVariable,
-      titleColor: "var(--title-font-color)",
-      titleFont: css("--font-family"),
-      titleFontSize: css("--title-font-size"),
-      titleFontWeight: css("--title-font-weight"),
-      labelColor: "var(--label-font-color)",
-      labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
-      symbolType: params["symbol-shape"],
-      symbolFillColor: "var(--series-0-color)",
-      symbolStrokeColor: css("--border-color"),
-      symbolStrokeWidth: css("--border-width"),
     },
   ];
 
@@ -175,6 +136,7 @@ export default async function threeVariablesScatterplot(stanza, params) {
     {
       name: "marks",
       type: "symbol",
+      // size: 2,
       from: { data: "source" },
       encode: {
         update: {
@@ -182,10 +144,12 @@ export default async function threeVariablesScatterplot(stanza, params) {
           y: { scale: "y", field: yVariable },
           shape: { value: params["symbol-shape"] },
           fill: { value: "var(--series-0-color)" },
-          size: { scale: "size", field: zVariable },
-          stroke: { value: "var(--border-color)" },
+          size: {
+            value: Number(css("--plot-size")),
+          },
+          stroke: { value: "var(--stroke-color)" },
           strokeWidth: {
-            value: css("--border-width"),
+            value: css("--stroke-width"),
           },
           opacity: {
             value: css("--opacity"),
@@ -201,10 +165,8 @@ export default async function threeVariablesScatterplot(stanza, params) {
     height,
     padding,
     data,
-    signals,
     scales,
     axes,
-    legends: zVariable == "none" || params["legend"] == "false" ? [] : legends,
     marks,
   };
 

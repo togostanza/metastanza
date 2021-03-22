@@ -2,112 +2,55 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "three-variables-scatterplot",
-  "stanza:label": "three variables scatterplot",
-  "stanza:definition": "Vega wrapped scatterplot for MetaStanza",
+  "@id": "dev-two-variables-scatterplot",
+  "stanza:label": "dev two variables scatterplot",
+  "stanza:definition": "Dev two variables scatterplot for MetaStanza",
   "stanza:type": "Stanza",
-  "stanza:display": "Graph",
+  "stanza:display": "Chart",
   "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
   "stanza:author": "c-nakashima",
   "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
-  "stanza:created": "2020-11-06",
-  "stanza:updated": "2020-11-06",
+  "stanza:created": "2021-01-25",
+  "stanza:updated": "2021-01-25",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
       "stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
-      "stanza:description": "Source url of data",
+      "stanza:description": "Source url of your data.",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
-      "stanza:description": "Type of data",
+      "stanza:description": "Type of your data.",
       "stanza:required": true
     },
     {
-      "stanza:key": "x",
+      "stanza:key": "x-variable",
       "stanza:example": "Horsepower",
-      "stanza:description": "Variable for X axis."
+      "stanza:description": "Key for X-variable."
     },
     {
-      "stanza:key": "y",
+      "stanza:key": "y-variable",
       "stanza:example": "Miles_per_Gallon",
-      "stanza:description": "Variable for Y axis."
-    },
-    {
-      "stanza:key": "z",
-      "stanza:example": "Acceleration",
-      "stanza:description": "Variable for Z axis"
+      "stanza:description": "Key for Y-variable."
     },
     {
       "stanza:key": "width",
       "stanza:example": "400",
-      "stanza:description": "Width"
+      "stanza:description": "Width of your stanza"
     },
     {
       "stanza:key": "height",
       "stanza:example": "200",
-      "stanza:description": "Height"
+      "stanza:description": "Height of your stanza"
     },
     {
       "stanza:key": "padding",
       "stanza:example": "50",
-      "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "xaxis-placement",
-      "stanza:example": "bottom",
-      "stanza:description": "Placement of X axis (top or bottom)"
-    },
-    {
-      "stanza:key": "yaxis-placement",
-      "stanza:example": "left",
-      "stanza:description": "Placement of Y axis (left or right)"
-    },
-    {
-      "stanza:key": "xgrid",
-      "stanza:example": true,
-      "stanza:description": "Display of X grid (true or false)"
-    },
-    {
-      "stanza:key": "ygrid",
-      "stanza:example": true,
-      "stanza:description": "Display of Y grid (true or false)"
-    },
-    {
-      "stanza:key": "xtick",
-      "stanza:example": false,
-      "stanza:description": "Display of X tick (true or false)"
-    },
-    {
-      "stanza:key": "ytick",
-      "stanza:example": true,
-      "stanza:description": "Display of Y tick (true or false)"
-    },
-    {
-      "stanza:key": "xlabel-angle",
-      "stanza:example": "0",
-      "stanza:description": "Angle of X label (in degree)"
-    },
-    {
-      "stanza:key": "ylabel-angle",
-      "stanza:example": "0",
-      "stanza:description": "Angle of Y label (in degree)"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:example": true,
-      "stanza:description": "Display of legend (true or false)"
-    },
-    {
-      "stanza:key": "symbol-shape",
-      "stanza:example": "circle",
-      "stanza:description": "Plot shape (circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"
+      "stanza:description": "Padding around your stanza"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -120,7 +63,52 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button (top-left, top-right, bottom-right, bottom-left, none)"
+      "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+    },
+    {
+      "stanza:key": "xaxis-placement",
+      "stanza:example": "bottom",
+      "stanza:description": "Orient of X-axis.(top or bottom)"
+    },
+    {
+      "stanza:key": "yaxis-placement",
+      "stanza:example": "left",
+      "stanza:description": "Orient of Y-axis.(left or right)"
+    },
+    {
+      "stanza:key": "xgrid",
+      "stanza:example": true,
+      "stanza:description": "display of X-grids"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:example": true,
+      "stanza:description": "display of Y-grids"
+    },
+    {
+      "stanza:key": "xtick",
+      "stanza:example": false,
+      "stanza:description": "display of X-ticks.(true or false)"
+    },
+    {
+      "stanza:key": "ytick",
+      "stanza:example": true,
+      "stanza:description": "display of Y-ticks.(true or false)"
+    },
+    {
+      "stanza:key": "xlabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of X-labels.(in degree)"
+    },
+    {
+      "stanza:key": "ylabel-angle",
+      "stanza:example": "0",
+      "stanza:description": "angle of Y-labels.(in degree)"
+    },
+    {
+      "stanza:key": "symbol-shape",
+      "stanza:example": "circle",
+      "stanza:description": "Shape of plot.(circle, square, cross, diamond, triangle-up, triangle-down, triangle-right, triangle-left, stroke, arrow, wedge, or triangle)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -129,25 +117,25 @@
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
-      "stanza:description": "Plot color"
+      "stanza:description": "Plot colot."
     },
     {
       "stanza:key": "--font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family"
+      "stanza:description": "Font family."
     },
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Axis color"
+      "stanza:description": "Axis color."
     },
     {
       "stanza:key": "--axis-width",
       "stanza:type": "number",
       "stanza:default": "1",
-      "stanza:description": "Axis width"
+      "stanza:description": "Axis width."
     },
     {
       "stanza:key": "--grid-color",
@@ -159,13 +147,13 @@
       "stanza:key": "--grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
-      "stanza:description": "Grid dash length.  Blank for solid lines"
+      "stanza:description": "Grid dash length.  Blank for solid lines."
     },
     {
       "stanza:key": "--grid-opacity",
       "stanza:type": "number",
       "stanza:default": "0.5",
-      "stanza:description": "Grid opacity (0-1)"
+      "stanza:description": "Grid opacity.(0-1)"
     },
     {
       "stanza:key": "--grid-width",
@@ -180,76 +168,76 @@
       "stanza:description": "Tick color"
     },
     {
-      "stanza:key": "--tick-length",
+      "stanza:key": "--tick-size",
       "stanza:type": "number",
       "stanza:default": "1.5",
-      "stanza:description": "Tick length (in pixel)"
+      "stanza:description": "Tick length in pixel."
     },
     {
       "stanza:key": "--tick-width",
       "stanza:type": "number",
       "stanza:default": "1",
-      "stanza:description": "Tick width (in pixel)"
+      "stanza:description": "Tick width in pixel."
     },
     {
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Font color of title"
+      "stanza:description": "Font color of titles."
     },
     {
       "stanza:key": "--title-font-size",
       "stanza:type": "number",
       "stanza:default": "12",
-      "stanza:description": "Font size of title"
+      "stanza:description": "Font size of title."
     },
     {
       "stanza:key": "--title-font-weight",
       "stanza:type": "number",
       "stanza:default": "400",
-      "stanza:description": "Font weight of title"
+      "stanza:description": "Font weight of title."
     },
     {
       "stanza:key": "--title-padding",
       "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "Padding between label and title"
-    },
-    {
-      "stanza:key": "--legend-font-size",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Font size of legend label"
+      "stanza:description": "Padding between axis labels and title."
     },
     {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Font color of label"
+      "stanza:description": "Label color."
     },
     {
       "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "Font size of label"
+      "stanza:description": "Font size of labels."
     },
     {
-      "stanza:key": "--border-color",
+      "stanza:key": "--plot-size",
+      "stanza:type": "text",
+      "stanza:default": "10",
+      "stanza:description": "Plot size.(The area in pixels of the plot bounding box.)"
+    },
+    {
+      "stanza:key": "--stroke-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Stroke color."
     },
     {
-      "stanza:key": "--border-width",
+      "stanza:key": "--stroke-width",
       "stanza:type": "number",
       "stanza:default": "0.5",
-      "stanza:description": "Border width"
+      "stanza:description": "Stroke width."
     },
     {
       "stanza:key": "--opacity",
       "stanza:type": "text",
-      "stanza:default": "0.7",
-      "stanza:description": "opacity of each plots"
+      "stanza:default": "0.8",
+      "stanza:description": "Opacity of each plots"
     }
   ]
 }
