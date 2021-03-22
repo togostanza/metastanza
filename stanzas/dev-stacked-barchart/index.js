@@ -14,9 +14,9 @@ export default async function devStackedBarchart(stanza, params) {
   // );
 
   //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
-  const groupVariable = params["group-variable"];
+  const labelVariable = params["category"];
+  const valueVariable = params["value"];
+  const groupVariable = params["group"];
 
   spec.data = [
     {
@@ -78,7 +78,7 @@ export default async function devStackedBarchart(stanza, params) {
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -96,15 +96,15 @@ export default async function devStackedBarchart(stanza, params) {
         "--tick-width"
       ),
       title: labelVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
         "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
+        "--title-font-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
+        "--title-font-weight"
       ),
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
@@ -117,7 +117,7 @@ export default async function devStackedBarchart(stanza, params) {
             angle: { value: params["xlabel-angle"] },
             dx: { value: params["xlabel-horizonal-offset"] },
             dy: { value: params["xlabel-vertical-offset"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -125,7 +125,7 @@ export default async function devStackedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
             // limit: 1
@@ -146,7 +146,7 @@ export default async function devStackedBarchart(stanza, params) {
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -164,15 +164,15 @@ export default async function devStackedBarchart(stanza, params) {
         "--tick-width"
       ),
       title: valueVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
         "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
+        "--title-font-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-weight"
+        "--title-font-weight"
       ),
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
@@ -185,7 +185,7 @@ export default async function devStackedBarchart(stanza, params) {
             angle: { value: params["ylabel-angle"] },
             dx: { value: params["ylabel-horizonal-offset"] },
             dy: { value: params["ylabel-vertical-offset"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -193,7 +193,7 @@ export default async function devStackedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
             // limit: 1
@@ -229,7 +229,7 @@ export default async function devStackedBarchart(stanza, params) {
         "--font-family"
       ),
       labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
+        "--legend-font-size"
       ),
       symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
         "--stroke-color"

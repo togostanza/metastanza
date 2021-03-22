@@ -50,7 +50,7 @@
     {
       "stanza:key": "group",
       "stanza:example": "category",
-      "stanza:description": "Variable to be assigned as an identifier of a group (If you will not use this variable, this parapeter should be set as none)",
+      "stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
       "stanza:required": false
     },
     {
@@ -91,37 +91,37 @@
     {
       "stanza:key": "xgrid",
       "stanza:example": false,
-      "stanza:description": "Display of X grids (true or false)"
+      "stanza:description": "Display of X grid (true or false)"
     },
     {
       "stanza:key": "ygrid",
       "stanza:example": true,
-      "stanza:description": "Display of Y grids (true or false)"
+      "stanza:description": "Display of Y grid (true or false)"
     },
     {
       "stanza:key": "xtick",
       "stanza:example": false,
-      "stanza:description": "Display of X ticks (true or false)"
+      "stanza:description": "Display of X tick (true or false)"
     },
     {
       "stanza:key": "ytick",
       "stanza:example": true,
-      "stanza:description": "Display of Y ticks (true or false)"
+      "stanza:description": "Display of Y tick (true or false)"
     },
     {
       "stanza:key": "xlabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of X labels (in degree)"
+      "stanza:description": "Angle of X label (in degree)"
     },
     {
       "stanza:key": "ylabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of Y labels (in degree)"
+      "stanza:description": "Angle of Y label (in degree)"
     },
     {
       "stanza:key": "bar-width",
       "stanza:example": "0.8",
-      "stanza:description": "Bar width [0-1]"
+      "stanza:description": "Bar width (0-1)"
     },
     {
       "stanza:key": "togostanza-menu-placement",
@@ -200,16 +200,16 @@
       "stanza:description": "Grid color"
     },
     {
-      "stanza:key": "--grid-dash",
+      "stanza:key": "--grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
-      "stanza:description": "Grid stroke dash (Blank for solid lines)"
+      "stanza:description": "Grid dash length (Blank for solid lines)"
     },
     {
       "stanza:key": "--grid-opacity",
       "stanza:type": "number",
       "stanza:default": "0.5",
-      "stanza:description": "Grid opacity.[0-1]"
+      "stanza:description": "Grid opacity (0-1)"
     },
     {
       "stanza:key": "--grid-width",
@@ -257,7 +257,7 @@
       "stanza:key": "--title-padding",
       "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "Padding between axis label and title"
+      "stanza:description": "Padding between label and title"
     },
     {
       "stanza:key": "--legend-font-size",
@@ -266,13 +266,13 @@
       "stanza:description": "Font size of legend label"
     },
     {
-      "stanza:key": "--label-color",
+      "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Label color"
+      "stanza:description": "Font color of label"
     },
     {
-      "stanza:key": "--label-size",
+      "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Font size of label"

@@ -17,9 +17,9 @@ export default async function linechart(stanza, params) {
   const padding = params["padding"];
 
   //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
-  const groupVariable = params["group-variable"];
+  const labelVariable = params["category"];
+  const valueVariable = params["value"];
+  const groupVariable = params["group"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -70,7 +70,7 @@ export default async function linechart(stanza, params) {
       domainWidth: css("--axis-width"),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash"),
+      gridDash: css("--grid-dash-length"),
       gridOpacity: css("--grid-opacity"),
       gridWidth: css("--grid-width"),
       ticks: params["xtick"] === "true",
@@ -79,10 +79,10 @@ export default async function linechart(stanza, params) {
       tickSize: css("--tick-size"),
       tickWidth: css("--tick-width"),
       title: labelVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--title-size"),
-      titleFontWeight: css("--title-weight"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
       zindex: 1,
       encode: {
@@ -92,9 +92,9 @@ export default async function linechart(stanza, params) {
             angle: { value: params["xlabel-angle"] },
             dx: { value: params["xlabel-horizonal-offset"] },
             dy: { value: params["xlabel-vertical-offset"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: { value: css("--font-family") },
-            fontSize: { value: css("--label-size") },
+            fontSize: { value: css("--label-font-size") },
           },
         },
       },
@@ -106,19 +106,19 @@ export default async function linechart(stanza, params) {
       domainWidth: css("--axis-width"),
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash"),
+      gridDash: css("--grid-dash-length"),
       gridOpacity: css("--grid-opacity"),
       gridWidth: css("--grid-width"),
       ticks: params["ytick"] === "true",
       // tickCount: params["ytick-count"],
       tickColor: "var(--tick-color)",
-      tickSize: css("--tick-size"),
+      tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: valueVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
-      titleFontSize: css("--title-size"),
-      titleFontWeight: css("--title-weight"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
       titlePadding: Number(css("--title-padding")),
       zindex: 0,
       encode: {
@@ -128,9 +128,9 @@ export default async function linechart(stanza, params) {
             angle: { value: params["ylabel-angle"] },
             dx: { value: params["ylabel-horizonal-offset"] },
             dy: { value: params["ylabel-vertical-offset"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: { value: css("--font-family") },
-            fontSize: { value: css("--label-size") },
+            fontSize: { value: css("--label-font-size") },
           },
         },
       },
@@ -141,32 +141,21 @@ export default async function linechart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "none",
-      legendX: 420,
+      orient: "right",
+      // legendX: width,
       legendY: -5,
       title: groupVariable,
-      titleColor: "var(--legendtitle-color)",
-      labelColor: "var(--legendlabel-color)",
+      titleColor: "var(--title-font-color)",
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-font-color)",
+      labelFont: css("--font-family"),
+      labelFontSize: css("--legend-font-size"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
       encode: {
-        title: {
-          update: {
-            font: { value: css("--font-family") },
-            fontSize: {
-              value: css("--legendtitle-size"),
-            },
-            fontWeight: { value: css("--legendtitle-weight") },
-          },
-        },
         labels: {
-          interactive: true,
-          update: {
-            font: { value: css("--legend-font") },
-            fontSize: {
-              value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--legendlabel-size"
-              ),
-            },
-          },
           text: { field: "value" },
         },
       },

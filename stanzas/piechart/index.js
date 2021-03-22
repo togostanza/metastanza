@@ -17,8 +17,8 @@ export default async function piechart(stanza, params) {
   const padding = { left: 5, top: 5, right: 150, bottom: 30 };
 
   //data
-  const labelVariable = params["label-variable"];
-  const valueVariable = params["value-variable"];
+  const labelVariable = params["category"];
+  const valueVariable = params["value"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -63,13 +63,13 @@ export default async function piechart(stanza, params) {
       legendX: "220",
       legendY: "5",
       title: labelVariable,
-      titleColor: "var(--label-color)",
+      titleColor: "var(--label-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--legendtitle-size"),
       titleFontWeight: css("--legendtitle-weight"),
-      labelColor: "var(--label-color)",
+      labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legendlabel-size"),
+      labelFontSize: css("--legend-font-size"),
       symbolType: params["symbol-shape"],
       symbolStrokeColor: css("--stroke-color"),
       symbolStrokeWidth: css("--stroke-width"),

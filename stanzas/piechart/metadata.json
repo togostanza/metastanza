@@ -29,13 +29,13 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "label-variable",
+      "stanza:key": "category",
       "stanza:example": "category",
-      "stanza:description": "Variable to be assigned as label",
+      "stanza:description": "Variable to be assigned as category",
       "stanza:required": true
     },
     {
-      "stanza:key": "value-variable",
+      "stanza:key": "value",
       "stanza:example": "count",
       "stanza:description": "Variable to be assigned as value",
       "stanza:required": true
@@ -109,7 +109,7 @@
       "stanza:description": "Font family."
     },
     {
-      "stanza:key": "--label-color",
+      "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#333333",
       "stanza:description": "Font color"
@@ -127,7 +127,7 @@
       "stanza:description": "Font weight of the legend title"
     },
     {
-      "stanza:key": "--legendlabel-size",
+      "stanza:key": "--legend-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Font size of the legend label"

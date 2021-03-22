@@ -30,7 +30,7 @@
     {
       "stanza:key": "label",
       "stanza:example": "child_name",
-      "stanza:description": "variable to be assigned as label",
+      "stanza:description": "Variable to be assigned as category",
       "stanza:required": true
     },
     {
@@ -124,13 +124,13 @@
       "stanza:description": "Font family."
     },
     {
-      "stanza:key": "--label-color",
+      "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#333",
       "stanza:description": "text color of each nodes"
     },
     {
-      "stanza:key": "--label-size",
+      "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "11",
       "stanza:description": "font size of the legend label"
@@ -178,7 +178,7 @@
       "stanza:description": "Font color of the legend label"
     },
     {
-      "stanza:key": "--legendlabel-size",
+      "stanza:key": "--legend-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Font size of the legend label"

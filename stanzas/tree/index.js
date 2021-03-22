@@ -94,7 +94,7 @@ export default async function tree(stanza, params) {
           interactive: true,
           update: {
             font: { value: css("--legend-font") },
-            fontSize: { value: css("--legendlabel-size") },
+            fontSize: { value: css("--legend-font-size") },
           },
           text: { field: "value" },
         },
@@ -147,7 +147,7 @@ export default async function tree(stanza, params) {
         enter: {
           text: { field: labelVariable },
           font: { value: css("--font-family") },
-          fontSize: { value: css("--label-size") },
+          fontSize: { value: css("--label-font-size") },
           baseline: { value: "middle" },
         },
         update: {
@@ -156,7 +156,7 @@ export default async function tree(stanza, params) {
           dx: { signal: "datum.children ? -7 : 7" },
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
-          fill: { value: "var(--label-color)" },
+          fill: { value: "var(--label-font-color)" },
         },
       },
     },

@@ -10,9 +10,9 @@ export default async function devGroupedBarchart(stanza, params) {
   spec.height = params["height"];
   spec.padding = params["padding"];
 
-  const labelVariable = params["label-variable"]; //category
-  const valueVariable = params["value-variable"]; //value
-  const groupVariable = params["group-variable"]; //position?
+  const labelVariable = params["category"]; //category
+  const valueVariable = params["value"]; //value
+  const groupVariable = params["group"]; //position?
 
   spec.data = [
     {
@@ -69,7 +69,7 @@ export default async function devGroupedBarchart(stanza, params) {
       grid: params["ygrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -86,12 +86,12 @@ export default async function devGroupedBarchart(stanza, params) {
         "--tick-width"
       ),
       title: labelVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titleFont: getComputedStyle(stanza.root.host).getPropertyValue(
         "--font-family"
       ),
       titleFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--title-size"
+        "--title-font-size"
       ),
       titleFontWeight: getComputedStyle(stanza.root.host).getPropertyValue(
         "--title-width"
@@ -107,7 +107,7 @@ export default async function devGroupedBarchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -115,7 +115,7 @@ export default async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
           },
@@ -136,14 +136,14 @@ export default async function devGroupedBarchart(stanza, params) {
       scale: "xscale",
       orient: params["xaxis-placement"],
       title: valueVariable,
-      titleColor: "var(--title-color)",
+      titleColor: "var(--title-font-color)",
       titlePadding: Number(
         getComputedStyle(stanza.root.host).getPropertyValue("--title-padding")
       ),
       grid: params["xgrid"] === "true",
       gridColor: "var(--grid-color)",
       gridDash: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--grid-dash"
+        "--grid-dash-length"
       ),
       gridOpacity: getComputedStyle(stanza.root.host).getPropertyValue(
         "--grid-opacity"
@@ -162,7 +162,7 @@ export default async function devGroupedBarchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            fill: { value: "var(--label-color)" },
+            fill: { value: "var(--label-font-color)" },
             font: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
                 "--font-family"
@@ -170,7 +170,7 @@ export default async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--label-size"
+                "--label-font-size"
               ),
             },
           },
@@ -184,12 +184,12 @@ export default async function devGroupedBarchart(stanza, params) {
             },
             fontSize: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-size"
+                "--title-font-size"
               ),
             },
             fontWeight: {
               value: getComputedStyle(stanza.root.host).getPropertyValue(
-                "--title-weight"
+                "--title-font-weight"
               ),
             },
           },
@@ -231,7 +231,7 @@ export default async function devGroupedBarchart(stanza, params) {
         "--font-family"
       ),
       labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legendlabel-size"
+        "--legend-font-size"
       ),
       symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
         "--stroke-color"
