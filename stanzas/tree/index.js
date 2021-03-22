@@ -74,41 +74,6 @@ export default async function tree(stanza, params) {
     },
   ];
 
-  //legend
-  const legends = [
-    {
-      fill: "color",
-      title: params["legend-title"],
-      titleColor: "var(--legendtitle-color)",
-      labelColor: "var(--legendlabel-color)",
-      orient: "top-left",
-      encode: {
-        title: {
-          update: {
-            font: { value: css("--legend-font") },
-            fontSize: { value: css("--legendtitle-size") },
-            fontWeight: { value: css("--legendtitle-weight") },
-          },
-        },
-        labels: {
-          interactive: true,
-          update: {
-            font: { value: css("--legend-font") },
-            fontSize: { value: css("--legend-font-size") },
-          },
-          text: { field: "value" },
-        },
-        symbols: {
-          update: {
-            shape: { value: params["symbol-shape"] },
-            stroke: { value: "var(--stroke-color)" },
-            strokeWidth: { value: css("--stroke-width") },
-          },
-        },
-      },
-    },
-  ];
-
   //marks
   const marks = [
     {
@@ -135,8 +100,8 @@ export default async function tree(stanza, params) {
           x: { field: "x" },
           y: { field: "y" },
           fill: { scale: "color", field: "depth" },
-          stroke: { value: "var(--stroke-color)" },
-          strokeWidth: { value: css("--stroke-width") },
+          stroke: { value: "var(--border-color)" },
+          strokeWidth: { value: css("--border-width") },
         },
       },
     },
@@ -170,7 +135,6 @@ export default async function tree(stanza, params) {
     signals: vegaJson.signals,
     data,
     scales,
-    legends,
     marks,
   };
 
@@ -189,7 +153,7 @@ export default async function tree(stanza, params) {
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
     stanza.root.querySelector("svg"),
-    "threevariable-scatter-plot",
+    "tree",
     stanza
   );
 

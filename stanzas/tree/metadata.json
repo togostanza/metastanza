@@ -4,7 +4,7 @@
   },
   "@id": "tree",
   "stanza:label": "tree",
-  "stanza:definition": "Vega wrapped tree for MetaStanza",
+  "stanza:definition": "Tree chart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "tree",
   "stanza:provider": "Togostanza",
@@ -17,53 +17,48 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_dendrogram.json",
-      "stanza:description": "Source url of your data.",
+      "stanza:example": "https://vega.github.io/vega/data/flare.json",
+      "stanza:description": "Source url of data",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
-      "stanza:example": "sparql-results-json",
-      "stanza:description": "Type of your data.",
+      "stanza:example": "json",
+      "stanza:description": "Type of data",
       "stanza:required": true
     },
     {
       "stanza:key": "label",
-      "stanza:example": "child_name",
+      "stanza:example": "name",
       "stanza:description": "Variable to be assigned as category",
       "stanza:required": true
     },
     {
       "stanza:key": "parent-node",
-      "stanza:example": "parent_name",
-      "stanza:description": "variable to be assigned as parent node",
+      "stanza:example": "parent",
+      "stanza:description": "Variable to be assigned as parent node",
       "stanza:required": true
     },
     {
       "stanza:key": "node",
-      "stanza:example": "child_name",
-      "stanza:description": "variable to be assigned as id",
+      "stanza:example": "id",
+      "stanza:description": "Variable to be assigned as node",
       "stanza:required": true
     },
     {
       "stanza:key": "width",
       "stanza:example": "600",
-      "stanza:description": "width of your stanza"
+      "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
-      "stanza:example": "400",
-      "stanza:description": "height of your stanza"
+      "stanza:example": "1600",
+      "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
       "stanza:example": "5",
-      "stanza:description": "padding around your stanza"
-    },
-    {
-      "stanza:key": "legend-title",
-      "stanza:example": "Title of this legend",
-      "stanza:description": "title of legends"
+      "stanza:description": "Padding"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -76,7 +71,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+      "stanza:description": "Placement of the download button Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -85,115 +80,79 @@
       "stanza:key": "--series-0-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 1"
     },
     {
       "stanza:key": "--series-1-color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 2"
     },
     {
       "stanza:key": "--series-2-color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 3"
     },
     {
       "stanza:key": "--series-3-color",
       "stanza:type": "color",
       "stanza:default": "#f5da64",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 4"
     },
     {
       "stanza:key": "--series-4-color",
       "stanza:type": "color",
       "stanza:default": "#f57f5b",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 5"
     },
     {
       "stanza:key": "--series-5-color",
       "stanza:type": "color",
       "stanza:default": "#f75976",
-      "stanza:description": "bar color"
+      "stanza:description": "Depth color 6"
     },
     {
       "stanza:key": "--font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family."
+      "stanza:description": "Font family"
     },
     {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#333",
-      "stanza:description": "text color of each nodes"
+      "stanza:default": "#333333",
+      "stanza:description": "Font color of label"
     },
     {
       "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "11",
-      "stanza:description": "font size of the legend label"
+      "stanza:description": "Font size of label"
     },
     {
       "stanza:key": "--branch-color",
       "stanza:type": "color",
       "stanza:default": "#AEB3BF",
-      "stanza:description": "Branch color."
+      "stanza:description": "Branch color"
     },
     {
       "stanza:key": "--node-size",
       "stanza:type": "number",
       "stanza:default": "100",
-      "stanza:description": "Node size."
+      "stanza:description": "Node size"
     },
     {
-      "stanza:key": "--stroke-color",
-      "stanza:type": "color",
-      "stanza:default": "#fff",
-      "stanza:description": "color of stroke"
-    },
-    {
-      "stanza:key": "--legendtitle-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "font color of the legend title"
-    },
-    {
-      "stanza:key": "--legendtitle-size",
-      "stanza:type": "number",
-      "stanza:default": "12",
-      "stanza:description": "Font size of the legend title"
-    },
-    {
-      "stanza:key": "--legendtitle-weight",
-      "stanza:type": "number",
-      "stanza:default": "400",
-      "stanza:description": "Font weight of the legend title"
-    },
-    {
-      "stanza:key": "--legendlabel-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Font color of the legend label"
-    },
-    {
-      "stanza:key": "--legend-font-size",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Font size of the legend label"
-    },
-    {
-      "stanza:key": "--stroke-color",
+      "stanza:key": "--border-color",
       "stanza:type": "color",
       "stanza:default": "#4e5059",
-      "stanza:description": "Stroke color."
+      "stanza:description": "Border color"
     },
     {
-      "stanza:key": "--stroke-width",
+      "stanza:key": "--border-width",
       "stanza:type": "number",
       "stanza:default": "0.5",
-      "stanza:description": "Stroke width."
+      "stanza:description": "Border width"
     }
   ]
 }
