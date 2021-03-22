@@ -4765,7 +4765,7 @@ var metadata = {
 	{
 		"stanza:key": "--thead-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of table header"
 	},
 	{
@@ -4789,13 +4789,13 @@ var metadata = {
 	{
 		"stanza:key": "--tbody-odd-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of table body (odd row)"
 	},
 	{
 		"stanza:key": "--tbody-even-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of table body (even row)"
 	},
 	{
@@ -4834,7 +4834,7 @@ var metadata = {
 	{
 		"stanza:key": "--pagination-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of pagination button"
 	},
 	{
@@ -4858,7 +4858,7 @@ var metadata = {
 	{
 		"stanza:key": "--pagination-current-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Font color of pagination button (at current page)"
 	},
 	{

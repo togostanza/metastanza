@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
 import { l as loadData } from './load-data-61d0d020.js';
-import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -87,20 +87,19 @@ async function scatterplot(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: xVariable,
+      title: params["x-title"] === "" ? xVariable : params["x-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
       zindex: 0,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            dx: { value: params["xlabel-horizonal-offset"] },
-            dy: { value: params["xlabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: {
               value: css("--font-family"),
@@ -128,20 +127,19 @@ async function scatterplot(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: yVariable,
+      title: params["y-title"] === "" ? yVariable : params["y-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
       zindex: 0,
       encode: {
         labels: {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            dx: { value: params["ylabel-horizonal-offset"] },
-            dy: { value: params["ylabel-vertical-offset"] },
             fill: { value: "var(--label-font-color)" },
             font: {
               value: css("--font-family"),
@@ -160,7 +158,7 @@ async function scatterplot(stanza, params) {
     {
       size: "size",
       format: "s",
-      title: zVariable,
+      title: params["z-title"] === "" ? zVariable : params["z-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -279,7 +277,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "https://vega.github.io/vega-lite/data/cars.json",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_scatterplot.json",
 		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
@@ -298,18 +296,36 @@ var metadata = {
 	},
 	{
 		"stanza:key": "x",
-		"stanza:example": "Horsepower",
+		"stanza:example": "density",
 		"stanza:description": "Variable for X axis"
 	},
 	{
 		"stanza:key": "y",
-		"stanza:example": "Miles_per_Gallon",
+		"stanza:example": "area",
 		"stanza:description": "Variable for Y axis"
 	},
 	{
 		"stanza:key": "z",
-		"stanza:example": "Acceleration",
-		"stanza:description": "Variable for Z axis  (If you will not use this variable, this parapeter should be set as none)"
+		"stanza:example": "population",
+		"stanza:description": "Variable for Z axis  (If you will not use this variable, this parameter should be set as none)"
+	},
+	{
+		"stanza:key": "x-title",
+		"stanza:example": "",
+		"stanza:description": "Title for x variable (In case of blank, 'x variable' name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "y-title",
+		"stanza:example": "",
+		"stanza:description": "Title for y variable (In case of blank, 'y variable' name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "z-title",
+		"stanza:example": "",
+		"stanza:description": "Title for z variable (In case of blank, 'z variable' name will be assigned)",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",
@@ -356,7 +372,7 @@ var metadata = {
 			"true",
 			"false"
 		],
-		"stanza:example": false,
+		"stanza:example": true,
 		"stanza:description": "Display of X grid (true or false)"
 	},
 	{
@@ -398,6 +414,30 @@ var metadata = {
 		"stanza:key": "ylabel-angle",
 		"stanza:example": "0",
 		"stanza:description": "Angle of Y label (in degree)"
+	},
+	{
+		"stanza:key": "xlabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between X label and tick"
+	},
+	{
+		"stanza:key": "ylabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between Y label and tick"
+	},
+	{
+		"stanza:key": "xtitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between X title and label"
+	},
+	{
+		"stanza:key": "ytitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between Y title and label"
 	},
 	{
 		"stanza:key": "legend",
@@ -513,12 +553,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of title"
-	},
-	{
-		"stanza:key": "--title-padding",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Padding between label and title"
 	},
 	{
 		"stanza:key": "--legend-font-size",

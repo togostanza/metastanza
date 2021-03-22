@@ -401,375 +401,125 @@ var metadata = {
 	{
 		"stanza:key": "table_data_api",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
-		"stanza:description": "table data api",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "limit",
 		"stanza:example": "10",
-		"stanza:description": "table page size",
+		"stanza:description": "Page size",
 		"stanza:required": true
 	},
 	{
 		"stanza:key": "params",
 		"stanza:example": "taxonomy='9606'",
-		"stanza:description": "parameters for table data api",
+		"stanza:description": "Parameters for table data api",
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "tableTitle",
-		"stanza:example": "Title of this Table",
-		"stanza:description": "Title of the table",
-		"stanza:required": false
+		"stanza:key": "width",
+		"stanza:type": "number",
+		"stanza:example": 800,
+		"stanza:description": "Width"
+	},
+	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 50,
+		"stanza:description": "Padding"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--general-font-family",
-		"stanza:type": "text",
-		"stanza:default": "Helvetica",
-		"stanza:description": "general font family"
-	},
-	{
-		"stanza:key": "--control-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#707070",
-		"stanza:description": "general font color"
-	},
-	{
-		"stanza:key": "--control-font-size",
-		"stanza:type": "number",
-		"stanza:default": "12px",
-		"stanza:description": "general font size"
-	},
-	{
-		"stanza:key": "--series-0-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "basic fill color"
-	},
-	{
-		"stanza:key": "--emphasized-color",
-		"stanza:type": "color",
-		"stanza:default": "#44b8cc",
-		"stanza:description": "emphasized color"
-	},
-	{
-		"stanza:key": "--background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color"
-	},
-	{
-		"stanza:key": "--tabletitle-display",
-		"stanza:type": "text",
-		"stanza:default": "flex",
-		"stanza:description": "display of table title.(flex, block or none)"
-	},
-	{
-		"stanza:key": "--tabletitle-placement",
-		"stanza:type": "text",
-		"stanza:default": "center",
-		"stanza:description": "table title placement when table title is displayed.(left, right, center)"
-	},
-	{
-		"stanza:key": "--tabletitle-margin",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "margin of table title"
-	},
-	{
-		"stanza:key": "--tabletitle-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12px",
-		"stanza:description": "font size of table title"
-	},
-	{
-		"stanza:key": "--tabletitle-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "font color of table title"
-	},
-	{
-		"stanza:key": "--table-border",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #eee",
-		"stanza:description": "style of table border"
-	},
-	{
-		"stanza:key": "--table-shadow",
-		"stanza:type": "text",
-		"stanza:default": "1px 1px 3px 1px #eee",
-		"stanza:description": "style of table shadow"
-	},
-	{
-		"stanza:key": "--ruled-line",
-		"stanza:type": "text",
-		"stanza:default": "0.5px solid #eee",
-		"stanza:description": "style of ruled line"
-	},
-	{
-		"stanza:key": "--control-border-radius",
-		"stanza:type": "text",
-		"stanza:default": "3px",
-		"stanza:description": "radius of search box"
-	},
-	{
-		"stanza:key": "--searchbox-border-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "border color of search box"
-	},
-	{
-		"stanza:key": "--control-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "color of search box"
-	},
-	{
 		"stanza:key": "--table-height",
 		"stanza:type": "text",
 		"stanza:default": "400px",
-		"stanza:description": "height of table"
-	},
-	{
-		"stanza:key": "--searchbtn-height",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "height of search button"
-	},
-	{
-		"stanza:key": "--searchbtn-width",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "width of search button"
-	},
-	{
-		"stanza:key": "--searchbox-height",
-		"stanza:type": "text",
-		"stanza:default": "20px",
-		"stanza:description": "height of search box"
-	},
-	{
-		"stanza:key": "--searchbox-width",
-		"stanza:type": "text",
-		"stanza:default": "164px",
-		"stanza:description": "width of search box"
-	},
-	{
-		"stanza:key": "--searchbox-font-size",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "font size of search box"
-	},
-	{
-		"stanza:key": "--searchbox-font-color",
-		"stanza:type": "text",
-		"stanza:default": "#707070",
-		"stanza:description": "font color of search box"
-	},
-	{
-		"stanza:key": "--control-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color of search box"
-	},
-	{
-		"stanza:key": "--searchbtn-border-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "border color of search button"
-	},
-	{
-		"stanza:key": "--searchbtn-radius",
-		"stanza:type": "text",
-		"stanza:default": "3px",
-		"stanza:description": "radius of search button"
-	},
-	{
-		"stanza:key": "--searchbtn-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "color of search button"
-	},
-	{
-		"stanza:key": "--searchbtn-img-width",
-		"stanza:type": "text",
-		"stanza:default": "12px",
-		"stanza:description": "width of search button image"
-	},
-	{
-		"stanza:key": "--searchbtn-img-height",
-		"stanza:type": "text",
-		"stanza:default": "12px",
-		"stanza:description": "height of search button image"
-	},
-	{
-		"stanza:key": "--searchimg-display",
-		"stanza:type": "text",
-		"stanza:default": "block",
-		"stanza:description": "display of search button image"
-	},
-	{
-		"stanza:key": "--searchtext-display",
-		"stanza:type": "text",
-		"stanza:default": "none",
-		"stanza:description": "display of search button text.(dafault: none)"
-	},
-	{
-		"stanza:key": "--searchtext-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "color of search button text"
-	},
-	{
-		"stanza:key": "--searchtext-font-size",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "font size of search button text"
-	},
-	{
-		"stanza:key": "--dlbtn-img-width",
-		"stanza:type": "text",
-		"stanza:default": "13px",
-		"stanza:description": "width of download button image"
-	},
-	{
-		"stanza:key": "--dlbtn-img-height",
-		"stanza:type": "text",
-		"stanza:default": "13px",
-		"stanza:description": "height of download button image"
-	},
-	{
-		"stanza:key": "--information-margin",
-		"stanza:type": "text",
-		"stanza:default": "0px 0px 10px 0px",
-		"stanza:description": "margin of information area"
-	},
-	{
-		"stanza:key": "--searchicon-display",
-		"stanza:type": "text",
-		"stanza:default": "inline-block",
-		"stanza:description": "display of search icon"
-	},
-	{
-		"stanza:key": "--filtericon-display",
-		"stanza:type": "text",
-		"stanza:default": "inline-block",
-		"stanza:description": "display of filter icon"
-	},
-	{
-		"stanza:key": "--sorticon-display",
-		"stanza:type": "text",
-		"stanza:default": "inline-block",
-		"stanza:description": "display of sort icon"
-	},
-	{
-		"stanza:key": "--thead-border-color",
-		"stanza:type": "text",
-		"stanza:default": "#eee",
-		"stanza:description": "border color of thead"
-	},
-	{
-		"stanza:key": "--thead-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12px",
-		"stanza:description": "font size of labels"
-	},
-	{
-		"stanza:key": "--tbody-font-size",
-		"stanza:type": "text",
-		"stanza:default": "10px",
-		"stanza:description": "font size of labels"
-	},
-	{
-		"stanza:key": "--thead-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "font color of table header"
-	},
-	{
-		"stanza:key": "--thead-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "font weight of table header"
-	},
-	{
-		"stanza:key": "--thead-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color of table header"
-	},
-	{
-		"stanza:key": "--tbody-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "font color of table body"
-	},
-	{
-		"stanza:key": "--tbody-border-right",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #333",
-		"stanza:description": "border right of table body"
-	},
-	{
-		"stanza:key": "--tbody-border-bottom",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #333",
-		"stanza:description": "border bottom of table body"
-	},
-	{
-		"stanza:key": "--tbody-border-left",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #333",
-		"stanza:description": "border left of table body"
-	},
-	{
-		"stanza:key": "--tbody-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color of table body"
-	},
-	{
-		"stanza:key": "--tbody-odd-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color of table body"
-	},
-	{
-		"stanza:key": "--tbody-even-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#fff",
-		"stanza:description": "background color of table body"
-	},
-	{
-		"stanza:key": "--showinfo-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "show info placement"
+		"stanza:description": "Height"
 	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica",
-		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--greeting-align",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "text align of greeting"
+		"stanza:key": "--table-border",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #eee",
+		"stanza:description": "Style of table border"
+	},
+	{
+		"stanza:key": "--table-shadow",
+		"stanza:type": "text",
+		"stanza:default": "1px 1px 3px 1px #eee",
+		"stanza:description": "Style of table shadow"
+	},
+	{
+		"stanza:key": "--ruled-line",
+		"stanza:type": "text",
+		"stanza:default": "0.5px solid #eee",
+		"stanza:description": "Style of ruled line"
+	},
+	{
+		"stanza:key": "--thead-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "1px solid #eee",
+		"stanza:description": "Border bottom of thead"
+	},
+	{
+		"stanza:key": "--thead-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "Font size of table header"
+	},
+	{
+		"stanza:key": "--thead-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "Font color of table header"
+	},
+	{
+		"stanza:key": "--thead-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "Font weight of table header"
+	},
+	{
+		"stanza:key": "--thead-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFFFFF",
+		"stanza:description": "Background color of table header"
+	},
+	{
+		"stanza:key": "--tbody-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "Font color of table body"
+	},
+	{
+		"stanza:key": "--tbody-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "Font size of table body"
+	},
+	{
+		"stanza:key": "--tbody-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "Font size of table body"
+	},
+	{
+		"stanza:key": "--tbody-odd-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFFFFF",
+		"stanza:description": "Background color of table body (odd row)"
+	},
+	{
+		"stanza:key": "--tbody-even-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFFFFF",
+		"stanza:description": "Background color of table body (even row)"
 	}
 ]
 };
@@ -914,6 +664,12 @@ script.__file = "stanzas/table-with-scroll/app.vue";
 
 async function tableWithPagination(stanza, params) {
   const main = stanza.root.querySelector("main");
+  main.setAttribute(
+    `style`,
+    `width: ${params["width"]}px;
+    height: ${params["height"]}px;
+    padding: ${params["padding"]}px;`
+  );
   createApp(script, params).mount(main);
 }
 

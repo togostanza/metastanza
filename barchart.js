@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
 import { l as loadData } from './load-data-61d0d020.js';
-import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -51,8 +51,7 @@ async function barchart(stanza, params) {
         ];
     }
   }
-  console.log("constructData(chartType)", constructData(chartType));
-  console.log("chartType", chartType);
+
   const axes = [
     {
       scale: "xscale",
@@ -69,11 +68,29 @@ async function barchart(stanza, params) {
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
       title: chartType === "grouped" ? valueVariable : labelVariable,
+      // title: function(){
+      //   if(chartType === "grouped") {
+      //     if(params["value-title"]) {
+      //       return params["value-title"];
+      //     } else {
+      //       return valueVariable;
+      //     }
+      //   }else if(chartType === "stacked"){
+      //     if(params["category-title"] === "") {
+      //       console.log('hoge')
+      //       return labelVariable;
+      //     } else {
+      //       console.log('fuga')
+      //       return params["category-title"];
+      //     }
+      //   }
+      // },
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
       encode: {
         labels: {
           interactive: true,
@@ -105,7 +122,8 @@ async function barchart(stanza, params) {
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
-      titlePadding: Number(css("--title-padding")),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
       zindex: 0,
       encode: {
         labels: {
@@ -390,7 +408,25 @@ var metadata = {
 	{
 		"stanza:key": "group",
 		"stanza:example": "category",
-		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
+		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parameter should be set as none)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "category-title",
+		"stanza:example": "",
+		"stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "value-title",
+		"stanza:example": "",
+		"stanza:description": "Title for value variable (In case of blank, 'value variable' name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "group-title",
+		"stanza:example": "",
+		"stanza:description": "Title for group variable (In case of blank, 'group variable' name will be assigned)",
 		"stanza:required": false
 	},
 	{
@@ -490,6 +526,30 @@ var metadata = {
 		"stanza:key": "ylabel-angle",
 		"stanza:example": "0",
 		"stanza:description": "Angle of Y label (in degree)"
+	},
+	{
+		"stanza:key": "xlabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between X label and tick"
+	},
+	{
+		"stanza:key": "ylabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between Y label and tick"
+	},
+	{
+		"stanza:key": "xtitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between X title and label"
+	},
+	{
+		"stanza:key": "ytitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between Y title and label"
 	},
 	{
 		"stanza:key": "bar-width",

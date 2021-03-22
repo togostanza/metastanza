@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import './dev-table-body.js';
-import './metastanza_utils-4432665a.js';
+import './metastanza_utils-0648515a.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
 
@@ -485,7 +485,7 @@ var metadata = {
 	{
 		"stanza:key": "--button-text-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "button text color"
 	},
 	{
@@ -608,7 +608,7 @@ var metadata = {
 		"stanza:description": "color of search box"
 	},
 	{
-		"stanza:key": "--table-height",
+		"stanza:key": "--height",
 		"stanza:type": "text",
 		"stanza:default": "400px",
 		"stanza:description": "height of table"

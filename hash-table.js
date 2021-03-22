@@ -165,13 +165,13 @@ var metadata = {
 	{
 		"stanza:key": "--odd-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of odd row"
 	},
 	{
 		"stanza:key": "--even-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#ffffff",
+		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of even row"
 	}
 ]

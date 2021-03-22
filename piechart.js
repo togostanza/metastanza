@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
 import { l as loadData } from './load-data-61d0d020.js';
-import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -67,7 +67,10 @@ async function piechart(stanza, params) {
       orient: "right",
       // legendX: "220",
       legendY: "5",
-      title: labelVariable,
+      title:
+        params["category-title"] === ""
+          ? labelVariable
+          : params["category-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -219,6 +222,12 @@ var metadata = {
 		"stanza:example": "count",
 		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "category-title",
+		"stanza:example": "",
+		"stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",

@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
 import { l as loadData } from './load-data-61d0d020.js';
-import { a as appendDlButton } from './metastanza_utils-4432665a.js';
+import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';

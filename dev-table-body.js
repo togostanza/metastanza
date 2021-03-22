@@ -1,5 +1,5 @@
 import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { g as getFormatedJson } from './metastanza_utils-4432665a.js';
+import { g as getFormatedJson } from './metastanza_utils-0648515a.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
 

@@ -6,9 +6,7 @@ main {
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  color: var(--control-font-color);
-  font-family: var(--general-font-family);
-  font-size: var(--control-font-size);
+  font-family: var(--font-family);
 }
 
 #renderDiv {
@@ -21,7 +19,7 @@ main {
 }
 
 .tableWrapper {
-  height: var(--table-height);
+  height: var(--height);
   overflow: auto;
 }
 .tableWrapper > table {
@@ -29,10 +27,7 @@ main {
   text-align: left;
   border-collapse: collapse;
   margin: 0;
-  background-color: var(--background-color);
-  border-right: var(--table-border);
-  border-bottom: var(--table-border);
-  border-left: var(--table-border);
+  border: var(--table-border);
   box-shadow: var(--table-shadow);
 }
 .tableWrapper > table > thead {
@@ -40,33 +35,31 @@ main {
   font-size: var(--thead-font-size);
   color: var(--thead-font-color);
   margin-bottom: 0;
+  border-bottom: var(--thead-border-bottom);
 }
 .tableWrapper > table > thead > tr > th {
   color: var(--thead-font-color);
   font-weight: var(--thead-font-weight);
+  background-color: var(--thead-background-color);
   padding: 10px;
   position: sticky;
   top: -1px;
-  background: #ffffff;
 }
 .tableWrapper > table > thead > tr > th:after {
   content: "";
   width: 100%;
   height: 1px;
-  background-color: var(--thead-border-color);
   position: absolute;
   left: 0;
   bottom: 0;
 }
 .tableWrapper > table > thead > tr > th:first-child {
-  background-color: var(--thead-background-color);
   padding-left: 20px;
   padding-right: 20px;
 }
 .tableWrapper > table > tbody {
   font-size: var(--tbody-font-size);
   color: var(--tbody-font-color);
-  background-color: var(--tbody-background-color);
   border-right: var(--tbody-border-right);
   border-bottom: var(--tbody-border-bottom);
   border-left: var(--tbody-border-left);
@@ -78,6 +71,7 @@ main {
   background-color: var(--tbody-even-background-color);
 }
 .tableWrapper > table > tbody > tr > td {
+  font-size: var(--tbody-font-size);
   border-bottom: var(--ruled-line);
   border-collapse: collapse;
   padding: 10px;
@@ -90,6 +84,9 @@ main {
 }
 .tableWrapper > table > tbody > tr > td.loadingWrapper {
   text-align: center;
+}
+.tableWrapper > table > tbody > tr > td > span > a {
+  color: var(--tbody-font-color);
 }
 .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
