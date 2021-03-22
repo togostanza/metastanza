@@ -1,15 +1,38 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
 
-// The following is just an example. Feel free to modify it.
-// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
-main {
-  padding: 1rem 2rem;
+* {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+main {
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    border: var(--table-border);
+    box-shadow: var(--table-shadow);
+    dl {
+      display: flex;
+      width: 50%;
+      padding: var(--row-padding);
+      border-bottom: var(--ruled-line);
+      dt {
+        width: var(--key-width-percentage);
+        padding: 10px;
+        color: var(--key-font-color);
+        font-size: var(--key-font-size);
+        font-weight: var(--key-font-weight);
+      }
+      dd {
+        width: calc(100% - var(--key-width-percentage));
+        padding: 10px;
+        color: var(--value-font-color);
+        font-size: var(--value-font-size);
+        font-weight: var(--value-font-weight);
+      }
+    }
+  }
 }

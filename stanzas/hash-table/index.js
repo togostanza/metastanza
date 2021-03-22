@@ -13,4 +13,12 @@ export default async function hashTable(stanza, params) {
       }),
     },
   });
+
+  const main = stanza.root.querySelector("main");
+  main.setAttribute(
+    "style",
+    `width: ${params["width"]};
+    height: ${params["height"]};
+    padding: ${params["padding"]}`
+  );
 }
