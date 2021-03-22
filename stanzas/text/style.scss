@@ -1,22 +1,21 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
-// The following is just an example. Feel free to modify it.
-// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
-main {
-  padding: 1rem 2rem;
-}
 
 * {
   font-family: var(--font-family);
   box-sizing: border-box;
 }
 
+.menu {
+  display: flex;
+  a {
+    color: var(--text-font-color);
+  }
+}
+
 table {
   display: block;
-  width: var(--text-width);
-  height: var(--text-height);
-  margin: var(--text-padding);
-  border: var(--table-border);
+  border: var(--text-border);
   tbody {
     tr {
       td {

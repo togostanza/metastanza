@@ -18,13 +18,13 @@
     {
       "stanza:key": "chart-type",
       "stanza:example": "stacked",
-      "stanza:description": "Type of barchart(stacked, grouped)",
+      "stanza:description": "Type of barchart (stacked, grouped)",
       "stanza:required": true
     },
     {
       "stanza:key": "data-url",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-      "stanza:description": "Source url of your data",
+      "stanza:description": "Source url of data",
       "stanza:required": true
     },
     {
