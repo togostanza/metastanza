@@ -273,24 +273,6 @@
       "stanza:type": "text",
       "stanza:default": "0.7",
       "stanza:description": "opacity of each plots"
-    },
-    {
-      "stanza:key": "--hover-stroke-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Stroke color of plot when you hover."
-    },
-    {
-      "stanza:key": "--hover-stroke-width",
-      "stanza:type": "number",
-      "stanza:default": "1",
-      "stanza:description": "Stroke width of plot when you hover."
-    },
-    {
-      "stanza:key": "--hover-opacity",
-      "stanza:type": "text",
-      "stanza:default": "1",
-      "stanza:description": "Opacity of each plots when you hover"
     }
   ]
 }

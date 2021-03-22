@@ -17,9 +17,9 @@ export default async function tree(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label-variable"]; //"name"
-  const parentVariable = params["parent-variable"]; //"parent"
-  const idVariable = params["id-variable"]; //"id-variable"
+  const labelVariable = params["label"]; //"name"
+  const parentVariable = params["parent-node"]; //"parent"
+  const idVariable = params["node"]; //"id-variable"
 
   const values = await loadData(params["data-url"], params["data-type"]);
 

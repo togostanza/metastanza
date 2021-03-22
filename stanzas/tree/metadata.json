@@ -17,37 +17,31 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://vega.github.io/vega/data/flare.json",
+      "stanza:example": "http://togostanza.org/sparqlist/api/d3sparql_dendrogram.json",
       "stanza:description": "Source url of your data.",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
-      "stanza:example": "json",
+      "stanza:example": "sparql-results-json",
       "stanza:description": "Type of your data.",
       "stanza:required": true
     },
     {
-      "stanza:key": "label-variable",
-      "stanza:example": "name",
+      "stanza:key": "label",
+      "stanza:example": "child_name",
       "stanza:description": "variable to be assigned as label",
       "stanza:required": true
     },
     {
-      "stanza:key": "value-variable",
-      "stanza:example": "size",
-      "stanza:description": "variable to be assigned as value",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "parent-variable",
-      "stanza:example": "parent",
+      "stanza:key": "parent-node",
+      "stanza:example": "parent_name",
       "stanza:description": "variable to be assigned as parent node",
       "stanza:required": true
     },
     {
-      "stanza:key": "id-variable",
-      "stanza:example": "id",
+      "stanza:key": "node",
+      "stanza:example": "child_name",
       "stanza:description": "variable to be assigned as id",
       "stanza:required": true
     },
@@ -58,7 +52,7 @@
     },
     {
       "stanza:key": "height",
-      "stanza:example": "1600",
+      "stanza:example": "400",
       "stanza:description": "height of your stanza"
     },
     {
@@ -122,12 +116,6 @@
       "stanza:type": "color",
       "stanza:default": "#f75976",
       "stanza:description": "bar color"
-    },
-    {
-      "stanza:key": "--emphasized-color",
-      "stanza:type": "color",
-      "stanza:default": "#fa8c84",
-      "stanza:description": "Emphasized color when you hover on labels and rects"
     },
     {
       "stanza:key": "--font-family",
