@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
 
 function devColumnTreeView(stanza, params) {
   const fetchReq = (query, callback, depth) => {
@@ -400,5 +400,7 @@ var templates = [
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=dev-column-tree-view.js.map

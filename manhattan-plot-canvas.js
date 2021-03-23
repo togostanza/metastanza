@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
 import './index-b2de29ee.js';
 import { g as getFormatedJson, a as appendDlButton, s as select } from './metastanza_utils-0648515a.js';
 import { p as pointer, d as drag } from './drag-53c70e65.js';
@@ -836,5 +836,7 @@ var templates = [
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=manhattan-plot-canvas.js.map

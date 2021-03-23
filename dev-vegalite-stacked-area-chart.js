@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { e as embed } from './vega-embed.module-8f73515b.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { e as embed } from './vega-embed.module-414e3eaf.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
 import './timer-be811b16.js';
@@ -115,5 +115,7 @@ var templates = [
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=dev-vegalite-stacked-area-chart.js.map

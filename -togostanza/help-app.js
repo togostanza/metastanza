@@ -1,4 +1,4 @@
-import { d as defineComponent, g as computed, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-27b75fa9.js';
+import { d as defineComponent, g as computed, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-6c7a71da.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -967,7 +967,6 @@ var script$3 = defineComponent({
   ],
 
   setup(props) {
-
     const formType = computed(() => {
       return props.type === "datetime" ? "datetime-local" : props.type;
     });
@@ -984,10 +983,7 @@ const _hoisted_3$2 = {
 };
 const _hoisted_4$2 = { class: "text-muted" };
 const _hoisted_5$1 = { class: "input-group" };
-const _hoisted_6$1 = {
-  key: 1,
-  class: "form-check"
-};
+const _hoisted_6$1 = { class: "input-group-text" };
 const _hoisted_7$1 = {
   key: 0,
   class: "form-text text-muted"
@@ -1020,25 +1016,27 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
             }), 128 /* KEYED_FRAGMENT */))
           ], 40 /* PROPS, HYDRATE_EVENTS */, ["value"]))
         : (_ctx.formType === 'boolean')
-          ? (openBlock(), createBlock("div", _hoisted_6$1, [
-              createVNode("input", {
-                class: "form-check-input",
-                type: "checkbox",
-                checked: _ctx.input.valueParsed.value,
-                onChange: _cache[2] || (_cache[2] = $event => (_ctx.input.setValueStr($event.target.checked.toString()))),
-                id: _ctx.name
-              }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["checked", "id"]),
+          ? (openBlock(), createBlock(Fragment, { key: 1 }, [
+              createVNode("div", _hoisted_6$1, [
+                createVNode("input", {
+                  class: "form-check-input mt-0",
+                  type: "checkbox",
+                  checked: _ctx.input.valueParsed.value,
+                  onChange: _cache[2] || (_cache[2] = $event => (_ctx.input.setValueStr($event.target.checked.toString()))),
+                  id: _ctx.name
+                }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["checked", "id"])
+              ]),
               createVNode("label", {
-                class: "form-check-label",
+                class: "input-group-text flex-fill bg-body",
                 for: _ctx.name
               }, toDisplayString(_ctx.helpText), 9 /* TEXT, PROPS */, ["for"])
-            ]))
+            ], 64 /* STABLE_FRAGMENT */))
           : (openBlock(), createBlock("input", {
               key: 2,
               type: _ctx.formType,
               value: _ctx.input.valueStr.value,
               onInput: _cache[3] || (_cache[3] = $event => (_ctx.input.setValueStr($event.target.value))),
-              class: ["form-control", {'form-control-color': _ctx.formType === 'color'}]
+              class: ["form-control mw-100", {'form-control-color': _ctx.formType === 'color'}]
             }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, ["type", "value"])),
       (_ctx.input.hasDefault)
         ? (openBlock(), createBlock("button", {
@@ -3265,7 +3263,7 @@ function parse(valueStr, type) {
       return JSON.parse(valueStr);
     case 'date':
     case 'datetime':
-      return Date.parse(valueStr);
+      return new Date(valueStr);
     default:
       return valueStr;
   }
@@ -3341,7 +3339,7 @@ const _hoisted_30 = {
   class: "fst-italic"
 };
 const _hoisted_31 = {
-  class: "tab-pane active px-lg-5",
+  class: "tab-pane",
   id: "event",
   role: "tabpanel"
 };

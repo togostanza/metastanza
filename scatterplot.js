@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { e as embed } from './vega-embed.module-8f73515b.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { e as embed } from './vega-embed.module-414e3eaf.js';
 import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
@@ -278,7 +278,7 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_scatterplot.json",
-		"stanza:description": "Source url of data",
+		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
 	{
@@ -610,5 +610,7 @@ var templates = [
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=scatterplot.js.map

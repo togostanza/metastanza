@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table-with-pagination",
-  "stanza:label": "table with pagination",
-  "stanza:definition": "Table with pagination for MetaStanza",
+  "@id": "pagination-table",
+  "stanza:label": "Pagination table",
+  "stanza:definition": "Pagination table MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",
@@ -18,7 +18,15 @@
     {
       "stanza:key": "data-url",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
-      "stanza:description": "Source url of data",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
       "stanza:required": true
     },
     {
@@ -32,7 +40,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Page slider on/off (true or false)"
+      "stanza:description": "Show page slider"
     },
     {
       "stanza:key": "columns",
@@ -47,12 +55,6 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica",
       "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--series-0-color",
-      "stanza:type": "color",
-      "stanza:default": "#256d80",
-      "stanza:description": "Key color"
     },
     {
       "stanza:key": "--table-border",
@@ -133,6 +135,18 @@
       "stanza:description": "Background color of table body (even row)"
     },
     {
+      "stanza:key": "--control-color",
+      "stanza:type": "color",
+      "stanza:default": "#256d80",
+      "stanza:description": "Color of control area"
+    },
+    {
+      "stanza:key": "--control-border",
+      "stanza:type": "text",
+      "stanza:default": "1px solid #256d80",
+      "stanza:description": "Color of control area"
+    },
+    {
       "stanza:key": "--control-active-color",
       "stanza:type": "color",
       "stanza:default": "#44b8cc",
@@ -189,7 +203,7 @@
     {
       "stanza:key": "--pagination-border-radius",
       "stanza:type": "text",
-      "stanza:default": "4px",
+      "stanza:default": "3px",
       "stanza:description": "Border radius of pagination button"
     },
     {
@@ -213,7 +227,7 @@
     {
       "stanza:key": "--pagination-current-border",
       "stanza:type": "text",
-      "stanza:default": "1px solid #DDDDDD",
+      "stanza:default": "1px solid #256d80",
       "stanza:description": "Border style of pagination button (at current page)"
     },
     {
@@ -221,12 +235,6 @@
       "stanza:type": "color",
       "stanza:default": "#002559",
       "stanza:description": "Color of pagination arrow button"
-    },
-    {
-      "stanza:key": "--control-background-color",
-      "stanza:type": "color",
-      "stanza:default": "#fff",
-      "stanza:description": "Background color of control area (inside of boxes)"
     },
     {
       "stanza:key": "--vertical-pagination-placement",

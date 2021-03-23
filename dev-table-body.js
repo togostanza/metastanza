@@ -1,4 +1,4 @@
-import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { a as commonjsGlobal, d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
 import { g as getFormatedJson } from './metastanza_utils-0648515a.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
@@ -1614,5 +1614,7 @@ var templates = [
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=dev-table-body.js.map

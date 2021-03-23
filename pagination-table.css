@@ -390,11 +390,10 @@
   margin-right: 3px;
   width: 164px;
   height: 20px;
-  border: 1px solid var(--series-0-color);
+  border: var(--control-border);
   border-radius: var(--control-border-radius);
   font-size: var(--control-font-size);
   color: var(--control-font-color);
-  background-color: var(--control-background-color);
 }
 .textSearchInput[type=text]::placeholder {
   padding: 0px 0px 0px 4px;
@@ -430,7 +429,7 @@
   font-size: var(--control-font-color);
 }
 .wrapper > .tableWrapper > .tableOption > .entries select {
-  border: 1px solid var(--series-0-color);
+  border: var(--control-border);
   border-radius: var(--control-border-radius);
   height: 20px;
 }
@@ -510,7 +509,7 @@
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {
   padding: 4px 8px;
-  background-color: var(--thead-font-color);
+  background-color: var(--control-color);
   color: #ffffff;
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters {
@@ -541,9 +540,9 @@
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {
-  border: 1px solid var(--series-0-color);
+  border: 1px solid var(--control-color);
   border-radius: 3px;
-  background-color: var(--series-0-color);
+  background-color: var(--control-color);
   color: #ffffff;
   display: flex;
   justify-content: center;
@@ -572,31 +571,27 @@
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > p.title {
   display: block;
   padding: 6px 16px;
-  background-color: var(--thead-font-color);
+  background-color: var(--control-color);
   color: #ffffff;
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > input.textSearchInput[name=queryInputByColumn] {
   margin: 20px 30px;
+}
+.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-base {
+  background-color: var(--control-non-active-color);
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider {
   margin: 30px 40px 8px;
   width: 230px;
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {
-  background-color: var(--thead-font-color);
+  background-color: var(--control-active-color);
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {
   width: 14px;
   height: 14px;
   top: -5px;
-  background-color: var(--series-0-color);
-}
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle .slider-tooltip {
-  border: 1px solid var(--thead-font-color);
-  background: var(--thead-font-color);
-  padding: 0 6px;
-  line-height: 1.4em;
-  bottom: 20px;
+  background-color: var(--control-active-color);
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput {
   width: 242px;
@@ -613,11 +608,10 @@
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text] {
   width: 164px;
   height: 20px;
-  border: 1px solid var(--series-0-color);
+  border: var(--control-border);
   border-radius: var(--control-border-radius);
   font-size: var(--control-font-size);
   color: var(--control-font-color);
-  background-color: var(--control-background-color);
   width: 100%;
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text]::placeholder {
@@ -660,7 +654,9 @@
 .wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing {
   z-index: 3;
   position: relative;
-  background-color: var(--thead-font-color);
+  background-color: var(--control-color);
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing > path {
   color: #ffffff;
 }
 .wrapper > .tableWrapper > table > thead > tr .icon.sort {
@@ -764,18 +760,10 @@
   margin-left: 20px;
 }
 .wrapper > .paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput {
-  width: 164px;
-  height: 20px;
-  border: 1px solid var(--series-0-color);
-  border-radius: var(--control-border-radius);
-  font-size: var(--control-font-size);
-  color: var(--control-font-color);
-  background-color: var(--control-background-color);
+  border: var(--pagination-current-border);
+  border-radius: var(--pagination-border-radius);
   width: 40px;
-}
-.wrapper > .paginationWrapper > .serialPagination > .pageNumber > input[type=text].jumpToNumberInput::placeholder {
-  padding: 0px 0px 0px 4px;
-  color: var(--searchbox-font-color);
+  height: 20px;
 }
 .wrapper > .paginationWrapper > #slider.pageSlider {
   height: 4px;

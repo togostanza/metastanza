@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { e as embed } from './vega-embed.module-8f73515b.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { e as embed } from './vega-embed.module-414e3eaf.js';
 import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
@@ -24,7 +24,7 @@ async function linechart(stanza, params) {
   //data
   const labelVariable = params["category"];
   const valueVariable = params["value"];
-  const groupVariable = params["group"];
+  const groupVariable = params["group-by"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -274,7 +274,7 @@ var metadata = {
 },
 	"@id": "linechart",
 	"stanza:label": "linechart",
-	"stanza:definition": "Linechart for MetaStanza",
+	"stanza:definition": "Linechart MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
 	"stanza:provider": "Togostanza",
@@ -289,7 +289,7 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-		"stanza:description": "Source url of data",
+		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
 	{
@@ -302,7 +302,7 @@ var metadata = {
 			"sparql-results-json"
 		],
 		"stanza:example": "json",
-		"stanza:description": "Type of data",
+		"stanza:description": "Data type",
 		"stanza:required": true
 	},
 	{
@@ -318,10 +318,10 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "group",
+		"stanza:key": "group-by",
 		"stanza:example": "category",
 		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
-		"stanza:required": true
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "category-title",
@@ -358,26 +358,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 50,
 		"stanza:description": "Padding"
-	},
-	{
-		"stanza:key": "xaxis-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"top",
-			"bottom"
-		],
-		"stanza:example": "bottom",
-		"stanza:description": "Placement of X axis"
-	},
-	{
-		"stanza:key": "yaxis-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"right"
-		],
-		"stanza:example": "left",
-		"stanza:description": "Placement of Y axis"
 	},
 	{
 		"stanza:key": "xgrid",
@@ -462,6 +442,26 @@ var metadata = {
 		],
 		"stanza:example": true,
 		"stanza:description": "Show legend"
+	},
+	{
+		"stanza:key": "xaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top",
+			"bottom"
+		],
+		"stanza:example": "bottom",
+		"stanza:description": "Placement of X axis (top or bottom)"
+	},
+	{
+		"stanza:key": "yaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"right"
+		],
+		"stanza:example": "left",
+		"stanza:description": "Placement of Y axis (left or right)"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -634,18 +634,11 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "<p class=\"greeting\">\n  "
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}}}) : helper)))
-    + "\n</p>";
+    return "";
 },"useData":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=linechart.js.map

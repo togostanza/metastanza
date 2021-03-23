@@ -1,4 +1,4 @@
-import { c as createCommonjsModule } from './stanza-element-d51bbc69.js';
+import { c as createCommonjsModule } from './stanza-element-c2a08f7a.js';
 import { h as has, i as isNumber, a as isString, w as writeConfig, s as splitAccessPath, $, t as toSet, b as isObject, c as isBoolean$1, l as logger, W as Warn, d as isArray, e as isFunction, f as array, m as mergeConfig, g as eventSelector, j as identity, v as vegaImport } from './vega.module-f322150d.js';
 
 /*!
@@ -24850,4 +24850,4 @@ function _embed(el, spec, opts = {}, loader) {
 }
 
 export { embed as e };
-//# sourceMappingURL=vega-embed.module-8f73515b.js.map
+//# sourceMappingURL=vega-embed.module-414e3eaf.js.map

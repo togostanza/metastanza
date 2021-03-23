@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
 import { l as loadData } from './load-data-a2861a31.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
@@ -66,7 +66,7 @@ var metadata = {
 			"sparql-results-json"
 		],
 		"stanza:example": "json",
-		"stanza:description": "Type of data",
+		"stanza:description": "Data type",
 		"stanza:required": true
 	},
 	{
@@ -205,5 +205,7 @@ var templates = [
 },"useData":true,"useBlockParams":true}]
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=hash-table.js.map

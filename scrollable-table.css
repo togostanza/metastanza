@@ -91,34 +91,34 @@
   position: relative;
   left: -9999px;
   display: inline-block;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background-color: var(--thead-font-color);
-  box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+  box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   animation: dot-typing 1.5s infinite linear;
 }
 
 @keyframes dot-typing {
   0% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
   16.667% {
-    box-shadow: 9991.5px -5px 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px -5px 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
   33.333% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
   50% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px -5px 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px -5px 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
   66.667% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
   83.333% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px -5px 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px -5px 0 0 var(--thead-font-color);
   }
   100% {
-    box-shadow: 9991.5px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10006.5px 0 0 0 var(--thead-font-color);
+    box-shadow: 9993px 0 0 0 var(--thead-font-color), 9999px 0 0 0 var(--thead-font-color), 10005px 0 0 0 var(--thead-font-color);
   }
 }

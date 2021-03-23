@@ -4,7 +4,7 @@
   },
   "@id": "linechart",
   "stanza:label": "linechart",
-  "stanza:definition": "Linechart for MetaStanza",
+  "stanza:definition": "Linechart MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",
   "stanza:provider": "Togostanza",
@@ -18,7 +18,7 @@
     {
       "stanza:key": "data-url",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-      "stanza:description": "Source url of data",
+      "stanza:description": "Data source URL",
       "stanza:required": true
     },
     {
@@ -26,7 +26,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
-      "stanza:description": "Type of data",
+      "stanza:description": "Data type",
       "stanza:required": true
     },
     {
@@ -42,10 +42,10 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "group",
+      "stanza:key": "group-by",
       "stanza:example": "category",
       "stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
-      "stanza:required": true
+      "stanza:required": false
     },
     {
       "stanza:key": "category-title",
@@ -82,20 +82,6 @@
       "stanza:type": "number",
       "stanza:example": 50,
       "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "xaxis-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
-      "stanza:description": "Placement of X axis"
-    },
-    {
-      "stanza:key": "yaxis-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
-      "stanza:description": "Placement of Y axis"
     },
     {
       "stanza:key": "xgrid",
@@ -165,6 +151,20 @@
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show legend"
+    },
+    {
+      "stanza:key": "xaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top", "bottom"],
+      "stanza:example": "bottom",
+      "stanza:description": "Placement of X axis (top or bottom)"
+    },
+    {
+      "stanza:key": "yaxis-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "right"],
+      "stanza:example": "left",
+      "stanza:description": "Placement of Y axis (left or right)"
     },
     {
       "stanza:key": "metastanza-menu-placement",

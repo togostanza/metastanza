@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { e as defineComponent, m as reactive, o as onMounted, n as lodash_orderby, b as createBlock, h as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, x as createApp } from './index-45eb168c.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { e as defineComponent, m as reactive, o as onMounted, n as lodash_orderby, b as createBlock, h as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, x as createApp } from './index-80d2805d.js';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -384,9 +384,9 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "table-with-scroll",
-	"stanza:label": "table with scroll",
-	"stanza:definition": "Table with scroll for MetaStanza",
+	"@id": "scrollable-table",
+	"stanza:label": "Scrollable table",
+	"stanza:definition": "Scrollable table MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
 	"stanza:provider": "Togostanza",
@@ -399,9 +399,9 @@ var metadata = {
 	"stanza:updated": "2020-12-09",
 	"stanza:parameter": [
 	{
-		"stanza:key": "data-url",
+		"stanza:key": "data-URL",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
-		"stanza:description": "Source url of data",
+		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
 	{
@@ -409,12 +409,6 @@ var metadata = {
 		"stanza:example": "10",
 		"stanza:description": "Page size",
 		"stanza:required": true
-	},
-	{
-		"stanza:key": "params",
-		"stanza:example": "taxonomy='9606'",
-		"stanza:description": "Parameters for table data api",
-		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",
@@ -542,7 +536,7 @@ var script = defineComponent({
     async function fetchData() {
       state.isFetchingData = true;
       const res = await fetch(
-        `${params.dataUrl}&limit=${params.pageSize}&offset=${state.offset}`
+        `${params.dataURL}&limit=${params.pageSize}&offset=${state.offset}`
       );
       const data = await res.json();
 
@@ -665,23 +659,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script.render = render;
-script.__file = "stanzas/table-with-scroll/app.vue";
+script.__file = "stanzas/scrollable-table/app.vue";
 
-async function tableWithPagination(stanza, params) {
+async function scrollableTable(stanza, params) {
   const main = stanza.root.querySelector("main");
   createApp(script, params).mount(main);
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': tableWithPagination
+  'default': scrollableTable
 });
 
 var templates = [
-  ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  table {\n      width: 100%;\n  }\n</style>\n\n<div class=\"container\">\n  <div class=\"infomation\">\n    <div class=\"text-search-wrapper\">\n      <input\n        type=\"text\"\n        id=\"search-input\"\n        placeholder=\"Search for keywords...\"\n      />\n      <button id=\"search-btn\" type=\"submit\">\n        <img\n          src=\"https://raw.githubusercontent.com/togostanza/metastanza/master/assets/white-search.svg\"\n          alt=\"search\"\n        />\n        <span class=\"search-text\">\n          Search\n        </span>\n      </button>\n    </div>\n    <a id=\"download-btn\" download=\"table-data\">\n      <img\n        src=\"https://raw.githubusercontent.com/togostanza/metastanza/master/assets/gray-download.svg\"\n        alt=\"download\"\n      />\n    </a>\n  </div>\n  <p class=\"table-title\">\n    Title of this Table\n  </p>\n  <div id=\"renderDiv\"></div>\n\n  <div id=\"pagination\">\n    <ul>\n      <li class=\"first-btn back-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n      <li class=\"previous-btn back-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"current-btn\">\n        1\n      </li>\n      <li>\n        2\n      </li>\n      <li>\n        3\n      </li>\n      <li>\n        4\n      </li>\n      <li>\n        …\n      </li>\n      <li>\n        10\n      </li>\n      <li class=\"next-btn advance-btn arrow-btn\">\n        <span></span>\n      </li>\n      <li class=\"last-btn advance-btn arrow-btn\">\n        <span></span>\n        <span></span>\n      </li>\n    </ul>\n  </div>\n  <p class=\"show-info\">\n    Showing 1 to 10 of 44 entres\n  </p>\n</div>";
-},"useData":true}]
+  
 ];
 
-defineStanzaElement({stanzaModule, metadata, templates, url: import.meta.url});
-//# sourceMappingURL=table-with-scroll.js.map
+const url = import.meta.url.replace(/\?.*$/, '');
+
+defineStanzaElement({stanzaModule, metadata, templates, url});
+//# sourceMappingURL=scrollable-table.js.map
