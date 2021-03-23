@@ -24,7 +24,7 @@ async function linechart(stanza, params) {
   //data
   const labelVariable = params["category"];
   const valueVariable = params["value"];
-  const groupVariable = params["group-by"];
+  const groupVariable = params["group-by"] ? params["group-by"] : "none";
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -214,7 +214,7 @@ async function linechart(stanza, params) {
     data,
     scales,
     axes,
-    legends: params["legend"] === "false" ? [] : legends,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
     marks,
   };
 
@@ -360,6 +360,16 @@ var metadata = {
 		"stanza:description": "Padding"
 	},
 	{
+		"stanza:key": "legend",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Show legend"
+	},
+	{
 		"stanza:key": "xgrid",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
@@ -432,16 +442,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 10,
 		"stanza:description": "Padding between Y title and label"
-	},
-	{
-		"stanza:key": "legend",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
-		"stanza:example": true,
-		"stanza:description": "Show legend"
 	},
 	{
 		"stanza:key": "xaxis-placement",
@@ -520,6 +520,12 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
+	},
+	{
+		"stanza:key": "--line-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Line width"
 	},
 	{
 		"stanza:key": "--axis-color",
@@ -622,12 +628,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
-	},
-	{
-		"stanza:key": "--line-width",
-		"stanza:type": "number",
-		"stanza:default": "1",
-		"stanza:description": "Line width"
 	}
 ]
 };
