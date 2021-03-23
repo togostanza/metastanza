@@ -84,6 +84,13 @@
       "stanza:description": "Padding"
     },
     {
+      "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show legend"
+    },
+    {
       "stanza:key": "xgrid",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
@@ -144,13 +151,6 @@
       "stanza:type": "number",
       "stanza:example": 10,
       "stanza:description": "Padding between Y title and label"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show legend"
     },
     {
       "stanza:key": "xaxis-placement",
@@ -223,6 +223,12 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--line-width",
+      "stanza:type": "number",
+      "stanza:default": "1",
+      "stanza:description": "Line width"
     },
     {
       "stanza:key": "--axis-color",
@@ -325,12 +331,6 @@
       "stanza:type": "number",
       "stanza:default": "0.5",
       "stanza:description": "Border width"
-    },
-    {
-      "stanza:key": "--line-width",
-      "stanza:type": "number",
-      "stanza:default": "1",
-      "stanza:description": "Line width"
     }
   ]
 }

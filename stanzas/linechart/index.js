@@ -19,7 +19,7 @@ export default async function linechart(stanza, params) {
   //data
   const labelVariable = params["category"];
   const valueVariable = params["value"];
-  const groupVariable = params["group-by"];
+  const groupVariable = params["group-by"] ? params["group-by"] : "none";
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -209,7 +209,7 @@ export default async function linechart(stanza, params) {
     data,
     scales,
     axes,
-    legends: params["legend"] === "false" ? [] : legends,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
     marks,
   };
 
