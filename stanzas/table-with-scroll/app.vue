@@ -1,5 +1,9 @@
 <template>
-  <div class="tableWrapper" @scroll="handleScroll" :style="`width: ${width}px; height: ${height}px; padding: ${oadding}px`">
+  <div
+    class="tableWrapper"
+    :style="`width: ${width}px; height: ${height}px; padding: ${oadding}px`"
+    @scroll="handleScroll"
+  >
     <table v-if="state.allRows">
       <thead>
         <tr>
@@ -105,14 +109,14 @@ export default defineComponent({
       fetchData();
     });
 
-    const {width, height, padding} = params
+    const { width, height, padding } = params;
 
     return {
       state,
       handleScroll,
       width,
       height,
-      padding
+      padding,
     };
   },
 });
