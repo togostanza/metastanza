@@ -1,5 +1,5 @@
 <template>
-  <div class="tableWrapper" @scroll="handleScroll">
+  <div class="tableWrapper" @scroll="handleScroll" :style="`width: ${width}px; height: ${height}px; padding: ${oadding}px`">
     <table v-if="state.allRows">
       <thead>
         <tr>
@@ -53,10 +53,9 @@ export default defineComponent({
     });
 
     async function fetchData() {
-      console.log("fetchData");
       state.isFetchingData = true;
       const res = await fetch(
-        `${params.table_data_api}&limit=${params.limit}&offset=${state.offset}`
+        `${params.dataUrl}&limit=${params.pageSize}&offset=${state.offset}`
       );
       const data = await res.json();
 
@@ -106,9 +105,14 @@ export default defineComponent({
       fetchData();
     });
 
+    const {width, height, padding} = params
+
     return {
       state,
       handleScroll,
+      width,
+      height,
+      padding
     };
   },
 });

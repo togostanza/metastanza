@@ -375,7 +375,7 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const res = await fetch(params.tableDataApi);
+      const res = await fetch(params.dataUrl);
       const data = await res.json();
 
       state.responseJSON = data;

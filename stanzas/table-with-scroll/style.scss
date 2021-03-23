@@ -12,10 +12,6 @@
   white-space: nowrap;
 }
 
-main {
-  padding: 1rem 2rem;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -33,7 +29,6 @@ main {
 }
 
 .tableWrapper {
-  height: var(--height);
   overflow: auto;
   > table {
     width: 100%;

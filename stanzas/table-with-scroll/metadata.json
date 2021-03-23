@@ -16,13 +16,13 @@
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
-      "stanza:key": "table_data_api",
+      "stanza:key": "data-url",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
       "stanza:description": "Source url of data",
       "stanza:required": true
     },
     {
-      "stanza:key": "limit",
+      "stanza:key": "page-size",
       "stanza:example": "10",
       "stanza:description": "Page size",
       "stanza:required": true
@@ -40,20 +40,20 @@
       "stanza:description": "Width"
     },
     {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Height"
+    },
+    {
       "stanza:key": "padding",
       "stanza:type": "number",
-      "stanza:example": 50,
+      "stanza:example": 0,
       "stanza:description": "Padding"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
-    {
-      "stanza:key": "--table-height",
-      "stanza:type": "text",
-      "stanza:default": "400px",
-      "stanza:description": "Height"
-    },
     {
       "stanza:key": "--font-family",
       "stanza:type": "text",
