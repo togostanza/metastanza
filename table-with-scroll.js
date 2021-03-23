@@ -399,13 +399,13 @@ var metadata = {
 	"stanza:updated": "2020-12-09",
 	"stanza:parameter": [
 	{
-		"stanza:key": "table_data_api",
+		"stanza:key": "data-url",
 		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
 		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "limit",
+		"stanza:key": "page-size",
 		"stanza:example": "10",
 		"stanza:description": "Page size",
 		"stanza:required": true
@@ -423,20 +423,20 @@ var metadata = {
 		"stanza:description": "Width"
 	},
 	{
+		"stanza:key": "height",
+		"stanza:type": "number",
+		"stanza:example": 400,
+		"stanza:description": "Height"
+	},
+	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": 50,
+		"stanza:example": 0,
 		"stanza:description": "Padding"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
-	{
-		"stanza:key": "--table-height",
-		"stanza:type": "text",
-		"stanza:default": "400px",
-		"stanza:description": "Height"
-	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",
@@ -540,10 +540,9 @@ var script = defineComponent({
     });
 
     async function fetchData() {
-      console.log("fetchData");
       state.isFetchingData = true;
       const res = await fetch(
-        `${params.table_data_api}&limit=${params.limit}&offset=${state.offset}`
+        `${params.dataUrl}&limit=${params.pageSize}&offset=${state.offset}`
       );
       const data = await res.json();
 
@@ -593,9 +592,14 @@ var script = defineComponent({
       fetchData();
     });
 
+    const { width, height, padding } = params;
+
     return {
       state,
       handleScroll,
+      width,
+      height,
+      padding,
     };
   },
 });
@@ -609,6 +613,7 @@ const _hoisted_5 = /*#__PURE__*/createVNode("div", { class: "dotTyping" }, null,
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     class: "tableWrapper",
+    style: `width: ${_ctx.width}px; height: ${_ctx.height}px; padding: ${_ctx.oadding}px`,
     onScroll: _cache[1] || (_cache[1] = (...args) => (_ctx.handleScroll && _ctx.handleScroll(...args)))
   }, [
     (_ctx.state.allRows)
@@ -656,7 +661,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           ])
         ]))
       : createCommentVNode("v-if", true)
-  ], 32 /* HYDRATE_EVENTS */))
+  ], 36 /* STYLE, HYDRATE_EVENTS */))
 }
 
 script.render = render;
@@ -664,12 +669,6 @@ script.__file = "stanzas/table-with-scroll/app.vue";
 
 async function tableWithPagination(stanza, params) {
   const main = stanza.root.querySelector("main");
-  main.setAttribute(
-    `style`,
-    `width: ${params["width"]}px;
-    height: ${params["height"]}px;
-    padding: ${params["padding"]}px;`
-  );
   createApp(script, params).mount(main);
 }
 

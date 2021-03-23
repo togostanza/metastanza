@@ -4643,7 +4643,7 @@ var metadata = {
 	"stanza:updated": "2020-12-09",
 	"stanza:parameter": [
 	{
-		"stanza:key": "table-data-api",
+		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
 		"stanza:description": "Source url of data",
 		"stanza:required": true
@@ -5044,7 +5044,7 @@ var script = defineComponent$1({
     }
 
     async function fetchData() {
-      const res = await fetch(params.tableDataApi);
+      const res = await fetch(params.dataUrl);
       const data = await res.json();
 
       state.responseJSON = data;
