@@ -65,7 +65,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button"
+      "stanza:description": "Menu button placement"
     }
   ],
   "stanza:about-link-placement": "bottom-right",

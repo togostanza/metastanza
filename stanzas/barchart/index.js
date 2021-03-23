@@ -16,7 +16,7 @@ export default async function barchart(stanza, params) {
   //data
   const labelVariable = params["category"]; //x
   const valueVariable = params["value"]; //y
-  const groupVariable = params["group"]; //z
+  const groupVariable = params["group-by"] ? params["group-by"] : "none"; //z
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -307,7 +307,7 @@ export default async function barchart(stanza, params) {
     data: constructData(chartType),
     scales: constructScale(chartType),
     axes,
-    legends: params["legend"] === "false" ? [] : legends,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
     marks: constructMark(chartType),
   };
 

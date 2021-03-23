@@ -14,7 +14,7 @@ export default async function scatterplot(stanza, params) {
 
   const xVariable = params["x"];
   const yVariable = params["y"];
-  const zVariable = params["z"];
+  const zVariable = params["z"] ? params["z"] : "none";
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -160,7 +160,7 @@ export default async function scatterplot(stanza, params) {
       titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
+      labelFontSize: css("--label-font-size"),
       symbolType: params["symbol-shape"],
       symbolFillColor: "var(--series-0-color)",
       symbolStrokeColor: css("--border-color"),

@@ -50,9 +50,9 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "group",
+      "stanza:key": "group-by",
       "stanza:example": "category",
-      "stanza:description": "Variable to be assigned as group (If you will not use this variable, this parameter should be set as none)",
+      "stanza:description": "Variable to be assigned as group",
       "stanza:required": false
     },
     {
@@ -106,14 +106,14 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
-      "stanza:description": "Placement of X axis"
+      "stanza:description": "X axis placement"
     },
     {
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
       "stanza:example": "left",
-      "stanza:description": "Placement of Y axis"
+      "stanza:description": "Y axis placement"
     },
     {
       "stanza:key": "xgrid",
@@ -146,12 +146,12 @@
     {
       "stanza:key": "xlabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of X label (in degree)"
+      "stanza:description": "X label angle (in degree)"
     },
     {
       "stanza:key": "ylabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of Y label (in degree)"
+      "stanza:description": "Y label angle (in degree)"
     },
     {
       "stanza:key": "xlabel-padding",
@@ -187,7 +187,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Show legend (true or false)"
+      "stanza:description": "Show legend"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -305,19 +305,19 @@
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Font color of title"
+      "stanza:description": "Title font color"
     },
     {
       "stanza:key": "--title-font-size",
       "stanza:type": "number",
       "stanza:default": "12",
-      "stanza:description": "Font size of title"
+      "stanza:description": "Title font size"
     },
     {
       "stanza:key": "--title-font-weight",
       "stanza:type": "number",
       "stanza:default": "400",
-      "stanza:description": "Font weight of title"
+      "stanza:description": "Title font weight"
     },
     {
       "stanza:key": "--title-padding",
@@ -329,13 +329,13 @@
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Font color of label"
+      "stanza:description": "Label font color"
     },
     {
       "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "Font size of label"
+      "stanza:description": "Label font size"
     },
     {
       "stanza:key": "--border-color",

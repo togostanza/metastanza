@@ -30,12 +30,6 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "label",
-      "stanza:example": "name",
-      "stanza:description": "Variable to be assigned as category",
-      "stanza:required": true
-    },
-    {
       "stanza:key": "parent-node",
       "stanza:example": "parent",
       "stanza:description": "Variable to be assigned as parent node",
@@ -46,6 +40,12 @@
       "stanza:example": "id",
       "stanza:description": "Variable to be assigned as node",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "label",
+      "stanza:example": "name",
+      "stanza:description": "Variable to be assigned as category",
+      "stanza:required": false
     },
     {
       "stanza:key": "width",
@@ -76,7 +76,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
+      "stanza:description": "Menu button placement Placement of the menu button"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -124,28 +124,28 @@
       "stanza:description": "Font family"
     },
     {
+      "stanza:key": "--node-size",
+      "stanza:type": "number",
+      "stanza:default": "100",
+      "stanza:description": "Node size"
+    },
+    {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#333333",
-      "stanza:description": "Font color of label"
+      "stanza:description": "Label font color"
     },
     {
       "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "11",
-      "stanza:description": "Font size of label"
+      "stanza:description": "Label font size"
     },
     {
-      "stanza:key": "--branch-color",
+      "stanza:key": "--edge-color",
       "stanza:type": "color",
       "stanza:default": "#AEB3BF",
-      "stanza:description": "Branch color"
-    },
-    {
-      "stanza:key": "--node-size",
-      "stanza:type": "number",
-      "stanza:default": "100",
-      "stanza:description": "Node size"
+      "stanza:description": "Edge color"
     },
     {
       "stanza:key": "--border-color",
