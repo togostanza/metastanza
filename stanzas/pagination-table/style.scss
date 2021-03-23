@@ -6,10 +6,10 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
 @mixin button {
-  border: 1px solid var(--control-color);
+  border: var(--control-border);
   border-radius: 3px;
-  background-color: var(--control-color);
-  color: #ffffff;
+  background-color: var(--thead-background-color);
+  color: var(--thead-font-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -159,8 +159,8 @@
                 border-radius: var(--control-border-radius);
                 > .filterWindowTitle {
                   padding: 4px 8px;
-                  background-color: var(--control-color);
-                  color: #ffffff;
+                  background-color: var(--thead-background-color);
+                  color: var(--thead-font-color);
                 }
                 > ul.filters {
                   padding: 9px 8px;
@@ -213,8 +213,8 @@
               > p.title {
                 display: block;
                 padding: 6px 16px;
-                background-color: var(--control-color);
-                color: #ffffff;
+                background-color: var(--thead-background-color);
+                color: var(--thead-font-color);
               }
               > input.textSearchInput[name="queryInputByColumn"] {
                 margin: 20px 30px;
@@ -281,6 +281,7 @@
             display: inline-block;
             width: var(--control-font-size);
             height: var(--control-font-size);
+            transform: translateY(1px);
             path {
               color: var(--control-non-active-color);
             }
@@ -299,9 +300,9 @@
               &.isShowing {
                 z-index: 3;
                 position: relative;
-                background-color: var(--control-color);
+                background-color: var(--thead-background-color);
                 > path {
-                  color: #ffffff;
+                  color: var(--thead-font-color);
                 }
               }
             }
