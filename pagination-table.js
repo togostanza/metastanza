@@ -4720,6 +4720,12 @@ var metadata = {
 		"stanza:description": "Font color of table header"
 	},
 	{
+		"stanza:key": "--thead-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#256d80",
+		"stanza:description": "Background color of table header"
+	},
+	{
 		"stanza:key": "--thead-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
@@ -4730,12 +4736,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of table header"
-	},
-	{
-		"stanza:key": "--thead-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "Background color of table header"
 	},
 	{
 		"stanza:key": "--tbody-border-bottom",
