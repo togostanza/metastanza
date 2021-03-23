@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table-with-scroll",
-  "stanza:label": "table with scroll",
-  "stanza:definition": "Table with scroll for MetaStanza",
+  "@id": "scrollable-table",
+  "stanza:label": "Scrollable table",
+  "stanza:definition": "Scrollable table MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",
@@ -16,9 +16,9 @@
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
-      "stanza:key": "data-url",
+      "stanza:key": "data-URL",
       "stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
-      "stanza:description": "Source url of data",
+      "stanza:description": "Data source URL",
       "stanza:required": true
     },
     {
@@ -26,12 +26,6 @@
       "stanza:example": "10",
       "stanza:description": "Page size",
       "stanza:required": true
-    },
-    {
-      "stanza:key": "params",
-      "stanza:example": "taxonomy='9606'",
-      "stanza:description": "Parameters for table data api",
-      "stanza:required": false
     },
     {
       "stanza:key": "width",

@@ -19,7 +19,7 @@ export default async function linechart(stanza, params) {
   //data
   const labelVariable = params["category"];
   const valueVariable = params["value"];
-  const groupVariable = params["group"];
+  const groupVariable = params["group-by"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
 

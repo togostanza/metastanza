@@ -113,10 +113,10 @@
                 >
                   <p class="title">
                     <template v-if="column.searchType === 'number'">
-                      Set {{ column.label }} range
+                      {{ column.label }} range
                     </template>
                     <template v-else>
-                      Search for "{{ column.label }}"
+                      {{ column.label }}
                     </template>
                   </p>
                   <div v-if="column.searchType === 'number'">
@@ -199,6 +199,7 @@ import SliderPagination from "./SliderPagination.vue";
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
+import loadData from "@/lib/load-data";
 
 import metadata from "./metadata.json";
 
@@ -375,8 +376,7 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const res = await fetch(params.dataUrl);
-      const data = await res.json();
+      const data = await loadData(params.dataUrl, params.dataType);
 
       state.responseJSON = data;
       let columns;

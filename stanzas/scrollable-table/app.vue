@@ -59,7 +59,7 @@ export default defineComponent({
     async function fetchData() {
       state.isFetchingData = true;
       const res = await fetch(
-        `${params.dataUrl}&limit=${params.pageSize}&offset=${state.offset}`
+        `${params.dataURL}&limit=${params.pageSize}&offset=${state.offset}`
       );
       const data = await res.json();
 

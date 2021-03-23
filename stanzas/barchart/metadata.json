@@ -26,7 +26,7 @@
     {
       "stanza:key": "data-url",
       "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-      "stanza:description": "Source url of data",
+      "stanza:description": "Data source URL",
       "stanza:required": true
     },
     {
@@ -34,7 +34,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
-      "stanza:description": "Type of data",
+      "stanza:description": "Data type",
       "stanza:required": true
     },
     {
