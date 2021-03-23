@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
@@ -172,7 +172,7 @@ async function barchart(stanza, params) {
       titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
+      labelFontSize: css("--label-font-size"),
       symbolStrokeColor: css("--border-color"),
       symbolStrokeWidth: css("--border-width"),
     },
@@ -387,7 +387,7 @@ var metadata = {
 			"grouped"
 		],
 		"stanza:example": "stacked",
-		"stanza:description": "Type of barchart (stacked, grouped)",
+		"stanza:description": "Type of barchart",
 		"stanza:required": true
 	},
 	{
@@ -481,7 +481,7 @@ var metadata = {
 			"bottom"
 		],
 		"stanza:example": "bottom",
-		"stanza:description": "Placement of X axis (top or bottom)"
+		"stanza:description": "Placement of X axis"
 	},
 	{
 		"stanza:key": "yaxis-placement",
@@ -491,7 +491,7 @@ var metadata = {
 			"right"
 		],
 		"stanza:example": "left",
-		"stanza:description": "Placement of Y axis (left or right)"
+		"stanza:description": "Placement of Y axis"
 	},
 	{
 		"stanza:key": "xgrid",
@@ -501,7 +501,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": false,
-		"stanza:description": "Display of X grid (true or false)"
+		"stanza:description": "Show X grid"
 	},
 	{
 		"stanza:key": "ygrid",
@@ -511,7 +511,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of Y grid (true or false)"
+		"stanza:description": "Show Y grid"
 	},
 	{
 		"stanza:key": "xtick",
@@ -521,7 +521,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": false,
-		"stanza:description": "Display of X tick (true or false)"
+		"stanza:description": "Show X tick"
 	},
 	{
 		"stanza:key": "ytick",
@@ -531,7 +531,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of Y tick (true or false)"
+		"stanza:description": "Show Y tick"
 	},
 	{
 		"stanza:key": "xlabel-angle",
@@ -580,7 +580,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of legend (true or false)"
+		"stanza:description": "Show legend (true or false)"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -643,7 +643,7 @@ var metadata = {
 	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Axis color"
 	},
 	{
@@ -679,7 +679,7 @@ var metadata = {
 	{
 		"stanza:key": "--tick-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Tick color"
 	},
 	{
@@ -697,7 +697,7 @@ var metadata = {
 	{
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of title"
 	},
 	{
@@ -719,15 +719,9 @@ var metadata = {
 		"stanza:description": "Padding between label and title"
 	},
 	{
-		"stanza:key": "--legend-font-size",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Font size of legend label"
-	},
-	{
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of label"
 	},
 	{
@@ -739,7 +733,7 @@ var metadata = {
 	{
 		"stanza:key": "--border-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{

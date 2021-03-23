@@ -471,7 +471,7 @@ var metadata = {
 	{
 		"stanza:key": "--axis-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Axis color."
 	},
 	{
@@ -507,7 +507,7 @@ var metadata = {
 	{
 		"stanza:key": "--tick-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Tick color"
 	},
 	{
@@ -525,7 +525,7 @@ var metadata = {
 	{
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of titles."
 	},
 	{
@@ -549,7 +549,7 @@ var metadata = {
 	{
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Label color."
 	},
 	{
@@ -591,7 +591,7 @@ var metadata = {
 	{
 		"stanza:key": "--stroke-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Stroke color."
 	},
 	{

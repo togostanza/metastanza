@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
@@ -351,7 +351,7 @@ var metadata = {
 	{
 		"stanza:key": "--border-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{

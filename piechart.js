@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
@@ -68,16 +68,16 @@ async function piechart(stanza, params) {
       // legendX: "220",
       legendY: "5",
       title:
-        params["category-title"] === ""
+        params["legend-title"] === ""
           ? labelVariable
-          : params["category-title"],
+          : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
       titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
+      labelFontSize: css("--label-font-size"),
       symbolType: params["symbol-shape"],
       symbolStrokeColor: css("--border-color"),
       symbolStrokeWidth: css("--border-width"),
@@ -230,6 +230,16 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
+		"stanza:key": "legend",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Show legend"
+	},
+	{
 		"stanza:key": "width",
 		"stanza:type": "number",
 		"stanza:example": 200,
@@ -240,16 +250,6 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 200,
 		"stanza:description": "Height"
-	},
-	{
-		"stanza:key": "legend",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
-		"stanza:example": true,
-		"stanza:description": "Display of legend (true or false)"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -312,7 +312,7 @@ var metadata = {
 	{
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of title"
 	},
 	{
@@ -334,15 +334,9 @@ var metadata = {
 		"stanza:description": "Font color of label"
 	},
 	{
-		"stanza:key": "--legend-font-size",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Font size of legend label"
-	},
-	{
 		"stanza:key": "--border-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{

@@ -46,18 +46,16 @@
       "stanza:type": "number",
       "stanza:example": 50,
       "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "data-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
-      "stanza:description": "Type of data",
-      "stanza:required": true
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
+    {
+      "stanza:key": "--column-count",
+      "stanza:type": "text",
+      "stanza:default": "1",
+      "stanza:description": "column's count"
+    },
     {
       "stanza:key": "--font-family",
       "stanza:type": "text",

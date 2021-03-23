@@ -49,6 +49,13 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show legend"
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 200,
@@ -59,13 +66,6 @@
       "stanza:type": "number",
       "stanza:example": 200,
       "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Display of legend (true or false)"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -128,7 +128,7 @@
     {
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Font color of title"
     },
     {
@@ -150,15 +150,9 @@
       "stanza:description": "Font color of label"
     },
     {
-      "stanza:key": "--legend-font-size",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Font size of legend label"
-    },
-    {
       "stanza:key": "--border-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Border color"
     },
     {

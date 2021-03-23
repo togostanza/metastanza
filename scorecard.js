@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
@@ -38,7 +38,7 @@ async function scorecard(stanza, params) {
 
   const key = stanza.root.querySelector("#scorecardKey");
   const value = stanza.root.querySelector("#scorecardValue");
-  if (params["key-display"] === "false") {
+  if (params["legend"] === "false") {
     key.setAttribute(`style`, `display: none;`);
   }
 
@@ -145,14 +145,14 @@ var metadata = {
 		"stanza:description": "Padding"
 	},
 	{
-		"stanza:key": "key-display",
+		"stanza:key": "legend",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
 			"true",
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of key (true or false)"
+		"stanza:description": "Show key name"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -165,7 +165,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+		"stanza:description": "Placement of the download button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -203,7 +203,7 @@ var metadata = {
 	{
 		"stanza:key": "--value-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color for value"
 	},
 	{

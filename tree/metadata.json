@@ -150,7 +150,7 @@
     {
       "stanza:key": "--border-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Border color"
     },
     {

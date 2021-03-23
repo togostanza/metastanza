@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
 import './dsv-cd3740c6.js';
@@ -86,23 +86,16 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 50,
 		"stanza:description": "Padding"
-	},
-	{
-		"stanza:key": "data-type",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"json",
-			"tsv",
-			"csv",
-			"sparql-results-json"
-		],
-		"stanza:example": "json",
-		"stanza:description": "Type of data",
-		"stanza:required": true
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
+	{
+		"stanza:key": "--column-count",
+		"stanza:type": "text",
+		"stanza:default": "1",
+		"stanza:description": "column's count"
+	},
 	{
 		"stanza:key": "--font-family",
 		"stanza:type": "text",

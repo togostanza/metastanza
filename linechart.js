@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
 import { e as embed } from './vega-embed.module-8f73515b.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import { a as appendDlButton } from './metastanza_utils-0648515a.js';
 import './vega.module-f322150d.js';
 import './dsv-cd3740c6.js';
@@ -367,7 +367,7 @@ var metadata = {
 			"bottom"
 		],
 		"stanza:example": "bottom",
-		"stanza:description": "Placement of X axis (top or bottom)"
+		"stanza:description": "Placement of X axis"
 	},
 	{
 		"stanza:key": "yaxis-placement",
@@ -377,7 +377,7 @@ var metadata = {
 			"right"
 		],
 		"stanza:example": "left",
-		"stanza:description": "Placement of Y axis (left or right)"
+		"stanza:description": "Placement of Y axis"
 	},
 	{
 		"stanza:key": "xgrid",
@@ -387,7 +387,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": false,
-		"stanza:description": "Display of X grid (true or false)"
+		"stanza:description": "Show X grid"
 	},
 	{
 		"stanza:key": "ygrid",
@@ -397,7 +397,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of Y grid (true or false)"
+		"stanza:description": "Show Y grid"
 	},
 	{
 		"stanza:key": "xtick",
@@ -407,7 +407,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": false,
-		"stanza:description": "Display of X tick (true or false)"
+		"stanza:description": "Show X tick"
 	},
 	{
 		"stanza:key": "ytick",
@@ -417,7 +417,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of Y tick (true or false)"
+		"stanza:description": "Show Y tick"
 	},
 	{
 		"stanza:key": "xlabel-angle",
@@ -461,7 +461,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Display of legend (true or false)"
+		"stanza:description": "Show legend"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -474,7 +474,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button (top-left,top-right,bottom-right,bottom-left,none)"
+		"stanza:description": "Placement of the download button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -560,7 +560,7 @@ var metadata = {
 	{
 		"stanza:key": "--tick-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Tick color"
 	},
 	{
@@ -578,7 +578,7 @@ var metadata = {
 	{
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of title"
 	},
 	{
@@ -602,7 +602,7 @@ var metadata = {
 	{
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Font color of label"
 	},
 	{
@@ -614,7 +614,7 @@ var metadata = {
 	{
 		"stanza:key": "--border-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
+		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{

@@ -12,7 +12,6 @@
 
 table {
   display: block;
-  border: var(--text-border);
 }
 table tbody tr td {
   word-break: break-all;

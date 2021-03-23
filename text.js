@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-d51bbc69.js';
-import { l as loadData } from './load-data-61d0d020.js';
+import { l as loadData } from './load-data-a2861a31.js';
 import './index-b2de29ee.js';
 import './timer-be811b16.js';
 import './dsv-cd3740c6.js';
@@ -129,7 +129,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
+		"stanza:description": "Placement of the menu button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -143,26 +143,20 @@ var metadata = {
 	{
 		"stanza:key": "--text-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#4e5059",
-		"stanza:description": "Font color of text"
+		"stanza:default": "#4E5059",
+		"stanza:description": "Font color"
 	},
 	{
 		"stanza:key": "--text-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
-		"stanza:description": "Font size of text"
+		"stanza:description": "Font size"
 	},
 	{
 		"stanza:key": "--text-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of text"
-	},
-	{
-		"stanza:key": "--text-border",
-		"stanza:type": "text",
-		"stanza:default": "0px solid #eeeeee",
-		"stanza:description": "Border style"
+		"stanza:description": "Font weight"
 	}
 ]
 };
