@@ -167,7 +167,7 @@ export default async function barchart(stanza, params) {
       titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
+      labelFontSize: css("--label-font-size"),
       symbolStrokeColor: css("--border-color"),
       symbolStrokeWidth: css("--border-width"),
     },

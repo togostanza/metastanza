@@ -183,7 +183,7 @@
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Axis color."
     },
     {
@@ -219,7 +219,7 @@
     {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Tick color"
     },
     {
@@ -237,7 +237,7 @@
     {
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Font color of titles."
     },
     {
@@ -261,7 +261,7 @@
     {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Label color."
     },
     {
@@ -303,7 +303,7 @@
     {
       "stanza:key": "--stroke-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Stroke color."
     },
     {

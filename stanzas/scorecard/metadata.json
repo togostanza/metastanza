@@ -48,11 +48,11 @@
       "stanza:description": "Padding"
     },
     {
-      "stanza:key": "key-display",
+      "stanza:key": "legend",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Display of key (true or false)"
+      "stanza:description": "Show key name"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -65,7 +65,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+      "stanza:description": "Placement of the download button"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -103,7 +103,7 @@
     {
       "stanza:key": "--value-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Font color for value"
     },
     {

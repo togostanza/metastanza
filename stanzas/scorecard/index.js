@@ -34,7 +34,7 @@ export default async function scorecard(stanza, params) {
 
   const key = stanza.root.querySelector("#scorecardKey");
   const value = stanza.root.querySelector("#scorecardValue");
-  if (params["key-display"] === "false") {
+  if (params["legend"] === "false") {
     key.setAttribute(`style`, `display: none;`);
   }
 

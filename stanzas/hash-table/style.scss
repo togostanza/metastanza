@@ -10,16 +10,15 @@
 
 main {
   .container {
-    display: flex;
-    flex-wrap: wrap;
+    column-count: var(--column-count);
     border: var(--table-border);
     box-shadow: var(--table-shadow);
     background-color: var(--table-background-color);
     dl {
       display: flex;
-      width: 50%;
       padding: var(--row-padding);
       border-bottom: var(--tbody-border-bottom);
+      break-inside: avoid-column;
       dt {
         width: var(--key-width-percentage);
         padding: 10px;

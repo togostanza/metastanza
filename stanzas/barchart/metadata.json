@@ -20,7 +20,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["stacked", "grouped"],
       "stanza:example": "stacked",
-      "stanza:description": "Type of barchart (stacked, grouped)",
+      "stanza:description": "Type of barchart",
       "stanza:required": true
     },
     {
@@ -106,42 +106,42 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
-      "stanza:description": "Placement of X axis (top or bottom)"
+      "stanza:description": "Placement of X axis"
     },
     {
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
       "stanza:example": "left",
-      "stanza:description": "Placement of Y axis (left or right)"
+      "stanza:description": "Placement of Y axis"
     },
     {
       "stanza:key": "xgrid",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": false,
-      "stanza:description": "Display of X grid (true or false)"
+      "stanza:description": "Show X grid"
     },
     {
       "stanza:key": "ygrid",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Display of Y grid (true or false)"
+      "stanza:description": "Show Y grid"
     },
     {
       "stanza:key": "xtick",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": false,
-      "stanza:description": "Display of X tick (true or false)"
+      "stanza:description": "Show X tick"
     },
     {
       "stanza:key": "ytick",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Display of Y tick (true or false)"
+      "stanza:description": "Show Y tick"
     },
     {
       "stanza:key": "xlabel-angle",
@@ -187,7 +187,7 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Display of legend (true or false)"
+      "stanza:description": "Show legend (true or false)"
     },
     {
       "stanza:key": "metastanza-menu-placement",
@@ -250,7 +250,7 @@
     {
       "stanza:key": "--axis-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Axis color"
     },
     {
@@ -286,7 +286,7 @@
     {
       "stanza:key": "--tick-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Tick color"
     },
     {
@@ -304,7 +304,7 @@
     {
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Font color of title"
     },
     {
@@ -326,15 +326,9 @@
       "stanza:description": "Padding between label and title"
     },
     {
-      "stanza:key": "--legend-font-size",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Font size of legend label"
-    },
-    {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Font color of label"
     },
     {
@@ -346,7 +340,7 @@
     {
       "stanza:key": "--border-color",
       "stanza:type": "color",
-      "stanza:default": "#4e5059",
+      "stanza:default": "#4E5059",
       "stanza:description": "Border color"
     },
     {
