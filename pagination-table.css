@@ -509,8 +509,8 @@
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {
   padding: 4px 8px;
-  background-color: var(--control-color);
-  color: #ffffff;
+  background-color: var(--thead-background-color);
+  color: var(--thead-font-color);
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters {
   padding: 9px 8px;
@@ -540,10 +540,10 @@
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {
-  border: 1px solid var(--control-color);
+  border: var(--control-border);
   border-radius: 3px;
-  background-color: var(--control-color);
-  color: #ffffff;
+  background-color: var(--thead-background-color);
+  color: var(--thead-font-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -571,8 +571,8 @@
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > p.title {
   display: block;
   padding: 6px 16px;
-  background-color: var(--control-color);
-  color: #ffffff;
+  background-color: var(--thead-background-color);
+  color: var(--thead-font-color);
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > input.textSearchInput[name=queryInputByColumn] {
   margin: 20px 30px;
@@ -636,6 +636,7 @@
   display: inline-block;
   width: var(--control-font-size);
   height: var(--control-font-size);
+  transform: translateY(1px);
 }
 .wrapper > .tableWrapper > table > thead > tr .icon path {
   color: var(--control-non-active-color);
@@ -654,10 +655,10 @@
 .wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing {
   z-index: 3;
   position: relative;
-  background-color: var(--control-color);
+  background-color: var(--thead-background-color);
 }
 .wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing > path {
-  color: #ffffff;
+  color: var(--thead-font-color);
 }
 .wrapper > .tableWrapper > table > thead > tr .icon.sort {
   display: var(--sorticon-display);

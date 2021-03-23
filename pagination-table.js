@@ -4716,7 +4716,7 @@ var metadata = {
 	{
 		"stanza:key": "--thead-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256d80",
+		"stanza:default": "#ffffff",
 		"stanza:description": "Font color of table header"
 	},
 	{
@@ -4734,7 +4734,7 @@ var metadata = {
 	{
 		"stanza:key": "--thead-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
+		"stanza:default": "#256d80",
 		"stanza:description": "Background color of table header"
 	},
 	{
@@ -4774,12 +4774,6 @@ var metadata = {
 		"stanza:description": "Background color of table body (even row)"
 	},
 	{
-		"stanza:key": "--control-color",
-		"stanza:type": "color",
-		"stanza:default": "#256d80",
-		"stanza:description": "Color of control area"
-	},
-	{
 		"stanza:key": "--control-border",
 		"stanza:type": "text",
 		"stanza:default": "1px solid #256d80",
@@ -4788,7 +4782,7 @@ var metadata = {
 	{
 		"stanza:key": "--control-active-color",
 		"stanza:type": "color",
-		"stanza:default": "#44b8cc",
+		"stanza:default": "#ffdf3d",
 		"stanza:description": "Active color of control area"
 	},
 	{
@@ -4872,7 +4866,7 @@ var metadata = {
 	{
 		"stanza:key": "--pagination-arrow-color",
 		"stanza:type": "color",
-		"stanza:default": "#002559",
+		"stanza:default": "#256d80",
 		"stanza:description": "Color of pagination arrow button"
 	},
 	{
