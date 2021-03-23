@@ -158,7 +158,7 @@ async function scatterplot(stanza, params) {
     {
       size: "size",
       format: "s",
-      title: params["z-title"] === "" ? zVariable : params["z-title"],
+      title: params["legend-title"] === "" ? zVariable : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -322,9 +322,9 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "z-title",
+		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "Title for z variable (In case of blank, 'z variable' name will be assigned)",
+		"stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z variable' name will be assigned)",
 		"stanza:required": false
 	},
 	{

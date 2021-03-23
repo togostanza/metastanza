@@ -53,7 +53,7 @@ table > tbody > tr:nth-child(even) {
   background-color: var(--tbody-even-background-color);
 }
 table > tbody > tr > td {
-  border-bottom: var(--ruled-line);
+  border-bottom: var(--tbody-border-bottom);
   border-collapse: collapse;
   padding: 10px;
 }

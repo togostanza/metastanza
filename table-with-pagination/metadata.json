@@ -55,30 +55,6 @@
       "stanza:description": "Key color"
     },
     {
-      "stanza:key": "--control-active-color",
-      "stanza:type": "color",
-      "stanza:default": "#44b8cc",
-      "stanza:description": "Active color of control area"
-    },
-    {
-      "stanza:key": "--control-non-active-color",
-      "stanza:type": "color",
-      "stanza:default": "rgba(0, 0, 0, .3)",
-      "stanza:description": "Non active color of control area"
-    },
-    {
-      "stanza:key": "--control-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#707070",
-      "stanza:description": "Font color of control area"
-    },
-    {
-      "stanza:key": "--control-font-size",
-      "stanza:type": "text",
-      "stanza:default": "10px",
-      "stanza:description": "Font size of control area"
-    },
-    {
       "stanza:key": "--table-border",
       "stanza:type": "text",
       "stanza:default": "1px solid #eee",
@@ -91,40 +67,22 @@
       "stanza:description": "Style of table shadow"
     },
     {
-      "stanza:key": "--ruled-line",
-      "stanza:type": "text",
-      "stanza:default": "0.5px solid #eee",
-      "stanza:description": "Style of ruled line"
-    },
-    {
-      "stanza:key": "--control-border-radius",
-      "stanza:type": "text",
-      "stanza:default": "3px",
-      "stanza:description": "Border radius of of control area (boxes)"
-    },
-    {
-      "stanza:key": "--control-background-color",
-      "stanza:type": "color",
-      "stanza:default": "#fff",
-      "stanza:description": "Background color of control area (inside of boxes)"
-    },
-    {
       "stanza:key": "--thead-border-bottom",
       "stanza:type": "text",
       "stanza:default": "1px solid #eee",
       "stanza:description": "Border bottom of thead"
     },
     {
-      "stanza:key": "--thead-font-size",
-      "stanza:type": "text",
-      "stanza:default": "12px",
-      "stanza:description": "Font size of table header"
-    },
-    {
       "stanza:key": "--thead-font-color",
       "stanza:type": "color",
       "stanza:default": "#256d80",
       "stanza:description": "Font color of table header"
+    },
+    {
+      "stanza:key": "--thead-font-size",
+      "stanza:type": "text",
+      "stanza:default": "12px",
+      "stanza:description": "Font size of table header"
     },
     {
       "stanza:key": "--thead-font-weight",
@@ -137,6 +95,12 @@
       "stanza:type": "color",
       "stanza:default": "#FFFFFF",
       "stanza:description": "Background color of table header"
+    },
+    {
+      "stanza:key": "--tbody-border-bottom",
+      "stanza:type": "text",
+      "stanza:default": "0.5px solid #eee",
+      "stanza:description": "Border bottom of tbody"
     },
     {
       "stanza:key": "--tbody-font-color",
@@ -169,18 +133,34 @@
       "stanza:description": "Background color of table body (even row)"
     },
     {
-      "stanza:key": "--vertical-pagination-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["column", "column-reverse"],
-      "stanza:default": "column-reverse",
-      "stanza:description": "Vertical pacement of pagination (top: column, bottom: column-reverse)"
+      "stanza:key": "--control-active-color",
+      "stanza:type": "color",
+      "stanza:default": "#44b8cc",
+      "stanza:description": "Active color of control area"
     },
     {
-      "stanza:key": "--horizonal-pagination-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "Horizonal placement of pagination"
+      "stanza:key": "--control-non-active-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(0, 0, 0, .3)",
+      "stanza:description": "Non active color of control area"
+    },
+    {
+      "stanza:key": "--control-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#707070",
+      "stanza:description": "Font color of control area"
+    },
+    {
+      "stanza:key": "--control-font-size",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "Font size of control area"
+    },
+    {
+      "stanza:key": "--control-border-radius",
+      "stanza:type": "text",
+      "stanza:default": "3px",
+      "stanza:description": "Border radius of of control area (boxes)"
     },
     {
       "stanza:key": "--pagination-font-color",
@@ -241,6 +221,26 @@
       "stanza:type": "color",
       "stanza:default": "#002559",
       "stanza:description": "Color of pagination arrow button"
+    },
+    {
+      "stanza:key": "--control-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fff",
+      "stanza:description": "Background color of control area (inside of boxes)"
+    },
+    {
+      "stanza:key": "--vertical-pagination-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["column", "column-reverse"],
+      "stanza:default": "column-reverse",
+      "stanza:description": "Vertical pacement of pagination (top: column, bottom: column-reverse)"
+    },
+    {
+      "stanza:key": "--horizonal-pagination-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "center", "right"],
+      "stanza:default": "center",
+      "stanza:description": "Horizonal placement of pagination"
     }
   ]
 }

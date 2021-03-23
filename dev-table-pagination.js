@@ -584,10 +584,10 @@ var metadata = {
 		"stanza:description": "style of table shadow"
 	},
 	{
-		"stanza:key": "--ruled-line",
+		"stanza:key": "--tbody-border-bottom",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
-		"stanza:description": "style of ruled line"
+		"stanza:description": "Border bottom of tbody"
 	},
 	{
 		"stanza:key": "--control-border-radius",

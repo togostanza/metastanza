@@ -95,7 +95,7 @@ var metadata = {
 },
 	"@id": "scorecard",
 	"stanza:label": "scorecard",
-	"stanza:definition": "scorecard for MetaStanza",
+	"stanza:definition": "Scorecard for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Image",
 	"stanza:provider": "Togostanza",
@@ -109,8 +109,8 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_gene_length_nano?tax_id=9606&gene_id=BRCA1",
-		"stanza:description": "Source url of data.",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_scorecard?tax_id=9606&gene_id=BRCA1",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{

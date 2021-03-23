@@ -69,7 +69,7 @@ var metadata = {
 },
 	"@id": "text",
 	"stanza:label": "text",
-	"stanza:definition": "text for MetaStanza",
+	"stanza:definition": "Text for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
 	"stanza:provider": "Togostanza",
@@ -83,7 +83,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "http://togogenome.org/sparqlist/api/togogenome_nucleotide_sequence",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_text?tax_id=9606&gene_id=BRCA1",
 		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},

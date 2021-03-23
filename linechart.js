@@ -152,7 +152,7 @@ async function linechart(stanza, params) {
       // legendX: width,
       legendY: -5,
       title:
-        params["group-title"] === "" ? groupVariable : params["group-title"],
+        params["legend-title"] === "" ? groupVariable : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -274,7 +274,7 @@ var metadata = {
 },
 	"@id": "linechart",
 	"stanza:label": "linechart",
-	"stanza:definition": "Vega wrapped linechart for MetaStanza",
+	"stanza:definition": "Linechart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
 	"stanza:provider": "Togostanza",
@@ -336,9 +336,9 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "group-title",
+		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "Title for group variable (In case of blank, 'group variable' name will be assigned)",
+		"stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group variable' name will be assigned)",
 		"stanza:required": false
 	},
 	{

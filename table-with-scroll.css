@@ -67,7 +67,7 @@
 }
 .tableWrapper > table > tbody > tr > td {
   font-size: var(--tbody-font-size);
-  border-bottom: var(--ruled-line);
+  border-bottom: var(--tbody-border-bottom);
   border-collapse: collapse;
   padding: 10px;
 }

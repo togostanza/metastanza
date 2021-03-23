@@ -456,12 +456,6 @@ var metadata = {
 		"stanza:description": "Style of table shadow"
 	},
 	{
-		"stanza:key": "--ruled-line",
-		"stanza:type": "text",
-		"stanza:default": "0.5px solid #eee",
-		"stanza:description": "Style of ruled line"
-	},
-	{
 		"stanza:key": "--thead-border-bottom",
 		"stanza:type": "text",
 		"stanza:default": "1px solid #eee",
@@ -490,6 +484,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#FFFFFF",
 		"stanza:description": "Background color of table header"
+	},
+	{
+		"stanza:key": "--tbody-border-bottom",
+		"stanza:type": "text",
+		"stanza:default": "0.5px solid #eee",
+		"stanza:description": "Border bottom of tbody"
 	},
 	{
 		"stanza:key": "--tbody-font-color",

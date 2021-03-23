@@ -679,7 +679,7 @@
   background-color: var(--tbody-even-background-color);
 }
 .wrapper > .tableWrapper > table > tbody > tr > td {
-  border-bottom: var(--ruled-line);
+  border-bottom: var(--tbody-border-bottom);
   border-collapse: collapse;
   padding: 10px;
 }
@@ -747,7 +747,6 @@
   display: inline-block;
   width: 15px;
   height: 15px;
-  color: var(--pagination-arrow-color);
 }
 .wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow.left {
   margin-right: 2px;
@@ -757,6 +756,9 @@
 }
 .wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow:hover {
   cursor: pointer;
+}
+.wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow > path {
+  color: var(--pagination-arrow-color);
 }
 .wrapper > .paginationWrapper > .serialPagination > .pageNumber {
   margin-left: 20px;

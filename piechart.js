@@ -179,7 +179,7 @@ var metadata = {
 },
 	"@id": "piechart",
 	"stanza:label": "piechart",
-	"stanza:definition": "Vega wrapped piechart for MetaStanza",
+	"stanza:definition": "Piechart for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:context": "Environment",
 	"stanza:display": "Chart",
@@ -224,9 +224,9 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "category-title",
+		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
+		"stanza:description": "Title for category variable, which is used as legend title (In case of blank, 'category variable' name will be assigned)",
 		"stanza:required": false
 	},
 	{

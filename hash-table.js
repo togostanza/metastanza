@@ -38,7 +38,7 @@ var metadata = {
 },
 	"@id": "hash-table",
 	"stanza:label": "hash table",
-	"stanza:definition": "hash table for MetaStanza",
+	"stanza:definition": "Hash table for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
 	"stanza:provider": "",
@@ -52,8 +52,21 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "http://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1",
 		"stanza:description": "Source url of data.",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
+		"stanza:example": "json",
+		"stanza:description": "Type of data",
 		"stanza:required": true
 	},
 	{
@@ -109,10 +122,10 @@ var metadata = {
 		"stanza:description": "Style of table shadow"
 	},
 	{
-		"stanza:key": "--ruled-line",
+		"stanza:key": "--tbody-border-bottom",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
-		"stanza:description": "Style of ruled line"
+		"stanza:description": "Border bottom of tbody"
 	},
 	{
 		"stanza:key": "--row-padding",
@@ -163,16 +176,10 @@ var metadata = {
 		"stanza:description": "Font weight of value"
 	},
 	{
-		"stanza:key": "--odd-background-color",
+		"stanza:key": "--table-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#FFFFFF",
-		"stanza:description": "Background color of odd row"
-	},
-	{
-		"stanza:key": "--even-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
-		"stanza:description": "Background color of even row"
+		"stanza:description": "Background color of table (If 'tbody-odd/even-background-color' is not set or transparent, '--table-background-color' would be appear)"
 	}
 ]
 };
