@@ -4,7 +4,7 @@
   },
   "@id": "hash-table",
   "stanza:label": "hash table",
-  "stanza:definition": "hash table for MetaStanza",
+  "stanza:definition": "Hash table for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "",
@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "http://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1",
       "stanza:description": "Source url of data.",
       "stanza:required": true
     },

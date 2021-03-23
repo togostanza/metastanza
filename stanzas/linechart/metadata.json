@@ -4,7 +4,7 @@
   },
   "@id": "linechart",
   "stanza:label": "linechart",
-  "stanza:definition": "Vega wrapped linechart for MetaStanza",
+  "stanza:definition": "Linechart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",
   "stanza:provider": "Togostanza",

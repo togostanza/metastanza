@@ -4,7 +4,7 @@
   },
   "@id": "piechart",
   "stanza:label": "piechart",
-  "stanza:definition": "Vega wrapped piechart for MetaStanza",
+  "stanza:definition": "Piechart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:context": "Environment",
   "stanza:display": "Chart",

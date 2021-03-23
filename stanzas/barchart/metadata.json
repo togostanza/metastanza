@@ -4,7 +4,7 @@
   },
   "@id": "barchart",
   "stanza:label": "barchart",
-  "stanza:definition": "Vega wrapped barchart for MetaStanza",
+  "stanza:definition": "Barchart for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",
   "stanza:provider": "Togostanza",
