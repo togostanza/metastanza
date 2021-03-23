@@ -47,6 +47,24 @@ export default async function barchart(stanza, params) {
     }
   }
 
+  const getTitle = function (
+    stackedParamsTitle,
+    stackedDefaultTitle,
+    groupedParamsTitle,
+    groupedDefaultTitle
+  ) {
+    switch (chartType) {
+      case "stacked":
+        return stackedParamsTitle === ""
+          ? stackedDefaultTitle
+          : stackedParamsTitle;
+      case "grouped":
+        return groupedParamsTitle === ""
+          ? groupedDefaultTitle
+          : groupedParamsTitle;
+    }
+  };
+
   const axes = [
     {
       scale: "xscale",
@@ -62,24 +80,12 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: chartType === "grouped" ? valueVariable : labelVariable,
-      // title: function(){
-      //   if(chartType === "grouped") {
-      //     if(params["value-title"]) {
-      //       return params["value-title"];
-      //     } else {
-      //       return valueVariable;
-      //     }
-      //   }else if(chartType === "stacked"){
-      //     if(params["category-title"] === "") {
-      //       console.log('hoge')
-      //       return labelVariable;
-      //     } else {
-      //       console.log('fuga')
-      //       return params["category-title"];
-      //     }
-      //   }
-      // },
+      title: getTitle(
+        params["category-title"],
+        labelVariable,
+        params["value-title"],
+        valueVariable
+      ),
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -112,7 +118,12 @@ export default async function barchart(stanza, params) {
       tickColor: "var(--tick-color)",
       tickSize: css("--tick-length"),
       tickWidth: css("--tick-width"),
-      title: chartType === "grouped" ? labelVariable : valueVariable,
+      title: getTitle(
+        params["value-title"],
+        valueVariable,
+        params["category-title"],
+        labelVariable
+      ),
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
@@ -144,7 +155,12 @@ export default async function barchart(stanza, params) {
       orient: "right",
       // legendX: width + 40,
       legendY: "0",
-      title: groupVariable,
+      title: getTitle(
+        params["legend-title"],
+        groupVariable,
+        params["legend-title"],
+        groupVariable
+      ),
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

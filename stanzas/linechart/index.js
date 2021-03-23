@@ -147,7 +147,7 @@ export default async function linechart(stanza, params) {
       // legendX: width,
       legendY: -5,
       title:
-        params["group-title"] === "" ? groupVariable : params["group-title"],
+        params["legend-title"] === "" ? groupVariable : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

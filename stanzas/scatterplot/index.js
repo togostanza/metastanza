@@ -153,7 +153,7 @@ export default async function scatterplot(stanza, params) {
     {
       size: "size",
       format: "s",
-      title: params["z-title"] === "" ? zVariable : params["z-title"],
+      title: params["legend-title"] === "" ? zVariable : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),
