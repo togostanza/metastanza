@@ -288,7 +288,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_multi_data_chart",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
 		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
