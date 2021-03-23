@@ -22,7 +22,7 @@ async function tree(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label"]; //"name"
+  const labelVariable = params["label"] ; //"name"
   const parentVariable = params["parent-node"]; //"parent"
   const idVariable = params["node"]; //"id-variable"
 
@@ -87,7 +87,7 @@ async function tree(stanza, params) {
       encode: {
         update: {
           path: { field: "path" },
-          stroke: { value: "var(--branch-color)" },
+          stroke: { value: "var(--edge-color)" },
         },
       },
     },
@@ -115,7 +115,9 @@ async function tree(stanza, params) {
       from: { data: "tree" },
       encode: {
         enter: {
-          text: { field: labelVariable },
+          text: { field: params["label"] === ""
+          ? params["node"]
+          :labelVariable },
           font: { value: css("--font-family") },
           fontSize: { value: css("--label-font-size") },
           baseline: { value: "middle" },
@@ -199,7 +201,7 @@ var metadata = {
 },
 	"@id": "tree",
 	"stanza:label": "tree",
-	"stanza:definition": "Tree chart for MetaStanza",
+	"stanza:definition": "Tree MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "tree",
 	"stanza:provider": "Togostanza",
@@ -231,12 +233,6 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label",
-		"stanza:example": "name",
-		"stanza:description": "Variable to be assigned as category",
-		"stanza:required": true
-	},
-	{
 		"stanza:key": "parent-node",
 		"stanza:example": "parent",
 		"stanza:description": "Variable to be assigned as parent node",
@@ -247,6 +243,12 @@ var metadata = {
 		"stanza:example": "id",
 		"stanza:description": "Variable to be assigned as node",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "label",
+		"stanza:example": "name",
+		"stanza:description": "Variable to be assigned as category",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",
@@ -277,7 +279,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button Placement of the menu button (top-left, top-right, bottom-right, bottom-left, none)"
+		"stanza:description": "Menu button placement"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -325,28 +327,28 @@ var metadata = {
 		"stanza:description": "Font family"
 	},
 	{
+		"stanza:key": "--node-size",
+		"stanza:type": "number",
+		"stanza:default": "100",
+		"stanza:description": "Node size"
+	},
+	{
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
-		"stanza:description": "Font color of label"
+		"stanza:description": "Label font color"
 	},
 	{
 		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "11",
-		"stanza:description": "Font size of label"
+		"stanza:description": "Label font size"
 	},
 	{
-		"stanza:key": "--branch-color",
+		"stanza:key": "--edge-color",
 		"stanza:type": "color",
 		"stanza:default": "#AEB3BF",
-		"stanza:description": "Branch color"
-	},
-	{
-		"stanza:key": "--node-size",
-		"stanza:type": "number",
-		"stanza:default": "100",
-		"stanza:description": "Node size"
+		"stanza:description": "Edge color"
 	},
 	{
 		"stanza:key": "--border-color",

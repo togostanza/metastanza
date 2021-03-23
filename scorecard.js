@@ -95,7 +95,7 @@ var metadata = {
 },
 	"@id": "scorecard",
 	"stanza:label": "scorecard",
-	"stanza:definition": "Scorecard for MetaStanza",
+	"stanza:definition": "Scorecard MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Image",
 	"stanza:provider": "Togostanza",
@@ -165,7 +165,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button"
+		"stanza:description": "Menu button placement"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",

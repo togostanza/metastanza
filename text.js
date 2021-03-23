@@ -69,7 +69,7 @@ var metadata = {
 },
 	"@id": "text",
 	"stanza:label": "text",
-	"stanza:definition": "Text for MetaStanza",
+	"stanza:definition": "Text MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
 	"stanza:provider": "Togostanza",

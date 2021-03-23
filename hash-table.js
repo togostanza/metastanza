@@ -37,7 +37,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "hash-table",
-	"stanza:label": "hash table",
+	"stanza:label": "Hash table",
 	"stanza:definition": "Hash table for MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
@@ -72,19 +72,19 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": 840,
+		"stanza:example": 800,
 		"stanza:description": "Width"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": 410,
+		"stanza:example": 400,
 		"stanza:description": "Height"
 	},
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": 50,
+		"stanza:example": 0,
 		"stanza:description": "Padding"
 	}
 ],
@@ -94,7 +94,7 @@ var metadata = {
 		"stanza:key": "--column-count",
 		"stanza:type": "text",
 		"stanza:default": "1",
-		"stanza:description": "column's count"
+		"stanza:description": "Column's count"
 	},
 	{
 		"stanza:key": "--font-family",
@@ -106,19 +106,25 @@ var metadata = {
 		"stanza:key": "--table-border",
 		"stanza:type": "text",
 		"stanza:default": "1px solid #eee",
-		"stanza:description": "Style of table border"
+		"stanza:description": "Table border"
 	},
 	{
 		"stanza:key": "--table-shadow",
 		"stanza:type": "text",
 		"stanza:default": "1px 1px 3px 1px #eee",
-		"stanza:description": "Style of table shadow"
+		"stanza:description": "Table shadow"
+	},
+	{
+		"stanza:key": "--table-background-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFFFFF",
+		"stanza:description": "Background color of table"
 	},
 	{
 		"stanza:key": "--tbody-border-bottom",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
-		"stanza:description": "Border bottom of tbody"
+		"stanza:description": "Border bottom of table body"
 	},
 	{
 		"stanza:key": "--row-padding",
@@ -167,12 +173,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of value"
-	},
-	{
-		"stanza:key": "--table-background-color",
-		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
-		"stanza:description": "Background color of table (If 'tbody-odd/even-background-color' is not set or transparent, '--table-background-color' would be appear)"
 	}
 ]
 };

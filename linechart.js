@@ -159,7 +159,7 @@ async function linechart(stanza, params) {
       titleFontWeight: css("--title-font-weight"),
       labelColor: "var(--label-font-color)",
       labelFont: css("--font-family"),
-      labelFontSize: css("--legend-font-size"),
+      labelFontSize: css("--label-font-size"),
       symbolStrokeColor: css("--border-color"),
       symbolStrokeWidth: css("--border-width"),
       encode: {
@@ -273,7 +273,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "linechart",
-	"stanza:label": "linechart",
+	"stanza:label": "Linechart",
 	"stanza:definition": "Linechart MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -320,7 +320,7 @@ var metadata = {
 	{
 		"stanza:key": "group-by",
 		"stanza:example": "category",
-		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parapeter should be set as none)",
+		"stanza:description": "Variable to be assigned as group",
 		"stanza:required": false
 	},
 	{
@@ -412,12 +412,12 @@ var metadata = {
 	{
 		"stanza:key": "xlabel-angle",
 		"stanza:example": "0",
-		"stanza:description": "Angle of X label (in degree)"
+		"stanza:description": "X label angle (in degree)"
 	},
 	{
 		"stanza:key": "ylabel-angle",
 		"stanza:example": "0",
-		"stanza:description": "Angle of Y label (in degree)"
+		"stanza:description": "Y label angle (in degree)"
 	},
 	{
 		"stanza:key": "xlabel-padding",
@@ -451,7 +451,7 @@ var metadata = {
 			"bottom"
 		],
 		"stanza:example": "bottom",
-		"stanza:description": "Placement of X axis (top or bottom)"
+		"stanza:description": "X axis placement"
 	},
 	{
 		"stanza:key": "yaxis-placement",
@@ -461,7 +461,7 @@ var metadata = {
 			"right"
 		],
 		"stanza:example": "left",
-		"stanza:description": "Placement of Y axis (left or right)"
+		"stanza:description": "Y axis placement"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -474,7 +474,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button"
+		"stanza:description": "Menu button placement"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -585,37 +585,31 @@ var metadata = {
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
-		"stanza:description": "Font color of title"
+		"stanza:description": "Title font color"
 	},
 	{
 		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Font size of title"
+		"stanza:description": "Title font size"
 	},
 	{
 		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of title"
-	},
-	{
-		"stanza:key": "--legend-font-size",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Font size of legend label"
+		"stanza:description": "Title font weight"
 	},
 	{
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
-		"stanza:description": "Font color of label"
+		"stanza:description": "Label font color"
 	},
 	{
 		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Font size of label"
+		"stanza:description": "Label font size"
 	},
 	{
 		"stanza:key": "--border-color",

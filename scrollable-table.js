@@ -385,7 +385,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "scrollable-table",
-	"stanza:label": "Scrollable table",
+	"stanza:label": "Scrollable table MetaStanza",
 	"stanza:definition": "Scrollable table MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",

@@ -235,7 +235,7 @@ async function devGroupedBarchart(stanza, params) {
         "--font-family"
       ),
       labelFontSize: getComputedStyle(stanza.root.host).getPropertyValue(
-        "--legend-font-size"
+        "--label-font-size"
       ),
       symbolStrokeColor: getComputedStyle(stanza.root.host).getPropertyValue(
         "--stroke-color"
@@ -553,19 +553,19 @@ var metadata = {
 		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "Font size of title"
+		"stanza:description": "Title font size"
 	},
 	{
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#222222",
-		"stanza:description": "Font color of title"
+		"stanza:description": "Title font color"
 	},
 	{
 		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of title"
+		"stanza:description": "Title font weight"
 	},
 	{
 		"stanza:key": "--title-padding",
@@ -610,7 +610,7 @@ var metadata = {
 		"stanza:description": "font color of the legend title"
 	},
 	{
-		"stanza:key": "--legend-font-size",
+		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "font size of the legend label"

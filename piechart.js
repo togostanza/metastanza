@@ -178,8 +178,8 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "piechart",
-	"stanza:label": "piechart",
-	"stanza:definition": "Piechart for MetaStanza",
+	"stanza:label": "Piechart",
+	"stanza:definition": "Piechart MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:context": "Environment",
 	"stanza:display": "Chart",
@@ -262,7 +262,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "bottom-right",
-		"stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+		"stanza:description": "Menu button placement.(top-left,top-right,bottom-right,bottom-left,none)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -313,7 +313,7 @@ var metadata = {
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
-		"stanza:description": "Font color of title"
+		"stanza:description": "Title font color"
 	},
 	{
 		"stanza:key": "--title-font-size",
@@ -331,7 +331,13 @@ var metadata = {
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
-		"stanza:description": "Font color of label"
+		"stanza:description": "Label font color"
+	},
+	{
+		"stanza:key": "--label-font-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "Label font size"
 	},
 	{
 		"stanza:key": "--border-color",

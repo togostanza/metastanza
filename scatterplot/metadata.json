@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "scatterplot",
-  "stanza:label": "scatterplot",
-  "stanza:definition": "Scatterplot for MetaStanza",
+  "stanza:label": "Scatterplot",
+  "stanza:definition": "Scatterplot MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Graph",
   "stanza:provider": "Togostanza",
@@ -120,12 +120,12 @@
     {
       "stanza:key": "xlabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of X label (in degree)"
+      "stanza:description": "X label angle (in degree)"
     },
     {
       "stanza:key": "ylabel-angle",
       "stanza:example": "0",
-      "stanza:description": "Angle of Y label (in degree)"
+      "stanza:description": "Y label angle (in degree)"
     },
     {
       "stanza:key": "xlabel-padding",
@@ -156,14 +156,14 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
-      "stanza:description": "Placement of X axis"
+      "stanza:description": "X axis placement"
     },
     {
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
       "stanza:example": "left",
-      "stanza:description": "Placement of Y axis"
+      "stanza:description": "Y axis placement"
     },
     {
       "stanza:key": "symbol-shape",
@@ -181,7 +181,7 @@
         "none"
       ],
       "stanza:example": "top-right",
-      "stanza:description": "Placement of the download button"
+      "stanza:description": "Menu button placement"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -220,7 +220,7 @@
       "stanza:key": "--grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
-      "stanza:description": "Grid dash length.  Blank for solid lines"
+      "stanza:description": "Grid dash length. Blank for solid lines"
     },
     {
       "stanza:key": "--grid-opacity",
@@ -256,37 +256,31 @@
       "stanza:key": "--title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Font color of title"
+      "stanza:description": "Title font color"
     },
     {
       "stanza:key": "--title-font-size",
       "stanza:type": "number",
       "stanza:default": "12",
-      "stanza:description": "Font size of title"
+      "stanza:description": "Title font size"
     },
     {
       "stanza:key": "--title-font-weight",
       "stanza:type": "number",
       "stanza:default": "400",
-      "stanza:description": "Font weight of title"
-    },
-    {
-      "stanza:key": "--legend-font-size",
-      "stanza:type": "number",
-      "stanza:default": "10",
-      "stanza:description": "Font size of legend label"
+      "stanza:description": "Title font weight"
     },
     {
       "stanza:key": "--label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Font color of label"
+      "stanza:description": "Label font color"
     },
     {
       "stanza:key": "--label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
-      "stanza:description": "Font size of label"
+      "stanza:description": "Label font size"
     },
     {
       "stanza:key": "--border-color",

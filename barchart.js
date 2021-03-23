@@ -21,7 +21,7 @@ async function barchart(stanza, params) {
   //data
   const labelVariable = params["category"]; //x
   const valueVariable = params["value"]; //y
-  const groupVariable = params["group"]; //z
+  const groupVariable = params["group-by"] ? params["group-by"] : "none"; //z
 
   const values = await loadData(params["data-url"], params["data-type"]);
 
@@ -312,7 +312,7 @@ async function barchart(stanza, params) {
     data: constructData(chartType),
     scales: constructScale(chartType),
     axes,
-    legends: params["legend"] === "false" ? [] : legends,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
     marks: constructMark(chartType),
   };
 
@@ -366,8 +366,8 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "barchart",
-	"stanza:label": "barchart",
-	"stanza:definition": "Barchart for MetaStanza",
+	"stanza:label": "Barchart",
+	"stanza:definition": "Barchart MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
 	"stanza:provider": "Togostanza",
@@ -422,9 +422,9 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "group",
+		"stanza:key": "group-by",
 		"stanza:example": "category",
-		"stanza:description": "Variable to be assigned as group (If you will not use this variable, this parameter should be set as none)",
+		"stanza:description": "Variable to be assigned as group",
 		"stanza:required": false
 	},
 	{
@@ -481,7 +481,7 @@ var metadata = {
 			"bottom"
 		],
 		"stanza:example": "bottom",
-		"stanza:description": "Placement of X axis"
+		"stanza:description": "X axis placement"
 	},
 	{
 		"stanza:key": "yaxis-placement",
@@ -491,7 +491,7 @@ var metadata = {
 			"right"
 		],
 		"stanza:example": "left",
-		"stanza:description": "Placement of Y axis"
+		"stanza:description": "Y axis placement"
 	},
 	{
 		"stanza:key": "xgrid",
@@ -536,12 +536,12 @@ var metadata = {
 	{
 		"stanza:key": "xlabel-angle",
 		"stanza:example": "0",
-		"stanza:description": "Angle of X label (in degree)"
+		"stanza:description": "X label angle (in degree)"
 	},
 	{
 		"stanza:key": "ylabel-angle",
 		"stanza:example": "0",
-		"stanza:description": "Angle of Y label (in degree)"
+		"stanza:description": "Y label angle (in degree)"
 	},
 	{
 		"stanza:key": "xlabel-padding",
@@ -580,7 +580,7 @@ var metadata = {
 			"false"
 		],
 		"stanza:example": true,
-		"stanza:description": "Show legend (true or false)"
+		"stanza:description": "Show legend"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
@@ -698,19 +698,19 @@ var metadata = {
 		"stanza:key": "--title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
-		"stanza:description": "Font color of title"
+		"stanza:description": "Title font color"
 	},
 	{
 		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "Font size of title"
+		"stanza:description": "Title font size"
 	},
 	{
 		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of title"
+		"stanza:description": "Title font weight"
 	},
 	{
 		"stanza:key": "--title-padding",
@@ -722,13 +722,13 @@ var metadata = {
 		"stanza:key": "--label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
-		"stanza:description": "Font color of label"
+		"stanza:description": "Label font color"
 	},
 	{
 		"stanza:key": "--label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
-		"stanza:description": "Font size of label"
+		"stanza:description": "Label font size"
 	},
 	{
 		"stanza:key": "--border-color",

@@ -286,7 +286,7 @@ var metadata = {
 			"none"
 		],
 		"stanza:example": "top-right",
-		"stanza:description": "Placement of the download button.(top-left,top-right,bottom-right,bottom-left,none)"
+		"stanza:description": "Menu button placement.(top-left,top-right,bottom-right,bottom-left,none)"
 	},
 	{
 		"stanza:key": "xaxis-placement",
@@ -412,13 +412,13 @@ var metadata = {
 		"stanza:key": "--title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
-		"stanza:description": "Font size of title."
+		"stanza:description": "Title font size."
 	},
 	{
 		"stanza:key": "--title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
-		"stanza:description": "Font weight of title."
+		"stanza:description": "Title font weight."
 	},
 	{
 		"stanza:key": "--title-padding",
