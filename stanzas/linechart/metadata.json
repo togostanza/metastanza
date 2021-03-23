@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "linechart",
-  "stanza:label": "linechart",
+  "stanza:label": "Linechart",
   "stanza:definition": "Linechart MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",

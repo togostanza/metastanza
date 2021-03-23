@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "barchart",
-  "stanza:label": "barchart",
-  "stanza:definition": "Barchart for MetaStanza",
+  "stanza:label": "Barchart",
+  "stanza:definition": "Barchart MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Chart",
   "stanza:provider": "Togostanza",

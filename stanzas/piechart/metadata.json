@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "piechart",
-  "stanza:label": "piechart",
-  "stanza:definition": "Piechart for MetaStanza",
+  "stanza:label": "Piechart",
+  "stanza:definition": "Piechart MetaStanza",
   "stanza:type": "Stanza",
   "stanza:context": "Environment",
   "stanza:display": "Chart",

@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "hash-table",
-  "stanza:label": "hash table",
+  "stanza:label": "Hash table",
   "stanza:definition": "Hash table for MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Table",

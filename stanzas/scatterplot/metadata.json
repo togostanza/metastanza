@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "scatterplot",
-  "stanza:label": "scatterplot",
-  "stanza:definition": "Scatterplot for MetaStanza",
+  "stanza:label": "Scatterplot",
+  "stanza:definition": "Scatterplot MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Graph",
   "stanza:provider": "Togostanza",
