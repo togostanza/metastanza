@@ -22,6 +22,14 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Type of data",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 840,
@@ -69,10 +77,10 @@
       "stanza:description": "Style of table shadow"
     },
     {
-      "stanza:key": "--ruled-line",
+      "stanza:key": "--tbody-border-bottom",
       "stanza:type": "text",
       "stanza:default": "0.5px solid #eee",
-      "stanza:description": "Style of ruled line"
+      "stanza:description": "Border bottom of tbody"
     },
     {
       "stanza:key": "--row-padding",
@@ -123,16 +131,10 @@
       "stanza:description": "Font weight of value"
     },
     {
-      "stanza:key": "--odd-background-color",
+      "stanza:key": "--table-background-color",
       "stanza:type": "color",
       "stanza:default": "#FFFFFF",
-      "stanza:description": "Background color of odd row"
-    },
-    {
-      "stanza:key": "--even-background-color",
-      "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
-      "stanza:description": "Background color of even row"
+      "stanza:description": "Background color of table (If 'tbody-odd/even-background-color' is not set or transparent, '--table-background-color' would be appear)"
     }
   ]
 }

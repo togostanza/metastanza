@@ -327,7 +327,7 @@
             background-color: var(--tbody-even-background-color);
           }
           > td {
-            border-bottom: var(--ruled-line);
+            border-bottom: var(--tbody-border-bottom);
             border-collapse: collapse;
             padding: 10px;
             &:first-child {
@@ -398,7 +398,6 @@
           display: inline-block;
           width: 15px;
           height: 15px;
-          color: var(--pagination-arrow-color);
           &.left {
             margin-right: 2px;
           }
@@ -407,6 +406,9 @@
           }
           &:hover {
             cursor: pointer;
+          }
+          > path {
+            color: var(--pagination-arrow-color);
           }
         }
       }

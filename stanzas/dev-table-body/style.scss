@@ -54,7 +54,7 @@ table {
         background-color: var(--tbody-even-background-color);
       }
       > td {
-        border-bottom: var(--ruled-line);
+        border-bottom: var(--tbody-border-bottom);
         border-collapse: collapse;
         padding: 10px;
         &:first-child {

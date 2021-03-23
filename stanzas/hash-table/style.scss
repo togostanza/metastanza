@@ -14,11 +14,12 @@ main {
     flex-wrap: wrap;
     border: var(--table-border);
     box-shadow: var(--table-shadow);
+    background-color: var(--table-background-color);
     dl {
       display: flex;
       width: 50%;
       padding: var(--row-padding);
-      border-bottom: var(--ruled-line);
+      border-bottom: var(--tbody-border-bottom);
       dt {
         width: var(--key-width-percentage);
         padding: 10px;
