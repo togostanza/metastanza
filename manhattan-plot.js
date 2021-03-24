@@ -30525,7 +30525,7 @@ const getVariants = () => {
 };
 let variants = total_variants; //init
 
-async function gwasManhattanPlot(stanza, params) {
+async function manhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
@@ -31554,15 +31554,15 @@ async function draw(stanza, params) {
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': gwasManhattanPlot
+  'default': manhattanPlot
 });
 
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "gwas-manhattan-plot",
-	"stanza:label": "Gwas manhattan plot",
+	"@id": "manhattan-plot",
+	"stanza:label": "Manhattan plot",
 	"stanza:definition": "Manhattan plot MetaStanza (for GWAS)",
 	"stanza:type": "Stanza",
 	"stanza:display": "Graph",
@@ -31721,4 +31721,4 @@ var templates = [
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=gwas-manhattan-plot.js.map
+//# sourceMappingURL=manhattan-plot.js.map
