@@ -400,7 +400,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-URL",
-		"stanza:example": "http://togostanza.org/sparqlist/api/metastanza_table?taxonomy=9606",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table?taxonomy=9606",
 		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
