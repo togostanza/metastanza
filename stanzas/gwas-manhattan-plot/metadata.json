@@ -4,7 +4,7 @@
   },
   "@id": "gwas-manhattan-plot",
   "stanza:label": "Gwas manhattan plot",
-  "stanza:definition": "manhattan plot(for GWAS) for MetaStanza",
+  "stanza:definition": "Manhattan plot MetaStanza (for GWAS)",
   "stanza:type": "Stanza",
   "stanza:display": "Graph",
   "stanza:provider": "Togostanza",
@@ -16,127 +16,127 @@
   "stanza:updated": "2021-01-13",
   "stanza:parameter": [
     {
-      "stanza:key": "api",
+      "stanza:key": "data-url",
       "stanza:example": "",
-      "stanza:description": "api(json)",
+      "stanza:description": "Data source URL (json)",
       "stanza:required": true
     },
     {
       "stanza:key": "chromosome_key",
       "stanza:example": "chr",
-      "stanza:description": "key to a chromosome in data frame. default: 'chromosome'",
+      "stanza:description": "Key to a chromosome in data frame'",
       "stanza:required": false
     },
     {
       "stanza:key": "position_key",
       "stanza:example": "stop",
-      "stanza:description": "key to a position on chromosome in data frame. default: 'position'",
+      "stanza:description": "Key to a position on chromosome in data frame",
       "stanza:required": false
     },
     {
       "stanza:key": "p_value_key",
       "stanza:example": "p-value",
-      "stanza:description": "key to a p-value in data frame. default: 'p-value'",
+      "stanza:description": "Key to a p-value in data frame",
       "stanza:required": false
     },
     {
       "stanza:key": "low_thresh",
       "stanza:example": "4",
-      "stanza:description": "filtering threshold. =log10(p-value) default: 4",
+      "stanza:description": "Filtering threshold (=log10(p-value))",
       "stanza:required": false
     },
     {
       "stanza:key": "high_thresh",
       "stanza:example": "8",
-      "stanza:description": "highlight threshold. =log10(p-value)",
+      "stanza:description": "Highlight threshold",
       "stanza:required": false
     },
     {
       "stanza:key": "records_per_page",
       "stanza:example": "20",
-      "stanza:description": "records per a page to display on table.",
+      "stanza:description": "Records per a page to display on table",
       "stanza:required": false
     }
   ],
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
+      "stanza:key": "--font-family",
+      "stanza:type": "text",
+      "stanza:default": "Arial",
+      "stanza:description": "Font family"
+    },
+    {
       "stanza:key": "--discovery-color",
       "stanza:type": "color",
       "stanza:default": "#3d6589",
-      "stanza:description": "plot color of discovery stage"
+      "stanza:description": "Plot color of discovery stage"
     },
     {
       "stanza:key": "--replication-color",
       "stanza:type": "color",
       "stanza:default": "#ed707e",
-      "stanza:description": "plot color of replication stage"
+      "stanza:description": "Plot color of replication stage"
     },
     {
       "stanza:key": "--combined-color",
       "stanza:type": "color",
       "stanza:default": "#eab64e",
-      "stanza:description": "plot color of combined stage"
+      "stanza:description": "Plot color of combined stage"
     },
     {
       "stanza:key": "--meta-analysis-color",
       "stanza:type": "color",
       "stanza:default": "#52b1c1",
-      "stanza:description": "plot color of meta-analysis stage"
+      "stanza:description": "Plot color of meta-analysis stage"
     },
     {
       "stanza:key": "--not-provided-color",
       "stanza:type": "color",
       "stanza:default": "#62b28c",
-      "stanza:description": "plot color of not-provided stage"
+      "stanza:description": "Plot color of not-provided stage"
     },
     {
       "stanza:key": "--thead-font-size",
       "stanza:type": "text",
       "stanza:default": "14px",
-      "stanza:description": "font size of labels"
+      "stanza:description": "Font size of table header"
     },
     {
       "stanza:key": "--tbody-font-size",
       "stanza:type": "text",
       "stanza:default": "14px",
-      "stanza:description": "font size of labels"
+      "stanza:description": "Font size of table body"
     },
     {
       "stanza:key": "--thead-font-color",
       "stanza:type": "color",
       "stanza:default": "#002559",
-      "stanza:description": "font color of table header"
+      "stanza:description": "Font color of table header"
     },
     {
       "stanza:key": "--thead-font-weight",
       "stanza:type": "text",
       "stanza:default": "600",
-      "stanza:description": "font weight of table header"
+      "stanza:description": "Font weight of table header"
     },
     {
       "stanza:key": "--thead-background-color",
       "stanza:type": "color",
       "stanza:default": "#C2E3F2",
-      "stanza:description": "background color of table header(even row)"
+      "stanza:description": "Background color of table header"
     },
     {
       "stanza:key": "--tbody-even-background-color",
       "stanza:type": "color",
       "stanza:default": "#F2F5F7",
-      "stanza:description": "background color of table header(even row)"
+      "stanza:description": "Background color of table body (even row)"
     },
     {
       "stanza:key": "--tbody-odd-background-color",
       "stanza:type": "color",
-      "stanza:default": "#e6ebef",
-      "stanza:description": "background color of table header(odd row)"
-    },
-    {
-      "stanza:key": "--font-family",
-      "stanza:type": "text",
-      "stanza:default": "Arial",
-      "stanza:description": "font family"
+      "stanza:default": "#E6EBEF",
+      "stanza:description": "Background color of table body (odd row)"
     }
   ]
 }

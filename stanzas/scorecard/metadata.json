@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "scorecard",
-  "stanza:label": "scorecard",
+  "stanza:label": "Scorecard",
   "stanza:definition": "Scorecard MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Image",

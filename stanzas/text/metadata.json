@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "text",
-  "stanza:label": "text",
+  "stanza:label": "Text",
   "stanza:definition": "Text MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Text",
@@ -31,8 +31,8 @@
     },
     {
       "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 800,
+      "stanza:type": "text",
+      "stanza:example": "800",
       "stanza:description": "Width"
     },
     {
@@ -43,8 +43,8 @@
     },
     {
       "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 0,
+      "stanza:type": "text",
+      "stanza:example": "0",
       "stanza:description": "Padding"
     },
     {
