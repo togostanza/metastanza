@@ -3,24 +3,33 @@ import { l as loadData } from './load-data-eeb61760.js';
 import './index-89a342ec.js';
 
 async function hashTable(stanza, params) {
-  const dataset = await loadData(params["data-url"], params["data-type"]);
-  const columns = params.columns ? JSON.parse(params.columns) : null;
-  const values = Object.entries(dataset[0]).map((datam) => {
-    const label = columns
-    ? columns.find((column) => column.id === datam[0]).label
-    : params["format-key"] === "true"
-    ? datam[0].charAt(0).toUpperCase() + datam[0].substring(1).replace(/_/g, " ")
-    : datam[0];
+  let dataset = await loadData(params["data-url"], params["data-type"]);
+  dataset = dataset[0];
+  const columns = params.columns
+    ? JSON.parse(params.columns)
+    : Object.keys(dataset).map((key) => {
+        return { id: key }
+      });
+  const values = columns.map((column) => {
+    const datam_label = Object.keys(dataset).find(datam => {
+      return datam === column.id
+    });
+    const label = column.label
+      ? column.label
+      : params["format-key"] === "true"
+      ? datam_label.charAt(0).toUpperCase() +
+        datam_label.substring(1).replace(/_/g, " ")
+      : datam_label;
 
     return {
       label,
-      value: datam[1],
+      value: dataset[column.id],
     };
   });
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      values
+      values,
     },
   });
 
@@ -95,7 +104,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\": \"dataset_id\", \"label\": \"Dataset ID\"}, {\"id\": \"title\", \"label\": \"Label\"}, {\"id\": \"description\", \"label\": \"Dscription\"}, {\"id\": \"species\", \"label\": \"Spacies\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
+		"stanza:example": "[{\"id\": \"title\"}, {\"id\": \"dataset_id\", \"label\": \"Dataset ID\"},{\"id\": \"description\"}, {\"id\": \"species\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
 		"stanza:description": "Columns' options"
 	},
 	{
