@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
-import data from "../gwas-manhattan-plot/gwas.var2.json";
+import data from "../manhattan-plot/gwas.var2.json";
 
 //when you put json url
 // console.log(params["data-url"]]);
@@ -64,7 +64,7 @@ const getVariants = () => {
 };
 let variants = total_variants; //init
 
-export default async function gwasManhattanPlot(stanza, params) {
+export default async function manhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {

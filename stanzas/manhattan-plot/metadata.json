@@ -2,8 +2,8 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "gwas-manhattan-plot",
-  "stanza:label": "Gwas manhattan plot",
+  "@id": "manhattan-plot",
+  "stanza:label": "Manhattan plot",
   "stanza:definition": "Manhattan plot MetaStanza (for GWAS)",
   "stanza:type": "Stanza",
   "stanza:display": "Graph",
