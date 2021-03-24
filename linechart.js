@@ -1,11 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { e as embed } from './vega-embed.module-414e3eaf.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import { a as appendDlButton } from './metastanza_utils-0648515a.js';
-import './vega.module-f322150d.js';
-import './dsv-cd3740c6.js';
-import './timer-be811b16.js';
-import './index-b2de29ee.js';
+import { e as embed } from './vega-embed.module-d9bc8b86.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import { a as appendDlButton } from './metastanza_utils-9b99b81a.js';
+import './index-89a342ec.js';
 
 async function linechart(stanza, params) {
   function css(key) {
@@ -326,19 +323,19 @@ var metadata = {
 	{
 		"stanza:key": "category-title",
 		"stanza:example": "",
-		"stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
+		"stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "value-title",
 		"stanza:example": "",
-		"stanza:description": "Title for value variable (In case of blank, 'value variable' name will be assigned)",
+		"stanza:description": "Title for value variable (In case of blank, 'value' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group variable' name will be assigned)",
+		"stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
@@ -500,19 +497,19 @@ var metadata = {
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#f5da64",
+		"stanza:default": "#F5DA64",
 		"stanza:description": "Group color 3"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#f57f5b",
+		"stanza:default": "#F57F5B",
 		"stanza:description": "Group color 4"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#f75976",
+		"stanza:default": "#F75976",
 		"stanza:description": "Group color 5"
 	},
 	{

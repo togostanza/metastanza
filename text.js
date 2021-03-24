@@ -1,8 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import './index-b2de29ee.js';
-import './timer-be811b16.js';
-import './dsv-cd3740c6.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import './index-89a342ec.js';
 
 async function text(stanza, params) {
   stanza.importWebFontCSS(
@@ -68,7 +66,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "text",
-	"stanza:label": "text",
+	"stanza:label": "Text",
 	"stanza:definition": "Text MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
@@ -102,8 +100,8 @@ var metadata = {
 	},
 	{
 		"stanza:key": "width",
-		"stanza:type": "number",
-		"stanza:example": 800,
+		"stanza:type": "text",
+		"stanza:example": "800",
 		"stanza:description": "Width"
 	},
 	{
@@ -114,8 +112,8 @@ var metadata = {
 	},
 	{
 		"stanza:key": "padding",
-		"stanza:type": "number",
-		"stanza:example": 0,
+		"stanza:type": "text",
+		"stanza:example": "0",
 		"stanza:description": "Padding"
 	},
 	{

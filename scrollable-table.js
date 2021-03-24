@@ -385,7 +385,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "scrollable-table",
-	"stanza:label": "Scrollable table MetaStanza",
+	"stanza:label": "Scrollable table",
 	"stanza:definition": "Scrollable table MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
@@ -440,20 +440,20 @@ var metadata = {
 	{
 		"stanza:key": "--table-border",
 		"stanza:type": "text",
-		"stanza:default": "1px solid #eee",
-		"stanza:description": "Style of table border"
+		"stanza:default": "1px solid #EEEEEE",
+		"stanza:description": "Table border style"
 	},
 	{
 		"stanza:key": "--table-shadow",
 		"stanza:type": "text",
-		"stanza:default": "1px 1px 3px 1px #eee",
-		"stanza:description": "Style of table shadow"
+		"stanza:default": "1px 1px 3px 1px #EEEEEE",
+		"stanza:description": "Table shadow style"
 	},
 	{
 		"stanza:key": "--thead-border-bottom",
 		"stanza:type": "text",
-		"stanza:default": "1px solid #eee",
-		"stanza:description": "Border bottom of thead"
+		"stanza:default": "1px solid #EEEEEE",
+		"stanza:description": "Border bottom of table header"
 	},
 	{
 		"stanza:key": "--thead-font-size",
@@ -464,7 +464,7 @@ var metadata = {
 	{
 		"stanza:key": "--thead-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256d80",
+		"stanza:default": "#256D80",
 		"stanza:description": "Font color of table header"
 	},
 	{
@@ -482,7 +482,7 @@ var metadata = {
 	{
 		"stanza:key": "--tbody-border-bottom",
 		"stanza:type": "text",
-		"stanza:default": "0.5px solid #eee",
+		"stanza:default": "0.5px solid #EEEEEE",
 		"stanza:description": "Border bottom of tbody"
 	},
 	{

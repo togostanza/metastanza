@@ -1,9 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import { a as appendDlButton } from './metastanza_utils-0648515a.js';
-import './index-b2de29ee.js';
-import './timer-be811b16.js';
-import './dsv-cd3740c6.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import { a as appendDlButton } from './metastanza_utils-9b99b81a.js';
+import './index-89a342ec.js';
 
 async function scorecard(stanza, params) {
   function css(key) {
@@ -94,7 +92,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "scorecard",
-	"stanza:label": "scorecard",
+	"stanza:label": "Scorecard",
 	"stanza:definition": "Scorecard MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Image",

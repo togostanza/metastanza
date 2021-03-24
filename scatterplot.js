@@ -1,11 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { e as embed } from './vega-embed.module-414e3eaf.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import { a as appendDlButton } from './metastanza_utils-0648515a.js';
-import './vega.module-f322150d.js';
-import './dsv-cd3740c6.js';
-import './timer-be811b16.js';
-import './index-b2de29ee.js';
+import { e as embed } from './vega-embed.module-d9bc8b86.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import { a as appendDlButton } from './metastanza_utils-9b99b81a.js';
+import './index-89a342ec.js';
 
 async function scatterplot(stanza, params) {
   function css(key) {
@@ -309,24 +306,24 @@ var metadata = {
 	{
 		"stanza:key": "z",
 		"stanza:example": "population",
-		"stanza:description": "Variable for Z axis  (If you will not use this variable, this parameter should be set as none)"
+		"stanza:description": "Variable for Z axis"
 	},
 	{
 		"stanza:key": "x-title",
 		"stanza:example": "",
-		"stanza:description": "Title for x variable (In case of blank, 'x variable' name will be assigned)",
+		"stanza:description": "Title for x variable (In case of blank, 'x' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "y-title",
 		"stanza:example": "",
-		"stanza:description": "Title for y variable (In case of blank, 'y variable' name will be assigned)",
+		"stanza:description": "Title for y variable (In case of blank, 'y' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z variable' name will be assigned)",
+		"stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z' variable name will be assigned)",
 		"stanza:required": false
 	},
 	{
@@ -506,7 +503,7 @@ var metadata = {
 		"stanza:key": "--grid-dash-length",
 		"stanza:type": "number",
 		"stanza:default": "",
-		"stanza:description": "Grid dash length. Blank for solid lines"
+		"stanza:description": "Grid dash length (Blank for solid lines)"
 	},
 	{
 		"stanza:key": "--grid-opacity",

@@ -1,11 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { e as embed } from './vega-embed.module-414e3eaf.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import { a as appendDlButton } from './metastanza_utils-0648515a.js';
-import './vega.module-f322150d.js';
-import './dsv-cd3740c6.js';
-import './timer-be811b16.js';
-import './index-b2de29ee.js';
+import { e as embed } from './vega-embed.module-d9bc8b86.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import { a as appendDlButton } from './metastanza_utils-9b99b81a.js';
+import './index-89a342ec.js';
 
 async function tree(stanza, params) {
   function css(key) {
@@ -22,7 +19,7 @@ async function tree(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label"] ; //"name"
+  const labelVariable = params["label"]; //"name"
   const parentVariable = params["parent-node"]; //"parent"
   const idVariable = params["node"]; //"id-variable"
 
@@ -115,9 +112,9 @@ async function tree(stanza, params) {
       from: { data: "tree" },
       encode: {
         enter: {
-          text: { field: params["label"] === ""
-          ? params["node"]
-          :labelVariable },
+          text: {
+            field: params["label"] === "" ? params["node"] : labelVariable,
+          },
           font: { value: css("--font-family") },
           fontSize: { value: css("--label-font-size") },
           baseline: { value: "middle" },
@@ -200,7 +197,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "tree",
-	"stanza:label": "tree",
+	"stanza:label": "Tree",
 	"stanza:definition": "Tree MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "tree",
@@ -287,37 +284,37 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#6590e6",
+		"stanza:default": "#6590E6",
 		"stanza:description": "Depth color 1"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#3ac9b6",
+		"stanza:default": "#3AC9B6",
 		"stanza:description": "Depth color 2"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#9ede2f",
+		"stanza:default": "#9EDE2F",
 		"stanza:description": "Depth color 3"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#f5da64",
+		"stanza:default": "#F5DA64",
 		"stanza:description": "Depth color 4"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#f57f5b",
+		"stanza:default": "#F57F5B",
 		"stanza:description": "Depth color 5"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#f75976",
+		"stanza:default": "#F75976",
 		"stanza:description": "Depth color 6"
 	},
 	{
@@ -345,12 +342,6 @@ var metadata = {
 		"stanza:description": "Label font size"
 	},
 	{
-		"stanza:key": "--edge-color",
-		"stanza:type": "color",
-		"stanza:default": "#AEB3BF",
-		"stanza:description": "Edge color"
-	},
-	{
 		"stanza:key": "--border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
@@ -361,6 +352,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
+	},
+	{
+		"stanza:key": "--edge-color",
+		"stanza:type": "color",
+		"stanza:default": "#AEB3BF",
+		"stanza:description": "Edge color"
 	}
 ]
 };

@@ -1,8 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { l as loadData } from './load-data-a2861a31.js';
-import './index-b2de29ee.js';
-import './timer-be811b16.js';
-import './dsv-cd3740c6.js';
+import { l as loadData } from './load-data-eeb61760.js';
+import './index-89a342ec.js';
 
 async function hashTable(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
@@ -46,7 +44,7 @@ var metadata = {
 },
 	"@id": "hash-table",
 	"stanza:label": "Hash table",
-	"stanza:definition": "Hash table for MetaStanza",
+	"stanza:definition": "Hash table MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
 	"stanza:provider": "",
@@ -61,7 +59,7 @@ var metadata = {
 	{
 		"stanza:key": "data-url",
 		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_hash_formatted?dataset=DS810_1",
-		"stanza:description": "Source url of data.",
+		"stanza:description": "Source url of data",
 		"stanza:required": true
 	},
 	{
@@ -164,7 +162,7 @@ var metadata = {
 	{
 		"stanza:key": "--key-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256d80",
+		"stanza:default": "#256D80",
 		"stanza:description": "Font color of key"
 	},
 	{
