@@ -1,11 +1,11 @@
 <div class="container">
-  {{#each dataset as |data|}}
+  {{#each values as |value|}}
     <dl>
       <dt>
-        {{data.key}}
+        {{value.label}}
       </dt>
       <dd>
-        {{data.value}}
+        {{value.value}}
       </dd>
     </dl>
   {{/each}}

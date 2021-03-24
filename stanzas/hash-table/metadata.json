@@ -46,6 +46,18 @@
       "stanza:type": "number",
       "stanza:example": 0,
       "stanza:description": "Padding"
+    },
+    {
+      "stanza:key": "columns",
+      "stanza:example": "[{\"id\": \"dataset_id\", \"label\": \"Dataset ID\"}, {\"id\": \"title\", \"label\": \"Label\"}, {\"id\": \"description\", \"label\": \"Dscription\"}, {\"id\": \"species\", \"label\": \"Spacies\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
+      "stanza:description": "Columns' options"
+    },
+    {
+      "stanza:key": "format-key",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Capitalize the acronym and convert underscore to blank"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
