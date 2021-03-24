@@ -384,9 +384,9 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "scrollable-table",
-	"stanza:label": "Scrollable table",
-	"stanza:definition": "Scrollable table MetaStanza",
+	"@id": "scroll-table",
+	"stanza:label": "Scroll table",
+	"stanza:definition": "Scroll table MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",
 	"stanza:provider": "Togostanza",
@@ -659,16 +659,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script.render = render;
-script.__file = "stanzas/scrollable-table/app.vue";
+script.__file = "stanzas/scroll-table/app.vue";
 
-async function scrollableTable(stanza, params) {
+async function scrollTable(stanza, params) {
   const main = stanza.root.querySelector("main");
   createApp(script, params).mount(main);
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': scrollableTable
+  'default': scrollTable
 });
 
 var templates = [
@@ -678,4 +678,4 @@ var templates = [
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=scrollable-table.js.map
+//# sourceMappingURL=scroll-table.js.map
