@@ -17,7 +17,7 @@ export default async function tree(stanza, params) {
   const padding = Number(params["padding"]);
 
   //data
-  const labelVariable = params["label"] ; //"name"
+  const labelVariable = params["label"]; //"name"
   const parentVariable = params["parent-node"]; //"parent"
   const idVariable = params["node"]; //"id-variable"
 
@@ -110,9 +110,9 @@ export default async function tree(stanza, params) {
       from: { data: "tree" },
       encode: {
         enter: {
-          text: { field: params["label"] === ""
-          ? params["node"]
-          :labelVariable },
+          text: {
+            field: params["label"] === "" ? params["node"] : labelVariable,
+          },
           font: { value: css("--font-family") },
           fontSize: { value: css("--label-font-size") },
           baseline: { value: "middle" },

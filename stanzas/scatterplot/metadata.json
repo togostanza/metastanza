@@ -44,24 +44,24 @@
     {
       "stanza:key": "z",
       "stanza:example": "population",
-      "stanza:description": "Variable for Z axis  (If you will not use this variable, this parameter should be set as none)"
+      "stanza:description": "Variable for Z axis"
     },
     {
       "stanza:key": "x-title",
       "stanza:example": "",
-      "stanza:description": "Title for x variable (In case of blank, 'x variable' name will be assigned)",
+      "stanza:description": "Title for x variable (In case of blank, 'x' variable name will be assigned)",
       "stanza:required": false
     },
     {
       "stanza:key": "y-title",
       "stanza:example": "",
-      "stanza:description": "Title for y variable (In case of blank, 'y variable' name will be assigned)",
+      "stanza:description": "Title for y variable (In case of blank, 'y' variable name will be assigned)",
       "stanza:required": false
     },
     {
       "stanza:key": "legend-title",
       "stanza:example": "",
-      "stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z variable' name will be assigned)",
+      "stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z' variable name will be assigned)",
       "stanza:required": false
     },
     {
@@ -220,7 +220,7 @@
       "stanza:key": "--grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
-      "stanza:description": "Grid dash length. Blank for solid lines"
+      "stanza:description": "Grid dash length (Blank for solid lines)"
     },
     {
       "stanza:key": "--grid-opacity",

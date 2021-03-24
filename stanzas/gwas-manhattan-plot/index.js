@@ -3,9 +3,9 @@ import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "../gwas-manhattan-plot/gwas.var2.json";
 
 //when you put json url
-// console.log(params.api);
+// console.log(params["data-url"]]);
 // const dataset = await getFormatedJson(
-//   params.api,
+//   params["data-url"],
 //   stanza.root.querySelector("#chart")
 // );
 // console.log("dataset", dataset);

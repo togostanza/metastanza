@@ -63,9 +63,7 @@ export default async function piechart(stanza, params) {
       // legendX: "220",
       legendY: "5",
       title:
-        params["legend-title"] === ""
-          ? labelVariable
-          : params["legend-title"],
+        params["legend-title"] === "" ? labelVariable : params["legend-title"],
       titleColor: "var(--title-font-color)",
       titleFont: css("--font-family"),
       titleFontSize: css("--title-font-size"),

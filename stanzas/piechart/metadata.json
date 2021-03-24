@@ -45,7 +45,7 @@
     {
       "stanza:key": "legend-title",
       "stanza:example": "",
-      "stanza:description": "Title for category variable, which is used as legend title (In case of blank, 'category variable' name will be assigned)",
+      "stanza:description": "Title for category variable, which is used as legend title (In case of blank, 'category' variable name will be assigned)",
       "stanza:required": false
     },
     {
@@ -78,7 +78,7 @@
         "none"
       ],
       "stanza:example": "bottom-right",
-      "stanza:description": "Menu button placement.(top-left,top-right,bottom-right,bottom-left,none)"
+      "stanza:description": "Menu button placement"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
@@ -104,19 +104,19 @@
     {
       "stanza:key": "--series-3-color",
       "stanza:type": "color",
-      "stanza:default": "#f5da64",
+      "stanza:default": "#F5DA64",
       "stanza:description": "Category color 3"
     },
     {
       "stanza:key": "--series-4-color",
       "stanza:type": "color",
-      "stanza:default": "#f57f5b",
+      "stanza:default": "#F57F5B",
       "stanza:description": "Category color 4"
     },
     {
       "stanza:key": "--series-5-color",
       "stanza:type": "color",
-      "stanza:default": "#f75976",
+      "stanza:default": "#F75976",
       "stanza:description": "Category color 5"
     },
     {
