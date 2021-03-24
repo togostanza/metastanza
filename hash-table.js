@@ -6,15 +6,23 @@ import './dsv-cd3740c6.js';
 
 async function hashTable(stanza, params) {
   const dataset = await loadData(params["data-url"], params["data-type"]);
+  const columns = params.columns ? JSON.parse(params.columns) : null;
+  const values = Object.entries(dataset[0]).map((datam) => {
+    const label = columns
+    ? columns.find((column) => column.id === datam[0]).label
+    : params["format-key"] === "true"
+    ? datam[0].charAt(0).toUpperCase() + datam[0].substring(1).replace(/_/g, " ")
+    : datam[0];
+
+    return {
+      label,
+      value: datam[1],
+    };
+  });
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      dataset: Object.entries(dataset[0]).map((datam) => {
-        return {
-          key: datam[0],
-          value: datam[1],
-        };
-      }),
+      values
     },
   });
 
@@ -86,6 +94,21 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 0,
 		"stanza:description": "Padding"
+	},
+	{
+		"stanza:key": "columns",
+		"stanza:example": "[{\"id\": \"dataset_id\", \"label\": \"Dataset ID\"}, {\"id\": \"title\", \"label\": \"Label\"}, {\"id\": \"description\", \"label\": \"Dscription\"}, {\"id\": \"species\", \"label\": \"Spacies\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
+		"stanza:description": "Columns' options"
+	},
+	{
+		"stanza:key": "format-key",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Capitalize the acronym and convert underscore to blank"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -187,7 +210,7 @@ var templates = [
     };
 
   return "    <dl>\n      <dt>\n        "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
+    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0))
     + "\n      </dt>\n      <dd>\n        "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
     + "\n      </dd>\n    </dl>\n";
@@ -200,7 +223,7 @@ var templates = [
     };
 
   return "<div class=\"container\">\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"dataset") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":11,"column":11}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"values") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":11,"column":11}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
