@@ -11,6 +11,7 @@
 main {
   .container {
     column-count: var(--column-count);
+    column-gap: 0;
     border: var(--table-border);
     box-shadow: var(--table-shadow);
     background-color: var(--table-background-color);
