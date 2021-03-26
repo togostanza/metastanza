@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
-import data from "../manhattan-plot/gwas.var2.json";
+import data from "./gwas.var2.json";
 
 //when you put json url
 // console.log(params["data-url"]]);
@@ -243,7 +243,6 @@ async function draw(stanza, params) {
       0
     );
   });
-  console.log("chromosomeSumLength", chromosomeSumLength.hg38);
 
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
@@ -274,11 +273,12 @@ async function draw(stanza, params) {
     .select(chart_element)
     .append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height + 10);
   const axis_g = svg.append("g").attr("id", "axis");
-  const ytitle = svg.append("g").attr("id", "y_title");
+  const slider_shadow_g = svg.append("g").attr("id", "slider_shadow");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
+  const ytitle = svg.append("g").attr("id", "y_title");
   const plot_g = svg.append("g").attr("id", "plot_group");
   const threshline_g = svg.append("g").attr("id", "thresh_line");
   const tooltip = d3
@@ -427,7 +427,7 @@ async function draw(stanza, params) {
     .append("text")
     .text("chr:")
     .attr("class", "info-key")
-    .attr("fill", "#99acb2")
+    .attr("fill", "#99ACB2")
     .attr("x", 4)
     .attr("y", 16)
     .attr("width", 10)
@@ -439,7 +439,7 @@ async function draw(stanza, params) {
     .attr("width", areaWidth)
     .attr("height", 23)
     .attr("fill", "#FFFFFF")
-    .attr("stroke", "#99acb2")
+    .attr("stroke", "#99ACB2")
     .attr("stroke-width", "1px");
   ctrl_svg
     .append("rect")
@@ -448,8 +448,8 @@ async function draw(stanza, params) {
     .attr("y", 1)
     .attr("width", areaWidth)
     .attr("height", 23)
-    .attr("fill", "#C2E3F2")
-    .attr("stroke", "#99acb2")
+    .attr("fill", "var(--slider-color)")
+    .attr("stroke", "#99ACB2")
     .call(
       d3
         .drag()
@@ -507,6 +507,7 @@ async function draw(stanza, params) {
             }
             const move = (delta / areaWidth) * total;
             range = [range[0] + move, range[1] + move];
+            console.log("range", range);
             reRender();
             pagination.init();
             dragBegin = false;
@@ -536,7 +537,7 @@ async function draw(stanza, params) {
       return (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
     })
     .attr("y", 18)
-    .attr("fill", "#2f4d76");
+    .attr("fill", "#2F4D76");
 
   sliderlabel_g
     .selectAll(".sliderLine")
@@ -554,8 +555,6 @@ async function draw(stanza, params) {
       }
       const sliderLinePos =
         (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
-      console.log("d", d);
-      console.log("sliderLinePos", sliderLinePos);
       return "M " + sliderLinePos + ", " + 2 + " V " + 24 + " Z";
     });
 
@@ -658,7 +657,6 @@ async function draw(stanza, params) {
       ];
       total = range[1];
     }
-    console.log(range);
 
     over_thresh_array = [];
 
@@ -834,9 +832,9 @@ async function draw(stanza, params) {
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
           (areaHeight - paddingTop);
-      //calucurate display of scale
+      //Calucurate display of scale
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 20; //Tick number to display(set by manual)
+      const tickNum = 20; //Tick number to display (set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
       if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g
@@ -910,6 +908,34 @@ async function draw(stanza, params) {
     );
     totalOverThreshVariants.innerText = over_thresh_array.length;
     setRange(range);
+
+    //slider shadow (Show only when chart is zoomed)
+    const sliderShadow = stanza.root.querySelectorAll(".slider-shadow");
+    for (let i = 0; i < sliderShadow.length; i++) {
+      sliderShadow[i].remove();
+    }
+
+    if (range[0] !== 0 && range[1] !== chromosomeSumLength.hg38) {
+      slider_shadow_g
+        .append("path")
+        .attr("class", "slider-shadow")
+        .attr("fill", "var(--slider-color)")
+        .attr("opacity", "0.4")
+        .attr(
+          "d",
+          `
+          M ${marginLeft} ${areaHeight}
+          L ${width} ${areaHeight}
+          L ${(range[1] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
+            height + 10
+          }
+          L ${(range[0] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
+            height + 10
+          }
+          z
+        `
+        );
+    }
   }
 
   function renderCanvas(variants, rangeVertical) {

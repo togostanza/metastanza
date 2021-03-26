@@ -69,32 +69,38 @@
     {
       "stanza:key": "--discovery-color",
       "stanza:type": "color",
-      "stanza:default": "#3d6589",
+      "stanza:default": "#3D6589",
       "stanza:description": "Plot color of discovery stage"
     },
     {
       "stanza:key": "--replication-color",
       "stanza:type": "color",
-      "stanza:default": "#ed707e",
+      "stanza:default": "#ED707E",
       "stanza:description": "Plot color of replication stage"
     },
     {
       "stanza:key": "--combined-color",
       "stanza:type": "color",
-      "stanza:default": "#eab64e",
+      "stanza:default": "#EAB64E",
       "stanza:description": "Plot color of combined stage"
     },
     {
       "stanza:key": "--meta-analysis-color",
       "stanza:type": "color",
-      "stanza:default": "#52b1c1",
+      "stanza:default": "#52B1C1",
       "stanza:description": "Plot color of meta-analysis stage"
     },
     {
       "stanza:key": "--not-provided-color",
       "stanza:type": "color",
-      "stanza:default": "#62b28c",
+      "stanza:default": "#62B28C",
       "stanza:description": "Plot color of not-provided stage"
+    },
+    {
+      "stanza:key": "--slider-color",
+      "stanza:type": "color",
+      "stanza:default": "#C2E3F2",
+      "stanza:description": "Slider color"
     },
     {
       "stanza:key": "--thead-font-size",

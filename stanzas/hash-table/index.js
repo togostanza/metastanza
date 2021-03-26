@@ -2,16 +2,16 @@ import loadData from "@/lib/load-data";
 
 export default async function hashTable(stanza, params) {
   let dataset = await loadData(params["data-url"], params["data-type"]);
-  dataset = dataset[0]
+  dataset = dataset[0];
   const columns = params.columns
     ? JSON.parse(params.columns)
     : Object.keys(dataset).map((key) => {
-        return { id: key }
+        return { id: key };
       });
   const values = columns.map((column) => {
-    const datam_label = Object.keys(dataset).find(datam => {
-      return datam === column.id
-    })
+    const datam_label = Object.keys(dataset).find((datam) => {
+      return datam === column.id;
+    });
     const label = column.label
       ? column.label
       : params["format-key"] === "true"

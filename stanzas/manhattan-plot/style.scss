@@ -51,11 +51,13 @@ h2 {
 hr {
   height: 1px;
   background-color: $COLOR_GREY;
+  opacity: 0.5;
   border: none;
 }
 
 div#chart {
   position: relative;
+  height: 410px; //height + 10px
   svg {
     cursor: crosshair;
   }
