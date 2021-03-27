@@ -9,15 +9,15 @@ export default async function hashTable(stanza, params) {
         return { id: key };
       });
   const values = columns.map((column) => {
-    const datam_label = Object.keys(dataset).find((datam) => {
-      return datam === column.id;
+    const datum_label = Object.keys(dataset).find((datum) => {
+      return datum === column.id;
     });
     const label = column.label
       ? column.label
       : params["format-key"] === "true"
-      ? datam_label.charAt(0).toUpperCase() +
-        datam_label.substring(1).replace(/_/g, " ")
-      : datam_label;
+      ? datum_label.charAt(0).toUpperCase() +
+        datum_label.substring(1).replace(/_/g, " ")
+      : datum_label;
 
     return {
       label,
