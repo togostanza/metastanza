@@ -82,10 +82,6 @@ export default defineComponent({
   components: {
     Slider,
     FontAwesomeIcon,
-    faAngleRight,
-    faAngleDoubleRight,
-    faAngleLeft,
-    faAngleDoubleLeft,
   },
   props: {
     currentPage: {

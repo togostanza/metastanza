@@ -221,12 +221,6 @@ export default defineComponent({
     Slider,
     SliderPagination,
     FontAwesomeIcon,
-    faEllipsisH,
-    faFilter,
-    faSearch,
-    faSort,
-    faSortUp,
-    faSortDown,
   },
 
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
@@ -453,12 +447,12 @@ function createColumnState(columnDef, values) {
       return minValue < rangeMin.value || maxValue > rangeMax.value;
     });
 
-    function setRange([min, max]) {
+    const setRange = ([min, max]) => {
       rangeMin.value = min;
       rangeMax.value = max;
       inputtingRangeMin.value = min;
       inputtingRangeMax.value = max;
-    }
+    };
 
     return {
       ...baseProps,
@@ -494,15 +488,15 @@ function createColumnState(columnDef, values) {
             })
         : null;
 
-    function filter(val) {
+    const filter = (val) => {
       const selected = filters.filter(({ checked }) => checked);
       return selected.some(({ value }) => value === val);
-    }
+    };
 
-    function search(val) {
+    const search = (val) => {
       const q = query.value;
       return q ? val.includes(q) : true;
-    }
+    };
 
     return {
       ...baseProps,
