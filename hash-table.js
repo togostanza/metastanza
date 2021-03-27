@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
-import { l as loadData } from './load-data-eeb61760.js';
+import { l as loadData } from './load-data-4c0c2f17.js';
 import './index-89a342ec.js';
 
 async function hashTable(stanza, params) {
@@ -8,18 +8,18 @@ async function hashTable(stanza, params) {
   const columns = params.columns
     ? JSON.parse(params.columns)
     : Object.keys(dataset).map((key) => {
-        return { id: key }
+        return { id: key };
       });
   const values = columns.map((column) => {
-    const datam_label = Object.keys(dataset).find(datam => {
-      return datam === column.id
+    const datum_label = Object.keys(dataset).find((datum) => {
+      return datum === column.id;
     });
     const label = column.label
       ? column.label
       : params["format-key"] === "true"
-      ? datam_label.charAt(0).toUpperCase() +
-        datam_label.substring(1).replace(/_/g, " ")
-      : datam_label;
+      ? datum_label.charAt(0).toUpperCase() +
+        datum_label.substring(1).replace(/_/g, " ")
+      : datum_label;
 
     return {
       label,

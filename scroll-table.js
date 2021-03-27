@@ -586,14 +586,12 @@ var script = defineComponent({
       fetchData();
     });
 
-    const { width, height, padding } = params;
-
     return {
       state,
       handleScroll,
-      width,
-      height,
-      padding,
+      width: props.width,
+      height: props.height,
+      padding: props.padding,
     };
   },
 });
