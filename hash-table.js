@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { l as loadData } from './load-data-eeb61760.js';
 import './index-89a342ec.js';
 

@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
-import { e as embed } from './vega-embed.module-d9bc8b86.js';
+import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
+import { e as embed } from './vega-embed.module-3f57ed7e.js';
 import { l as loadData } from './load-data-eeb61760.js';
 import { a as appendDlButton } from './metastanza_utils-9b99b81a.js';
 import './index-89a342ec.js';

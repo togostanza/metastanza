@@ -1,4 +1,4 @@
-import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { w as dispatch } from './index-89a342ec.js';
 import { s as select, a as appendDlButton } from './metastanza_utils-9b99b81a.js';
 
