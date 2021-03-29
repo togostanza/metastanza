@@ -175,7 +175,6 @@ async function draw(stanza, params) {
   const low_thresh = parseFloat(params.low_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
-  const even_and_odd = params.even_and_odd === "true";
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
@@ -447,7 +446,7 @@ async function draw(stanza, params) {
     .attr("x", marginLeft)
     .attr("y", 1)
     .attr("width", areaWidth)
-    .attr("height", 23)
+    .attr("height", 22)
     .attr("fill", "var(--slider-color)")
     .attr("stroke", "#99ACB2")
     .call(
@@ -507,7 +506,6 @@ async function draw(stanza, params) {
             }
             const move = (delta / areaWidth) * total;
             range = [range[0] + move, range[1] + move];
-            console.log("range", range);
             reRender();
             pagination.init();
             dragBegin = false;
@@ -947,26 +945,18 @@ async function draw(stanza, params) {
       );
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
+      console.log("slider_shadow_g", slider_shadow_g);
+
       for (const d of variants) {
+        const stage = d["stage"].toLowerCase();
         ctx.beginPath();
         if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
             "--over-thresh-color"
           );
-        } else if (even_and_odd) {
-          let tmp = "even";
-          if (
-            d[chromosome_key] === "X" ||
-            parseInt(d[chromosome_key]) % 2 === 1
-          ) {
-            tmp = "odd";
-          }
+        } else if (stage) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            "--ch-" + tmp + "-color"
-          );
-        } else {
-          ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            "--ch-" + d[chromosome_key] + "-color"
+            `--${stage}-color`
           );
         }
         ctx.arc(
@@ -1088,7 +1078,6 @@ async function draw(stanza, params) {
         }
         listingTable.appendChild(tr);
       }
-
       updatePagination();
     };
 
