@@ -589,9 +589,9 @@ var script = defineComponent({
     return {
       state,
       handleScroll,
-      width: props.width,
-      height: props.height,
-      padding: props.padding,
+      width: params.width,
+      height: params.height,
+      padding: params.padding,
     };
   },
 });
