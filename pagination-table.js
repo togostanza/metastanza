@@ -3614,6 +3614,7 @@ var script$1 = defineComponent$1({
     }
 
     function updateCurrentPage(num) {
+      inputtingCurrentPage.value = num;
       context.emit("updateCurrentPage", num);
     }
 
@@ -4949,8 +4950,23 @@ var script = defineComponent$1({
     });
 
     const totalPages = computed(() => {
-      return Math.ceil(filteredRows.value.length / state.pagination.perPage);
+      const totalPages = Math.ceil(
+        filteredRows.value.length / state.pagination.perPage
+      );
+      return totalPages;
     });
+
+    watch(
+      () => totalPages.value,
+      (totalPages) => {
+        if (totalPages > 0 && state.pagination.currentPage > totalPages) {
+          updateCurrentPage(totalPages);
+          if (sliderPagination.value) {
+            sliderPagination.value.inputtingCurrentPage = totalPages;
+          }
+        }
+      }
+    );
 
     const rowsInCurrentPage = computed(() => {
       const { currentPage, perPage } = state.pagination;
