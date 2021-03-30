@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, computed, onMounted } from "vue";
+import { defineComponent, reactive, ref, computed, watch, onMounted } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
 
@@ -252,7 +252,6 @@ export default defineComponent({
     });
 
     const filteredRows = computed(() => {
-
       const queryForAllColumns = state.queryForAllColumns;
       const filtered = state.allRows.filter((row) => {
         return (
@@ -277,15 +276,23 @@ export default defineComponent({
     });
 
     const totalPages = computed(() => {
-      const totalPages = Math.ceil(filteredRows.value.length / state.pagination.perPage);
-      if(totalPages > 0 && state.pagination.currentPage > totalPages) {
-        updateCurrentPage(totalPages)
-        if(sliderPagination) {
-          sliderPagination.value.inputtingCurrentPage = totalPages
-        }
-      }
+      const totalPages = Math.ceil(
+        filteredRows.value.length / state.pagination.perPage
+      );
       return totalPages;
     });
+
+    watch(
+      () => totalPages.value,
+      (totalPages) => {
+        if (totalPages > 0 && state.pagination.currentPage > totalPages) {
+          updateCurrentPage(totalPages);
+          if (sliderPagination.value) {
+            sliderPagination.value.inputtingCurrentPage = totalPages;
+          }
+        }
+      }
+    )
 
     const rowsInCurrentPage = computed(() => {
       const { currentPage, perPage } = state.pagination;

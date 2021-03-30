@@ -43,7 +43,7 @@
           :value="currentPage"
           type="text"
           class="jumpToNumberInput"
-          @input="updateCurrentPage(Number($event.target.value));"
+          @input="updateCurrentPage(Number($event.target.value))"
         />
         of {{ totalPages }}
       </div>
@@ -172,7 +172,7 @@ export default defineComponent({
     }
 
     function updateCurrentPage(num) {
-      inputtingCurrentPage.value = num
+      inputtingCurrentPage.value = num;
       context.emit("updateCurrentPage", num);
     }
 
