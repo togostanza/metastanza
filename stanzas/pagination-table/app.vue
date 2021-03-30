@@ -252,6 +252,7 @@ export default defineComponent({
     });
 
     const filteredRows = computed(() => {
+
       const queryForAllColumns = state.queryForAllColumns;
       const filtered = state.allRows.filter((row) => {
         return (
@@ -276,7 +277,14 @@ export default defineComponent({
     });
 
     const totalPages = computed(() => {
-      return Math.ceil(filteredRows.value.length / state.pagination.perPage);
+      const totalPages = Math.ceil(filteredRows.value.length / state.pagination.perPage);
+      if(totalPages > 0 && state.pagination.currentPage > totalPages) {
+        updateCurrentPage(totalPages)
+        if(sliderPagination) {
+          sliderPagination.value.inputtingCurrentPage = totalPages
+        }
+      }
+      return totalPages;
     });
 
     const rowsInCurrentPage = computed(() => {
