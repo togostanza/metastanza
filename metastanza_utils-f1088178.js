@@ -98,10 +98,6 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
         .innerHTML.replace(/[\r\n]/g, "");
     }
     const tmp = svg.node().outerHTML.match(/^([^>]+>)([\s\S]+)$/);
-    console.log(
-      "svg.node().outerHTML",
-      svg.node().outerHTML.match(/^([^>]+>)/)[1]
-    );
     const string = tmp[1] + "<style>" + style + "</style>" + tmp[2];
     const w = parseInt(svg.style("width"));
     const h = parseInt(svg.style("height"));
@@ -158,4 +154,4 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
 }
 
 export { appendDlButton as a, select as s };
-//# sourceMappingURL=metastanza_utils-fe6d16ed.js.map
+//# sourceMappingURL=metastanza_utils-f1088178.js.map

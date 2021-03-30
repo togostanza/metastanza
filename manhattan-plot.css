@@ -32,11 +32,13 @@ h2 {
 hr {
   height: 1px;
   background-color: #707070;
+  opacity: 0.5;
   border: none;
 }
 
 div#chart {
   position: relative;
+  height: 410px;
 }
 div#chart svg {
   cursor: crosshair;

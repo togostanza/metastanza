@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { w as dispatch } from './index-89a342ec.js';
-import { s as select, a as appendDlButton } from './metastanza_utils-fe6d16ed.js';
+import { s as select, a as appendDlButton } from './metastanza_utils-f1088178.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -30634,7 +30634,6 @@ async function draw(stanza, params) {
   const low_thresh = parseFloat(params.low_thresh);
   let high_thresh = parseFloat(params.high_thresh);
 
-  const even_and_odd = params.even_and_odd === "true";
   const chromosome_key = params.chromosome_key;
   const position_key = params.position_key;
   const p_value_key = params.p_value_key;
@@ -30702,7 +30701,6 @@ async function draw(stanza, params) {
       0
     );
   });
-  console.log("chromosomeSumLength", chromosomeSumLength.hg38);
 
   const chromosomeArray = Object.values(chromosomeNtLength.hg38);
   const chromosomeStartPosition = {};
@@ -30731,11 +30729,12 @@ async function draw(stanza, params) {
   const svg = select(chart_element)
     .append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height + 10);
   const axis_g = svg.append("g").attr("id", "axis");
-  const ytitle = svg.append("g").attr("id", "y_title");
+  const slider_shadow_g = svg.append("g").attr("id", "slider_shadow");
   const xlabel_g = svg.append("g").attr("id", "x_label");
   const ylabel_g = svg.append("g").attr("id", "y_label");
+  const ytitle = svg.append("g").attr("id", "y_title");
   const plot_g = svg.append("g").attr("id", "plot_group");
   const threshline_g = svg.append("g").attr("id", "thresh_line");
   const tooltip = select(chart_element)
@@ -30882,7 +30881,7 @@ async function draw(stanza, params) {
     .append("text")
     .text("chr:")
     .attr("class", "info-key")
-    .attr("fill", "#99acb2")
+    .attr("fill", "#99ACB2")
     .attr("x", 4)
     .attr("y", 16)
     .attr("width", 10)
@@ -30894,7 +30893,7 @@ async function draw(stanza, params) {
     .attr("width", areaWidth)
     .attr("height", 23)
     .attr("fill", "#FFFFFF")
-    .attr("stroke", "#99acb2")
+    .attr("stroke", "#99ACB2")
     .attr("stroke-width", "1px");
   ctrl_svg
     .append("rect")
@@ -30902,9 +30901,9 @@ async function draw(stanza, params) {
     .attr("x", marginLeft)
     .attr("y", 1)
     .attr("width", areaWidth)
-    .attr("height", 23)
-    .attr("fill", "#C2E3F2")
-    .attr("stroke", "#99acb2")
+    .attr("height", 22)
+    .attr("fill", "var(--slider-color)")
+    .attr("stroke", "#99ACB2")
     .call(
       drag()
         .on("start", function (e) {
@@ -30990,7 +30989,7 @@ async function draw(stanza, params) {
       return (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
     })
     .attr("y", 18)
-    .attr("fill", "#2f4d76");
+    .attr("fill", "#2F4D76");
 
   sliderlabel_g
     .selectAll(".sliderLine")
@@ -31008,8 +31007,6 @@ async function draw(stanza, params) {
       }
       const sliderLinePos =
         (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
-      console.log("d", d);
-      console.log("sliderLinePos", sliderLinePos);
       return "M " + sliderLinePos + ", " + 2 + " V " + 24 + " Z";
     });
 
@@ -31108,7 +31105,6 @@ async function draw(stanza, params) {
       ];
       total = range[1];
     }
-    console.log(range);
 
     over_thresh_array = [];
 
@@ -31284,9 +31280,9 @@ async function draw(stanza, params) {
         areaHeight -
         ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
           (areaHeight - paddingTop);
-      //calucurate display of scale
+      //Calucurate display of scale
       const scaleNum = rangeVertical[1] - rangeVertical[0];
-      const tickNum = 20; //Tick number to display(set by manual)
+      const tickNum = 20; //Tick number to display (set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
       if (rangeVertical[1] - rangeVertical[0] < tickNum) {
         ylabel_g
@@ -31360,6 +31356,34 @@ async function draw(stanza, params) {
     );
     totalOverThreshVariants.innerText = over_thresh_array.length;
     setRange(range);
+
+    //slider shadow (Show only when chart is zoomed)
+    const sliderShadow = stanza.root.querySelectorAll(".slider-shadow");
+    for (let i = 0; i < sliderShadow.length; i++) {
+      sliderShadow[i].remove();
+    }
+
+    if (range[0] !== 0 && range[1] !== chromosomeSumLength.hg38) {
+      slider_shadow_g
+        .append("path")
+        .attr("class", "slider-shadow")
+        .attr("fill", "var(--slider-color)")
+        .attr("opacity", "0.4")
+        .attr(
+          "d",
+          `
+          M ${marginLeft} ${areaHeight}
+          L ${width} ${areaHeight}
+          L ${(range[1] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
+            height + 10
+          }
+          L ${(range[0] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
+            height + 10
+          }
+          z
+        `
+        );
+    }
   }
 
   function renderCanvas(variants, rangeVertical) {
@@ -31371,26 +31395,18 @@ async function draw(stanza, params) {
       );
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
+      console.log("slider_shadow_g", slider_shadow_g);
+
       for (const d of variants) {
+        const stage = d["stage"].toLowerCase();
         ctx.beginPath();
         if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
             "--over-thresh-color"
           );
-        } else if (even_and_odd) {
-          let tmp = "even";
-          if (
-            d[chromosome_key] === "X" ||
-            parseInt(d[chromosome_key]) % 2 === 1
-          ) {
-            tmp = "odd";
-          }
+        } else if (stage) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            "--ch-" + tmp + "-color"
-          );
-        } else {
-          ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            "--ch-" + d[chromosome_key] + "-color"
+            `--${stage}-color`
           );
         }
         ctx.arc(
@@ -31512,7 +31528,6 @@ async function draw(stanza, params) {
         }
         listingTable.appendChild(tr);
       }
-
       updatePagination();
     };
 
@@ -31629,32 +31644,38 @@ var metadata = {
 	{
 		"stanza:key": "--discovery-color",
 		"stanza:type": "color",
-		"stanza:default": "#3d6589",
+		"stanza:default": "#3D6589",
 		"stanza:description": "Plot color of discovery stage"
 	},
 	{
 		"stanza:key": "--replication-color",
 		"stanza:type": "color",
-		"stanza:default": "#ed707e",
+		"stanza:default": "#ED707E",
 		"stanza:description": "Plot color of replication stage"
 	},
 	{
 		"stanza:key": "--combined-color",
 		"stanza:type": "color",
-		"stanza:default": "#eab64e",
+		"stanza:default": "#EAB64E",
 		"stanza:description": "Plot color of combined stage"
 	},
 	{
 		"stanza:key": "--meta-analysis-color",
 		"stanza:type": "color",
-		"stanza:default": "#52b1c1",
+		"stanza:default": "#52B1C1",
 		"stanza:description": "Plot color of meta-analysis stage"
 	},
 	{
 		"stanza:key": "--not-provided-color",
 		"stanza:type": "color",
-		"stanza:default": "#62b28c",
+		"stanza:default": "#62B28C",
 		"stanza:description": "Plot color of not-provided stage"
+	},
+	{
+		"stanza:key": "--slider-color",
+		"stanza:type": "color",
+		"stanza:default": "#C2E3F2",
+		"stanza:description": "Slider color"
 	},
 	{
 		"stanza:key": "--thead-font-size",
