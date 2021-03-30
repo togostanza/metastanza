@@ -297,18 +297,18 @@
             }
             &.filter {
               padding: 0 2px;
-              &.isShowing {
-                z-index: 3;
-                position: relative;
-                background-color: var(--thead-background-color);
-                > path {
-                  color: var(--thead-font-color);
-                }
-              }
             }
             &.sort {
               display: var(--sorticon-display);
               position: relative;
+            }
+          }
+          .icon.isShowing {
+            z-index: 3;
+            position: relative;
+            background-color: var(--thead-background-color);
+            path {
+              color: var(--thead-font-color);
             }
           }
         }
