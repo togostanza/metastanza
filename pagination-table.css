@@ -652,17 +652,17 @@
 .wrapper > .tableWrapper > table > thead > tr .icon.filter {
   padding: 0 2px;
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing {
+.wrapper > .tableWrapper > table > thead > tr .icon.sort {
+  display: var(--sorticon-display);
+  position: relative;
+}
+.wrapper > .tableWrapper > table > thead > tr .icon.isShowing {
   z-index: 3;
   position: relative;
   background-color: var(--thead-background-color);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.filter.isShowing > path {
+.wrapper > .tableWrapper > table > thead > tr .icon.isShowing path {
   color: var(--thead-font-color);
-}
-.wrapper > .tableWrapper > table > thead > tr .icon.sort {
-  display: var(--sorticon-display);
-  position: relative;
 }
 .wrapper > .tableWrapper > table > tbody {
   font-size: var(--tbody-font-size);
