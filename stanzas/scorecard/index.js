@@ -38,7 +38,9 @@ export default async function scorecard(stanza, params) {
     key.setAttribute(`style`, `display: none;`);
   }
 
+  key.setAttribute("x", `${width / 2}px`);
   key.setAttribute("y", Number(css("--key-font-size")));
+  value.setAttribute("x", `${width / 2}px`);
   value.setAttribute(
     "y",
     Number(css("--key-font-size")) + Number(css("--value-font-size"))
