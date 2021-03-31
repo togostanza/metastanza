@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { e as embed } from './vega-embed.module-6233b8c4.js';
 import { l as loadData } from './load-data-4c0c2f17.js';
-import { a as appendDlButton } from './metastanza_utils-f1088178.js';
+import { a as appendDlButton } from './metastanza_utils-b8e50d97.js';
 import './index-89a342ec.js';
 
 async function scatterplot(stanza, params) {

@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { w as dispatch } from './index-89a342ec.js';
-import { s as select, a as appendDlButton } from './metastanza_utils-f1088178.js';
+import { s as select, a as appendDlButton } from './metastanza_utils-b8e50d97.js';
 
 function sourceEvent(event) {
   let sourceEvent;

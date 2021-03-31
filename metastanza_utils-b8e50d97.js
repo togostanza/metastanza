@@ -90,15 +90,30 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
     if (stanza.root.host && stanza.root.host.querySelector("style")) {
       style += stanza.root.host
         .querySelector("style")
-        .innerHTML.replace(/[\r\n]/g, "");
+        .innerHTML.replace(/[\r\n]/g, "")
+        .match(/^\s*:root\s*{(.+)}\s*$/)[1];
     }
-    if (stanza && stanza.root.querySelector("style")) {
-      style += stanza.root
-        .querySelector("style")
-        .innerHTML.replace(/[\r\n]/g, "");
+
+    const outerCode = document
+      .querySelector(".overflow-auto")
+      .innerHTML.replace("<code>", "")
+      .replace("</code>", "");
+    const customizedStyle = outerCode
+      .replaceAll('""', "")
+      .replaceAll("&lt;", "<")
+      .replaceAll("&gt;", ">")
+      .match(/<style>[\s\S]*?<\/style>/);
+    if (customizedStyle) {
+      //when customize styles exist
+      style += customizedStyle[0]
+        .replace("<style>", "")
+        .replace("</style>", "")
+        .replace(/[\r\n]/g, "")
+        .match(/^\s*togostanza-.+\s{\s(.+\s)+}\s*$/)[1];
     }
+
     const tmp = svg.node().outerHTML.match(/^([^>]+>)([\s\S]+)$/);
-    const string = tmp[1] + "<style>" + style + "</style>" + tmp[2];
+    const string = tmp[1] + "<style>svg{" + style + "}</style>" + tmp[2];
     const w = parseInt(svg.style("width"));
     const h = parseInt(svg.style("height"));
 
@@ -154,4 +169,4 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
 }
 
 export { appendDlButton as a, select as s };
-//# sourceMappingURL=metastanza_utils-f1088178.js.map
+//# sourceMappingURL=metastanza_utils-b8e50d97.js.map

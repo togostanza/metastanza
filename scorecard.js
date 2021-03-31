@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { l as loadData } from './load-data-4c0c2f17.js';
-import { a as appendDlButton } from './metastanza_utils-f1088178.js';
+import { a as appendDlButton } from './metastanza_utils-b8e50d97.js';
 import './index-89a342ec.js';
 
 async function scorecard(stanza, params) {
@@ -40,7 +40,9 @@ async function scorecard(stanza, params) {
     key.setAttribute(`style`, `display: none;`);
   }
 
+  key.setAttribute("x", `${width / 2}px`);
   key.setAttribute("y", Number(css("--key-font-size")));
+  value.setAttribute("x", `${width / 2}px`);
   value.setAttribute(
     "y",
     Number(css("--key-font-size")) + Number(css("--value-font-size"))
@@ -228,9 +230,9 @@ var templates = [
         return undefined
     };
 
-  return "    <svg class=\"scorecard-svg\">\n      <text\n        id=\"scorecardKey\"\n        x=\"50%\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--key-font-color)\"\n        font-weight=\"var(--key-font-weight)\"\n      >\n        "
+  return "    <svg class=\"scorecard-svg\">\n      <text\n        id=\"scorecardKey\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--key-font-color)\"\n        font-weight=\"var(--key-font-weight)\"\n      >\n        "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
-    + "\n      </text>\n      <text\n        id=\"scorecardValue\"\n        x=\"50%\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--value-font-color)\"\n        font-weight=\"var(--value-font-weight)\"\n      >\n        "
+    + "\n      </text>\n      <text\n        id=\"scorecardValue\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--value-font-color)\"\n        font-weight=\"var(--value-font-weight)\"\n      >\n        "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
     + "\n      </text>\n    </svg>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
@@ -242,7 +244,7 @@ var templates = [
     };
 
   return "<div class=\"chart-wrapper\">\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":25,"column":11}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":23,"column":11}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
