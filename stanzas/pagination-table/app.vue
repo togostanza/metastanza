@@ -192,7 +192,14 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, computed, watch, onMounted } from "vue";
+import {
+  defineComponent,
+  reactive,
+  ref,
+  computed,
+  watch,
+  onMounted,
+} from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
 
@@ -292,7 +299,7 @@ export default defineComponent({
           }
         }
       }
-    )
+    );
 
     const rowsInCurrentPage = computed(() => {
       const { currentPage, perPage } = state.pagination;

@@ -14,7 +14,7 @@ import data from "./gwas.var2.json";
 const dataset = data.dataset;
 const study_name = Object.keys(dataset)[0];
 
-//project data and project names(single per a json)
+//project data and project names (single per a json)
 const project = Object.values(dataset)[0][0];
 const project_name = Object.keys(project)[0];
 
@@ -27,9 +27,10 @@ const fixed_order_stage_names = [
   "discovery",
   "replication",
   "combined",
-  "meta-analysis",
-  "not-provided",
+  "meta analysis",
+  "not provided",
 ];
+
 stage_names = fixed_order_stage_names.filter((stage_name) => {
   if (stage_info[stage_name]) {
     return true;
@@ -704,8 +705,9 @@ async function draw(stanza, params) {
         return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
       })
       .append("circle")
-      .attr("class", function (d) {
-        return d["stage"].toLowerCase();
+      .attr("fill", function (d) {
+        const stage = d["stage"].replace(/\s/, "-");
+        return `var(--${stage}-color)`;
       })
       .attr("cx", function (d) {
         return (
@@ -950,15 +952,9 @@ async function draw(stanza, params) {
       for (const d of variants) {
         const stage = d["stage"].toLowerCase();
         ctx.beginPath();
-        if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
-          ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            "--over-thresh-color"
-          );
-        } else if (stage) {
-          ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            `--${stage}-color`
-          );
-        }
+        ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
+          `--${stage}-color`
+        );
         ctx.arc(
           (d.pos / (range[1] - range[0])) * areaWidth,
           areaHeight -
@@ -1067,7 +1063,7 @@ async function draw(stanza, params) {
             if (tableHeadArray[j] === "gene_name") {
               const displayedGeneName =
                 over_thresh_array[i][`${tableHeadArray[j]}`];
-              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].rsId}#locuszoom-link">${displayedGeneName}</a>`;
+              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
             } else {
               td.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
             }

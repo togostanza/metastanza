@@ -296,10 +296,10 @@ div#dl_list {
               &[data-stage="combined"] {
                 background-color: $COLOR_COMBINED;
               }
-              &[data-stage="meta-analysis"] {
+              &[data-stage="meta analysis"] {
                 background-color: $COLOR_META_ANARYSIS;
               }
-              &[data-stage="not-provided"] {
+              &[data-stage="not provided"] {
                 background-color: $COLOR_NOT_PROVIDED;
               }
             }
