@@ -123,8 +123,8 @@ export default async function manhattanPlot(stanza, params) {
     chr = chr.replace("chr", "");
     variants[i].chr = chr;
 
-    const pval = variants[i]["p-value"];
-    String(pval);
+    const pValue = variants[i]["p-value"];
+    String(pValue);
 
     const physicalPosition = variants[i]["stop"];
     String(physicalPosition);
@@ -149,6 +149,7 @@ async function draw(stanza, params) {
   const paddingTop = 10;
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
+  const drawAreaHeight = areaHeight - paddingTop;
 
   const chartElement = stanza.root.querySelector("#chart");
   const controlElement = stanza.root.querySelector("#control");
@@ -283,11 +284,15 @@ async function draw(stanza, params) {
     .append("div")
     .attr("class", "tooltip");
 
-  let horizonalRange = []; // [begin position, end _position]
-  let varticalRange = []; // [begin position, end _position]
+  let horizonalRange = []; // [begin position, end position]
+  let verticalRange = []; // [begin position, end position]
   let maxLogP = 0;
   let maxLogPInt;
   let total;
+
+  const getRangeLength = function (targetRange) {
+    return targetRange[1] - targetRange[0];
+  };
 
   // axis line
   axisGroup
@@ -362,22 +367,22 @@ async function draw(stanza, params) {
       if (horizonalDragBegin) {
         const horizonalDragEnd = d3.pointer(e)[0];
         // re-render
-        if (5 > horizonalDragEnd - horizonalDragBegin) {
+        if (horizonalDragBegin > horizonalDragEnd) {
           horizonalRange = [
             ((horizonalDragEnd - marginLeft) / areaWidth) *
-              (horizonalRange[1] - horizonalRange[0]) +
+              getRangeLength(horizonalRange) +
               horizonalRange[0],
             ((horizonalDragBegin - marginLeft) / areaWidth) *
-              (horizonalRange[1] - horizonalRange[0]) +
+              getRangeLength(horizonalRange) +
               horizonalRange[0],
           ];
-        } else if (horizonalDragEnd - horizonalDragBegin > 5) {
+        } else if (horizonalDragEnd > horizonalDragBegin) {
           horizonalRange = [
             ((horizonalDragBegin - marginLeft) / areaWidth) *
-              (horizonalRange[1] - horizonalRange[0]) +
+              getRangeLength(horizonalRange) +
               horizonalRange[0],
             ((horizonalDragEnd - marginLeft) / areaWidth) *
-              (horizonalRange[1] - horizonalRange[0]) +
+              getRangeLength(horizonalRange) +
               horizonalRange[0],
           ];
         }
@@ -389,27 +394,26 @@ async function draw(stanza, params) {
         const verticalDragEnd =
           d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
         // re-render
-        const rangeVerticalLength = varticalRange[1] - varticalRange[0];
-        if (0 > verticalDragEnd - verticalDragBegin) {
+        if (verticalDragBegin > verticalDragEnd) {
           const maxLog =
-            varticalRange[1] -
-            ((verticalDragEnd - paddingTop) / (areaHeight - paddingTop)) *
-              rangeVerticalLength;
+            verticalRange[1] -
+            ((verticalDragEnd - paddingTop) / drawAreaHeight) *
+              getRangeLength(verticalRange);
           const minLog =
-            varticalRange[1] -
-            ((verticalDragBegin - paddingTop) / (areaHeight - paddingTop)) *
-              rangeVerticalLength;
-          varticalRange = [minLog, maxLog];
+            verticalRange[1] -
+            ((verticalDragBegin - paddingTop) / drawAreaHeight) *
+              getRangeLength(verticalRange);
+          verticalRange = [minLog, maxLog];
         } else if (verticalDragEnd - verticalDragBegin > 0) {
           const maxLog =
-            varticalRange[1] -
-            ((verticalDragBegin - paddingTop) / (areaHeight - paddingTop)) *
-              rangeVerticalLength;
+            verticalRange[1] -
+            ((verticalDragBegin - paddingTop) / drawAreaHeight) *
+              getRangeLength(verticalRange);
           const minLog =
-            varticalRange[1] -
-            ((verticalDragEnd - paddingTop) / (areaHeight - paddingTop)) *
-              rangeVerticalLength;
-          varticalRange = [minLog, maxLog];
+            verticalRange[1] -
+            ((verticalDragEnd - paddingTop) / drawAreaHeight) *
+              getRangeLength(verticalRange);
+          verticalRange = [minLog, maxLog];
         }
         reRender();
         pagination.init();
@@ -420,13 +424,13 @@ async function draw(stanza, params) {
     });
 
   // slider
-  const ctrl_svg = d3
+  const ctrlSvg = d3
     .select(controlElement)
     .append("svg")
     .attr("id", "slider_container")
     .attr("width", width)
     .attr("height", 24);
-  ctrl_svg
+  ctrlSvg
     .append("text")
     .text("chr:")
     .attr("class", "info-key")
@@ -435,7 +439,7 @@ async function draw(stanza, params) {
     .attr("y", 16)
     .attr("width", 10)
     .attr("height", 23);
-  ctrl_svg
+  ctrlSvg
     .append("rect")
     .attr("x", marginLeft)
     .attr("y", 1)
@@ -444,7 +448,7 @@ async function draw(stanza, params) {
     .attr("fill", "#FFFFFF")
     .attr("stroke", "#99ACB2")
     .attr("stroke-width", "1px");
-  ctrl_svg
+  ctrlSvg
     .append("rect")
     .attr("id", "slider")
     .attr("x", marginLeft)
@@ -461,7 +465,7 @@ async function draw(stanza, params) {
         })
         .on("drag", function (e) {
           if (horizonalDragBegin) {
-            const slider = ctrl_svg.select("rect#slider");
+            const slider = ctrlSvg.select("rect#slider");
             let delta = e.x - horizonalDragBegin;
             if (parseFloat(slider.attr("x")) + delta < marginLeft) {
               delta = (parseFloat(slider.attr("x")) - marginLeft) * -1;
@@ -478,12 +482,10 @@ async function draw(stanza, params) {
             }
             slider.attr("transform", "translate(" + delta + ", 0)");
             const move = (delta / areaWidth) * total;
-            // renderCanvas([horizonalRange[0] + move, horizonalRange[1] + move]);
             canvas
               .style(
                 "left",
-                ((horizonalRange[0] + move) /
-                  (horizonalRange[0] - horizonalRange[1])) *
+                ((horizonalRange[0] + move) / getRangeLength(horizonalRange)) *
                   areaWidth +
                   "px"
               )
@@ -496,7 +498,7 @@ async function draw(stanza, params) {
         .on("end", function (e) {
           if (horizonalDragBegin) {
             // re-render
-            const slider = ctrl_svg.select("rect#slider");
+            const slider = ctrlSvg.select("rect#slider");
             let delta = e.x - horizonalDragBegin;
             if (parseFloat(slider.attr("x")) + delta < marginLeft) {
               delta = (parseFloat(slider.attr("x")) - marginLeft) * -1;
@@ -523,9 +525,9 @@ async function draw(stanza, params) {
         })
     );
 
-  const sliderlabel_g = ctrl_svg.append("g").attr("id", "sliderLabel");
+  const sliderlabelGroup = ctrlSvg.append("g").attr("id", "sliderLabel");
 
-  sliderlabel_g
+  sliderlabelGroup
     .selectAll(".slider-label")
     .data(chromosomes)
     .enter()
@@ -547,7 +549,7 @@ async function draw(stanza, params) {
     .attr("y", 18)
     .attr("fill", "#2F4D76");
 
-  sliderlabel_g
+  sliderlabelGroup
     .selectAll(".slider-ine")
     .data(chromosomes)
     .enter()
@@ -583,18 +585,17 @@ async function draw(stanza, params) {
     .attr("type", "button")
     .attr("value", "-")
     .on("click", function () {
-      let begin =
-        horizonalRange[0] - (horizonalRange[1] - horizonalRange[0]) / 2;
-      let end = horizonalRange[1] + (horizonalRange[1] - horizonalRange[0]) / 2;
+      let begin = horizonalRange[0] - getRangeLength(horizonalRange) / 2;
+      let end = horizonalRange[1] + getRangeLength(horizonalRange) / 2;
       if (begin < 0) {
         begin = 0;
-        end = (horizonalRange[1] - horizonalRange[0]) * 2;
+        end = getRangeLength(horizonalRange) * 2;
         if (end > total) {
           end = total;
         }
       } else if (end > total) {
         end = total;
-        begin = total - (horizonalRange[1] - horizonalRange[0]) * 2;
+        begin = total - getRangeLength(horizonalRange) * 2;
         if (begin < 0) {
           begin - 0;
         }
@@ -608,10 +609,8 @@ async function draw(stanza, params) {
     .attr("type", "button")
     .attr("value", "+")
     .on("click", function () {
-      const begin =
-        horizonalRange[0] + (horizonalRange[1] - horizonalRange[0]) / 4;
-      const end =
-        horizonalRange[1] - (horizonalRange[1] - horizonalRange[0]) / 4;
+      const begin = horizonalRange[0] + getRangeLength(horizonalRange) / 4;
+      const end = horizonalRange[1] - getRangeLength(horizonalRange) / 4;
       horizonalRange = [begin, end];
       reRender();
       pagination.init();
@@ -622,7 +621,7 @@ async function draw(stanza, params) {
     .attr("value", "reset")
     .on("click", function () {
       horizonalRange = [];
-      varticalRange = [];
+      verticalRange = [];
       reRender();
       pagination.init();
     });
@@ -670,18 +669,17 @@ async function draw(stanza, params) {
     }
 
     overThreshArray = [];
-
     const pValueArray = variants.map(
       (variant) => Math.log10(parseFloat(variant["p-value"])) * -1
     );
-    maxLogP = Math.max(...pValueArray);
 
+    maxLogP = Math.max(...pValueArray);
     if (maxLogPInt === undefined) {
       maxLogPInt = Math.floor(maxLogP);
     }
 
-    if (varticalRange[0] === undefined) {
-      varticalRange = [lowThresh, maxLogPInt];
+    if (verticalRange[0] === undefined) {
+      verticalRange = [lowThresh, maxLogPInt];
     }
 
     xLabelGroup.html("");
@@ -692,7 +690,7 @@ async function draw(stanza, params) {
       .selectAll(".plot")
       .data(variants)
       .enter()
-      // filter: display range
+      // filter: displayed range
       .filter(function (d) {
         if (!d.pos) {
           // calculate  accumulated position
@@ -709,8 +707,8 @@ async function draw(stanza, params) {
         return (
           horizonalRange[0] <= d.pos &&
           d.pos <= horizonalRange[1] &&
-          varticalRange[0] <= logValue &&
-          logValue <= varticalRange[1]
+          verticalRange[0] <= logValue &&
+          logValue <= verticalRange[1]
         );
       })
       .filter(function (d) {
@@ -732,9 +730,8 @@ async function draw(stanza, params) {
       .attr("cy", function (d) {
         const logValue = Math.log10(parseFloat(d[pValueKey])) * -1;
         return (
-          ((varticalRange[1] - logValue) /
-            (varticalRange[1] - varticalRange[0])) *
-            (areaHeight - paddingTop) +
+          ((verticalRange[1] - logValue) / getRangeLength(verticalRange)) *
+            drawAreaHeight +
           paddingTop
         );
       })
@@ -765,7 +762,7 @@ async function draw(stanza, params) {
       .on("mouseout", function () {
         tooltip.style("display", "none");
       });
-    renderCanvas(variants, horizonalRange);
+    renderCanvas(variants);
 
     // x axis label
     xLabelGroup
@@ -786,8 +783,7 @@ async function draw(stanza, params) {
           pos += chromosomeNtLength.hg38[ch];
         }
         return (
-          ((pos - horizonalRange[0]) /
-            (horizonalRange[1] - horizonalRange[0])) *
+          ((pos - horizonalRange[0]) / getRangeLength(horizonalRange)) *
             areaWidth +
           marginLeft
         );
@@ -808,14 +804,14 @@ async function draw(stanza, params) {
         ) {
           return (
             ((chromosomeStartPosition[d] - horizonalRange[0]) /
-              (horizonalRange[1] - horizonalRange[0])) *
+              getRangeLength(horizonalRange)) *
               areaWidth +
             marginLeft
           );
         } else {
           return (
             ((chromosomeStartPosition[d] - horizonalRange[0]) /
-              (horizonalRange[1] - horizonalRange[0])) *
+              getRangeLength(horizonalRange)) *
               areaWidth +
             marginLeft
           );
@@ -824,13 +820,12 @@ async function draw(stanza, params) {
       .attr("y", paddingTop)
       .attr("width", function (d) {
         return (
-          (chromosomeNtLength.hg38[d] /
-            (horizonalRange[1] - horizonalRange[0])) *
+          (chromosomeNtLength.hg38[d] / getRangeLength(horizonalRange)) *
           areaWidth
         );
       })
       .attr("opacity", "0.4")
-      .attr("height", areaHeight - paddingTop)
+      .attr("height", drawAreaHeight)
       .attr("fill", function (d) {
         if (d % 2 === 0 || d === "Y") {
           return "#EEEEEE";
@@ -848,19 +843,18 @@ async function draw(stanza, params) {
 
     const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
     for (
-      let i = Math.floor(varticalRange[0]) + 1;
-      i <= Math.ceil(varticalRange[1]);
+      let i = Math.floor(verticalRange[0]) + 1;
+      i <= Math.ceil(verticalRange[1]);
       i++
     ) {
       const y =
         areaHeight -
-        ((i - varticalRange[0]) / (varticalRange[1] - varticalRange[0])) *
-          (areaHeight - paddingTop);
+        ((i - verticalRange[0]) / getRangeLength(verticalRange)) *
+          drawAreaHeight;
       //Calucurate display of scale
-      const scaleNum = varticalRange[1] - varticalRange[0];
       const tickNum = 20; //Tick number to display (set by manual)
-      const tickInterval = Math.floor(scaleNum / tickNum);
-      if (varticalRange[1] - varticalRange[0] < tickNum) {
+      const tickInterval = Math.floor(getRangeLength(verticalRange) / tickNum);
+      if (getRangeLength(verticalRange) < tickNum) {
         yLabelGroup
           .append("text")
           .text(i)
@@ -875,7 +869,7 @@ async function draw(stanza, params) {
             "d",
             "M " + (marginLeft - 6) + ", " + y + " H " + marginLeft + " Z"
           );
-      } else if (scaleNum >= tickNum) {
+      } else if (getRangeLength(verticalRange) >= tickNum) {
         if (i % tickInterval === 0) {
           yLabelGroup
             .append("text")
@@ -907,7 +901,7 @@ async function draw(stanza, params) {
     // y zero (lowThresh)
     yLabelGroup
       .append("text")
-      .text(Math.floor(varticalRange[0]))
+      .text(Math.floor(verticalRange[0]))
       .attr("class", "axis-label y-label")
       .attr("x", marginLeft - 12)
       .attr("y", areaHeight)
@@ -921,13 +915,10 @@ async function draw(stanza, params) {
       );
 
     // slider
-    ctrl_svg
+    ctrlSvg
       .select("rect#slider")
       .attr("x", marginLeft + (horizonalRange[0] / total) * areaWidth)
-      .attr(
-        "width",
-        ((horizonalRange[1] - horizonalRange[0]) / total) * areaWidth
-      )
+      .attr("width", (getRangeLength(horizonalRange) / total) * areaWidth)
       .attr("transform", "translate(0, 0)");
 
     const totalOverThreshVariants = stanza.root.querySelector(
@@ -970,15 +961,15 @@ async function draw(stanza, params) {
     }
   }
 
-  function renderCanvas(variants, varticalRange) {
+  function renderCanvas(variants) {
     if (canvas.node().getContext) {
       canvas.attr(
         "width",
-        (total / (horizonalRange[1] - horizonalRange[0])) * areaWidth
+        (total / getRangeLength(horizonalRange)) * areaWidth
       );
       canvas.attr(
         "height",
-        (total / (varticalRange[1] - varticalRange[0])) * areaHeight
+        (total / getRangeLength(horizonalRange)) * areaHeight
       );
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
@@ -991,7 +982,7 @@ async function draw(stanza, params) {
           `--${stage}-color`
         );
         ctx.arc(
-          (d.pos / (horizonalRange[1] - horizonalRange[0])) * areaWidth,
+          (d.pos / getRangeLength(horizonalRange)) * areaWidth,
           areaHeight -
             ((Math.log10(parseFloat(d[pValueKey])) * -1 - lowThresh) *
               areaHeight) /
@@ -1004,9 +995,7 @@ async function draw(stanza, params) {
       }
       canvas.style(
         "left",
-        (horizonalRange[0] / (horizonalRange[0] - horizonalRange[1])) *
-          areaWidth +
-          "px"
+        (horizonalRange[0] / getRangeLength(horizonalRange)) * areaWidth + "px"
       );
     }
     canvas.style("display", "none");
