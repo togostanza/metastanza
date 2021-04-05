@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "./gwas.var2.json";
+import { pagination } from "./table.js";
 
 //when you put json url
 // console.log(params["data-url"]]);
@@ -19,7 +20,6 @@ const project = Object.values(dataset)[0][0];
 const projectName = Object.keys(project)[0];
 
 // stage data and stage names
-// const stages = Object.values(project)[0];
 const stageData = Object.values(project)[0];
 let stageNames = Object.keys(stageData);
 
@@ -78,9 +78,6 @@ export default async function manhattanPlot(stanza, params) {
   const secondConditionList = stanza.root.querySelector("#secondConditionList");
 
   let td, input, label;
-  // let input;
-  // let label;
-
   for (let i = 0; i < stageNames.length; i++) {
     td = document.createElement("td");
     input = document.createElement("input");
@@ -422,7 +419,7 @@ async function draw(stanza, params) {
           verticalRange = [minLog, maxLog];
         }
         reRender();
-        pagination.init();
+        pagination(stanza.root, params, overThreshArray);
         svg.select("#selector").remove();
         horizonalDragBegin = false;
         verticalDragBegin = false;
@@ -525,7 +522,7 @@ async function draw(stanza, params) {
               horizonalRange[1] + move,
             ];
             reRender();
-            pagination.init();
+            pagination(stanza.root, params, overThreshArray);
             horizonalDragBegin = false;
           }
         })
@@ -609,7 +606,7 @@ async function draw(stanza, params) {
       }
       horizonalRange = [begin, end];
       reRender();
-      pagination.init();
+      pagination(stanza.root, params, overThreshArray);
     });
   ctrlBtn
     .append("input")
@@ -621,7 +618,7 @@ async function draw(stanza, params) {
       const end = horizonalRange[1] - horizonalRangeLength / 4;
       horizonalRange = [begin, end];
       reRender();
-      pagination.init();
+      pagination(stanza.root, params, overThreshArray);
     });
   ctrlBtn
     .append("input")
@@ -631,7 +628,7 @@ async function draw(stanza, params) {
       horizonalRange = [];
       verticalRange = [];
       reRender();
-      pagination.init();
+      pagination(stanza.root, params, overThreshArray);
     });
   ctrlBtn
     .append("label")
@@ -647,7 +644,7 @@ async function draw(stanza, params) {
   threshold.addEventListener("input", function () {
     highThresh = parseFloat(threshold.value);
     reRender();
-    pagination.init();
+    pagination(stanza.root, params, overThreshArray);
   });
 
   reRender();
@@ -661,7 +658,7 @@ async function draw(stanza, params) {
       stageData[stageName].checked = stageBtn[i].checked;
       variants = getVariants();
       reRender();
-      pagination.init();
+      pagination(stanza.root, params, overThreshArray);
     });
   }
 
@@ -975,7 +972,6 @@ async function draw(stanza, params) {
       canvas.attr("height", (total / horizonalRangeLength) * areaHeight);
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
-      console.log("sliderShadowGroup", sliderShadowGroup);
 
       for (const d of variants) {
         const stage = d["stage"].replace(/\s/, "-").toLowerCase();
@@ -1019,124 +1015,5 @@ async function draw(stanza, params) {
     ctrlBtn.select("#range_text").html(text);
   }
 
-  function Pagination() {
-    const pageBtns = stanza.root.querySelectorAll(".page-btn");
-    const prevBtn = stanza.root.querySelector("#prevBtn");
-    const nextBtn = stanza.root.querySelector("#nextBtn");
-    const firstBtn = stanza.root.querySelector("#firstBtn");
-    const lastBtn = stanza.root.querySelector("#lastBtn");
-
-    let currentPage = 1;
-    const recordsPerPage = params["recordsPerPage"];
-    const totalPage = Math.ceil(overThreshArray.length / recordsPerPage);
-
-    this.init = function () {
-      updateTable(1);
-      addEventListeners();
-    };
-
-    function surroundingPages() {
-      let start, end;
-      if (currentPage <= 3) {
-        start = 1;
-        end = Math.min(start + 4, totalPage);
-      } else if (totalPage - currentPage <= 3) {
-        end = totalPage;
-        start = Math.max(end - 4, 1);
-      } else {
-        start = Math.max(currentPage - 2, 1);
-        end = Math.min(currentPage + 2, totalPage);
-      }
-      return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-    }
-
-    function addEventListeners() {
-      prevBtn.addEventListener("click", () => {
-        updateTable(currentPage - 1);
-      });
-      nextBtn.addEventListener("click", () => {
-        updateTable(currentPage + 1);
-      });
-      firstBtn.addEventListener("click", () => {
-        updateTable(1);
-      });
-      lastBtn.addEventListener("click", () => {
-        updateTable(totalPage);
-      });
-    }
-
-    function updateTable(page) {
-      currentPage = page;
-      const listingTable = stanza.root.querySelector("#listingTable");
-      listingTable.innerHTML = "";
-      const tableHeadArray = [
-        "gene_name",
-        "rsId",
-        "chr",
-        "pos",
-        "ref",
-        "alt",
-        "p-value",
-      ];
-
-      for (
-        let i = (page - 1) * recordsPerPage;
-        i < page * recordsPerPage && i < overThreshArray.length;
-        i++
-      ) {
-        const tr = document.createElement("tr");
-        for (let j = 0; j < tableHeadArray.length; j++) {
-          const td = document.createElement("td");
-          if (overThreshArray[i][`${tableHeadArray[j]}`]) {
-            if (tableHeadArray[j] === "gene_name") {
-              const displayedGeneName =
-                overThreshArray[i][`${tableHeadArray[j]}`];
-              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
-            } else {
-              td.innerText = overThreshArray[i][`${tableHeadArray[j]}`];
-            }
-          } else {
-            td.innerText = "";
-          }
-          tr.appendChild(td);
-        }
-        listingTable.appendChild(tr);
-      }
-      updatePagination();
-    }
-
-    function updatePagination() {
-      const pageNumber = stanza.root.querySelector("#pageNumber");
-      pageNumber.innerHTML = "";
-      const surroundingPage = surroundingPages();
-
-      for (const i of surroundingPage) {
-        const pageNumBtn = document.createElement("span");
-        pageNumBtn.innerText = i;
-        pageNumBtn.setAttribute("class", "page-btn");
-
-        if (i === currentPage) {
-          pageNumBtn.classList.add("current");
-        }
-
-        pageNumBtn.addEventListener("click", () => {
-          updateTable(i);
-        });
-        pageNumber.append(pageNumBtn);
-      }
-      pageBtns.forEach((pageBtns) => (pageBtns.style.display = "flex"));
-
-      if (currentPage === 1) {
-        firstBtn.style.display = "none";
-        prevBtn.style.display = "none";
-      }
-
-      if (currentPage === totalPage) {
-        nextBtn.style.display = "none";
-        lastBtn.style.display = "none";
-      }
-    }
-  }
-  const pagination = new Pagination();
-  pagination.init();
+  pagination(stanza.root, params, overThreshArray);
 }
