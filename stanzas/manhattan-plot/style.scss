@@ -79,21 +79,21 @@ path {
 }
 
 text {
-  &.axisLabel {
+  &.axis-label {
     font-size: 12px;
   }
 
-  &.xLabel {
+  &.x-label {
     text-anchor: middle;
     user-select: none;
   }
 
-  &.yLabel {
+  &.y-label {
     text-anchor: end;
     user-select: none;
   }
 
-  &.sliderLabel {
+  &.slider-label {
     text-anchor: middle;
     user-select: none;
   }

@@ -12,18 +12,18 @@ import data from "./gwas.var2.json";
 
 // study name(single per a json)
 const dataset = data.dataset;
-const study_name = Object.keys(dataset)[0];
+const studyName = Object.keys(dataset)[0];
 
 //project data and project names (single per a json)
 const project = Object.values(dataset)[0][0];
-const project_name = Object.keys(project)[0];
+const projectName = Object.keys(project)[0];
 
 // stage data and stage names
 const stages = Object.values(project);
-const stage_info = stages[0];
+const stageDatum = stages[0];
+let stageNames = Object.keys(stageDatum);
 
-let stage_names = Object.keys(stage_info);
-const fixed_order_stage_names = [
+const fixedStageNamesOrder = [
   "discovery",
   "replication",
   "combined",
@@ -31,8 +31,8 @@ const fixed_order_stage_names = [
   "not provided",
 ];
 
-stage_names = fixed_order_stage_names.filter((stage_name) => {
-  if (stage_info[stage_name]) {
+stageNames = fixedStageNamesOrder.filter((stageName) => {
+  if (stageDatum[stageName]) {
     return true;
   } else {
     return false;
@@ -40,37 +40,36 @@ stage_names = fixed_order_stage_names.filter((stage_name) => {
 });
 
 //add stage information to each plot
-for (let i = 0; i < stage_names.length; i++) {
-  for (let j = 0; j < stages[0][stage_names[i]].variants.length; j++) {
-    stages[0][stage_names[i]].variants[j].stage = stage_names[i];
+for (let i = 0; i < stageNames.length; i++) {
+  for (let j = 0; j < stages[0][stageNames[i]].variants.length; j++) {
+    stages[0][stageNames[i]].variants[j].stage = stageNames[i];
   }
 }
 
 //combine variants to display
-let total_variants = [];
-stage_names.forEach(
-  (stage) =>
-    (total_variants = total_variants.concat(stage_info[stage].variants))
+let totalVariants = [];
+stageNames.forEach(
+  (stage) => (totalVariants = totalVariants.concat(stageDatum[stage].variants))
 );
 
 // get stage information
 const getVariants = () => {
   let variantsArray = [];
-  stage_names.forEach((stage) => {
-    if (stage_info[stage].checked) {
-      variantsArray = variantsArray.concat(stage_info[stage].variants);
+  stageNames.forEach((stage) => {
+    if (stageDatum[stage].checked) {
+      variantsArray = variantsArray.concat(stageDatum[stage].variants);
     }
   });
   return variantsArray;
 };
-let variants = total_variants; //init
+let variants = totalVariants; //init
 
 export default async function manhattanPlot(stanza, params) {
   stanza.render({
     template: "stanza.html.hbs",
     parameters: {
-      study_name,
-      project_name,
+      studyName,
+      projectName,
     },
   });
 
@@ -83,37 +82,37 @@ export default async function manhattanPlot(stanza, params) {
   let input;
   let label;
 
-  for (let i = 0; i < stage_names.length; i++) {
+  for (let i = 0; i < stageNames.length; i++) {
     td = document.createElement("td");
     input = document.createElement("input");
     input.setAttribute("type", "checkbox");
     input.setAttribute("class", "stage-btn");
-    input.setAttribute("id", `${stage_names[i]}Btn`);
+    input.setAttribute("id", `${stageNames[i]}Btn`);
     input.setAttribute("name", "stage");
-    input.setAttribute("value", stage_names[i]);
+    input.setAttribute("value", stageNames[i]);
     input.setAttribute("checked", true);
-    input.setAttribute("data-stage", stage_names[i]);
+    input.setAttribute("data-stage", stageNames[i]);
     label = document.createElement("label");
-    label.textContent = stage_names[i];
-    label.setAttribute("for", `${stage_names[i]}Btn`);
-    label.setAttribute("data-stage", stage_names[i]);
+    label.textContent = stageNames[i];
+    label.setAttribute("for", `${stageNames[i]}Btn`);
+    label.setAttribute("data-stage", stageNames[i]);
     stageList.appendChild(td);
     td.appendChild(input);
     td.appendChild(label);
-    stage_info[stage_names[i]].checked = true;
+    stageDatum[stageNames[i]].checked = true;
   }
 
-  for (let i = 0; i < stage_names.length; i++) {
+  for (let i = 0; i < stageNames.length; i++) {
     td = document.createElement("td");
     td.setAttribute("class", "condition-key");
-    td.innerText = stage_info[stage_names[i]].condition1;
+    td.innerText = stageDatum[stageNames[i]].condition1;
     firstConditionList.appendChild(td);
   }
 
-  for (let i = 0; i < stage_names.length; i++) {
+  for (let i = 0; i < stageNames.length; i++) {
     td = document.createElement("td");
     td.setAttribute("class", "condition-key");
-    td.innerText = stage_info[stage_names[i]].condition2;
+    td.innerText = stageDatum[stageNames[i]].condition2;
     secondConditionList.appendChild(td);
   }
 
@@ -127,8 +126,8 @@ export default async function manhattanPlot(stanza, params) {
     const pval = variants[i]["p-value"];
     String(pval);
 
-    const physical_pos = variants[i]["stop"];
-    String(physical_pos);
+    const physicalPosition = variants[i]["stop"];
+    String(physicalPosition);
   }
 
   if (typeof variants === "object") {
@@ -151,35 +150,32 @@ async function draw(stanza, params) {
   const areaWidth = width - marginLeft;
   const areaHeight = height - marginBottom;
 
-  const chart_element = stanza.root.querySelector("#chart");
-  const control_element = stanza.root.querySelector("#control");
-  let over_thresh_array;
+  const chartElement = stanza.root.querySelector("#chart");
+  const controlElement = stanza.root.querySelector("#control");
+  let overThreshArray;
 
-  if (params.low_thresh === "") {
-    params.low_thresh = 4;
+  if (params.lowThresh === "") {
+    params.lowThresh = 4;
   }
-  if (params.high_thresh === "") {
-    params.high_thresh = Infinity;
+  if (params.highThresh === "") {
+    params.highThresh = Infinity;
   }
-  if (params.chromosome_key === "") {
-    params.chromosome_key = "chromosome";
+  if (params.chromosomeKey === "") {
+    params.chromosomeKey = "chr";
   }
-  if (params.position_key === "") {
-    params.position_key = "position";
+  if (params.positionKey === "") {
+    params.positionKey = "position";
   }
-  if (params.p_value_key === "") {
-    params.p_value__key = "p-value";
+  if (params.pValueKey === "") {
+    params.pValueKey = "p-value";
   }
-  // if (params.label_key === "") {
-  //   params.label_key = "label";
-  // }
-  const low_thresh = parseFloat(params.low_thresh);
-  let high_thresh = parseFloat(params.high_thresh);
 
-  const chromosome_key = params.chromosome_key;
-  const position_key = params.position_key;
-  const p_value_key = params.p_value_key;
-  // const label_key = params.label_key;
+  const lowThresh = parseFloat(params.lowThresh);
+  let highThresh = parseFloat(params.highThresh);
+
+  const chromosomeKey = params.chromosomeKey;
+  const positionKey = params.positionKey;
+  const pValueKey = params.pValueKey;
 
   const chromosomes = [
     "1",
@@ -236,6 +232,7 @@ async function draw(stanza, params) {
       Y: 57227415,
     },
   };
+
   const chromosomeSumLength = {};
   Object.keys(chromosomeNtLength).forEach((ref) => {
     chromosomeSumLength[ref] = Object.keys(chromosomeNtLength[ref]).reduce(
@@ -257,52 +254,52 @@ async function draw(stanza, params) {
     }
   }
 
-  const canvas_div = d3
-    .select(chart_element)
+  const canvasDiv = d3
+    .select(chartElement)
     .append("div")
     .style("width", areaWidth + "px")
     .style("overflow", "hidden")
     .style("position", "absolute")
     .style("left", marginLeft + "px");
-  const canvas = canvas_div
+  const canvas = canvasDiv
     .append("canvas")
     .attr("width", areaWidth)
     .attr("height", areaHeight)
     .style("position", "relative");
   const svg = d3
-    .select(chart_element)
+    .select(chartElement)
     .append("svg")
     .attr("width", width)
     .attr("height", height + 10);
-  const axis_g = svg.append("g").attr("id", "axis");
-  const slider_shadow_g = svg.append("g").attr("id", "slider_shadow");
-  const xlabel_g = svg.append("g").attr("id", "x_label");
-  const ylabel_g = svg.append("g").attr("id", "y_label");
-  const ytitle = svg.append("g").attr("id", "y_title");
-  const plot_g = svg.append("g").attr("id", "plot_group");
-  const threshline_g = svg.append("g").attr("id", "thresh_line");
+  const axisGroup = svg.append("g").attr("id", "axis");
+  const sliderShadowGroup = svg.append("g").attr("id", "slider_shadow");
+  const xLabelGroup = svg.append("g").attr("id", "x_label");
+  const yLabelGroup = svg.append("g").attr("id", "y_label");
+  const yTitle = svg.append("g").attr("id", "y_title");
+  const plotGroup = svg.append("g").attr("id", "plot_group");
+  const threshlineGroup = svg.append("g").attr("id", "thresh_line");
   const tooltip = d3
-    .select(chart_element)
+    .select(chartElement)
     .append("div")
     .attr("class", "tooltip");
 
-  let range = []; // [begin position, end _position]
-  let rangeVertical = []; // [begin position, end _position]
-  let max_log_p = 0;
-  let max_log_p_int;
+  let horizonalRange = []; // [begin position, end _position]
+  let varticalRange = []; // [begin position, end _position]
+  let maxLogP = 0;
+  let maxLogPInt;
   let total;
 
   // axis line
-  axis_g
+  axisGroup
     .append("path")
     .attr("d", "M " + marginLeft + ", " + areaHeight + " H " + width + " Z")
     .attr("class", "axis-line");
-  axis_g
+  axisGroup
     .append("path")
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
 
-  ytitle
+  yTitle
     .append("text")
     .text("-log₁₀(p-value)")
     .attr("class", "axis-title")
@@ -312,113 +309,119 @@ async function draw(stanza, params) {
     .attr("text-anchor", "middle");
 
   // select range by drag
-  let dragBegin = false;
-  let dragBeginVertical = false;
+  let horizonalDragBegin = false;
+  let verticalDragBegin = false;
 
   svg
     .on("mousedown", function (e) {
       if (d3.pointer(e)[1] <= areaHeight) {
-        dragBegin = d3.pointer(e)[0];
-        dragBeginVertical =
+        horizonalDragBegin = d3.pointer(e)[0];
+        verticalDragBegin =
           d3.pointer(e)[1] <= paddingTop ? paddingTop : d3.pointer(e)[1];
         svg
           .append("rect")
           .attr("fill", "rgba(128, 128, 128, 0.2)")
-          .attr("stroke", "black")
-          .attr("x", dragBegin)
-          .attr("y", dragBeginVertical)
+          .attr("stroke", "#000000")
+          .attr("x", horizonalDragBegin)
+          .attr("y", verticalDragBegin)
           .attr("width", 0)
           .attr("height", 0)
           .attr("id", "selector");
       }
     })
     .on("mousemove", function (e) {
-      if (dragBegin) {
-        const dragEnd = d3.pointer(e)[0];
-        if (dragBegin < dragEnd) {
-          svg.select("#selector").attr("width", dragEnd - dragBegin);
+      if (horizonalDragBegin) {
+        const horizonalDragEnd = d3.pointer(e)[0];
+        if (horizonalDragBegin < horizonalDragEnd) {
+          svg
+            .select("#selector")
+            .attr("width", horizonalDragEnd - horizonalDragBegin);
         } else {
           svg
             .select("#selector")
-            .attr("x", dragEnd)
-            .attr("width", dragBegin - dragEnd);
+            .attr("x", horizonalDragEnd)
+            .attr("width", horizonalDragBegin - horizonalDragEnd);
         }
       }
-      if (dragBeginVertical) {
-        const dragEndVertical =
+      if (verticalDragBegin) {
+        const verticalDragEnd =
           d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
-        if (dragBeginVertical < dragEndVertical) {
+        if (verticalDragBegin < verticalDragEnd) {
           svg
             .select("#selector")
-            .attr("height", dragEndVertical - dragBeginVertical);
+            .attr("height", verticalDragEnd - verticalDragBegin);
         } else {
           svg
             .select("#selector")
-            .attr("y", dragEndVertical)
-            .attr("height", dragBeginVertical - dragEndVertical);
+            .attr("y", verticalDragEnd)
+            .attr("height", verticalDragBegin - verticalDragEnd);
         }
       }
     })
     .on("mouseup", function (e) {
-      if (dragBegin) {
-        const dragEnd = d3.pointer(e)[0];
+      if (horizonalDragBegin) {
+        const horizonalDragEnd = d3.pointer(e)[0];
         // re-render
-        if (5 > dragEnd - dragBegin) {
-          range = [
-            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
-              range[0],
-            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
-              range[0],
+        if (5 > horizonalDragEnd - horizonalDragBegin) {
+          horizonalRange = [
+            ((horizonalDragEnd - marginLeft) / areaWidth) *
+              (horizonalRange[1] - horizonalRange[0]) +
+              horizonalRange[0],
+            ((horizonalDragBegin - marginLeft) / areaWidth) *
+              (horizonalRange[1] - horizonalRange[0]) +
+              horizonalRange[0],
           ];
-        } else if (dragEnd - dragBegin > 5) {
-          range = [
-            ((dragBegin - marginLeft) / areaWidth) * (range[1] - range[0]) +
-              range[0],
-            ((dragEnd - marginLeft) / areaWidth) * (range[1] - range[0]) +
-              range[0],
+        } else if (horizonalDragEnd - horizonalDragBegin > 5) {
+          horizonalRange = [
+            ((horizonalDragBegin - marginLeft) / areaWidth) *
+              (horizonalRange[1] - horizonalRange[0]) +
+              horizonalRange[0],
+            ((horizonalDragEnd - marginLeft) / areaWidth) *
+              (horizonalRange[1] - horizonalRange[0]) +
+              horizonalRange[0],
           ];
         }
         svg.select("#selector").remove();
         reRender();
-        dragBegin = false;
+        horizonalDragBegin = false;
       }
-      if (dragBeginVertical) {
-        const dragEndVertical =
+      if (verticalDragBegin) {
+        const verticalDragEnd =
           d3.pointer(e)[1] > areaHeight ? areaHeight : d3.pointer(e)[1];
         // re-render
-        const rangeVerticalLength = rangeVertical[1] - rangeVertical[0];
-        if (0 > dragEndVertical - dragBeginVertical) {
+        const rangeVerticalLength = varticalRange[1] - varticalRange[0];
+        if (0 > verticalDragEnd - verticalDragBegin) {
           const maxLog =
-            rangeVertical[1] -
-            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+            varticalRange[1] -
+            ((verticalDragEnd - paddingTop) / (areaHeight - paddingTop)) *
               rangeVerticalLength;
           const minLog =
-            rangeVertical[1] -
-            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+            varticalRange[1] -
+            ((verticalDragBegin - paddingTop) / (areaHeight - paddingTop)) *
               rangeVerticalLength;
-          rangeVertical = [minLog, maxLog];
-        } else if (dragEndVertical - dragBeginVertical > 0) {
+          varticalRange = [minLog, maxLog];
+        } else if (verticalDragEnd - verticalDragBegin > 0) {
           const maxLog =
-            rangeVertical[1] -
-            ((dragBeginVertical - paddingTop) / (areaHeight - paddingTop)) *
+            varticalRange[1] -
+            ((verticalDragBegin - paddingTop) / (areaHeight - paddingTop)) *
               rangeVerticalLength;
           const minLog =
-            rangeVertical[1] -
-            ((dragEndVertical - paddingTop) / (areaHeight - paddingTop)) *
+            varticalRange[1] -
+            ((verticalDragEnd - paddingTop) / (areaHeight - paddingTop)) *
               rangeVerticalLength;
-          rangeVertical = [minLog, maxLog];
+          varticalRange = [minLog, maxLog];
         }
         reRender();
         pagination.init();
         svg.select("#selector").remove();
-        dragBegin = false;
-        dragBeginVertical = false;
+        horizonalDragBegin = false;
+        verticalDragBegin = false;
       }
     });
 
   // slider
   const ctrl_svg = d3
-    .select(control_element)
+    .select(controlElement)
     .append("svg")
     .attr("id", "slider_container")
     .attr("width", width)
@@ -454,12 +457,12 @@ async function draw(stanza, params) {
       d3
         .drag()
         .on("start", function (e) {
-          dragBegin = e.x;
+          horizonalDragBegin = e.x;
         })
         .on("drag", function (e) {
-          if (dragBegin) {
+          if (horizonalDragBegin) {
             const slider = ctrl_svg.select("rect#slider");
-            let delta = e.x - dragBegin;
+            let delta = e.x - horizonalDragBegin;
             if (parseFloat(slider.attr("x")) + delta < marginLeft) {
               delta = (parseFloat(slider.attr("x")) - marginLeft) * -1;
             } else if (
@@ -475,23 +478,26 @@ async function draw(stanza, params) {
             }
             slider.attr("transform", "translate(" + delta + ", 0)");
             const move = (delta / areaWidth) * total;
-            // renderCanvas([range[0] + move, range[1] + move]);
+            // renderCanvas([horizonalRange[0] + move, horizonalRange[1] + move]);
             canvas
               .style(
                 "left",
-                ((range[0] + move) / (range[0] - range[1])) * areaWidth + "px"
+                ((horizonalRange[0] + move) /
+                  (horizonalRange[0] - horizonalRange[1])) *
+                  areaWidth +
+                  "px"
               )
               .style("display", "block");
-            setRange([range[0] + move, range[1] + move]);
-            plot_g.html("");
-            xlabel_g.html("");
+            setRange([horizonalRange[0] + move, horizonalRange[1] + move]);
+            plotGroup.html("");
+            xLabelGroup.html("");
           }
         })
         .on("end", function (e) {
-          if (dragBegin) {
+          if (horizonalDragBegin) {
             // re-render
             const slider = ctrl_svg.select("rect#slider");
-            let delta = e.x - dragBegin;
+            let delta = e.x - horizonalDragBegin;
             if (parseFloat(slider.attr("x")) + delta < marginLeft) {
               delta = (parseFloat(slider.attr("x")) - marginLeft) * -1;
             } else if (
@@ -506,10 +512,13 @@ async function draw(stanza, params) {
                   parseFloat(slider.attr("width")));
             }
             const move = (delta / areaWidth) * total;
-            range = [range[0] + move, range[1] + move];
+            horizonalRange = [
+              horizonalRange[0] + move,
+              horizonalRange[1] + move,
+            ];
             reRender();
             pagination.init();
-            dragBegin = false;
+            horizonalDragBegin = false;
           }
         })
     );
@@ -517,11 +526,11 @@ async function draw(stanza, params) {
   const sliderlabel_g = ctrl_svg.append("g").attr("id", "sliderLabel");
 
   sliderlabel_g
-    .selectAll(".sliderLabel")
+    .selectAll(".slider-label")
     .data(chromosomes)
     .enter()
     .append("text")
-    .attr("class", "axisLabel sliderLabel")
+    .attr("class", "axis-label slider-label")
     .text(function (d) {
       return d;
     })
@@ -539,7 +548,7 @@ async function draw(stanza, params) {
     .attr("fill", "#2F4D76");
 
   sliderlabel_g
-    .selectAll(".sliderLine")
+    .selectAll(".slider-ine")
     .data(chromosomes)
     .enter()
     .append("path")
@@ -558,63 +567,66 @@ async function draw(stanza, params) {
     });
 
   // button
-  const ctrl_button = d3
-    .select(control_element)
+  const ctrlBtn = d3
+    .select(controlElement)
     .append("div")
     .attr("id", "ctrl_button");
-  ctrl_button
+  ctrlBtn
     .append("span")
     .attr("class", "info-key")
     .text("Position:  ")
     .append("span")
     .attr("class", "range-text")
     .attr("id", "range_text");
-  ctrl_button
+  ctrlBtn
     .append("input")
     .attr("type", "button")
     .attr("value", "-")
     .on("click", function () {
-      let begin = range[0] - (range[1] - range[0]) / 2;
-      let end = range[1] + (range[1] - range[0]) / 2;
+      let begin =
+        horizonalRange[0] - (horizonalRange[1] - horizonalRange[0]) / 2;
+      let end = horizonalRange[1] + (horizonalRange[1] - horizonalRange[0]) / 2;
       if (begin < 0) {
         begin = 0;
-        end = (range[1] - range[0]) * 2;
+        end = (horizonalRange[1] - horizonalRange[0]) * 2;
         if (end > total) {
           end = total;
         }
       } else if (end > total) {
         end = total;
-        begin = total - (range[1] - range[0]) * 2;
+        begin = total - (horizonalRange[1] - horizonalRange[0]) * 2;
         if (begin < 0) {
           begin - 0;
         }
       }
-      range = [begin, end];
+      horizonalRange = [begin, end];
       reRender();
       pagination.init();
     });
-  ctrl_button
+  ctrlBtn
     .append("input")
     .attr("type", "button")
     .attr("value", "+")
     .on("click", function () {
-      const begin = range[0] + (range[1] - range[0]) / 4;
-      const end = range[1] - (range[1] - range[0]) / 4;
-      range = [begin, end];
+      const begin =
+        horizonalRange[0] + (horizonalRange[1] - horizonalRange[0]) / 4;
+      const end =
+        horizonalRange[1] - (horizonalRange[1] - horizonalRange[0]) / 4;
+      horizonalRange = [begin, end];
       reRender();
       pagination.init();
     });
-  ctrl_button
+  ctrlBtn
     .append("input")
     .attr("type", "button")
     .attr("value", "reset")
     .on("click", function () {
-      range = [];
-      rangeVertical = [];
+      horizonalRange = [];
+      varticalRange = [];
       reRender();
       pagination.init();
     });
-  ctrl_button
+  ctrlBtn
     .append("label")
     .attr("class", "info-key -threshold")
     .text("Threshold:  ")
@@ -626,7 +638,7 @@ async function draw(stanza, params) {
 
   const threshold = stanza.root.querySelector("#threshold");
   threshold.addEventListener("input", function () {
-    high_thresh = parseFloat(threshold.value);
+    highThresh = parseFloat(threshold.value);
     reRender();
     pagination.init();
   });
@@ -639,7 +651,7 @@ async function draw(stanza, params) {
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
       const stageName = e.path[0].getAttribute("data-stage");
-      stage_info[stageName].checked = stageBtn[i].checked;
+      stageDatum[stageName].checked = stageBtn[i].checked;
       variants = getVariants();
       reRender();
       pagination.init();
@@ -647,36 +659,36 @@ async function draw(stanza, params) {
   }
 
   function reRender() {
-    if (range[0] === undefined) {
-      range = [
+    if (horizonalRange[0] === undefined) {
+      horizonalRange = [
         0,
         Object.values(chromosomeNtLength.hg38).reduce(
           (sum, value) => sum + value
         ),
       ];
-      total = range[1];
+      total = horizonalRange[1];
     }
 
-    over_thresh_array = [];
+    overThreshArray = [];
 
-    const p_value_array = variants.map(
+    const pValueArray = variants.map(
       (variant) => Math.log10(parseFloat(variant["p-value"])) * -1
     );
-    max_log_p = Math.max(...p_value_array);
+    maxLogP = Math.max(...pValueArray);
 
-    if (max_log_p_int === undefined) {
-      max_log_p_int = Math.floor(max_log_p);
+    if (maxLogPInt === undefined) {
+      maxLogPInt = Math.floor(maxLogP);
     }
 
-    if (rangeVertical[0] === undefined) {
-      rangeVertical = [low_thresh, max_log_p_int];
+    if (varticalRange[0] === undefined) {
+      varticalRange = [lowThresh, maxLogPInt];
     }
 
-    xlabel_g.html("");
-    ylabel_g.html("");
-    plot_g.html("");
+    xLabelGroup.html("");
+    yLabelGroup.html("");
+    plotGroup.html("");
 
-    plot_g
+    plotGroup
       .selectAll(".plot")
       .data(variants)
       .enter()
@@ -686,23 +698,23 @@ async function draw(stanza, params) {
           // calculate  accumulated position
           let pos = 0;
           for (const ch of chromosomes) {
-            if (ch === d[chromosome_key]) {
+            if (ch === d[chromosomeKey]) {
               break;
             }
             pos += chromosomeNtLength.hg38[ch];
           }
-          d.pos = pos + parseInt(d[position_key]);
+          d.pos = pos + parseInt(d[positionKey]);
         }
-        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
+        const logValue = Math.log10(parseFloat(d[pValueKey])) * -1;
         return (
-          range[0] <= d.pos &&
-          d.pos <= range[1] &&
-          rangeVertical[0] <= logValue &&
-          logValue <= rangeVertical[1]
+          horizonalRange[0] <= d.pos &&
+          d.pos <= horizonalRange[1] &&
+          varticalRange[0] <= logValue &&
+          logValue <= varticalRange[1]
         );
       })
       .filter(function (d) {
-        return Math.log10(parseFloat(d[p_value_key])) * -1 > low_thresh;
+        return Math.log10(parseFloat(d[pValueKey])) * -1 > lowThresh;
       })
       .append("circle")
       .attr("fill", function (d) {
@@ -711,14 +723,17 @@ async function draw(stanza, params) {
       })
       .attr("cx", function (d) {
         return (
-          ((d.pos - range[0]) / (range[1] - range[0])) * areaWidth + marginLeft
+          ((d.pos - horizonalRange[0]) /
+            (horizonalRange[1] - horizonalRange[0])) *
+            areaWidth +
+          marginLeft
         );
       })
       .attr("cy", function (d) {
-        const logValue = Math.log10(parseFloat(d[p_value_key])) * -1;
+        const logValue = Math.log10(parseFloat(d[pValueKey])) * -1;
         return (
-          ((rangeVertical[1] - logValue) /
-            (rangeVertical[1] - rangeVertical[0])) *
+          ((varticalRange[1] - logValue) /
+            (varticalRange[1] - varticalRange[0])) *
             (areaHeight - paddingTop) +
           paddingTop
         );
@@ -726,10 +741,10 @@ async function draw(stanza, params) {
       .attr("r", 2)
       // filter: high p-value
       .filter(function (d) {
-        if (Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh) {
-          over_thresh_array.push(d);
+        if (Math.log10(parseFloat(d[pValueKey])) * -1 > highThresh) {
+          overThreshArray.push(d);
         }
-        return Math.log10(parseFloat(d[p_value_key])) * -1 > high_thresh;
+        return Math.log10(parseFloat(d[pValueKey])) * -1 > highThresh;
       })
       .classed("over-thresh-plot", true)
       .on("mouseover", function (e, d) {
@@ -750,15 +765,15 @@ async function draw(stanza, params) {
       .on("mouseout", function () {
         tooltip.style("display", "none");
       });
-    renderCanvas(variants, range);
+    renderCanvas(variants, horizonalRange);
 
     // x axis label
-    xlabel_g
-      .selectAll(".xLabel")
+    xLabelGroup
+      .selectAll(".x-label")
       .data(chromosomes)
       .enter()
       .append("text")
-      .attr("class", "axisLabel xLabel")
+      .attr("class", "axis-label x-label")
       .text(function (d) {
         return d;
       })
@@ -771,31 +786,36 @@ async function draw(stanza, params) {
           pos += chromosomeNtLength.hg38[ch];
         }
         return (
-          ((pos - range[0]) / (range[1] - range[0])) * areaWidth + marginLeft
+          ((pos - horizonalRange[0]) /
+            (horizonalRange[1] - horizonalRange[0])) *
+            areaWidth +
+          marginLeft
         );
       })
       .attr("y", areaHeight + 20);
 
     // chart background
-    xlabel_g
-      .selectAll(".xBackground")
+    xLabelGroup
+      .selectAll(".x-background")
       .data(chromosomes)
       .enter()
       .append("rect")
-      .attr("class", "axisLabel xBackground")
+      .attr("class", "axis-label x-background")
       .attr("x", function (d) {
         if (
-          chromosomeStartPosition[d] < range[0] &&
-          range[0] < chromosomeStartPosition[d + 1]
+          chromosomeStartPosition[d] < horizonalRange[0] &&
+          horizonalRange[0] < chromosomeStartPosition[d + 1]
         ) {
           return (
-            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
+            ((chromosomeStartPosition[d] - horizonalRange[0]) /
+              (horizonalRange[1] - horizonalRange[0])) *
               areaWidth +
             marginLeft
           );
         } else {
           return (
-            ((chromosomeStartPosition[d] - range[0]) / (range[1] - range[0])) *
+            ((chromosomeStartPosition[d] - horizonalRange[0]) /
+              (horizonalRange[1] - horizonalRange[0])) *
               areaWidth +
             marginLeft
           );
@@ -803,7 +823,11 @@ async function draw(stanza, params) {
       })
       .attr("y", paddingTop)
       .attr("width", function (d) {
-        return (chromosomeNtLength.hg38[d] / (range[1] - range[0])) * areaWidth;
+        return (
+          (chromosomeNtLength.hg38[d] /
+            (horizonalRange[1] - horizonalRange[0])) *
+          areaWidth
+        );
       })
       .attr("opacity", "0.4")
       .attr("height", areaHeight - paddingTop)
@@ -816,7 +840,7 @@ async function draw(stanza, params) {
       });
 
     // y axis label
-    ylabel_g
+    yLabelGroup
       .append("rect")
       .attr("fill", "#FFFFFF")
       .attr("width", marginLeft - 1)
@@ -824,27 +848,27 @@ async function draw(stanza, params) {
 
     const overThreshLine = stanza.root.querySelectorAll(".overthresh-line");
     for (
-      let i = Math.floor(rangeVertical[0]) + 1;
-      i <= Math.ceil(rangeVertical[1]);
+      let i = Math.floor(varticalRange[0]) + 1;
+      i <= Math.ceil(varticalRange[1]);
       i++
     ) {
       const y =
         areaHeight -
-        ((i - rangeVertical[0]) / (rangeVertical[1] - rangeVertical[0])) *
+        ((i - varticalRange[0]) / (varticalRange[1] - varticalRange[0])) *
           (areaHeight - paddingTop);
       //Calucurate display of scale
-      const scaleNum = rangeVertical[1] - rangeVertical[0];
+      const scaleNum = varticalRange[1] - varticalRange[0];
       const tickNum = 20; //Tick number to display (set by manual)
       const tickInterval = Math.floor(scaleNum / tickNum);
-      if (rangeVertical[1] - rangeVertical[0] < tickNum) {
-        ylabel_g
+      if (varticalRange[1] - varticalRange[0] < tickNum) {
+        yLabelGroup
           .append("text")
           .text(i)
-          .attr("class", "axisLabel yLabel")
+          .attr("class", "axis-label y-label")
           .attr("x", marginLeft - 12)
           .attr("y", y)
           .attr("text-anchor", "end");
-        ylabel_g
+        yLabelGroup
           .append("path")
           .attr("class", "axis-line")
           .attr(
@@ -853,14 +877,14 @@ async function draw(stanza, params) {
           );
       } else if (scaleNum >= tickNum) {
         if (i % tickInterval === 0) {
-          ylabel_g
+          yLabelGroup
             .append("text")
             .text(i)
-            .attr("class", "axisLabel yLabel")
+            .attr("class", "axis-label y-label")
             .attr("x", marginLeft - 12)
             .attr("y", y)
             .attr("text-anchor", "end");
-          ylabel_g
+          yLabelGroup
             .append("path")
             .attr("class", "axis-line")
             .attr(
@@ -869,8 +893,8 @@ async function draw(stanza, params) {
             );
         }
       }
-      if (i === high_thresh) {
-        threshline_g
+      if (i === highThresh) {
+        threshlineGroup
           .append("path")
           .attr("d", "M " + marginLeft + ", " + y + " H " + width + " Z")
           .attr("class", "overthresh-line");
@@ -880,15 +904,15 @@ async function draw(stanza, params) {
       overThreshLine[i].remove();
     }
 
-    // y zero (low_thresh)
-    ylabel_g
+    // y zero (lowThresh)
+    yLabelGroup
       .append("text")
-      .text(Math.floor(rangeVertical[0]))
-      .attr("class", "axisLabel yLabel")
+      .text(Math.floor(varticalRange[0]))
+      .attr("class", "axis-label y-label")
       .attr("x", marginLeft - 12)
       .attr("y", areaHeight)
       .attr("text-anchor", "end");
-    ylabel_g
+    yLabelGroup
       .append("path")
       .attr("class", "axis-line")
       .attr(
@@ -899,15 +923,18 @@ async function draw(stanza, params) {
     // slider
     ctrl_svg
       .select("rect#slider")
-      .attr("x", marginLeft + (range[0] / total) * areaWidth)
-      .attr("width", ((range[1] - range[0]) / total) * areaWidth)
+      .attr("x", marginLeft + (horizonalRange[0] / total) * areaWidth)
+      .attr(
+        "width",
+        ((horizonalRange[1] - horizonalRange[0]) / total) * areaWidth
+      )
       .attr("transform", "translate(0, 0)");
 
     const totalOverThreshVariants = stanza.root.querySelector(
       "#totalOverThreshVariants"
     );
-    totalOverThreshVariants.innerText = over_thresh_array.length;
-    setRange(range);
+    totalOverThreshVariants.innerText = overThreshArray.length;
+    setRange(horizonalRange);
 
     //slider shadow (Show only when chart is zoomed)
     const sliderShadow = stanza.root.querySelectorAll(".slider-shadow");
@@ -915,8 +942,11 @@ async function draw(stanza, params) {
       sliderShadow[i].remove();
     }
 
-    if (range[0] !== 0 && range[1] !== chromosomeSumLength.hg38) {
-      slider_shadow_g
+    if (
+      horizonalRange[0] !== 0 &&
+      horizonalRange[1] !== chromosomeSumLength.hg38
+    ) {
+      sliderShadowGroup
         .append("path")
         .attr("class", "slider-shadow")
         .attr("fill", "var(--slider-color)")
@@ -926,41 +956,46 @@ async function draw(stanza, params) {
           `
           M ${marginLeft} ${areaHeight}
           L ${width} ${areaHeight}
-          L ${(range[1] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
-            height + 10
-          }
-          L ${(range[0] / chromosomeSumLength.hg38) * areaWidth + marginLeft} ${
-            height + 10
-          }
+          L ${
+            (horizonalRange[1] / chromosomeSumLength.hg38) * areaWidth +
+            marginLeft
+          } ${height + 10}
+          L ${
+            (horizonalRange[0] / chromosomeSumLength.hg38) * areaWidth +
+            marginLeft
+          } ${height + 10}
           z
         `
         );
     }
   }
 
-  function renderCanvas(variants, rangeVertical) {
+  function renderCanvas(variants, varticalRange) {
     if (canvas.node().getContext) {
-      canvas.attr("width", (total / (range[1] - range[0])) * areaWidth);
+      canvas.attr(
+        "width",
+        (total / (horizonalRange[1] - horizonalRange[0])) * areaWidth
+      );
       canvas.attr(
         "height",
-        (total / (rangeVertical[1] - rangeVertical[0])) * areaHeight
+        (total / (varticalRange[1] - varticalRange[0])) * areaHeight
       );
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
-      console.log("slider_shadow_g", slider_shadow_g);
+      console.log("sliderShadowGroup", sliderShadowGroup);
 
       for (const d of variants) {
-        const stage = d["stage"].toLowerCase();
+        const stage = d["stage"].replace(/\s/, "-").toLowerCase();
         ctx.beginPath();
         ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
           `--${stage}-color`
         );
         ctx.arc(
-          (d.pos / (range[1] - range[0])) * areaWidth,
+          (d.pos / (horizonalRange[1] - horizonalRange[0])) * areaWidth,
           areaHeight -
-            ((Math.log10(parseFloat(d[p_value_key])) * -1 - low_thresh) *
+            ((Math.log10(parseFloat(d[pValueKey])) * -1 - lowThresh) *
               areaHeight) /
-              max_log_p_int,
+              maxLogPInt,
           2,
           0,
           Math.PI * 2
@@ -969,26 +1004,28 @@ async function draw(stanza, params) {
       }
       canvas.style(
         "left",
-        (range[0] / (range[0] - range[1])) * areaWidth + "px"
+        (horizonalRange[0] / (horizonalRange[0] - horizonalRange[1])) *
+          areaWidth +
+          "px"
       );
     }
     canvas.style("display", "none");
   }
 
-  function setRange(range) {
+  function setRange(horizonalRange) {
     let start = 0;
     let text = "";
     for (const ch of chromosomes) {
-      if (start + chromosomeNtLength.hg38[ch] >= range[0] && !text) {
-        text += " chr" + ch + ":" + Math.floor(range[0]);
+      if (start + chromosomeNtLength.hg38[ch] >= horizonalRange[0] && !text) {
+        text += " chr" + ch + ":" + Math.floor(horizonalRange[0]);
       }
-      if (start + chromosomeNtLength.hg38[ch] >= range[1]) {
-        text += " - chr" + ch + ":" + Math.floor(range[1] - start);
+      if (start + chromosomeNtLength.hg38[ch] >= horizonalRange[1]) {
+        text += " - chr" + ch + ":" + Math.floor(horizonalRange[1] - start);
         break;
       }
       start += chromosomeNtLength.hg38[ch];
     }
-    ctrl_button.select("#range_text").html(text);
+    ctrlBtn.select("#range_text").html(text);
   }
 
   function Pagination() {
@@ -998,9 +1035,9 @@ async function draw(stanza, params) {
     const firstBtn = stanza.root.querySelector("#firstBtn");
     const lastBtn = stanza.root.querySelector("#lastBtn");
 
-    let current_page = 1;
-    const records_per_page = params["records_per_page"];
-    const total_pages = Math.ceil(over_thresh_array.length / records_per_page);
+    let currentPage = 1;
+    const recordsPerPage = params["recordsPerPage"];
+    const totalPage = Math.ceil(overThreshArray.length / recordsPerPage);
 
     this.init = function () {
       updateTable(1);
@@ -1009,36 +1046,36 @@ async function draw(stanza, params) {
 
     const surroundingPages = function () {
       let start, end;
-      if (current_page <= 3) {
+      if (currentPage <= 3) {
         start = 1;
-        end = Math.min(start + 4, total_pages);
-      } else if (total_pages - current_page <= 3) {
-        end = total_pages;
+        end = Math.min(start + 4, totalPage);
+      } else if (totalPage - currentPage <= 3) {
+        end = totalPage;
         start = Math.max(end - 4, 1);
       } else {
-        start = Math.max(current_page - 2, 1);
-        end = Math.min(current_page + 2, total_pages);
+        start = Math.max(currentPage - 2, 1);
+        end = Math.min(currentPage + 2, totalPage);
       }
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
     };
 
     const addEventListeners = function () {
       prevBtn.addEventListener("click", () => {
-        updateTable(current_page - 1);
+        updateTable(currentPage - 1);
       });
       nextBtn.addEventListener("click", () => {
-        updateTable(current_page + 1);
+        updateTable(currentPage + 1);
       });
       firstBtn.addEventListener("click", () => {
         updateTable(1);
       });
       lastBtn.addEventListener("click", () => {
-        updateTable(total_pages);
+        updateTable(totalPage);
       });
     };
 
     const updateTable = function (page) {
-      current_page = page;
+      currentPage = page;
       const listingTable = stanza.root.querySelector("#listingTable");
       listingTable.innerHTML = "";
       const tableHeadArray = [
@@ -1052,20 +1089,20 @@ async function draw(stanza, params) {
       ];
 
       for (
-        let i = (page - 1) * records_per_page;
-        i < page * records_per_page && i < over_thresh_array.length;
+        let i = (page - 1) * recordsPerPage;
+        i < page * recordsPerPage && i < overThreshArray.length;
         i++
       ) {
         const tr = document.createElement("tr");
         for (let j = 0; j < tableHeadArray.length; j++) {
           const td = document.createElement("td");
-          if (over_thresh_array[i][`${tableHeadArray[j]}`]) {
+          if (overThreshArray[i][`${tableHeadArray[j]}`]) {
             if (tableHeadArray[j] === "gene_name") {
               const displayedGeneName =
-                over_thresh_array[i][`${tableHeadArray[j]}`];
-              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${over_thresh_array[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
+                overThreshArray[i][`${tableHeadArray[j]}`];
+              td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
             } else {
-              td.innerText = over_thresh_array[i][`${tableHeadArray[j]}`];
+              td.innerText = overThreshArray[i][`${tableHeadArray[j]}`];
             }
           } else {
             td.innerText = "";
@@ -1080,30 +1117,30 @@ async function draw(stanza, params) {
     const updatePagination = function () {
       const pageNumber = stanza.root.querySelector("#pageNumber");
       pageNumber.innerHTML = "";
-      const surrounding_pages = surroundingPages();
+      const surroundingPage = surroundingPages();
 
-      for (const i of surrounding_pages) {
-        const page_num = document.createElement("span");
-        page_num.innerText = i;
-        page_num.setAttribute("class", "page-btn");
+      for (const i of surroundingPage) {
+        const pageNumBtn = document.createElement("span");
+        pageNumBtn.innerText = i;
+        pageNumBtn.setAttribute("class", "page-btn");
 
-        if (i === current_page) {
-          page_num.classList.add("current");
+        if (i === currentPage) {
+          pageNumBtn.classList.add("current");
         }
 
-        page_num.addEventListener("click", () => {
+        pageNumBtn.addEventListener("click", () => {
           updateTable(i);
         });
-        pageNumber.append(page_num);
+        pageNumber.append(pageNumBtn);
       }
       pageBtns.forEach((pageBtns) => (pageBtns.style.display = "flex"));
 
-      if (current_page === 1) {
+      if (currentPage === 1) {
         firstBtn.style.display = "none";
         prevBtn.style.display = "none";
       }
 
-      if (current_page === total_pages) {
+      if (currentPage === totalPage) {
         nextBtn.style.display = "none";
         lastBtn.style.display = "none";
       }
