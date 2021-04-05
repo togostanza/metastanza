@@ -19,9 +19,9 @@ const project = Object.values(dataset)[0][0];
 const projectName = Object.keys(project)[0];
 
 // stage data and stage names
-const stages = Object.values(project);
-const stageDatum = stages[0];
-let stageNames = Object.keys(stageDatum);
+// const stages = Object.values(project)[0];
+const stageData = Object.values(project)[0];
+let stageNames = Object.keys(stageData);
 
 const fixedStageNamesOrder = [
   "discovery",
@@ -30,9 +30,8 @@ const fixedStageNamesOrder = [
   "meta analysis",
   "not provided",
 ];
-
 stageNames = fixedStageNamesOrder.filter((stageName) => {
-  if (stageDatum[stageName]) {
+  if (stageData[stageName]) {
     return true;
   } else {
     return false;
@@ -41,23 +40,23 @@ stageNames = fixedStageNamesOrder.filter((stageName) => {
 
 //add stage information to each plot
 for (let i = 0; i < stageNames.length; i++) {
-  for (let j = 0; j < stages[0][stageNames[i]].variants.length; j++) {
-    stages[0][stageNames[i]].variants[j].stage = stageNames[i];
+  for (let j = 0; j < stageData[stageNames[i]].variants.length; j++) {
+    stageData[stageNames[i]].variants[j].stage = stageNames[i];
   }
 }
 
 //combine variants to display
 let totalVariants = [];
 stageNames.forEach(
-  (stage) => (totalVariants = totalVariants.concat(stageDatum[stage].variants))
+  (stage) => (totalVariants = totalVariants.concat(stageData[stage].variants))
 );
 
 // get stage information
 const getVariants = () => {
   let variantsArray = [];
   stageNames.forEach((stage) => {
-    if (stageDatum[stage].checked) {
-      variantsArray = variantsArray.concat(stageDatum[stage].variants);
+    if (stageData[stage].checked) {
+      variantsArray = variantsArray.concat(stageData[stage].variants);
     }
   });
   return variantsArray;
@@ -78,9 +77,9 @@ export default async function manhattanPlot(stanza, params) {
   const firstConditionList = stanza.root.querySelector("#firstConditionList");
   const secondConditionList = stanza.root.querySelector("#secondConditionList");
 
-  let td;
-  let input;
-  let label;
+  let td, input, label;
+  // let input;
+  // let label;
 
   for (let i = 0; i < stageNames.length; i++) {
     td = document.createElement("td");
@@ -99,22 +98,27 @@ export default async function manhattanPlot(stanza, params) {
     stageList.appendChild(td);
     td.appendChild(input);
     td.appendChild(label);
-    stageDatum[stageNames[i]].checked = true;
+    stageData[stageNames[i]].checked = true;
   }
 
-  for (let i = 0; i < stageNames.length; i++) {
-    td = document.createElement("td");
-    td.setAttribute("class", "condition-key");
-    td.innerText = stageDatum[stageNames[i]].condition1;
-    firstConditionList.appendChild(td);
-  }
-
-  for (let i = 0; i < stageNames.length; i++) {
-    td = document.createElement("td");
-    td.setAttribute("class", "condition-key");
-    td.innerText = stageDatum[stageNames[i]].condition2;
-    secondConditionList.appendChild(td);
-  }
+  firstConditionList.insertAdjacentHTML(
+    "beforeend",
+    stageNames
+      .map(
+        (stage) =>
+          `<td class="condition-key">${stageData[stage].condition1}</td>`
+      )
+      .join("")
+  );
+  secondConditionList.insertAdjacentHTML(
+    "beforeend",
+    stageNames
+      .map(
+        (stage) =>
+          `<td class="condition-key">${stageData[stage].condition2}</td>`
+      )
+      .join("")
+  );
 
   // adjust datum
   for (let i = 0; i < variants.length; i++) {
@@ -364,25 +368,27 @@ async function draw(stanza, params) {
       }
     })
     .on("mouseup", function (e) {
+      const horizonalRangeLength = getRangeLength(horizonalRange);
+      const verticalRangeLength = getRangeLength(verticalRange);
       if (horizonalDragBegin) {
         const horizonalDragEnd = d3.pointer(e)[0];
         // re-render
         if (horizonalDragBegin > horizonalDragEnd) {
           horizonalRange = [
             ((horizonalDragEnd - marginLeft) / areaWidth) *
-              getRangeLength(horizonalRange) +
+              horizonalRangeLength +
               horizonalRange[0],
             ((horizonalDragBegin - marginLeft) / areaWidth) *
-              getRangeLength(horizonalRange) +
+              horizonalRangeLength +
               horizonalRange[0],
           ];
         } else if (horizonalDragEnd > horizonalDragBegin) {
           horizonalRange = [
             ((horizonalDragBegin - marginLeft) / areaWidth) *
-              getRangeLength(horizonalRange) +
+              horizonalRangeLength +
               horizonalRange[0],
             ((horizonalDragEnd - marginLeft) / areaWidth) *
-              getRangeLength(horizonalRange) +
+              horizonalRangeLength +
               horizonalRange[0],
           ];
         }
@@ -398,21 +404,21 @@ async function draw(stanza, params) {
           const maxLog =
             verticalRange[1] -
             ((verticalDragEnd - paddingTop) / drawAreaHeight) *
-              getRangeLength(verticalRange);
+              verticalRangeLength;
           const minLog =
             verticalRange[1] -
             ((verticalDragBegin - paddingTop) / drawAreaHeight) *
-              getRangeLength(verticalRange);
+              verticalRangeLength;
           verticalRange = [minLog, maxLog];
         } else if (verticalDragEnd - verticalDragBegin > 0) {
           const maxLog =
             verticalRange[1] -
             ((verticalDragBegin - paddingTop) / drawAreaHeight) *
-              getRangeLength(verticalRange);
+              verticalRangeLength;
           const minLog =
             verticalRange[1] -
             ((verticalDragEnd - paddingTop) / drawAreaHeight) *
-              getRangeLength(verticalRange);
+              verticalRangeLength;
           verticalRange = [minLog, maxLog];
         }
         reRender();
@@ -525,9 +531,9 @@ async function draw(stanza, params) {
         })
     );
 
-  const sliderlabelGroup = ctrlSvg.append("g").attr("id", "sliderLabel");
+  const sliderLabelGroup = ctrlSvg.append("g").attr("id", "sliderLabel");
 
-  sliderlabelGroup
+  sliderLabelGroup
     .selectAll(".slider-label")
     .data(chromosomes)
     .enter()
@@ -549,7 +555,7 @@ async function draw(stanza, params) {
     .attr("y", 18)
     .attr("fill", "#2F4D76");
 
-  sliderlabelGroup
+  sliderLabelGroup
     .selectAll(".slider-ine")
     .data(chromosomes)
     .enter()
@@ -585,17 +591,18 @@ async function draw(stanza, params) {
     .attr("type", "button")
     .attr("value", "-")
     .on("click", function () {
-      let begin = horizonalRange[0] - getRangeLength(horizonalRange) / 2;
-      let end = horizonalRange[1] + getRangeLength(horizonalRange) / 2;
+      const horizonalRangeLength = getRangeLength(horizonalRange);
+      let begin = horizonalRange[0] - horizonalRangeLength / 2;
+      let end = horizonalRange[1] + horizonalRangeLength / 2;
       if (begin < 0) {
         begin = 0;
-        end = getRangeLength(horizonalRange) * 2;
+        end = horizonalRangeLength * 2;
         if (end > total) {
           end = total;
         }
       } else if (end > total) {
         end = total;
-        begin = total - getRangeLength(horizonalRange) * 2;
+        begin = total - horizonalRangeLength * 2;
         if (begin < 0) {
           begin - 0;
         }
@@ -609,8 +616,9 @@ async function draw(stanza, params) {
     .attr("type", "button")
     .attr("value", "+")
     .on("click", function () {
-      const begin = horizonalRange[0] + getRangeLength(horizonalRange) / 4;
-      const end = horizonalRange[1] - getRangeLength(horizonalRange) / 4;
+      const horizonalRangeLength = getRangeLength(horizonalRange);
+      const begin = horizonalRange[0] + horizonalRangeLength / 4;
+      const end = horizonalRange[1] - horizonalRangeLength / 4;
       horizonalRange = [begin, end];
       reRender();
       pagination.init();
@@ -650,7 +658,7 @@ async function draw(stanza, params) {
   for (let i = 0; i < stageBtn.length; i++) {
     stageBtn[i].addEventListener("change", (e) => {
       const stageName = e.path[0].getAttribute("data-stage");
-      stageDatum[stageName].checked = stageBtn[i].checked;
+      stageData[stageName].checked = stageBtn[i].checked;
       variants = getVariants();
       reRender();
       pagination.init();
@@ -721,8 +729,7 @@ async function draw(stanza, params) {
       })
       .attr("cx", function (d) {
         return (
-          ((d.pos - horizonalRange[0]) /
-            (horizonalRange[1] - horizonalRange[0])) *
+          ((d.pos - horizonalRange[0]) / getRangeLength(horizonalRange)) *
             areaWidth +
           marginLeft
         );
@@ -962,15 +969,10 @@ async function draw(stanza, params) {
   }
 
   function renderCanvas(variants) {
+    const horizonalRangeLength = getRangeLength(horizonalRange);
     if (canvas.node().getContext) {
-      canvas.attr(
-        "width",
-        (total / getRangeLength(horizonalRange)) * areaWidth
-      );
-      canvas.attr(
-        "height",
-        (total / getRangeLength(horizonalRange)) * areaHeight
-      );
+      canvas.attr("width", (total / horizonalRangeLength) * areaWidth);
+      canvas.attr("height", (total / horizonalRangeLength) * areaHeight);
       const ctx = canvas.node().getContext("2d");
       ctx.clearRect(0, 0, areaWidth, areaHeight);
       console.log("sliderShadowGroup", sliderShadowGroup);
@@ -982,7 +984,7 @@ async function draw(stanza, params) {
           `--${stage}-color`
         );
         ctx.arc(
-          (d.pos / getRangeLength(horizonalRange)) * areaWidth,
+          (d.pos / horizonalRangeLength) * areaWidth,
           areaHeight -
             ((Math.log10(parseFloat(d[pValueKey])) * -1 - lowThresh) *
               areaHeight) /
@@ -995,7 +997,7 @@ async function draw(stanza, params) {
       }
       canvas.style(
         "left",
-        (horizonalRange[0] / getRangeLength(horizonalRange)) * areaWidth + "px"
+        (horizonalRange[0] / horizonalRangeLength) * areaWidth + "px"
       );
     }
     canvas.style("display", "none");
@@ -1033,7 +1035,7 @@ async function draw(stanza, params) {
       addEventListeners();
     };
 
-    const surroundingPages = function () {
+    function surroundingPages() {
       let start, end;
       if (currentPage <= 3) {
         start = 1;
@@ -1046,9 +1048,9 @@ async function draw(stanza, params) {
         end = Math.min(currentPage + 2, totalPage);
       }
       return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-    };
+    }
 
-    const addEventListeners = function () {
+    function addEventListeners() {
       prevBtn.addEventListener("click", () => {
         updateTable(currentPage - 1);
       });
@@ -1061,9 +1063,9 @@ async function draw(stanza, params) {
       lastBtn.addEventListener("click", () => {
         updateTable(totalPage);
       });
-    };
+    }
 
-    const updateTable = function (page) {
+    function updateTable(page) {
       currentPage = page;
       const listingTable = stanza.root.querySelector("#listingTable");
       listingTable.innerHTML = "";
@@ -1101,9 +1103,9 @@ async function draw(stanza, params) {
         listingTable.appendChild(tr);
       }
       updatePagination();
-    };
+    }
 
-    const updatePagination = function () {
+    function updatePagination() {
       const pageNumber = stanza.root.querySelector("#pageNumber");
       pageNumber.innerHTML = "";
       const surroundingPage = surroundingPages();
@@ -1133,7 +1135,7 @@ async function draw(stanza, params) {
         nextBtn.style.display = "none";
         lastBtn.style.display = "none";
       }
-    };
+    }
   }
   const pagination = new Pagination();
   pagination.init();
