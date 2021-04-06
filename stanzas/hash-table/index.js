@@ -18,10 +18,11 @@ export default async function hashTable(stanza, params) {
       ? datum_label.charAt(0).toUpperCase() +
         datum_label.substring(1).replace(/_/g, " ")
       : datum_label;
-
+    const href = column.link ? dataset[column.link] : null;
     return {
       label,
       value: dataset[column.id],
+      href,
     };
   });
   stanza.render({
