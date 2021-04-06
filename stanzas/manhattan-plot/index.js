@@ -722,7 +722,7 @@ async function draw(stanza, params) {
       .append("circle")
       .attr("fill", function (d) {
         const stage = d["stage"].replace(/\s/, "-");
-        return `var(--${stage}-color)`;
+        return `var(--togostanza-${stage}-color)`;
       })
       .attr("cx", function (d) {
         return (

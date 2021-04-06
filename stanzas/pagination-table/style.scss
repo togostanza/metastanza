@@ -129,13 +129,13 @@
       box-shadow: var(--togostanza-table-shadow);
       > thead {
         background-color: var(--togostanza-thead-background-color);
-        font-size: var(--togostanza-thead-font-size);
         color: var(--togostanza-thead-font-color);
         margin-bottom: 0;
         border-bottom: var(--togostanza-thead-border-bottom);
         > tr {
           > th {
             color: var(--togostanza-thead-font-color);
+            font-size: var(--togostanza-thead-font-size);
             font-weight: var(--togostanza-thead-font-weight);
             padding: 10px;
             white-space: nowrap;
@@ -314,9 +314,6 @@
         }
       }
       > tbody {
-        font-size: var(--togostanza-tbody-font-size);
-        color: var(--togostanza-tbody-font-color);
-        font-weight: var(--togostanza-tbody-font-weight);
         > tr {
           &:nth-child(odd) {
             background-color: var(--togostanza-tbody-odd-background-color);
@@ -333,6 +330,16 @@
             }
             &:last-child {
               padding-right: 20px;
+            }
+            > span {
+              font-size: var(--togostanza-tbody-font-size);
+              color: var(--togostanza-tbody-font-color);
+              font-weight: var(--togostanza-tbody-font-weight);
+              > a {
+                font-size: inherit;
+                color: inherit;
+                font-weight: inherit;
+              }
             }
           }
           &:last-of-type {
