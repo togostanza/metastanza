@@ -20,10 +20,11 @@ async function hashTable(stanza, params) {
       ? datum_label.charAt(0).toUpperCase() +
         datum_label.substring(1).replace(/_/g, " ")
       : datum_label;
-
+    const href = column.link ? dataset[column.link] : null;
     return {
       label,
       value: dataset[column.id],
+      href,
     };
   });
   stanza.render({
@@ -104,7 +105,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\": \"title\"}, {\"id\": \"dataset_id\", \"label\": \"Dataset ID\"},{\"id\": \"description\"}, {\"id\": \"species\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
+		"stanza:example": "[{\"id\": \"title\"}, {\"id\": \"dataset_uri\", \"label\": \"Dataset ID\", \"link\": \"dataset_uri\"},{\"id\": \"description\"}, {\"id\": \"species\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
 		"stanza:description": "Columns' options"
 	},
 	{
@@ -209,7 +210,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"1":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
@@ -217,10 +218,34 @@ var templates = [
     };
 
   return "    <dl>\n      <dt>\n        "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0))
-    + "\n      </dt>\n      <dd>\n        "
-    + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "\n      </dd>\n    </dl>\n";
+    + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"label") : stack1), depth0))
+    + "\n      </dt>\n      <dd>\n"
+    + ((stack1 = lookupProperty(helpers,"if").call(depth0 != null ? depth0 : (container.nullContext || {}),((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"href") : stack1),{"name":"if","hash":{},"fn":container.program(2, data, 0, blockParams),"inverse":container.program(4, data, 0, blockParams),"data":data,"blockParams":blockParams,"loc":{"start":{"line":8,"column":8},"end":{"line":14,"column":15}}})) != null ? stack1 : "")
+    + "      </dd>\n    </dl>\n";
+},"2":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, alias1=container.lambda, alias2=container.escapeExpression, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "          <a href=\""
+    + alias2(alias1(((stack1 = blockParams[1][0]) != null ? lookupProperty(stack1,"href") : stack1), depth0))
+    + "\" target=\"_blank\">\n            "
+    + alias2(alias1(((stack1 = blockParams[1][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
+    + "\n          </a>\n";
+},"4":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "          "
+    + container.escapeExpression(container.lambda(((stack1 = blockParams[1][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
+    + "\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -230,7 +255,7 @@ var templates = [
     };
 
   return "<div class=\"container\">\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"values") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":11,"column":11}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"values") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":17,"column":11}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
