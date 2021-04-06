@@ -60,18 +60,18 @@ path.background-fill {
   stroke: red;
 }
 
-text.axisLabel {
+text.axis-label {
   font-size: 12px;
 }
-text.xLabel {
+text.x-label {
   text-anchor: middle;
   user-select: none;
 }
-text.yLabel {
+text.y-label {
   text-anchor: end;
   user-select: none;
 }
-text.sliderLabel {
+text.slider-label {
   text-anchor: middle;
   user-select: none;
 }
@@ -270,10 +270,10 @@ div#dl_list ul li.hover {
 .chart-section table tbody tr td input:checked + label[data-stage=combined] {
   background-color: var(--combined-color);
 }
-.chart-section table tbody tr td input:checked + label[data-stage=meta-analysis] {
+.chart-section table tbody tr td input:checked + label[data-stage="meta analysis"] {
   background-color: var(--meta-analysis-color);
 }
-.chart-section table tbody tr td input:checked + label[data-stage=not-provided] {
+.chart-section table tbody tr td input:checked + label[data-stage="not provided"] {
   background-color: var(--not-provided-color);
 }
 
