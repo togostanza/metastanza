@@ -9131,7 +9131,7 @@ async function draw(stanza, params) {
     .attr("y", 1)
     .attr("width", areaWidth)
     .attr("height", 22)
-    .attr("fill", "var(--slider-color)")
+    .attr("fill", "var(--togostanza-slider-color)")
     .attr("stroke", "#99ACB2")
     .call(
       drag()
@@ -9612,7 +9612,7 @@ async function draw(stanza, params) {
       sliderShadowGroup
         .append("path")
         .attr("class", "slider-shadow")
-        .attr("fill", "var(--slider-color)")
+        .attr("fill", "var(--togostanza-slider-color)")
         .attr("opacity", "0.4")
         .attr(
           "d",
@@ -9645,7 +9645,7 @@ async function draw(stanza, params) {
         const stage = d["stage"].replace(/\s/, "-").toLowerCase();
         ctx.beginPath();
         ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-          `--${stage}-color`
+          `--togostanza-${stage}-color`
         );
         ctx.arc(
           (d.pos / horizonalRangeLength) * areaWidth,
@@ -9755,85 +9755,85 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Arial",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--discovery-color",
+		"stanza:key": "--togostanza-discovery-color",
 		"stanza:type": "color",
 		"stanza:default": "#3D6589",
 		"stanza:description": "Plot color of discovery stage"
 	},
 	{
-		"stanza:key": "--replication-color",
+		"stanza:key": "--togostanza-replication-color",
 		"stanza:type": "color",
 		"stanza:default": "#ED707E",
 		"stanza:description": "Plot color of replication stage"
 	},
 	{
-		"stanza:key": "--combined-color",
+		"stanza:key": "--togostanza-combined-color",
 		"stanza:type": "color",
 		"stanza:default": "#EAB64E",
 		"stanza:description": "Plot color of combined stage"
 	},
 	{
-		"stanza:key": "--meta-analysis-color",
+		"stanza:key": "--togostanza-meta-analysis-color",
 		"stanza:type": "color",
 		"stanza:default": "#52B1C1",
 		"stanza:description": "Plot color of meta-analysis stage"
 	},
 	{
-		"stanza:key": "--not-provided-color",
+		"stanza:key": "--togostanza-not-provided-color",
 		"stanza:type": "color",
 		"stanza:default": "#62B28C",
 		"stanza:description": "Plot color of not-provided stage"
 	},
 	{
-		"stanza:key": "--slider-color",
+		"stanza:key": "--togostanza-slider-color",
 		"stanza:type": "color",
 		"stanza:default": "#C2E3F2",
 		"stanza:description": "Slider color"
 	},
 	{
-		"stanza:key": "--thead-font-size",
+		"stanza:key": "--togostanza-thead-font-size",
 		"stanza:type": "text",
 		"stanza:default": "14px",
 		"stanza:description": "Font size of table header"
 	},
 	{
-		"stanza:key": "--tbody-font-size",
+		"stanza:key": "--togostanza-tbody-font-size",
 		"stanza:type": "text",
 		"stanza:default": "14px",
 		"stanza:description": "Font size of table body"
 	},
 	{
-		"stanza:key": "--thead-font-color",
+		"stanza:key": "--togostanza-thead-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#002559",
 		"stanza:description": "Font color of table header"
 	},
 	{
-		"stanza:key": "--thead-font-weight",
+		"stanza:key": "--togostanza-thead-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "600",
 		"stanza:description": "Font weight of table header"
 	},
 	{
-		"stanza:key": "--thead-background-color",
+		"stanza:key": "--togostanza-thead-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#C2E3F2",
 		"stanza:description": "Background color of table header"
 	},
 	{
-		"stanza:key": "--tbody-even-background-color",
+		"stanza:key": "--togostanza-tbody-even-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#F2F5F7",
 		"stanza:description": "Background color of table body (even row)"
 	},
 	{
-		"stanza:key": "--tbody-odd-background-color",
+		"stanza:key": "--togostanza-tbody-odd-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#E6EBEF",
 		"stanza:description": "Background color of table body (odd row)"

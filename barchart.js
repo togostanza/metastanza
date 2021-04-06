@@ -71,27 +71,27 @@ async function barchart(stanza, params) {
     {
       scale: "xscale",
       orient: params["xaxis-placement"],
-      domainColor: "var(--axis-color)",
-      domainWidth: css("--axis-width"),
+      domainColor: "var(--togostanza-axis-color)",
+      domainWidth: css("--togostanza-axis-width"),
       grid: params["xgrid"] === "true",
-      gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash-length"),
-      gridOpacity: css("--grid-opacity"),
-      gridWidth: css("--grid-width"),
+      gridColor: "var(--togostanza-grid-color)",
+      gridDash: css("--togostanza-grid-dash-length"),
+      gridOpacity: css("--togostanza-grid-opacity"),
+      gridWidth: css("--togostanza-grid-width"),
       ticks: params["xtick"] === "true",
-      tickColor: "var(--tick-color)",
-      tickSize: css("--tick-length"),
-      tickWidth: css("--tick-width"),
+      tickColor: "var(--togostanza-tick-color)",
+      tickSize: css("--togostanza-tick-length"),
+      tickWidth: css("--togostanza-tick-width"),
       title: getTitle(
         params["category-title"],
         labelVariable,
         params["value-title"],
         valueVariable
       ),
-      titleColor: "var(--title-font-color)",
-      titleFont: css("--font-family"),
-      titleFontSize: css("--title-font-size"),
-      titleFontWeight: css("--title-font-weight"),
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["xtitle-padding"],
       labelPadding: params["xlabel-padding"],
       encode: {
@@ -99,9 +99,9 @@ async function barchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["xlabel-angle"] },
-            fill: { value: "var(--label-font-color)" },
-            font: { value: css("--font-family") },
-            fontSize: { value: css("--label-font-size") },
+            fill: { value: "var(--togostanza-label-font-color)" },
+            font: { value: css("--togostanza-font-family") },
+            fontSize: { value: css("--togostanza-label-font-size") },
           },
         },
       },
@@ -109,27 +109,27 @@ async function barchart(stanza, params) {
     {
       scale: "yscale",
       orient: params["yaxis-placement"],
-      domainColor: "var(--axis-color)",
-      domainWidth: css("--axis-width"),
+      domainColor: "var(--togostanza-axis-color)",
+      domainWidth: css("--togostanza-axis-width"),
       grid: params["ygrid"] === "true",
-      gridColor: "var(--grid-color)",
-      gridDash: css("--grid-dash-length"),
-      gridOpacity: css("--grid-opacity"),
-      gridWidth: css("--grid-width"),
+      gridColor: "var(--togostanza-grid-color)",
+      gridDash: css("--togostanza-grid-dash-length"),
+      gridOpacity: css("--togostanza-grid-opacity"),
+      gridWidth: css("--togostanza-grid-width"),
       ticks: params["ytick"] === "true",
-      tickColor: "var(--tick-color)",
-      tickSize: css("--tick-length"),
-      tickWidth: css("--tick-width"),
+      tickColor: "var(--togostanza-tick-color)",
+      tickSize: css("--togostanza-tick-length"),
+      tickWidth: css("--togostanza-tick-width"),
       title: getTitle(
         params["value-title"],
         valueVariable,
         params["category-title"],
         labelVariable
       ),
-      titleColor: "var(--title-font-color)",
-      titleFont: css("--font-family"),
-      titleFontSize: css("--title-font-size"),
-      titleFontWeight: css("--title-font-weight"),
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["ytitle-padding"],
       labelPadding: params["ylabel-padding"],
       zindex: 0,
@@ -138,11 +138,11 @@ async function barchart(stanza, params) {
           interactive: true,
           update: {
             angle: { value: params["ylabel-angle"] },
-            fill: { value: "var(--label-font-color)" },
+            fill: { value: "var(--togostanza-label-font-color)" },
             font: {
-              value: css("--font-family"),
+              value: css("--togostanza-font-family"),
             },
-            fontSize: { value: css("--label-font-size") },
+            fontSize: { value: css("--togostanza-label-font-size") },
             // limit: 1
           },
         },
@@ -163,15 +163,15 @@ async function barchart(stanza, params) {
         params["legend-title"],
         groupVariable
       ),
-      titleColor: "var(--title-font-color)",
-      titleFont: css("--font-family"),
-      titleFontSize: css("--title-font-size"),
-      titleFontWeight: css("--title-font-weight"),
-      labelColor: "var(--label-font-color)",
-      labelFont: css("--font-family"),
-      labelFontSize: css("--label-font-size"),
-      symbolStrokeColor: css("--border-color"),
-      symbolStrokeWidth: css("--border-width"),
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
+      labelColor: "var(--togostanza-label-font-color)",
+      labelFont: css("--togostanza-font-family"),
+      labelFontSize: css("--togostanza-label-font-size"),
+      symbolStrokeColor: css("--togostanza-border-color"),
+      symbolStrokeWidth: css("--togostanza-border-width"),
     },
   ];
 
@@ -180,12 +180,12 @@ async function barchart(stanza, params) {
     type: "ordinal",
     domain: { data: "table", field: groupVariable },
     range: [
-      "var(--series-0-color)",
-      "var(--series-1-color)",
-      "var(--series-2-color)",
-      "var(--series-3-color)",
-      "var(--series-4-color)",
-      "var(--series-5-color)",
+      "var(--togostanza-series-0-color)",
+      "var(--togostanza-series-1-color)",
+      "var(--togostanza-series-2-color)",
+      "var(--togostanza-series-3-color)",
+      "var(--togostanza-series-4-color)",
+      "var(--togostanza-series-5-color)",
     ],
   };
 
@@ -272,8 +272,8 @@ async function barchart(stanza, params) {
                     x: { scale: "xscale", field: valueVariable },
                     x2: { scale: "xscale", value: 0 },
                     fill: { scale: "color", field: groupVariable },
-                    stroke: { value: "var(--border-color)" },
-                    strokeWidth: { value: css("--border-width") },
+                    stroke: { value: "var(--togostanza-border-color)" },
+                    strokeWidth: { value: css("--togostanza-border-width") },
                   },
                 },
               },
@@ -292,8 +292,8 @@ async function barchart(stanza, params) {
                 y: { scale: "yscale", field: "y0" },
                 y2: { scale: "yscale", field: "y1" },
                 fill: { scale: "color", field: groupVariable },
-                stroke: { value: "var(--border-color)" },
-                strokeWidth: { value: css("--border-width") },
+                stroke: { value: "var(--togostanza-border-color)" },
+                strokeWidth: { value: css("--togostanza-border-width") },
               },
             },
           },
@@ -596,148 +596,142 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--series-0-color",
+		"stanza:key": "--togostanza-series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Group color 0"
 	},
 	{
-		"stanza:key": "--series-1-color",
+		"stanza:key": "--togostanza-series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
 		"stanza:description": "Group color 1"
 	},
 	{
-		"stanza:key": "--series-2-color",
+		"stanza:key": "--togostanza-series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
 		"stanza:description": "Group color 2"
 	},
 	{
-		"stanza:key": "--series-3-color",
+		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#F5DA64",
 		"stanza:description": "Group color 3"
 	},
 	{
-		"stanza:key": "--series-4-color",
+		"stanza:key": "--togostanza-series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#F57F5B",
 		"stanza:description": "Group color 4"
 	},
 	{
-		"stanza:key": "--series-5-color",
+		"stanza:key": "--togostanza-series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#F75976",
 		"stanza:description": "Group color 5"
 	},
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--axis-color",
+		"stanza:key": "--togostanza-axis-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Axis color"
 	},
 	{
-		"stanza:key": "--axis-width",
+		"stanza:key": "--togostanza-axis-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "Axis width"
 	},
 	{
-		"stanza:key": "--grid-color",
+		"stanza:key": "--togostanza-grid-color",
 		"stanza:type": "color",
 		"stanza:default": "#aeb3bf",
 		"stanza:description": "Grid color"
 	},
 	{
-		"stanza:key": "--grid-dash-length",
+		"stanza:key": "--togostanza-grid-dash-length",
 		"stanza:type": "number",
 		"stanza:default": "",
 		"stanza:description": "Grid dash length (Blank for solid lines)"
 	},
 	{
-		"stanza:key": "--grid-opacity",
+		"stanza:key": "--togostanza-grid-opacity",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Grid opacity (0-1)"
 	},
 	{
-		"stanza:key": "--grid-width",
+		"stanza:key": "--togostanza-grid-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "Grid width"
 	},
 	{
-		"stanza:key": "--tick-color",
+		"stanza:key": "--togostanza-tick-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Tick color"
 	},
 	{
-		"stanza:key": "--tick-length",
+		"stanza:key": "--togostanza-tick-length",
 		"stanza:type": "number",
 		"stanza:default": "1.5",
 		"stanza:description": "Tick length (in pixel)"
 	},
 	{
-		"stanza:key": "--tick-width",
+		"stanza:key": "--togostanza-tick-width",
 		"stanza:type": "number",
 		"stanza:default": "1",
 		"stanza:description": "Tick width (in pixel)"
 	},
 	{
-		"stanza:key": "--title-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#4E5059",
-		"stanza:description": "Title font color"
-	},
-	{
-		"stanza:key": "--title-font-size",
-		"stanza:type": "number",
-		"stanza:default": "12",
-		"stanza:description": "Title font size"
-	},
-	{
-		"stanza:key": "--title-font-weight",
-		"stanza:type": "number",
-		"stanza:default": "400",
-		"stanza:description": "Title font weight"
-	},
-	{
-		"stanza:key": "--title-padding",
-		"stanza:type": "number",
-		"stanza:default": "10",
-		"stanza:description": "Padding between label and title"
-	},
-	{
-		"stanza:key": "--label-font-color",
+		"stanza:key": "--togostanza-label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Label font color"
 	},
 	{
-		"stanza:key": "--label-font-size",
+		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "Label font size"
 	},
 	{
-		"stanza:key": "--border-color",
+		"stanza:key": "--togostanza-border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{
-		"stanza:key": "--border-width",
+		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
+	},
+	{
+		"stanza:key": "--togostanza-title-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Title font color"
+	},
+	{
+		"stanza:key": "--togostanza-title-font-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "Title font size"
+	},
+	{
+		"stanza:key": "--togostanza-title-font-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "Title font weight"
 	}
 ]
 };

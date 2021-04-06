@@ -187,115 +187,115 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--series-0-color",
+      "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Plot color"
     },
     {
-      "stanza:key": "--font-family",
+      "stanza:key": "--togostanza-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--axis-color",
+      "stanza:key": "--togostanza-axis-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Axis color"
     },
     {
-      "stanza:key": "--axis-width",
+      "stanza:key": "--togostanza-axis-width",
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description": "Axis width"
     },
     {
-      "stanza:key": "--grid-color",
+      "stanza:key": "--togostanza-grid-color",
       "stanza:type": "color",
       "stanza:default": "#aeb3bf",
       "stanza:description": "Grid color"
     },
     {
-      "stanza:key": "--grid-dash-length",
+      "stanza:key": "--togostanza-grid-dash-length",
       "stanza:type": "number",
       "stanza:default": "",
       "stanza:description": "Grid dash length (Blank for solid lines)"
     },
     {
-      "stanza:key": "--grid-opacity",
+      "stanza:key": "--togostanza-grid-opacity",
       "stanza:type": "number",
       "stanza:default": "0.5",
       "stanza:description": "Grid opacity (0-1)"
     },
     {
-      "stanza:key": "--grid-width",
+      "stanza:key": "--togostanza-grid-width",
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description": "Grid width"
     },
     {
-      "stanza:key": "--tick-color",
+      "stanza:key": "--togostanza-tick-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Tick color"
     },
     {
-      "stanza:key": "--tick-length",
+      "stanza:key": "--togostanza-tick-length",
       "stanza:type": "number",
       "stanza:default": "1.5",
       "stanza:description": "Tick length (in pixel)"
     },
     {
-      "stanza:key": "--tick-width",
+      "stanza:key": "--togostanza-tick-width",
       "stanza:type": "number",
       "stanza:default": "1",
       "stanza:description": "Tick width (in pixel)"
     },
     {
-      "stanza:key": "--title-font-color",
+      "stanza:key": "--togostanza-title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Title font color"
     },
     {
-      "stanza:key": "--title-font-size",
+      "stanza:key": "--togostanza-title-font-size",
       "stanza:type": "number",
       "stanza:default": "12",
       "stanza:description": "Title font size"
     },
     {
-      "stanza:key": "--title-font-weight",
+      "stanza:key": "--togostanza-title-font-weight",
       "stanza:type": "number",
       "stanza:default": "400",
       "stanza:description": "Title font weight"
     },
     {
-      "stanza:key": "--label-font-color",
+      "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Label font color"
     },
     {
-      "stanza:key": "--label-font-size",
+      "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
       "stanza:default": "10",
       "stanza:description": "Label font size"
     },
     {
-      "stanza:key": "--border-color",
+      "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Border color"
     },
     {
-      "stanza:key": "--border-width",
+      "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
       "stanza:default": "0.5",
       "stanza:description": "Border width"
     },
     {
-      "stanza:key": "--opacity",
+      "stanza:key": "--togostanza-opacity",
       "stanza:type": "text",
       "stanza:default": "0.7",
       "stanza:description": "Plot opacity"

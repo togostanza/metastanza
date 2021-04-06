@@ -1,5 +1,5 @@
 * {
-  font-family: var(--font-family);
+  font-family: var(--togostanza-font-family);
   box-sizing: border-box;
 }
 
@@ -7,7 +7,7 @@
   display: flex;
 }
 .menu a {
-  color: var(--text-font-color);
+  color: var(--togostanza-text-font-color);
 }
 
 table {
@@ -15,7 +15,7 @@ table {
 }
 table tbody tr td {
   word-break: break-all;
-  color: var(--text-font-color);
-  font-size: var(--text-font-size);
-  font-weight: var(--text-font-weight);
+  color: var(--togostanza-text-font-color);
+  font-size: var(--togostanza-text-font-size);
+  font-weight: var(--togostanza-text-font-weight);
 }

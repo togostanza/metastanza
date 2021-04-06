@@ -35,10 +35,10 @@ svg#dl_button .hover {
 div#dl_list {
   width: fit-content;
   position: absolute;
-  border: solid 1px var(--label-font-color);
+  border: solid 1px var(--togostanza-label-font-color);
   background-color: #ffffff;
   font-size: 12px;
-  font-family: var(--font-family);
+  font-family: var(--togostanza-font-family);
 }
 div#dl_list.dl-top-left {
   top: 40px;

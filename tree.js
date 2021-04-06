@@ -64,12 +64,12 @@ async function tree(stanza, params) {
       name: "color",
       type: "ordinal",
       range: [
-        "var(--series-0-color)",
-        "var(--series-1-color)",
-        "var(--series-2-color)",
-        "var(--series-3-color)",
-        "var(--series-4-color)",
-        "var(--series-5-color)",
+        "var(--togostanza-series-0-color)",
+        "var(--togostanza-series-1-color)",
+        "var(--togostanza-series-2-color)",
+        "var(--togostanza-series-3-color)",
+        "var(--togostanza-series-4-color)",
+        "var(--togostanza-series-5-color)",
       ],
       domain: { data: "tree", field: "depth" },
       zero: true,
@@ -84,7 +84,7 @@ async function tree(stanza, params) {
       encode: {
         update: {
           path: { field: "path" },
-          stroke: { value: "var(--edge-color)" },
+          stroke: { value: "var(--togostanza-edge-color)" },
         },
       },
     },
@@ -94,7 +94,7 @@ async function tree(stanza, params) {
       encode: {
         enter: {
           size: {
-            value: css("--node-size"),
+            value: css("--togostanza-node-size"),
           },
           stroke: { value: "var(--stroke-color)" },
         },
@@ -102,8 +102,8 @@ async function tree(stanza, params) {
           x: { field: "x" },
           y: { field: "y" },
           fill: { scale: "color", field: "depth" },
-          stroke: { value: "var(--border-color)" },
-          strokeWidth: { value: css("--border-width") },
+          stroke: { value: "var(--togostanza-border-color)" },
+          strokeWidth: { value: css("--togostanza-border-width") },
         },
       },
     },
@@ -115,8 +115,8 @@ async function tree(stanza, params) {
           text: {
             field: params["label"] === "" ? params["node"] : labelVariable,
           },
-          font: { value: css("--font-family") },
-          fontSize: { value: css("--label-font-size") },
+          font: { value: css("--togostanza-font-family") },
+          fontSize: { value: css("--togostanza-label-font-size") },
           baseline: { value: "middle" },
         },
         update: {
@@ -125,7 +125,7 @@ async function tree(stanza, params) {
           dx: { signal: "datum.children ? -7 : 7" },
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
-          fill: { value: "var(--label-font-color)" },
+          fill: { value: "var(--togostanza-label-font-color)" },
         },
       },
     },
@@ -282,79 +282,79 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--series-0-color",
+		"stanza:key": "--togostanza-series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590E6",
 		"stanza:description": "Depth color 1"
 	},
 	{
-		"stanza:key": "--series-1-color",
+		"stanza:key": "--togostanza-series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3AC9B6",
 		"stanza:description": "Depth color 2"
 	},
 	{
-		"stanza:key": "--series-2-color",
+		"stanza:key": "--togostanza-series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9EDE2F",
 		"stanza:description": "Depth color 3"
 	},
 	{
-		"stanza:key": "--series-3-color",
+		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#F5DA64",
 		"stanza:description": "Depth color 4"
 	},
 	{
-		"stanza:key": "--series-4-color",
+		"stanza:key": "--togostanza-series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#F57F5B",
 		"stanza:description": "Depth color 5"
 	},
 	{
-		"stanza:key": "--series-5-color",
+		"stanza:key": "--togostanza-series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#F75976",
 		"stanza:description": "Depth color 6"
 	},
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--node-size",
+		"stanza:key": "--togostanza-node-size",
 		"stanza:type": "number",
 		"stanza:default": "100",
 		"stanza:description": "Node size"
 	},
 	{
-		"stanza:key": "--label-font-color",
+		"stanza:key": "--togostanza-label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
 		"stanza:description": "Label font color"
 	},
 	{
-		"stanza:key": "--label-font-size",
+		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "11",
 		"stanza:description": "Label font size"
 	},
 	{
-		"stanza:key": "--border-color",
+		"stanza:key": "--togostanza-border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{
-		"stanza:key": "--border-width",
+		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
 	},
 	{
-		"stanza:key": "--edge-color",
+		"stanza:key": "--togostanza-edge-color",
 		"stanza:type": "color",
 		"stanza:default": "#AEB3BF",
 		"stanza:description": "Edge color"

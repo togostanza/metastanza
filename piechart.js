@@ -47,12 +47,12 @@ async function piechart(stanza, params) {
       type: "ordinal",
       domain: { data: "table", field: labelVariable },
       range: [
-        "var(--series-0-color)",
-        "var(--series-1-color)",
-        "var(--series-2-color)",
-        "var(--series-3-color)",
-        "var(--series-4-color)",
-        "var(--series-5-color)",
+        "var(--togostanza-series-0-color)",
+        "var(--togostanza-series-1-color)",
+        "var(--togostanza-series-2-color)",
+        "var(--togostanza-series-3-color)",
+        "var(--togostanza-series-4-color)",
+        "var(--togostanza-series-5-color)",
       ],
     },
   ];
@@ -66,16 +66,16 @@ async function piechart(stanza, params) {
       legendY: "5",
       title:
         params["legend-title"] === "" ? labelVariable : params["legend-title"],
-      titleColor: "var(--title-font-color)",
-      titleFont: css("--font-family"),
-      titleFontSize: css("--title-font-size"),
-      titleFontWeight: css("--title-font-weight"),
-      labelColor: "var(--label-font-color)",
-      labelFont: css("--font-family"),
-      labelFontSize: css("--label-font-size"),
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
+      labelColor: "var(--togostanza-label-font-color)",
+      labelFont: css("--togostanza-font-family"),
+      labelFontSize: css("--togostanza-label-font-size"),
       symbolType: params["symbol-shape"],
-      symbolStrokeColor: css("--border-color"),
-      symbolStrokeWidth: css("--border-width"),
+      symbolStrokeColor: css("--togostanza-border-color"),
+      symbolStrokeWidth: css("--togostanza-border-width"),
     },
   ];
 
@@ -98,8 +98,8 @@ async function piechart(stanza, params) {
           outerRadius: { signal: "width / 2" },
           cornerRadius: { signal: "cornerRadius" },
           fill: { scale: "color", field: labelVariable },
-          stroke: { value: "var(--border-color)" },
-          strokeWidth: { value: "var(--border-width)" },
+          stroke: { value: "var(--togostanza-border-color)" },
+          strokeWidth: { value: "var(--togostanza-border-width)" },
         },
       },
     },
@@ -263,85 +263,85 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--series-0-color",
+		"stanza:key": "--togostanza-series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Category color 0"
 	},
 	{
-		"stanza:key": "--series-1-color",
+		"stanza:key": "--togostanza-series-1-color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
 		"stanza:description": "Category color 1"
 	},
 	{
-		"stanza:key": "--series-2-color",
+		"stanza:key": "--togostanza-series-2-color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
 		"stanza:description": "Category color 2"
 	},
 	{
-		"stanza:key": "--series-3-color",
+		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
 		"stanza:default": "#F5DA64",
 		"stanza:description": "Category color 3"
 	},
 	{
-		"stanza:key": "--series-4-color",
+		"stanza:key": "--togostanza-series-4-color",
 		"stanza:type": "color",
 		"stanza:default": "#F57F5B",
 		"stanza:description": "Category color 4"
 	},
 	{
-		"stanza:key": "--series-5-color",
+		"stanza:key": "--togostanza-series-5-color",
 		"stanza:type": "color",
 		"stanza:default": "#F75976",
 		"stanza:description": "Category color 5"
 	},
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--title-font-color",
+		"stanza:key": "--togostanza-title-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Title font color"
 	},
 	{
-		"stanza:key": "--title-font-size",
+		"stanza:key": "--togostanza-title-font-size",
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "Font size of the legend title"
 	},
 	{
-		"stanza:key": "--title-font-weight",
+		"stanza:key": "--togostanza-title-font-weight",
 		"stanza:type": "number",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of legend title"
 	},
 	{
-		"stanza:key": "--label-font-color",
+		"stanza:key": "--togostanza-label-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
 		"stanza:description": "Label font color"
 	},
 	{
-		"stanza:key": "--label-font-size",
+		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10",
 		"stanza:description": "Label font size"
 	},
 	{
-		"stanza:key": "--border-color",
+		"stanza:key": "--togostanza-border-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Border color"
 	},
 	{
-		"stanza:key": "--border-width",
+		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"

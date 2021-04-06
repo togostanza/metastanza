@@ -133,25 +133,25 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--text-font-color",
+		"stanza:key": "--togostanza-text-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Font color"
 	},
 	{
-		"stanza:key": "--text-font-size",
+		"stanza:key": "--togostanza-text-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
 		"stanza:description": "Font size"
 	},
 	{
-		"stanza:key": "--text-font-weight",
+		"stanza:key": "--togostanza-text-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight"

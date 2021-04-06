@@ -41,14 +41,15 @@ async function scorecard(stanza, params) {
   }
 
   key.setAttribute("x", `${width / 2}px`);
-  key.setAttribute("y", Number(css("--key-font-size")));
+  key.setAttribute("y", Number(css("--togostanza-key-font-size")));
   value.setAttribute("x", `${width / 2}px`);
   value.setAttribute(
     "y",
-    Number(css("--key-font-size")) + Number(css("--value-font-size"))
+    Number(css("--togostanza-key-font-size")) +
+      Number(css("--togostanza-value-font-size"))
   );
-  key.setAttribute("font-size", css("--key-font-size"));
-  value.setAttribute("font-size", css("--value-font-size"));
+  key.setAttribute("font-size", css("--togostanza-key-font-size"));
+  value.setAttribute("font-size", css("--togostanza-value-font-size"));
 
   //menu button placement
   appendDlButton(
@@ -171,49 +172,49 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--series-0-color",
+		"stanza:key": "--togostanza-series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Key color"
 	},
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--key-font-color",
+		"stanza:key": "--togostanza-key-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Font color for key"
 	},
 	{
-		"stanza:key": "--key-font-size",
+		"stanza:key": "--togostanza-key-font-size",
 		"stanza:type": "text",
 		"stanza:default": "16",
 		"stanza:description": "Font size for key"
 	},
 	{
-		"stanza:key": "--key-font-weight",
+		"stanza:key": "--togostanza-key-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight for key"
 	},
 	{
-		"stanza:key": "--value-font-color",
+		"stanza:key": "--togostanza-value-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Font color for value"
 	},
 	{
-		"stanza:key": "--value-font-size",
+		"stanza:key": "--togostanza-value-font-size",
 		"stanza:type": "text",
 		"stanza:default": "36",
 		"stanza:description": "Font size for value"
 	},
 	{
-		"stanza:key": "--value-font-weight",
+		"stanza:key": "--togostanza-value-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "600",
 		"stanza:description": "Font weight for value"
@@ -230,9 +231,9 @@ var templates = [
         return undefined
     };
 
-  return "    <svg class=\"scorecard-svg\">\n      <text\n        id=\"scorecardKey\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--key-font-color)\"\n        font-weight=\"var(--key-font-weight)\"\n      >\n        "
+  return "    <svg class=\"scorecard-svg\">\n      <text\n        id=\"scorecardKey\"\n        text-anchor=\"middle\"\n        font-family=\"var(--togostanza-font-family)\"\n        fill=\"var(--togostanza-key-font-color)\"\n        font-weight=\"var(--togostanza-key-font-weight)\"\n      >\n        "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
-    + "\n      </text>\n      <text\n        id=\"scorecardValue\"\n        text-anchor=\"middle\"\n        font-family=\"var(--font-family)\"\n        fill=\"var(--value-font-color)\"\n        font-weight=\"var(--value-font-weight)\"\n      >\n        "
+    + "\n      </text>\n      <text\n        id=\"scorecardValue\"\n        text-anchor=\"middle\"\n        font-family=\"var(--togostanza-font-family)\"\n        fill=\"var(--togostanza-value-font-color)\"\n        font-weight=\"var(--togostanza-value-font-weight)\"\n      >\n        "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
     + "\n      </text>\n    </svg>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {

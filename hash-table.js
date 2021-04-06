@@ -128,19 +128,19 @@ var metadata = {
 		"stanza:description": "Column's count"
 	},
 	{
-		"stanza:key": "--font-family",
+		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--table-border",
+		"stanza:key": "--togostanza-table-border",
 		"stanza:type": "text",
 		"stanza:default": "1px solid #eee",
 		"stanza:description": "Table border"
 	},
 	{
-		"stanza:key": "--table-shadow",
+		"stanza:key": "--togostanza-table-shadow",
 		"stanza:type": "text",
 		"stanza:default": "1px 1px 3px 1px #eee",
 		"stanza:description": "Table shadow"
@@ -152,7 +152,7 @@ var metadata = {
 		"stanza:description": "Background color of table"
 	},
 	{
-		"stanza:key": "--tbody-border-bottom",
+		"stanza:key": "--togostanza-tbody-border-bottom",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
 		"stanza:description": "Border bottom of table body"
@@ -170,37 +170,37 @@ var metadata = {
 		"stanza:description": "Percentage of key width"
 	},
 	{
-		"stanza:key": "--key-font-color",
+		"stanza:key": "--togostanza-key-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#256D80",
 		"stanza:description": "Font color of key"
 	},
 	{
-		"stanza:key": "--key-font-size",
+		"stanza:key": "--togostanza-key-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
 		"stanza:description": "Font size of key"
 	},
 	{
-		"stanza:key": "--key-font-weight",
+		"stanza:key": "--togostanza-key-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of key"
 	},
 	{
-		"stanza:key": "--value-font-color",
+		"stanza:key": "--togostanza-value-font-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
 		"stanza:description": "Font color of value"
 	},
 	{
-		"stanza:key": "--value-font-size",
+		"stanza:key": "--togostanza-value-font-size",
 		"stanza:type": "text",
 		"stanza:default": "12px",
 		"stanza:description": "Font size of value"
 	},
 	{
-		"stanza:key": "--value-font-weight",
+		"stanza:key": "--togostanza-value-font-weight",
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of value"

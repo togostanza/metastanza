@@ -1,7 +1,7 @@
 @charset "UTF-8";
 * {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--togostanza-font-family);
 }
 
 main {
@@ -82,19 +82,19 @@ text.axis-title {
 }
 
 circle.discovery {
-  fill: var(--discovery-color);
+  fill: var(--togostanza-discovery-color);
 }
 circle.replication {
-  fill: var(--replication-color);
+  fill: var(--togostanza-replication-color);
 }
 circle.combined {
-  fill: var(--combined-color);
+  fill: var(--togostanza-combined-color);
 }
 circle.meta-analysis {
-  fill: var(--meta-analysis-color);
+  fill: var(--togostanza-meta-analysis-color);
 }
 circle.not-provided {
-  fill: var(--not-provided-color);
+  fill: var(--togostanza-not-provided-color);
 }
 circle.over-thresh-plot {
   cursor: default;
@@ -262,19 +262,19 @@ div#dl_list ul li.hover {
   content: "+ ";
 }
 .chart-section table tbody tr td input:checked + label[data-stage=discovery] {
-  background-color: var(--discovery-color);
+  background-color: var(--togostanza-discovery-color);
 }
 .chart-section table tbody tr td input:checked + label[data-stage=replication] {
-  background-color: var(--replication-color);
+  background-color: var(--togostanza-replication-color);
 }
 .chart-section table tbody tr td input:checked + label[data-stage=combined] {
-  background-color: var(--combined-color);
+  background-color: var(--togostanza-combined-color);
 }
 .chart-section table tbody tr td input:checked + label[data-stage="meta analysis"] {
-  background-color: var(--meta-analysis-color);
+  background-color: var(--togostanza-meta-analysis-color);
 }
 .chart-section table tbody tr td input:checked + label[data-stage="not provided"] {
-  background-color: var(--not-provided-color);
+  background-color: var(--togostanza-not-provided-color);
 }
 
 .table-section {
@@ -311,9 +311,9 @@ div#dl_list ul li.hover {
 }
 .table-section .pagination table thead {
   height: 40px;
-  color: var(--thead-font-color);
-  background-color: var(--thead-background-color);
-  font-size: var(--thead-font-size);
+  color: var(--togostanza-thead-font-color);
+  background-color: var(--togostanza-thead-background-color);
+  font-size: var(--togostanza-thead-font-size);
   border-bottom: 1.5px solid #99acb2;
   margin-bottom: 0;
   padding: 8px 8px 0 8px;
@@ -326,19 +326,19 @@ div#dl_list ul li.hover {
   text-align: left;
 }
 .table-section .pagination table tbody {
-  background-color: var(--tbody-odd-background-color);
+  background-color: var(--togostanza-tbody-odd-background-color);
 }
 .table-section .pagination table tbody tr {
   height: 40px;
 }
 .table-section .pagination table tbody tr:nth-last-of-type(odd) {
-  background-color: var(--tbody-even-background-color);
+  background-color: var(--togostanza-tbody-even-background-color);
 }
 .table-section .pagination table tbody tr td {
   padding: 10px 20px;
   text-align: left;
   border-left: 0.5px solid #d2dae2;
-  font-size: var(--tbody-font-size);
+  font-size: var(--togostanza-tbody-font-size);
 }
 .table-section .pagination table tbody tr td:first-of-type {
   border-left: none;
