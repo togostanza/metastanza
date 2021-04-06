@@ -476,13 +476,13 @@
 }
 .wrapper > .tableWrapper > table > thead {
   background-color: var(--togostanza-thead-background-color);
-  font-size: var(--togostanza-thead-font-size);
   color: var(--togostanza-thead-font-color);
   margin-bottom: 0;
   border-bottom: var(--togostanza-thead-border-bottom);
 }
 .wrapper > .tableWrapper > table > thead > tr > th {
   color: var(--togostanza-thead-font-color);
+  font-size: var(--togostanza-thead-font-size);
   font-weight: var(--togostanza-thead-font-weight);
   padding: 10px;
   white-space: nowrap;
@@ -664,11 +664,6 @@
 .wrapper > .tableWrapper > table > thead > tr .icon.isShowing path {
   color: var(--togostanza-thead-font-color);
 }
-.wrapper > .tableWrapper > table > tbody {
-  font-size: var(--togostanza-tbody-font-size);
-  color: var(--togostanza-tbody-font-color);
-  font-weight: var(--togostanza-tbody-font-weight);
-}
 .wrapper > .tableWrapper > table > tbody > tr:nth-child(odd) {
   background-color: var(--togostanza-tbody-odd-background-color);
 }
@@ -685,6 +680,16 @@
 }
 .wrapper > .tableWrapper > table > tbody > tr > td:last-child {
   padding-right: 20px;
+}
+.wrapper > .tableWrapper > table > tbody > tr > td > span {
+  font-size: var(--togostanza-tbody-font-size);
+  color: var(--togostanza-tbody-font-color);
+  font-weight: var(--togostanza-tbody-font-weight);
+}
+.wrapper > .tableWrapper > table > tbody > tr > td > span > a {
+  font-size: inherit;
+  color: inherit;
+  font-weight: inherit;
 }
 .wrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
