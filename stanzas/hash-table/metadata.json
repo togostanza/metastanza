@@ -49,7 +49,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\": \"title\"}, {\"id\": \"dataset_id\", \"label\": \"Dataset ID\"},{\"id\": \"description\"}, {\"id\": \"species\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
+      "stanza:example": "[{\"id\": \"title\"}, {\"id\": \"dataset_uri\", \"label\": \"Dataset ID\", \"link\": \"dataset_uri\"},{\"id\": \"description\"}, {\"id\": \"species\"}, {\"id\": \"number_of_protein\", \"label\": \"#protein\"}]",
       "stanza:description": "Columns' options"
     },
     {

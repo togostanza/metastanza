@@ -22,37 +22,37 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "chromosome_key",
+      "stanza:key": "chromosomeKey",
       "stanza:example": "chr",
       "stanza:description": "Key to a chromosome in data frame'",
       "stanza:required": false
     },
     {
-      "stanza:key": "position_key",
+      "stanza:key": "positionKey",
       "stanza:example": "stop",
       "stanza:description": "Key to a position on chromosome in data frame",
       "stanza:required": false
     },
     {
-      "stanza:key": "p_value_key",
+      "stanza:key": "pValueKey",
       "stanza:example": "p-value",
       "stanza:description": "Key to a p-value in data frame",
       "stanza:required": false
     },
     {
-      "stanza:key": "low_thresh",
+      "stanza:key": "lowThresh",
       "stanza:example": "4",
       "stanza:description": "Filtering threshold (=log10(p-value))",
       "stanza:required": false
     },
     {
-      "stanza:key": "high_thresh",
+      "stanza:key": "highThresh",
       "stanza:example": "8",
       "stanza:description": "Highlight threshold",
       "stanza:required": false
     },
     {
-      "stanza:key": "records_per_page",
+      "stanza:key": "recordsPerPage",
       "stanza:example": "20",
       "stanza:description": "Records per a page to display on table",
       "stanza:required": false

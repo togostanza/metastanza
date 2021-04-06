@@ -79,21 +79,21 @@ path {
 }
 
 text {
-  &.axisLabel {
+  &.axis-label {
     font-size: 12px;
   }
 
-  &.xLabel {
+  &.x-label {
     text-anchor: middle;
     user-select: none;
   }
 
-  &.yLabel {
+  &.y-label {
     text-anchor: end;
     user-select: none;
   }
 
-  &.sliderLabel {
+  &.slider-label {
     text-anchor: middle;
     user-select: none;
   }
@@ -296,10 +296,10 @@ div#dl_list {
               &[data-stage="combined"] {
                 background-color: $COLOR_COMBINED;
               }
-              &[data-stage="meta-analysis"] {
+              &[data-stage="meta analysis"] {
                 background-color: $COLOR_META_ANARYSIS;
               }
-              &[data-stage="not-provided"] {
+              &[data-stage="not provided"] {
                 background-color: $COLOR_NOT_PROVIDED;
               }
             }

@@ -5,7 +5,13 @@
         {{value.label}}
       </dt>
       <dd>
-        {{value.value}}
+        {{#if value.href}}
+          <a href="{{value.href}}" target="_blank">
+            {{value.value}}
+          </a>
+        {{else}}
+          {{value.value}}
+        {{/if}}
       </dd>
     </dl>
   {{/each}}
