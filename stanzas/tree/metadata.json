@@ -82,79 +82,79 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--series-0-color",
+      "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
       "stanza:default": "#6590E6",
       "stanza:description": "Depth color 1"
     },
     {
-      "stanza:key": "--series-1-color",
+      "stanza:key": "--togostanza-series-1-color",
       "stanza:type": "color",
       "stanza:default": "#3AC9B6",
       "stanza:description": "Depth color 2"
     },
     {
-      "stanza:key": "--series-2-color",
+      "stanza:key": "--togostanza-series-2-color",
       "stanza:type": "color",
       "stanza:default": "#9EDE2F",
       "stanza:description": "Depth color 3"
     },
     {
-      "stanza:key": "--series-3-color",
+      "stanza:key": "--togostanza-series-3-color",
       "stanza:type": "color",
       "stanza:default": "#F5DA64",
       "stanza:description": "Depth color 4"
     },
     {
-      "stanza:key": "--series-4-color",
+      "stanza:key": "--togostanza-series-4-color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Depth color 5"
     },
     {
-      "stanza:key": "--series-5-color",
+      "stanza:key": "--togostanza-series-5-color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Depth color 6"
     },
     {
-      "stanza:key": "--font-family",
+      "stanza:key": "--togostanza-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--node-size",
+      "stanza:key": "--togostanza-node-size",
       "stanza:type": "number",
       "stanza:default": "100",
       "stanza:description": "Node size"
     },
     {
-      "stanza:key": "--label-font-color",
+      "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
       "stanza:default": "#333333",
       "stanza:description": "Label font color"
     },
     {
-      "stanza:key": "--label-font-size",
+      "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
       "stanza:default": "11",
       "stanza:description": "Label font size"
     },
     {
-      "stanza:key": "--border-color",
+      "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Border color"
     },
     {
-      "stanza:key": "--border-width",
+      "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
       "stanza:default": "0.5",
       "stanza:description": "Border width"
     },
     {
-      "stanza:key": "--edge-color",
+      "stanza:key": "--togostanza-edge-color",
       "stanza:type": "color",
       "stanza:default": "#AEB3BF",
       "stanza:description": "Edge color"

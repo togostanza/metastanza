@@ -9,4 +9,4 @@
 
 - **Change styles by stylesheet of your web page**  
   Styles shown on 'styles' section can be changed by stylesheet of your web page.
-  Style name (e.g `--font-family`) is supporsed to be property and you can assign value on your stylesheet.
+  Style name (e.g `--togostanza-font-family`) is supporsed to be property and you can assign value on your stylesheet.

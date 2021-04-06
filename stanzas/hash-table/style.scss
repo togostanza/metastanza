@@ -2,7 +2,7 @@
 @use '@/common.scss';
 
 * {
-  font-family: var(--font-family);
+  font-family: var(--togostanza-font-family);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,27 +12,27 @@ main {
   .container {
     column-count: var(--column-count);
     column-gap: 0;
-    border: var(--table-border);
-    box-shadow: var(--table-shadow);
+    border: var(--togostanza-table-border);
+    box-shadow: var(--togostanza-table-shadow);
     background-color: var(--table-background-color);
     dl {
       display: flex;
       padding: var(--row-padding);
-      border-bottom: var(--tbody-border-bottom);
+      border-bottom: var(--togostanza-tbody-border-bottom);
       break-inside: avoid-column;
       dt {
         width: var(--key-width-percentage);
         padding: 10px;
-        color: var(--key-font-color);
-        font-size: var(--key-font-size);
-        font-weight: var(--key-font-weight);
+        color: var(--togostanza-key-font-color);
+        font-size: var(--togostanza-key-font-size);
+        font-weight: var(--togostanza-key-font-weight);
       }
       dd {
         width: calc(100% - var(--key-width-percentage));
         padding: 10px;
-        color: var(--value-font-color);
-        font-size: var(--value-font-size);
-        font-weight: var(--value-font-weight);
+        color: var(--togostanza-value-font-color);
+        font-size: var(--togostanza-value-font-size);
+        font-weight: var(--togostanza-value-font-weight);
       }
     }
   }

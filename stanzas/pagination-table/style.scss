@@ -6,10 +6,10 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
 @mixin button {
-  border: var(--control-border);
+  border: var(--togostanza-control-border);
   border-radius: 3px;
-  background-color: var(--thead-background-color);
-  color: var(--thead-font-color);
+  background-color: var(--togostanza-thead-background-color);
+  color: var(--togostanza-thead-font-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,10 +19,10 @@
 @mixin text-input {
   width: 164px;
   height: 20px;
-  border: var(--control-border);
-  border-radius: var(--control-border-radius);
-  font-size: var(--control-font-size);
-  color: var(--control-font-color);
+  border: var(--togostanza-control-border);
+  border-radius: var(--togostanza-control-border-radius);
+  font-size: var(--togostanza-control-font-size);
+  color: var(--togostanza-control-font-color);
   &::placeholder {
     padding: 0px 0px 0px 4px;
     color: var(--searchbox-font-color);
@@ -33,9 +33,9 @@
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  color: var(--control-font-color);
-  font-family: var(--font-family);
-  font-size: var(--control-font-size);
+  color: var(--togostanza-control-font-color);
+  font-family: var(--togostanza-font-family);
+  font-size: var(--togostanza-control-font-size);
 }
 
 #renderDiv {
@@ -66,7 +66,7 @@
 
 .wrapper {
   display: flex;
-  flex-direction: var(--vertical-pagination-placement);
+  flex-direction: var(--togostanza-vertical-pagination-placement);
   > .tableWrapper {
     > .tableOption {
       width: 100%;
@@ -77,10 +77,10 @@
       > .entries {
         margin-left: auto;
         margin-right: 10px;
-        font-size: var(--control-font-color);
+        font-size: var(--togostanza-control-font-color);
         select {
-          border: var(--control-border);
-          border-radius: var(--control-border-radius);
+          border: var(--togostanza-control-border);
+          border-radius: var(--togostanza-control-border-radius);
           height: 20px;
         }
       }
@@ -125,22 +125,22 @@
       text-align: left;
       border-collapse: collapse;
       margin: 0;
-      border: var(--table-border);
-      box-shadow: var(--table-shadow);
+      border: var(--togostanza-table-border);
+      box-shadow: var(--togostanza-table-shadow);
       > thead {
-        background-color: var(--thead-background-color);
-        font-size: var(--thead-font-size);
-        color: var(--thead-font-color);
+        background-color: var(--togostanza-thead-background-color);
+        font-size: var(--togostanza-thead-font-size);
+        color: var(--togostanza-thead-font-color);
         margin-bottom: 0;
-        border-bottom: var(--thead-border-bottom);
+        border-bottom: var(--togostanza-thead-border-bottom);
         > tr {
           > th {
-            color: var(--thead-font-color);
-            font-weight: var(--thead-font-weight);
+            color: var(--togostanza-thead-font-color);
+            font-weight: var(--togostanza-thead-font-weight);
             padding: 10px;
             white-space: nowrap;
             &:first-child {
-              background-color: var(--thead-background-color);
+              background-color: var(--togostanza-thead-background-color);
               padding-left: 20px;
               padding-right: 20px;
             }
@@ -156,11 +156,11 @@
                 height: auto;
                 background-color: #ffffff;
                 box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-                border-radius: var(--control-border-radius);
+                border-radius: var(--togostanza-control-border-radius);
                 > .filterWindowTitle {
                   padding: 4px 8px;
-                  background-color: var(--thead-background-color);
-                  color: var(--thead-font-color);
+                  background-color: var(--togostanza-thead-background-color);
+                  color: var(--togostanza-thead-font-color);
                 }
                 > ul.filters {
                   padding: 9px 8px;
@@ -213,20 +213,20 @@
               > p.title {
                 display: block;
                 padding: 6px 16px;
-                background-color: var(--thead-background-color);
-                color: var(--thead-font-color);
+                background-color: var(--togostanza-thead-background-color);
+                color: var(--togostanza-thead-font-color);
               }
               > input.textSearchInput[name="queryInputByColumn"] {
                 margin: 20px 30px;
               }
               .slider-base {
-                background-color: var(--control-non-active-color);
+                background-color: var(--togostanza-non-active-color);
               }
               #slider {
                 margin: 30px 40px 8px;
                 width: 230px;
                 .slider-connect {
-                  background-color: var(--control-active-color);
+                  background-color: var(--togostanza-control-active-color);
                 }
               }
 
@@ -235,7 +235,7 @@
                   width: 14px;
                   height: 14px;
                   top: -5px;
-                  background-color: var(--control-active-color);
+                  background-color: var(--togostanza-control-active-color);
                 }
               }
 
@@ -259,7 +259,7 @@
                 > .dash {
                   width: 8px;
                   height: 1px;
-                  background-color: var(--control-font-color);
+                  background-color: var(--togostanza-control-font-color);
                   margin-left: 4px;
                   margin-right: 4px;
                   margin-bottom: 10px;
@@ -279,21 +279,21 @@
             cursor: pointer;
             content: "";
             display: inline-block;
-            width: var(--control-font-size);
-            height: var(--control-font-size);
+            width: var(--togostanza-control-font-size);
+            height: var(--togostanza-control-font-size);
             transform: translateY(1px);
             path {
-              color: var(--control-non-active-color);
+              color: var(--togostanza-non-active-color);
             }
             &.active {
               path {
-                color: var(--control-active-color);
+                color: var(--togostanza-control-active-color);
               }
             }
             &.search {
               margin-left: 1px;
-              width: calc(var(--control-font-size) - 1px);
-              height: calc(var(--control-font-size) - 1px);
+              width: calc(var(--togostanza-control-font-size) - 1px);
+              height: calc(var(--togostanza-control-font-size) - 1px);
             }
             &.filter {
               padding: 0 2px;
@@ -306,26 +306,26 @@
           .icon.isShowing {
             z-index: 3;
             position: relative;
-            background-color: var(--thead-background-color);
+            background-color: var(--togostanza-thead-background-color);
             path {
-              color: var(--thead-font-color);
+              color: var(--togostanza-thead-font-color);
             }
           }
         }
       }
       > tbody {
-        font-size: var(--tbody-font-size);
-        color: var(--tbody-font-color);
-        font-weight: var(--tbody-font-weight);
+        font-size: var(--togostanza-tbody-font-size);
+        color: var(--togostanza-tbody-font-color);
+        font-weight: var(--togostanza-tbody-font-weight);
         > tr {
           &:nth-child(odd) {
-            background-color: var(--tbody-odd-background-color);
+            background-color: var(--togostanza-tbody-odd-background-color);
           }
           &:nth-child(even) {
-            background-color: var(--tbody-even-background-color);
+            background-color: var(--togostanza-tbody-even-background-color);
           }
           > td {
-            border-bottom: var(--tbody-border-bottom);
+            border-bottom: var(--togostanza-tbody-border-bottom);
             border-collapse: collapse;
             padding: 10px;
             &:first-child {
@@ -346,41 +346,49 @@
   }
   > .paginationWrapper {
     display: flex;
-    flex-direction: var(--vertical-pagination-placement);
+    flex-direction: var(--togostanza-vertical-pagination-placement);
     width: calc(100% - 30px);
     margin: 10px auto;
     > .serialPagination {
       display: flex;
-      justify-content: var(--horizonal-pagination-placement);
+      justify-content: var(--togostanza-horizonal-pagination-placement);
       align-items: stretch;
       > ul.paginationNumList {
         display: flex;
         padding: 0;
         > li.pagination {
-          color: var(--pagination-font-color);
-          background-color: var(--pagination-background-color);
-          border-right: var(--pagination-border);
-          padding: var(--pagination-padding);
-          font-size: var(--pagination-font-size);
+          color: var(--togostanza-pagination-font-color);
+          background-color: var(--togostanza-pagination-background-color);
+          border-right: var(--togostanza-pagination-border);
+          padding: var(--togostanza-pagination-padding);
+          font-size: var(--togostanza-pagination-font-size);
           display: flex;
           align-items: center;
           &:hover {
             cursor: pointer;
-            color: var(--pagination-current-font-color);
-            background-color: var(--pagination-current-background-color);
+            color: var(--togostanza-pagination-current-font-color);
+            background-color: var(
+              --togostanza-pagination-current-background-color
+            );
           }
           &:first-of-type {
-            border-top-left-radius: var(--pagination-border-radius);
-            border-bottom-left-radius: var(--pagination-border-radius);
+            border-top-left-radius: var(--togostanza-pagination-border-radius);
+            border-bottom-left-radius: var(
+              --togostanza-pagination-border-radius
+            );
           }
           &:last-of-type {
-            border-top-right-radius: var(--pagination-border-radius);
-            border-bottom-right-radius: var(--pagination-border-radius);
+            border-top-right-radius: var(--togostanza-pagination-border-radius);
+            border-bottom-right-radius: var(
+              --togostanza-pagination-border-radius
+            );
             border-right: none;
           }
           &.currentBtn {
-            color: var(--pagination-current-font-color);
-            background-color: var(--pagination-current-background-color);
+            color: var(--togostanza-pagination-current-font-color);
+            background-color: var(
+              --togostanza-pagination-current-background-color
+            );
           }
         }
       }
@@ -406,15 +414,15 @@
             cursor: pointer;
           }
           > path {
-            color: var(--pagination-arrow-color);
+            color: var(--togostanza-pagination-arrow-color);
           }
         }
       }
       > .pageNumber {
         margin-left: 20px;
         > input[type="text"].jumpToNumberInput {
-          border: var(--pagination-current-border);
-          border-radius: var(--pagination-border-radius);
+          border: var(--togostanza-pagination-current-border);
+          border-radius: var(--togostanza-pagination-border-radius);
           width: 40px;
           height: 20px;
         }
@@ -437,12 +445,14 @@
           transform: translate(-50%, -50%);
           bottom: auto;
           line-height: 1.3;
-          color: var(--pagination-current-font-color);
-          background-color: var(--pagination-current-background-color);
-          border: var(--pagination-border);
-          padding: var(--pagination-padding);
-          font-size: var(--pagination-font-size);
-          border-radius: var(--pagination-border-radius);
+          color: var(--togostanza-pagination-current-font-color);
+          background-color: var(
+            --togostanza-pagination-current-background-color
+          );
+          border: var(--togostanza-pagination-border);
+          padding: var(--togostanza-pagination-padding);
+          font-size: var(--togostanza-pagination-font-size);
+          border-radius: var(--togostanza-pagination-border-radius);
           &:before {
             display: none;
           }

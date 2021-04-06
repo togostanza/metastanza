@@ -447,7 +447,7 @@ async function draw(stanza, params) {
     .attr("y", 1)
     .attr("width", areaWidth)
     .attr("height", 22)
-    .attr("fill", "var(--slider-color)")
+    .attr("fill", "var(--togostanza-slider-color)")
     .attr("stroke", "#99ACB2")
     .call(
       d3
@@ -917,7 +917,7 @@ async function draw(stanza, params) {
       slider_shadow_g
         .append("path")
         .attr("class", "slider-shadow")
-        .attr("fill", "var(--slider-color)")
+        .attr("fill", "var(--togostanza-slider-color)")
         .attr("opacity", "0.4")
         .attr(
           "d",
@@ -956,7 +956,7 @@ async function draw(stanza, params) {
           );
         } else if (stage) {
           ctx.fillStyle = getComputedStyle(stanza.root.host).getPropertyValue(
-            `--${stage}-color`
+            `--togostanza-${stage}-color`
           );
         }
         ctx.arc(

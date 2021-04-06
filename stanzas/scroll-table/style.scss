@@ -16,7 +16,7 @@
   box-sizing: border-box;
   margin: 0;
   list-style: none;
-  font-family: var(--font-family);
+  font-family: var(--togostanza-font-family);
 }
 
 #renderDiv {
@@ -35,19 +35,19 @@
     text-align: left;
     border-collapse: collapse;
     margin: 0;
-    border: var(--table-border);
-    box-shadow: var(--table-shadow);
+    border: var(--togostanza-table-border);
+    box-shadow: var(--togostanza-table-shadow);
     > thead {
-      background-color: var(--thead-background-color);
-      font-size: var(--thead-font-size);
-      color: var(--thead-font-color);
+      background-color: var(--togostanza-thead-background-color);
+      font-size: var(--togostanza-thead-font-size);
+      color: var(--togostanza-thead-font-color);
       margin-bottom: 0;
-      border-bottom: var(--thead-border-bottom);
+      border-bottom: var(--togostanza-thead-border-bottom);
       > tr {
         > th {
-          color: var(--thead-font-color);
-          font-weight: var(--thead-font-weight);
-          background-color: var(--thead-background-color);
+          color: var(--togostanza-thead-font-color);
+          font-weight: var(--togostanza-thead-font-weight);
+          background-color: var(--togostanza-thead-background-color);
           padding: 10px;
           position: sticky;
           top: -1px;
@@ -67,21 +67,21 @@
       }
     }
     > tbody {
-      font-size: var(--tbody-font-size);
-      color: var(--tbody-font-color);
+      font-size: var(--togostanza-tbody-font-size);
+      color: var(--togostanza-tbody-font-color);
       border-right: var(--tbody-border-right);
-      border-bottom: var(--tbody-border-bottom);
+      border-bottom: var(--togostanza-tbody-border-bottom);
       border-left: var(--tbody-border-left);
       > tr {
         &:nth-child(odd) {
-          background-color: var(--tbody-odd-background-color);
+          background-color: var(--togostanza-tbody-odd-background-color);
         }
         &:nth-child(even) {
-          background-color: var(--tbody-even-background-color);
+          background-color: var(--togostanza-tbody-even-background-color);
         }
         > td {
-          font-size: var(--tbody-font-size);
-          border-bottom: var(--tbody-border-bottom);
+          font-size: var(--togostanza-tbody-font-size);
+          border-bottom: var(--togostanza-tbody-border-bottom);
           border-collapse: collapse;
           padding: 10px;
           &:first-child {
@@ -94,7 +94,7 @@
             text-align: center;
           }
           > span > a {
-            color: var(--tbody-font-color);
+            color: var(--togostanza-tbody-font-color);
           }
         }
         &:last-of-type {
@@ -109,7 +109,7 @@
 
 $dot-width: 4px;
 $dot-spacing: $dot-width + $dot-width/2 !default;
-$dot-color: var(--thead-font-color);
+$dot-color: var(--togostanza-thead-font-color);
 $dot-before-color: $dot-color !default;
 $dot-after-color: $dot-color !default;
 $left-pos: -9999px;

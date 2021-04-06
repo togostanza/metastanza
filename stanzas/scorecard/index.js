@@ -39,14 +39,15 @@ export default async function scorecard(stanza, params) {
   }
 
   key.setAttribute("x", `${width / 2}px`);
-  key.setAttribute("y", Number(css("--key-font-size")));
+  key.setAttribute("y", Number(css("--togostanza-key-font-size")));
   value.setAttribute("x", `${width / 2}px`);
   value.setAttribute(
     "y",
-    Number(css("--key-font-size")) + Number(css("--value-font-size"))
+    Number(css("--togostanza-key-font-size")) +
+      Number(css("--togostanza-value-font-size"))
   );
-  key.setAttribute("font-size", css("--key-font-size"));
-  value.setAttribute("font-size", css("--value-font-size"));
+  key.setAttribute("font-size", css("--togostanza-key-font-size"));
+  value.setAttribute("font-size", css("--togostanza-value-font-size"));
 
   //menu button placement
   appendDlButton(

@@ -62,12 +62,12 @@ export default async function tree(stanza, params) {
       name: "color",
       type: "ordinal",
       range: [
-        "var(--series-0-color)",
-        "var(--series-1-color)",
-        "var(--series-2-color)",
-        "var(--series-3-color)",
-        "var(--series-4-color)",
-        "var(--series-5-color)",
+        "var(--togostanza-series-0-color)",
+        "var(--togostanza-series-1-color)",
+        "var(--togostanza-series-2-color)",
+        "var(--togostanza-series-3-color)",
+        "var(--togostanza-series-4-color)",
+        "var(--togostanza-series-5-color)",
       ],
       domain: { data: "tree", field: "depth" },
       zero: true,
@@ -82,7 +82,7 @@ export default async function tree(stanza, params) {
       encode: {
         update: {
           path: { field: "path" },
-          stroke: { value: "var(--edge-color)" },
+          stroke: { value: "var(--togostanza-edge-color)" },
         },
       },
     },
@@ -92,7 +92,7 @@ export default async function tree(stanza, params) {
       encode: {
         enter: {
           size: {
-            value: css("--node-size"),
+            value: css("--togostanza-node-size"),
           },
           stroke: { value: "var(--stroke-color)" },
         },
@@ -100,8 +100,8 @@ export default async function tree(stanza, params) {
           x: { field: "x" },
           y: { field: "y" },
           fill: { scale: "color", field: "depth" },
-          stroke: { value: "var(--border-color)" },
-          strokeWidth: { value: css("--border-width") },
+          stroke: { value: "var(--togostanza-border-color)" },
+          strokeWidth: { value: css("--togostanza-border-width") },
         },
       },
     },
@@ -113,8 +113,8 @@ export default async function tree(stanza, params) {
           text: {
             field: params["label"] === "" ? params["node"] : labelVariable,
           },
-          font: { value: css("--font-family") },
-          fontSize: { value: css("--label-font-size") },
+          font: { value: css("--togostanza-font-family") },
+          fontSize: { value: css("--togostanza-label-font-size") },
           baseline: { value: "middle" },
         },
         update: {
@@ -123,7 +123,7 @@ export default async function tree(stanza, params) {
           dx: { signal: "datum.children ? -7 : 7" },
           align: { signal: "datum.children ? 'right' : 'left'" },
           opacity: { signal: "labels ? 1 : 0" },
-          fill: { value: "var(--label-font-color)" },
+          fill: { value: "var(--togostanza-label-font-color)" },
         },
       },
     },
