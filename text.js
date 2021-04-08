@@ -28,8 +28,8 @@ async function text(stanza, params) {
   const width = params["width"];
   const height = params["height"];
   const padding = params["padding"];
-  const table = stanza.root.querySelector("table");
-  table.setAttribute(
+  const container = stanza.root.querySelector(".container");
+  container.setAttribute(
     `style`,
     `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
@@ -42,10 +42,11 @@ async function text(stanza, params) {
       menu.setAttribute("style", "justify-content: flex-end;");
       break;
     case "bottom-left":
-      menu.setAttribute("style", "flex-direction: column-reverse;");
+      container.setAttribute("style", "flex-direction: column-reverse;");
       break;
     case "bottom-right":
-      menu.setAttribute(
+      menu.setAttribute("style", "justify-content: flex-end;");
+      container.setAttribute(
         "style",
         "justify-content flex-end; flex-direction: column-reverse;"
       );
@@ -168,9 +169,9 @@ var templates = [
         return undefined
     };
 
-  return "  <table>\n    <tbody>\n      <tr>\n        <td>\n          "
+  return "    <table>\n      <tbody>\n        <tr>\n          <td>\n            "
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "\n        </td>\n      </tr>\n    </tbody>\n  </table>\n";
+    + "\n          </td>\n        </tr>\n      </tbody>\n    </table>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -179,10 +180,11 @@ var templates = [
         return undefined
     };
 
-  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"menu\">\n  <a id=\"metastanzaMenuBtn\" href=\""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"textUrl") || (depth0 != null ? lookupProperty(depth0,"textUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"textUrl","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":9,"column":34},"end":{"line":9,"column":45}}}) : helper)))
-    + "\" download=\"text\">\n    <i class=\"fas fa-ellipsis-h\"></i>\n  </a>\n</div>\n\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":14,"column":0},"end":{"line":24,"column":9}}})) != null ? stack1 : "");
+  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"container\">\n  <div class=\"menu\">\n    <a id=\"metastanzaMenuBtn\" href=\""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"textUrl") || (depth0 != null ? lookupProperty(depth0,"textUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"textUrl","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":10,"column":36},"end":{"line":10,"column":47}}}) : helper)))
+    + "\" download=\"text\">\n      <i class=\"fas fa-ellipsis-h\"></i>\n    </a>\n  </div>\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":14,"column":2},"end":{"line":24,"column":11}}})) != null ? stack1 : "")
+    + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
 

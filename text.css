@@ -3,17 +3,20 @@
   box-sizing: border-box;
 }
 
-.menu {
+.container {
   display: flex;
 }
-.menu a {
+.container .menu {
+  display: flex;
+  padding: 5px;
+}
+.container .menu a {
   color: var(--togostanza-text-font-color);
 }
-
-table {
+.container table {
   display: block;
 }
-table tbody tr td {
+.container table tbody tr td {
   word-break: break-all;
   color: var(--togostanza-text-font-color);
   font-size: var(--togostanza-text-font-size);
