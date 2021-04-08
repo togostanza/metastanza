@@ -5,20 +5,21 @@
   crossorigin="anonymous"
 />
 
-<div class="menu">
-  <a id="metastanzaMenuBtn" href="{{textUrl}}" download="text">
-    <i class="fas fa-ellipsis-h"></i>
-  </a>
+<div class="container">
+  <div class="menu">
+    <a id="metastanzaMenuBtn" href="{{textUrl}}" download="text">
+      <i class="fas fa-ellipsis-h"></i>
+    </a>
+  </div>
+  {{#each rows as |row|}}
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            {{row.value}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  {{/each}}
 </div>
-
-{{#each rows as |row|}}
-  <table>
-    <tbody>
-      <tr>
-        <td>
-          {{row.value}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-{{/each}}

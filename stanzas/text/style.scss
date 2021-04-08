@@ -6,22 +6,25 @@
   box-sizing: border-box;
 }
 
-.menu {
+.container {
   display: flex;
-  a {
-    color: var(--togostanza-text-font-color);
+  .menu {
+    display: flex;
+    padding: 5px;
+    a {
+      color: var(--togostanza-text-font-color);
+    }
   }
-}
-
-table {
-  display: block;
-  tbody {
-    tr {
-      td {
-        word-break: break-all;
-        color: var(--togostanza-text-font-color);
-        font-size: var(--togostanza-text-font-size);
-        font-weight: var(--togostanza-text-font-weight);
+  table {
+    display: block;
+    tbody {
+      tr {
+        td {
+          word-break: break-all;
+          color: var(--togostanza-text-font-color);
+          font-size: var(--togostanza-text-font-size);
+          font-weight: var(--togostanza-text-font-weight);
+        }
       }
     }
   }

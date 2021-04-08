@@ -26,8 +26,8 @@ export default async function text(stanza, params) {
   const width = params["width"];
   const height = params["height"];
   const padding = params["padding"];
-  const table = stanza.root.querySelector("table");
-  table.setAttribute(
+  const container = stanza.root.querySelector(".container");
+  container.setAttribute(
     `style`,
     `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
@@ -40,10 +40,11 @@ export default async function text(stanza, params) {
       menu.setAttribute("style", "justify-content: flex-end;");
       break;
     case "bottom-left":
-      menu.setAttribute("style", "flex-direction: column-reverse;");
+      container.setAttribute("style", "flex-direction: column-reverse;");
       break;
     case "bottom-right":
-      menu.setAttribute(
+      menu.setAttribute("style", "justify-content: flex-end;");
+      container.setAttribute(
         "style",
         "justify-content flex-end; flex-direction: column-reverse;"
       );
