@@ -79,10 +79,6 @@ path {
 }
 
 text {
-  &.axis-label {
-    font-size: 12px;
-  }
-
   &.x-label {
     text-anchor: middle;
     user-select: none;
@@ -101,7 +97,6 @@ text {
   &.axis-title {
     user-select: none;
     color: #000000;
-    font-size: 14px;
   }
 }
 
@@ -128,16 +123,14 @@ circle {
 }
 
 svg#dl_button {
-  display: none;
+  // display: none;
   position: absolute;
-  top: -58px;
+  top: -100px;
   right: 0px;
-
   .circle_g {
     cursor: pointer;
     opacity: 0.2;
   }
-
   .hover {
     opacity: 1;
   }
@@ -217,9 +210,10 @@ svg#dl_button {
 div#dl_list {
   border: solid 1px #000000;
   position: absolute;
-  top: 35px;
-  right: 6px;
+  top: -70px;
+  right: 0px;
   width: fit-content;
+  background-color: #ffffff;
   ul {
     list-style-type: none;
     margin: 0px;
