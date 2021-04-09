@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
-import { l as loadData } from './load-data-4c0c2f17.js';
+import { l as loadData } from './load-data-ae634ee6.js';
 import './index-89a342ec.js';
 
 async function hashTable(stanza, params) {
