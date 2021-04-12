@@ -60,9 +60,6 @@ path.background-fill {
   stroke: red;
 }
 
-text.axis-label {
-  font-size: 12px;
-}
 text.x-label {
   text-anchor: middle;
   user-select: none;
@@ -78,7 +75,6 @@ text.slider-label {
 text.axis-title {
   user-select: none;
   color: #000000;
-  font-size: 14px;
 }
 
 circle.discovery {
@@ -101,9 +97,8 @@ circle.over-thresh-plot {
 }
 
 svg#dl_button {
-  display: none;
   position: absolute;
-  top: -58px;
+  top: -100px;
   right: 0px;
 }
 svg#dl_button .circle_g {
@@ -186,9 +181,10 @@ svg#dl_button .hover {
 div#dl_list {
   border: solid 1px #000000;
   position: absolute;
-  top: 35px;
-  right: 6px;
+  top: -70px;
+  right: 0px;
   width: fit-content;
+  background-color: #ffffff;
 }
 div#dl_list ul {
   list-style-type: none;

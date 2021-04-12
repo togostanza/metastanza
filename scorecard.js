@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { l as loadData } from './load-data-ae634ee6.js';
-import { a as appendDlButton } from './metastanza_utils-b8e50d97.js';
+import { a as appendDlButton } from './metastanza_utils-d3f6ca68.js';
 import './index-89a342ec.js';
 
 async function scorecard(stanza, params) {

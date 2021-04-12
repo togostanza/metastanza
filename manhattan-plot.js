@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
 import { w as dispatch } from './index-89a342ec.js';
-import { s as select, a as appendDlButton } from './metastanza_utils-b8e50d97.js';
+import { s as select, a as appendDlButton } from './metastanza_utils-d3f6ca68.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -8635,7 +8635,7 @@ const pagination = async function (shadowRoot, params, overThreshArray) {
           if (tableHeadArray[j] === "gene_name") {
             const displayedGeneName =
               overThreshArray[i][`${tableHeadArray[j]}`];
-            td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
+            td.innerHTML = `<a target="_blank" href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
           } else {
             td.innerText = overThreshArray[i][`${tableHeadArray[j]}`];
           }
@@ -8796,7 +8796,7 @@ async function manhattanPlot(stanza, params) {
       .join("")
   );
 
-  // adjust datum
+  // adjust data
   for (let i = 0; i < variants.length; i++) {
     // convert chromosome data from 'chrnum' to 'num'
     let chr = variants[i].chr;
@@ -8978,11 +8978,11 @@ async function draw(stanza, params) {
     .append("path")
     .attr("d", "M " + marginLeft + ", 0 V " + areaHeight + " Z")
     .attr("class", "axis-line");
-
   yTitle
     .append("text")
     .text("-log₁₀(p-value)")
     .attr("class", "axis-title")
+    .attr("font-size", "14")
     .attr("x", -areaHeight / 2)
     .attr("y", marginLeft - 32)
     .attr("transform", "rotate(-90)")
@@ -9222,6 +9222,7 @@ async function draw(stanza, params) {
       return (pos / chromosomeSumLength.hg38) * areaWidth + marginLeft;
     })
     .attr("y", 18)
+    .attr("font-size", "12")
     .attr("fill", "#2F4D76");
 
   sliderLabelGroup
@@ -9460,6 +9461,7 @@ async function draw(stanza, params) {
           marginLeft
         );
       })
+      .attr("font-size", "12")
       .attr("y", areaHeight + 20);
 
     // chart background
@@ -9531,6 +9533,7 @@ async function draw(stanza, params) {
           .append("text")
           .text(i)
           .attr("class", "axis-label y-label")
+          .attr("font-size", "12")
           .attr("x", marginLeft - 12)
           .attr("y", y)
           .attr("text-anchor", "end");

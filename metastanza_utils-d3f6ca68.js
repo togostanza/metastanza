@@ -87,12 +87,17 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
     svg.attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg");
 
     let style = "";
-    if (stanza.root.host && stanza.root.host.querySelector("style")) {
-      style += stanza.root.host
+    console.log(
+      'stanza.root.querySelector("style")',
+      stanza.root.querySelector("style")
+    );
+    if (stanza.root.host && stanza.root.querySelector("style")) {
+      style += stanza.root
         .querySelector("style")
         .innerHTML.replace(/[\r\n]/g, "")
-        .match(/^\s*:root\s*{(.+)}\s*$/)[1];
+        .match(/^\s*:host\s*{(.+)}\s*$/)[1];
     }
+    console.log("stanza.root.host", stanza.root.host);
 
     const outerCode = document
       .querySelector(".overflow-auto")
@@ -169,4 +174,4 @@ function appendDlButton(buttonDiv, svg, filename, stanza) {
 }
 
 export { appendDlButton as a, select as s };
-//# sourceMappingURL=metastanza_utils-b8e50d97.js.map
+//# sourceMappingURL=metastanza_utils-d3f6ca68.js.map
