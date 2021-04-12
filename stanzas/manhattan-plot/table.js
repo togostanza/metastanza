@@ -71,7 +71,7 @@ export const pagination = async function (shadowRoot, params, overThreshArray) {
           if (tableHeadArray[j] === "gene_name") {
             const displayedGeneName =
               overThreshArray[i][`${tableHeadArray[j]}`];
-            td.innerHTML = `<a href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
+            td.innerHTML = `<a target="_blank" href="https://mgend.med.kyoto-u.ac.jp/gene/info/${overThreshArray[i].entrez_id}#locuszoom-link">${displayedGeneName}</a>`;
           } else {
             td.innerText = overThreshArray[i][`${tableHeadArray[j]}`];
           }
