@@ -284,6 +284,14 @@ div#dl_list ul li.hover {
   margin-bottom: 20px;
   height: 16px;
 }
+.table-section .table-info .table-title {
+  display: flex;
+  align-items: baseline;
+}
+.table-section .table-info .table-title p {
+  font-size: 12px;
+  padding-left: 10px;
+}
 .table-section .table-info .total-overthresh-variants {
   display: flex;
   justify-content: flex-end;
