@@ -4783,7 +4783,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-non-active-color",
 		"stanza:type": "color",
-		"stanza:default": "rgba(0, 0, 0, .3)",
+		"stanza:default": "rgba(255, 255, 255, .7)",
 		"stanza:description": "Non active color of control area"
 	},
 	{
@@ -5120,6 +5120,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
+    unescape: columnDef.escape === false
   };
 
   if (columnDef.type === "number") {
@@ -5265,7 +5266,7 @@ const _hoisted_18 = /*#__PURE__*/createVNode$1("span", { class: "rangeInputLabel
 const _hoisted_19 = /*#__PURE__*/createVNode$1("span", { class: "dash" }, null, -1 /* HOISTED */);
 const _hoisted_20 = /*#__PURE__*/createVNode$1("span", { class: "rangeInputLabel" }, " To ", -1 /* HOISTED */);
 const _hoisted_21 = { key: 0 };
-const _hoisted_22 = { key: 1 };
+const _hoisted_22 = { key: 2 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
@@ -5507,7 +5508,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 target: "_blank"
                               }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href"])
                             ]))
-                          : (openBlock(), createBlock("span", _hoisted_22, toDisplayString(cell.value), 1 /* TEXT */))
+                          : (cell.column.unescape)
+                            ? (openBlock(), createBlock("span", {
+                                key: 1,
+                                innerHTML: cell.value
+                              }, null, 8 /* PROPS */, ["innerHTML"]))
+                            : (openBlock(), createBlock("span", _hoisted_22, toDisplayString(cell.value), 1 /* TEXT */))
                       ]))
                     }), 128 /* KEYED_FRAGMENT */))
                   ]))
