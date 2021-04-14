@@ -168,6 +168,8 @@
               <span v-if="cell.href">
                 <a :href="cell.href" target="_blank">{{ cell.value }}</a>
               </span>
+              <span v-else-if="cell.column.unescape" v-html="cell.value">
+              </span>
               <span v-else>
                 {{ cell.value }}
               </span>
@@ -453,6 +455,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
+    unescape: columnDef.escape === false
   };
 
   if (columnDef.type === "number") {
