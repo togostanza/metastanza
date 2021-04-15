@@ -3,6 +3,7 @@ import loadData from "@/lib/load-data";
 export default async function hashTable(stanza, params) {
   let dataset = await loadData(params["data-url"], params["data-type"]);
   dataset = dataset[0];
+
   const columns = params.columns
     ? JSON.parse(params.columns)
     : Object.keys(dataset).map((key) => {
@@ -23,6 +24,7 @@ export default async function hashTable(stanza, params) {
       label,
       value: dataset[column.id],
       href,
+      unescape: column.escape === false,
     };
   });
   stanza.render({
