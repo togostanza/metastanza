@@ -1,8 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-ce8eecec.js';
-import { e as embed } from './vega-embed.module-5f5c328e.js';
-import { l as loadData } from './load-data-ae634ee6.js';
-import { a as appendDlButton } from './metastanza_utils-d3f6ca68.js';
-import './index-89a342ec.js';
+import { d as defineStanzaElement } from './index-60baf012.js';
+import { e as embed } from './vega-embed.module-89eea843.js';
+import { l as loadData } from './load-data-c473ed5e.js';
+import { a as appendDlButton } from './metastanza_utils-a3ff1297.js';
 
 async function tree(stanza, params) {
   function css(key) {
