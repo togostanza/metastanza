@@ -14,5 +14,6 @@ Describe about the repository here. These contents will help the repository user
 
 ## Development
 
+- `npx togostanza s` run code
 - `npm run lint` checks the format of code
 - `npm run lint:fix` fixes fixable format errors
