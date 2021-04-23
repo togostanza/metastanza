@@ -9,5 +9,6 @@ Want to see more specific Stanzas already optimized for certain fields, applicat
 
 ## Development
 
+- `npx togostanza s` run code
 - `npm run lint` checks the format of code
 - `npm run lint:fix` fixes fixable format errors

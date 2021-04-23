@@ -1,15 +1,16 @@
 {
   "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "heatmap-geographic-map",
-  "stanza:label": "Heatmap geographic map",
-  "stanza:definition": "Heatmap geographic map MetaStanza",
+  "@id": "region-geographic-map",
+  "stanza:label": "Region geographic map",
+  "stanza:definition": "Region geographic map MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Map",
-  "stanza:provider": "",
+  "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
+  "stanza:author": "MarleenEliza",
+  "stanza:address": "62828450+MarleenEliza@users.noreply.github.com",
   "stanza:contributor": [],
   "stanza:created": "2021-04-23",
   "stanza:updated": "2021-04-23",
