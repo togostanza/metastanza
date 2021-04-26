@@ -1,3 +1,3 @@
 # Region geographic map
 
-Stanza description goes here. Edit `stanzas/region-geographic-map/README.md` to update.
+This is a region geographic map.

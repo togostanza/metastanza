@@ -33,9 +33,9 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-map-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#66CCFF",
+      "stanza:key": "--togostanza-region-border-color",
+      "stanza:type": "text",
+      "stanza:default": "blues",
       "stanza:description": "Border color"
     },
     {
@@ -43,6 +43,48 @@
       "stanza:type": "color",
       "stanza:default": "#FFFF99",
       "stanza:description": "Map color"
+    },
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Category color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Category color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Category color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Category color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Category color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Category color 5"
+    },
+    {
+      "stanza:key": "--togostanza-series-6-color",
+      "stanza:type": "color",
+      "stanza:default": "#8251DB",
+      "stanza:description": "Category color 6"
     }
   ],
   "stanza:incomingEvent": [],
