@@ -28,6 +28,13 @@
       "stanza:description": "height"
     },
     {
+      "stanza:key": "border",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show border between"
+    },
+    {
       "stanza:key": "legend",
       "stanza:type": "boolean",
       "stanza:choice": ["true", "false"],
@@ -57,9 +64,33 @@
   "stanza:style": [
     {
       "stanza:key": "--togostanza-region-border-color",
-      "stanza:type": "text",
-      "stanza:default": "blues",
+      "stanza:type": "color",
+      "stanza:default": "#FFFAFA",
       "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-hover-color",
+      "stanza:type": "color",
+      "stanza:default": "#FB0E0E",
+      "stanza:description": "Hover color when hovering over region"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Title font color"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-weight",
+      "stanza:type": "number",
+      "stanza:default": "400",
+      "stanza:description": "Font weight of legend title"
     },
     {
       "stanza:key": "--togostanza-series-0-color",
@@ -102,12 +133,6 @@
       "stanza:type": "color",
       "stanza:default": "#8251DB",
       "stanza:description": "Category color 6"
-    },
-    {
-      "stanza:key": "--togostanza-hover-color",
-      "stanza:type": "color",
-      "stanza:default": "#FB0E0E",
-      "stanza:description": "Hover color when hovering over region"
     }
   ],
   "stanza:incomingEvent": [],
