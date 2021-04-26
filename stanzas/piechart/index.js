@@ -127,6 +127,9 @@ export default async function piechart(stanza, params) {
   };
   await vegaEmbed(el, spec, opts);
 
+  const svg = stanza.root.querySelector(".marks");
+  svg.style.padding = `${params["padding"]}px`;
+
   //menu button placement
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),

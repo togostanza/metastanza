@@ -27,10 +27,9 @@ export default async function scorecard(stanza, params) {
   });
 
   const main = stanza.root.querySelector("main");
-  console.log("main.parentNode", main.parentNode);
   main.parentNode.setAttribute(
     `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px; background-color: var(--togostanza-fg-color);`
   );
 
   const chartWrapper = stanza.root.querySelector(".chart-wrapper");

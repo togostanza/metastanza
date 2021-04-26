@@ -455,7 +455,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
-    unescape: columnDef.escape === false
+    unescape: columnDef.escape === false,
   };
 
   if (columnDef.type === "number") {

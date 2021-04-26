@@ -30,6 +30,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Padding",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "page-size-option",
       "stanza:example": "10,20,50,100",
       "stanza:description": "Page size list",
@@ -243,6 +250,12 @@
       "stanza:choice": ["left", "center", "right"],
       "stanza:default": "center",
       "stanza:description": "Horizonal placement of pagination"
+    },
+    {
+      "stanza:key": "--togostanza-fg-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }
