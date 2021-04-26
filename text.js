@@ -156,7 +156,7 @@ var metadata = {
 		"stanza:description": "Font weight"
 	},
 	{
-		"stanza:key": "--togostanza-fg-color",
+		"stanza:key": "--togostanza-background-color",
 		"stanza:type": "color",
 		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color"

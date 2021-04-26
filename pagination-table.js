@@ -7381,7 +7381,7 @@ var metadata = {
 		"stanza:description": "Horizonal placement of pagination"
 	},
 	{
-		"stanza:key": "--togostanza-fg-color",
+		"stanza:key": "--togostanza-background-color",
 		"stanza:type": "color",
 		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color"
@@ -8046,7 +8046,7 @@ script.__file = "stanzas/pagination-table/app.vue";
 
 async function paginationTable(stanza, params) {
   const main = stanza.root.querySelector("main");
-  main.parentNode.style.backgroundColor = "var(--togostanza-fg-color)";
+  main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
   main.parentNode.style.padding = params["padding"];
   createApp(script, params).mount(main);
 }

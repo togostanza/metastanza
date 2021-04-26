@@ -30,7 +30,7 @@ async function scorecard(stanza, params) {
   const main = stanza.root.querySelector("main");
   main.parentNode.setAttribute(
     `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px; background-color: var(--togostanza-fg-color);`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px; background-color: var(--togostanza-background-color);`
   );
 
   const chartWrapper = stanza.root.querySelector(".chart-wrapper");
@@ -222,7 +222,7 @@ var metadata = {
 		"stanza:description": "Font weight for value"
 	},
 	{
-		"stanza:key": "--togostanza-fg-color",
+		"stanza:key": "--togostanza-background-color",
 		"stanza:type": "color",
 		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color"
