@@ -26,11 +26,15 @@ export default async function scorecard(stanza, params) {
     },
   });
 
-  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
-  chartWrapper.setAttribute(
+  const main = stanza.root.querySelector("main");
+  console.log("main.parentNode", main.parentNode);
+  main.parentNode.setAttribute(
     `style`,
     `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
+
+  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
+  chartWrapper.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
 
   const key = stanza.root.querySelector("#scorecardKey");
   const value = stanza.root.querySelector("#scorecardValue");
