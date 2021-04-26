@@ -2,6 +2,10 @@ summary {
   display: none;
 }
 
+svg.marks {
+  background-color: var(--togostanza-fg-color);
+}
+
 svg#dl_button {
   position: absolute;
 }

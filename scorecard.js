@@ -28,10 +28,9 @@ async function scorecard(stanza, params) {
   });
 
   const main = stanza.root.querySelector("main");
-  console.log("main.parentNode", main.parentNode);
   main.parentNode.setAttribute(
     `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px; background-color: var(--togostanza-fg-color);`
   );
 
   const chartWrapper = stanza.root.querySelector(".chart-wrapper");
@@ -133,13 +132,13 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": 230,
+		"stanza:example": 200,
 		"stanza:description": "Width"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": 100,
+		"stanza:example": 70,
 		"stanza:description": "Height"
 	},
 	{
@@ -221,6 +220,12 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "600",
 		"stanza:description": "Font weight for value"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

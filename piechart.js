@@ -128,6 +128,9 @@ async function piechart(stanza, params) {
   };
   await embed(el, spec, opts);
 
+  const svg = stanza.root.querySelector(".marks");
+  svg.style.padding = `${params["padding"]}px`;
+
   //menu button placement
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
@@ -246,6 +249,12 @@ var metadata = {
 		"stanza:description": "Height"
 	},
 	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 0,
+		"stanza:description": "Padding"
+	},
+	{
 		"stanza:key": "metastanza-menu-placement",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
@@ -344,6 +353,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

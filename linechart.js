@@ -618,6 +618,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "0.5",
 		"stanza:description": "Border width"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

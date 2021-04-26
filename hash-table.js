@@ -36,11 +36,15 @@ async function hashTable(stanza, params) {
   });
 
   const main = stanza.root.querySelector("main");
-  main.setAttribute(
+  const container = stanza.root.querySelector(".container");
+  main.parentNode.style.backgroundColor = "var(--togostanza-fg-color)";
+  main.parentNode.style.padding = `${params["padding"]}px`;
+  container.setAttribute(
     "style",
-    `width: ${params["width"]};
-    height: ${params["height"]};
-    padding: ${params["padding"]}`
+    `
+    width: ${params["width"]}px;
+    height: ${params["height"]}px;
+    `
   );
 }
 
@@ -205,6 +209,12 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of value"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

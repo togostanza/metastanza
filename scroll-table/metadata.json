@@ -37,6 +37,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Padding",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "page-size",
       "stanza:type": "number",
       "stanza:example": 10,
@@ -96,7 +103,7 @@
     {
       "stanza:key": "--togostanza-thead-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table header"
     },
     {
@@ -134,6 +141,12 @@
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table body (even row)"
+    },
+    {
+      "stanza:key": "--togostanza-fg-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

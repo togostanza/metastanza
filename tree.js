@@ -357,6 +357,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#AEB3BF",
 		"stanza:description": "Edge color"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

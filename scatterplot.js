@@ -581,6 +581,12 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "0.7",
 		"stanza:description": "Plot opacity"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };

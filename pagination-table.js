@@ -7149,6 +7149,13 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 0,
+		"stanza:description": "Padding",
+		"stanza:required": false
+	},
+	{
 		"stanza:key": "page-size-option",
 		"stanza:example": "10,20,50,100",
 		"stanza:description": "Page size list",
@@ -7372,6 +7379,12 @@ var metadata = {
 		],
 		"stanza:default": "center",
 		"stanza:description": "Horizonal placement of pagination"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };
@@ -7608,7 +7621,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
-    unescape: columnDef.escape === false
+    unescape: columnDef.escape === false,
   };
 
   if (columnDef.type === "number") {
@@ -8033,6 +8046,8 @@ script.__file = "stanzas/pagination-table/app.vue";
 
 async function paginationTable(stanza, params) {
   const main = stanza.root.querySelector("main");
+  main.parentNode.style.backgroundColor = "var(--togostanza-fg-color)";
+  main.parentNode.style.padding = params["padding"];
   createApp(script, params).mount(main);
 }
 

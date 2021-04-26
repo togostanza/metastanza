@@ -68,6 +68,12 @@
       "stanza:description": "Height"
     },
     {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Padding"
+    },
+    {
       "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
@@ -166,6 +172,12 @@
       "stanza:type": "number",
       "stanza:default": "0.5",
       "stanza:description": "Border width"
+    },
+    {
+      "stanza:key": "--togostanza-fg-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

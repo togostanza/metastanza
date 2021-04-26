@@ -3,9 +3,14 @@
   box-sizing: border-box;
 }
 
+main {
+  background-color: var(--togostanza-fg-color);
+}
+
 .container {
   display: flex;
   flex-direction: column;
+  background-color: var(--togostanza-fg-color);
 }
 .container .menu {
   display: flex;

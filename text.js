@@ -28,10 +28,9 @@ async function text(stanza, params) {
   const height = params["height"];
   const padding = params["padding"];
   const container = stanza.root.querySelector(".container");
-  container.setAttribute(
-    `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
-  );
+  const main = stanza.root.querySelector("main");
+  main.setAttribute("style", `padding: ${padding}px;`);
+  container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
 
   const menu = stanza.root.querySelector(".menu");
   switch (params["metastanza-menu-placement"]) {
@@ -155,6 +154,12 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight"
+	},
+	{
+		"stanza:key": "--togostanza-fg-color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Background color"
 	}
 ]
 };
