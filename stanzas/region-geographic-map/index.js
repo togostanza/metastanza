@@ -1,8 +1,9 @@
-import vegaEmbed from "vega-embed";
+import vegaEmbed, { vega } from "vega-embed";
 
 export default async function regionGeographicMap(stanza, params) {
 
   const spec = await fetch("https://vega.github.io/vega/examples/county-unemployment.vg.json").then((res) => res.json());
+
 
   spec.width = params["width"]; //metadata.jsにパラメータを定義
   spec.height = params["height"];
@@ -27,7 +28,8 @@ export default async function regionGeographicMap(stanza, params) {
   spec.projections = [
     {
       "name": "projection",
-      "type": "albersUsa"
+      "type": "albersUsa",
+      // "scale": {"signal": "scale"},
     }
   ]
 
@@ -36,7 +38,15 @@ export default async function regionGeographicMap(stanza, params) {
       "name": "color",
       "type": "quantize",
       "domain": [0, 0.15],
-      "range": {"scheme": "blues", "count": 7}
+      "range": [
+        "var(--togostanza-series-0-color)" ,
+        "var(--togostanza-series-1-color)" ,
+        "var(--togostanza-series-2-color)" ,
+        "var(--togostanza-series-3-color)" ,
+        "var(--togostanza-series-4-color)" ,
+        "var(--togostanza-series-5-color)" ,
+        "var(--togostanza-series-6-color)"
+      ]
     }
   ],
 
@@ -55,11 +65,12 @@ export default async function regionGeographicMap(stanza, params) {
       "from": {"data": "counties"},
       "encode": {
         "enter": { "tooltip": {"signal": "format(datum.rate, '0.1%')"}},
-        "update": { "fill": {"scale": "color", "field": "rate"} },
-        "hover": { "fill": {"value": "red"} }
+        "hover": { "fill": {"value": "red"} },
+        "update": { 
+          "fill": {"scale": "color", "field": "rate"} },
       },
       "transform": [
-        { "type": "geoshape", "projection": "projection" }
+        { "type": "geoshape", "projection": "projection" },
       ]
     }
   ]
@@ -69,4 +80,7 @@ export default async function regionGeographicMap(stanza, params) {
     renderer: "svg",
   };
   await vegaEmbed(el, spec, opts);
+
+  // DELETE WHEN FINISHED
+  console.log(spec)
 }
