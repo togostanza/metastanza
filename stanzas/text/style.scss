@@ -7,12 +7,12 @@
 }
 
 main {
-  background-color: var(--togostanza-fg-color);
+  background-color: var(--togostanza-background-color);
 }
 .container {
   display: flex;
   flex-direction: column;
-  background-color: var(--togostanza-fg-color);
+  background-color: var(--togostanza-background-color);
   .menu {
     display: flex;
     padding: 5px;
