@@ -13,21 +13,44 @@
   "stanza:address": "62828450+MarleenEliza@users.noreply.github.com",
   "stanza:contributor": [],
   "stanza:created": "2021-04-23",
-  "stanza:updated": "2021-04-23",
+  "stanza:updated": "2021-04-26",
   "stanza:parameter": [
     {
       "stanza:key": "width",
-      "stanza:type": "string",
-      "stanza:example": "600",
-      "stanza:description": "width",
-      "stanza:required": false
+      "stanza:type": "number",
+      "stanza:example": 1000,
+      "stanza:description": "width"
     },
     {
       "stanza:key": "height",
-      "stanza:type": "string",
-      "stanza:example": "300",
-      "stanza:description": "height",
-      "stanza:required": false
+      "stanza:type": "number",
+      "stanza:example": 500,
+      "stanza:description": "height"
+    },
+    {
+      "stanza:key": "legend",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show legend"
+    },
+    {
+      "stanza:key": "legend-orient",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Legend Placement"
+    },
+    {
+      "stanza:key": "legend-title",
+      "stanza:type": "text",
+      "stanza:example": "Legend Title",
+      "stanza:description": "Legend Title"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -37,12 +60,6 @@
       "stanza:type": "text",
       "stanza:default": "blues",
       "stanza:description": "Border color"
-    },
-    {
-      "stanza:key": "--togostanza-map-color",
-      "stanza:type": "color",
-      "stanza:default": "#FFFF99",
-      "stanza:description": "Map color"
     },
     {
       "stanza:key": "--togostanza-series-0-color",
@@ -85,6 +102,12 @@
       "stanza:type": "color",
       "stanza:default": "#8251DB",
       "stanza:description": "Category color 6"
+    },
+    {
+      "stanza:key": "--togostanza-hover-color",
+      "stanza:type": "color",
+      "stanza:default": "#FB0E0E",
+      "stanza:description": "Hover color when hovering over region"
     }
   ],
   "stanza:incomingEvent": [],
