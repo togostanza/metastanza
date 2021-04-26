@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
-import { l as loadData } from './load-data-c473ed5e.js';
+import { l as loadData } from './load-data-cd9af903.js';
 
 async function text(stanza, params) {
   stanza.importWebFontCSS(

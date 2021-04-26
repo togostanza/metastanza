@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
 import { e as defineComponent, m as reactive, o as onMounted, b as createBlock, h as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, u as createApp } from './runtime-dom.esm-bundler-1a3b1ec7.js';
-import { l as loadData } from './load-data-c473ed5e.js';
+import { l as loadData } from './load-data-cd9af903.js';
 
 var metadata = {
 	"@context": {
@@ -136,13 +136,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-tbody-odd-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
+		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color of table body (odd row)"
 	},
 	{
 		"stanza:key": "--togostanza-tbody-even-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
+		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color of table body (even row)"
 	}
 ]

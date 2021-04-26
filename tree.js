@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
-import { e as embed } from './vega-embed.module-89eea843.js';
-import { l as loadData } from './load-data-c473ed5e.js';
+import { e as embed } from './vega-embed.module-dbf5bd3a.js';
+import { l as loadData } from './load-data-cd9af903.js';
 import { a as appendDlButton } from './metastanza_utils-a3ff1297.js';
 
 async function tree(stanza, params) {

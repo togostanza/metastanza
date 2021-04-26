@@ -5,6 +5,7 @@
 
 .container {
   display: flex;
+  flex-direction: column;
 }
 .container .menu {
   display: flex;

@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
-import { l as loadData } from './load-data-c473ed5e.js';
+import { l as loadData } from './load-data-cd9af903.js';
 
 async function hashTable(stanza, params) {
   let dataset = await loadData(params["data-url"], params["data-type"]);
@@ -149,7 +149,7 @@ var metadata = {
 	{
 		"stanza:key": "--table-background-color",
 		"stanza:type": "color",
-		"stanza:default": "#FFFFFF",
+		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color of table"
 	},
 	{

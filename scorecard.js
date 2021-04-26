@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
-import { l as loadData } from './load-data-c473ed5e.js';
+import { l as loadData } from './load-data-cd9af903.js';
 import { a as appendDlButton } from './metastanza_utils-a3ff1297.js';
 
 async function scorecard(stanza, params) {
@@ -27,11 +27,15 @@ async function scorecard(stanza, params) {
     },
   });
 
-  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
-  chartWrapper.setAttribute(
+  const main = stanza.root.querySelector("main");
+  console.log("main.parentNode", main.parentNode);
+  main.parentNode.setAttribute(
     `style`,
     `width: ${width}px; height: ${height}px; padding: ${padding}px;`
   );
+
+  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
+  chartWrapper.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
 
   const key = stanza.root.querySelector("#scorecardKey");
   const value = stanza.root.querySelector("#scorecardValue");
