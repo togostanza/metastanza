@@ -7,6 +7,8 @@ export default async function regionGeographicMap(stanza, params) {
 
   spec.width = params["width"]; //metadata.jsにパラメータを定義
   spec.height = params["height"];
+  spec.legends = params["legend"];
+  
 
   spec.data = [
     {
@@ -48,16 +50,20 @@ export default async function regionGeographicMap(stanza, params) {
         "var(--togostanza-series-6-color)"
       ]
     }
-  ],
+  ]
 
-  spec.legends = [
+
+  // set legend if metadata "legend" is true
+  const legend = [
     {
       "fill": "color",
-      "orient": "bottom-right",
-      "title": "Unemployment",
+      "orient": params["legend-orient"],
+      "title": params["legend-title"],
       "format": "0.1%"
     }
   ]
+
+  params["legend"] ? spec.legends = legend : spec.legends = []
 
   spec.marks = [
     {
@@ -65,7 +71,7 @@ export default async function regionGeographicMap(stanza, params) {
       "from": {"data": "counties"},
       "encode": {
         "enter": { "tooltip": {"signal": "format(datum.rate, '0.1%')"}},
-        "hover": { "fill": {"value": "red"} },
+        "hover": { "fill": {"value": "var(--togostanza-hover-color)"} },
         "update": { 
           "fill": {"scale": "color", "field": "rate"} },
       },
@@ -83,4 +89,5 @@ export default async function regionGeographicMap(stanza, params) {
 
   // DELETE WHEN FINISHED
   console.log(spec)
+  console.log("var(--togostanza-legend-orient)")
 }
