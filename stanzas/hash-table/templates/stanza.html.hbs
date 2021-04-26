@@ -9,6 +9,8 @@
           <a href="{{value.href}}" target="_blank">
             {{value.value}}
           </a>
+        {{else if value.unescape}}
+          {{{value.value}}}
         {{else}}
           {{value.value}}
         {{/if}}

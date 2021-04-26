@@ -149,7 +149,7 @@
     {
       "stanza:key": "--togostanza-non-active-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(0, 0, 0, .3)",
+      "stanza:default": "rgba(255, 255, 255, .7)",
       "stanza:description": "Non active color of control area"
     },
     {

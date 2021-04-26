@@ -16,34 +16,37 @@
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
-      "stanza:key": "data-URL",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table?taxonomy=9606",
+      "stanza:key": "data-url",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
     {
-      "stanza:key": "page-size",
-      "stanza:example": "10",
-      "stanza:description": "Page size",
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
       "stanza:required": true
-    },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 800,
-      "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 400,
-      "stanza:description": "Height"
+      "stanza:description": "Height",
+      "stanza:required": true
     },
     {
-      "stanza:key": "padding",
+      "stanza:key": "page-size",
       "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "Padding"
+      "stanza:example": 10,
+      "stanza:description": "Page size",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "columns",
+      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\",\"escape\": false},{\"id\":\"mass\",\"label\":\"Mass\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\"}]",
+      "stanza:description": "Columns' options"
     }
   ],
   "stanza:about-link-placement": "bottom-right",

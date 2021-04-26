@@ -1,7 +1,7 @@
 <template>
   <div
     class="tableWrapper"
-    :style="`width: ${width}px; height: ${height}px; padding: ${oadding}px`"
+    :style="`height: ${height}px;`"
     @scroll="handleScroll"
   >
     <table v-if="state.allRows">
@@ -18,12 +18,13 @@
             <span v-if="cell.href">
               <a :href="cell.href" target="_blank">{{ cell.value }}</a>
             </span>
+            <span v-else-if="cell.unescape" v-html="cell.value"></span>
             <span v-else>
               {{ cell.value }}
             </span>
           </td>
         </tr>
-        <tr v-if="state.isFetchingData">
+        <tr v-if="state.isFetching">
           <td :colspan="state.columns.length" class="loadingWrapper">
             <div class="dotTyping"></div>
           </td>
@@ -36,8 +37,7 @@
 <script>
 import { defineComponent, reactive, onMounted } from "vue";
 
-import orderBy from "lodash.orderby";
-import zip from "lodash.zip";
+import loadData from "@/lib/load-data";
 
 import metadata from "./metadata.json";
 
@@ -46,61 +46,65 @@ export default defineComponent({
 
   setup(params) {
     const state = reactive({
-      responseJSON: null, // for download. may consume extra memory
-
       columns: [],
       allRows: [],
 
       offset: 0,
 
-      isFetchingData: false,
+      isFetching: false,
     });
 
     async function fetchData() {
-      state.isFetchingData = true;
-      const res = await fetch(
-        `${params.dataURL}&limit=${params.pageSize}&offset=${state.offset}`
+      state.isFetching = true;
+      let urlParams = {
+        limit: params.pageSize,
+        offset: state.offset,
+      };
+      urlParams = new URLSearchParams(urlParams);
+      const { dataUrl } = params;
+      const connectCharacter = new URL(dataUrl) ? "&" : "?";
+      const data = await loadData(
+        `${dataUrl}${connectCharacter}${urlParams}`,
+        params.dataType
       );
-      const data = await res.json();
 
-      state.responseJSON = data;
-
-      const { vars, labels, order, href } = data.head;
-
-      const columns = zip(vars, labels, order, href)
-        .map(([_var, label, _order, _href]) => {
+      if (params.columns) {
+        state.columns = JSON.parse(params.columns);
+      } else if (data.length > 0) {
+        const firstRow = data[0];
+        state.columns = Object.keys(firstRow).map((key) => {
           return {
-            id: _var,
-            label,
-            order: _order,
-            href: _href,
+            id: key,
+            label: key,
           };
-        })
-        .filter((column) => column.label !== null);
-
-      state.columns = orderBy(columns, ["order"]);
+        });
+      } else {
+        state.columns = [];
+      }
 
       state.allRows = state.allRows.concat(
-        data.body.map((row) => {
-          return columns.map((column) => {
+        data.map((row) => {
+          return state.columns.map((column) => {
             return {
               column,
-              value: row[column.id].value,
-              href: column.href ? row[column.href].value : null,
+              value: row[column.id],
+              href: column.link ? row[column.link] : null,
+              unescape: column.escape === false,
             };
           });
         })
       );
-      state.isFetchingData = false;
+
+      state.isFetching = false;
     }
 
     function handleScroll(e) {
       if (
         e.path[0].scrollTop ===
           e.path[0].firstChild.clientHeight - e.path[0].clientHeight &&
-        !state.isFetchingData
+        !state.isFetching
       ) {
-        state.offset++;
+        state.offset = state.offset + params.pageSize;
         fetchData();
       }
     }
@@ -112,7 +116,6 @@ export default defineComponent({
     return {
       state,
       handleScroll,
-      width: params.width,
       height: params.height,
       padding: params.padding,
     };
