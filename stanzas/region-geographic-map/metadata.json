@@ -51,6 +51,13 @@
       "stanza:description": "Show border between"
     },
     {
+      "stanza:key": "border",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show border between"
+    },
+    {
       "stanza:key": "legend",
       "stanza:type": "boolean",
       "stanza:choice": ["true", "false"],
