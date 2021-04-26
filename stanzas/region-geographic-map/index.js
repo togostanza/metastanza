@@ -2,45 +2,47 @@ import vegaEmbed, { vega } from "vega-embed";
 
 export default async function regionGeographicMap(stanza, params) {
 
-  const spec = await fetch("https://vega.github.io/vega/examples/county-unemployment.vg.json").then((res) => res.json());
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+
+  const vegaJson = await fetch("https://vega.github.io/vega/examples/county-unemployment.vg.json").then((res) => res.json());
 
 
-  spec.width = params["width"]; //metadata.jsにパラメータを定義
-  spec.height = params["height"];
-  spec.legends = params["legend"];
-  
+  const 
+    width = params["width"], //metadata.jsにパラメータを定義
+    height = params["height"];
 
-  spec.data = [
+  const data = [
     {
-      "name": "unemp",
-      "url": "https://vega.github.io/vega/data/unemployment.tsv",
-      "format": {"type": "tsv", "parse": "auto"}
+      name: "unemp",
+      url: "https://vega.github.io/vega/data/unemployment.tsv",
+      format: {"type": "tsv", "parse": "auto"}
     },
     {
-      "name": "counties",
-      "url": "https://vega.github.io/vega/data/us-10m.json",
-      "format": {"type": "topojson", "feature": "counties"},
-      "transform": [
-        { "type": "lookup", "from": "unemp", "key": "id", "fields": ["id"], "values": ["rate"] },
-        { "type": "filter", "expr": "datum.rate != null" }
+      name: "counties",
+      url: "https://vega.github.io/vega/data/us-10m.json",
+      format: {type: "topojson", "feature": "counties"},
+      transform: [
+        { type: "lookup", from: "unemp", key: "id", fields: ["id"], values: ["rate"] },
+        { type: "filter", expr: "datum.rate != null" }
       ]
     }
   ]
 
-  spec.projections = [
+  const projections = [
     {
-      "name": "projection",
-      "type": "albersUsa",
-      // "scale": {"signal": "scale"},
+      name: "projection",
+      type: "albersUsa"
     }
   ]
 
-  spec.scales =  [
+  const scales =  [
     {
-      "name": "color",
-      "type": "quantize",
-      "domain": [0, 0.15],
-      "range": [
+      name: "userColor",
+      type: "quantize",
+      domain: [0, 0.15],
+      range: [
         "var(--togostanza-series-0-color)" ,
         "var(--togostanza-series-1-color)" ,
         "var(--togostanza-series-2-color)" ,
@@ -52,42 +54,53 @@ export default async function regionGeographicMap(stanza, params) {
     }
   ]
 
-
-  // set legend if metadata "legend" is true
-  const legend = [
+  const legends = [
     {
-      "fill": "color",
-      "orient": params["legend-orient"],
-      "title": params["legend-title"],
-      "format": "0.1%"
+      fill: "userColor",
+      orient: params["legend-orient"],
+      title: params["legend-title"],
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: "var(--togostanza-font-family)",
+      titleFontWeight: "var(--togostanza-title-font-weight)",
+      format: "0.1%",
     }
   ]
 
-  params["legend"] ? spec.legends = legend : spec.legends = []
-
-  spec.marks = [
+  const marks = [
     {
-      "type": "shape",
-      "from": {"data": "counties"},
-      "encode": {
-        "enter": { "tooltip": {"signal": "format(datum.rate, '0.1%')"}},
-        "hover": { "fill": {"value": "var(--togostanza-hover-color)"} },
-        "update": { 
-          "fill": {"scale": "color", "field": "rate"} },
+      type: "shape",
+      from: {data: "counties"},
+      encode: {
+        enter: { tooltip: {signal: "format(datum.rate, '0.1%')"}},
+        hover: { 
+          fill: { value: "var(--togostanza-hover-color)"} 
+        },
+        update: { 
+          fill: { scale: "userColor", field: "rate"},
+          stroke: params["border"] ? {"value": "var(--togostanza-region-border-color)"} : ""
+        },
       },
-      "transform": [
-        { "type": "geoshape", "projection": "projection" },
+      transform: [
+        { type: "geoshape", projection: "projection" },
       ]
     }
   ]
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width,
+    height,
+    signals: vegaJson.signals,
+    data,
+    projections,
+    scales,
+    legends: params["legend"] ? legends : [],
+    marks,
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {
     renderer: "svg",
   };
   await vegaEmbed(el, spec, opts);
-
-  // DELETE WHEN FINISHED
-  console.log(spec)
-  console.log("var(--togostanza-legend-orient)")
 }
