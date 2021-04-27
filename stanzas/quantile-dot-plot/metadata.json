@@ -18,13 +18,13 @@
     {
       "stanza:key": "width",
       "stanza:type": "number",
-      "stanza:example": 150,
+      "stanza:example": 500,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 500,
+      "stanza:example": 180,
       "stanza:description": "Height"
     },
     {
