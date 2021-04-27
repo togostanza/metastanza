@@ -15,5 +15,6 @@ Describe about the repository here. These contents will help the repository user
 ## Development
 
 - `npx togostanza s` run code
+- `npx togostanza g stanza` build new stanza
 - `npm run lint` checks the format of code
 - `npm run lint:fix` fixes fixable format errors
