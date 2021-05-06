@@ -10,9 +10,9 @@ async function barchart(stanza, params) {
   const chartType = params["chart-type"];
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   //data
   const labelVariable = params["category"]; //x
@@ -142,7 +142,6 @@ async function barchart(stanza, params) {
               value: css("--togostanza-font-family"),
             },
             fontSize: { value: css("--togostanza-label-font-size") },
-            // limit: 1
           },
         },
       },
@@ -154,7 +153,6 @@ async function barchart(stanza, params) {
     {
       fill: "color",
       orient: "right",
-      // legendX: width + 40,
       legendY: "0",
       title: getTitle(
         params["legend-title"],
@@ -461,12 +459,13 @@ var metadata = {
 	},
 	{
 		"stanza:key": "padding-inner",
-		"stanza:example": "0.1",
+		"stanza:type": "number",
+		"stanza:example": 0.1,
 		"stanza:description": "Padding between each bars (0-1)"
 	},
 	{
 		"stanza:key": "padding-outer",
-		"stanza:example": "0.4",
+		"stanza:example": 0.4,
 		"stanza:description": "Padding outside of bar group (0-1)"
 	},
 	{
@@ -531,12 +530,12 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xlabel-angle",
-		"stanza:example": "0",
+		"stanza:example": 0,
 		"stanza:description": "X label angle (in degree)"
 	},
 	{
 		"stanza:key": "ylabel-angle",
-		"stanza:example": "0",
+		"stanza:example": 0,
 		"stanza:description": "Y label angle (in degree)"
 	},
 	{
@@ -565,7 +564,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "bar-width",
-		"stanza:example": "0.8",
+		"stanza:example": 0.8,
 		"stanza:description": "Bar width (0-1)"
 	},
 	{
@@ -645,7 +644,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-axis-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Axis width"
 	},
 	{
@@ -663,13 +662,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-grid-opacity",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Grid opacity (0-1)"
 	},
 	{
 		"stanza:key": "--togostanza-grid-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Grid width"
 	},
 	{
@@ -681,13 +680,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-tick-length",
 		"stanza:type": "number",
-		"stanza:default": "1.5",
+		"stanza:default": 1.5,
 		"stanza:description": "Tick length (in pixel)"
 	},
 	{
 		"stanza:key": "--togostanza-tick-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Tick width (in pixel)"
 	},
 	{
@@ -699,7 +698,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
-		"stanza:default": "10",
+		"stanza:default": 10,
 		"stanza:description": "Label font size"
 	},
 	{
@@ -711,7 +710,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Border width"
 	},
 	{
@@ -723,13 +722,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-title-font-size",
 		"stanza:type": "number",
-		"stanza:default": "12",
+		"stanza:default": 12,
 		"stanza:description": "Title font size"
 	},
 	{
 		"stanza:key": "--togostanza-title-font-weight",
 		"stanza:type": "number",
-		"stanza:default": "400",
+		"stanza:default": 400,
 		"stanza:description": "Title font weight"
 	},
 	{

@@ -100,7 +100,7 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "text",
-		"stanza:example": "800",
+		"stanza:example": 800,
 		"stanza:description": "Width"
 	},
 	{

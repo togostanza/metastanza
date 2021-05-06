@@ -140,13 +140,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-table-border",
 		"stanza:type": "text",
-		"stanza:default": "1px solid #eee",
+		"stanza:default": "1px solid #EEEEEE",
 		"stanza:description": "Table border"
 	},
 	{
 		"stanza:key": "--togostanza-table-shadow",
 		"stanza:type": "text",
-		"stanza:default": "1px 1px 3px 1px #eee",
+		"stanza:default": "1px 1px 3px 1px #EEEEEE",
 		"stanza:description": "Table shadow"
 	},
 	{
@@ -158,7 +158,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-tbody-border-bottom",
 		"stanza:type": "text",
-		"stanza:default": "0.5px solid #eee",
+		"stanza:default": "0.5px solid #EEEEEE",
 		"stanza:description": "Border bottom of table body"
 	},
 	{

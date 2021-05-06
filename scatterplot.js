@@ -9,9 +9,9 @@ async function scatterplot(stanza, params) {
   }
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   const xVariable = params["x"];
   const yVariable = params["y"];
@@ -395,12 +395,14 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xlabel-angle",
-		"stanza:example": "0",
+		"stanza:type": "number",
+		"stanza:example": 0,
 		"stanza:description": "X label angle (in degree)"
 	},
 	{
 		"stanza:key": "ylabel-angle",
-		"stanza:example": "0",
+		"stanza:type": "number",
+		"stanza:example": 0,
 		"stanza:description": "Y label angle (in degree)"
 	},
 	{
@@ -489,7 +491,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-axis-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Axis width"
 	},
 	{
@@ -507,13 +509,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-grid-opacity",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Grid opacity (0-1)"
 	},
 	{
 		"stanza:key": "--togostanza-grid-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Grid width"
 	},
 	{
@@ -525,13 +527,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-tick-length",
 		"stanza:type": "number",
-		"stanza:default": "1.5",
+		"stanza:default": 1.5,
 		"stanza:description": "Tick length (in pixel)"
 	},
 	{
 		"stanza:key": "--togostanza-tick-width",
 		"stanza:type": "number",
-		"stanza:default": "1",
+		"stanza:default": 1,
 		"stanza:description": "Tick width (in pixel)"
 	},
 	{
@@ -543,13 +545,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-title-font-size",
 		"stanza:type": "number",
-		"stanza:default": "12",
+		"stanza:default": 12,
 		"stanza:description": "Title font size"
 	},
 	{
 		"stanza:key": "--togostanza-title-font-weight",
 		"stanza:type": "number",
-		"stanza:default": "400",
+		"stanza:default": 400,
 		"stanza:description": "Title font weight"
 	},
 	{
@@ -561,7 +563,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
-		"stanza:default": "10",
+		"stanza:default": 10,
 		"stanza:description": "Label font size"
 	},
 	{
@@ -573,13 +575,13 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Border width"
 	},
 	{
 		"stanza:key": "--togostanza-opacity",
 		"stanza:type": "text",
-		"stanza:default": "0.7",
+		"stanza:default": 0.7,
 		"stanza:description": "Plot opacity"
 	},
 	{

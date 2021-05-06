@@ -13,9 +13,9 @@ async function tree(stanza, params) {
   ).then((res) => res.json());
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   //data
   const labelVariable = params["label"]; //"name"
@@ -325,7 +325,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-node-size",
 		"stanza:type": "number",
-		"stanza:default": "100",
+		"stanza:default": 100,
 		"stanza:description": "Node size"
 	},
 	{
@@ -337,7 +337,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
-		"stanza:default": "11",
+		"stanza:default": 11,
 		"stanza:description": "Label font size"
 	},
 	{
@@ -349,7 +349,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Border width"
 	},
 	{

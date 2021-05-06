@@ -13,9 +13,9 @@ async function piechart(stanza, params) {
   ).then((res) => res.json());
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = { left: 5, top: 5, right: 150, bottom: 30 };
+  const width = params["width"];
+  const height = params["height"];
+  const padding = { left: 0, top: 0, right: 150, bottom: 0 };
 
   //data
   const labelVariable = params["category"];
@@ -61,7 +61,6 @@ async function piechart(stanza, params) {
     {
       fill: "color",
       orient: "right",
-      // legendX: "220",
       legendY: "5",
       title:
         params["legend-title"] === "" ? labelVariable : params["legend-title"],
@@ -327,7 +326,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-title-font-weight",
 		"stanza:type": "number",
-		"stanza:default": "400",
+		"stanza:default": 400,
 		"stanza:description": "Font weight of legend title"
 	},
 	{
@@ -339,7 +338,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-label-font-size",
 		"stanza:type": "number",
-		"stanza:default": "10",
+		"stanza:default": 10,
 		"stanza:description": "Label font size"
 	},
 	{
@@ -351,7 +350,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": "0.5",
+		"stanza:default": 0.5,
 		"stanza:description": "Border width"
 	},
 	{

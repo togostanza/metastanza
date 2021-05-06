@@ -27,29 +27,35 @@ async function scorecard(stanza, params) {
     },
   });
 
-  const main = stanza.root.querySelector("main");
-  main.parentNode.setAttribute(
+  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
+  chartWrapper.setAttribute(
     `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px; background-color: var(--togostanza-background-color);`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px`
   );
 
-  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
-  chartWrapper.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
+  const scorecardSvg = stanza.root.querySelector("#scorecardSvg");
+  scorecardSvg.setAttribute(
+    "height",
+    `${
+      Number(css("--togostanza-key-font-size")) +
+      Number(css("--togostanza-value-font-size"))
+    }`
+  );
 
-  const key = stanza.root.querySelector("#scorecardKey");
-  const value = stanza.root.querySelector("#scorecardValue");
+  const key = stanza.root.querySelector("#key");
+  const value = stanza.root.querySelector("#value");
   if (params["legend"] === "false") {
     key.setAttribute(`style`, `display: none;`);
   }
 
-  key.setAttribute("x", `${width / 2}px`);
   key.setAttribute("y", Number(css("--togostanza-key-font-size")));
-  value.setAttribute("x", `${width / 2}px`);
+  key.setAttribute("fill", css("--togostanza-key-font-color"));
   value.setAttribute(
     "y",
     Number(css("--togostanza-key-font-size")) +
       Number(css("--togostanza-value-font-size"))
   );
+  value.setAttribute("fill", css("--togostanza-value-font-color"));
   key.setAttribute("font-size", css("--togostanza-key-font-size"));
   value.setAttribute("font-size", css("--togostanza-value-font-size"));
 
@@ -63,6 +69,8 @@ async function scorecard(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
+  console.log("dl_button", menuButton);
+  console.log("menuList", menuList);
   switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
@@ -144,7 +152,7 @@ var metadata = {
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": 0,
+		"stanza:example": 50,
 		"stanza:description": "Padding"
 	},
 	{
@@ -193,14 +201,14 @@ var metadata = {
 	},
 	{
 		"stanza:key": "--togostanza-key-font-size",
-		"stanza:type": "text",
-		"stanza:default": "16",
+		"stanza:type": "number",
+		"stanza:default": 16,
 		"stanza:description": "Font size for key"
 	},
 	{
 		"stanza:key": "--togostanza-key-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
+		"stanza:type": "number",
+		"stanza:default": 400,
 		"stanza:description": "Font weight for key"
 	},
 	{
@@ -211,14 +219,14 @@ var metadata = {
 	},
 	{
 		"stanza:key": "--togostanza-value-font-size",
-		"stanza:type": "text",
-		"stanza:default": "36",
+		"stanza:type": "number",
+		"stanza:default": 36,
 		"stanza:description": "Font size for value"
 	},
 	{
 		"stanza:key": "--togostanza-value-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "600",
+		"stanza:type": "number",
+		"stanza:default": 600,
 		"stanza:description": "Font weight for value"
 	},
 	{
@@ -239,11 +247,11 @@ var templates = [
         return undefined
     };
 
-  return "    <svg class=\"scorecard-svg\">\n      <text\n        id=\"scorecardKey\"\n        text-anchor=\"middle\"\n        font-family=\"var(--togostanza-font-family)\"\n        fill=\"var(--togostanza-key-font-color)\"\n        font-weight=\"var(--togostanza-key-font-weight)\"\n      >\n        "
+  return "    <svg id=\"scorecardSvg\" class=\"scorecard-svg\">\n      <text id=\"text\" x=\"50%\" y=\"50%\" text-anchor=\"middle\">\n        <tspan id=\"key\" x=\"50%\" y=\"16px\" font-size=\"16px\">\n          "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"key") : stack1), depth0))
-    + "\n      </text>\n      <text\n        id=\"scorecardValue\"\n        text-anchor=\"middle\"\n        font-family=\"var(--togostanza-font-family)\"\n        fill=\"var(--togostanza-value-font-color)\"\n        font-weight=\"var(--togostanza-value-font-weight)\"\n      >\n        "
+    + "\n        </tspan>\n        <tspan id=\"value\" x=\"50%\" y=\"48px\" font-size=\"32px\">\n          "
     + alias2(alias1(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
-    + "\n      </text>\n    </svg>\n";
+    + "\n        </tspan>\n      </text>\n    </svg>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
     var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -253,7 +261,7 @@ var templates = [
     };
 
   return "<div class=\"chart-wrapper\">\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":23,"column":11}}})) != null ? stack1 : "")
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"scorecards") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":2,"column":2},"end":{"line":13,"column":11}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
