@@ -7,14 +7,13 @@
   justify-content: center;
 }
 
-main{
+main {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-
-.chart-wrapper{
+.chart-wrapper {
   display: flex;
   flex-direction: column;
   width: 200px;
@@ -23,9 +22,10 @@ main{
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: var(--togostanza-background-color);
 }
 
-svg.scorecard-svg{
+svg.scorecard-svg {
   width: 200px;
   height: 48px;
   overflow: visible;

@@ -8,9 +8,9 @@ export default async function scatterplot(stanza, params) {
   }
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   const xVariable = params["x"];
   const yVariable = params["y"];

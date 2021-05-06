@@ -146,7 +146,7 @@
     {
       "stanza:key": "--togostanza-title-font-weight",
       "stanza:type": "number",
-      "stanza:default": "400",
+      "stanza:default": 400,
       "stanza:description": "Font weight of legend title"
     },
     {
@@ -158,7 +158,7 @@
     {
       "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
-      "stanza:default": "10",
+      "stanza:default": 10,
       "stanza:description": "Label font size"
     },
     {
@@ -170,7 +170,7 @@
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": "0.5",
+      "stanza:default": 0.5,
       "stanza:description": "Border width"
     },
     {

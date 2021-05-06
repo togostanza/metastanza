@@ -26,17 +26,20 @@ export default async function scorecard(stanza, params) {
     },
   });
 
-  const main = stanza.root.querySelector("main");
-  main.parentNode.setAttribute(
+  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
+  chartWrapper.setAttribute(
     `style`,
-    `background-color: var(--togostanza-background-color);`
+    `width: ${width}px; height: ${height}px; padding: ${padding}px`
   );
 
-  const chartWrapper = stanza.root.querySelector(".chart-wrapper");
-  chartWrapper.setAttribute(`style`, `width: ${width}px; height: ${height}px; padding: ${padding}px`);
-
   const scorecardSvg = stanza.root.querySelector("#scorecardSvg");
-  scorecardSvg.setAttribute('height',`${Number(css("--togostanza-key-font-size")) + Number(css("--togostanza-value-font-size"))}`)
+  scorecardSvg.setAttribute(
+    "height",
+    `${
+      Number(css("--togostanza-key-font-size")) +
+      Number(css("--togostanza-value-font-size"))
+    }`
+  );
 
   const key = stanza.root.querySelector("#key");
   const value = stanza.root.querySelector("#value");
@@ -45,16 +48,16 @@ export default async function scorecard(stanza, params) {
   }
 
   key.setAttribute("y", Number(css("--togostanza-key-font-size")));
-  key.setAttribute("fill",css("--togostanza-key-font-color"));
+  key.setAttribute("fill", css("--togostanza-key-font-color"));
   value.setAttribute(
     "y",
     Number(css("--togostanza-key-font-size")) +
       Number(css("--togostanza-value-font-size"))
   );
-  value.setAttribute("fill",css("--togostanza-value-font-color"));
+  value.setAttribute("fill", css("--togostanza-value-font-color"));
   key.setAttribute("font-size", css("--togostanza-key-font-size"));
   value.setAttribute("font-size", css("--togostanza-value-font-size"));
-  
+
   //menu button placement
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
@@ -65,8 +68,8 @@ export default async function scorecard(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  console.log('dl_button',menuButton);
-  console.log('menuList',menuList)
+  console.log("dl_button", menuButton);
+  console.log("menuList", menuList);
   switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");

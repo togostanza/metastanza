@@ -9,9 +9,9 @@ export default async function barchart(stanza, params) {
   const chartType = params["chart-type"];
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   //data
   const labelVariable = params["category"]; //x
@@ -141,7 +141,6 @@ export default async function barchart(stanza, params) {
               value: css("--togostanza-font-family"),
             },
             fontSize: { value: css("--togostanza-label-font-size") },
-            // limit: 1
           },
         },
       },
@@ -153,7 +152,6 @@ export default async function barchart(stanza, params) {
     {
       fill: "color",
       orient: "right",
-      // legendX: width + 40,
       legendY: "0",
       title: getTitle(
         params["legend-title"],

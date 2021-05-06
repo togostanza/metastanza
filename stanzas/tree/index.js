@@ -12,9 +12,9 @@ export default async function tree(stanza, params) {
   ).then((res) => res.json());
 
   //width,height,padding
-  const width = Number(params["width"]);
-  const height = Number(params["height"]);
-  const padding = Number(params["padding"]);
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
   //data
   const labelVariable = params["label"]; //"name"

@@ -90,14 +90,14 @@
     },
     {
       "stanza:key": "--togostanza-key-font-size",
-      "stanza:type": "text",
-      "stanza:default": "16",
+      "stanza:type": "number",
+      "stanza:default": 16,
       "stanza:description": "Font size for key"
     },
     {
       "stanza:key": "--togostanza-key-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "400",
+      "stanza:type": "number",
+      "stanza:default": 400,
       "stanza:description": "Font weight for key"
     },
     {
@@ -108,14 +108,14 @@
     },
     {
       "stanza:key": "--togostanza-value-font-size",
-      "stanza:type": "text",
-      "stanza:default": "36",
+      "stanza:type": "number",
+      "stanza:default": 36,
       "stanza:description": "Font size for value"
     },
     {
       "stanza:key": "--togostanza-value-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "600",
+      "stanza:type": "number",
+      "stanza:default": 600,
       "stanza:description": "Font weight for value"
     },
     {
