@@ -47,15 +47,15 @@ async function scorecard(stanza, params) {
   if (params["legend"] === "false") {
     key.setAttribute(`style`, `display: none;`);
   }
-
+  
   key.setAttribute("y", Number(css("--togostanza-key-font-size")));
-  key.setAttribute("fill", css("--togostanza-key-font-color"));
+  key.setAttribute("fill", "var(--togostanza-key-font-color)");
   value.setAttribute(
     "y",
     Number(css("--togostanza-key-font-size")) +
       Number(css("--togostanza-value-font-size"))
   );
-  value.setAttribute("fill", css("--togostanza-value-font-color"));
+  value.setAttribute("fill", "var(--togostanza-value-font-color)");
   key.setAttribute("font-size", css("--togostanza-key-font-size"));
   value.setAttribute("font-size", css("--togostanza-value-font-size"));
 
@@ -69,8 +69,6 @@ async function scorecard(stanza, params) {
 
   const menuButton = stanza.root.querySelector("#dl_button");
   const menuList = stanza.root.querySelector("#dl_list");
-  console.log("dl_button", menuButton);
-  console.log("menuList", menuList);
   switch (params["metastanza-menu-placement"]) {
     case "top-left":
       menuButton.setAttribute("class", "dl-top-left");
@@ -181,12 +179,6 @@ var metadata = {
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
-	{
-		"stanza:key": "--togostanza-series-0-color",
-		"stanza:type": "color",
-		"stanza:default": "#6590e6",
-		"stanza:description": "Key color"
-	},
 	{
 		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
