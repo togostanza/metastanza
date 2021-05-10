@@ -47,7 +47,7 @@ async function scorecard(stanza, params) {
   if (params["legend"] === "false") {
     key.setAttribute(`style`, `display: none;`);
   }
-  
+
   key.setAttribute("y", Number(css("--togostanza-key-font-size")));
   key.setAttribute("fill", "var(--togostanza-key-font-color)");
   value.setAttribute(
