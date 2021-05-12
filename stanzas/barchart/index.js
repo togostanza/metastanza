@@ -92,6 +92,7 @@ export default async function barchart(stanza, params) {
       titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["xtitle-padding"],
       labelPadding: params["xlabel-padding"],
+      labelAlign: params["xlabel-alignment"],
       encode: {
         labels: {
           interactive: true,
@@ -130,6 +131,7 @@ export default async function barchart(stanza, params) {
       titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["ytitle-padding"],
       labelPadding: params["ylabel-padding"],
+      labelAlign: params["ylabel-alignment"],
       zindex: 0,
       encode: {
         labels: {

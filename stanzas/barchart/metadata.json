@@ -167,6 +167,20 @@
       "stanza:description": "Padding between Y label and tick"
     },
     {
+      "stanza:key": "xlabel-alignment",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "center", "right"],
+      "stanza:example": "center",
+      "stanza:description": "X label alignment"
+    },
+    {
+      "stanza:key": "ylabel-alignment",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "center", "right"],
+      "stanza:example": "right",
+      "stanza:description": "Y label alignment"
+    },
+    {
       "stanza:key": "xtitle-padding",
       "stanza:type": "number",
       "stanza:example": 10,
