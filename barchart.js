@@ -93,6 +93,7 @@ async function barchart(stanza, params) {
       titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["xtitle-padding"],
       labelPadding: params["xlabel-padding"],
+      labelAlign: params["xlabel-alignment"],
       encode: {
         labels: {
           interactive: true,
@@ -131,6 +132,7 @@ async function barchart(stanza, params) {
       titleFontWeight: css("--togostanza-title-font-weight"),
       titlePadding: params["ytitle-padding"],
       labelPadding: params["ylabel-padding"],
+      labelAlign: params["ylabel-alignment"],
       zindex: 0,
       encode: {
         labels: {
@@ -549,6 +551,28 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 5,
 		"stanza:description": "Padding between Y label and tick"
+	},
+	{
+		"stanza:key": "xlabel-alignment",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"center",
+			"right"
+		],
+		"stanza:example": "center",
+		"stanza:description": "X label alignment"
+	},
+	{
+		"stanza:key": "ylabel-alignment",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"center",
+			"right"
+		],
+		"stanza:example": "right",
+		"stanza:description": "Y label alignment"
 	},
 	{
 		"stanza:key": "xtitle-padding",
