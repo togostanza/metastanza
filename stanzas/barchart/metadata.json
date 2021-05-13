@@ -145,9 +145,26 @@
       "stanza:description": "Show Y tick"
     },
     {
+      "stanza:key": "xlabel-max-width",
+      "stanza:type": "number",
+      "stanza:example": 200,
+      "stanza:description": "Max width of each X label"
+    },
+    {
+      "stanza:key": "ylabel-max-width",
+      "stanza:type": "number",
+      "stanza:example": 200,
+      "stanza:description": "Max width of each Y label"
+    },
+    {
       "stanza:key": "xlabel-angle",
       "stanza:example": 0,
       "stanza:description": "X label angle (in degree)"
+    },
+    {
+      "stanza:key": "ylabel-angle",
+      "stanza:example": 0,
+      "stanza:description": "Y label angle (in degree)"
     },
     {
       "stanza:key": "ylabel-angle",
@@ -170,7 +187,7 @@
       "stanza:key": "xlabel-alignment",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "center", "right"],
-      "stanza:example": "center",
+      "stanza:example": "left",
       "stanza:description": "X label alignment"
     },
     {
@@ -203,6 +220,12 @@
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show legend"
+    },
+    {
+      "stanza:key": "legend-padding",
+      "stanza:type": "number",
+      "stanza:example": 18,
+      "stanza:description": "Padding between chart and legend"
     },
     {
       "stanza:key": "metastanza-menu-placement",

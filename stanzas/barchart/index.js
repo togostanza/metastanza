@@ -1,6 +1,7 @@
 import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
 import { appendDlButton } from "@/lib/metastanza_utils.js";
+import { None } from "vega";
 
 export default async function barchart(stanza, params) {
   function css(key) {
@@ -93,6 +94,7 @@ export default async function barchart(stanza, params) {
       titlePadding: params["xtitle-padding"],
       labelPadding: params["xlabel-padding"],
       labelAlign: params["xlabel-alignment"],
+      labelLimit: params["xlabel-max-width"],
       encode: {
         labels: {
           interactive: true,
@@ -100,7 +102,7 @@ export default async function barchart(stanza, params) {
             angle: { value: params["xlabel-angle"] },
             fill: { value: "var(--togostanza-label-font-color)" },
             font: { value: css("--togostanza-font-family") },
-            fontSize: { value: css("--togostanza-label-font-size") },
+            fontSize: { value: css("--togostanza-label-font-size")},
           },
         },
       },
@@ -132,6 +134,7 @@ export default async function barchart(stanza, params) {
       titlePadding: params["ytitle-padding"],
       labelPadding: params["ylabel-padding"],
       labelAlign: params["ylabel-alignment"],
+      labelLimit: params["ylabel-max-width"],
       zindex: 0,
       encode: {
         labels: {
@@ -153,8 +156,8 @@ export default async function barchart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "right",
-      legendY: "0",
+      orient: "none",
+      legendX: params["legend-padding"] ?  width + params["legend-padding"] : width + 18,
       title: getTitle(
         params["legend-title"],
         groupVariable,
@@ -170,6 +173,7 @@ export default async function barchart(stanza, params) {
       labelFontSize: css("--togostanza-label-font-size"),
       symbolStrokeColor: css("--togostanza-border-color"),
       symbolStrokeWidth: css("--togostanza-border-width"),
+      symbolLimit: "2000",
     },
   ];
 
