@@ -38,13 +38,6 @@ async function hashTable(stanza, params) {
   const main = stanza.root.querySelector("main");
   main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
   main.parentNode.style.padding = `${params["padding"]}px`;
-  main.setAttribute(
-    "style",
-    `
-    width: ${params["width"]}px;
-    height: ${params["height"]}px;
-    `
-  );
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
@@ -88,18 +81,6 @@ var metadata = {
 		"stanza:example": "json",
 		"stanza:description": "Data type",
 		"stanza:required": true
-	},
-	{
-		"stanza:key": "width",
-		"stanza:type": "number",
-		"stanza:example": 800,
-		"stanza:description": "Width"
-	},
-	{
-		"stanza:key": "height",
-		"stanza:type": "number",
-		"stanza:example": 400,
-		"stanza:description": "Height"
 	},
 	{
 		"stanza:key": "padding",
