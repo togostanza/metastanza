@@ -102,7 +102,7 @@ async function barchart(stanza, params) {
             angle: { value: params["xlabel-angle"] },
             fill: { value: "var(--togostanza-label-font-color)" },
             font: { value: css("--togostanza-font-family") },
-            fontSize: { value: css("--togostanza-label-font-size")},
+            fontSize: { value: css("--togostanza-label-font-size") },
           },
         },
       },
@@ -157,7 +157,9 @@ async function barchart(stanza, params) {
     {
       fill: "color",
       orient: "none",
-      legendX: params["legend-padding"] ?  width + params["legend-padding"] : width + 18,
+      legendX: params["legend-padding"]
+        ? width + params["legend-padding"]
+        : width + 18,
       title: getTitle(
         params["legend-title"],
         groupVariable,
