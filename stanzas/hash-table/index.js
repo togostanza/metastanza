@@ -37,11 +37,4 @@ export default async function hashTable(stanza, params) {
   const main = stanza.root.querySelector("main");
   main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
   main.parentNode.style.padding = `${params["padding"]}px`;
-  main.setAttribute(
-    "style",
-    `
-    width: ${params["width"]}px;
-    height: ${params["height"]}px;
-    `
-  );
 }
