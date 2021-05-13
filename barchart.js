@@ -94,6 +94,7 @@ async function barchart(stanza, params) {
       titlePadding: params["xtitle-padding"],
       labelPadding: params["xlabel-padding"],
       labelAlign: params["xlabel-alignment"],
+      labelLimit: params["xlabel-max-width"],
       encode: {
         labels: {
           interactive: true,
@@ -101,7 +102,7 @@ async function barchart(stanza, params) {
             angle: { value: params["xlabel-angle"] },
             fill: { value: "var(--togostanza-label-font-color)" },
             font: { value: css("--togostanza-font-family") },
-            fontSize: { value: css("--togostanza-label-font-size") },
+            fontSize: { value: css("--togostanza-label-font-size")},
           },
         },
       },
@@ -133,6 +134,7 @@ async function barchart(stanza, params) {
       titlePadding: params["ytitle-padding"],
       labelPadding: params["ylabel-padding"],
       labelAlign: params["ylabel-alignment"],
+      labelLimit: params["ylabel-max-width"],
       zindex: 0,
       encode: {
         labels: {
@@ -154,8 +156,8 @@ async function barchart(stanza, params) {
   const legends = [
     {
       fill: "color",
-      orient: "right",
-      legendY: "0",
+      orient: "none",
+      legendX: params["legend-padding"] ?  width + params["legend-padding"] : width + 18,
       title: getTitle(
         params["legend-title"],
         groupVariable,
@@ -171,6 +173,7 @@ async function barchart(stanza, params) {
       labelFontSize: css("--togostanza-label-font-size"),
       symbolStrokeColor: css("--togostanza-border-color"),
       symbolStrokeWidth: css("--togostanza-border-width"),
+      symbolLimit: "2000",
     },
   ];
 
@@ -531,9 +534,26 @@ var metadata = {
 		"stanza:description": "Show Y tick"
 	},
 	{
+		"stanza:key": "xlabel-max-width",
+		"stanza:type": "number",
+		"stanza:example": 200,
+		"stanza:description": "Max width of each X label"
+	},
+	{
+		"stanza:key": "ylabel-max-width",
+		"stanza:type": "number",
+		"stanza:example": 200,
+		"stanza:description": "Max width of each Y label"
+	},
+	{
 		"stanza:key": "xlabel-angle",
 		"stanza:example": 0,
 		"stanza:description": "X label angle (in degree)"
+	},
+	{
+		"stanza:key": "ylabel-angle",
+		"stanza:example": 0,
+		"stanza:description": "Y label angle (in degree)"
 	},
 	{
 		"stanza:key": "ylabel-angle",
@@ -560,7 +580,7 @@ var metadata = {
 			"center",
 			"right"
 		],
-		"stanza:example": "center",
+		"stanza:example": "left",
 		"stanza:description": "X label alignment"
 	},
 	{
@@ -600,6 +620,12 @@ var metadata = {
 		],
 		"stanza:example": true,
 		"stanza:description": "Show legend"
+	},
+	{
+		"stanza:key": "legend-padding",
+		"stanza:type": "number",
+		"stanza:example": 18,
+		"stanza:description": "Padding between chart and legend"
 	},
 	{
 		"stanza:key": "metastanza-menu-placement",
