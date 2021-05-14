@@ -1,5 +1,5 @@
 import { d as defineStanzaElement } from './index-60baf012.js';
-import { l as loadData } from './load-data-cd9af903.js';
+import { l as loadData } from './load-data-d021d995.js';
 
 async function hashTable(stanza, params) {
   let dataset = await loadData(params["data-url"], params["data-type"]);
