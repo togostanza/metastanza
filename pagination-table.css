@@ -416,6 +416,9 @@
   display: flex;
   flex-direction: var(--togostanza-vertical-pagination-placement);
 }
+.wrapper > .tableWrapper {
+  min-height: 430px;
+}
 .wrapper > .tableWrapper > .tableOption {
   width: 100%;
   display: flex;
@@ -517,7 +520,7 @@
   margin: 9px 8px 6px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 3px;
-  max-height: 400px;
+  max-height: 300px;
   overflow: auto;
 }
 .wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li {
