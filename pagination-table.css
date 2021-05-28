@@ -678,6 +678,9 @@
   border-collapse: collapse;
   padding: 10px;
 }
+.wrapper > .tableWrapper > table > tbody > tr > td.hide {
+  display: none;
+}
 .wrapper > .tableWrapper > table > tbody > tr > td:first-child {
   padding-left: 20px;
 }

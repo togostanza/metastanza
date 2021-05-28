@@ -7173,7 +7173,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\"}]",
+		"stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\": true}]",
 		"stanza:description": "Columns' options"
 	}
 ],
@@ -7475,7 +7475,7 @@ var script = defineComponent$1({
       const startIndex = (currentPage - 1) * perPage;
       const endIndex = startIndex + perPage;
 
-      return filteredRows.value.slice(startIndex, endIndex);
+      return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
     const blobUrls = computed(() => {
@@ -7519,6 +7519,31 @@ var script = defineComponent$1({
         state.isMenuOn
       );
     });
+
+    function setRowspanState(rows) {
+      const rowspanCount = {};
+      const reversedRows = rows.reverse().map((row, rowIndex) => {
+        return row.map((cell, colIndex) => {
+          if (cell.column.rowspan) {
+            const aboveValue = rows[rowIndex + 1]
+              ? rows[rowIndex + 1][colIndex].value
+              : null;
+            const colId = cell.column.id;
+            if (cell.value === aboveValue) {
+              cell.hide = true;
+              rowspanCount[colId] = rowspanCount[colId]
+                ? rowspanCount[colId] + 1
+                : 1;
+            } else if (rowspanCount[colId] >= 1) {
+              cell.rowspanCount = rowspanCount[colId] + 1;
+              delete rowspanCount[colId];
+            }
+          }
+          return cell;
+        });
+      });
+      return reversedRows.reverse();
+    }
 
     function setSorting(column) {
       state.sorting.column = column;
@@ -8000,7 +8025,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, [
                     (openBlock(true), createBlock(Fragment$1, null, renderList(row, (cell) => {
                       return (openBlock(), createBlock("td", {
-                        key: cell.column.id
+                        key: cell.column.id,
+                        rowspan: cell.rowspanCount,
+                        class: { hide: cell.hide }
                       }, [
                         (cell.href)
                           ? (openBlock(), createBlock("span", _hoisted_21, [
@@ -8015,7 +8042,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 innerHTML: cell.value
                               }, null, 8 /* PROPS */, ["innerHTML"]))
                             : (openBlock(), createBlock("span", _hoisted_22, toDisplayString(cell.value), 1 /* TEXT */))
-                      ]))
+                      ], 10 /* CLASS, PROPS */, ["rowspan"]))
                     }), 128 /* KEYED_FRAGMENT */))
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
