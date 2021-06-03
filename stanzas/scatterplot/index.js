@@ -217,7 +217,7 @@ export default async function scatterplot(stanza, params) {
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
     stanza.root.querySelector("svg"),
-    "threevariable-scatter-plot",
+    "scatter-plot",
     stanza
   );
 

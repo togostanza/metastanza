@@ -228,7 +228,7 @@ export default async function linechart(stanza, params) {
   appendDlButton(
     stanza.root.querySelector(".chart-wrapper"),
     stanza.root.querySelector("svg"),
-    "piechart",
+    "linechart",
     stanza
   );
 
