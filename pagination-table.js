@@ -7150,8 +7150,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "padding",
-		"stanza:type": "number",
-		"stanza:example": 0,
+		"stanza:example": "0px",
 		"stanza:description": "Padding",
 		"stanza:required": false
 	},
