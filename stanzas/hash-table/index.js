@@ -1,40 +1,48 @@
+import Stanza from "togostanza/stanza";
+
 import loadData from "@/lib/load-data";
 
-export default async function hashTable(stanza, params) {
-  let dataset = await loadData(params["data-url"], params["data-type"]);
-  dataset = dataset[0];
+export default class HashTable extends Stanza {
+  async render() {
+    let dataset = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+    dataset = dataset[0];
 
-  const columns = params.columns
-    ? JSON.parse(params.columns)
-    : Object.keys(dataset).map((key) => {
-        return { id: key };
+    const columns = this.params.columns
+      ? JSON.parse(this.params.columns)
+      : Object.keys(dataset).map((key) => {
+          return { id: key };
+        });
+    const values = columns.map((column) => {
+      const datum_label = Object.keys(dataset).find((datum) => {
+        return datum === column.id;
       });
-  const values = columns.map((column) => {
-    const datum_label = Object.keys(dataset).find((datum) => {
-      return datum === column.id;
+      const label = column.label
+        ? column.label
+        : this.params["format-key"] === "true"
+        ? datum_label.charAt(0).toUpperCase() +
+          datum_label.substring(1).replace(/_/g, " ")
+        : datum_label;
+      const href = column.link ? dataset[column.link] : null;
+      return {
+        label,
+        value: dataset[column.id],
+        href,
+        unescape: column.escape === false,
+      };
     });
-    const label = column.label
-      ? column.label
-      : params["format-key"] === "true"
-      ? datum_label.charAt(0).toUpperCase() +
-        datum_label.substring(1).replace(/_/g, " ")
-      : datum_label;
-    const href = column.link ? dataset[column.link] : null;
-    return {
-      label,
-      value: dataset[column.id],
-      href,
-      unescape: column.escape === false,
-    };
-  });
-  stanza.render({
-    template: "stanza.html.hbs",
-    parameters: {
-      values,
-    },
-  });
+    this.renderTemplate({
+      template: "stanza.html.hbs",
+      parameters: {
+        values,
+      },
+    });
 
-  const main = stanza.root.querySelector("main");
-  main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
-  main.parentNode.style.padding = `${params["padding"]}px`;
+    const main = this.root.querySelector("main");
+    main.parentNode.style.backgroundColor =
+      "var(--togostanza-background-color)";
+    main.parentNode.style.padding = `${this.params["padding"]}px`;
+  }
 }
