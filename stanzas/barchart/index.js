@@ -2,9 +2,36 @@ import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
-import { appendDlButton } from "@/lib/metastanza_utils.js";
+import { downloadImg } from "@/lib/metastanza_utils.js";
 
 export default class Barchart extends Stanza {
+  menu() {
+    return [
+      {
+        label: "Download SVG",
+        handler: () => {
+          downloadImg(
+            this.root.querySelector("svg"),
+            "svg",
+            "barchart",
+            this.root
+          );
+        },
+      },
+      {
+        label: "Download PNG",
+        handler: () => {
+          downloadImg(
+            this.root.querySelector("svg"),
+            "png",
+            "barchart",
+            this.root
+          );
+        },
+      },
+    ];
+  }
+
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
@@ -331,38 +358,5 @@ export default class Barchart extends Stanza {
       renderer: "svg",
     };
     await vegaEmbed(el, spec, opts);
-
-    //menu button placement
-    appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector("svg"),
-      "barchart",
-      this.root
-    );
-
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        menuButton.setAttribute("class", "dl-top-left");
-        menuList.setAttribute("class", "dl-top-left");
-        break;
-      case "top-right":
-        menuButton.setAttribute("class", "dl-top-right");
-        menuList.setAttribute("class", "dl-top-right");
-        break;
-      case "bottom-left":
-        menuButton.setAttribute("class", "dl-bottom-left");
-        menuList.setAttribute("class", "dl-bottom-left");
-        break;
-      case "bottom-right":
-        menuButton.setAttribute("class", "dl-bottom-right");
-        menuList.setAttribute("class", "dl-bottom-right");
-        break;
-      case "none":
-        menuButton.setAttribute("class", "dl-none");
-        menuList.setAttribute("class", "dl-none");
-        break;
-    }
   }
 }
