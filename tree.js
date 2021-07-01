@@ -8,6 +8,10 @@ async function tree(stanza, params) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
 
+  const vegaJson = await fetch(
+    "https://vega.github.io/vega/examples/tree-layout.vg.json"
+  ).then((res) => res.json());
+
   //width,height,padding
   const width = params["width"];
   const height = params["height"];
@@ -51,21 +55,6 @@ async function tree(stanza, params) {
         },
       ],
     },
-  ];
-
-  const signals = [
-    {
-      "name": "labels", "value": true
-    },
-    {
-      "name": "layout", "value": "tidy"
-    },
-    {
-      "name": "links", "value": "diagonal"
-    },
-    {
-      "name": "separation", "value": false
-    }
   ];
 
   //scales
@@ -146,12 +135,16 @@ async function tree(stanza, params) {
     width,
     height,
     padding,
-    signals,
+    signals: vegaJson.signals,
     data,
     scales,
     marks,
   };
 
+  //delete default controller
+  for (const signal of vegaJson.signals) {
+    delete signal.bind;
+  }
 
   const el = stanza.root.querySelector("main");
   const opts = {
