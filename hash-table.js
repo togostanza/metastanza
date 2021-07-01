@@ -1,54 +1,48 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { l as loadData } from './load-data-e0faf98c.js';
+import { d as defineStanzaElement } from './index-60baf012.js';
+import { l as loadData } from './load-data-d021d995.js';
 
-class HashTable extends Stanza {
-  async render() {
-    let dataset = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
-    dataset = dataset[0];
+async function hashTable(stanza, params) {
+  let dataset = await loadData(params["data-url"], params["data-type"]);
+  dataset = dataset[0];
 
-    const columns = this.params.columns
-      ? JSON.parse(this.params.columns)
-      : Object.keys(dataset).map((key) => {
-          return { id: key };
-        });
-    const values = columns.map((column) => {
-      const datum_label = Object.keys(dataset).find((datum) => {
-        return datum === column.id;
+  const columns = params.columns
+    ? JSON.parse(params.columns)
+    : Object.keys(dataset).map((key) => {
+        return { id: key };
       });
-      const label = column.label
-        ? column.label
-        : this.params["format-key"] === "true"
-        ? datum_label.charAt(0).toUpperCase() +
-          datum_label.substring(1).replace(/_/g, " ")
-        : datum_label;
-      const href = column.link ? dataset[column.link] : null;
-      return {
-        label,
-        value: dataset[column.id],
-        href,
-        unescape: column.escape === false,
-      };
+  const values = columns.map((column) => {
+    const datum_label = Object.keys(dataset).find((datum) => {
+      return datum === column.id;
     });
-    this.renderTemplate({
-      template: "stanza.html.hbs",
-      parameters: {
-        values,
-      },
-    });
+    const label = column.label
+      ? column.label
+      : params["format-key"] === "true"
+      ? datum_label.charAt(0).toUpperCase() +
+        datum_label.substring(1).replace(/_/g, " ")
+      : datum_label;
+    const href = column.link ? dataset[column.link] : null;
+    return {
+      label,
+      value: dataset[column.id],
+      href,
+      unescape: column.escape === false,
+    };
+  });
+  stanza.render({
+    template: "stanza.html.hbs",
+    parameters: {
+      values,
+    },
+  });
 
-    const main = this.root.querySelector("main");
-    main.parentNode.style.backgroundColor =
-      "var(--togostanza-background-color)";
-    main.parentNode.style.padding = `${this.params["padding"]}px`;
-  }
+  const main = stanza.root.querySelector("main");
+  main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
+  main.parentNode.style.padding = `${params["padding"]}px`;
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': HashTable
+  'default': hashTable
 });
 
 var metadata = {

@@ -1,6 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
+import { d as defineStanzaElement } from './index-60baf012.js';
 import { e as defineComponent, m as reactive, o as onMounted, b as createBlock, h as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, u as createApp } from './runtime-dom.esm-bundler-1a3b1ec7.js';
-import { l as loadData } from './load-data-e0faf98c.js';
+import { l as loadData } from './load-data-d021d995.js';
 
 var metadata = {
 	"@context": {
@@ -310,19 +310,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 script.render = render;
 script.__file = "stanzas/scroll-table/app.vue";
 
-class ScrollTable extends Stanza {
-  async render() {
-    const main = this.root.querySelector("main");
-    main.parentNode.style.backgroundColor =
-      "var(--togostanza-background-color)";
-    main.parentNode.style.padding = this.params["padding"];
-    createApp(script, this.params).mount(main);
-  }
+async function scrollTable(stanza, params) {
+  const main = stanza.root.querySelector("main");
+  main.parentNode.style.backgroundColor = "var(--togostanza-background-color)";
+  main.parentNode.style.padding = params["padding"];
+  createApp(script, params).mount(main);
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': ScrollTable
+  'default': scrollTable
 });
 
 var templates = [

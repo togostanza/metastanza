@@ -1,266 +1,256 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { e as embed } from './vega-embed.module-d0fdd393.js';
-import { l as loadData } from './load-data-e0faf98c.js';
-import { a as appendDlButton } from './metastanza_utils-1e6af370.js';
+import { d as defineStanzaElement } from './index-60baf012.js';
+import { e as embed } from './vega-embed.module-6e02496f.js';
+import { l as loadData } from './load-data-d021d995.js';
+import { a as appendDlButton } from './metastanza_utils-a3ff1297.js';
 
-class ScatterPlot extends Stanza {
-  async render() {
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+async function scatterplot(stanza, params) {
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
 
-    //width,height,padding
-    const width = this.params["width"];
-    const height = this.params["height"];
-    const padding = this.params["padding"];
+  //width,height,padding
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
-    const xVariable = this.params["x"];
-    const yVariable = this.params["y"];
-    const zVariable = this.params["z"] ? this.params["z"] : "none";
+  const xVariable = params["x"];
+  const yVariable = params["y"];
+  const zVariable = params["z"] ? params["z"] : "none";
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
+  const values = await loadData(params["data-url"], params["data-type"]);
 
-    const data = [
-      {
-        name: "source",
-        values,
-        transform: [
-          {
-            type: "filter",
-            expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
-          },
-        ],
-      },
-    ];
-
-    const signals = [];
-
-    //scales
-    const scales = [
-      {
-        name: "x",
-        type: "linear",
-        round: true,
-        nice: true,
-        zero: true,
-        domain: { data: "source", field: xVariable },
-        range: "width",
-      },
-      {
-        name: "y",
-        type: "linear",
-        round: true,
-        nice: true,
-        zero: true,
-        domain: { data: "source", field: yVariable },
-        range: "height",
-      },
-      {
-        name: "size",
-        type: "linear",
-        round: true,
-        nice: false,
-        zero: true,
-        domain: { data: "source", field: zVariable },
-        range: [4, 361],
-      },
-    ];
-
-    //axes
-    const axes = [
-      {
-        scale: "x",
-        orient: this.params["xaxis-placement"],
-        domain: true,
-        domainColor: "var(--togostanza-axis-color)",
-        domainWidth: css("--togostanza-axis-width"),
-        grid: this.params["xgrid"] === "true",
-        gridColor: "var(--togostanza-grid-color)",
-        gridDash: css("--togostanza-grid-dash-length"),
-        gridOpacity: css("--togostanza-grid-opacity"),
-        gridWidth: css("--togostanza-grid-width"),
-        ticks: this.params["xtick"] === "true",
-        // tickCount: params["xtick-count"],
-        tickColor: "var(--togostanza-tick-color)",
-        tickSize: css("--togostanza-tick-length"),
-        tickWidth: css("--togostanza-tick-width"),
-        title:
-          this.params["x-title"] === "" ? xVariable : this.params["x-title"],
-        titleColor: "var(--togostanza-title-font-color)",
-        titleFont: css("--togostanza-font-family"),
-        titleFontSize: css("--togostanza-title-font-size"),
-        titleFontWeight: css("--togostanza-title-font-weight"),
-        titlePadding: this.params["xtitle-padding"],
-        labelPadding: this.params["xlabel-padding"],
-        zindex: 0,
-        encode: {
-          labels: {
-            interactive: true,
-            update: {
-              angle: { value: this.params["xlabel-angle"] },
-              fill: { value: "var(--togostanza-label-font-color)" },
-              font: {
-                value: css("--togostanza-font-family"),
-              },
-              fontSize: {
-                value: css("--togostanza-label-font-size"),
-              },
-            },
-          },
+  const data = [
+    {
+      name: "source",
+      values,
+      transform: [
+        {
+          type: "filter",
+          expr: `datum['${xVariable}'] != null && datum['${yVariable}'] != null`,
         },
-      },
-      {
-        scale: "y",
-        orient: this.params["yaxis-placement"],
-        domain: true,
-        domainColor: "var(--togostanza-axis-color)",
-        domainWidth: css("--togostanza-axis-width"),
-        grid: this.params["ygrid"] === "true",
-        gridColor: "var(--togostanza-grid-color)",
-        gridDash: css("--togostanza-grid-dash-length"),
-        gridOpacity: css("--togostanza-grid-opacity"),
-        gridWidth: css("--togostanza-grid-width"),
-        ticks: this.params["ytick"] === "true",
-        // tickCount: params["ytick-count"],
-        tickColor: "var(--togostanza-tick-color)",
-        tickSize: css("--togostanza-tick-length"),
-        tickWidth: css("--togostanza-tick-width"),
-        title:
-          this.params["y-title"] === "" ? yVariable : this.params["y-title"],
-        titleColor: "var(--togostanza-title-font-color)",
-        titleFont: css("--togostanza-font-family"),
-        titleFontSize: css("--togostanza-title-font-size"),
-        titleFontWeight: css("--togostanza-title-font-weight"),
-        titlePadding: this.params["ytitle-padding"],
-        labelPadding: this.params["ylabel-padding"],
-        zindex: 0,
-        encode: {
-          labels: {
-            interactive: true,
-            update: {
-              angle: { value: this.params["ylabel-angle"] },
-              fill: { value: "var(--togostanza-label-font-color)" },
-              font: {
-                value: css("--togostanza-font-family"),
-              },
-              fontSize: {
-                value: css("--togostanza-label-font-size"),
-              },
-            },
-          },
-        },
-      },
-    ];
+      ],
+    },
+  ];
 
-    // legend
-    const legends = [
-      {
-        size: "size",
-        format: "s",
-        title:
-          this.params["legend-title"] === ""
-            ? zVariable
-            : this.params["legend-title"],
-        titleColor: "var(--togostanza-title-font-color)",
-        titleFont: css("--togostanza-font-family"),
-        titleFontSize: css("--togostanza-title-font-size"),
-        titleFontWeight: css("--togostanza-title-font-weight"),
-        labelColor: "var(--togostanza-label-font-color)",
-        labelFont: css("--togostanza-font-family"),
-        labelFontSize: css("--togostanza-label-font-size"),
-        symbolType: this.params["symbol-shape"],
-        symbolFillColor: "var(--togostanza-series-0-color)",
-        symbolStrokeColor: css("--togostanza-border-color"),
-        symbolStrokeWidth: css("--togostanza-border-width"),
-      },
-    ];
+  const signals = [];
 
-    //marks
-    const marks = [
-      {
-        name: "marks",
-        type: "symbol",
-        from: { data: "source" },
-        encode: {
+  //scales
+  const scales = [
+    {
+      name: "x",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: xVariable },
+      range: "width",
+    },
+    {
+      name: "y",
+      type: "linear",
+      round: true,
+      nice: true,
+      zero: true,
+      domain: { data: "source", field: yVariable },
+      range: "height",
+    },
+    {
+      name: "size",
+      type: "linear",
+      round: true,
+      nice: false,
+      zero: true,
+      domain: { data: "source", field: zVariable },
+      range: [4, 361],
+    },
+  ];
+
+  //axes
+  const axes = [
+    {
+      scale: "x",
+      orient: params["xaxis-placement"],
+      domain: true,
+      domainColor: "var(--togostanza-axis-color)",
+      domainWidth: css("--togostanza-axis-width"),
+      grid: params["xgrid"] === "true",
+      gridColor: "var(--togostanza-grid-color)",
+      gridDash: css("--togostanza-grid-dash-length"),
+      gridOpacity: css("--togostanza-grid-opacity"),
+      gridWidth: css("--togostanza-grid-width"),
+      ticks: params["xtick"] === "true",
+      // tickCount: params["xtick-count"],
+      tickColor: "var(--togostanza-tick-color)",
+      tickSize: css("--togostanza-tick-length"),
+      tickWidth: css("--togostanza-tick-width"),
+      title: params["x-title"] === "" ? xVariable : params["x-title"],
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
+      zindex: 0,
+      encode: {
+        labels: {
+          interactive: true,
           update: {
-            x: { scale: "x", field: xVariable },
-            y: { scale: "y", field: yVariable },
-            shape: { value: this.params["symbol-shape"] },
-            fill: { value: "var(--togostanza-series-0-color)" },
-            size: { scale: "size", field: zVariable },
-            stroke: { value: "var(--togostanza-border-color)" },
-            strokeWidth: {
-              value: css("--togostanza-border-width"),
+            angle: { value: params["xlabel-angle"] },
+            fill: { value: "var(--togostanza-label-font-color)" },
+            font: {
+              value: css("--togostanza-font-family"),
             },
-            opacity: {
-              value: css("--togostanza-opacity"),
+            fontSize: {
+              value: css("--togostanza-label-font-size"),
             },
           },
         },
       },
-    ];
+    },
+    {
+      scale: "y",
+      orient: params["yaxis-placement"],
+      domain: true,
+      domainColor: "var(--togostanza-axis-color)",
+      domainWidth: css("--togostanza-axis-width"),
+      grid: params["ygrid"] === "true",
+      gridColor: "var(--togostanza-grid-color)",
+      gridDash: css("--togostanza-grid-dash-length"),
+      gridOpacity: css("--togostanza-grid-opacity"),
+      gridWidth: css("--togostanza-grid-width"),
+      ticks: params["ytick"] === "true",
+      // tickCount: params["ytick-count"],
+      tickColor: "var(--togostanza-tick-color)",
+      tickSize: css("--togostanza-tick-length"),
+      tickWidth: css("--togostanza-tick-width"),
+      title: params["y-title"] === "" ? yVariable : params["y-title"],
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
+      zindex: 0,
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["ylabel-angle"] },
+            fill: { value: "var(--togostanza-label-font-color)" },
+            font: {
+              value: css("--togostanza-font-family"),
+            },
+            fontSize: {
+              value: css("--togostanza-label-font-size"),
+            },
+          },
+        },
+      },
+    },
+  ];
 
-    const spec = {
-      $schema: "https://vega.github.io/schema/vega/v5.json",
-      width,
-      height,
-      padding,
-      data,
-      signals,
-      scales,
-      axes,
-      legends:
-        zVariable === "none" || this.params["legend"] === "false"
-          ? []
-          : legends,
-      marks,
-    };
+  // legend
+  const legends = [
+    {
+      size: "size",
+      format: "s",
+      title: params["legend-title"] === "" ? zVariable : params["legend-title"],
+      titleColor: "var(--togostanza-title-font-color)",
+      titleFont: css("--togostanza-font-family"),
+      titleFontSize: css("--togostanza-title-font-size"),
+      titleFontWeight: css("--togostanza-title-font-weight"),
+      labelColor: "var(--togostanza-label-font-color)",
+      labelFont: css("--togostanza-font-family"),
+      labelFontSize: css("--togostanza-label-font-size"),
+      symbolType: params["symbol-shape"],
+      symbolFillColor: "var(--togostanza-series-0-color)",
+      symbolStrokeColor: css("--togostanza-border-color"),
+      symbolStrokeWidth: css("--togostanza-border-width"),
+    },
+  ];
 
-    const el = this.root.querySelector("main");
-    const opts = {
-      renderer: "svg",
-    };
-    await embed(el, spec, opts);
+  //marks
+  const marks = [
+    {
+      name: "marks",
+      type: "symbol",
+      from: { data: "source" },
+      encode: {
+        update: {
+          x: { scale: "x", field: xVariable },
+          y: { scale: "y", field: yVariable },
+          shape: { value: params["symbol-shape"] },
+          fill: { value: "var(--togostanza-series-0-color)" },
+          size: { scale: "size", field: zVariable },
+          stroke: { value: "var(--togostanza-border-color)" },
+          strokeWidth: {
+            value: css("--togostanza-border-width"),
+          },
+          opacity: {
+            value: css("--togostanza-opacity"),
+          },
+        },
+      },
+    },
+  ];
 
-    //menu button placement
-    appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector("svg"),
-      "scatter-plot",
-      this.root
-    );
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width,
+    height,
+    padding,
+    data,
+    signals,
+    scales,
+    axes,
+    legends:
+      zVariable === "none" || params["legend"] === "false" ? [] : legends,
+    marks,
+  };
 
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        menuButton.setAttribute("class", "dl-top-left");
-        menuList.setAttribute("class", "dl-top-left");
-        break;
-      case "top-right":
-        menuButton.setAttribute("class", "dl-top-right");
-        menuList.setAttribute("class", "dl-top-right");
-        break;
-      case "bottom-left":
-        menuButton.setAttribute("class", "dl-bottom-left");
-        menuList.setAttribute("class", "dl-bottom-left");
-        break;
-      case "bottom-right":
-        menuButton.setAttribute("class", "dl-bottom-right");
-        menuList.setAttribute("class", "dl-bottom-right");
-        break;
-      case "none":
-        menuButton.setAttribute("class", "dl-none");
-        menuList.setAttribute("class", "dl-none");
-        break;
-    }
+  const el = stanza.root.querySelector("main");
+  const opts = {
+    renderer: "svg",
+  };
+  await embed(el, spec, opts);
+
+  //menu button placement
+  appendDlButton(
+    stanza.root.querySelector(".chart-wrapper"),
+    stanza.root.querySelector("svg"),
+    "scatter-plot",
+    stanza
+  );
+
+  const menuButton = stanza.root.querySelector("#dl_button");
+  const menuList = stanza.root.querySelector("#dl_list");
+  switch (params["metastanza-menu-placement"]) {
+    case "top-left":
+      menuButton.setAttribute("class", "dl-top-left");
+      menuList.setAttribute("class", "dl-top-left");
+      break;
+    case "top-right":
+      menuButton.setAttribute("class", "dl-top-right");
+      menuList.setAttribute("class", "dl-top-right");
+      break;
+    case "bottom-left":
+      menuButton.setAttribute("class", "dl-bottom-left");
+      menuList.setAttribute("class", "dl-bottom-left");
+      break;
+    case "bottom-right":
+      menuButton.setAttribute("class", "dl-bottom-right");
+      menuList.setAttribute("class", "dl-bottom-right");
+      break;
+    case "none":
+      menuButton.setAttribute("class", "dl-none");
+      menuList.setAttribute("class", "dl-none");
+      break;
   }
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': ScatterPlot
+  'default': scatterplot
 });
 
 var metadata = {
