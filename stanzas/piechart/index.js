@@ -8,10 +8,6 @@ export default class PieChart extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/pie-chart.vg.json"
-    ).then((res) => res.json());
-
     //width,height,padding
     const width = this.params["width"];
     const height = this.params["height"];
@@ -25,6 +21,33 @@ export default class PieChart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+
+    const signals = [
+      {
+        name: "startAngle",
+        value: 0,
+      },
+      {
+        name: "endAngle",
+        value: 6.29,
+      },
+      {
+        name: "padAngle",
+        value: 0,
+      },
+      {
+        name: "innerRadius",
+        value: 0,
+      },
+      {
+        name: "cornerRadius",
+        value: 0,
+      },
+      {
+        name: "sort",
+        value: false,
+      },
+    ];
 
     const data = [
       {
@@ -113,18 +136,13 @@ export default class PieChart extends Stanza {
       width,
       height,
       padding,
+      signals,
       autosize: "none",
-      signals: vegaJson.signals,
       data,
       scales,
       legends: this.params["legend"] === "false" ? [] : legends,
       marks,
     };
-
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
 
     const el = this.root.querySelector("main");
     const opts = {

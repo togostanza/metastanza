@@ -8,10 +8,6 @@ export default class Tree extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/tree-layout.vg.json"
-    ).then((res) => res.json());
-
     //width,height,padding
     const width = this.params["width"];
     const height = this.params["height"];
@@ -26,6 +22,25 @@ export default class Tree extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+
+    const signals = [
+      {
+        name: "labels",
+        value: true,
+      },
+      {
+        name: "layout",
+        value: "tidy",
+      },
+      {
+        name: "links",
+        value: "diagonal",
+      },
+      {
+        name: "separation",
+        value: false,
+      },
+    ];
 
     const data = [
       {
@@ -141,16 +156,11 @@ export default class Tree extends Stanza {
       width,
       height,
       padding,
-      signals: vegaJson.signals,
+      signals,
       data,
       scales,
       marks,
     };
-
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
 
     const el = this.root.querySelector("main");
     const opts = {

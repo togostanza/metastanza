@@ -8,10 +8,6 @@ export default class Linechart extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/line-chart.vg.json"
-    ).then((res) => res.json());
-
     //width、height、padding
     const width = this.params["width"];
     const height = this.params["height"];
@@ -28,6 +24,13 @@ export default class Linechart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+
+    const signals = [
+      {
+        name: "interpolate",
+        value: "linear",
+      },
+    ];
 
     const data = [
       {
@@ -215,7 +218,7 @@ export default class Linechart extends Stanza {
       width,
       height,
       padding,
-      signals: vegaJson.signals,
+      signals,
       data,
       scales,
       axes,
@@ -225,11 +228,6 @@ export default class Linechart extends Stanza {
           : [],
       marks,
     };
-
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
 
     const el = this.root.querySelector("main");
     const opts = {
