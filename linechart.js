@@ -7,9 +7,6 @@ class Linechart extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/line-chart.vg.json"
-    ).then((res) => res.json());
 
     //width、height、padding
     const width = this.params["width"];
@@ -35,36 +32,43 @@ class Linechart extends Stanza {
       },
     ];
 
-    //scale
-    const scales = [
+  const signals = [
       {
-        name: "x",
-        type: "point",
-        range: "width",
-        domain: { data: "table", field: labelVariable },
-      },
-      {
-        name: "y",
-        type: "linear",
-        range: "height",
-        nice: true,
-        zero: true,
-        domain: { data: "table", field: valueVariable },
-      },
-      {
-        name: "color",
-        type: "ordinal",
-        range: [
-          "var(--togostanza-series-0-color)",
-          "var(--togostanza-series-1-color)",
-          "var(--togostanza-series-2-color)",
-          "var(--togostanza-series-3-color)",
-          "var(--togostanza-series-4-color)",
-          "var(--togostanza-series-5-color)",
-        ],
-        domain: { data: "table", field: groupVariable },
-      },
-    ];
+        "name": "interpolate",
+        "value": "linear"
+      }
+  ];
+
+  //scale
+  const scales = [
+    {
+      name: "x",
+      type: "point",
+      range: "width",
+      domain: { data: "table", field: labelVariable },
+    },
+    {
+      name: "y",
+      type: "linear",
+      range: "height",
+      nice: true,
+      zero: true,
+      domain: { data: "table", field: valueVariable },
+    },
+    {
+      name: "color",
+      type: "ordinal",
+      range: [
+        "var(--togostanza-series-0-color)",
+        "var(--togostanza-series-1-color)",
+        "var(--togostanza-series-2-color)",
+        "var(--togostanza-series-3-color)",
+        "var(--togostanza-series-4-color)",
+        "var(--togostanza-series-5-color)",
+      ],
+      domain: { data: "table", field: groupVariable },
+    },
+  ];
 
     //axes
     const axes = [
@@ -209,26 +213,19 @@ class Linechart extends Stanza {
       },
     ];
 
-    const spec = {
-      $schema: "https://vega.github.io/schema/vega/v5.json",
-      width,
-      height,
-      padding,
-      signals: vegaJson.signals,
-      data,
-      scales,
-      axes,
-      legends:
-        this.params["legend"] === "true" && this.params["group-by"]
-          ? legends
-          : [],
-      marks,
-    };
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width,
+    height,
+    padding,
+    signals,
+    data,
+    scales,
+    axes,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
+    marks,
+  };
 
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
 
     const el = this.root.querySelector("main");
     const opts = {

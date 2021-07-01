@@ -7,14 +7,10 @@ class Tree extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/tree-layout.vg.json"
-    ).then((res) => res.json());
-
-    //width,height,padding
-    const width = this.params["width"];
-    const height = this.params["height"];
-    const padding = this.params["padding"];
+  //width,height,padding
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
 
     //data
     const labelVariable = this.params["label"]; //"name"
@@ -59,23 +55,38 @@ class Tree extends Stanza {
       },
     ];
 
-    //scales
-    const scales = [
-      {
-        name: "color",
-        type: "ordinal",
-        range: [
-          "var(--togostanza-series-0-color)",
-          "var(--togostanza-series-1-color)",
-          "var(--togostanza-series-2-color)",
-          "var(--togostanza-series-3-color)",
-          "var(--togostanza-series-4-color)",
-          "var(--togostanza-series-5-color)",
-        ],
-        domain: { data: "tree", field: "depth" },
-        zero: true,
-      },
-    ];
+  const signals = [
+    {
+      "name": "labels", "value": true
+    },
+    {
+      "name": "layout", "value": "tidy"
+    },
+    {
+      "name": "links", "value": "diagonal"
+    },
+    {
+      "name": "separation", "value": false
+    }
+  ];
+
+  //scales
+  const scales = [
+    {
+      name: "color",
+      type: "ordinal",
+      range: [
+        "var(--togostanza-series-0-color)",
+        "var(--togostanza-series-1-color)",
+        "var(--togostanza-series-2-color)",
+        "var(--togostanza-series-3-color)",
+        "var(--togostanza-series-4-color)",
+        "var(--togostanza-series-5-color)",
+      ],
+      domain: { data: "tree", field: "depth" },
+      zero: true,
+    },
+  ];
 
     //marks
     const marks = [
@@ -135,21 +146,17 @@ class Tree extends Stanza {
       },
     ];
 
-    const spec = {
-      $schema: "https://vega.github.io/schema/vega/v5.json",
-      width,
-      height,
-      padding,
-      signals: vegaJson.signals,
-      data,
-      scales,
-      marks,
-    };
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width,
+    height,
+    padding,
+    signals,
+    data,
+    scales,
+    marks,
+  };
 
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
 
     const el = this.root.querySelector("main");
     const opts = {

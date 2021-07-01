@@ -7,23 +7,16 @@ class PieChart extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/pie-chart.vg.json"
-    ).then((res) => res.json());
-
     //width,height,padding
-    const width = this.params["width"];
-    const height = this.params["height"];
+    const width = params["width"];
+    const height = params["height"];
     const padding = { left: 0, top: 0, right: 150, bottom: 0 };
 
     //data
-    const labelVariable = this.params["category"];
-    const valueVariable = this.params["value"];
+    const labelVariable = params["category"];
+    const valueVariable = params["value"];
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
+    const values = await loadData(params["data-url"], params["data-type"]);
 
     const data = [
       {
@@ -39,6 +32,27 @@ class PieChart extends Stanza {
           },
         ],
       },
+    ];
+
+    const signals = [
+      {
+        "name": "startAngle", "value": 0,
+      },
+      {
+        "name": "endAngle", "value": 6.29,
+      },
+      {
+        "name": "padAngle", "value": 0,
+      },
+      {
+        "name": "innerRadius", "value": 0,
+      },
+      {
+        "name": "cornerRadius", "value": 0,
+      },
+      {
+        "name": "sort", "value": false,
+      }
     ];
 
     // scales(color scheme)
@@ -65,9 +79,7 @@ class PieChart extends Stanza {
         orient: "right",
         legendY: "5",
         title:
-          this.params["legend-title"] === ""
-            ? labelVariable
-            : this.params["legend-title"],
+          params["legend-title"] === "" ? labelVariable : params["legend-title"],
         titleColor: "var(--togostanza-title-font-color)",
         titleFont: css("--togostanza-font-family"),
         titleFontSize: css("--togostanza-title-font-size"),
@@ -75,7 +87,7 @@ class PieChart extends Stanza {
         labelColor: "var(--togostanza-label-font-color)",
         labelFont: css("--togostanza-font-family"),
         labelFontSize: css("--togostanza-label-font-size"),
-        symbolType: this.params["symbol-shape"],
+        symbolType: params["symbol-shape"],
         symbolStrokeColor: css("--togostanza-border-color"),
         symbolStrokeWidth: css("--togostanza-border-width"),
       },
@@ -113,38 +125,33 @@ class PieChart extends Stanza {
       height,
       padding,
       autosize: "none",
-      signals: vegaJson.signals,
+      signals,
       data,
       scales,
-      legends: this.params["legend"] === "false" ? [] : legends,
+      legends: params["legend"] === "false" ? [] : legends,
       marks,
     };
 
-    //delete default controller
-    for (const signal of vegaJson.signals) {
-      delete signal.bind;
-    }
-
-    const el = this.root.querySelector("main");
+    const el = stanza.root.querySelector("main");
     const opts = {
       renderer: "svg",
     };
     await embed(el, spec, opts);
 
-    const svg = this.root.querySelector(".marks");
-    svg.style.padding = `${this.params["padding"]}px`;
+    const svg = stanza.root.querySelector(".marks");
+    svg.style.padding = `${params["padding"]}px`;
 
     //menu button placement
     appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector("svg"),
+      stanza.root.querySelector(".chart-wrapper"),
+      stanza.root.querySelector("svg"),
       "piechart",
-      this.root
+      stanza
     );
 
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
+    const menuButton = stanza.root.querySelector("#dl_button");
+    const menuList = stanza.root.querySelector("#dl_list");
+    switch (params["metastanza-menu-placement"]) {
       case "top-left":
         menuButton.setAttribute("class", "dl-top-left");
         menuList.setAttribute("class", "dl-top-left");
