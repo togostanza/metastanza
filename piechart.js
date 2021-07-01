@@ -8,10 +8,6 @@ async function piechart(stanza, params) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
 
-  const vegaJson = await fetch(
-    "https://vega.github.io/vega/examples/pie-chart.vg.json"
-  ).then((res) => res.json());
-
   //width,height,padding
   const width = params["width"];
   const height = params["height"];
@@ -22,6 +18,27 @@ async function piechart(stanza, params) {
   const valueVariable = params["value"];
 
   const values = await loadData(params["data-url"], params["data-type"]);
+
+  const signals = [
+    {
+      "name": "startAngle", "value": 0,
+    },
+    {
+      "name": "endAngle", "value": 6.29,
+    },
+    {
+      "name": "padAngle", "value": 0,
+    },
+    {
+      "name": "innerRadius", "value": 0,
+    },
+    {
+      "name": "cornerRadius", "value": 0,
+    },
+    {
+      "name": "sort", "value": false,
+    }
+  ];
 
   const data = [
     {
@@ -108,18 +125,14 @@ async function piechart(stanza, params) {
     width,
     height,
     padding,
+    signals,
     autosize: "none",
-    signals: vegaJson.signals,
     data,
     scales,
     legends: params["legend"] === "false" ? [] : legends,
     marks,
   };
 
-  //delete default controller
-  for (const signal of vegaJson.signals) {
-    delete signal.bind;
-  }
 
   const el = stanza.root.querySelector("main");
   const opts = {

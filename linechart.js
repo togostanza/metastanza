@@ -8,10 +8,6 @@ async function linechart(stanza, params) {
     return getComputedStyle(stanza.root.host).getPropertyValue(key);
   }
 
-  const vegaJson = await fetch(
-    "https://vega.github.io/vega/examples/line-chart.vg.json"
-  ).then((res) => res.json());
-
   //width、height、padding
   const width = params["width"];
   const height = params["height"];
@@ -23,6 +19,13 @@ async function linechart(stanza, params) {
   const groupVariable = params["group-by"] ? params["group-by"] : "none";
 
   const values = await loadData(params["data-url"], params["data-type"]);
+
+  const signals = [
+    {
+      "name": "interpolate",
+      "value": "linear"
+    }
+  ];
 
   const data = [
     {
@@ -206,18 +209,13 @@ async function linechart(stanza, params) {
     width,
     height,
     padding,
-    signals: vegaJson.signals,
+    signals,
     data,
     scales,
     axes,
     legends: params["legend"] === "true" && params["group-by"] ? legends : [],
     marks,
   };
-
-  //delete default controller
-  for (const signal of vegaJson.signals) {
-    delete signal.bind;
-  }
 
   const el = stanza.root.querySelector("main");
   const opts = {
