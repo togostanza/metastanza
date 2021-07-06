@@ -1,5 +1,5 @@
-import { y as dispatch, d as defineStanzaElement } from './index-60baf012.js';
-import { s as select, a as appendDlButton } from './metastanza_utils-a3ff1297.js';
+import { y as dispatch, S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
+import { s as select, a as appendDlButton } from './metastanza_utils-1e6af370.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -8741,80 +8741,82 @@ const getVariants = () => {
 };
 let variants = totalVariants; //init
 
-async function manhattanPlot(stanza, params) {
-  stanza.render({
-    template: "stanza.html.hbs",
-    parameters: {
-      studyName,
-      projectName,
-    },
-  });
+class ManhattanPlot extends Stanza {
+  async render() {
+    this.renderTemplate({
+      template: "stanza.html.hbs",
+      parameters: {
+        studyName,
+        projectName,
+      },
+    });
 
-  //append checkbox and its conditions to filter stages
-  const stageList = stanza.root.querySelector("#stageList");
-  const firstConditionList = stanza.root.querySelector("#firstConditionList");
-  const secondConditionList = stanza.root.querySelector("#secondConditionList");
+    //append checkbox and its conditions to filter stages
+    const stageList = this.root.querySelector("#stageList");
+    const firstConditionList = this.root.querySelector("#firstConditionList");
+    const secondConditionList = this.root.querySelector("#secondConditionList");
 
-  let td, input, label;
-  for (let i = 0; i < stageNames.length; i++) {
-    td = document.createElement("td");
-    input = document.createElement("input");
-    input.setAttribute("type", "checkbox");
-    input.setAttribute("class", "stage-btn");
-    input.setAttribute("id", `${stageNames[i]}Btn`);
-    input.setAttribute("name", "stage");
-    input.setAttribute("value", stageNames[i]);
-    input.setAttribute("checked", true);
-    input.setAttribute("data-stage", stageNames[i]);
-    label = document.createElement("label");
-    label.textContent = stageNames[i];
-    label.setAttribute("for", `${stageNames[i]}Btn`);
-    label.setAttribute("data-stage", stageNames[i]);
-    stageList.appendChild(td);
-    td.appendChild(input);
-    td.appendChild(label);
-    stageData[stageNames[i]].checked = true;
-  }
+    let td, input, label;
+    for (let i = 0; i < stageNames.length; i++) {
+      td = document.createElement("td");
+      input = document.createElement("input");
+      input.setAttribute("type", "checkbox");
+      input.setAttribute("class", "stage-btn");
+      input.setAttribute("id", `${stageNames[i]}Btn`);
+      input.setAttribute("name", "stage");
+      input.setAttribute("value", stageNames[i]);
+      input.setAttribute("checked", true);
+      input.setAttribute("data-stage", stageNames[i]);
+      label = document.createElement("label");
+      label.textContent = stageNames[i];
+      label.setAttribute("for", `${stageNames[i]}Btn`);
+      label.setAttribute("data-stage", stageNames[i]);
+      stageList.appendChild(td);
+      td.appendChild(input);
+      td.appendChild(label);
+      stageData[stageNames[i]].checked = true;
+    }
 
-  firstConditionList.insertAdjacentHTML(
-    "beforeend",
-    stageNames
-      .map(
-        (stage) =>
-          `<td class="condition-key">${stageData[stage].condition1}</td>`
-      )
-      .join("")
-  );
-  secondConditionList.insertAdjacentHTML(
-    "beforeend",
-    stageNames
-      .map(
-        (stage) =>
-          `<td class="condition-key">${stageData[stage].condition2}</td>`
-      )
-      .join("")
-  );
-
-  // adjust data
-  for (let i = 0; i < variants.length; i++) {
-    // convert chromosome data from 'chrnum' to 'num'
-    let chr = variants[i].chr;
-    chr = chr.replace("chr", "");
-    variants[i].chr = chr;
-
-    variants[i]["p-value"];
-
-    variants[i]["stop"];
-  }
-
-  if (typeof variants === "object") {
-    draw(stanza, params);
-    appendDlButton(
-      stanza.root.querySelector("#chart"),
-      stanza.root.querySelector("svg"),
-      "manhattan_plot",
-      stanza
+    firstConditionList.insertAdjacentHTML(
+      "beforeend",
+      stageNames
+        .map(
+          (stage) =>
+            `<td class="condition-key">${stageData[stage].condition1}</td>`
+        )
+        .join("")
     );
+    secondConditionList.insertAdjacentHTML(
+      "beforeend",
+      stageNames
+        .map(
+          (stage) =>
+            `<td class="condition-key">${stageData[stage].condition2}</td>`
+        )
+        .join("")
+    );
+
+    // adjust data
+    for (let i = 0; i < variants.length; i++) {
+      // convert chromosome data from 'chrnum' to 'num'
+      let chr = variants[i].chr;
+      chr = chr.replace("chr", "");
+      variants[i].chr = chr;
+
+      variants[i]["p-value"];
+
+      variants[i]["stop"];
+    }
+
+    if (typeof variants === "object") {
+      draw(this, this.params);
+      appendDlButton(
+        this.root.querySelector("#chart"),
+        this.root.querySelector("svg"),
+        "manhattan_plot",
+        this.root
+      );
+    }
   }
 }
 
@@ -9690,7 +9692,7 @@ async function draw(stanza, params) {
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': manhattanPlot
+  'default': ManhattanPlot
 });
 
 var metadata = {

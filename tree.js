@@ -1,200 +1,210 @@
-import { d as defineStanzaElement } from './index-60baf012.js';
-import { e as embed } from './vega-embed.module-6e02496f.js';
-import { l as loadData } from './load-data-d021d995.js';
-import { a as appendDlButton } from './metastanza_utils-a3ff1297.js';
+import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
+import { e as embed } from './vega-embed.module-d0fdd393.js';
+import { l as loadData } from './load-data-e0faf98c.js';
+import { a as appendDlButton } from './metastanza_utils-1e6af370.js';
 
-async function tree(stanza, params) {
-  function css(key) {
-    return getComputedStyle(stanza.root.host).getPropertyValue(key);
-  }
+class Tree extends Stanza {
+  async render() {
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-  //width,height,padding
-  const width = params["width"];
-  const height = params["height"];
-  const padding = params["padding"];
+    //width,height,padding
+    const width = this.params["width"];
+    const height = this.params["height"];
+    const padding = this.params["padding"];
 
-  //data
-  const labelVariable = params["label"]; //"name"
-  const parentVariable = params["parent-node"]; //"parent"
-  const idVariable = params["node"]; //"id-variable"
+    //data
+    const labelVariable = this.params["label"]; //"name"
+    const parentVariable = this.params["parent-node"]; //"parent"
+    const idVariable = this.params["node"]; //"id-variable"
 
-  const values = await loadData(params["data-url"], params["data-type"]);
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
 
-  const signals = [
-    {
-      "name": "labels", "value": true,
-    },
-    {
-      "name": "layout", "value": "tidy",
-    },
-    {
-      "name": "links", "value": "diagonal",
-    },
-    {
-      "name": "separation", "value": false,
+    const signals = [
+      {
+        name: "labels",
+        value: true,
+      },
+      {
+        name: "layout",
+        value: "tidy",
+      },
+      {
+        name: "links",
+        value: "diagonal",
+      },
+      {
+        name: "separation",
+        value: false,
+      },
+    ];
+
+    const data = [
+      {
+        name: "tree",
+        values,
+        transform: [
+          {
+            type: "stratify",
+            key: idVariable,
+            parentKey: parentVariable,
+          },
+          {
+            type: "tree",
+            method: { signal: "layout" },
+            size: [{ signal: "height" }, { signal: "width - 100" }],
+            separation: { signal: "separation" },
+            as: ["y", "x", "depth", "children"],
+          },
+        ],
+      },
+      {
+        name: "links",
+        source: "tree",
+        transform: [
+          { type: "treelinks" },
+          {
+            type: "linkpath",
+            orient: "horizontal",
+            shape: { signal: "links" },
+          },
+        ],
+      },
+    ];
+
+    //scales
+    const scales = [
+      {
+        name: "color",
+        type: "ordinal",
+        range: [
+          "var(--togostanza-series-0-color)",
+          "var(--togostanza-series-1-color)",
+          "var(--togostanza-series-2-color)",
+          "var(--togostanza-series-3-color)",
+          "var(--togostanza-series-4-color)",
+          "var(--togostanza-series-5-color)",
+        ],
+        domain: { data: "tree", field: "depth" },
+        zero: true,
+      },
+    ];
+
+    //marks
+    const marks = [
+      {
+        type: "path",
+        from: { data: "links" },
+        encode: {
+          update: {
+            path: { field: "path" },
+            stroke: { value: "var(--togostanza-edge-color)" },
+          },
+        },
+      },
+      {
+        type: "symbol",
+        from: { data: "tree" },
+        encode: {
+          enter: {
+            size: {
+              value: css("--togostanza-node-size"),
+            },
+            stroke: { value: "var(--stroke-color)" },
+          },
+          update: {
+            x: { field: "x" },
+            y: { field: "y" },
+            fill: { scale: "color", field: "depth" },
+            stroke: { value: "var(--togostanza-border-color)" },
+            strokeWidth: { value: css("--togostanza-border-width") },
+          },
+        },
+      },
+      {
+        type: "text",
+        from: { data: "tree" },
+        encode: {
+          enter: {
+            text: {
+              field:
+                this.params["label"] === ""
+                  ? this.params["node"]
+                  : labelVariable,
+            },
+            font: { value: css("--togostanza-font-family") },
+            fontSize: { value: css("--togostanza-label-font-size") },
+            baseline: { value: "middle" },
+          },
+          update: {
+            x: { field: "x" },
+            y: { field: "y" },
+            dx: { signal: "datum.children ? -7 : 7" },
+            align: { signal: "datum.children ? 'right' : 'left'" },
+            opacity: { signal: "labels ? 1 : 0" },
+            fill: { value: "var(--togostanza-label-font-color)" },
+          },
+        },
+      },
+    ];
+
+    const spec = {
+      $schema: "https://vega.github.io/schema/vega/v5.json",
+      width,
+      height,
+      padding,
+      signals,
+      data,
+      scales,
+      marks,
+    };
+
+    const el = this.root.querySelector("main");
+    const opts = {
+      renderer: "svg",
+    };
+    await embed(el, spec, opts);
+
+    //menu button placement
+    appendDlButton(
+      this.root.querySelector(".chart-wrapper"),
+      this.root.querySelector("svg"),
+      "tree",
+      this.root
+    );
+
+    const menuButton = this.root.querySelector("#dl_button");
+    const menuList = this.root.querySelector("#dl_list");
+    switch (this.params["metastanza-menu-placement"]) {
+      case "top-left":
+        menuButton.setAttribute("class", "dl-top-left");
+        menuList.setAttribute("class", "dl-top-left");
+        break;
+      case "top-right":
+        menuButton.setAttribute("class", "dl-top-right");
+        menuList.setAttribute("class", "dl-top-right");
+        break;
+      case "bottom-left":
+        menuButton.setAttribute("class", "dl-bottom-left");
+        menuList.setAttribute("class", "dl-bottom-left");
+        break;
+      case "bottom-right":
+        menuButton.setAttribute("class", "dl-bottom-right");
+        menuList.setAttribute("class", "dl-bottom-right");
+        break;
+      case "none":
+        menuButton.setAttribute("class", "dl-none");
+        menuList.setAttribute("class", "dl-none");
+        break;
     }
-  ];
-
-  const data = [
-    {
-      name: "tree",
-      values,
-      transform: [
-        {
-          type: "stratify",
-          key: idVariable,
-          parentKey: parentVariable,
-        },
-        {
-          type: "tree",
-          method: { signal: "layout" },
-          size: [{ signal: "height" }, { signal: "width - 100" }],
-          separation: { signal: "separation" },
-          as: ["y", "x", "depth", "children"],
-        },
-      ],
-    },
-    {
-      name: "links",
-      source: "tree",
-      transform: [
-        { type: "treelinks" },
-        {
-          type: "linkpath",
-          orient: "horizontal",
-          shape: { signal: "links" },
-        },
-      ],
-    },
-  ];
-
-  //scales
-  const scales = [
-    {
-      name: "color",
-      type: "ordinal",
-      range: [
-        "var(--togostanza-series-0-color)",
-        "var(--togostanza-series-1-color)",
-        "var(--togostanza-series-2-color)",
-        "var(--togostanza-series-3-color)",
-        "var(--togostanza-series-4-color)",
-        "var(--togostanza-series-5-color)",
-      ],
-      domain: { data: "tree", field: "depth" },
-      zero: true,
-    },
-  ];
-
-  //marks
-  const marks = [
-    {
-      type: "path",
-      from: { data: "links" },
-      encode: {
-        update: {
-          path: { field: "path" },
-          stroke: { value: "var(--togostanza-edge-color)" },
-        },
-      },
-    },
-    {
-      type: "symbol",
-      from: { data: "tree" },
-      encode: {
-        enter: {
-          size: {
-            value: css("--togostanza-node-size"),
-          },
-          stroke: { value: "var(--stroke-color)" },
-        },
-        update: {
-          x: { field: "x" },
-          y: { field: "y" },
-          fill: { scale: "color", field: "depth" },
-          stroke: { value: "var(--togostanza-border-color)" },
-          strokeWidth: { value: css("--togostanza-border-width") },
-        },
-      },
-    },
-    {
-      type: "text",
-      from: { data: "tree" },
-      encode: {
-        enter: {
-          text: {
-            field: params["label"] === "" ? params["node"] : labelVariable,
-          },
-          font: { value: css("--togostanza-font-family") },
-          fontSize: { value: css("--togostanza-label-font-size") },
-          baseline: { value: "middle" },
-        },
-        update: {
-          x: { field: "x" },
-          y: { field: "y" },
-          dx: { signal: "datum.children ? -7 : 7" },
-          align: { signal: "datum.children ? 'right' : 'left'" },
-          opacity: { signal: "labels ? 1 : 0" },
-          fill: { value: "var(--togostanza-label-font-color)" },
-        },
-      },
-    },
-  ];
-
-  const spec = {
-    $schema: "https://vega.github.io/schema/vega/v5.json",
-    width,
-    height,
-    padding,
-    signals,
-    data,
-    scales,
-    marks,
-  };
-
-  const el = stanza.root.querySelector("main");
-  const opts = {
-    renderer: "svg",
-  };
-  await embed(el, spec, opts);
-
-  //menu button placement
-  appendDlButton(
-    stanza.root.querySelector(".chart-wrapper"),
-    stanza.root.querySelector("svg"),
-    "tree",
-    stanza
-  );
-
-  const menuButton = stanza.root.querySelector("#dl_button");
-  const menuList = stanza.root.querySelector("#dl_list");
-  switch (params["metastanza-menu-placement"]) {
-    case "top-left":
-      menuButton.setAttribute("class", "dl-top-left");
-      menuList.setAttribute("class", "dl-top-left");
-      break;
-    case "top-right":
-      menuButton.setAttribute("class", "dl-top-right");
-      menuList.setAttribute("class", "dl-top-right");
-      break;
-    case "bottom-left":
-      menuButton.setAttribute("class", "dl-bottom-left");
-      menuList.setAttribute("class", "dl-bottom-left");
-      break;
-    case "bottom-right":
-      menuButton.setAttribute("class", "dl-bottom-right");
-      menuList.setAttribute("class", "dl-bottom-right");
-      break;
-    case "none":
-      menuButton.setAttribute("class", "dl-none");
-      menuList.setAttribute("class", "dl-none");
-      break;
   }
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': tree
+  'default': Tree
 });
 
 var metadata = {
