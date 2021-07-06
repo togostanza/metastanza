@@ -2,33 +2,16 @@ import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
-import { downloadImg } from "@/lib/metastanza_utils.js";
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+} from "@/lib/metastanza_utils.js";
 
 export default class Barchart extends Stanza {
   menu() {
     return [
-      {
-        label: "Download SVG",
-        handler: () => {
-          downloadImg(
-            this.root.querySelector("svg"),
-            "svg",
-            "barchart",
-            this.root
-          );
-        },
-      },
-      {
-        label: "Download PNG",
-        handler: () => {
-          downloadImg(
-            this.root.querySelector("svg"),
-            "png",
-            "barchart",
-            this.root
-          );
-        },
-      },
+      downloadSvgMenuItem(this, "barchart"),
+      downloadPngMenuItem(this, "barchart"),
     ];
   }
 
