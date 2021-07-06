@@ -1,9 +1,12 @@
 import Stanza from "togostanza/stanza";
 
 import * as d3 from "d3";
-import { appendDlButton } from "@/lib/metastanza_utils.js";
 import data from "./gwas.var2.json";
 import { pagination } from "./table.js";
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+} from "@/lib/metastanza_utils.js";
 
 //when you put json url
 // console.log(params["data-url"]]);
@@ -66,6 +69,13 @@ const getVariants = () => {
 let variants = totalVariants; //init
 
 export default class ManhattanPlot extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "manhattan_plot"),
+      downloadPngMenuItem(this, "manhattan_plot"),
+    ];
+  }
+
   async render() {
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -136,12 +146,6 @@ export default class ManhattanPlot extends Stanza {
 
     if (typeof variants === "object") {
       draw(this, this.params);
-      appendDlButton(
-        this.root.querySelector("#chart"),
-        this.root.querySelector("svg"),
-        "manhattan_plot",
-        this.root
-      );
     }
   }
 }
