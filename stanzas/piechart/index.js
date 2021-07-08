@@ -2,9 +2,19 @@ import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
 import loadData from "@/lib/load-data";
-import { appendDlButton } from "@/lib/metastanza_utils.js";
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+} from "@/lib/metastanza_utils.js";
 
 export default class PieChart extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "piechart"),
+      downloadPngMenuItem(this, "piechart"),
+    ];
+  }
+
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
@@ -152,38 +162,5 @@ export default class PieChart extends Stanza {
 
     const svg = this.root.querySelector(".marks");
     svg.style.padding = `${this.params["padding"]}px`;
-
-    //menu button placement
-    appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector("svg"),
-      "piechart",
-      this.root
-    );
-
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        menuButton.setAttribute("class", "dl-top-left");
-        menuList.setAttribute("class", "dl-top-left");
-        break;
-      case "top-right":
-        menuButton.setAttribute("class", "dl-top-right");
-        menuList.setAttribute("class", "dl-top-right");
-        break;
-      case "bottom-left":
-        menuButton.setAttribute("class", "dl-bottom-left");
-        menuList.setAttribute("class", "dl-bottom-left");
-        break;
-      case "bottom-right":
-        menuButton.setAttribute("class", "dl-bottom-right");
-        menuList.setAttribute("class", "dl-bottom-right");
-        break;
-      case "none":
-        menuButton.setAttribute("class", "dl-none");
-        menuList.setAttribute("class", "dl-none");
-        break;
-    }
   }
 }
