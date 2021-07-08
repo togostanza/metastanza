@@ -1,5 +1,5 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { l as loadData } from './load-data-e0faf98c.js';
+import { S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
+import { l as loadData } from './load-data-181bd368.js';
 
 class HashTable extends Stanza {
   async render() {

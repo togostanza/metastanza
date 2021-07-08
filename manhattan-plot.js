@@ -1,5 +1,5 @@
-import { y as dispatch, S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { s as select, a as appendDlButton } from './metastanza_utils-1e6af370.js';
+import { x as dispatch, S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
+import { s as select, d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-0f6ea723.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -8742,6 +8742,13 @@ const getVariants = () => {
 let variants = totalVariants; //init
 
 class ManhattanPlot extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "manhattan_plot"),
+      downloadPngMenuItem(this, "manhattan_plot"),
+    ];
+  }
+
   async render() {
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -8810,12 +8817,6 @@ class ManhattanPlot extends Stanza {
 
     if (typeof variants === "object") {
       draw(this, this.params);
-      appendDlButton(
-        this.root.querySelector("#chart"),
-        this.root.querySelector("svg"),
-        "manhattan_plot",
-        this.root
-      );
     }
   }
 }

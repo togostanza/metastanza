@@ -1,9 +1,16 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { e as embed } from './vega-embed.module-d0fdd393.js';
-import { l as loadData } from './load-data-e0faf98c.js';
-import { a as appendDlButton } from './metastanza_utils-1e6af370.js';
+import { S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
+import { e as embed } from './vega-embed.module-c30bdeba.js';
+import { l as loadData } from './load-data-181bd368.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-0f6ea723.js';
 
 class Tree extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "tree"),
+      downloadPngMenuItem(this, "tree"),
+    ];
+  }
+
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
@@ -166,39 +173,6 @@ class Tree extends Stanza {
       renderer: "svg",
     };
     await embed(el, spec, opts);
-
-    //menu button placement
-    appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector("svg"),
-      "tree",
-      this.root
-    );
-
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        menuButton.setAttribute("class", "dl-top-left");
-        menuList.setAttribute("class", "dl-top-left");
-        break;
-      case "top-right":
-        menuButton.setAttribute("class", "dl-top-right");
-        menuList.setAttribute("class", "dl-top-right");
-        break;
-      case "bottom-left":
-        menuButton.setAttribute("class", "dl-bottom-left");
-        menuList.setAttribute("class", "dl-bottom-left");
-        break;
-      case "bottom-right":
-        menuButton.setAttribute("class", "dl-bottom-right");
-        menuList.setAttribute("class", "dl-bottom-right");
-        break;
-      case "none":
-        menuButton.setAttribute("class", "dl-none");
-        menuList.setAttribute("class", "dl-none");
-        break;
-    }
   }
 }
 

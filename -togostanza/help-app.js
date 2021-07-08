@@ -1,25 +1,24 @@
-import { d as defineComponent, g as computed, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-e24ea373.js';
+import { d as defineComponent, g as computed, o as openBlock, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-017db405.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
-function createCommonjsModule(fn) {
-  var module = { exports: {} };
-	return fn(module, module.exports), module.exports;
-}
+var tab = {exports: {}};
+
+var selectorEngine = {exports: {}};
 
 /*!
-  * Bootstrap selector-engine.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-var selectorEngine = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 (function (global, factory) {
   module.exports = factory() ;
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/selector-engine.js
+   * Bootstrap (v5.0.2): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -92,85 +91,17 @@ var selectorEngine = createCommonjsModule(function (module, exports) {
 
 })));
 
-});
+}(selectorEngine));
+
+var eventHandler = {exports: {}};
 
 /*!
-  * Bootstrap data.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-var data = createCommonjsModule(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-}(commonjsGlobal, (function () {
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-  const elementMap = new Map();
-  var data = {
-    set(element, key, instance) {
-      if (!elementMap.has(element)) {
-        elementMap.set(element, new Map());
-      }
-
-      const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
-
-      if (!instanceMap.has(key) && instanceMap.size !== 0) {
-        // eslint-disable-next-line no-console
-        console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
-        return;
-      }
-
-      instanceMap.set(key, instance);
-    },
-
-    get(element, key) {
-      if (elementMap.has(element)) {
-        return elementMap.get(element).get(key) || null;
-      }
-
-      return null;
-    },
-
-    remove(element, key) {
-      if (!elementMap.has(element)) {
-        return;
-      }
-
-      const instanceMap = elementMap.get(element);
-      instanceMap.delete(key); // free up element references if there are no instances left for an element
-
-      if (instanceMap.size === 0) {
-        elementMap.delete(element);
-      }
-    }
-
-  };
-
-  return data;
-
-})));
-
-});
-
-/*!
-  * Bootstrap event-handler.js v5.0.1 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
-
-var eventHandler = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 (function (global, factory) {
   module.exports = factory() ;
 }(commonjsGlobal, (function () {
@@ -188,7 +119,7 @@ var eventHandler = createCommonjsModule(function (module, exports) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): dom/event-handler.js
+   * Bootstrap (v5.0.2): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -479,17 +410,91 @@ var eventHandler = createCommonjsModule(function (module, exports) {
 
 })));
 
-});
+}(eventHandler));
+
+var baseComponent = {exports: {}};
+
+var data = {exports: {}};
 
 /*!
-  * Bootstrap base-component.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-var baseComponent = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(data, selectorEngine, eventHandler) ;
+  module.exports = factory() ;
+}(commonjsGlobal, (function () {
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.0.2): dom/data.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  /**
+   * ------------------------------------------------------------------------
+   * Constants
+   * ------------------------------------------------------------------------
+   */
+  const elementMap = new Map();
+  var data = {
+    set(element, key, instance) {
+      if (!elementMap.has(element)) {
+        elementMap.set(element, new Map());
+      }
+
+      const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
+      // can be removed later when multiple key/instances are fine to be used
+
+      if (!instanceMap.has(key) && instanceMap.size !== 0) {
+        // eslint-disable-next-line no-console
+        console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
+        return;
+      }
+
+      instanceMap.set(key, instance);
+    },
+
+    get(element, key) {
+      if (elementMap.has(element)) {
+        return elementMap.get(element).get(key) || null;
+      }
+
+      return null;
+    },
+
+    remove(element, key) {
+      if (!elementMap.has(element)) {
+        return;
+      }
+
+      const instanceMap = elementMap.get(element);
+      instanceMap.delete(key); // free up element references if there are no instances left for an element
+
+      if (instanceMap.size === 0) {
+        elementMap.delete(element);
+      }
+    }
+
+  };
+
+  return data;
+
+})));
+
+}(data));
+
+/*!
+  * Bootstrap base-component.js v5.0.2 (https://getbootstrap.com/)
+  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+(function (module, exports) {
+(function (global, factory) {
+  module.exports = factory(data.exports, selectorEngine.exports, eventHandler.exports) ;
 }(commonjsGlobal, (function (Data, SelectorEngine, EventHandler) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -552,33 +557,45 @@ var baseComponent = createCommonjsModule(function (module, exports) {
     return null;
   };
 
-  const emulateTransitionEnd = (element, duration) => {
-    let called = false;
-    const durationPadding = 5;
-    const emulatedDuration = duration + durationPadding;
-
-    function listener() {
-      called = true;
-      element.removeEventListener(TRANSITION_END, listener);
-    }
-
-    element.addEventListener(TRANSITION_END, listener);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(element);
-      }
-    }, emulatedDuration);
-  };
-
   const execute = callback => {
     if (typeof callback === 'function') {
       callback();
     }
   };
 
+  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+    if (!waitForTransition) {
+      execute(callback);
+      return;
+    }
+
+    const durationPadding = 5;
+    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
+    let called = false;
+
+    const handler = ({
+      target
+    }) => {
+      if (target !== transitionElement) {
+        return;
+      }
+
+      called = true;
+      transitionElement.removeEventListener(TRANSITION_END, handler);
+      execute(callback);
+    };
+
+    transitionElement.addEventListener(TRANSITION_END, handler);
+    setTimeout(() => {
+      if (!called) {
+        triggerTransitionEnd(transitionElement);
+      }
+    }, emulatedDuration);
+  };
+
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): base-component.js
+   * Bootstrap (v5.0.2): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -588,7 +605,7 @@ var baseComponent = createCommonjsModule(function (module, exports) {
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.0.1';
+  const VERSION = '5.0.2';
 
   class BaseComponent {
     constructor(element) {
@@ -611,20 +628,17 @@ var baseComponent = createCommonjsModule(function (module, exports) {
     }
 
     _queueCallback(callback, element, isAnimated = true) {
-      if (!isAnimated) {
-        execute(callback);
-        return;
-      }
-
-      const transitionDuration = getTransitionDurationFromElement(element);
-      EventHandler__default['default'].one(element, 'transitionend', () => execute(callback));
-      emulateTransitionEnd(element, transitionDuration);
+      executeAfterTransition(callback, element, isAnimated);
     }
     /** Static */
 
 
     static getInstance(element) {
       return Data__default['default'].get(element, this.DATA_KEY);
+    }
+
+    static getOrCreateInstance(element, config = {}) {
+      return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
     }
 
     static get VERSION() {
@@ -649,22 +663,21 @@ var baseComponent = createCommonjsModule(function (module, exports) {
 
 })));
 
-});
+}(baseComponent));
 
 /*!
-  * Bootstrap tab.js v5.0.1 (https://getbootstrap.com/)
+  * Bootstrap tab.js v5.0.2 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(selectorEngine, data, eventHandler, baseComponent) ;
-}(commonjsGlobal, (function (SelectorEngine, Data, EventHandler, BaseComponent) {
+  module.exports = factory(selectorEngine.exports, eventHandler.exports, baseComponent.exports) ;
+}(commonjsGlobal, (function (SelectorEngine, EventHandler, BaseComponent) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
-  var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
   var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
   var BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
 
@@ -727,9 +740,18 @@ createCommonjsModule(function (module, exports) {
     return null;
   };
 
+  const DOMContentLoadedCallbacks = [];
+
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', callback);
+      // add listener on the first call when the document is in loading state
+      if (!DOMContentLoadedCallbacks.length) {
+        document.addEventListener('DOMContentLoaded', () => {
+          DOMContentLoadedCallbacks.forEach(callback => callback());
+        });
+      }
+
+      DOMContentLoadedCallbacks.push(callback);
     } else {
       callback();
     }
@@ -756,7 +778,7 @@ createCommonjsModule(function (module, exports) {
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.1): tab.js
+   * Bootstrap (v5.0.2): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -911,7 +933,7 @@ createCommonjsModule(function (module, exports) {
 
     static jQueryInterface(config) {
       return this.each(function () {
-        const data = Data__default['default'].get(this, DATA_KEY) || new Tab(this);
+        const data = Tab.getOrCreateInstance(this);
 
         if (typeof config === 'string') {
           if (typeof data[config] === 'undefined') {
@@ -940,7 +962,7 @@ createCommonjsModule(function (module, exports) {
       return;
     }
 
-    const data = Data__default['default'].get(this, DATA_KEY) || new Tab(this);
+    const data = Tab.getOrCreateInstance(this);
     data.show();
   });
   /**
@@ -956,7 +978,7 @@ createCommonjsModule(function (module, exports) {
 
 })));
 
-});
+}(tab));
 
 var script$3 = defineComponent({
   props: [
@@ -1486,16 +1508,20 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
 script$2.render = render$2;
 script$2.__file = "node_modules/togostanza/src/components/CopyButton.vue";
 
-var utils = createCommonjsModule(function (module, exports) {
+var handlebars_runtime = {exports: {}};
 
-exports.__esModule = true;
-exports.extend = extend;
-exports.indexOf = indexOf;
-exports.escapeExpression = escapeExpression;
-exports.isEmpty = isEmpty;
-exports.createFrame = createFrame;
-exports.blockParams = blockParams;
-exports.appendContextPath = appendContextPath;
+var base = {};
+
+var utils = {};
+
+utils.__esModule = true;
+utils.extend = extend;
+utils.indexOf = indexOf;
+utils.escapeExpression = escapeExpression;
+utils.isEmpty = isEmpty;
+utils.createFrame = createFrame;
+utils.blockParams = blockParams;
+utils.appendContextPath = appendContextPath;
 var escape = {
   '&': '&amp;',
   '<': '&lt;',
@@ -1527,7 +1553,7 @@ function extend(obj /* , ...source */) {
 
 var toString = Object.prototype.toString;
 
-exports.toString = toString;
+utils.toString = toString;
 // Sourced from lodash
 // https://github.com/bestiejs/lodash/blob/master/LICENSE.txt
 /* eslint-disable func-style */
@@ -1537,11 +1563,11 @@ var isFunction = function isFunction(value) {
 // fallback for older versions of Chrome and Safari
 /* istanbul ignore next */
 if (isFunction(/x/)) {
-  exports.isFunction = isFunction = function (value) {
+  utils.isFunction = isFunction = function (value) {
     return typeof value === 'function' && toString.call(value) === '[object Function]';
   };
 }
-exports.isFunction = isFunction;
+utils.isFunction = isFunction;
 
 /* eslint-enable func-style */
 
@@ -1550,7 +1576,7 @@ var isArray = Array.isArray || function (value) {
   return value && typeof value === 'object' ? toString.call(value) === '[object Array]' : false;
 };
 
-exports.isArray = isArray;
+utils.isArray = isArray;
 // Older IE versions do not directly support indexOf so we must implement our own, sadly.
 
 function indexOf(array, value) {
@@ -1610,9 +1636,9 @@ function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
 }
 
-});
+var exception = {exports: {}};
 
-var exception = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
@@ -1676,13 +1702,17 @@ Exception.prototype = new Error();
 exports['default'] = Exception;
 module.exports = exports['default'];
 
-});
+}(exception, exception.exports));
 
-var blockHelperMissing = createCommonjsModule(function (module, exports) {
+var helpers = {};
+
+var blockHelperMissing = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 
-
+var _utils = utils;
 
 exports['default'] = function (instance) {
   instance.registerHelper('blockHelperMissing', function (context, options) {
@@ -1693,7 +1723,7 @@ exports['default'] = function (instance) {
       return fn(this);
     } else if (context === false || context == null) {
       return inverse(this);
-    } else if (utils.isArray(context)) {
+    } else if (_utils.isArray(context)) {
       if (context.length > 0) {
         if (options.ids) {
           options.ids = [options.name];
@@ -1705,8 +1735,8 @@ exports['default'] = function (instance) {
       }
     } else {
       if (options.data && options.ids) {
-        var data = utils.createFrame(options.data);
-        data.contextPath = utils.appendContextPath(options.data.contextPath, options.name);
+        var data = _utils.createFrame(options.data);
+        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.name);
         options = { data: data };
       }
 
@@ -1717,20 +1747,22 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(blockHelperMissing, blockHelperMissing.exports));
 
-var each = createCommonjsModule(function (module, exports) {
+var each = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _utils = utils;
 
+var _exception = exception.exports;
 
-
-
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault(_exception);
 
 exports['default'] = function (instance) {
   instance.registerHelper('each', function (context, options) {
@@ -1746,15 +1778,15 @@ exports['default'] = function (instance) {
         contextPath = undefined;
 
     if (options.data && options.ids) {
-      contextPath = utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
+      contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
     }
 
-    if (utils.isFunction(context)) {
+    if (_utils.isFunction(context)) {
       context = context.call(this);
     }
 
     if (options.data) {
-      data = utils.createFrame(options.data);
+      data = _utils.createFrame(options.data);
     }
 
     function execIteration(field, index, last) {
@@ -1771,12 +1803,12 @@ exports['default'] = function (instance) {
 
       ret = ret + fn(context[field], {
         data: data,
-        blockParams: utils.blockParams([context[field], field], [contextPath + field, null])
+        blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
       });
     }
 
     if (context && typeof context === 'object') {
-      if (utils.isArray(context)) {
+      if (_utils.isArray(context)) {
         for (var j = context.length; i < j; i++) {
           if (i in context) {
             execIteration(i, i, i === context.length - 1);
@@ -1823,18 +1855,20 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(each, each.exports));
 
-var helperMissing = createCommonjsModule(function (module, exports) {
+var helperMissing = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _exception = exception.exports;
 
-
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault(_exception);
 
 exports['default'] = function (instance) {
   instance.registerHelper('helperMissing', function () /* [args, ]options */{
@@ -1850,34 +1884,36 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(helperMissing, helperMissing.exports));
 
-var _if = createCommonjsModule(function (module, exports) {
+var _if = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _utils = utils;
 
+var _exception = exception.exports;
 
-
-
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault(_exception);
 
 exports['default'] = function (instance) {
   instance.registerHelper('if', function (conditional, options) {
     if (arguments.length != 2) {
       throw new _exception2['default']('#if requires exactly one argument');
     }
-    if (utils.isFunction(conditional)) {
+    if (_utils.isFunction(conditional)) {
       conditional = conditional.call(this);
     }
 
     // Default behavior is to render the positive path if the value is truthy and not empty.
     // The `includeZero` option may be set to treat the condtional as purely not empty based on the
     // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
-    if (!options.hash.includeZero && !conditional || utils.isEmpty(conditional)) {
+    if (!options.hash.includeZero && !conditional || _utils.isEmpty(conditional)) {
       return options.inverse(this);
     } else {
       return options.fn(this);
@@ -1898,9 +1934,11 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(_if, _if.exports));
 
-var log$1 = createCommonjsModule(function (module, exports) {
+var log$1 = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 
@@ -1926,9 +1964,11 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(log$1, log$1.exports));
 
-var lookup = createCommonjsModule(function (module, exports) {
+var lookup = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 
@@ -1944,42 +1984,44 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(lookup, lookup.exports));
 
-var _with = createCommonjsModule(function (module, exports) {
+var _with = {exports: {}};
+
+(function (module, exports) {
 
 exports.__esModule = true;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _utils = utils;
 
+var _exception = exception.exports;
 
-
-
-var _exception2 = _interopRequireDefault(exception);
+var _exception2 = _interopRequireDefault(_exception);
 
 exports['default'] = function (instance) {
   instance.registerHelper('with', function (context, options) {
     if (arguments.length != 2) {
       throw new _exception2['default']('#with requires exactly one argument');
     }
-    if (utils.isFunction(context)) {
+    if (_utils.isFunction(context)) {
       context = context.call(this);
     }
 
     var fn = options.fn;
 
-    if (!utils.isEmpty(context)) {
+    if (!_utils.isEmpty(context)) {
       var data = options.data;
       if (options.data && options.ids) {
-        data = utils.createFrame(options.data);
-        data.contextPath = utils.appendContextPath(options.data.contextPath, options.ids[0]);
+        data = _utils.createFrame(options.data);
+        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]);
       }
 
       return fn(context, {
         data: data,
-        blockParams: utils.blockParams([context], [data && data.contextPath])
+        blockParams: _utils.blockParams([context], [data && data.contextPath])
       });
     } else {
       return options.inverse(this);
@@ -1989,41 +2031,42 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(_with, _with.exports));
 
-var registerDefaultHelpers_1 = registerDefaultHelpers;
-var moveHelperToHooks_1 = moveHelperToHooks;
+helpers.__esModule = true;
+helpers.registerDefaultHelpers = registerDefaultHelpers;
+helpers.moveHelperToHooks = moveHelperToHooks;
 // istanbul ignore next
 
 function _interopRequireDefault$3(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _helpersBlockHelperMissing = blockHelperMissing.exports;
 
+var _helpersBlockHelperMissing2 = _interopRequireDefault$3(_helpersBlockHelperMissing);
 
-var _helpersBlockHelperMissing2 = _interopRequireDefault$3(blockHelperMissing);
+var _helpersEach = each.exports;
 
+var _helpersEach2 = _interopRequireDefault$3(_helpersEach);
 
+var _helpersHelperMissing = helperMissing.exports;
 
-var _helpersEach2 = _interopRequireDefault$3(each);
+var _helpersHelperMissing2 = _interopRequireDefault$3(_helpersHelperMissing);
 
+var _helpersIf = _if.exports;
 
+var _helpersIf2 = _interopRequireDefault$3(_helpersIf);
 
-var _helpersHelperMissing2 = _interopRequireDefault$3(helperMissing);
+var _helpersLog = log$1.exports;
 
+var _helpersLog2 = _interopRequireDefault$3(_helpersLog);
 
+var _helpersLookup = lookup.exports;
 
-var _helpersIf2 = _interopRequireDefault$3(_if);
+var _helpersLookup2 = _interopRequireDefault$3(_helpersLookup);
 
+var _helpersWith = _with.exports;
 
-
-var _helpersLog2 = _interopRequireDefault$3(log$1);
-
-
-
-var _helpersLookup2 = _interopRequireDefault$3(lookup);
-
-
-
-var _helpersWith2 = _interopRequireDefault$3(_with);
+var _helpersWith2 = _interopRequireDefault$3(_helpersWith);
 
 function registerDefaultHelpers(instance) {
   _helpersBlockHelperMissing2['default'](instance);
@@ -2044,17 +2087,15 @@ function moveHelperToHooks(instance, helperName, keepHelper) {
   }
 }
 
+var decorators = {};
 
-var helpers = /*#__PURE__*/Object.defineProperty({
-	registerDefaultHelpers: registerDefaultHelpers_1,
-	moveHelperToHooks: moveHelperToHooks_1
-}, '__esModule', {value: true});
+var inline = {exports: {}};
 
-var inline = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 
-
+var _utils = utils;
 
 exports['default'] = function (instance) {
   instance.registerDecorator('inline', function (fn, props, container, options) {
@@ -2064,7 +2105,7 @@ exports['default'] = function (instance) {
       ret = function (context, options) {
         // Create a new partials stack frame prior to exec.
         var original = container.partials;
-        container.partials = utils.extend({}, original, props.partials);
+        container.partials = _utils.extend({}, original, props.partials);
         var ret = fn(context, options);
         container.partials = original;
         return ret;
@@ -2079,31 +2120,29 @@ exports['default'] = function (instance) {
 
 module.exports = exports['default'];
 
-});
+}(inline, inline.exports));
 
-var registerDefaultDecorators_1 = registerDefaultDecorators;
+decorators.__esModule = true;
+decorators.registerDefaultDecorators = registerDefaultDecorators;
 // istanbul ignore next
 
 function _interopRequireDefault$2(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _decoratorsInline = inline.exports;
 
-
-var _decoratorsInline2 = _interopRequireDefault$2(inline);
+var _decoratorsInline2 = _interopRequireDefault$2(_decoratorsInline);
 
 function registerDefaultDecorators(instance) {
   _decoratorsInline2['default'](instance);
 }
 
+var logger$1 = {exports: {}};
 
-var decorators = /*#__PURE__*/Object.defineProperty({
-	registerDefaultDecorators: registerDefaultDecorators_1
-}, '__esModule', {value: true});
-
-var logger_1 = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 
-
+var _utils = utils;
 
 var logger = {
   methodMap: ['debug', 'info', 'warn', 'error'],
@@ -2112,7 +2151,7 @@ var logger = {
   // Maps a given level value to the `methodMap` indexes above.
   lookupLevel: function lookupLevel(level) {
     if (typeof level === 'string') {
-      var levelMap = utils.indexOf(logger.methodMap, level.toLowerCase());
+      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
       if (levelMap >= 0) {
         level = levelMap;
       } else {
@@ -2146,11 +2185,16 @@ var logger = {
 exports['default'] = logger;
 module.exports = exports['default'];
 
-});
+}(logger$1, logger$1.exports));
 
-var createNewLookupObject_2 = createNewLookupObject;
+var protoAccess = {};
 
+var createNewLookupObject$1 = {};
 
+createNewLookupObject$1.__esModule = true;
+createNewLookupObject$1.createNewLookupObject = createNewLookupObject;
+
+var _utils$2 = utils;
 
 /**
  * Create a new object with "null"-prototype to avoid truthy results on prototype properties.
@@ -2164,26 +2208,22 @@ function createNewLookupObject() {
     sources[_key] = arguments[_key];
   }
 
-  return utils.extend.apply(undefined, [Object.create(null)].concat(sources));
+  return _utils$2.extend.apply(undefined, [Object.create(null)].concat(sources));
 }
 
-
-var createNewLookupObject_1 = /*#__PURE__*/Object.defineProperty({
-	createNewLookupObject: createNewLookupObject_2
-}, '__esModule', {value: true});
-
-var createProtoAccessControl_1 = createProtoAccessControl;
-var resultIsAllowed_1 = resultIsAllowed;
-var resetLoggedProperties_1 = resetLoggedProperties;
+protoAccess.__esModule = true;
+protoAccess.createProtoAccessControl = createProtoAccessControl;
+protoAccess.resultIsAllowed = resultIsAllowed;
+protoAccess.resetLoggedProperties = resetLoggedProperties;
 // istanbul ignore next
 
 function _interopRequireWildcard$1(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
+var _createNewLookupObject = createNewLookupObject$1;
 
+var _logger$1 = logger$1.exports;
 
-
-
-var logger$1 = _interopRequireWildcard$1(logger_1);
+var logger = _interopRequireWildcard$1(_logger$1);
 
 var loggedProperties = Object.create(null);
 
@@ -2200,11 +2240,11 @@ function createProtoAccessControl(runtimeOptions) {
 
   return {
     properties: {
-      whitelist: createNewLookupObject_1.createNewLookupObject(defaultPropertyWhiteList, runtimeOptions.allowedProtoProperties),
+      whitelist: _createNewLookupObject.createNewLookupObject(defaultPropertyWhiteList, runtimeOptions.allowedProtoProperties),
       defaultValue: runtimeOptions.allowProtoPropertiesByDefault
     },
     methods: {
-      whitelist: createNewLookupObject_1.createNewLookupObject(defaultMethodWhiteList, runtimeOptions.allowedProtoMethods),
+      whitelist: _createNewLookupObject.createNewLookupObject(defaultMethodWhiteList, runtimeOptions.allowedProtoMethods),
       defaultValue: runtimeOptions.allowProtoMethodsByDefault
     }
   };
@@ -2232,7 +2272,7 @@ function checkWhiteList(protoAccessControlForType, propertyName) {
 function logUnexpecedPropertyAccessOnce(propertyName) {
   if (loggedProperties[propertyName] !== true) {
     loggedProperties[propertyName] = true;
-    logger$1.log('error', 'Handlebars: Access has been denied to resolve the property "' + propertyName + '" because it is not an "own property" of its parent.\n' + 'You can add a runtime option to disable the check or this warning:\n' + 'See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details');
+    logger.log('error', 'Handlebars: Access has been denied to resolve the property "' + propertyName + '" because it is not an "own property" of its parent.\n' + 'You can add a runtime option to disable the check or this warning:\n' + 'See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details');
   }
 }
 
@@ -2242,41 +2282,35 @@ function resetLoggedProperties() {
   });
 }
 
-
-var protoAccess = /*#__PURE__*/Object.defineProperty({
-	createProtoAccessControl: createProtoAccessControl_1,
-	resultIsAllowed: resultIsAllowed_1,
-	resetLoggedProperties: resetLoggedProperties_1
-}, '__esModule', {value: true});
-
-var HandlebarsEnvironment_1 = HandlebarsEnvironment;
+base.__esModule = true;
+base.HandlebarsEnvironment = HandlebarsEnvironment;
 // istanbul ignore next
 
 function _interopRequireDefault$1(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+var _utils$1 = utils;
 
+var _exception$1 = exception.exports;
 
+var _exception2$1 = _interopRequireDefault$1(_exception$1);
 
+var _helpers$1 = helpers;
 
-var _exception2$1 = _interopRequireDefault$1(exception);
+var _decorators = decorators;
 
+var _logger = logger$1.exports;
 
+var _logger2 = _interopRequireDefault$1(_logger);
 
-
-
-
-
-var _logger2 = _interopRequireDefault$1(logger_1);
-
-
+var _internalProtoAccess$1 = protoAccess;
 
 var VERSION = '4.7.7';
-var VERSION_1 = VERSION;
+base.VERSION = VERSION;
 var COMPILER_REVISION = 8;
-var COMPILER_REVISION_1 = COMPILER_REVISION;
+base.COMPILER_REVISION = COMPILER_REVISION;
 var LAST_COMPATIBLE_COMPILER_REVISION = 7;
 
-var LAST_COMPATIBLE_COMPILER_REVISION_1 = LAST_COMPATIBLE_COMPILER_REVISION;
+base.LAST_COMPATIBLE_COMPILER_REVISION = LAST_COMPATIBLE_COMPILER_REVISION;
 var REVISION_CHANGES = {
   1: '<= 1.0.rc.2', // 1.0.rc.2 is actually rev2 but doesn't report it
   2: '== 1.0.0-rc.3',
@@ -2288,16 +2322,16 @@ var REVISION_CHANGES = {
   8: '>= 4.3.0'
 };
 
-var REVISION_CHANGES_1 = REVISION_CHANGES;
+base.REVISION_CHANGES = REVISION_CHANGES;
 var objectType = '[object Object]';
 
-function HandlebarsEnvironment(helpers$1, partials, decorators$1) {
-  this.helpers = helpers$1 || {};
+function HandlebarsEnvironment(helpers, partials, decorators) {
+  this.helpers = helpers || {};
   this.partials = partials || {};
-  this.decorators = decorators$1 || {};
+  this.decorators = decorators || {};
 
-  helpers.registerDefaultHelpers(this);
-  decorators.registerDefaultDecorators(this);
+  _helpers$1.registerDefaultHelpers(this);
+  _decorators.registerDefaultDecorators(this);
 }
 
 HandlebarsEnvironment.prototype = {
@@ -2307,11 +2341,11 @@ HandlebarsEnvironment.prototype = {
   log: _logger2['default'].log,
 
   registerHelper: function registerHelper(name, fn) {
-    if (utils.toString.call(name) === objectType) {
+    if (_utils$1.toString.call(name) === objectType) {
       if (fn) {
         throw new _exception2$1['default']('Arg not supported with multiple helpers');
       }
-      utils.extend(this.helpers, name);
+      _utils$1.extend(this.helpers, name);
     } else {
       this.helpers[name] = fn;
     }
@@ -2321,8 +2355,8 @@ HandlebarsEnvironment.prototype = {
   },
 
   registerPartial: function registerPartial(name, partial) {
-    if (utils.toString.call(name) === objectType) {
-      utils.extend(this.partials, name);
+    if (_utils$1.toString.call(name) === objectType) {
+      _utils$1.extend(this.partials, name);
     } else {
       if (typeof partial === 'undefined') {
         throw new _exception2$1['default']('Attempting to register a partial called "' + name + '" as undefined');
@@ -2335,11 +2369,11 @@ HandlebarsEnvironment.prototype = {
   },
 
   registerDecorator: function registerDecorator(name, fn) {
-    if (utils.toString.call(name) === objectType) {
+    if (_utils$1.toString.call(name) === objectType) {
       if (fn) {
         throw new _exception2$1['default']('Arg not supported with multiple decorators');
       }
-      utils.extend(this.decorators, name);
+      _utils$1.extend(this.decorators, name);
     } else {
       this.decorators[name] = fn;
     }
@@ -2352,29 +2386,19 @@ HandlebarsEnvironment.prototype = {
    * @deprecated should only be used in handlebars test-cases
    */
   resetLoggedPropertyAccesses: function resetLoggedPropertyAccesses() {
-    protoAccess.resetLoggedProperties();
+    _internalProtoAccess$1.resetLoggedProperties();
   }
 };
 
 var log = _logger2['default'].log;
 
-var log_1 = log;
-var createFrame = utils.createFrame;
-var logger = _logger2['default'];
+base.log = log;
+base.createFrame = _utils$1.createFrame;
+base.logger = _logger2['default'];
 
+var safeString = {exports: {}};
 
-var base = /*#__PURE__*/Object.defineProperty({
-	HandlebarsEnvironment: HandlebarsEnvironment_1,
-	VERSION: VERSION_1,
-	COMPILER_REVISION: COMPILER_REVISION_1,
-	LAST_COMPATIBLE_COMPILER_REVISION: LAST_COMPATIBLE_COMPILER_REVISION_1,
-	REVISION_CHANGES: REVISION_CHANGES_1,
-	log: log_1,
-	createFrame: createFrame,
-	logger: logger
-}, '__esModule', {value: true});
-
-var safeString = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 function SafeString(string) {
@@ -2388,9 +2412,14 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 exports['default'] = SafeString;
 module.exports = exports['default'];
 
-});
+}(safeString, safeString.exports));
 
-var wrapHelper_2 = wrapHelper;
+var runtime$1 = {};
+
+var wrapHelper$1 = {};
+
+wrapHelper$1.__esModule = true;
+wrapHelper$1.wrapHelper = wrapHelper;
 
 function wrapHelper(helper, transformOptionsFn) {
   if (typeof helper !== 'function') {
@@ -2406,17 +2435,13 @@ function wrapHelper(helper, transformOptionsFn) {
   return wrapper;
 }
 
-
-var wrapHelper_1 = /*#__PURE__*/Object.defineProperty({
-	wrapHelper: wrapHelper_2
-}, '__esModule', {value: true});
-
-var checkRevision_1 = checkRevision;
-var template_1 = template;
-var wrapProgram_1 = wrapProgram;
-var resolvePartial_1 = resolvePartial;
-var invokePartial_1 = invokePartial;
-var noop_1 = noop;
+runtime$1.__esModule = true;
+runtime$1.checkRevision = checkRevision;
+runtime$1.template = template;
+runtime$1.wrapProgram = wrapProgram;
+runtime$1.resolvePartial = resolvePartial;
+runtime$1.invokePartial = invokePartial;
+runtime$1.noop = noop;
 // istanbul ignore next
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -2425,33 +2450,33 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
+var _utils = utils;
 
+var Utils = _interopRequireWildcard(_utils);
 
-var Utils = _interopRequireWildcard(utils);
+var _exception = exception.exports;
 
+var _exception2 = _interopRequireDefault(_exception);
 
+var _base = base;
 
-var _exception2 = _interopRequireDefault(exception);
+var _helpers = helpers;
 
+var _internalWrapHelper = wrapHelper$1;
 
-
-
-
-
-
-
+var _internalProtoAccess = protoAccess;
 
 function checkRevision(compilerInfo) {
   var compilerRevision = compilerInfo && compilerInfo[0] || 1,
-      currentRevision = base.COMPILER_REVISION;
+      currentRevision = _base.COMPILER_REVISION;
 
-  if (compilerRevision >= base.LAST_COMPATIBLE_COMPILER_REVISION && compilerRevision <= base.COMPILER_REVISION) {
+  if (compilerRevision >= _base.LAST_COMPATIBLE_COMPILER_REVISION && compilerRevision <= _base.COMPILER_REVISION) {
     return;
   }
 
-  if (compilerRevision < base.LAST_COMPATIBLE_COMPILER_REVISION) {
-    var runtimeVersions = base.REVISION_CHANGES[currentRevision],
-        compilerVersions = base.REVISION_CHANGES[compilerRevision];
+  if (compilerRevision < _base.LAST_COMPATIBLE_COMPILER_REVISION) {
+    var runtimeVersions = _base.REVISION_CHANGES[currentRevision],
+        compilerVersions = _base.REVISION_CHANGES[compilerRevision];
     throw new _exception2['default']('Template was precompiled with an older version of Handlebars than the current runtime. ' + 'Please update your precompiler to a newer version (' + runtimeVersions + ') or downgrade your runtime to an older version (' + compilerVersions + ').');
   } else {
     // Use the embedded version info since the runtime doesn't know about this revision yet
@@ -2534,7 +2559,7 @@ function template(templateSpec, env) {
         return result;
       }
 
-      if (protoAccess.resultIsAllowed(result, container.protoAccessControl, propertyName)) {
+      if (_internalProtoAccess.resultIsAllowed(result, container.protoAccessControl, propertyName)) {
         return result;
       }
       return undefined;
@@ -2639,11 +2664,11 @@ function template(templateSpec, env) {
       }
 
       container.hooks = {};
-      container.protoAccessControl = protoAccess.createProtoAccessControl(options);
+      container.protoAccessControl = _internalProtoAccess.createProtoAccessControl(options);
 
       var keepHelperInHelpers = options.allowCallsToHelperMissing || templateWasPrecompiledWithCompilerV7;
-      helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
-      helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
+      _helpers.moveHelperToHooks(container, 'helperMissing', keepHelperInHelpers);
+      _helpers.moveHelperToHooks(container, 'blockHelperMissing', keepHelperInHelpers);
     } else {
       container.protoAccessControl = options.protoAccessControl; // internal option
       container.helpers = options.helpers;
@@ -2716,7 +2741,7 @@ function invokePartial(partial, context, options) {
   var partialBlock = undefined;
   if (options.fn && options.fn !== noop) {
     (function () {
-      options.data = base.createFrame(options.data);
+      options.data = _base.createFrame(options.data);
       // Wrapper function to get access to currentPartialBlock from the closure
       var fn = options.fn;
       partialBlock = options.data['partial-block'] = function partialBlockWrapper(context) {
@@ -2724,7 +2749,7 @@ function invokePartial(partial, context, options) {
 
         // Restore the partial-block from the closure for the execution of the block
         // i.e. the part inside the block of the partial call.
-        options.data = base.createFrame(options.data);
+        options.data = _base.createFrame(options.data);
         options.data['partial-block'] = currentPartialBlock;
         return fn(context, options);
       };
@@ -2751,7 +2776,7 @@ function noop() {
 
 function initData(context, data) {
   if (!data || !('root' in data)) {
-    data = data ? base.createFrame(data) : {};
+    data = data ? _base.createFrame(data) : {};
     data.root = context;
   }
   return data;
@@ -2775,22 +2800,14 @@ function wrapHelpersToPassLookupProperty(mergedHelpers, container) {
 
 function passLookupPropertyOption(helper, container) {
   var lookupProperty = container.lookupProperty;
-  return wrapHelper_1.wrapHelper(helper, function (options) {
+  return _internalWrapHelper.wrapHelper(helper, function (options) {
     return Utils.extend({ lookupProperty: lookupProperty }, options);
   });
 }
 
+var noConflict = {exports: {}};
 
-var runtime$1 = /*#__PURE__*/Object.defineProperty({
-	checkRevision: checkRevision_1,
-	template: template_1,
-	wrapProgram: wrapProgram_1,
-	resolvePartial: resolvePartial_1,
-	invokePartial: invokePartial_1,
-	noop: noop_1
-}, '__esModule', {value: true});
-
-var noConflict = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 
@@ -2809,9 +2826,9 @@ exports['default'] = function (Handlebars) {
 
 module.exports = exports['default'];
 
-});
+}(noConflict, noConflict.exports));
 
-var handlebars_runtime = createCommonjsModule(function (module, exports) {
+(function (module, exports) {
 
 exports.__esModule = true;
 // istanbul ignore next
@@ -2822,32 +2839,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
+var _handlebarsBase = base;
 
-
-var base$1 = _interopRequireWildcard(base);
+var base$1 = _interopRequireWildcard(_handlebarsBase);
 
 // Each of these augment the Handlebars object. No need to setup here.
 // (This is done to easily share code between commonjs and browse envs)
 
+var _handlebarsSafeString = safeString.exports;
 
+var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
-var _handlebarsSafeString2 = _interopRequireDefault(safeString);
+var _handlebarsException = exception.exports;
 
+var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 
+var _handlebarsUtils = utils;
 
-var _handlebarsException2 = _interopRequireDefault(exception);
+var Utils = _interopRequireWildcard(_handlebarsUtils);
 
+var _handlebarsRuntime = runtime$1;
 
+var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var Utils = _interopRequireWildcard(utils);
+var _handlebarsNoConflict = noConflict.exports;
 
-
-
-var runtime = _interopRequireWildcard(runtime$1);
-
-
-
-var _handlebarsNoConflict2 = _interopRequireDefault(noConflict);
+var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
 // For compatibility and usage outside of module systems, make the Handlebars object a namespace
 function create() {
@@ -2877,11 +2894,11 @@ inst['default'] = inst;
 exports['default'] = inst;
 module.exports = exports['default'];
 
-});
+}(handlebars_runtime, handlebars_runtime.exports));
 
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
-var runtime = handlebars_runtime['default'];
+var runtime = handlebars_runtime.exports['default'];
 
 function Helpers0 (Handlebars) {
   Handlebars.registerHelper('eq', (a, b) => a === b);

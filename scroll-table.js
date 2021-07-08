@@ -1,6 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-a60af4a2.js';
-import { e as defineComponent, m as reactive, o as onMounted, b as createBlock, h as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, u as createApp } from './runtime-dom.esm-bundler-1a3b1ec7.js';
-import { l as loadData } from './load-data-e0faf98c.js';
+import { S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
+import { e as defineComponent, n as reactive, o as onMounted, b as createBlock, i as createVNode, F as Fragment, j as renderList, m as createCommentVNode, d as openBlock, l as toDisplayString, x as createApp } from './runtime-dom.esm-bundler-bdefa7ba.js';
+import { l as loadData } from './load-data-181bd368.js';
 
 var metadata = {
 	"@context": {
