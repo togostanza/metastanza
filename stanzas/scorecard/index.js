@@ -1,9 +1,19 @@
 import Stanza from "togostanza/stanza";
 
 import loadData from "@/lib/load-data";
-import { appendDlButton } from "@/lib/metastanza_utils.js";
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+} from "@/lib/metastanza_utils.js";
 
 export default class Scorecard extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "scorecard"),
+      downloadPngMenuItem(this, "scorecard"),
+    ];
+  }
+
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
@@ -61,38 +71,5 @@ export default class Scorecard extends Stanza {
     value.setAttribute("fill", "var(--togostanza-value-font-color)");
     key.setAttribute("font-size", css("--togostanza-key-font-size"));
     value.setAttribute("font-size", css("--togostanza-value-font-size"));
-
-    //menu button placement
-    appendDlButton(
-      this.root.querySelector(".chart-wrapper"),
-      this.root.querySelector(".scorecard-svg"),
-      "scorecard",
-      this.root
-    );
-
-    const menuButton = this.root.querySelector("#dl_button");
-    const menuList = this.root.querySelector("#dl_list");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        menuButton.setAttribute("class", "dl-top-left");
-        menuList.setAttribute("class", "dl-top-left");
-        break;
-      case "top-right":
-        menuButton.setAttribute("class", "dl-top-right");
-        menuList.setAttribute("class", "dl-top-right");
-        break;
-      case "bottom-left":
-        menuButton.setAttribute("class", "dl-bottom-left");
-        menuList.setAttribute("class", "dl-bottom-left");
-        break;
-      case "bottom-right":
-        menuButton.setAttribute("class", "dl-bottom-right");
-        menuList.setAttribute("class", "dl-bottom-right");
-        break;
-      case "none":
-        menuButton.setAttribute("class", "dl-none");
-        menuList.setAttribute("class", "dl-none");
-        break;
-    }
   }
 }
