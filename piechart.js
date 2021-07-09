@@ -1,7 +1,7 @@
-import { S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
-import { e as embed } from './vega-embed.module-c30bdeba.js';
-import { l as loadData } from './load-data-181bd368.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-0f6ea723.js';
+import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
+import { e as embed } from './vega-embed.module-81e2d9b2.js';
+import { l as loadData } from './load-data-8f706a23.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
 
 class PieChart extends Stanza {
   menu() {

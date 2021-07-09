@@ -1,5 +1,5 @@
-import { x as dispatch, S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
-import { s as select, d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-0f6ea723.js';
+import { x as dispatch, S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
+import { s as select, d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
 
 function sourceEvent(event) {
   let sourceEvent;

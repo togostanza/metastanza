@@ -1,6 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-7f5bb4d5.js';
+import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
 import { e as defineComponent, n as reactive, o as onMounted, b as createBlock, i as createVNode, F as Fragment, j as renderList, m as createCommentVNode, d as openBlock, l as toDisplayString, x as createApp } from './runtime-dom.esm-bundler-bdefa7ba.js';
-import { l as loadData } from './load-data-181bd368.js';
+import { l as loadData } from './load-data-8f706a23.js';
 
 var metadata = {
 	"@context": {
