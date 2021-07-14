@@ -16,6 +16,13 @@ export default class Tree extends Stanza {
   }
 
   async render() {
+    const style = this.root.querySelector('style');
+    fetch(this.params["insert-css-url"])
+      .then(response => response.text())
+      .then(data => {
+        style.insertAdjacentHTML('beforeend', data);
+      })
+      
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding

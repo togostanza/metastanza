@@ -30,6 +30,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "insert-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to insert into stanza",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "padding",
       "stanza:type": "number",
       "stanza:example": 0,

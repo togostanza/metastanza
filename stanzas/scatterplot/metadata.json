@@ -65,6 +65,12 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "insert-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to insert into stanza",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 400,

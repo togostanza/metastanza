@@ -43,6 +43,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "insert-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to insert into stanza",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "legend-title",
       "stanza:example": "",
       "stanza:description": "Title for category variable, which is used as legend title (In case of blank, 'category' variable name will be assigned)",

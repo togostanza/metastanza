@@ -40,6 +40,12 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "insert-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to insert into stanza",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "lowThresh",
       "stanza:example": "4",
       "stanza:description": "Filtering threshold (=log10(p-value))",

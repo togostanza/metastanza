@@ -4,6 +4,13 @@ import loadData from "@/lib/load-data";
 
 export default class HashTable extends Stanza {
   async render() {
+    const style = this.root.querySelector('style');
+    fetch(this.params["insert-css-url"])
+      .then(response => response.text())
+      .then(data => {
+        style.insertAdjacentHTML('beforeend', data);
+      })
+      
     let dataset = await loadData(
       this.params["data-url"],
       this.params["data-type"]
