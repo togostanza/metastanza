@@ -29,13 +29,13 @@ export default class Text extends Stanza {
         textUrl: URL.createObjectURL(textBlob),
       },
     });
-    
-    const style = this.root.querySelector('style');
+
+    const style = this.root.querySelector("style");
     fetch(this.params["insert-css-url"])
-      .then(response => response.text())
-      .then(data => {
-        style.insertAdjacentHTML('beforeend', data);
-      })
+      .then((response) => response.text())
+      .then((data) => {
+        style.insertAdjacentHTML("beforeend", data);
+      });
 
     const width = this.params["width"];
     const height = this.params["height"];
