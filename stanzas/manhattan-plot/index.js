@@ -78,8 +78,8 @@ export default class ManhattanPlot extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this,this.params["custom-css-url"]);
-    
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     this.renderTemplate({
       template: "stanza.html.hbs",
       parameters: {

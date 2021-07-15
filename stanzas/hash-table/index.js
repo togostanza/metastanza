@@ -1,11 +1,11 @@
 import Stanza from "togostanza/stanza";
 import loadData from "@/lib/load-data";
-import {appendCustomCss} from "@/lib/metastanza_utils.js";
+import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
 export default class HashTable extends Stanza {
   async render() {
-    appendCustomCss(this,this.params["custom-css-url"]);
-    
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     let dataset = await loadData(
       this.params["data-url"],
       this.params["data-type"]

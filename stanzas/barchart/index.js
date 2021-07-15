@@ -17,7 +17,7 @@ export default class Barchart extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this,this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
     const chartType = this.params["chart-type"];

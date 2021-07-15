@@ -1,9 +1,8 @@
 import Stanza from "togostanza/stanza";
 
-
 import loadData from "@/lib/load-data";
 
-import {appendCustomCss} from "@/lib/metastanza_utils.js";
+import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
 export default class Text extends Stanza {
   async render() {
@@ -33,7 +32,7 @@ export default class Text extends Stanza {
       },
     });
 
-    appendCustomCss(this,this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["custom-css-url"]);
 
     const width = this.params["width"];
     const height = this.params["height"];

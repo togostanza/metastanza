@@ -17,7 +17,7 @@ export default class ScatterPlot extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this,this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding
