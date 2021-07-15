@@ -1,16 +1,12 @@
 import Stanza from "togostanza/stanza";
-
 import { createApp } from "vue";
 import App from "./app.vue";
 
+import {appendCustomCss} from "@/lib/metastanza_utils.js";
+
 export default class PaginationTable extends Stanza {
   async render() {
-    const style = this.root.querySelector("style");
-    fetch(this.params["insert-css-url"])
-      .then((response) => response.text())
-      .then((data) => {
-        style.insertAdjacentHTML("beforeend", data);
-      });
+    appendCustomCss(this,this.params["custom-css-url"]);
 
     const main = this.root.querySelector("main");
     main.parentNode.style.backgroundColor =

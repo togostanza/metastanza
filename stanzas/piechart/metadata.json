@@ -43,9 +43,9 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "insert-css-url",
+      "stanza:key": "custom-css-url",
       "stanza:example": "",
-      "stanza:description": "Stylesheet(css file) URL to insert into stanza",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
     },
     {

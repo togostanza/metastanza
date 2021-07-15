@@ -6,6 +6,7 @@ import { pagination } from "./table.js";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 
 //when you put json url
@@ -77,13 +78,8 @@ export default class ManhattanPlot extends Stanza {
   }
 
   async render() {
-    const style = this.root.querySelector("style");
-    fetch(this.params["insert-css-url"])
-      .then((response) => response.text())
-      .then((data) => {
-        style.insertAdjacentHTML("beforeend", data);
-      });
-
+    appendCustomCss(this,this.params["custom-css-url"]);
+    
     this.renderTemplate({
       template: "stanza.html.hbs",
       parameters: {
