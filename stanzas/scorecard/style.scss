@@ -16,19 +16,10 @@ main {
 .chart-wrapper {
   display: flex;
   flex-direction: column;
-  width: 200px;
-  height: 100px;
-  padding: 10px;
   align-items: center;
   justify-content: center;
   position: relative;
   background-color: var(--togostanza-background-color);
-}
-
-svg.scorecard-svg {
-  width: 200px;
-  height: 48px;
-  overflow: visible;
 }
 
 //dl button style
