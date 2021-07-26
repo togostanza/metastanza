@@ -1,6 +1,5 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { l as loadData } from './load-data-8f706a23.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
+import { l as loadData } from './load-data-fa6d4100.js';
 
 class Scorecard extends Stanza {
   menu() {
@@ -11,6 +10,7 @@ class Scorecard extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const dataset = await loadData(
@@ -111,6 +111,12 @@ var metadata = {
 		"stanza:example": "json",
 		"stanza:description": "Data type",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",

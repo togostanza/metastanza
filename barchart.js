@@ -1,7 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { e as embed } from './vega-embed.module-a9808fed.js';
-import { l as loadData } from './load-data-8f706a23.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
+import { e as embed } from './vega-embed.module-5d39601f.js';
+import { l as loadData } from './load-data-fa6d4100.js';
 
 class Barchart extends Stanza {
   menu() {
@@ -12,8 +11,9 @@ class Barchart extends Stanza {
   }
 
   async render() {
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    appendCustomCss(this, this.params["custom-css-url"]);
 
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
     const chartType = this.params["chart-type"];
 
     //width,height,padding
@@ -427,6 +427,12 @@ var metadata = {
 		"stanza:key": "legend-title",
 		"stanza:example": "",
 		"stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
 		"stanza:required": false
 	},
 	{

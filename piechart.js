@@ -1,7 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { e as embed } from './vega-embed.module-a9808fed.js';
-import { l as loadData } from './load-data-8f706a23.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
+import { e as embed } from './vega-embed.module-5d39601f.js';
+import { l as loadData } from './load-data-fa6d4100.js';
 
 class PieChart extends Stanza {
   menu() {
@@ -12,6 +11,7 @@ class PieChart extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding
@@ -215,6 +215,12 @@ var metadata = {
 		"stanza:example": "count",
 		"stanza:description": "Variable to be assigned as value",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "legend-title",

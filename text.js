@@ -1,5 +1,5 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { l as loadData } from './load-data-8f706a23.js';
+import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
+import { l as loadData } from './load-data-fa6d4100.js';
 
 class Text extends Stanza {
   async render() {
@@ -28,6 +28,9 @@ class Text extends Stanza {
         textUrl: URL.createObjectURL(textBlob),
       },
     });
+
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     const width = this.params["width"];
     const height = this.params["height"];
     const padding = this.params["padding"];
@@ -101,6 +104,12 @@ var metadata = {
 		"stanza:example": "json",
 		"stanza:description": "Data type",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "width",

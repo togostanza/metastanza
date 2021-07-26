@@ -30,6 +30,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "padding",
       "stanza:example": "0px",
       "stanza:description": "Padding",

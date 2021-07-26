@@ -1,5 +1,4 @@
-import { x as dispatch, S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { s as select, d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
+import { B as select, A as dispatch, S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -8750,6 +8749,8 @@ class ManhattanPlot extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     this.renderTemplate({
       template: "stanza.html.hbs",
       parameters: {
@@ -9736,6 +9737,12 @@ var metadata = {
 		"stanza:key": "pValueKey",
 		"stanza:example": "p-value",
 		"stanza:description": "Key to a p-value in data frame",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
 		"stanza:required": false
 	},
 	{

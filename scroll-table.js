@@ -1,6 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
+import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
 import { e as defineComponent, p as reactive, o as onMounted, b as createBlock, g as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, y as createApp } from './runtime-dom.esm-bundler-560ba1c4.js';
-import { l as loadData } from './load-data-8f706a23.js';
+import { l as loadData } from './load-data-fa6d4100.js';
 
 var metadata = {
 	"@context": {
@@ -38,6 +38,12 @@ var metadata = {
 		"stanza:example": "json",
 		"stanza:description": "Data type",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "height",
@@ -312,6 +318,8 @@ script.__file = "stanzas/scroll-table/app.vue";
 
 class ScrollTable extends Stanza {
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     const main = this.root.querySelector("main");
     main.parentNode.style.backgroundColor =
       "var(--togostanza-background-color)";
