@@ -4,6 +4,7 @@ import loadData from "@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 
 export default class Scorecard extends Stanza {
@@ -15,6 +16,7 @@ export default class Scorecard extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const dataset = await loadData(

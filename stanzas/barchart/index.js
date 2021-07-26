@@ -5,6 +5,7 @@ import loadData from "@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 
 export default class Barchart extends Stanza {
@@ -16,8 +17,9 @@ export default class Barchart extends Stanza {
   }
 
   async render() {
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    appendCustomCss(this, this.params["custom-css-url"]);
 
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
     const chartType = this.params["chart-type"];
 
     //width,height,padding

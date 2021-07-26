@@ -66,6 +66,12 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 400,

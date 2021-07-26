@@ -2,6 +2,8 @@ import Stanza from "togostanza/stanza";
 
 import loadData from "@/lib/load-data";
 
+import { appendCustomCss } from "@/lib/metastanza_utils.js";
+
 export default class Text extends Stanza {
   async render() {
     this.importWebFontCSS(
@@ -29,6 +31,9 @@ export default class Text extends Stanza {
         textUrl: URL.createObjectURL(textBlob),
       },
     });
+
+    appendCustomCss(this, this.params["custom-css-url"]);
+
     const width = this.params["width"];
     const height = this.params["height"];
     const padding = this.params["padding"];

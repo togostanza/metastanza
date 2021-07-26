@@ -5,6 +5,7 @@ import loadData from "@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 
 export default class PieChart extends Stanza {
@@ -16,6 +17,7 @@ export default class PieChart extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding
