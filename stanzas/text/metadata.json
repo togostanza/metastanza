@@ -30,9 +30,15 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "text",
-      "stanza:example": "800",
+      "stanza:example": 800,
       "stanza:description": "Width"
     },
     {
@@ -86,6 +92,12 @@
       "stanza:type": "text",
       "stanza:default": "400",
       "stanza:description": "Font weight"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

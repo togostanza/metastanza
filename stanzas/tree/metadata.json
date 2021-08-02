@@ -48,6 +48,12 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 600,
@@ -126,7 +132,7 @@
     {
       "stanza:key": "--togostanza-node-size",
       "stanza:type": "number",
-      "stanza:default": "100",
+      "stanza:default": 100,
       "stanza:description": "Node size"
     },
     {
@@ -138,7 +144,7 @@
     {
       "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
-      "stanza:default": "11",
+      "stanza:default": 11,
       "stanza:description": "Label font size"
     },
     {
@@ -150,7 +156,7 @@
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": "0.5",
+      "stanza:default": 0.5,
       "stanza:description": "Border width"
     },
     {
@@ -158,6 +164,12 @@
       "stanza:type": "color",
       "stanza:default": "#AEB3BF",
       "stanza:description": "Edge color"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

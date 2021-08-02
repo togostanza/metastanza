@@ -164,7 +164,12 @@
         </thead>
         <tbody>
           <tr v-for="row in rowsInCurrentPage" :key="row.id">
-            <td v-for="cell in row" :key="cell.column.id">
+            <td
+              v-for="cell in row"
+              :key="cell.column.id"
+              :rowspan="cell.rowspanCount"
+              :class="{ hide: cell.hide }"
+            >
               <span v-if="cell.href">
                 <a :href="cell.href" target="_blank">{{ cell.value }}</a>
               </span>
@@ -309,7 +314,7 @@ export default defineComponent({
       const startIndex = (currentPage - 1) * perPage;
       const endIndex = startIndex + perPage;
 
-      return filteredRows.value.slice(startIndex, endIndex);
+      return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
     const blobUrls = computed(() => {
@@ -353,6 +358,31 @@ export default defineComponent({
         state.isMenuOn
       );
     });
+
+    function setRowspanState(rows) {
+      const rowspanCount = {};
+      const reversedRows = rows.reverse().map((row, rowIndex) => {
+        return row.map((cell, colIndex) => {
+          if (cell.column.rowspan) {
+            const aboveValue = rows[rowIndex + 1]
+              ? rows[rowIndex + 1][colIndex].value
+              : null;
+            const colId = cell.column.id;
+            if (cell.value === aboveValue) {
+              cell.hide = true;
+              rowspanCount[colId] = rowspanCount[colId]
+                ? rowspanCount[colId] + 1
+                : 1;
+            } else if (rowspanCount[colId] >= 1) {
+              cell.rowspanCount = rowspanCount[colId] + 1;
+              delete rowspanCount[colId];
+            }
+          }
+          return cell;
+        });
+      });
+      return reversedRows.reverse();
+    }
 
     function setSorting(column) {
       state.sorting.column = column;
@@ -455,7 +485,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
-    unescape: columnDef.escape === false
+    unescape: columnDef.escape === false,
   };
 
   if (columnDef.type === "number") {

@@ -5,6 +5,10 @@ summary {
   display: none;
 }
 
+svg.marks {
+  background-color: var(--togostanza-background-color);
+}
+
 //dl button style
 svg#dl_button {
   position: absolute;

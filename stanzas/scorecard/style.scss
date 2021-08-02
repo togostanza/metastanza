@@ -7,15 +7,28 @@
   justify-content: center;
 }
 
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .chart-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  .scorecard-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
+  background-color: var(--togostanza-background-color);
+}
+
+svg.scorecard-svg {
+  width: 200px;
+  height: 48px;
+  overflow: visible;
 }
 
 //dl button style

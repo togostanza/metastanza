@@ -30,6 +30,18 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:example": "0px",
+      "stanza:description": "Padding",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "page-size-option",
       "stanza:example": "10,20,50,100",
       "stanza:description": "Page size list",
@@ -44,7 +56,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\":true}]",
+      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\": true}]",
       "stanza:description": "Columns' options"
     }
   ],
@@ -125,13 +137,13 @@
     {
       "stanza:key": "--togostanza-tbody-odd-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table body (odd row)"
     },
     {
       "stanza:key": "--togostanza-tbody-even-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table body (even row)"
     },
     {
@@ -243,6 +255,12 @@
       "stanza:choice": ["left", "center", "right"],
       "stanza:default": "center",
       "stanza:description": "Horizonal placement of pagination"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

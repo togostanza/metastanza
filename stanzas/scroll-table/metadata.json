@@ -30,11 +30,24 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 400,
       "stanza:description": "Height",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Padding",
+      "stanza:required": false
     },
     {
       "stanza:key": "page-size",
@@ -96,7 +109,7 @@
     {
       "stanza:key": "--togostanza-thead-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table header"
     },
     {
@@ -126,14 +139,20 @@
     {
       "stanza:key": "--togostanza-tbody-odd-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table body (odd row)"
     },
     {
       "stanza:key": "--togostanza-tbody-even-background-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color of table body (even row)"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }

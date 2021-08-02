@@ -1,56 +1,67 @@
+import Stanza from "togostanza/stanza";
+
 import loadData from "@/lib/load-data";
 
-export default async function text(stanza, params) {
-  stanza.importWebFontCSS(
-    "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
-  );
-  const dataset = await loadData(params["data-url"], params["data-type"]);
-  const textBlob = new Blob([dataset.value], {
-    type: "text/plain",
-  });
+import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
-  const textUrl = URL.createObjectURL(textBlob);
-  console.log(textUrl);
+export default class Text extends Stanza {
+  async render() {
+    this.importWebFontCSS(
+      "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+    );
+    const dataset = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+    const textBlob = new Blob([dataset.value], {
+      type: "text/plain",
+    });
 
-  stanza.render({
-    template: "stanza.html.hbs",
-    parameters: {
-      rows: [
-        {
-          value: dataset.value,
-        },
-      ],
-      textUrl: URL.createObjectURL(textBlob),
-    },
-  });
-  const width = params["width"];
-  const height = params["height"];
-  const padding = params["padding"];
-  const container = stanza.root.querySelector(".container");
-  container.setAttribute(
-    `style`,
-    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
-  );
+    const textUrl = URL.createObjectURL(textBlob);
+    console.log(textUrl);
 
-  const menu = stanza.root.querySelector(".menu");
-  switch (params["metastanza-menu-placement"]) {
-    case "top-left":
-      break;
-    case "top-right":
-      menu.setAttribute("style", "justify-content: flex-end;");
-      break;
-    case "bottom-left":
-      container.setAttribute("style", "flex-direction: column-reverse;");
-      break;
-    case "bottom-right":
-      menu.setAttribute("style", "justify-content: flex-end;");
-      container.setAttribute(
-        "style",
-        "justify-content flex-end; flex-direction: column-reverse;"
-      );
-      break;
-    case "none":
-      menu.setAttribute("style", "display: none;");
-      break;
+    this.renderTemplate({
+      template: "stanza.html.hbs",
+      parameters: {
+        rows: [
+          {
+            value: dataset.value,
+          },
+        ],
+        textUrl: URL.createObjectURL(textBlob),
+      },
+    });
+
+    appendCustomCss(this, this.params["custom-css-url"]);
+
+    const width = this.params["width"];
+    const height = this.params["height"];
+    const padding = this.params["padding"];
+    const container = this.root.querySelector(".container");
+    const main = this.root.querySelector("main");
+    main.setAttribute("style", `padding: ${padding}px;`);
+    container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
+
+    const menu = this.root.querySelector(".menu");
+    switch (this.params["metastanza-menu-placement"]) {
+      case "top-left":
+        break;
+      case "top-right":
+        menu.setAttribute("style", "justify-content: flex-end;");
+        break;
+      case "bottom-left":
+        container.setAttribute("style", "flex-direction: column-reverse;");
+        break;
+      case "bottom-right":
+        menu.setAttribute("style", "justify-content: flex-end;");
+        container.setAttribute(
+          "style",
+          "justify-content flex-end; flex-direction: column-reverse;"
+        );
+        break;
+      case "none":
+        menu.setAttribute("style", "display: none;");
+        break;
+    }
   }
 }

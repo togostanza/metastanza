@@ -1,23 +1,13 @@
 <div class="chart-wrapper">
   {{#each scorecards as |scorecard|}}
-    <svg class="scorecard-svg">
-      <text
-        id="scorecardKey"
-        text-anchor="middle"
-        font-family="var(--togostanza-font-family)"
-        fill="var(--togostanza-key-font-color)"
-        font-weight="var(--togostanza-key-font-weight)"
-      >
-        {{scorecard.key}}
-      </text>
-      <text
-        id="scorecardValue"
-        text-anchor="middle"
-        font-family="var(--togostanza-font-family)"
-        fill="var(--togostanza-value-font-color)"
-        font-weight="var(--togostanza-value-font-weight)"
-      >
-        {{scorecard.value}}
+    <svg id="scorecardSvg" class="scorecard-svg">
+      <text id="text" x="50%" y="50%" text-anchor="middle">
+        <tspan id="key" x="50%" y="16px" font-size="16px">
+          {{scorecard.key}}
+        </tspan>
+        <tspan id="value" x="50%" y="48px" font-size="32px">
+          {{scorecard.value}}
+        </tspan>
       </text>
     </svg>
   {{/each}}

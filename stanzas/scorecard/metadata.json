@@ -30,21 +30,27 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
-      "stanza:example": 230,
+      "stanza:example": 200,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 100,
+      "stanza:example": 70,
       "stanza:description": "Height"
     },
     {
       "stanza:key": "padding",
       "stanza:type": "number",
-      "stanza:example": 0,
+      "stanza:example": 50,
       "stanza:description": "Padding"
     },
     {
@@ -71,12 +77,6 @@
   "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-series-0-color",
-      "stanza:type": "color",
-      "stanza:default": "#6590e6",
-      "stanza:description": "Key color"
-    },
-    {
       "stanza:key": "--togostanza-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
@@ -90,14 +90,14 @@
     },
     {
       "stanza:key": "--togostanza-key-font-size",
-      "stanza:type": "text",
-      "stanza:default": "16",
+      "stanza:type": "number",
+      "stanza:default": 16,
       "stanza:description": "Font size for key"
     },
     {
       "stanza:key": "--togostanza-key-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "400",
+      "stanza:type": "number",
+      "stanza:default": 400,
       "stanza:description": "Font weight for key"
     },
     {
@@ -108,15 +108,21 @@
     },
     {
       "stanza:key": "--togostanza-value-font-size",
-      "stanza:type": "text",
-      "stanza:default": "36",
+      "stanza:type": "number",
+      "stanza:default": 36,
       "stanza:description": "Font size for value"
     },
     {
       "stanza:key": "--togostanza-value-font-weight",
-      "stanza:type": "text",
-      "stanza:default": "600",
+      "stanza:type": "number",
+      "stanza:default": 600,
       "stanza:description": "Font weight for value"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
     }
   ]
 }
