@@ -1,0 +1,15 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use '@/common.scss';
+
+// The following is just an example. Feel free to modify it.
+// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
+main {
+  padding: 1rem 2rem;
+}
+
+p.greeting {
+  margin: 0;
+  font-size: 24px;
+  color: var(--greeting-color);
+  text-align: var(--greeting-align);
+}
