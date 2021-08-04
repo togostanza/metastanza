@@ -6426,7 +6426,10 @@ class PaginationTable extends Stanza {
     main.parentNode.style.backgroundColor =
       "var(--togostanza-background-color)";
     main.parentNode.style.padding = this.params["padding"];
-    createApp(script, this.params).mount(main);
+
+    this._app?.unmount();
+    this._app = createApp(script, this.params);
+    this._app.mount(main);
   }
 }
 
