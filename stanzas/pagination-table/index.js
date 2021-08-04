@@ -12,6 +12,9 @@ export default class PaginationTable extends Stanza {
     main.parentNode.style.backgroundColor =
       "var(--togostanza-background-color)";
     main.parentNode.style.padding = this.params["padding"];
-    createApp(App, this.params).mount(main);
+
+    this._app?.unmount();
+    this._app = createApp(App, this.params);
+    this._app.mount(main);
   }
 }
