@@ -126,8 +126,8 @@
 }
 
 $dot-width: 4px;
-$dot-spacing: $dot-width + $dot-width/2 !default;
 $dot-color: var(--togostanza-tbody-font-color);
+$dot-spacing: $dot-width * 1.5 !default;
 $dot-before-color: $dot-color !default;
 $dot-after-color: $dot-color !default;
 $left-pos: -9999px;
