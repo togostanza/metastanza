@@ -1,0 +1,121 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "venn-stanza",
+  "stanza:label": "Venn stanza",
+  "stanza:definition": "Venn stanza MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Image",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c-nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2021-08-03",
+  "stanza:updated": "2021-08-03",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn.sparql.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "sparql-results-json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 300,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 50,
+      "stanza:description": "Padding"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--greeting-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "text color of greeting"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    },
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
