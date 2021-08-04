@@ -232,19 +232,6 @@
       "stanza:type": "number",
       "stanza:example": 18,
       "stanza:description": "Padding between chart and legend"
-    },
-    {
-      "stanza:key": "metastanza-menu-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Placement of the menu button"
     }
   ],
   "stanza:about-link-placement": "bottom-right",

@@ -145,19 +145,6 @@ var metadata = {
 		],
 		"stanza:example": true,
 		"stanza:description": "Show key name"
-	},
-	{
-		"stanza:key": "metastanza-menu-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"top-left",
-			"top-right",
-			"bottom-left",
-			"bottom-right",
-			"none"
-		],
-		"stanza:example": "top-right",
-		"stanza:description": "Menu button placement"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",

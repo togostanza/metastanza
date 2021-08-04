@@ -78,19 +78,6 @@
       "stanza:type": "number",
       "stanza:example": 0,
       "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "metastanza-menu-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "bottom-right",
-      "stanza:description": "Menu button placement"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
