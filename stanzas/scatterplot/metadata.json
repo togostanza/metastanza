@@ -177,19 +177,6 @@
       "stanza:key": "symbol-shape",
       "stanza:example": "circle",
       "stanza:description": "Plot shape"
-    },
-    {
-      "stanza:key": "metastanza-menu-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Menu button placement"
     }
   ],
   "stanza:about-link-placement": "bottom-right",
