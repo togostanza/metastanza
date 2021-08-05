@@ -2,30 +2,41 @@ import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './m
 import { l as loadData } from './load-data-fa6d4100.js';
 
 class Text extends Stanza {
+  menu() {
+    return [
+      {
+        type: "item",
+        label: "Download Text",
+        handler: () => {
+          const textBlob = new Blob([this._dataset.value], {
+            type: "text/plain",
+          });
+          const textUrl = URL.createObjectURL(textBlob);
+          const link = document.createElement("a");
+          document.body.appendChild(link);
+          link.href = textUrl;
+          link.download = "text.txt";
+          link.click();
+          document.body.removeChild(link);
+        },
+      },
+    ];
+  }
+
   async render() {
-    this.importWebFontCSS(
-      "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
-    );
-    const dataset = await loadData(
+    this._dataset = await loadData(
       this.params["data-url"],
       this.params["data-type"]
     );
-    const textBlob = new Blob([dataset.value], {
-      type: "text/plain",
-    });
-
-    const textUrl = URL.createObjectURL(textBlob);
-    console.log(textUrl);
 
     this.renderTemplate({
       template: "stanza.html.hbs",
       parameters: {
         rows: [
           {
-            value: dataset.value,
+            value: this._dataset.value,
           },
         ],
-        textUrl: URL.createObjectURL(textBlob),
       },
     });
 
@@ -38,28 +49,6 @@ class Text extends Stanza {
     const main = this.root.querySelector("main");
     main.setAttribute("style", `padding: ${padding}px;`);
     container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
-
-    const menu = this.root.querySelector(".menu");
-    switch (this.params["metastanza-menu-placement"]) {
-      case "top-left":
-        break;
-      case "top-right":
-        menu.setAttribute("style", "justify-content: flex-end;");
-        break;
-      case "bottom-left":
-        container.setAttribute("style", "flex-direction: column-reverse;");
-        break;
-      case "bottom-right":
-        menu.setAttribute("style", "justify-content: flex-end;");
-        container.setAttribute(
-          "style",
-          "justify-content flex-end; flex-direction: column-reverse;"
-        );
-        break;
-      case "none":
-        menu.setAttribute("style", "display: none;");
-        break;
-    }
   }
 }
 
@@ -128,19 +117,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:example": "0",
 		"stanza:description": "Padding"
-	},
-	{
-		"stanza:key": "metastanza-menu-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"top-left",
-			"top-right",
-			"bottom-left",
-			"bottom-right",
-			"none"
-		],
-		"stanza:example": "top-right",
-		"stanza:description": "Placement of the menu button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -191,17 +167,15 @@ var templates = [
     + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
     + "\n          </td>\n        </tr>\n      </tbody>\n    </table>\n";
 },"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
-    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
           return parent[propertyName];
         }
         return undefined
     };
 
-  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"container\">\n  <div class=\"menu\">\n    <a id=\"metastanzaMenuBtn\" href=\""
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"textUrl") || (depth0 != null ? lookupProperty(depth0,"textUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"textUrl","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":10,"column":36},"end":{"line":10,"column":47}}}) : helper)))
-    + "\" download=\"text\">\n      <i class=\"fas fa-ellipsis-h\"></i>\n    </a>\n  </div>\n"
-    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":14,"column":2},"end":{"line":24,"column":11}}})) != null ? stack1 : "")
+  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"container\">\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":9,"column":2},"end":{"line":19,"column":11}}})) != null ? stack1 : "")
     + "</div>";
 },"useData":true,"useBlockParams":true}]
 ];
