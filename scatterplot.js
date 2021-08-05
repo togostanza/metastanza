@@ -445,7 +445,7 @@ var metadata = {
 		"stanza:description": "Plot shape"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--togostanza-series-0-color",

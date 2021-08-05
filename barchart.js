@@ -619,7 +619,7 @@ var metadata = {
 		"stanza:description": "Padding between chart and legend"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--togostanza-series-0-color",

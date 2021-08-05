@@ -257,7 +257,7 @@ var metadata = {
 		"stanza:description": "Padding"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--togostanza-series-0-color",

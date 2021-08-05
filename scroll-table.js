@@ -72,7 +72,7 @@ var metadata = {
 		"stanza:description": "Columns' options"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--togostanza-font-family",

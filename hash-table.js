@@ -118,7 +118,7 @@ var metadata = {
 		"stanza:description": "Capitalize the acronym and convert underscore to blank"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--column-count",
