@@ -16,6 +16,14 @@
   "stanza:updated": "2021-08-03",
   "stanza:parameter": [
     {
+      "stanza:key": "chart-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["original", "rings","mono"],
+      "stanza:example": "original",
+      "stanza:description": "Type of benn diagram",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "data-url",
       "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn.sparql.json",
       "stanza:description": "Data source URL",
@@ -38,41 +46,18 @@
     {
       "stanza:key": "width",
       "stanza:type": "number",
-      "stanza:example": 400,
+      "stanza:example": 800,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 300,
+      "stanza:example": 380,
       "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Padding"
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
-    {
-      "stanza:key": "--greeting-color",
-      "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
-    },
-    {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
-    },
     {
       "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
@@ -114,6 +99,36 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFFFFF",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 2,
+      "stanza:description": "Border width"
+    },
+    {
+      "stanza:key": "--togostanza-border-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Border opacity"
+    },
+    {
+      "stanza:key": "--togostanza-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Fill opacity"
     }
   ],
   "stanza:incomingEvent": [],
