@@ -1,4 +1,4 @@
-import { B as select, A as dispatch, S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
+import { B as select, A as dispatch, S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ce242dd6.js';
 
 function sourceEvent(event) {
   let sourceEvent;
@@ -25,6 +25,11 @@ function pointer(event, node) {
   return [event.pageX, event.pageY];
 }
 
+// These are typically used in conjunction with noevent to ensure that we can
+// preventDefault on the event.
+const nonpassive = {passive: false};
+const nonpassivecapture = {capture: true, passive: false};
+
 function nopropagation(event) {
   event.stopImmediatePropagation();
 }
@@ -36,9 +41,9 @@ function noevent(event) {
 
 function dragDisable(view) {
   var root = view.document.documentElement,
-      selection = select(view).on("dragstart.drag", noevent, true);
+      selection = select(view).on("dragstart.drag", noevent, nonpassivecapture);
   if ("onselectstart" in root) {
-    selection.on("selectstart.drag", noevent, true);
+    selection.on("selectstart.drag", noevent, nonpassivecapture);
   } else {
     root.__noselect = root.style.MozUserSelect;
     root.style.MozUserSelect = "none";
@@ -49,7 +54,7 @@ function yesdrag(view, noclick) {
   var root = view.document.documentElement,
       selection = select(view).on("dragstart.drag", null);
   if (noclick) {
-    selection.on("click.drag", noevent, true);
+    selection.on("click.drag", noevent, nonpassivecapture);
     setTimeout(function() { selection.on("click.drag", null); }, 0);
   }
   if ("onselectstart" in root) {
@@ -127,7 +132,7 @@ function drag() {
         .on("mousedown.drag", mousedowned)
       .filter(touchable)
         .on("touchstart.drag", touchstarted)
-        .on("touchmove.drag", touchmoved)
+        .on("touchmove.drag", touchmoved, nonpassive)
         .on("touchend.drag touchcancel.drag", touchended)
         .style("touch-action", "none")
         .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)");
@@ -137,7 +142,9 @@ function drag() {
     if (touchending || !filter.call(this, event, d)) return;
     var gesture = beforestart(this, container.call(this, event, d), event, d, "mouse");
     if (!gesture) return;
-    select(event.view).on("mousemove.drag", mousemoved, true).on("mouseup.drag", mouseupped, true);
+    select(event.view)
+      .on("mousemove.drag", mousemoved, nonpassivecapture)
+      .on("mouseup.drag", mouseupped, nonpassivecapture);
     dragDisable(event.view);
     nopropagation(event);
     mousemoving = false;
@@ -226,7 +233,7 @@ function drag() {
       var p0 = p, n;
       switch (type) {
         case "start": gestures[identifier] = gesture, n = active++; break;
-        case "end": delete gestures[identifier], --active; // nobreak
+        case "end": delete gestures[identifier], --active; // falls through
         case "drag": p = pointer(touch || event, container), n = active; break;
       }
       dispatch.call(

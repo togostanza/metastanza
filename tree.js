@@ -1,6 +1,6 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-f2f63c85.js';
-import { e as embed } from './vega-embed.module-5d39601f.js';
-import { l as loadData } from './load-data-fa6d4100.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ce242dd6.js';
+import { e as embed } from './vega-embed.module-8255a7bd.js';
+import { l as loadData } from './load-data-5eebbe71.js';
 
 class Tree extends Stanza {
   menu() {

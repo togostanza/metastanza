@@ -1,13 +1,13 @@
-import { d as defineComponent, g as computed, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, o as openBlock, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-9ade2339.js';
+import { d as defineComponent, g as computed, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, o as openBlock, i as ref, j as octicons, m as mergeProps, k as resolveDynamicComponent, r as resolveComponent, s as script$4, p as pushScopeId, l as popScopeId, n as withScopeId, q as n, f as createApp } from './Layout-019fb09e.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 var tab = {exports: {}};
 
-var selectorEngine = {exports: {}};
+var eventHandler = {exports: {}};
 
 /*!
-  * Bootstrap selector-engine.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.1.0 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -18,93 +18,11 @@ var selectorEngine = {exports: {}};
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/selector-engine.js
+   * Bootstrap (v5.1.0): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-  const NODE_TEXT = 3;
-  const SelectorEngine = {
-    find(selector, element = document.documentElement) {
-      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
-    },
-
-    findOne(selector, element = document.documentElement) {
-      return Element.prototype.querySelector.call(element, selector);
-    },
-
-    children(element, selector) {
-      return [].concat(...element.children).filter(child => child.matches(selector));
-    },
-
-    parents(element, selector) {
-      const parents = [];
-      let ancestor = element.parentNode;
-
-      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
-        if (ancestor.matches(selector)) {
-          parents.push(ancestor);
-        }
-
-        ancestor = ancestor.parentNode;
-      }
-
-      return parents;
-    },
-
-    prev(element, selector) {
-      let previous = element.previousElementSibling;
-
-      while (previous) {
-        if (previous.matches(selector)) {
-          return [previous];
-        }
-
-        previous = previous.previousElementSibling;
-      }
-
-      return [];
-    },
-
-    next(element, selector) {
-      let next = element.nextElementSibling;
-
-      while (next) {
-        if (next.matches(selector)) {
-          return [next];
-        }
-
-        next = next.nextElementSibling;
-      }
-
-      return [];
-    }
-
-  };
-
-  return SelectorEngine;
-
-})));
-
-}(selectorEngine));
-
-var eventHandler = {exports: {}};
-
-/*!
-  * Bootstrap event-handler.js v5.0.2 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
-
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-}(commonjsGlobal, (function () {
   const getjQuery = () => {
     const {
       jQuery
@@ -119,7 +37,7 @@ var eventHandler = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/event-handler.js
+   * Bootstrap (v5.1.0): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -412,12 +330,10 @@ var eventHandler = {exports: {}};
 
 }(eventHandler));
 
-var baseComponent = {exports: {}};
-
-var data = {exports: {}};
+var selectorEngine = {exports: {}};
 
 /*!
-  * Bootstrap data.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.1.0 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -428,7 +344,140 @@ var data = {exports: {}};
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/data.js
+   * Bootstrap (v5.1.0): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  const isElement = obj => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
+
+    if (typeof obj.jquery !== 'undefined') {
+      obj = obj[0];
+    }
+
+    return typeof obj.nodeType !== 'undefined';
+  };
+
+  const isVisible = element => {
+    if (!isElement(element) || element.getClientRects().length === 0) {
+      return false;
+    }
+
+    return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
+  };
+
+  const isDisabled = element => {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+
+    if (element.classList.contains('disabled')) {
+      return true;
+    }
+
+    if (typeof element.disabled !== 'undefined') {
+      return element.disabled;
+    }
+
+    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
+  };
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.0): dom/selector-engine.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  const NODE_TEXT = 3;
+  const SelectorEngine = {
+    find(selector, element = document.documentElement) {
+      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
+    },
+
+    findOne(selector, element = document.documentElement) {
+      return Element.prototype.querySelector.call(element, selector);
+    },
+
+    children(element, selector) {
+      return [].concat(...element.children).filter(child => child.matches(selector));
+    },
+
+    parents(element, selector) {
+      const parents = [];
+      let ancestor = element.parentNode;
+
+      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
+        if (ancestor.matches(selector)) {
+          parents.push(ancestor);
+        }
+
+        ancestor = ancestor.parentNode;
+      }
+
+      return parents;
+    },
+
+    prev(element, selector) {
+      let previous = element.previousElementSibling;
+
+      while (previous) {
+        if (previous.matches(selector)) {
+          return [previous];
+        }
+
+        previous = previous.previousElementSibling;
+      }
+
+      return [];
+    },
+
+    next(element, selector) {
+      let next = element.nextElementSibling;
+
+      while (next) {
+        if (next.matches(selector)) {
+          return [next];
+        }
+
+        next = next.nextElementSibling;
+      }
+
+      return [];
+    },
+
+    focusableChildren(element) {
+      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
+      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
+    }
+
+  };
+
+  return SelectorEngine;
+
+})));
+
+}(selectorEngine));
+
+var baseComponent = {exports: {}};
+
+var data = {exports: {}};
+
+/*!
+  * Bootstrap data.js v5.1.0 (https://getbootstrap.com/)
+  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+(function (module, exports) {
+(function (global, factory) {
+  module.exports = factory() ;
+}(commonjsGlobal, (function () {
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.0): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -487,21 +536,26 @@ var data = {exports: {}};
 }(data));
 
 /*!
-  * Bootstrap base-component.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.1.0 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
 (function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(data.exports, selectorEngine.exports, eventHandler.exports) ;
-}(commonjsGlobal, (function (Data, SelectorEngine, EventHandler) {
+  module.exports = factory(data.exports, eventHandler.exports) ;
+}(commonjsGlobal, (function (Data, EventHandler) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
 
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.0): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
   const MILLISECONDS_MULTIPLIER = 1000;
   const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
@@ -551,7 +605,7 @@ var data = {exports: {}};
     }
 
     if (typeof obj === 'string' && obj.length > 0) {
-      return SelectorEngine__default['default'].findOne(obj);
+      return document.querySelector(obj);
     }
 
     return null;
@@ -595,7 +649,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): base-component.js
+   * Bootstrap (v5.1.0): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -605,7 +659,7 @@ var data = {exports: {}};
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.0.2';
+  const VERSION = '5.1.0';
 
   class BaseComponent {
     constructor(element) {
@@ -634,7 +688,7 @@ var data = {exports: {}};
 
 
     static getInstance(element) {
-      return Data__default['default'].get(element, this.DATA_KEY);
+      return Data__default['default'].get(getElement(element), this.DATA_KEY);
     }
 
     static getOrCreateInstance(element, config = {}) {
@@ -666,20 +720,27 @@ var data = {exports: {}};
 }(baseComponent));
 
 /*!
-  * Bootstrap tab.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap tab.js v5.1.0 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
 (function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(selectorEngine.exports, eventHandler.exports, baseComponent.exports) ;
-}(commonjsGlobal, (function (SelectorEngine, EventHandler, BaseComponent) {
+  module.exports = factory(eventHandler.exports, selectorEngine.exports, baseComponent.exports) ;
+}(commonjsGlobal, (function (EventHandler, SelectorEngine, BaseComponent) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.0): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
 
   const getSelector = element => {
     let selector = element.getAttribute('data-bs-target');
@@ -725,8 +786,20 @@ var data = {exports: {}};
 
     return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
   };
+  /**
+   * Trick to restart an element's animation
+   *
+   * @param {HTMLElement} element
+   * @return void
+   *
+   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
+   */
 
-  const reflow = element => element.offsetHeight;
+
+  const reflow = element => {
+    // eslint-disable-next-line no-unused-expressions
+    element.offsetHeight;
+  };
 
   const getjQuery = () => {
     const {
@@ -778,7 +851,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): tab.js
+   * Bootstrap (v5.1.0): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -3059,45 +3132,45 @@ var script$1 = defineComponent({
   props: ['metadata', 'params', 'styleVars'],
 
   components: {
-    CopyButton: script$2
+    CopyButton: script$2,
   },
 
   setup(props) {
-    const id      = props.metadata['@id'];
+    const id = props.metadata['@id'];
     const tagName = `togostanza-${id}`;
 
     const stanzaProps = computed(() => {
       return props.params.reduce((acc, param) => {
-        return (param.type === "boolean" && param.value === "false") ? acc : {
-          ...acc,
-          [param.name]: param.value
-        }
+        return param.type === 'boolean' && param.value === 'false'
+          ? acc
+          : {
+              ...acc,
+              [param.name]: param.value,
+            };
       }, {});
     });
 
     const stanzaSnippet = computed(() => {
       return stanzaSnippetTemplate({
         tagName,
-        params: props.params
+        params: props.params,
       });
     });
 
     const styleSnippet = computed(() => {
       return styleSnippetTemplate({
         tagName,
-        styleVars: props.styleVars
+        styleVars: props.styleVars,
       });
     });
 
-    const scriptSrc     = new URL(`./${id}.js`, location.href).href;
-    const loaderSnippet = loaderSnippetTemplate({scriptSrc});
+    const scriptSrc = new URL(`./${id}.js`, location.href).href;
+    const loaderSnippet = loaderSnippetTemplate({ scriptSrc });
 
     const combinedSnippet = computed(() => {
-      return [
-        loaderSnippet,
-        styleSnippet.value,
-        stanzaSnippet.value
-      ].filter(Boolean).join('\n');
+      return [loaderSnippet, styleSnippet.value, stanzaSnippet.value]
+        .filter(Boolean)
+        .join('\n');
     });
 
     return {
@@ -3105,9 +3178,9 @@ var script$1 = defineComponent({
       props: stanzaProps,
       styleSnippet,
       stanzaSnippet,
-      combinedSnippet
+      combinedSnippet,
     };
-  }
+  },
 });
 
 const _hoisted_1$1 = { class: "bg-dark" };
@@ -3132,9 +3205,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     createVNode("div", _hoisted_4$1, [
       createVNode("div", { innerHTML: _ctx.styleSnippet }, null, 8 /* PROPS */, ["innerHTML"]),
-      createVNode("div", { innerHTML: _ctx.stanzaSnippet }, null, 8 /* PROPS */, ["innerHTML"]),
-      createCommentVNode(" <component :is=\"tagName\" v-bind=\"props\"></component> "),
-      createCommentVNode(" temporary disable this because some stanzas don't seem to work as expected with the \"component\" approach ")
+      (openBlock(), createBlock(resolveDynamicComponent(_ctx.tagName), _ctx.props, null, 16 /* FULL_PROPS */))
     ])
   ], 64 /* STABLE_FRAGMENT */))
 }
@@ -3574,5 +3645,5 @@ function helpApp({metadata, readme}) {
   return createApp(script, {metadata, readme})
 }
 
-export default helpApp;
+export { helpApp as default };
 //# sourceMappingURL=help-app.js.map
