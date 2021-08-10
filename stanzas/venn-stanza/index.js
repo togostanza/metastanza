@@ -1,5 +1,6 @@
 import Stanza from 'togostanza/stanza';
 import loadData from "@/lib/load-data";
+// import { fixedVenn } from "./fixedVenn.js";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -8,6 +9,7 @@ import {
 
 import * as d3 from "d3";
 import * as venn from "venn.js";
+import { id } from 'vega';
 
 export default class VennStanza extends Stanza {
   menu() {
@@ -79,49 +81,14 @@ export default class VennStanza extends Stanza {
       css('--togostanza-series-5-color')
     ];
 
-    // original Venn diagram
-    const chart = venn.VennDiagram();
-    const vennElement = this.root.querySelector('#venn');
-    const originalSvg =
-      d3.select(vennElement)
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .datum(sets)
-        .call(chart);
-
-    //path
-    originalSvg
-      .selectAll('.venn-circle path')
-      .data(sets)
-      .style('fill-opacity', css('--togostanza-opacity'))
-      .style('fill', function (d, i) {
-        console.log('d', d);
-        return colorScheme[i];
-      })
-      .style('stroke-width', css('--togostanza-border-width'))
-      .style('stroke-opacity', css('--togostanza-border-opacity'))
-      .style('stroke', function (d, i) {
-        return colorScheme[i];
-      });
-
-    //text
-    // originalSvg
-    //   .selectAll('#venn .venn-circle text')
-    //   .style('fill', function (d, i) {
-    //     return css('--togostanza-label-font-color');
-    //   })
-    //   .style('font-family', css('--togostanza-font-family'))
-    //   .style('font-size', css('--togostanza-label-font-size') + 'px')
-    //   .style('font-weight', '100');
-
-
     const interactiveChart = venn.VennDiagram();
     const interactiveElement = this.root.querySelector('#interactive');
     const interactiveSvg = d3.select(interactiveElement);
 
     // draw interactive venn diagram svg
     interactiveSvg
+      .attr('width', width)
+      .attr('height', height)
       .datum(sets)
       .call(interactiveChart);
 
@@ -136,7 +103,7 @@ export default class VennStanza extends Stanza {
       .selectAll('path')
       .style('fill', function (d, i) {
         return colorScheme[i];
-      })     
+      })
       .style('stroke-opacity', 0)
       .style('stroke', '#333')
       .style('stroke-width', 3);
@@ -149,7 +116,7 @@ export default class VennStanza extends Stanza {
       // })
       .style('fill', function (d, i) {
         return colorScheme[i];
-      })   
+      })
       .style('font-family', css('--togostanza-font-family'))
       .style('font-size', css('--togostanza-label-font-size') + 'px')
       .style('font-weight', '100');
@@ -183,5 +150,27 @@ export default class VennStanza extends Stanza {
           // .style('fill-opacity', d.sets.length == 1 ? .25 : .0)
           .style('stroke-opacity', 0);
       });
+
+    // const fixedChart = venn.VennDiagram();
+    const fixedElement = this.root.querySelector('#venn-diagrams');
+    const fixedSvg = d3.select(fixedElement);
+
+    // draw fixed venn diagram svg
+    fixedSvg
+      .attr('width', width)
+      .attr('height', height);
+
+  // get how many circles to draw
+    for (let i = 0; i < sets.length; i++) {
+      setsNums.push(sets[i].sets.length);
+    }
+    const aryMax = function (a, b) { return Math.max(a, b); }
+    let circleNum = setsNums.reduce(aryMax);
+
+  // show venns corresponds to data(circle numbers to draw)
+  const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
+  Array.from(vennDiagrams).forEach((vennDiagram,i) =>{
+    vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
+  })
   }
 }
