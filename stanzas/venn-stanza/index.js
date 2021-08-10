@@ -161,7 +161,8 @@ export default class VennStanza extends Stanza {
       .attr('height', height);
 
   // get how many circles to draw
-    for (let i = 0; i < sets.length; i++) {
+  let setsNums =[];  
+  for (let i = 0; i < sets.length; i++) {
       setsNums.push(sets[i].sets.length);
     }
     const aryMax = function (a, b) { return Math.max(a, b); }
@@ -172,5 +173,42 @@ export default class VennStanza extends Stanza {
   Array.from(vennDiagrams).forEach((vennDiagram,i) =>{
     vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
   })
-  }
+
+  // assign labels to each circles
+  const LABEL0 = "10090"; // set as parameter by user: required
+  const LABEL1 = "7955"; // set as parameter by user: required
+  const LABEL2 = "9606"; // set as parameter by user: required
+
+  const vennTextSet3_0 = this.root.querySelector('#venn-text-set3-0');
+  const vennTextSet3_1 = this.root.querySelector('#venn-text-set3-1');
+  const vennTextSet3_2 = this.root.querySelector('#venn-text-set3-2');
+  const vennTextSet3_0_1 = this.root.querySelector('#venn-text-set3-0_1');
+  const vennTextSet3_0_2 = this.root.querySelector('#venn-text-set3-0_2');
+  const vennTextSet3_1_2 = this.root.querySelector('#venn-text-set3-1_2');
+  const vennTextSet3_0_1_2 = this.root.querySelector('#venn-text-set3-0_1_2');
+
+  dataset.forEach( data =>{
+    const orgArray = data.orgs.split(', ');
+    const doesIncludeLabel0 = orgArray.includes(LABEL0);
+    const doesIncludeLabel1 = orgArray.includes(LABEL1);
+    const doesIncludeLabel2 = orgArray.includes(LABEL2);
+    if(doesIncludeLabel0 && doesIncludeLabel1 && doesIncludeLabel2){
+      vennTextSet3_0_1_2.textContent = data.count;
+    }else if(doesIncludeLabel0 && doesIncludeLabel1){
+      vennTextSet3_0_1.textContent = data.count;
+    }else if(doesIncludeLabel1 && doesIncludeLabel2){
+      vennTextSet3_0_2.textContent = data.count;
+    }else if(doesIncludeLabel0 && doesIncludeLabel2){
+      vennTextSet3_1_2.textContent = data.count;
+    }else if(doesIncludeLabel0){
+      vennTextSet3_0.textContent = data.count;
+    }else if(doesIncludeLabel1){
+      vennTextSet3_1.textContent = data.count;
+    }else if(doesIncludeLabel2){
+      vennTextSet3_2.textContent = data.count;
+    };
+  })
+  
+}
+
 }
