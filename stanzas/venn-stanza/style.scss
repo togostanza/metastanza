@@ -10,3 +10,219 @@
   border-radius: 8px;
   opacity: 0;
 }
+
+$color-light-gray:				#96948D;
+$color-dark:							#77503C;
+$color-gray:							#7A776C;
+$color-beige:							#E6E4DE;
+$color-key:								#77503C;
+$color-key-active:				#D11A50;
+$color-key-light:					#CFBAAF;
+$color-key-middle:				#AD968A;
+$color-bg-active:					#FFF4D3;
+$color-bg-svg:						#FFFEF5;
+$color-hover:							#FFF6C8;
+
+$color-set1:							#96938D;
+$color-set2-1:						#804040;
+$color-set2-2:						#408080;
+$color-set2-1_2:					#FFF;
+$color-set3-1:						#804040;
+$color-set3-2:						#408040;
+$color-set3-3:						#404080;
+$color-set3-1_2:					#AAAA68;
+$color-set3-1_3:					#AA68AA;
+$color-set3-2_3:					#68AAAA;
+$color-set3-1_2_3:				#FFF;
+$color-set4-1:						#807040;
+$color-set4-2:						#408050;
+$color-set4-3:						#405080;
+$color-set4-4:						#804070;
+$color-set4-1_2:					#AAC67A;
+$color-set4-1_3:					#AAA6AA;
+$color-set4-1_4:					#CE9B9B;
+$color-set4-2_3:					#68B4B4;
+$color-set4-2_4:					#AAAAA6;
+$color-set4-3_4:					#AA7AC6;
+$color-set4-1_2_3:				#D1E6D7;
+$color-set4-1_2_4:				#E7E3CF;
+$color-set4-1_3_4:				#E7CFE3;
+$color-set4-2_3_4:				#D1D7E6;
+$color-set4-1_2_3_4:			#FFF;
+$color-set5-1:						#804040;
+$color-set5-2:						#738040;
+$color-set5-3:						#40805A;
+$color-set5-4:						#405A80;
+$color-set5-5:						#734080;
+$color-set5-1_2:					#C6AA61;
+$color-set5-1_3:					#ACAC81;
+$color-set5-1_4:					#AC85AC;
+$color-set5-1_5:					#C869A8;
+$color-set5-2_3:					#9ECD88;
+$color-set5-2_4:					#9CBAA9;
+$color-set5-2_5:					#C1A9AA;
+$color-set5-3_4:					#6FBAB2;
+$color-set5-3_5:					#A0AAB7;
+$color-set5-4_5:					#9F85CB;
+$color-set5-1_2_3:				#E3E6B5;
+$color-set5-1_2_4:				#E3DAD1;
+$color-set5-1_2_5:				#EED1D1;
+$color-set5-1_3_4:				#D1DADB;
+$color-set5-1_3_5:				#E3D1DB;
+$color-set5-1_4_5:				#E3B7E7;
+$color-set5-2_3_4:				#C8ECDB;
+$color-set5-2_3_5:				#DEE7DB;
+$color-set5-2_4_5:				#DEDAE7;
+$color-set5-3_4_5:				#C8DAEC;
+$color-set5-1_2_3_4:			#F3F6EF;
+$color-set5-1_2_3_5:			#F6F4EF;
+$color-set5-1_2_4_5:			#F6EFF4;
+$color-set5-1_3_4_5:			#F3EFF6;
+$color-set5-2_3_4_5:			#F0F6F6;
+$color-set5-1_2_3_4_5:		#FFF;
+
+#venn-shape-set1-0 { fill: $color-set1; }
+#venn-shape-set2-0 { fill: $color-set2-1; }
+#venn-shape-set2-1 { fill: $color-set2-2; }
+#venn-shape-set3-0 { fill: $color-set3-1; }
+#venn-shape-set3-1 { fill: $color-set3-2; }
+#venn-shape-set3-2 { fill: $color-set3-3; }
+#venn-shape-set3-0_1 { fill: $color-set3-1_2; }
+#venn-shape-set3-0_2 { fill: $color-set3-1_3; }
+#venn-shape-set3-1_2 { fill: $color-set3-2_3; }
+#venn-shape-set4-0 { fill: $color-set4-1; }
+#venn-shape-set4-1 { fill: $color-set4-2; }
+#venn-shape-set4-2 { fill: $color-set4-3; }
+#venn-shape-set4-3 { fill: $color-set4-4; }
+#venn-shape-set4-0_1 { fill: $color-set4-1_2; }
+#venn-shape-set4-0_2 { fill: $color-set4-1_3; }
+#venn-shape-set4-0_3 { fill: $color-set4-1_4; }
+#venn-shape-set4-1_2 { fill: $color-set4-2_3; }
+#venn-shape-set4-1_3 { fill: $color-set4-2_4; }
+#venn-shape-set4-2_3 { fill: $color-set4-3_4; }
+#venn-shape-set4-0_1_2 { fill: $color-set4-1_2_3; }
+#venn-shape-set4-0_1_3 { fill: $color-set4-1_2_4; }
+#venn-shape-set4-0_2_3 { fill: $color-set4-1_3_4; }
+#venn-shape-set4-1_2_3 { fill: $color-set4-2_3_4; }
+#venn-shape-set5-0 { fill: $color-set5-1; }
+#venn-shape-set5-1 { fill: $color-set5-2; }
+#venn-shape-set5-2 { fill: $color-set5-3; }
+#venn-shape-set5-3 { fill: $color-set5-4; }
+#venn-shape-set5-4 { fill: $color-set5-5; }
+#venn-shape-set5-0_1 { fill: $color-set5-1_2; }
+#venn-shape-set5-0_2 { fill: $color-set5-1_3; }
+#venn-shape-set5-0_3 { fill: $color-set5-1_4; }
+#venn-shape-set5-0_4 { fill: $color-set5-1_5; }
+#venn-shape-set5-1_2 { fill: $color-set5-2_3; }
+#venn-shape-set5-1_3 { fill: $color-set5-2_4; }
+#venn-shape-set5-1_4 { fill: $color-set5-2_5; }
+#venn-shape-set5-2_3 { fill: $color-set5-3_4; }
+#venn-shape-set5-2_4 { fill: $color-set5-3_5; }
+#venn-shape-set5-3_4 { fill: $color-set5-4_5; }
+#venn-shape-set5-0_1_2 { fill: $color-set5-1_2_3; }
+#venn-shape-set5-0_1_3 { fill: $color-set5-1_2_4; }
+#venn-shape-set5-0_1_4 { fill: $color-set5-1_2_5; }
+#venn-shape-set5-0_2_3 { fill: $color-set5-1_3_4; }
+#venn-shape-set5-0_2_4 { fill: $color-set5-1_3_5; }
+#venn-shape-set5-0_3_4 { fill: $color-set5-1_4_5; }
+#venn-shape-set5-1_2_3 { fill: $color-set5-2_3_4; }
+#venn-shape-set5-1_2_4 { fill: $color-set5-2_3_5; }
+#venn-shape-set5-1_3_4 { fill: $color-set5-2_4_5; }
+#venn-shape-set5-2_3_4 { fill: $color-set5-3_4_5; }
+#venn-shape-set5-0_1_2_3 { fill: $color-set5-1_2_3_4; }
+#venn-shape-set5-0_1_2_4 { fill: $color-set5-1_2_3_5; }
+#venn-shape-set5-0_1_3_4 { fill: $color-set5-1_2_4_5; }
+#venn-shape-set5-0_2_3_4 { fill: $color-set5-1_3_4_5; }
+#venn-shape-set5-1_2_3_4 { fill: $color-set5-2_3_4_5; }
+#venn-shape-set2-0_1,
+#venn-shape-set3-0_1_2,
+#venn-shape-set4-0_1_2_3,
+#venn-shape-set5-0_1_2_3_4 { fill: #fff; }
+
+
+
+
+
+// &[data-number-of-species="0"] {
+// .combination-results {
+//   min-height: auto;
+// }
+// }
+// &[data-number-of-species="1"] {
+// .bar-chart .color-ball {
+//   &.set1-0 { background-color: $color-set1; }
+// }
+// #venn-diagram1 { visibility: visible; opacity: 1; }
+// }
+// &[data-number-of-species="2"] {
+// .bar-chart .color-ball {
+//   &.set2-0 { background-color: $color-set2-1; }
+//   &.set2-1 { background-color: $color-set2-2; }
+// }
+// #venn-diagram2 { visibility: visible; opacity: 1; }
+// }
+// &[data-number-of-species="3"] {
+// .bar-chart .color-ball {
+//   &.set3-0 { background-color: $color-set3-1; }
+//   &.set3-1 { background-color: $color-set3-2; }
+//   &.set3-2 { background-color: $color-set3-3; }
+//   &.set3-0_1 { background-color: $color-set3-1_2; }
+//   &.set3-0_2 { background-color: $color-set3-1_3; }
+//   &.set3-1_2 { background-color: $color-set3-2_3; }
+// }
+// #venn-diagram3 { visibility: visible; opacity: 1; }
+// }
+// &[data-number-of-species="4"] {
+// .bar-chart .color-ball {
+//   &.set4-0 { background-color: $color-set4-1; }
+//   &.set4-1 { background-color: $color-set4-2; }
+//   &.set4-2 { background-color: $color-set4-3; }
+//   &.set4-3 { background-color: $color-set4-4; }
+//   &.set4-0_1 { background-color: $color-set4-1_2; }
+//   &.set4-0_2 { background-color: $color-set4-1_3; }
+//   &.set4-0_3 { background-color: $color-set4-1_4; }
+//   &.set4-1_2 { background-color: $color-set4-2_3; }
+//   &.set4-1_3 { background-color: $color-set4-2_4; }
+//   &.set4-2_3 { background-color: $color-set4-3_4; }
+//   &.set4-0_1_2 { background-color: $color-set4-1_2_3; }
+//   &.set4-0_1_3 { background-color: $color-set4-1_2_4; }
+//   &.set4-0_2_3 { background-color: $color-set4-1_3_4; }
+//   &.set4-1_2_3 { background-color: $color-set4-2_3_4; }
+// }
+// #venn-diagram4 { visibility: visible; opacity: 1; }
+// }
+// &[data-number-of-species="5"] {
+// .bar-chart .color-ball {
+//   &.set5-0 { background-color: $color-set5-1; }
+//   &.set5-1 { background-color: $color-set5-2; }
+//   &.set5-2 { background-color: $color-set5-3; }
+//   &.set5-3 { background-color: $color-set5-4; }
+//   &.set5-4 { background-color: $color-set5-5; }
+//   &.set5-0_1 { background-color: $color-set5-1_2; }
+//   &.set5-0_2 { background-color: $color-set5-1_3; }
+//   &.set5-0_3 { background-color: $color-set5-1_4; }
+//   &.set5-0_4 { background-color: $color-set5-1_5; }
+//   &.set5-1_2 { background-color: $color-set5-2_3; }
+//   &.set5-1_3 { background-color: $color-set5-2_4; }
+//   &.set5-1_4 { background-color: $color-set5-2_5; }
+//   &.set5-2_3 { background-color: $color-set5-3_4; }
+//   &.set5-2_4 { background-color: $color-set5-3_5; }
+//   &.set5-3_4 { background-color: $color-set5-4_5; }
+//   &.set5-0_1_2 { background-color: $color-set5-1_2_3; }
+//   &.set5-0_1_3 { background-color: $color-set5-1_2_4; }
+//   &.set5-0_1_4 { background-color: $color-set5-1_2_5; }
+//   &.set5-0_2_3 { background-color: $color-set5-1_3_4; }
+//   &.set5-0_2_4 { background-color: $color-set5-1_3_5; }
+//   &.set5-0_3_4 { background-color: $color-set5-1_4_5; }
+//   &.set5-1_2_3 { background-color: $color-set5-2_3_4; }
+//   &.set5-1_2_4 { background-color: $color-set5-2_3_5; }
+//   &.set5-1_3_4 { background-color: $color-set5-2_4_5; }
+//   &.set5-2_3_4 { background-color: $color-set5-3_4_5; }
+//   &.set5-0_1_2_3 { background-color: $color-set5-1_2_3_4; }
+//   &.set5-0_1_2_4 { background-color: $color-set5-1_2_3_5; }
+//   &.set5-0_1_3_4 { background-color: $color-set5-1_2_4_5; }
+//   &.set5-0_2_3_4 { background-color: $color-set5-1_3_4_5; }
+//   &.set5-1_2_3_4 { background-color: $color-set5-2_3_4_5; }
+// }
+// #venn-diagram5 { visibility: visible; opacity: 1; }
+// }
