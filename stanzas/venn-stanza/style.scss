@@ -11,6 +11,22 @@
   opacity: 0;
 }
 
+.venn-diagram{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
+#fixed{
+  position: relative;
+  .fixed-tooltip{
+    position: absolute;
+    background-color: #FFF;
+    padding: 5px;
+  }
+}
+
+
 $color-light-gray:				#96948D;
 $color-dark:							#77503C;
 $color-gray:							#7A776C;
