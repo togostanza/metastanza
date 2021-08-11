@@ -25,7 +25,7 @@
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn.sparql.json",
+      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-3orgs-sparql.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -36,6 +36,41 @@
       "stanza:example": "sparql-results-json",
       "stanza:description": "Data type",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "label-0",
+      "stanza:type": "string",
+      "stanza:example": "10090",
+      "stanza:description": "Label name",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "label-1",
+      "stanza:type": "string",
+      "stanza:example": "7955",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-2",
+      "stanza:type": "string",
+      "stanza:example": "10090",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-3",
+      "stanza:type": "string",
+      "stanza:example": "9606",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-4",
+      "stanza:type": "string",
+      "stanza:example": "",
+      "stanza:description": "Label name",
+      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",
