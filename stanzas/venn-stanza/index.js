@@ -10,7 +10,6 @@ import {
 } from '@/lib/metastanza_utils.js';
 import ToolTip from '@/lib/ToolTip';
 
-
 export default class VennStanza extends Stanza {
 
   // colorSeries;
