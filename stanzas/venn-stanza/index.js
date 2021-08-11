@@ -1,15 +1,12 @@
 import Stanza from 'togostanza/stanza';
 import loadData from "@/lib/load-data";
-// import { fixedVenn } from "./fixedVenn.js";
+import { vennJs } from "./vennJs.js";
+import * as d3 from "d3";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
-
-import * as d3 from "d3";
-import * as venn from "venn.js";
-import { id } from 'vega';
 
 export default class VennStanza extends Stanza {
   menu() {
@@ -81,77 +78,10 @@ export default class VennStanza extends Stanza {
       css('--togostanza-series-5-color')
     ];
 
-    const interactiveChart = venn.VennDiagram();
-    const interactiveElement = this.root.querySelector('#interactive');
-    const interactiveSvg = d3.select(interactiveElement);
-
-    // draw interactive venn diagram svg
-    interactiveSvg
-      .attr('width', width)
-      .attr('height', height)
-      .datum(sets)
-      .call(interactiveChart);
-
-    //tooltip
-    const main = this.root.querySelector('main');
-    const tooltip =
-      d3.select(main)
-        .append('div')
-        .attr('class', 'venntooltip');
-    //path
-    interactiveSvg
-      .selectAll('path')
-      .style('fill', function (d, i) {
-        return colorScheme[i];
-      })
-      .style('stroke-opacity', 0)
-      .style('stroke', '#333')
-      .style('stroke-width', 3);
-
-    //text
-    interactiveSvg
-      .selectAll('#venn .venn-circle text')
-      // .style('fill', function (d, i) {
-      //   return css('--togostanza-label-font-color');
-      // })
-      .style('fill', function (d, i) {
-        return colorScheme[i];
-      })
-      .style('font-family', css('--togostanza-font-family'))
-      .style('font-size', css('--togostanza-label-font-size') + 'px')
-      .style('font-weight', '100');
-
-    interactiveSvg.selectAll('g')
-      .data(sets)
-      .on('mouseover', function (e, d) {
-        // sort all the areas relative to the current item
-        venn.sortAreas(interactiveSvg, d);
-
-        // Display a tooltip with the current size
-        tooltip.transition().duration(100).style('opacity', .9);
-        console.log('d.size', d.size)
-        tooltip.text(d.size + ' genes');
-
-        // highlight the current path
-        let selection = d3.select(this).transition('tooltip').duration(400);
-        selection.select('path')
-          .style('fill-opacity', d.sets.length == 1 ? .4 : .1)
-          .style('stroke-opacity', 1);
-      })
-      .on('mousemove', function () {
-        tooltip.style('left', (d3.event.pageX) + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
-      })
-      .on('mouseout', function (d, i) {
-        tooltip.transition().duration(400).style('opacity', 0);
-        let selection = d3.select(this).transition('tooltip').duration(400);
-        selection.select('path')
-          // .style('fill-opacity', .5)
-          // .style('fill-opacity', d.sets.length == 1 ? .25 : .0)
-          .style('stroke-opacity', 0);
-      });
+    vennJs(this.root, this.params, css, sets, width, height, colorScheme, css);
 
     // const fixedChart = venn.VennDiagram();
+    const fixedArea = this.root.querySelector('#fixed');
     const fixedElement = this.root.querySelector('#venn-diagrams');
     const fixedSvg = d3.select(fixedElement);
 
@@ -160,55 +90,112 @@ export default class VennStanza extends Stanza {
       .attr('width', width)
       .attr('height', height);
 
-  // get how many circles to draw
-  let setsNums =[];  
-  for (let i = 0; i < sets.length; i++) {
+    // get how many circles to draw
+    let setsNums = [];
+    for (let i = 0; i < sets.length; i++) {
       setsNums.push(sets[i].sets.length);
     }
     const aryMax = function (a, b) { return Math.max(a, b); }
     let circleNum = setsNums.reduce(aryMax);
 
-  // show venns corresponds to data(circle numbers to draw)
-  const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
-  Array.from(vennDiagrams).forEach((vennDiagram,i) =>{
-    vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
-  })
+    // show venns corresponds to data(circle numbers to draw)
+    const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
+    Array.from(vennDiagrams).forEach((vennDiagram, i) => {
+      vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
+    })
 
-  // assign labels to each circles
-  const LABEL0 = "10090"; // set as parameter by user: required
-  const LABEL1 = "7955"; // set as parameter by user: required
-  const LABEL2 = "9606"; // set as parameter by user: required
+    // assign labels to each circles
+    const LABEL0 = "10090"; // set as parameter by user: required
+    const LABEL1 = "7955"; // set as parameter by user: required
+    const LABEL2 = "9606"; // set as parameter by user: required
 
-  const vennTextSet3_0 = this.root.querySelector('#venn-text-set3-0');
-  const vennTextSet3_1 = this.root.querySelector('#venn-text-set3-1');
-  const vennTextSet3_2 = this.root.querySelector('#venn-text-set3-2');
-  const vennTextSet3_0_1 = this.root.querySelector('#venn-text-set3-0_1');
-  const vennTextSet3_0_2 = this.root.querySelector('#venn-text-set3-0_2');
-  const vennTextSet3_1_2 = this.root.querySelector('#venn-text-set3-1_2');
-  const vennTextSet3_0_1_2 = this.root.querySelector('#venn-text-set3-0_1_2');
+    const vennTextSet3_0 = this.root.querySelector('#venn-text-set3-0');
+    const vennTextSet3_1 = this.root.querySelector('#venn-text-set3-1');
+    const vennTextSet3_2 = this.root.querySelector('#venn-text-set3-2');
+    const vennTextSet3_0_1 = this.root.querySelector('#venn-text-set3-0_1');
+    const vennTextSet3_0_2 = this.root.querySelector('#venn-text-set3-0_2');
+    const vennTextSet3_1_2 = this.root.querySelector('#venn-text-set3-1_2');
+    const vennTextSet3_0_1_2 = this.root.querySelector('#venn-text-set3-0_1_2');
 
-  dataset.forEach( data =>{
-    const orgArray = data.orgs.split(', ');
-    const doesIncludeLabel0 = orgArray.includes(LABEL0);
-    const doesIncludeLabel1 = orgArray.includes(LABEL1);
-    const doesIncludeLabel2 = orgArray.includes(LABEL2);
-    if(doesIncludeLabel0 && doesIncludeLabel1 && doesIncludeLabel2){
-      vennTextSet3_0_1_2.textContent = data.count;
-    }else if(doesIncludeLabel0 && doesIncludeLabel1){
-      vennTextSet3_0_1.textContent = data.count;
-    }else if(doesIncludeLabel1 && doesIncludeLabel2){
-      vennTextSet3_0_2.textContent = data.count;
-    }else if(doesIncludeLabel0 && doesIncludeLabel2){
-      vennTextSet3_1_2.textContent = data.count;
-    }else if(doesIncludeLabel0){
-      vennTextSet3_0.textContent = data.count;
-    }else if(doesIncludeLabel1){
-      vennTextSet3_1.textContent = data.count;
-    }else if(doesIncludeLabel2){
-      vennTextSet3_2.textContent = data.count;
-    };
-  })
-  
-}
+    const vennShapeSet3_0 = this.root.querySelector('#venn-shape-set3-0');
+    const vennShapeSet3_1 = this.root.querySelector('#venn-shape-set3-1');
+    const vennShapeSet3_2 = this.root.querySelector('#venn-shape-set3-2');
+    const vennShapeSet3_0_1 = this.root.querySelector('#venn-shape-set3-0_1');
+    const vennShapeSet3_0_2 = this.root.querySelector('#venn-shape-set3-0_2');
+    const vennShapeSet3_1_2 = this.root.querySelector('#venn-shape-set3-1_2');
+    const vennShapeSet3_0_1_2 = this.root.querySelector('#venn-shape-set3-0_1_2');
+    
+    const tooltip = d3.select(fixedArea)
+      .append('div')
+      .attr('class', 'fixed-tooltip');
 
+    const vennDiagram3Group = this.root.querySelector('#venn-diagram3');
+    console.log('vennDiagram3Group',vennDiagram3Group)
+    console.log("d3.select(vennDiagram3Group)",d3.select(vennDiagram3Group));
+    // console.log("d3.select(vennDiagram3Group).selectorAll('.part3')",d3.select(vennDiagram3Group).selectAll('.part3').append('text'));
+
+    function showTooltip(target, label, count){
+      d3.select(target)
+        // .selectAll('.part3')
+        .on("mouseover", function (e) {
+          tooltip
+            .style("display", "block")
+            .style("left", `${d3.pointer(e)[0] + 8}px`)
+            .style(
+              "top",
+              `${d3.pointer(e)[1]}px`
+            ).html(`
+              <p>Organisms: ${label}</p>
+              <p>Label: ${count}</p>
+              `);
+        })
+        .on("mousemove", function (e) {
+          tooltip
+            .style("left", `${d3.pointer(e)[0] + 8}px`)
+            .style(
+              "top",
+              `${d3.pointer(e)[1]}px`
+            )
+        })
+        .on("mouseout", function () {
+          tooltip.style("display", "none");
+        });
+    }
+
+    dataset.forEach(data => {
+      const orgArray = data.orgs.split(', ');
+      const doesIncludeLabel0 = orgArray.includes(LABEL0);
+      const doesIncludeLabel1 = orgArray.includes(LABEL1);
+      const doesIncludeLabel2 = orgArray.includes(LABEL2);
+      if (doesIncludeLabel0 && doesIncludeLabel1 && doesIncludeLabel2) {
+        showTooltip(vennShapeSet3_0_1_2, data.orgs, data.count);
+        showTooltip(vennTextSet3_0_1_2, data.orgs, data.count);
+        vennTextSet3_0_1_2.textContent = data.count;
+      } else if (doesIncludeLabel0 && doesIncludeLabel1) {
+        showTooltip(vennShapeSet3_0_1, data.orgs, data.count);
+        showTooltip(vennTextSet3_0_1, data.orgs, data.count);
+        vennTextSet3_0_1.textContent = data.count;
+      } else if (doesIncludeLabel1 && doesIncludeLabel2) {
+        showTooltip(vennShapeSet3_1_2, data.orgs, data.count);
+        showTooltip(vennTextSet3_1_2, data.orgs, data.count);
+        vennTextSet3_0_2.textContent = data.count;
+      } else if (doesIncludeLabel0 && doesIncludeLabel2) {
+        showTooltip(vennShapeSet3_0_2, data.orgs, data.count);
+        showTooltip(vennTextSet3_0_2, data.orgs, data.count);
+        vennTextSet3_1_2.textContent = data.count;
+      } else if (doesIncludeLabel0) {
+        showTooltip(vennShapeSet3_0, data.orgs, data.count);
+        showTooltip(vennTextSet3_0, data.orgs, data.count);
+        vennTextSet3_0.textContent = data.count;
+      } else if (doesIncludeLabel1) {
+        showTooltip(vennShapeSet3_1, data.orgs, data.count);
+        showTooltip(vennTextSet3_1, data.orgs, data.count);
+        vennTextSet3_1.textContent = data.count;
+      } else if (doesIncludeLabel2) {
+        showTooltip(vennShapeSet3_2, data.orgs, data.count);
+        showTooltip(vennTextSet3_2, data.orgs, data.count);
+        vennTextSet3_2.textContent = data.count;
+      };
+    })
+  }
 }
