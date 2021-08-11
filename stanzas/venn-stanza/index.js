@@ -30,6 +30,26 @@ export default class VennStanza extends Stanza {
     //   { sets: ['A','B', 'C'], size: 5568 },
     // ];
 
+
+    // 5 species data
+    let fiveOrgsSets = [
+      { orgs: "10090, 9606, 9615, 9986", count: "5719" },
+      { orgs: "10090, 9606, 9615", count: "312" },
+      { orgs: "9606", count: "158" },
+      { orgs: "10090, 9606, 9986", count: "75" },
+      { orgs: "10090, 9606", count: "53" },
+      { orgs: "10090", count: "45" },
+      { orgs: "9606, 9615, 9986", count: "19" },
+      { orgs: "9606, 9615", count: "19" },
+      { orgs: "9615", count: "11" },
+      { orgs: "9986", count: "8" },
+      { orgs: "9606, 9986", count: "7" },
+      { orgs: "10090, 9615", count: "6" },
+      { orgs: "10090, 9615, 9986", count: "5" },
+      { orgs: "10090, 9986", count: "5" },
+      { orgs: "9615, 9986", count: "2" }
+    ]
+
     // Venn.js usable data
     let sets = [
       { sets: ['A'], size: 6241 },
@@ -40,21 +60,6 @@ export default class VennStanza extends Stanza {
       { sets: ['A', 'C'], size: 591 + 5568 },
       { sets: ['A', 'B', 'C'], size: 5568 },
     ];
-
-    //get data
-    let dataset = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
-
-    //convert data to use venn.js
-    let str = JSON.stringify(dataset).replace(/\"orgs\":/g, "\"sets\":").replace(/\"count\":/g, "\"size\":");
-    let json = JSON.parse(str);
-    for (let i = 0; i < json.length; i++) {
-      json[i].sets = json[i].sets.split(', ');
-      json[i].size = Number(json[i].size);
-    }
-    // const sets = json;
 
     this.renderTemplate(
       {
@@ -84,17 +89,40 @@ export default class VennStanza extends Stanza {
     const fixedArea = this.root.querySelector('#fixed');
     const fixedElement = this.root.querySelector('#venn-diagrams');
     const fixedSvg = d3.select(fixedElement);
+
     fixedSvg
       .attr('width', width)
       .attr('height', height);
 
-    // get how many circles to draw
-    let setsNums = [];
-    for (let i = 0; i < sets.length; i++) {
-      setsNums.push(sets[i].sets.length);
+    //get data
+    let dataset = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+
+    // //convert data to use venn.js
+    // let str = JSON.stringify(dataset).replace(/\"orgs\":/g, "\"sets\":").replace(/\"count\":/g, "\"size\":");
+    // let json = JSON.parse(str);
+    // for (let i = 0; i < json.length; i++) {
+    //   json[i].sets = json[i].sets.split(', ');
+    //   json[i].size = Number(json[i].size);
+    // }
+
+    //convert data to use fixed venn diagram
+    for (let i = 0; i < dataset.length; i++) {
+      dataset[i].orgs = dataset[i].orgs.split(', ');
+      dataset[i].count = Number(dataset[i].count);
     }
+    console.log('dataset', dataset);
+
+    // get how many circles to draw
+    let datasetNums = [];
+    for (let i = 0; i < dataset.length; i++) {
+      datasetNums.push(dataset[i].orgs.length);
+    }
+
     const aryMax = function (a, b) { return Math.max(a, b); }
-    let circleNum = setsNums.reduce(aryMax);
+    const circleNum = datasetNums.reduce(aryMax); //TODO これはユーザーParameterとして入力する形でもいいかも（円の数はデータに依存するため）
 
     // show venns corresponds to data(circle numbers to draw)
     const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
@@ -106,6 +134,13 @@ export default class VennStanza extends Stanza {
     const LABEL0 = "10090"; // set as parameter by user: required
     const LABEL1 = "7955"; // set as parameter by user: required
     const LABEL2 = "9606"; // set as parameter by user: required
+
+    // assign labels to each circles : set as parameter by user //TODO ツールチップ等描画する前に取得するように順番を制御する必要あり
+    // const LABEL0 = this.params["label-0"];
+    // const LABEL1 = this.params["label-1"];
+    // const LABEL2 = this.params["label-2"];
+    // const LABEL3 = this.params["label-3"];
+    // const LABEL4 = this.params["label-4"];
 
     //get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's orger
     const part3Paths = this.root.querySelectorAll('.part3-path');
@@ -163,7 +198,9 @@ export default class VennStanza extends Stanza {
 
     //set highlight event and count labels to each parts
     dataset.forEach(data => {
-      const orgArray = data.orgs.split(', ');
+      console.log('data.orgs', data.orgs)
+      const orgArray = data.orgs;
+      // const orgArray = data.orgs.split(', ');
       const hasLabel0 = orgArray.includes(LABEL0); //boolean
       const hasLabel1 = orgArray.includes(LABEL1); //boolean
       const hasLabel2 = orgArray.includes(LABEL2); //boolean
