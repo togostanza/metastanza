@@ -124,19 +124,17 @@ export default class VennStanza extends Stanza {
     const vennShapeSet3_0_2 = this.root.querySelector('#venn-shape-set3-0_2');
     const vennShapeSet3_1_2 = this.root.querySelector('#venn-shape-set3-1_2');
     const vennShapeSet3_0_1_2 = this.root.querySelector('#venn-shape-set3-0_1_2');
+
+    // const part3Texts = this.root.querySelectorAll('.part3'); //TODO vennTextSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
+    const part3Paths = this.root.querySelectorAll('.part3'); //TODO vennShapeSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
+    const vennSet3Arr = ['3-0','3-1','3-2','3-0_1','3-0_2','3-1_2','3-0_1_2' ];
     
     const tooltip = d3.select(fixedArea)
       .append('div')
       .attr('class', 'fixed-tooltip');
 
-    const vennDiagram3Group = this.root.querySelector('#venn-diagram3');
-    console.log('vennDiagram3Group',vennDiagram3Group)
-    console.log("d3.select(vennDiagram3Group)",d3.select(vennDiagram3Group));
-    // console.log("d3.select(vennDiagram3Group).selectorAll('.part3')",d3.select(vennDiagram3Group).selectAll('.part3').append('text'));
-
-    function showTooltip(target, label, count){
-      d3.select(target)
-        // .selectAll('.part3')
+    function highlightParts(targetElm, label, count){
+      d3.select(targetElm)
         .on("mouseover", function (e) {
           tooltip
             .style("display", "block")
@@ -148,6 +146,9 @@ export default class VennStanza extends Stanza {
               <p>Organisms: ${label}</p>
               <p>Label: ${count}</p>
               `);
+          Array.from(part3Paths).forEach((path,i) =>{
+            targetElm.id === `venn-shape-set${vennSet3Arr[i]}` ? path.dataset.highlight = "selected" :  path.dataset.highlight = "unselected";
+          });
         })
         .on("mousemove", function (e) {
           tooltip
@@ -159,41 +160,45 @@ export default class VennStanza extends Stanza {
         })
         .on("mouseout", function () {
           tooltip.style("display", "none");
+          Array.from(part3Paths).forEach(path =>{
+            path.dataset.highlight = "default";
+          });
         });
     }
 
     dataset.forEach(data => {
       const orgArray = data.orgs.split(', ');
-      const doesIncludeLabel0 = orgArray.includes(LABEL0);
-      const doesIncludeLabel1 = orgArray.includes(LABEL1);
-      const doesIncludeLabel2 = orgArray.includes(LABEL2);
+      const doesIncludeLabel0 = orgArray.includes(LABEL0); //boolean
+      const doesIncludeLabel1 = orgArray.includes(LABEL1); //boolean
+      const doesIncludeLabel2 = orgArray.includes(LABEL2); //boolean
+
       if (doesIncludeLabel0 && doesIncludeLabel1 && doesIncludeLabel2) {
-        showTooltip(vennShapeSet3_0_1_2, data.orgs, data.count);
-        showTooltip(vennTextSet3_0_1_2, data.orgs, data.count);
+        highlightParts(vennShapeSet3_0_1_2, data.orgs, data.count);
+        highlightParts(vennTextSet3_0_1_2, data.orgs, data.count);
         vennTextSet3_0_1_2.textContent = data.count;
       } else if (doesIncludeLabel0 && doesIncludeLabel1) {
-        showTooltip(vennShapeSet3_0_1, data.orgs, data.count);
-        showTooltip(vennTextSet3_0_1, data.orgs, data.count);
+        highlightParts(vennShapeSet3_0_1, data.orgs, data.count);
+        highlightParts(vennTextSet3_0_1, data.orgs, data.count);
         vennTextSet3_0_1.textContent = data.count;
       } else if (doesIncludeLabel1 && doesIncludeLabel2) {
-        showTooltip(vennShapeSet3_1_2, data.orgs, data.count);
-        showTooltip(vennTextSet3_1_2, data.orgs, data.count);
+        highlightParts(vennShapeSet3_1_2, data.orgs, data.count);
+        highlightParts(vennTextSet3_1_2, data.orgs, data.count);
         vennTextSet3_0_2.textContent = data.count;
       } else if (doesIncludeLabel0 && doesIncludeLabel2) {
-        showTooltip(vennShapeSet3_0_2, data.orgs, data.count);
-        showTooltip(vennTextSet3_0_2, data.orgs, data.count);
+        highlightParts(vennShapeSet3_0_2, data.orgs, data.count);
+        highlightParts(vennTextSet3_0_2, data.orgs, data.count);
         vennTextSet3_1_2.textContent = data.count;
       } else if (doesIncludeLabel0) {
-        showTooltip(vennShapeSet3_0, data.orgs, data.count);
-        showTooltip(vennTextSet3_0, data.orgs, data.count);
+        highlightParts(vennShapeSet3_0, data.orgs, data.count);
+        highlightParts(vennTextSet3_0, data.orgs, data.count);
         vennTextSet3_0.textContent = data.count;
       } else if (doesIncludeLabel1) {
-        showTooltip(vennShapeSet3_1, data.orgs, data.count);
-        showTooltip(vennTextSet3_1, data.orgs, data.count);
+        highlightParts(vennShapeSet3_1, data.orgs, data.count);
+        highlightParts(vennTextSet3_1, data.orgs, data.count);
         vennTextSet3_1.textContent = data.count;
       } else if (doesIncludeLabel2) {
-        showTooltip(vennShapeSet3_2, data.orgs, data.count);
-        showTooltip(vennTextSet3_2, data.orgs, data.count);
+        highlightParts(vennShapeSet3_2, data.orgs, data.count);
+        highlightParts(vennTextSet3_2, data.orgs, data.count);
         vennTextSet3_2.textContent = data.count;
       };
     })
