@@ -125,15 +125,17 @@ export default class VennStanza extends Stanza {
     const vennShapeSet3_1_2 = this.root.querySelector('#venn-shape-set3-1_2');
     const vennShapeSet3_0_1_2 = this.root.querySelector('#venn-shape-set3-0_1_2');
 
-    // const part3Texts = this.root.querySelectorAll('.part3'); //TODO vennTextSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
-    const part3Paths = this.root.querySelectorAll('.part3'); //TODO vennShapeSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
-    const vennSet3Arr = ['3-0','3-1','3-2','3-0_1','3-0_2','3-1_2','3-0_1_2' ];
-    
+    const part3Paths = this.root.querySelectorAll('.part3-path'); //TODO vennShapeSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
+    const part3Texts = this.root.querySelectorAll('.part3-text'); //TODO vennTextSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
+    const vennSet3Arr = ['3-0', '3-1', '3-2', '3-0_1', '3-0_2', '3-1_2', '3-0_1_2'];
+
+    //set tooltip for fixed venn
     const tooltip = d3.select(fixedArea)
       .append('div')
       .attr('class', 'fixed-tooltip');
 
-    function highlightParts(targetElm, label, count){
+    //set highlight event which fire when hovered
+    function highlightParts(targetElm, label, count) {
       d3.select(targetElm)
         .on("mouseover", function (e) {
           tooltip
@@ -146,9 +148,16 @@ export default class VennStanza extends Stanza {
               <p>Organisms: ${label}</p>
               <p>Label: ${count}</p>
               `);
-          Array.from(part3Paths).forEach((path,i) =>{
-            targetElm.id === `venn-shape-set${vennSet3Arr[i]}` ? path.dataset.highlight = "selected" :  path.dataset.highlight = "unselected";
-          });
+          //highlight the selected part
+          for (let i = 0; i < vennSet3Arr.length; i++) {
+            if (targetElm.id === `venn-shape-set${vennSet3Arr[i]}` || targetElm.id === `venn-text-set${vennSet3Arr[i]}`) {
+              part3Paths[i].dataset.highlight = "selected";
+              part3Texts[i].dataset.highlight = "selected";
+            } else {
+              part3Paths[i].dataset.highlight = "unselected";
+              part3Texts[i].dataset.highlight = "unselected";
+            }
+          }
         })
         .on("mousemove", function (e) {
           tooltip
@@ -160,8 +169,11 @@ export default class VennStanza extends Stanza {
         })
         .on("mouseout", function () {
           tooltip.style("display", "none");
-          Array.from(part3Paths).forEach(path =>{
+          Array.from(part3Paths).forEach(path => {
             path.dataset.highlight = "default";
+          });
+          Array.from(part3Texts).forEach(text => {
+            text.dataset.highlight = "default";
           });
         });
     }
