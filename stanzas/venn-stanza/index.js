@@ -65,10 +65,9 @@ export default class VennStanza extends Stanza {
       }
     );
 
+    //set common parameters and styles
     const width = this.params['width'];
     const height = this.params['height'];
-
-    //set color scheme
     const colorScheme = [
       css('--togostanza-series-0-color'),
       css('--togostanza-series-1-color'),
@@ -78,14 +77,13 @@ export default class VennStanza extends Stanza {
       css('--togostanza-series-5-color')
     ];
 
+    // draw size-reflected venn diagram
     vennJs(this.root, this.params, css, sets, width, height, colorScheme, css);
 
-    // const fixedChart = venn.VennDiagram();
+    // draw fixed venn diagram
     const fixedArea = this.root.querySelector('#fixed');
     const fixedElement = this.root.querySelector('#venn-diagrams');
     const fixedSvg = d3.select(fixedElement);
-
-    // draw fixed venn diagram svg
     fixedSvg
       .attr('width', width)
       .attr('height', height);
@@ -109,24 +107,9 @@ export default class VennStanza extends Stanza {
     const LABEL1 = "7955"; // set as parameter by user: required
     const LABEL2 = "9606"; // set as parameter by user: required
 
-    const vennTextSet3_0 = this.root.querySelector('#venn-text-set3-0');
-    const vennTextSet3_1 = this.root.querySelector('#venn-text-set3-1');
-    const vennTextSet3_2 = this.root.querySelector('#venn-text-set3-2');
-    const vennTextSet3_0_1 = this.root.querySelector('#venn-text-set3-0_1');
-    const vennTextSet3_0_2 = this.root.querySelector('#venn-text-set3-0_2');
-    const vennTextSet3_1_2 = this.root.querySelector('#venn-text-set3-1_2');
-    const vennTextSet3_0_1_2 = this.root.querySelector('#venn-text-set3-0_1_2');
-
-    const vennShapeSet3_0 = this.root.querySelector('#venn-shape-set3-0');
-    const vennShapeSet3_1 = this.root.querySelector('#venn-shape-set3-1');
-    const vennShapeSet3_2 = this.root.querySelector('#venn-shape-set3-2');
-    const vennShapeSet3_0_1 = this.root.querySelector('#venn-shape-set3-0_1');
-    const vennShapeSet3_0_2 = this.root.querySelector('#venn-shape-set3-0_2');
-    const vennShapeSet3_1_2 = this.root.querySelector('#venn-shape-set3-1_2');
-    const vennShapeSet3_0_1_2 = this.root.querySelector('#venn-shape-set3-0_1_2');
-
-    const part3Paths = this.root.querySelectorAll('.part3-path'); //TODO vennShapeSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
-    const part3Texts = this.root.querySelectorAll('.part3-text'); //TODO vennTextSet3_0〜をこちらの配列に置き換えてもいいかも（要順番）
+    //get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's orger
+    const part3Paths = this.root.querySelectorAll('.part3-path');
+    const part3Texts = this.root.querySelectorAll('.part3-text');
     const vennSet3Arr = ['3-0', '3-1', '3-2', '3-0_1', '3-0_2', '3-1_2', '3-0_1_2'];
 
     //set tooltip for fixed venn
@@ -134,7 +117,7 @@ export default class VennStanza extends Stanza {
       .append('div')
       .attr('class', 'fixed-tooltip');
 
-    //set highlight event which fire when hovered
+    //function: set highlight event which fire when hovered
     function highlightParts(targetElm, label, count) {
       d3.select(targetElm)
         .on("mouseover", function (e) {
@@ -146,7 +129,7 @@ export default class VennStanza extends Stanza {
               `${d3.pointer(e)[1]}px`
             ).html(`
               <p>Organisms: ${label}</p>
-              <p>Label: ${count}</p>
+              <p>Count: ${count}</p>
               `);
           //highlight the selected part
           for (let i = 0; i < vennSet3Arr.length; i++) {
@@ -178,40 +161,41 @@ export default class VennStanza extends Stanza {
         });
     }
 
+    //set highlight event and count labels to each parts
     dataset.forEach(data => {
       const orgArray = data.orgs.split(', ');
-      const doesIncludeLabel0 = orgArray.includes(LABEL0); //boolean
-      const doesIncludeLabel1 = orgArray.includes(LABEL1); //boolean
-      const doesIncludeLabel2 = orgArray.includes(LABEL2); //boolean
+      const hasLabel0 = orgArray.includes(LABEL0); //boolean
+      const hasLabel1 = orgArray.includes(LABEL1); //boolean
+      const hasLabel2 = orgArray.includes(LABEL2); //boolean
 
-      if (doesIncludeLabel0 && doesIncludeLabel1 && doesIncludeLabel2) {
-        highlightParts(vennShapeSet3_0_1_2, data.orgs, data.count);
-        highlightParts(vennTextSet3_0_1_2, data.orgs, data.count);
-        vennTextSet3_0_1_2.textContent = data.count;
-      } else if (doesIncludeLabel0 && doesIncludeLabel1) {
-        highlightParts(vennShapeSet3_0_1, data.orgs, data.count);
-        highlightParts(vennTextSet3_0_1, data.orgs, data.count);
-        vennTextSet3_0_1.textContent = data.count;
-      } else if (doesIncludeLabel1 && doesIncludeLabel2) {
-        highlightParts(vennShapeSet3_1_2, data.orgs, data.count);
-        highlightParts(vennTextSet3_1_2, data.orgs, data.count);
-        vennTextSet3_0_2.textContent = data.count;
-      } else if (doesIncludeLabel0 && doesIncludeLabel2) {
-        highlightParts(vennShapeSet3_0_2, data.orgs, data.count);
-        highlightParts(vennTextSet3_0_2, data.orgs, data.count);
-        vennTextSet3_1_2.textContent = data.count;
-      } else if (doesIncludeLabel0) {
-        highlightParts(vennShapeSet3_0, data.orgs, data.count);
-        highlightParts(vennTextSet3_0, data.orgs, data.count);
-        vennTextSet3_0.textContent = data.count;
-      } else if (doesIncludeLabel1) {
-        highlightParts(vennShapeSet3_1, data.orgs, data.count);
-        highlightParts(vennTextSet3_1, data.orgs, data.count);
-        vennTextSet3_1.textContent = data.count;
-      } else if (doesIncludeLabel2) {
-        highlightParts(vennShapeSet3_2, data.orgs, data.count);
-        highlightParts(vennTextSet3_2, data.orgs, data.count);
-        vennTextSet3_2.textContent = data.count;
+      if (hasLabel0 && hasLabel1 && hasLabel2) { //3-0_1_2 (=vennSet3Arr[6])
+        highlightParts(part3Paths[6], data.orgs, data.count);
+        highlightParts(part3Texts[6], data.orgs, data.count);
+        part3Texts[6].textContent = data.count;
+      } else if (hasLabel0 && hasLabel1) { //3-0_1 (=vennSet3Arr[3])
+        highlightParts(part3Paths[3], data.orgs, data.count);
+        highlightParts(part3Texts[3], data.orgs, data.count);
+        part3Texts[3].textContent = data.count;
+      } else if (hasLabel1 && hasLabel2) { //3-1_2 (=vennSet3Arr[5])
+        highlightParts(part3Paths[5], data.orgs, data.count);
+        highlightParts(part3Texts[5], data.orgs, data.count);
+        part3Texts[5].textContent = data.count;
+      } else if (hasLabel0 && hasLabel2) { //3-0_2 (=vennSet3Arr[4])
+        highlightParts(part3Paths[4], data.orgs, data.count);
+        highlightParts(part3Texts[4], data.orgs, data.count);
+        part3Texts[4].textContent = data.count;
+      } else if (hasLabel0) { //3-0 (=vennSet3Arr[0])
+        highlightParts(part3Paths[0], data.orgs, data.count);
+        highlightParts(part3Texts[0], data.orgs, data.count);
+        part3Texts[0].textContent = data.count;
+      } else if (hasLabel1) { //3-1 (=vennSet3Arr[1])
+        highlightParts(part3Paths[1], data.orgs, data.count);
+        highlightParts(part3Texts[1], data.orgs, data.count);
+        part3Texts[1].textContent = data.count;
+      } else if (hasLabel2) { //3-1 (=vennSet3Arr[2])
+        highlightParts(part3Paths[2], data.orgs, data.count);
+        highlightParts(part3Texts[2], data.orgs, data.count);
+        part3Texts[2].textContent = data.count;
       };
     })
   }
