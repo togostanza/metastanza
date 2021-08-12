@@ -18,14 +18,14 @@
     {
       "stanza:key": "chart-type",
       "stanza:type": "single-choice",
-      "stanza:choice": ["original", "rings","mono"],
+      "stanza:choice": ["original", "rings", "mono"],
       "stanza:example": "original",
       "stanza:description": "Type of benn diagram",
       "stanza:required": true
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-3orgs-sparql.json",
+      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-5orgs-sparql.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -47,28 +47,28 @@
     {
       "stanza:key": "label-1",
       "stanza:type": "string",
-      "stanza:example": "7955",
+      "stanza:example": "9595",
       "stanza:description": "Label name",
       "stanza:required": false
     },
     {
       "stanza:key": "label-2",
       "stanza:type": "string",
-      "stanza:example": "10090",
+      "stanza:example": "9598",
       "stanza:description": "Label name",
       "stanza:required": false
     },
     {
       "stanza:key": "label-3",
       "stanza:type": "string",
-      "stanza:example": "9606",
+      "stanza:example": "9601",
       "stanza:description": "Label name",
       "stanza:required": false
     },
     {
       "stanza:key": "label-4",
       "stanza:type": "string",
-      "stanza:example": "",
+      "stanza:example": "9606",
       "stanza:description": "Label name",
       "stanza:required": false
     },
