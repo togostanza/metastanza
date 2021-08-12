@@ -30,26 +30,6 @@ export default class VennStanza extends Stanza {
     //   { sets: ['A','B', 'C'], size: 5568 },
     // ];
 
-
-    // 5 species data
-    let fiveOrgsSets = [
-      { orgs: "10090, 9606, 9615, 9986", count: "5719" },
-      { orgs: "10090, 9606, 9615", count: "312" },
-      { orgs: "9606", count: "158" },
-      { orgs: "10090, 9606, 9986", count: "75" },
-      { orgs: "10090, 9606", count: "53" },
-      { orgs: "10090", count: "45" },
-      { orgs: "9606, 9615, 9986", count: "19" },
-      { orgs: "9606, 9615", count: "19" },
-      { orgs: "9615", count: "11" },
-      { orgs: "9986", count: "8" },
-      { orgs: "9606, 9986", count: "7" },
-      { orgs: "10090, 9615", count: "6" },
-      { orgs: "10090, 9615, 9986", count: "5" },
-      { orgs: "10090, 9986", count: "5" },
-      { orgs: "9615, 9986", count: "2" }
-    ]
-
     // Venn.js usable data
     let sets = [
       { sets: ['A'], size: 6241 },
@@ -130,22 +110,54 @@ export default class VennStanza extends Stanza {
       vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
     })
 
-    // assign labels to each circles
-    const LABEL0 = "10090"; // set as parameter by user: required
-    const LABEL1 = "7955"; // set as parameter by user: required
-    const LABEL2 = "9606"; // set as parameter by user: required
+    // assign labels to each circles : set as parameter by user 
+    const LABEL0 = this.params["label-0"];
+    const LABEL1 = this.params["label-1"];
+    const LABEL2 = this.params["label-2"];
+    const LABEL3 = this.params["label-3"];
+    const LABEL4 = this.params["label-4"];
 
-    // assign labels to each circles : set as parameter by user //TODO ツールチップ等描画する前に取得するように順番を制御する必要あり
-    // const LABEL0 = this.params["label-0"];
-    // const LABEL1 = this.params["label-1"];
-    // const LABEL2 = this.params["label-2"];
-    // const LABEL3 = this.params["label-3"];
-    // const LABEL4 = this.params["label-4"];
+    //get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's order
+    const part1Paths = this.root.querySelectorAll('.part1-path');
+    const part1Texts = this.root.querySelectorAll('.part1-text');
+    const vennSet1Arr = ['1-0'];
 
-    //get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's orger
+    const part2Paths = this.root.querySelectorAll('.part2-path');
+    const part2Texts = this.root.querySelectorAll('.part2-text');
+    const vennSet2Arr = ['2-0', '2-1', '2-0_1'];
+
     const part3Paths = this.root.querySelectorAll('.part3-path');
     const part3Texts = this.root.querySelectorAll('.part3-text');
     const vennSet3Arr = ['3-0', '3-1', '3-2', '3-0_1', '3-0_2', '3-1_2', '3-0_1_2'];
+
+    const part4Paths = this.root.querySelectorAll('.part4-path');
+    const part4Texts = this.root.querySelectorAll('.part4-text');
+    const vennSet4Arr = ['4-0', '4-1', '4-2', '4-3', '4-0_1', '4-0_2', '4-0_3', '4-1_2', '4-1_3', '4-2_3', '4-0_1_2', '4-0_1_3', '4-0_2_3', '4-1_2_3', '4-0_1_2_3'];
+    
+    const part5Paths = this.root.querySelectorAll('.part5-path');
+    const part5Texts = this.root.querySelectorAll('.part5-text');
+    const vennSet5Arr = ['5-0', '5-1', '5-2', '5-3', '5-4', '5-0_1', '5-0_2', '5-0_3', '5-0_4', '5-1_2', '5-1_3', '5-1_4', '5-2_3', '5-2_4', '5-3_4', '5-0_1_2', '5-0_1_3', '5-0_1_4', '5-0_2_3', '5-0_2_4', '5-0_3_4', '5-1_2_3', '5-1_2_4', '5-1_3_4', '5-2_3_4', '5-0_1_2_3', '5-0_1_2_4', '5-0_1_3_4', '5-0_2_3_4', '5-1_2_3_4', '5-0_1_2_3_4'];
+
+    switch (circleNum) {
+      case 1:
+        set1Venn();
+        break;
+      case 2:
+        set2Venn();
+        break;
+      case 3:
+        set3Venn();
+        break;
+      case 4:
+        set4Venn();
+        break;
+      case 5:
+        set5Venn();
+        break;
+      default:
+        console.log(`Circle number(${circleNum}) is invalid. Please set from 1 to 5 circles.`);
+    }
+    
 
     //set tooltip for fixed venn
     const tooltip = d3.select(fixedArea)
@@ -153,9 +165,9 @@ export default class VennStanza extends Stanza {
       .attr('class', 'fixed-tooltip');
 
     //function: set highlight event which fire when hovered
-    function highlightParts(targetElm, label, count) {
+    function highlightParts(vennSetArr, pathsArr, TextsArr, targetElm, label, count) {
       d3.select(targetElm)
-        .on("mouseover", function (e) {
+        .on("mouseenter", function (e) {
           tooltip
             .style("display", "block")
             .style("left", `${d3.pointer(e)[0] + 8}px`)
@@ -167,13 +179,13 @@ export default class VennStanza extends Stanza {
               <p>Count: ${count}</p>
               `);
           //highlight the selected part
-          for (let i = 0; i < vennSet3Arr.length; i++) {
-            if (targetElm.id === `venn-shape-set${vennSet3Arr[i]}` || targetElm.id === `venn-text-set${vennSet3Arr[i]}`) {
-              part3Paths[i].dataset.highlight = "selected";
-              part3Texts[i].dataset.highlight = "selected";
+          for (let i = 0; i < vennSetArr.length; i++) {
+            if (targetElm.id === `venn-shape-set${vennSetArr[i]}` || targetElm.id === `venn-text-set${vennSetArr[i]}`) {
+              pathsArr[i].dataset.highlight = "selected";
+              TextsArr[i].dataset.highlight = "selected";
             } else {
-              part3Paths[i].dataset.highlight = "unselected";
-              part3Texts[i].dataset.highlight = "unselected";
+              pathsArr[i].dataset.highlight = "unselected";
+              TextsArr[i].dataset.highlight = "unselected";
             }
           }
         })
@@ -185,55 +197,304 @@ export default class VennStanza extends Stanza {
               `${d3.pointer(e)[1]}px`
             )
         })
-        .on("mouseout", function () {
+        .on("mouseleave", function () {
           tooltip.style("display", "none");
-          Array.from(part3Paths).forEach(path => {
+          Array.from(pathsArr).forEach(path => {
             path.dataset.highlight = "default";
           });
-          Array.from(part3Texts).forEach(text => {
+          Array.from(TextsArr).forEach(text => {
             text.dataset.highlight = "default";
           });
         });
     }
 
-    //set highlight event and count labels to each parts
-    dataset.forEach(data => {
-      console.log('data.orgs', data.orgs)
-      const orgArray = data.orgs;
-      // const orgArray = data.orgs.split(', ');
-      const hasLabel0 = orgArray.includes(LABEL0); //boolean
-      const hasLabel1 = orgArray.includes(LABEL1); //boolean
-      const hasLabel2 = orgArray.includes(LABEL2); //boolean
+    //【organism num: 2】set highlight event and count labels to each parts
+    function set1Venn(){
+      dataset.forEach(data => {
+        const orgArray = data.orgs;
+        const hasLabel0 = orgArray.includes(LABEL0); //boolean
+  
+        if (hasLabel0) { //1-0 (=vennSet1Arr[0])
+          highlightParts(vennSet1Arr, part1Paths, part1Texts, part1Paths[0], data.orgs, data.count);
+          highlightParts(vennSet1Arr, part1Paths, part1Texts, part1Texts[0], data.orgs, data.count);
+          part1Texts[0].textContent = data.count;
+        };
+      })
+    }
 
-      if (hasLabel0 && hasLabel1 && hasLabel2) { //3-0_1_2 (=vennSet3Arr[6])
-        highlightParts(part3Paths[6], data.orgs, data.count);
-        highlightParts(part3Texts[6], data.orgs, data.count);
-        part3Texts[6].textContent = data.count;
-      } else if (hasLabel0 && hasLabel1) { //3-0_1 (=vennSet3Arr[3])
-        highlightParts(part3Paths[3], data.orgs, data.count);
-        highlightParts(part3Texts[3], data.orgs, data.count);
-        part3Texts[3].textContent = data.count;
-      } else if (hasLabel1 && hasLabel2) { //3-1_2 (=vennSet3Arr[5])
-        highlightParts(part3Paths[5], data.orgs, data.count);
-        highlightParts(part3Texts[5], data.orgs, data.count);
-        part3Texts[5].textContent = data.count;
-      } else if (hasLabel0 && hasLabel2) { //3-0_2 (=vennSet3Arr[4])
-        highlightParts(part3Paths[4], data.orgs, data.count);
-        highlightParts(part3Texts[4], data.orgs, data.count);
-        part3Texts[4].textContent = data.count;
-      } else if (hasLabel0) { //3-0 (=vennSet3Arr[0])
-        highlightParts(part3Paths[0], data.orgs, data.count);
-        highlightParts(part3Texts[0], data.orgs, data.count);
-        part3Texts[0].textContent = data.count;
-      } else if (hasLabel1) { //3-1 (=vennSet3Arr[1])
-        highlightParts(part3Paths[1], data.orgs, data.count);
-        highlightParts(part3Texts[1], data.orgs, data.count);
-        part3Texts[1].textContent = data.count;
-      } else if (hasLabel2) { //3-1 (=vennSet3Arr[2])
-        highlightParts(part3Paths[2], data.orgs, data.count);
-        highlightParts(part3Texts[2], data.orgs, data.count);
-        part3Texts[2].textContent = data.count;
-      };
-    })
+    //【organism num: 2】set highlight event and count labels to each parts
+    function set2Venn(){
+      dataset.forEach(data => {
+        const orgArray = data.orgs;
+        const hasLabel0 = orgArray.includes(LABEL0); //boolean
+        const hasLabel1 = orgArray.includes(LABEL1); //boolean
+  
+        if (hasLabel0 && hasLabel1) { //2-0_1 (=vennSet2Arr[2])
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Paths[2], data.orgs, data.count);
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Texts[2], data.orgs, data.count);
+          part2Texts[2].textContent = data.count;
+        } else if (hasLabel1) { //2-1 (=vennSet2Arr[1])
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Paths[1], data.orgs, data.count);
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Texts[1], data.orgs, data.count);
+          part2Texts[1].textContent = data.count;
+        } else if (hasLabel0) { //2-0 (=vennSet2Arr[0])
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Paths[0], data.orgs, data.count);
+          highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Texts[0], data.orgs, data.count);
+          part2Texts[0].textContent = data.count;
+        };
+      })
+    }
+
+    //【organism num: 3】set highlight event and count labels to each parts
+    function set3Venn(){
+      dataset.forEach(data => {
+        const orgArray = data.orgs;
+        const hasLabel0 = orgArray.includes(LABEL0); //boolean
+        const hasLabel1 = orgArray.includes(LABEL1); //boolean
+        const hasLabel2 = orgArray.includes(LABEL2); //boolean
+  
+        if (hasLabel0 && hasLabel1 && hasLabel2) { //3-0_1_2 (=vennSet3Arr[6])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[6], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[6], data.orgs, data.count);
+          part3Texts[6].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1) { //3-0_1 (=vennSet3Arr[3])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[3], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[3], data.orgs, data.count);
+          part3Texts[3].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2) { //3-1_2 (=vennSet3Arr[5])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[5], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[5], data.orgs, data.count);
+          part3Texts[5].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2) { //3-0_2 (=vennSet3Arr[4])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[4], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[4], data.orgs, data.count);
+          part3Texts[4].textContent = data.count;
+        } else if (hasLabel0) { //3-0 (=vennSet3Arr[0])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[0], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[0], data.orgs, data.count);
+          part3Texts[0].textContent = data.count;
+        } else if (hasLabel1) { //3-1 (=vennSet3Arr[1])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[1], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[1], data.orgs, data.count);
+          part3Texts[1].textContent = data.count;
+        } else if (hasLabel2) { //3-1 (=vennSet3Arr[2])
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[2], data.orgs, data.count);
+          highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[2], data.orgs, data.count);
+          part3Texts[2].textContent = data.count;
+        };
+      })
+    }
+
+    //【organism num: 4】set highlight event and count labels to each parts
+    function set4Venn(){
+      dataset.forEach(data => {
+        const orgArray = data.orgs;
+        const hasLabel0 = orgArray.includes(LABEL0); //boolean
+        const hasLabel1 = orgArray.includes(LABEL1); //boolean
+        const hasLabel2 = orgArray.includes(LABEL2); //boolean
+        const hasLabel3 = orgArray.includes(LABEL3); //boolean
+    
+        if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel3) { //4-0_1_2_3 (=vennSet4Arr[14])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[14], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[14], data.orgs, data.count);
+          part4Texts[14].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2 && hasLabel3) { //4-1_2_3 (=vennSet4Arr[13])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[13], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[13], data.orgs, data.count);
+          part4Texts[13].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2 && hasLabel3) { //4-0_2_3 (=vennSet4Arr[12])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[12], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[12], data.orgs, data.count);
+          part4Texts[12].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel3) { //4-0_1_3 (=vennSet4Arr[11])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[11], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[11], data.orgs, data.count);
+          part4Texts[11].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel2) { //4-0_1_2 (=vennSet4Arr[10])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[10], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[10], data.orgs, data.count);
+          part4Texts[10].textContent = data.count;
+        } else if (hasLabel2 && hasLabel3) { //4-2_3 (=vennSet4Arr[9])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[9], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[9], data.orgs, data.count);
+          part4Texts[9].textContent = data.count;
+        } else if (hasLabel1 && hasLabel3) { //4-1_3 (=vennSet4Arr[8])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[8], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[8], data.orgs, data.count);
+          part4Texts[8].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2) { //4-1_2 (=vennSet4Arr[7])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[7], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[7], data.orgs, data.count);
+          part4Texts[7].textContent = data.count;
+        } else if (hasLabel0 && hasLabel3) { //4-0_3 (=vennSet4Arr[6])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[6], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[6], data.orgs, data.count);
+          part4Texts[6].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2) { //4-0_2 (=vennSet4Arr[5])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[5], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[5], data.orgs, data.count);
+          part4Texts[5].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1) { //4-0_1 (=vennSet4Arr[4])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[4], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[4], data.orgs, data.count);
+          part4Texts[4].textContent = data.count;
+        } else if (hasLabel3) { //4-3 (=vennSet4Arr[3])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[3], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[3], data.orgs, data.count);
+          part3Texts[3].textContent = data.count;
+        } else if (hasLabel2) { //4-2 (=vennSet4Arr[2])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[2], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[2], data.orgs, data.count);
+          part4Texts[2].textContent = data.count;
+        } else if (hasLabel1) { //4-1 (=vennSet4Arr[1])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[1], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[1], data.orgs, data.count);
+          part4Texts[1].textContent = data.count;
+        } else if (hasLabel0) { //4-0 (=vennSet4Arr[0])
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[0], data.orgs, data.count);
+          highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[0], data.orgs, data.count);
+          part4Texts[0].textContent = data.count;
+        };
+      })
+    }
+
+    //【organism num: 5】set highlight event and count labels to each parts
+    function set5Venn(){
+      dataset.forEach(data => {
+        const orgArray = data.orgs;
+        const hasLabel0 = orgArray.includes(LABEL0); //boolean
+        const hasLabel1 = orgArray.includes(LABEL1); //boolean
+        const hasLabel2 = orgArray.includes(LABEL2); //boolean
+        const hasLabel3 = orgArray.includes(LABEL3); //boolean
+        const hasLabel4 = orgArray.includes(LABEL4); //boolean
+    
+        if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel3 && hasLabel4) { //5-0_1_2_3_4 (=vennSet5Arr[14])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[30], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[30], data.orgs, data.count);
+          part5Texts[30].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2 && hasLabel3 && hasLabel4) { //5-1_2_3_4 (=vennSet5Arr[29])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[29], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[29], data.orgs, data.count);
+          part5Texts[29].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2 && hasLabel3 && hasLabel4) { //5-0_2_3_4 (=vennSet5Arr[28])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[28], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[28], data.orgs, data.count);
+          part5Texts[28].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel3 && hasLabel4) { //5-0_1_3_4 (=vennSet5Arr[27])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[27], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[27], data.orgs, data.count);
+          part5Texts[27].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel4) { //5-0_1_2_4 (=vennSet5Arr[26])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[26], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[26], data.orgs, data.count);
+          part5Texts[26].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel3) { //5-0_1_2_3 (=vennSet5Arr[25])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[25], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[25], data.orgs, data.count);
+          part5Texts[25].textContent = data.count;
+        } else if (hasLabel2 && hasLabel3 && hasLabel4) { //5-2_3_4 (=vennSet5Arr[24])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[24], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[24], data.orgs, data.count);
+          part5Texts[24].textContent = data.count;
+        } else if (hasLabel1 && hasLabel3 && hasLabel4) { //5-1_3_4 (=vennSet5Arr[23])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[23], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[23], data.orgs, data.count);
+          part5Texts[23].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2 && hasLabel4) { //5-1_2_4 (=vennSet5Arr[22])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[22], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[22], data.orgs, data.count);
+          part5Texts[22].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2 && hasLabel3) { //5-1_2_3 (=vennSet5Arr[21])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[21], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[21], data.orgs, data.count);
+          part5Texts[21].textContent = data.count;
+        } else if (hasLabel0 && hasLabel3 && hasLabel4) { //5-0_3_4 (=vennSet5Arr[20])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[20], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[20], data.orgs, data.count);
+          part5Texts[20].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2 && hasLabel4) { //5-0_2_4 (=vennSet5Arr[19])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[19], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[19], data.orgs, data.count);
+          part5Texts[19].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2 && hasLabel3) { //5-0_2_3 (=vennSet5Arr[18])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[18], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[18], data.orgs, data.count);
+          part5Texts[18].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel4) { //5-0_1_4 (=vennSet5Arr[17])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[17], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[17], data.orgs, data.count);
+          part5Texts[17].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel3) { //5-0_1_3 (=vennSet5Arr[16])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[16], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[16], data.orgs, data.count);
+          part5Texts[16].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1 && hasLabel2) { //5-0_1_2 (=vennSet5Arr[15])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[15], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[15], data.orgs, data.count);
+          part5Texts[15].textContent = data.count;
+        } else if (hasLabel3 && hasLabel4) { //5-3_4 (=vennSet5Arr[14])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[14], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[14], data.orgs, data.count);
+          part5Texts[14].textContent = data.count;
+        } else if (hasLabel2 && hasLabel4) { //5-2_4 (=vennSet5Arr[13])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[13], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[13], data.orgs, data.count);
+          part5Texts[13].textContent = data.count;
+        } else if (hasLabel2 && hasLabel3) { //5-2_3 (=vennSet5Arr[12])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[12], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[12], data.orgs, data.count);
+          part5Texts[12].textContent = data.count;
+        } else if (hasLabel1 && hasLabel4) { //5-1_4 (=vennSet5Arr[11])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[11], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[11], data.orgs, data.count);
+          part5Texts[11].textContent = data.count;
+        } else if (hasLabel1 && hasLabel3) { //5-1_3 (=vennSet5Arr[10])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[10], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[10], data.orgs, data.count);
+          part5Texts[10].textContent = data.count;
+        } else if (hasLabel1 && hasLabel2) { //5-1_2 (=vennSet5Arr[9])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[9], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[9], data.orgs, data.count);
+          part5Texts[9].textContent = data.count;
+        } else if (hasLabel0 && hasLabel4) { //5-0_4 (=vennSet5Arr[8])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[8], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[8], data.orgs, data.count);
+          part5Texts[8].textContent = data.count;
+        } else if (hasLabel0 && hasLabel3) { //5-0_3 (=vennSet5Arr[7])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[7], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[7], data.orgs, data.count);
+          part5Texts[7].textContent = data.count;
+        } else if (hasLabel0 && hasLabel2) { //5-0_2 (=vennSet5Arr[6])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[6], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[6], data.orgs, data.count);
+          part5Texts[6].textContent = data.count;
+        } else if (hasLabel0 && hasLabel1) { //5-0_1 (=vennSet5Arr[5])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[5], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[5], data.orgs, data.count);
+          part5Texts[5].textContent = data.count;
+        } else if (hasLabel4) { //5-4 (=vennSet5Arr[4])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[4], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[4], data.orgs, data.count);
+          part5Texts[4].textContent = data.count;
+        } else if (hasLabel3) { //4-3 (=vennSet5Arr[3])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[3], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[3], data.orgs, data.count);
+          part5Texts[3].textContent = data.count;
+        } else if (hasLabel2) { //5-2 (=vennSet5Arr[2])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[2], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[2], data.orgs, data.count);
+          part5Texts[2].textContent = data.count;
+        } else if (hasLabel1) { //5-1 (=vennSet5Arr[1])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[1], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[1], data.orgs, data.count);
+          part5Texts[1].textContent = data.count;
+        } else if (hasLabel0) { //5-0 (=vennSet5Arr[0])
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[0], data.orgs, data.count);
+          highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[0], data.orgs, data.count);
+          part5Texts[0].textContent = data.count;
+        };
+      })
+    }
+
   }
 }
