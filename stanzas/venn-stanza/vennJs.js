@@ -15,9 +15,9 @@ export const vennJs = async function (shadowRoot, params, css, sets, width, heig
     .call(interactiveChart);
 
   //tooltip
-  const main = shadowRoot.querySelector('main');
+  // const main = shadowRoot.querySelector('main');
   const tooltip =
-    d3.select(main)
+    d3.select(interactiveElement)
       .append('div')
       .attr('class', 'venntooltip');
   //path
@@ -51,8 +51,7 @@ export const vennJs = async function (shadowRoot, params, css, sets, width, heig
 
       // Display a tooltip with the current size
       tooltip.transition().duration(100).style('opacity', .9);
-      // console.log('d.size', d.size)
-      tooltip.text(d.size + ' genes');
+      tooltip.text(d.size);
 
       // highlight the current path
       let selection = d3.select(this).transition('tooltip').duration(400);
