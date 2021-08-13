@@ -1,0 +1,292 @@
+#interactive{
+  position: relative;
+}
+
+.venntooltip {
+  top: 50%;
+  left: 25%;
+  position: absolute;
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+//Fixed Venn diagram
+.venn-diagram {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+#fixed {
+  position: relative;
+  .fixed-tooltip {
+    position: absolute;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 2px;
+  }
+}
+
+//common styles between shapes and text
+path,text {
+  &[data-highlight="default"] {
+    opacity:  1;
+  }
+  &[data-highlight="selected"] {
+    opacity: 1;
+  }
+  &[data-highlight="unselected"] {
+    opacity: .2;
+  }
+}
+
+//only shape's styles
+path {
+  &[data-highlight="default"] {
+    stroke-width: 0px;
+  }
+  &[data-highlight="selected"] {
+    stroke: #333;
+    stroke-width: 2px;
+  }
+  &[data-highlight="unselected"] {
+    stroke-width: 0px;
+  }
+}
+
+$color-light-gray: #96948d;
+$color-dark: #77503c;
+$color-gray: #7a776c;
+$color-beige: #e6e4de;
+$color-key: #77503c;
+$color-key-active: #d11a50;
+$color-key-light: #cfbaaf;
+$color-key-middle: #ad968a;
+$color-bg-active: #fff4d3;
+$color-bg-svg: #fffef5;
+$color-hover: #fff6c8;
+
+$color-set1: #96938d;
+$color-set2-1: #804040;
+$color-set2-2: #408080;
+$color-set2-1_2: #fff;
+$color-set3-1: #804040;
+$color-set3-2: #408040;
+$color-set3-3: #404080;
+$color-set3-1_2: #aaaa68;
+$color-set3-1_3: #aa68aa;
+$color-set3-2_3: #68aaaa;
+$color-set3-1_2_3: #fff;
+$color-set4-1: #807040;
+$color-set4-2: #408050;
+$color-set4-3: #405080;
+$color-set4-4: #804070;
+$color-set4-1_2: #aac67a;
+$color-set4-1_3: #aaa6aa;
+$color-set4-1_4: #ce9b9b;
+$color-set4-2_3: #68b4b4;
+$color-set4-2_4: #aaaaa6;
+$color-set4-3_4: #aa7ac6;
+$color-set4-1_2_3: #d1e6d7;
+$color-set4-1_2_4: #e7e3cf;
+$color-set4-1_3_4: #e7cfe3;
+$color-set4-2_3_4: #d1d7e6;
+$color-set4-1_2_3_4: #fff;
+$color-set5-1: #804040;
+$color-set5-2: #738040;
+$color-set5-3: #40805a;
+$color-set5-4: #405a80;
+$color-set5-5: #734080;
+$color-set5-1_2: #c6aa61;
+$color-set5-1_3: #acac81;
+$color-set5-1_4: #ac85ac;
+$color-set5-1_5: #c869a8;
+$color-set5-2_3: #9ecd88;
+$color-set5-2_4: #9cbaa9;
+$color-set5-2_5: #c1a9aa;
+$color-set5-3_4: #6fbab2;
+$color-set5-3_5: #a0aab7;
+$color-set5-4_5: #9f85cb;
+$color-set5-1_2_3: #e3e6b5;
+$color-set5-1_2_4: #e3dad1;
+$color-set5-1_2_5: #eed1d1;
+$color-set5-1_3_4: #d1dadb;
+$color-set5-1_3_5: #e3d1db;
+$color-set5-1_4_5: #e3b7e7;
+$color-set5-2_3_4: #c8ecdb;
+$color-set5-2_3_5: #dee7db;
+$color-set5-2_4_5: #dedae7;
+$color-set5-3_4_5: #c8daec;
+$color-set5-1_2_3_4: #f3f6ef;
+$color-set5-1_2_3_5: #f6f4ef;
+$color-set5-1_2_4_5: #f6eff4;
+$color-set5-1_3_4_5: #f3eff6;
+$color-set5-2_3_4_5: #f0f6f6;
+$color-set5-1_2_3_4_5: #fff;
+
+#venn-shape-set1-0 {
+  fill: $color-set1;
+}
+#venn-shape-set2-0 {
+  fill: $color-set2-1;
+}
+#venn-shape-set2-1 {
+  fill: $color-set2-2;
+}
+#venn-shape-set3-0 {
+  fill: $color-set3-1;
+}
+#venn-shape-set3-1 {
+  fill: $color-set3-2;
+}
+#venn-shape-set3-2 {
+  fill: $color-set3-3;
+}
+#venn-shape-set3-0_1 {
+  fill: $color-set3-1_2;
+}
+#venn-shape-set3-0_2 {
+  fill: $color-set3-1_3;
+}
+#venn-shape-set3-1_2 {
+  fill: $color-set3-2_3;
+}
+#venn-shape-set4-0 {
+  fill: $color-set4-1;
+}
+#venn-shape-set4-1 {
+  fill: $color-set4-2;
+}
+#venn-shape-set4-2 {
+  fill: $color-set4-3;
+}
+#venn-shape-set4-3 {
+  fill: $color-set4-4;
+}
+#venn-shape-set4-0_1 {
+  fill: $color-set4-1_2;
+}
+#venn-shape-set4-0_2 {
+  fill: $color-set4-1_3;
+}
+#venn-shape-set4-0_3 {
+  fill: $color-set4-1_4;
+}
+#venn-shape-set4-1_2 {
+  fill: $color-set4-2_3;
+}
+#venn-shape-set4-1_3 {
+  fill: $color-set4-2_4;
+}
+#venn-shape-set4-2_3 {
+  fill: $color-set4-3_4;
+}
+#venn-shape-set4-0_1_2 {
+  fill: $color-set4-1_2_3;
+}
+#venn-shape-set4-0_1_3 {
+  fill: $color-set4-1_2_4;
+}
+#venn-shape-set4-0_2_3 {
+  fill: $color-set4-1_3_4;
+}
+#venn-shape-set4-1_2_3 {
+  fill: $color-set4-2_3_4;
+}
+#venn-shape-set5-0 {
+  fill: $color-set5-1;
+}
+#venn-shape-set5-1 {
+  fill: $color-set5-2;
+}
+#venn-shape-set5-2 {
+  fill: $color-set5-3;
+}
+#venn-shape-set5-3 {
+  fill: $color-set5-4;
+}
+#venn-shape-set5-4 {
+  fill: $color-set5-5;
+}
+#venn-shape-set5-0_1 {
+  fill: $color-set5-1_2;
+}
+#venn-shape-set5-0_2 {
+  fill: $color-set5-1_3;
+}
+#venn-shape-set5-0_3 {
+  fill: $color-set5-1_4;
+}
+#venn-shape-set5-0_4 {
+  fill: $color-set5-1_5;
+}
+#venn-shape-set5-1_2 {
+  fill: $color-set5-2_3;
+}
+#venn-shape-set5-1_3 {
+  fill: $color-set5-2_4;
+}
+#venn-shape-set5-1_4 {
+  fill: $color-set5-2_5;
+}
+#venn-shape-set5-2_3 {
+  fill: $color-set5-3_4;
+}
+#venn-shape-set5-2_4 {
+  fill: $color-set5-3_5;
+}
+#venn-shape-set5-3_4 {
+  fill: $color-set5-4_5;
+}
+#venn-shape-set5-0_1_2 {
+  fill: $color-set5-1_2_3;
+}
+#venn-shape-set5-0_1_3 {
+  fill: $color-set5-1_2_4;
+}
+#venn-shape-set5-0_1_4 {
+  fill: $color-set5-1_2_5;
+}
+#venn-shape-set5-0_2_3 {
+  fill: $color-set5-1_3_4;
+}
+#venn-shape-set5-0_2_4 {
+  fill: $color-set5-1_3_5;
+}
+#venn-shape-set5-0_3_4 {
+  fill: $color-set5-1_4_5;
+}
+#venn-shape-set5-1_2_3 {
+  fill: $color-set5-2_3_4;
+}
+#venn-shape-set5-1_2_4 {
+  fill: $color-set5-2_3_5;
+}
+#venn-shape-set5-1_3_4 {
+  fill: $color-set5-2_4_5;
+}
+#venn-shape-set5-2_3_4 {
+  fill: $color-set5-3_4_5;
+}
+#venn-shape-set5-0_1_2_3 {
+  fill: $color-set5-1_2_3_4;
+}
+#venn-shape-set5-0_1_2_4 {
+  fill: $color-set5-1_2_3_5;
+}
+#venn-shape-set5-0_1_3_4 {
+  fill: $color-set5-1_2_4_5;
+}
+#venn-shape-set5-0_2_3_4 {
+  fill: $color-set5-1_3_4_5;
+}
+#venn-shape-set5-1_2_3_4 {
+  fill: $color-set5-2_3_4_5;
+}
+#venn-shape-set2-0_1,
+#venn-shape-set3-0_1_2,
+#venn-shape-set4-0_1_2_3,
+#venn-shape-set5-0_1_2_3_4 {
+  fill: #fff;
+}

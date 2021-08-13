@@ -32,6 +32,7 @@
     "vega": "^5.19.1",
     "vega-embed": "^6.15.0",
     "vega-lite": "^5.1.0",
+    "venn.js": "^0.2.20",
     "vue": "^3.1.4"
   },
   "devDependencies": {
