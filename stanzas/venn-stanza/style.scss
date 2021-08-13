@@ -1,14 +1,14 @@
+#interactive{
+  position: relative;
+}
+
 .venntooltip {
+  top: 50%;
+  left: 25%;
   position: absolute;
-  text-align: center;
-  width: 128px;
-  height: 16px;
-  background: #333;
-  color: #ddd;
-  padding: 2px;
-  border: 0px;
-  border-radius: 8px;
-  opacity: 0;
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 2px;
 }
 
 //Fixed Venn diagram
@@ -290,87 +290,3 @@ $color-set5-1_2_3_4_5: #fff;
 #venn-shape-set5-0_1_2_3_4 {
   fill: #fff;
 }
-
-// &[data-number-of-species="0"] {
-// .combination-results {
-//   min-height: auto;
-// }
-// }
-// &[data-number-of-species="1"] {
-// .bar-chart .color-ball {
-//   &.set1-0 { background-color: $color-set1; }
-// }
-// #venn-diagram1 { visibility: visible; opacity: 1; }
-// }
-// &[data-number-of-species="2"] {
-// .bar-chart .color-ball {
-//   &.set2-0 { background-color: $color-set2-1; }
-//   &.set2-1 { background-color: $color-set2-2; }
-// }
-// #venn-diagram2 { visibility: visible; opacity: 1; }
-// }
-// &[data-number-of-species="3"] {
-// .bar-chart .color-ball {
-//   &.set3-0 { background-color: $color-set3-1; }
-//   &.set3-1 { background-color: $color-set3-2; }
-//   &.set3-2 { background-color: $color-set3-3; }
-//   &.set3-0_1 { background-color: $color-set3-1_2; }
-//   &.set3-0_2 { background-color: $color-set3-1_3; }
-//   &.set3-1_2 { background-color: $color-set3-2_3; }
-// }
-// #venn-diagram3 { visibility: visible; opacity: 1; }
-// }
-// &[data-number-of-species="4"] {
-// .bar-chart .color-ball {
-//   &.set4-0 { background-color: $color-set4-1; }
-//   &.set4-1 { background-color: $color-set4-2; }
-//   &.set4-2 { background-color: $color-set4-3; }
-//   &.set4-3 { background-color: $color-set4-4; }
-//   &.set4-0_1 { background-color: $color-set4-1_2; }
-//   &.set4-0_2 { background-color: $color-set4-1_3; }
-//   &.set4-0_3 { background-color: $color-set4-1_4; }
-//   &.set4-1_2 { background-color: $color-set4-2_3; }
-//   &.set4-1_3 { background-color: $color-set4-2_4; }
-//   &.set4-2_3 { background-color: $color-set4-3_4; }
-//   &.set4-0_1_2 { background-color: $color-set4-1_2_3; }
-//   &.set4-0_1_3 { background-color: $color-set4-1_2_4; }
-//   &.set4-0_2_3 { background-color: $color-set4-1_3_4; }
-//   &.set4-1_2_3 { background-color: $color-set4-2_3_4; }
-// }
-// #venn-diagram4 { visibility: visible; opacity: 1; }
-// }
-// &[data-number-of-species="5"] {
-// .bar-chart .color-ball {
-//   &.set5-0 { background-color: $color-set5-1; }
-//   &.set5-1 { background-color: $color-set5-2; }
-//   &.set5-2 { background-color: $color-set5-3; }
-//   &.set5-3 { background-color: $color-set5-4; }
-//   &.set5-4 { background-color: $color-set5-5; }
-//   &.set5-0_1 { background-color: $color-set5-1_2; }
-//   &.set5-0_2 { background-color: $color-set5-1_3; }
-//   &.set5-0_3 { background-color: $color-set5-1_4; }
-//   &.set5-0_4 { background-color: $color-set5-1_5; }
-//   &.set5-1_2 { background-color: $color-set5-2_3; }
-//   &.set5-1_3 { background-color: $color-set5-2_4; }
-//   &.set5-1_4 { background-color: $color-set5-2_5; }
-//   &.set5-2_3 { background-color: $color-set5-3_4; }
-//   &.set5-2_4 { background-color: $color-set5-3_5; }
-//   &.set5-3_4 { background-color: $color-set5-4_5; }
-//   &.set5-0_1_2 { background-color: $color-set5-1_2_3; }
-//   &.set5-0_1_3 { background-color: $color-set5-1_2_4; }
-//   &.set5-0_1_4 { background-color: $color-set5-1_2_5; }
-//   &.set5-0_2_3 { background-color: $color-set5-1_3_4; }
-//   &.set5-0_2_4 { background-color: $color-set5-1_3_5; }
-//   &.set5-0_3_4 { background-color: $color-set5-1_4_5; }
-//   &.set5-1_2_3 { background-color: $color-set5-2_3_4; }
-//   &.set5-1_2_4 { background-color: $color-set5-2_3_5; }
-//   &.set5-1_3_4 { background-color: $color-set5-2_4_5; }
-//   &.set5-2_3_4 { background-color: $color-set5-3_4_5; }
-//   &.set5-0_1_2_3 { background-color: $color-set5-1_2_3_4; }
-//   &.set5-0_1_2_4 { background-color: $color-set5-1_2_3_5; }
-//   &.set5-0_1_3_4 { background-color: $color-set5-1_2_4_5; }
-//   &.set5-0_2_3_4 { background-color: $color-set5-1_3_4_5; }
-//   &.set5-1_2_3_4 { background-color: $color-set5-2_3_4_5; }
-// }
-// #venn-diagram5 { visibility: visible; opacity: 1; }
-// }
