@@ -32,13 +32,13 @@ export default class VennStanza extends Stanza {
 
     // Venn.js usable data
     let sets = [
-      { sets: ['A'], size: 6241 },
-      { sets: ['B'], size: 5670 },
-      { sets: ['C'], size: 6362 },
-      { sets: ['A', 'B'], size: 9 + 5568 },
-      { sets: ['B', 'C'], size: 20 + 5568 },
-      { sets: ['A', 'C'], size: 591 + 5568 },
-      { sets: ['A', 'B', 'C'], size: 5568 },
+      { sets: ['10090'], size: 6241 },
+      { sets: ['7955'], size: 5670 },
+      { sets: ['9606'], size: 6362 },
+      { sets: ['10090', '7955'], size: 9 + 5568 },
+      { sets: ['7955', '9606'], size: 20 + 5568 },
+      { sets: ['10090', '9606'], size: 591 + 5568 },
+      { sets: ['10090', '7955', '9606'], size: 5568 },
     ];
 
     this.renderTemplate(
