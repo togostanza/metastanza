@@ -1,11 +1,9 @@
 import Stanza from "togostanza/stanza";
-import vegaEmbed, { vega } from "vega-embed";
+import vegaEmbed from "vega-embed";
 
 export default class regionGeographicMap extends Stanza {
 
   async render() {
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
-
     const vegaJson = await fetch(
       "https://vega.github.io/vega/examples/county-unemployment.vg.json"
     ).then((res) => res.json());
