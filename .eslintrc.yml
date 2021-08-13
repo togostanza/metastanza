@@ -2,7 +2,6 @@ extends:
   - eslint:recommended
   - plugin:vue/vue3-recommended
   - prettier
-  - prettier/vue
 
 env:
   browser: true
