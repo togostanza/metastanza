@@ -138,10 +138,11 @@ export default class VennStanza extends Stanza {
     const part5Texts = this.root.querySelectorAll('.part5-text');
     const vennSet5Arr = ['5-0', '5-1', '5-2', '5-3', '5-4', '5-0_1', '5-0_2', '5-0_3', '5-0_4', '5-1_2', '5-1_3', '5-1_4', '5-2_3', '5-2_4', '5-3_4', '5-0_1_2', '5-0_1_3', '5-0_1_4', '5-0_2_3', '5-0_2_4', '5-0_3_4', '5-1_2_3', '5-1_2_4', '5-1_3_4', '5-2_3_4', '5-0_1_2_3', '5-0_1_2_4', '5-0_1_3_4', '5-0_2_3_4', '5-1_2_3_4', '5-0_1_2_3_4'];
 
-    //set venn diagram depends on circle numbers
+    //set venn diagram depends on circle numbers //TODO: check opacity value
     switch (circleNum) {
       case 1:
         set1Venn();
+        part1Paths[0].setAttribute('fill',colorScheme[0].trim());
         break;
       case 2:
         set2Venn();
@@ -152,18 +153,70 @@ export default class VennStanza extends Stanza {
           colorScheme[0].trim(),
           colorScheme[1].trim(),
           colorScheme[2].trim(),
-          rgb2hex(blendRgb(hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), .8)),
-          rgb2hex(blendRgb(hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), .8)),
-          rgb2hex(blendRgb(hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), .8)),
+          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
+          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
           '#FFFFFF'
         ];
         part3Paths.forEach((path, i) => {path.setAttribute('fill', part3ColorScheme[i]);})
         break;
       case 4:
         set4Venn();
+        const part4ColorScheme = [
+          colorScheme[0].trim(),
+          colorScheme[1].trim(),
+          colorScheme[2].trim(),
+          colorScheme[3].trim(),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          '#FFFFFF'
+        ];
+        part4Paths.forEach((path, i) => {path.setAttribute('fill', part4ColorScheme[i]);})
         break;
       case 5:
         set5Venn();
+        const part5ColorScheme = [
+          colorScheme[0].trim(),
+          colorScheme[1].trim(),
+          colorScheme[2].trim(),
+          colorScheme[3].trim(),
+          colorScheme[4].trim(),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          '#FFFFFF'
+        ];
+        part5Paths.forEach((path, i) => {path.setAttribute('fill', part5ColorScheme[i]);})
         break;
       default:
         console.log(`Circle number(${circleNum}) is invalid. Please set from 1 to 5 circles.`);
@@ -186,10 +239,13 @@ export default class VennStanza extends Stanza {
 
     //blend two colors to draw overlapping color
     //rgbArr is supporsed to be like [red, green, blue]
-    function blendRgb(rgbArr1, rgbArr2, opacity){
-      let red = Math.round((rgbArr1[0] + rgbArr2[0]) * opacity);
-      let green = Math.round((rgbArr1[1] + rgbArr2[1]) * opacity);
-      let blue = Math.round((rgbArr1[2] + rgbArr2[2]) * opacity);
+    function blendRgb(opacity, rgbArr1, rgbArr2, rgbArr3, rgbArr4){
+      rgbArr3 ? rgbArr3 : rgbArr3 = [0,0,0];
+      rgbArr4 ? rgbArr4 : rgbArr4 = [0,0,0];
+
+      let red = Math.round((rgbArr1[0] + rgbArr2[0] + rgbArr3[0] + rgbArr4[0]) * opacity);
+      let green = Math.round((rgbArr1[1] + rgbArr2[1] + rgbArr3[1] + rgbArr4[1]) * opacity);
+      let blue = Math.round((rgbArr1[2] + rgbArr2[2] + rgbArr3[2] + rgbArr4[2]) * opacity);
 
       red > 255 ? red = 255 : red; 
       green > 255 ? green = 255 : green; 
@@ -380,7 +436,7 @@ export default class VennStanza extends Stanza {
         } else if (hasLabel3) { //4-3 (=vennSet4Arr[3])
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[3], data.orgs, data.count);
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[3], data.orgs, data.count);
-          part3Texts[3].textContent = data.count;
+          part4Texts[3].textContent = data.count;
         } else if (hasLabel2) { //4-2 (=vennSet4Arr[2])
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[2], data.orgs, data.count);
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[2], data.orgs, data.count);
