@@ -133,11 +133,12 @@ export default class VennStanza extends Stanza {
     const part4Paths = this.root.querySelectorAll('.part4-path');
     const part4Texts = this.root.querySelectorAll('.part4-text');
     const vennSet4Arr = ['4-0', '4-1', '4-2', '4-3', '4-0_1', '4-0_2', '4-0_3', '4-1_2', '4-1_3', '4-2_3', '4-0_1_2', '4-0_1_3', '4-0_2_3', '4-1_2_3', '4-0_1_2_3'];
-    
+
     const part5Paths = this.root.querySelectorAll('.part5-path');
     const part5Texts = this.root.querySelectorAll('.part5-text');
     const vennSet5Arr = ['5-0', '5-1', '5-2', '5-3', '5-4', '5-0_1', '5-0_2', '5-0_3', '5-0_4', '5-1_2', '5-1_3', '5-1_4', '5-2_3', '5-2_4', '5-3_4', '5-0_1_2', '5-0_1_3', '5-0_1_4', '5-0_2_3', '5-0_2_4', '5-0_3_4', '5-1_2_3', '5-1_2_4', '5-1_3_4', '5-2_3_4', '5-0_1_2_3', '5-0_1_2_4', '5-0_1_3_4', '5-0_2_3_4', '5-1_2_3_4', '5-0_1_2_3_4'];
 
+    //set venn diagram depends on circle numbers
     switch (circleNum) {
       case 1:
         set1Venn();
@@ -147,6 +148,16 @@ export default class VennStanza extends Stanza {
         break;
       case 3:
         set3Venn();
+        const part3ColorScheme = [
+          colorScheme[0].trim(),
+          colorScheme[1].trim(),
+          colorScheme[2].trim(),
+          rgb2hex(blendRgb(hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), .8)),
+          rgb2hex(blendRgb(hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), .8)),
+          rgb2hex(blendRgb(hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), .8)),
+          '#FFFFFF'
+        ];
+        part3Paths.forEach((path, i) => {path.setAttribute('fill', part3ColorScheme[i]);})
         break;
       case 4:
         set4Venn();
@@ -157,7 +168,35 @@ export default class VennStanza extends Stanza {
       default:
         console.log(`Circle number(${circleNum}) is invalid. Please set from 1 to 5 circles.`);
     }
+
+    //convert hex to rgb (retrun [red, green, blue])
+    function hex2rgb(colorCode){
+      const red = parseInt(colorCode.substring(1, 3), 16);
+      const green = parseInt(colorCode.substring(3, 5), 16);
+      const blue = parseInt(colorCode.substring(5, 7), 16);
+      return [red,green,blue];
+    }
     
+    //convert hex to rgb (retrun [red, green, blue])
+    function rgb2hex(rgb) {
+      return "#" + rgb.map(  value => {
+        return ("0" + value.toString(16)).slice(-2);
+      } ).join( "" ) ;
+    }
+
+    //blend two colors to draw overlapping color
+    //rgbArr is supporsed to be like [red, green, blue]
+    function blendRgb(rgbArr1, rgbArr2, opacity){
+      let red = Math.round((rgbArr1[0] + rgbArr2[0]) * opacity);
+      let green = Math.round((rgbArr1[1] + rgbArr2[1]) * opacity);
+      let blue = Math.round((rgbArr1[2] + rgbArr2[2]) * opacity);
+
+      red > 255 ? red = 255 : red; 
+      green > 255 ? green = 255 : green; 
+      blue > 255 ? blue = 255 : blue;       
+      
+      return [red, green, blue];
+    }
 
     //set tooltip for fixed venn
     const tooltip = d3.select(fixedArea)
@@ -209,11 +248,11 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 2】set highlight event and count labels to each parts
-    function set1Venn(){
+    function set1Venn() {
       dataset.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
-  
+
         if (hasLabel0) { //1-0 (=vennSet1Arr[0])
           highlightParts(vennSet1Arr, part1Paths, part1Texts, part1Paths[0], data.orgs, data.count);
           highlightParts(vennSet1Arr, part1Paths, part1Texts, part1Texts[0], data.orgs, data.count);
@@ -223,12 +262,12 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 2】set highlight event and count labels to each parts
-    function set2Venn(){
+    function set2Venn() {
       dataset.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
-  
+
         if (hasLabel0 && hasLabel1) { //2-0_1 (=vennSet2Arr[2])
           highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Paths[2], data.orgs, data.count);
           highlightParts(vennSet2Arr, part2Paths, part2Texts, part2Texts[2], data.orgs, data.count);
@@ -246,13 +285,13 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 3】set highlight event and count labels to each parts
-    function set3Venn(){
+    function set3Venn() {
       dataset.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
         const hasLabel2 = orgArray.includes(LABEL2); //boolean
-  
+
         if (hasLabel0 && hasLabel1 && hasLabel2) { //3-0_1_2 (=vennSet3Arr[6])
           highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Paths[6], data.orgs, data.count);
           highlightParts(vennSet3Arr, part3Paths, part3Texts, part3Texts[6], data.orgs, data.count);
@@ -286,14 +325,14 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 4】set highlight event and count labels to each parts
-    function set4Venn(){
+    function set4Venn() {
       dataset.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
         const hasLabel2 = orgArray.includes(LABEL2); //boolean
         const hasLabel3 = orgArray.includes(LABEL3); //boolean
-    
+
         if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel3) { //4-0_1_2_3 (=vennSet4Arr[14])
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Paths[14], data.orgs, data.count);
           highlightParts(vennSet4Arr, part4Paths, part4Texts, part4Texts[14], data.orgs, data.count);
@@ -359,7 +398,7 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 5】set highlight event and count labels to each parts
-    function set5Venn(){
+    function set5Venn() {
       dataset.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
@@ -367,7 +406,7 @@ export default class VennStanza extends Stanza {
         const hasLabel2 = orgArray.includes(LABEL2); //boolean
         const hasLabel3 = orgArray.includes(LABEL3); //boolean
         const hasLabel4 = orgArray.includes(LABEL4); //boolean
-    
+
         if (hasLabel0 && hasLabel1 && hasLabel2 && hasLabel3 && hasLabel4) { //5-0_1_2_3_4 (=vennSet5Arr[14])
           highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Paths[30], data.orgs, data.count);
           highlightParts(vennSet5Arr, part5Paths, part5Texts, part5Texts[30], data.orgs, data.count);
