@@ -25,7 +25,7 @@
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-5orgs-sparql.json",
+      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-3orgs-sparql.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -47,14 +47,14 @@
     {
       "stanza:key": "label-1",
       "stanza:type": "string",
-      "stanza:example": "9595",
+      "stanza:example": "7955",
       "stanza:description": "Label name",
       "stanza:required": false
     },
     {
       "stanza:key": "label-2",
       "stanza:type": "string",
-      "stanza:example": "9598",
+      "stanza:example": "9606",
       "stanza:description": "Label name",
       "stanza:required": false
     },
