@@ -146,6 +146,12 @@ export default class VennStanza extends Stanza {
         break;
       case 2:
         set2Venn();
+        const part2ColorScheme = [
+          colorScheme[0].trim(),
+          colorScheme[1].trim(),
+          '#FFFFFF'
+        ];
+        part2Paths.forEach((path, i) => {path.setAttribute('fill', part2ColorScheme[i]);})
         break;
       case 3:
         set3Venn();
