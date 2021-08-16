@@ -47,14 +47,14 @@
     {
       "stanza:key": "label-1",
       "stanza:type": "string",
-      "stanza:example": "9595",
+      "stanza:example": "7955",
       "stanza:description": "Label name",
       "stanza:required": false
     },
     {
       "stanza:key": "label-2",
       "stanza:type": "string",
-      "stanza:example": "9598",
+      "stanza:example": "9606",
       "stanza:description": "Label name",
       "stanza:required": false
     },
