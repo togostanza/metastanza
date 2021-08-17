@@ -1,6 +1,5 @@
 import Stanza from 'togostanza/stanza';
 import loadData from "@/lib/load-data";
-import { vennJs } from "./vennJs.js";
 import * as d3 from "d3";
 import {
   downloadSvgMenuItem,
@@ -19,36 +18,8 @@ export default class VennStanza extends Stanza {
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
-    // // TogoGenome's data structure exclusive
-    // let sets = [
-    //   { sets: ['A'], size: 52 },
-    //   { sets: ['B'], size: 73 },
-    //   { sets: ['C'], size: 183 },
-    //   { sets: ['A', 'B'], size: 9 },
-    //   { sets: ['B', 'C'], size: 20 },
-    //   { sets: ['A', 'C'], size: 591 },
-    //   { sets: ['A','B', 'C'], size: 5568 },
-    // ];
 
-    // Venn.js usable data
-    let sets = [
-      { sets: ['10090'], size: 6241 },
-      { sets: ['7955'], size: 5670 },
-      { sets: ['9606'], size: 6362 },
-      { sets: ['10090', '7955'], size: 9 + 5568 },
-      { sets: ['7955', '9606'], size: 20 + 5568 },
-      { sets: ['10090', '9606'], size: 591 + 5568 },
-      { sets: ['10090', '7955', '9606'], size: 5568 },
-    ];
-
-    this.renderTemplate(
-      {
-        template: 'stanza.html.hbs',
-        parameters: {
-          greeting: `Hello, ${this.params['say-to']}!`
-        }
-      }
-    );
+    this.renderTemplate({ template: 'stanza.html.hbs' });
 
     //set common parameters and styles
     const width = this.params['width'];
@@ -62,15 +33,12 @@ export default class VennStanza extends Stanza {
       css('--togostanza-series-5-color')
     ];
 
-    // draw size-reflected venn diagram
-    vennJs(this.root, this.params, css, sets, width, height, colorScheme, css);
+    // draw venn diagram
+    // const drawArea = this.root.querySelector('#drawArea'); //TODO: set to use tooltip
+    const vennElement = this.root.querySelector('#venn-diagrams');
+    const vennGroup = d3.select(vennElement);
 
-    // draw fixed venn diagram
-    const fixedArea = this.root.querySelector('#fixed');
-    const fixedElement = this.root.querySelector('#venn-diagrams');
-    const fixedSvg = d3.select(fixedElement);
-
-    fixedSvg
+    vennGroup
       .attr('width', width)
       .attr('height', height);
 
@@ -80,31 +48,22 @@ export default class VennStanza extends Stanza {
       this.params["data-type"]
     );
 
-    // //convert data to use venn.js
-    // let str = JSON.stringify(dataset).replace(/\"orgs\":/g, "\"sets\":").replace(/\"count\":/g, "\"size\":");
-    // let json = JSON.parse(str);
-    // for (let i = 0; i < json.length; i++) {
-    //   json[i].sets = json[i].sets.split(', ');
-    //   json[i].size = Number(json[i].size);
-    // }
-
-    //convert data to use fixed venn diagram
+    //convert data
     for (let i = 0; i < dataset.length; i++) {
       dataset[i].orgs = dataset[i].orgs.split(', ');
       dataset[i].count = Number(dataset[i].count);
     }
-    console.log('dataset', dataset);
 
-    // get how many circles to draw
+    // get circle number to draw
     let datasetNums = [];
     for (let i = 0; i < dataset.length; i++) {
       datasetNums.push(dataset[i].orgs.length);
     }
 
     const aryMax = function (a, b) { return Math.max(a, b); }
-    const circleNum = datasetNums.reduce(aryMax); //TODO これはユーザーParameterとして入力する形でもいいかも（円の数はデータに依存するため）
+    const circleNum = datasetNums.reduce(aryMax); //TODO 円の数はユーザーParameterとして入力する形でもいいかもしれません
 
-    // show venns corresponds to data(circle numbers to draw)
+    // show venn diagram corresponds to data(circle numbers to draw)
     const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
     Array.from(vennDiagrams).forEach((vennDiagram, i) => {
       vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
@@ -138,7 +97,7 @@ export default class VennStanza extends Stanza {
     const part5Texts = this.root.querySelectorAll('.part5-text');
     const vennSet5Arr = ['5-0', '5-1', '5-2', '5-3', '5-4', '5-0_1', '5-0_2', '5-0_3', '5-0_4', '5-1_2', '5-1_3', '5-1_4', '5-2_3', '5-2_4', '5-3_4', '5-0_1_2', '5-0_1_3', '5-0_1_4', '5-0_2_3', '5-0_2_4', '5-0_3_4', '5-1_2_3', '5-1_2_4', '5-1_3_4', '5-2_3_4', '5-0_1_2_3', '5-0_1_2_4', '5-0_1_3_4', '5-0_2_3_4', '5-1_2_3_4', '5-0_1_2_3_4'];
 
-    //set venn diagram depends on circle numbers //TODO: check opacity value
+    //set venn diagram depends on circle numbers //TODO: check and adjust opacity value
     switch (circleNum) {
       case 1:
         set1Venn();
@@ -260,25 +219,25 @@ export default class VennStanza extends Stanza {
       return [red, green, blue];
     }
 
-    //set tooltip for fixed venn
-    const tooltip = d3.select(fixedArea)
-      .append('div')
-      .attr('class', 'fixed-tooltip');
+    // //set tooltip for fixed venn 
+    // const tooltip = d3.select(drawArea) //TODO: set tooltip
+    //   .append('div')
+    //   .attr('class', 'fixed-tooltip');
 
     //function: set highlight event which fire when hovered
     function highlightParts(vennSetArr, pathsArr, TextsArr, targetElm, label, count) {
       d3.select(targetElm)
         .on("mouseenter", function (e) {
-          tooltip
-            .style("display", "block")
-            .style("left", `${d3.pointer(e)[0] + 8}px`)
-            .style(
-              "top",
-              `${d3.pointer(e)[1]}px`
-            ).html(`
-              <p>Organisms: ${label}</p>
-              <p>Count: ${count}</p>
-              `);
+          // tooltip //TODO: set tooltip
+          //   .style("display", "block")
+          //   .style("left", `${d3.pointer(e)[0] + 8}px`)
+          //   .style(
+          //     "top",
+          //     `${d3.pointer(e)[1]}px`
+          //   ).html(`
+          //     <p>Organisms: ${label}</p>
+          //     <p>Count: ${count}</p>
+          //     `);
           //highlight the selected part
           for (let i = 0; i < vennSetArr.length; i++) {
             if (targetElm.id === `venn-shape-set${vennSetArr[i]}` || targetElm.id === `venn-text-set${vennSetArr[i]}`) {
@@ -291,12 +250,12 @@ export default class VennStanza extends Stanza {
           }
         })
         .on("mousemove", function (e) {
-          tooltip
-            .style("left", `${d3.pointer(e)[0] + 8}px`)
-            .style(
-              "top",
-              `${d3.pointer(e)[1]}px`
-            )
+          // tooltip //TODO: set tooltip
+          //   .style("left", `${d3.pointer(e)[0] + 8}px`)
+          //   .style(
+          //     "top",
+          //     `${d3.pointer(e)[1]}px`
+          //   )
         })
         .on("mouseleave", function () {
           tooltip.style("display", "none");
