@@ -30,6 +30,14 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "mode",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["text", "markdown"],
+      "stanza:example": "text",
+      "stanza:description": "Mode",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",

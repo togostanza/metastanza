@@ -1,4 +1,5 @@
 import Stanza from "togostanza/stanza";
+import * as commonmark from "commonmark";
 
 import loadData from "@/lib/load-data";
 
@@ -32,16 +33,26 @@ export default class Text extends Stanza {
       this.params["data-type"]
     );
 
-    this.renderTemplate({
-      template: "stanza.html.hbs",
-      parameters: {
-        rows: [
-          {
-            value: this._dataset.value,
-          },
-        ],
-      },
-    });
+    const main = this.root.querySelector("main");
+
+    const value = this._dataset.value;
+    if (this.params["mode"] === "markdown") {
+      const parser = new commonmark.Parser();
+      const renderer = new commonmark.HtmlRenderer();
+      const html = renderer.render(parser.parse(value));
+      main.innerHTML = html;
+    } else {
+      this.renderTemplate({
+        template: "stanza.html.hbs",
+        parameters: {
+          rows: [
+            {
+              value,
+            },
+          ],
+        },
+      });
+    }
 
     appendCustomCss(this, this.params["custom-css-url"]);
 
@@ -49,7 +60,6 @@ export default class Text extends Stanza {
     const height = this.params["height"];
     const padding = this.params["padding"];
     const container = this.root.querySelector(".container");
-    const main = this.root.querySelector("main");
     main.setAttribute("style", `padding: ${padding}px;`);
     container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
   }
