@@ -23,6 +23,7 @@
     "@vueform/slider": "^1.0.3",
     "commonmark": "^0.30.0",
     "d3": "^7.0.0",
+    "highlight.js": "^11.2.0",
     "lodash.mapvalues": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.orderby": "^4.6.0",

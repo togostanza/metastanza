@@ -1,5 +1,6 @@
 import Stanza from "togostanza/stanza";
 import * as commonmark from "commonmark";
+import hljs from "highlight.js";
 
 import loadData from "@/lib/load-data";
 
@@ -40,7 +41,15 @@ export default class Text extends Stanza {
       const parser = new commonmark.Parser();
       const renderer = new commonmark.HtmlRenderer();
       const html = renderer.render(parser.parse(value));
-      main.innerHTML = html;
+      this.renderTemplate({
+        template: "stanza.html.hbs",
+        parameters: {
+          html,
+        },
+      });
+      main.querySelectorAll("pre code").forEach((el) => {
+        hljs.highlightElement(el);
+      });
     } else {
       this.renderTemplate({
         template: "stanza.html.hbs",
