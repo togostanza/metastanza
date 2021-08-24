@@ -59,9 +59,6 @@
   top: 0;
   left: 0;
   z-index: 2;
-  &.black {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
 }
 
 .wrapper {
@@ -140,6 +137,7 @@
             font-weight: var(--togostanza-thead-font-weight);
             padding: 10px;
             white-space: nowrap;
+            position: relative;
             &:first-child {
               background-color: var(--togostanza-thead-background-color);
               padding-left: 20px;
@@ -148,10 +146,14 @@
             > .filterWrapper {
               display: inline-block;
               position: relative;
+              position: absolute;
+              top: calc(var(--togostanza-thead-font-size) + 16px);
+              left: 0;
+              &.lastCol {
+                left: auto;
+                right: 0;
+              }
               > div.filterWindow {
-                position: absolute;
-                top: 0;
-                left: -22px;
                 z-index: 3;
                 width: auto;
                 height: auto;
@@ -204,13 +206,16 @@
               }
             }
             > .textSearchByColumnWrapper {
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
+              position: absolute;
+              top: calc(var(--togostanza-thead-font-size) + 16px);
+              left: 0;
               z-index: 3;
               background: #ffffff;
               box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+              &.lastCol {
+                left: auto;
+                right: 0;
+              }
               > p.title {
                 display: block;
                 padding: 6px 16px;

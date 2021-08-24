@@ -75,41 +75,40 @@
                 ]"
                 @click="column.isFilterPopupShowing = true"
               />
-              <div v-if="column.isFilterPopupShowing" class="filterWrapper">
-                <div
-                  :class="[
-                    'filterWindow',
-                    { lastCol: state.columns.length - 1 === i },
-                  ]"
-                >
-                  <p class="filterWindowTitle">{{ column.label }}</p>
-                  <ul class="filters">
-                    <li v-for="filter in column.filters" :key="filter.value">
-                      <label :for="filter.id">
-                        <input
-                          :id="filter.value"
-                          v-model="filter.checked"
-                          type="checkbox"
-                          name="items"
-                        />
-                        {{ filter.value }}
-                      </label>
-                    </li>
-                  </ul>
-                  <div class="toggleAllButton">
-                    <button class="selectAll" @click="setFilters(column, true)">
-                      Select All
-                    </button>
-                    <button class="clear" @click="setFilters(column, false)">
-                      Clear
-                    </button>
+              <transition name="modal">
+                <div v-if="column.isFilterPopupShowing" :class="['filterWrapper', 'modal', { lastCol: state.columns.length - 1 === i }]">
+                  <div
+                    class="filterWindow"
+                  >
+                    <p class="filterWindowTitle">{{ column.label }}</p>
+                    <ul class="filters">
+                      <li v-for="filter in column.filters" :key="filter.value">
+                        <label :for="filter.id">
+                          <input
+                            :id="filter.value"
+                            v-model="filter.checked"
+                            type="checkbox"
+                            name="items"
+                          />
+                          {{ filter.value }}
+                        </label>
+                      </li>
+                    </ul>
+                    <div class="toggleAllButton">
+                      <button class="selectAll" @click="setFilters(column, true)">
+                        Select All
+                      </button>
+                      <button class="clear" @click="setFilters(column, false)">
+                        Clear
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </transition>
               <transition name="modal">
                 <div
                   v-if="column.isSearchModalShowing"
-                  class="textSearchByColumnWrapper modal"
+                  :class="['textSearchByColumnWrapper', 'modal', { lastCol: state.columns.length - 1 === i }]"
                 >
                   <p class="title">
                     <template v-if="column.searchType === 'number'">
@@ -193,7 +192,7 @@
   </div>
   <div
     v-if="isPopupOrModalShowing"
-    :class="['modalBackground', { black: isModalShowing }]"
+    class="modalBackground"
     @click="closeModal()"
   ></div>
 </template>
