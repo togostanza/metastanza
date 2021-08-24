@@ -16,6 +16,28 @@
   "stanza:updated": "2021-04-27",
   "stanza:parameter": [
     {
+      "stanza:key": "data-url",
+      "stanza:example": "https://vega.github.io/vega/data/unemployment.tsv",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "tsv",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+        {
+      "stanza:key": "area",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["us", "world"],
+      "stanza:example": "us",
+      "stanza:description": "Area of map",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "border",
       "stanza:type": "boolean",
       "stanza:choice": ["true", "false"],
@@ -32,12 +54,7 @@
     {
       "stanza:key": "legend-orient",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right"
-      ],
+      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
       "stanza:example": "top-right",
       "stanza:description": "Legend Placement"
     },
@@ -50,15 +67,7 @@
     {
       "stanza:key": "group-amount",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8"
-      ],
+      "stanza:choice": ["2", "3", "4", "5", "6", "7", "8"],
       "stanza:example": "5",
       "stanza:description": "Amount of Region groups"
     }
