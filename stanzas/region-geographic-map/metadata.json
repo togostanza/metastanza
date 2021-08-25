@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://vega.github.io/vega/data/unemployment.tsv",
+      "stanza:example": "http://localhost:8080/assets/named_map_world_test.tsv",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -29,11 +29,17 @@
       "stanza:description": "Data type",
       "stanza:required": true
     },
-        {
+    {
+      "stanza:key": "value-key",
+      "stanza:example": "rate",
+      "stanza:description": "Value key of data",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "area",
       "stanza:type": "single-choice",
       "stanza:choice": ["us", "world"],
-      "stanza:example": "us",
+      "stanza:example": "world",
       "stanza:description": "Area of map",
       "stanza:required": true
     },
@@ -77,7 +83,7 @@
     {
       "stanza:key": "--togostanza-region-border-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFAFA",
+      "stanza:default": "black",
       "stanza:description": "Border color"
     },
     {
