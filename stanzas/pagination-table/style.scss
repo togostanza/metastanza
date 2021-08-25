@@ -334,6 +334,12 @@
             &.hide {
               display: none;
             }
+            &.center {
+              text-align: center;
+            }
+            &.right {
+              text-align: right;
+            }
             &:first-child {
               padding-left: 20px;
             }

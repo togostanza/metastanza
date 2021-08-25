@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr v-for="row in state.allRows" :key="row.id">
-          <td v-for="cell in row" :key="cell.column.id">
+          <td v-for="cell in row" :key="cell.column.id" :class="cell.column.align">
             <span v-if="cell.href">
               <a :href="cell.href" target="_blank">{{ cell.value }}</a>
             </span>
@@ -90,6 +90,7 @@ export default defineComponent({
               value: row[column.id],
               href: column.link ? row[column.link] : null,
               unescape: column.escape === false,
+              align: column.align,
             };
           });
         })

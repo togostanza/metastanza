@@ -76,10 +76,15 @@
                 @click="column.isFilterPopupShowing = true"
               />
               <transition name="modal">
-                <div v-if="column.isFilterPopupShowing" :class="['filterWrapper', 'modal', { lastCol: state.columns.length - 1 === i }]">
-                  <div
-                    class="filterWindow"
-                  >
+                <div
+                  v-if="column.isFilterPopupShowing"
+                  :class="[
+                    'filterWrapper',
+                    'modal',
+                    { lastCol: state.columns.length - 1 === i },
+                  ]"
+                >
+                  <div class="filterWindow">
                     <p class="filterWindowTitle">{{ column.label }}</p>
                     <ul class="filters">
                       <li v-for="filter in column.filters" :key="filter.value">
@@ -95,7 +100,10 @@
                       </li>
                     </ul>
                     <div class="toggleAllButton">
-                      <button class="selectAll" @click="setFilters(column, true)">
+                      <button
+                        class="selectAll"
+                        @click="setFilters(column, true)"
+                      >
                         Select All
                       </button>
                       <button class="clear" @click="setFilters(column, false)">
@@ -108,7 +116,11 @@
               <transition name="modal">
                 <div
                   v-if="column.isSearchModalShowing"
-                  :class="['textSearchByColumnWrapper', 'modal', { lastCol: state.columns.length - 1 === i }]"
+                  :class="[
+                    'textSearchByColumnWrapper',
+                    'modal',
+                    { lastCol: state.columns.length - 1 === i },
+                  ]"
                 >
                   <p class="title">
                     <template v-if="column.searchType === 'number'">
@@ -167,7 +179,7 @@
               v-for="cell in row"
               :key="cell.column.id"
               :rowspan="cell.rowspanCount"
-              :class="{ hide: cell.hide }"
+              :class="[{ hide: cell.hide }, cell.column.align]"
             >
               <span v-if="cell.href">
                 <a :href="cell.href" target="_blank">{{ cell.value }}</a>
@@ -485,6 +497,7 @@ function createColumnState(columnDef, values) {
     rowspan: columnDef.rowspan,
     href: columnDef.link,
     unescape: columnDef.escape === false,
+    align: columnDef.align
   };
 
   if (columnDef.type === "number") {

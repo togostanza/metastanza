@@ -84,6 +84,12 @@
           border-bottom: var(--togostanza-tbody-border-bottom);
           border-collapse: collapse;
           padding: 10px;
+          &.center {
+            text-align: center;
+          }
+          &.right {
+            text-align: right;
+          }
           &:first-child {
             padding-left: 20px;
           }
@@ -109,7 +115,7 @@
 
 $dot-width: 4px;
 $dot-spacing: $dot-width + $dot-width/2 !default;
-$dot-color: var(--togostanza-thead-font-color);
+$dot-color: var(--togostanza-tbody-font-color);
 $dot-before-color: $dot-color !default;
 $dot-after-color: $dot-color !default;
 $left-pos: -9999px;
