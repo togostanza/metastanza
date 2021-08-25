@@ -43,55 +43,7 @@ export default class regionGeographicMap extends Stanza {
         fields: ["id"],
         values: [this.params["value-key"]],
       },
-    ],
-  ],
-  [
-    "world",
-    [
-      {
-        name: "world",
-        url: "data/world-110m.json",
-        format: {
-          type: "topojson",
-          feature: "countries",
-        },
-      },
-      {
-        name: "graticule",
-        transform: [{ type: "graticule" }],
-      },
-    ],
-  ],
-]);
-export default class regionGeographicMap extends Stanza {
-  async render() {
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
-        const arr = [];
-    // console.log(vegaJson);
-    const valObj = {
-      name: "userData",
-      url: this.params["data-url"],
-      format: { type: this.params["data-type"], parse: "auto" },
-    };
-
-    arr.push(valObj);
-
-    for (const obj of areas.get(this.params["area"])) {
-      // console.log("obj");
-      // console.log(obj);
-      arr.push(obj);
-    }
-    // console.log("arr");
-    // console.log(arr);
-
-    const data = arr;
-    // const data = areas.get(this.params["area"]);
-    // console.log(areas.get(this.params["area"]));
-    // console.log(values);
-    // console.log(data);
+    ];
 
     const obj = areas.get(this.params["area"]);
     obj.transform = transform;
@@ -144,13 +96,15 @@ export default class regionGeographicMap extends Stanza {
     const marks = [
       {
         type: "shape",
-<<<<<<< HEAD
         from: { data: "map" },
-=======
-        from: { data: "us-counties" },
->>>>>>> working us
         encode: {
-          enter: { tooltip: { signal: this.params["percentage"] ? `format(datum.${this.params["value-key"]}, '0.1%')` : `datum.${this.params["value-key"]}` } },
+          enter: {
+            tooltip: {
+              signal: this.params["percentage"]
+                ? `format(datum.${this.params["value-key"]}, '0.1%')`
+                : `datum.${this.params["value-key"]}`,
+            },
+          },
           hover: {
             fill: { value: "var(--togostanza-hover-color)" },
           },
