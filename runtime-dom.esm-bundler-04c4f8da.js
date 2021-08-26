@@ -2360,6 +2360,7 @@ const onMounted = createHook("m" /* MOUNTED */);
 const onUpdated = createHook("u" /* UPDATED */);
 const onBeforeUnmount = createHook("bum" /* BEFORE_UNMOUNT */);
 const onUnmounted = createHook("um" /* UNMOUNTED */);
+const onRenderTriggered = createHook("rtg" /* RENDER_TRIGGERED */);
 
 function initProps(instance, rawProps, isStateful, // result of bitwise flag comparison
 isSSR = false) {
@@ -5934,5 +5935,5 @@ function normalizeContainer(container) {
     return container;
 }
 
-export { Fragment as F, Transition as T, onUnmounted as a, createBlock as b, computed as c, openBlock as d, defineComponent as e, onUpdated as f, createVNode as g, h, renderList as i, createTextVNode as j, toDisplayString as k, createCommentVNode as l, mergeProps as m, resolveComponent as n, onMounted as o, reactive as p, withDirectives as q, ref as r, vModelSelect as s, toRefs as t, vModelCheckbox as u, vModelText as v, watch as w, withCtx as x, createApp as y };
-//# sourceMappingURL=runtime-dom.esm-bundler-179c1bdc.js.map
+export { Fragment as F, Transition as T, onUnmounted as a, createBlock as b, computed as c, openBlock as d, defineComponent as e, onUpdated as f, createVNode as g, h, renderList as i, createTextVNode as j, toDisplayString as k, createCommentVNode as l, mergeProps as m, resolveComponent as n, onMounted as o, reactive as p, onRenderTriggered as q, ref as r, withDirectives as s, toRefs as t, vModelSelect as u, vModelText as v, watch as w, withCtx as x, vModelCheckbox as y, createApp as z };
+//# sourceMappingURL=runtime-dom.esm-bundler-04c4f8da.js.map

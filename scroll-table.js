@@ -1,5 +1,5 @@
 import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-58b370c7.js';
-import { e as defineComponent, p as reactive, o as onMounted, b as createBlock, g as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, y as createApp } from './runtime-dom.esm-bundler-179c1bdc.js';
+import { e as defineComponent, p as reactive, o as onMounted, r as ref, q as onRenderTriggered, b as createBlock, g as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, z as createApp } from './runtime-dom.esm-bundler-04c4f8da.js';
 import { l as loadData } from './load-data-47f5a50f.js';
 
 var metadata = {
@@ -46,11 +46,23 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
+		"stanza:key": "width",
+		"stanza:type": "number",
+		"stanza:description": "Width"
+	},
+	{
 		"stanza:key": "height",
 		"stanza:type": "number",
 		"stanza:example": 400,
 		"stanza:description": "Height",
 		"stanza:required": true
+	},
+	{
+		"stanza:key": "fixed-columns",
+		"stanza:type": "number",
+		"stanza:example": 1,
+		"stanza:description": "amount of fixed columns",
+		"stanza:required": false
 	},
 	{
 		"stanza:key": "padding",
@@ -68,7 +80,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\",\"escape\": false},{\"id\":\"mass\",\"label\":\"Mass\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\"}]",
+		"stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"label\": \"Mnemonic\",\"class\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\",\"escape\": false},{\"id\": \"mass\",\"label\": \"Mass\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\"}]",
 		"stanza:description": "Columns' options"
 	}
 ],
@@ -107,7 +119,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-thead-font-color",
 		"stanza:type": "color",
-		"stanza:default": "#256D80",
+		"stanza:default": "#ffffff",
 		"stanza:description": "Font color of table header"
 	},
 	{
@@ -119,7 +131,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-thead-background-color",
 		"stanza:type": "color",
-		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:default": "#256D80",
 		"stanza:description": "Background color of table header"
 	},
 	{
@@ -161,7 +173,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-background-color",
 		"stanza:type": "color",
-		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:default": "#F8F9FA",
 		"stanza:description": "Background color"
 	}
 ]
@@ -178,6 +190,8 @@ var script = defineComponent({
       offset: 0,
 
       isFetching: false,
+
+      thListWidth: [],
     });
 
     async function fetchData() {
@@ -195,13 +209,17 @@ var script = defineComponent({
       );
 
       if (params.columns) {
-        state.columns = JSON.parse(params.columns);
+        state.columns = JSON.parse(params.columns).map((column, index) => {
+          column.fixed = index < params.fixedColumns;
+          return column;
+        });
       } else if (data.length > 0) {
         const firstRow = data[0];
-        state.columns = Object.keys(firstRow).map((key) => {
+        state.columns = Object.keys(firstRow).map((key, index) => {
           return {
             id: key,
             label: key,
+            fixed: index < params.fixedColumns,
           };
         });
       } else {
@@ -216,11 +234,13 @@ var script = defineComponent({
               value: row[column.id],
               href: column.link ? row[column.link] : null,
               unescape: column.escape === false,
+              align: column.align,
+              class: column.class,
+              target: column.target
             };
           });
         })
       );
-
       state.isFetching = false;
     }
 
@@ -239,71 +259,95 @@ var script = defineComponent({
       fetchData();
     });
 
+    const thead = ref(null);
+    onRenderTriggered(() => {
+      setTimeout(() => {
+        const thList = thead.value.children[0].children;
+        state.thListWidth = Array.from(thList).map((th) => th.clientWidth);
+      }, 0);
+    });
+
     return {
       state,
       handleScroll,
+      width: params.width,
       height: params.height,
       padding: params.padding,
+      thead,
     };
   },
 });
 
 const _hoisted_1 = { key: 0 };
-const _hoisted_2 = { key: 0 };
-const _hoisted_3 = { key: 2 };
-const _hoisted_4 = { key: 0 };
-const _hoisted_5 = /*#__PURE__*/createVNode("div", { class: "dotTyping" }, null, -1 /* HOISTED */);
+const _hoisted_2 = { ref: "thead" };
+const _hoisted_3 = { key: 0 };
+const _hoisted_4 = { key: 2 };
+const _hoisted_5 = { key: 0 };
+const _hoisted_6 = /*#__PURE__*/createVNode("div", { class: "dotTyping" }, null, -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     class: "tableWrapper",
-    style: `height: ${_ctx.height}px;`,
+    style: `width: ${_ctx.width}px; height: ${_ctx.height}px;`,
     onScroll: _cache[1] || (_cache[1] = (...args) => (_ctx.handleScroll && _ctx.handleScroll(...args)))
   }, [
     (_ctx.state.allRows)
       ? (openBlock(), createBlock("table", _hoisted_1, [
-          createVNode("thead", null, [
+          createVNode("thead", _hoisted_2, [
             createVNode("tr", null, [
-              (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.columns, (column) => {
+              (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.columns, (column, index) => {
                 return (openBlock(), createBlock("th", {
-                  key: column.id
-                }, toDisplayString(column.label), 1 /* TEXT */))
+                  id: column.id,
+                  key: column.id,
+                  class: { fixed: column.fixed },
+                  style: 
+              column.fixed
+                ? `left: ${index === 0 ? 0 : _ctx.state.thListWidth[index - 1]}px;`
+                : null
+            
+                }, toDisplayString(column.label), 15 /* TEXT, CLASS, STYLE, PROPS */, ["id"]))
               }), 128 /* KEYED_FRAGMENT */))
             ])
-          ]),
+          ], 512 /* NEED_PATCH */),
           createVNode("tbody", null, [
             (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.allRows, (row) => {
               return (openBlock(), createBlock("tr", {
                 key: row.id
               }, [
-                (openBlock(true), createBlock(Fragment, null, renderList(row, (cell) => {
+                (openBlock(true), createBlock(Fragment, null, renderList(row, (cell, index) => {
                   return (openBlock(), createBlock("td", {
-                    key: cell.column.id
+                    key: cell.column.id,
+                    class: [cell.column.align, { fixed: cell.column.fixed }, cell.column.class],
+                    style: 
+              cell.column.fixed
+                ? `left: ${index === 0 ? 0 : _ctx.state.thListWidth[index - 1]}px;`
+                : null
+            
                   }, [
                     (cell.href)
-                      ? (openBlock(), createBlock("span", _hoisted_2, [
+                      ? (openBlock(), createBlock("span", _hoisted_3, [
                           createVNode("a", {
                             href: cell.href,
-                            target: "_blank"
-                          }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href"])
+                            target: cell.target ? `_${cell.target}` : '_blank'
+                          }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href", "target"])
                         ]))
                       : (cell.unescape)
                         ? (openBlock(), createBlock("span", {
                             key: 1,
                             innerHTML: cell.value
                           }, null, 8 /* PROPS */, ["innerHTML"]))
-                        : (openBlock(), createBlock("span", _hoisted_3, toDisplayString(cell.value), 1 /* TEXT */))
-                  ]))
+                        : (openBlock(), createBlock("span", _hoisted_4, toDisplayString(cell.value), 1 /* TEXT */))
+                  ], 6 /* CLASS, STYLE */))
                 }), 128 /* KEYED_FRAGMENT */))
               ]))
             }), 128 /* KEYED_FRAGMENT */)),
             (_ctx.state.isFetching)
-              ? (openBlock(), createBlock("tr", _hoisted_4, [
+              ? (openBlock(), createBlock("tr", _hoisted_5, [
                   createVNode("td", {
                     colspan: _ctx.state.columns.length,
                     class: "loadingWrapper"
                   }, [
-                    _hoisted_5
+                    _hoisted_6
                   ], 8 /* PROPS */, ["colspan"])
                 ]))
               : createCommentVNode("v-if", true)
