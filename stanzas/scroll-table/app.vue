@@ -27,7 +27,7 @@
           <td
             v-for="(cell, index) in row"
             :key="cell.column.id"
-            :class="[cell.column.align, { fixed: cell.column.fixed }]"
+            :class="[cell.column.align, { fixed: cell.column.fixed }, cell.column.class]"
             :style="
               cell.column.fixed
                 ? `left: ${index === 0 ? 0 : state.thListWidth[index - 1]}px;`
@@ -122,6 +122,7 @@ export default defineComponent({
               href: column.link ? row[column.link] : null,
               unescape: column.escape === false,
               align: column.align,
+              class: column.class
             };
           });
         })

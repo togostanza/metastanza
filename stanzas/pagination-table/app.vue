@@ -201,6 +201,7 @@
                   { hide: cell.hide },
                   cell.column.align,
                   { fixed: cell.column.fixed },
+                  cell.column.class
                 ]"
                 :style="
                   cell.column.fixed
@@ -540,6 +541,7 @@ function createColumnState(columnDef, values) {
     searchType: columnDef.type,
     rowspan: columnDef.rowspan,
     href: columnDef.link,
+    class: columnDef.class,
     unescape: columnDef.escape === false,
     align: columnDef.align,
     fixed: columnDef.fixed,
