@@ -35,7 +35,7 @@
             "
           >
             <span v-if="cell.href">
-              <a :href="cell.href" target="_blank">{{ cell.value }}</a>
+              <a :href="cell.href" :target="cell.target ? `_${cell.target}` : '_blank'">{{ cell.value }}</a>
             </span>
             <span v-else-if="cell.unescape" v-html="cell.value"></span>
             <span v-else>
@@ -122,7 +122,8 @@ export default defineComponent({
               href: column.link ? row[column.link] : null,
               unescape: column.escape === false,
               align: column.align,
-              class: column.class
+              class: column.class,
+              target: column.target
             };
           });
         })

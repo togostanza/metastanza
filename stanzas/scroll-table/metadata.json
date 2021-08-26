@@ -70,7 +70,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\"},{\"id\": \"mnemonic\",\"label\": \"Mnemonic\",\"class\": \"mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\",\"escape\": false},{\"id\": \"mass\",\"label\": \"Mass\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\"}]",
+      "stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"label\": \"Mnemonic\",\"class\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\",\"escape\": false},{\"id\": \"mass\",\"label\": \"Mass\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\"}]",
       "stanza:description": "Columns' options"
     }
   ],
