@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="wrapper"
-    :style="`width: ${width}px;`"
-  >
+  <div class="wrapper" :style="`width: ${width}px;`">
     <div class="tableOptionWrapper">
       <div class="tableOption">
         <input
@@ -37,9 +34,18 @@
       </div>
       <div class="tableWrapper" :style="`width: ${width}px;`">
         <table v-if="state.allRows">
-          <thead>
+          <thead ref="thead">
             <tr>
-              <th v-for="(column, i) in state.columns" :key="column.id">
+              <th
+                v-for="(column, i) in state.columns"
+                :key="column.id"
+                :class="{ fixed: column.fixed }"
+                :style="
+                  column.fixed
+                    ? `left: ${i === 0 ? 0 : state.thListWidth[i - 1]}px;`
+                    : null
+                "
+              >
                 {{ column.label }}
                 <font-awesome-icon
                   v-if="state.sorting.column === column"
@@ -75,7 +81,9 @@
                     'icon',
                     'filter',
                     { isShowing: column.isFilterPopupShowing },
-                    { active: column.filters.some((filter) => !filter.checked) },
+                    {
+                      active: column.filters.some((filter) => !filter.checked),
+                    },
                   ]"
                   @click="column.isFilterPopupShowing = true"
                 />
@@ -91,7 +99,10 @@
                     <div class="filterWindow">
                       <p class="filterWindowTitle">{{ column.label }}</p>
                       <ul class="filters">
-                        <li v-for="filter in column.filters" :key="filter.value">
+                        <li
+                          v-for="filter in column.filters"
+                          :key="filter.value"
+                        >
                           <label :for="filter.id">
                             <input
                               :id="filter.value"
@@ -110,7 +121,10 @@
                         >
                           Select All
                         </button>
-                        <button class="clear" @click="setFilters(column, false)">
+                        <button
+                          class="clear"
+                          @click="setFilters(column, false)"
+                        >
                           Clear
                         </button>
                       </div>
@@ -180,10 +194,19 @@
           <tbody>
             <tr v-for="row in rowsInCurrentPage" :key="row.id">
               <td
-                v-for="cell in row"
+                v-for="(cell, i) in row"
                 :key="cell.column.id"
                 :rowspan="cell.rowspanCount"
-                :class="[{ hide: cell.hide }, cell.column.align]"
+                :class="[
+                  { hide: cell.hide },
+                  cell.column.align,
+                  { fixed: cell.column.fixed },
+                ]"
+                :style="
+                  cell.column.fixed
+                    ? `left: ${i === 0 ? 0 : state.thListWidth[i - 1]}px;`
+                    : null
+                "
               >
                 <span v-if="cell.href">
                   <a :href="cell.href" target="_blank">{{ cell.value }}</a>
@@ -222,6 +245,7 @@ import {
   computed,
   watch,
   onMounted,
+  onRenderTriggered,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
@@ -445,13 +469,17 @@ export default defineComponent({
       state.responseJSON = data;
       let columns;
       if (params.columns) {
-        columns = JSON.parse(params.columns);
+        columns = JSON.parse(params.columns).map((column, index) => {
+          column.fixed = index < params.fixedColumns;
+          return column;
+        });
       } else if (data.length > 0) {
         const firstRow = data[0];
-        columns = Object.keys(firstRow).map((key) => {
+        columns = Object.keys(firstRow).map((key, index) => {
           return {
             id: key,
             label: key,
+            fixed: index < params.fixedColumns,
           };
         });
       } else {
@@ -475,6 +503,15 @@ export default defineComponent({
     }
 
     onMounted(fetchData);
+
+    const thead = ref(null);
+    onRenderTriggered(() => {
+      setTimeout(() => {
+        const thList = thead.value.children[0].children;
+        state.thListWidth = Array.from(thList).map((th) => th.clientWidth);
+      }, 0);
+    });
+
     return {
       width: params.width,
       sliderPagination,
@@ -491,6 +528,7 @@ export default defineComponent({
       showModal,
       closeModal,
       updateCurrentPage,
+      thead,
     };
   },
 });
@@ -503,7 +541,8 @@ function createColumnState(columnDef, values) {
     rowspan: columnDef.rowspan,
     href: columnDef.link,
     unescape: columnDef.escape === false,
-    align: columnDef.align
+    align: columnDef.align,
+    fixed: columnDef.fixed,
   };
 
   if (columnDef.type === "number") {

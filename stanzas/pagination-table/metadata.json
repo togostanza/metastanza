@@ -41,6 +41,13 @@
       "stanza:description": "Width"
     },
     {
+      "stanza:key": "fixed-columns",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "amount of fixed columns",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "padding",
       "stanza:example": "0px",
       "stanza:description": "Padding",
@@ -264,7 +271,7 @@
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:default": "#ffffff",
       "stanza:description": "Background color"
     }
   ]

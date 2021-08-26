@@ -48,6 +48,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "fixed-columns",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "amount of fixed columns",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "padding",
       "stanza:type": "number",
       "stanza:example": 0,
@@ -156,7 +163,7 @@
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:default": "#ffffff",
       "stanza:description": "Background color"
     }
   ]

@@ -120,12 +120,15 @@
     }
     > .tableWrapper {
       overflow: auto;
+      background-color: var(--togostanza-background-color);
       > table {
         width: 100%;
         text-align: left;
         border-collapse: collapse;
         margin: 0;
         border: var(--togostanza-table-border);
+        border-left: 0px none;
+        border-right: 0px none;
         box-shadow: var(--togostanza-table-shadow);
         > thead {
           background-color: var(--togostanza-thead-background-color);
@@ -140,6 +143,10 @@
               padding: 10px;
               white-space: nowrap;
               position: relative;
+              &.fixed {
+                position: sticky;
+                z-index: 20;
+              }
               &:first-child {
                 background-color: var(--togostanza-thead-background-color);
                 padding-left: 20px;
@@ -333,6 +340,11 @@
               border-bottom: var(--togostanza-tbody-border-bottom);
               border-collapse: collapse;
               padding: 10px;
+              &.fixed {
+                position: sticky;
+                z-index: 10;
+                background-color: var(--togostanza-background-color);
+              }
               &.hide {
                 display: none;
               }

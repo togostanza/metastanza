@@ -5,16 +5,35 @@
     @scroll="handleScroll"
   >
     <table v-if="state.allRows">
-      <thead>
+      <thead ref="thead">
         <tr>
-          <th v-for="column in state.columns" :key="column.id">
+          <th
+            v-for="(column, index) in state.columns"
+            :id="column.id"
+            :key="column.id"
+            :class="{ fixed: column.fixed }"
+            :style="
+              column.fixed
+                ? `left: ${index === 0 ? 0 : state.thListWidth[index - 1]}px;`
+                : null
+            "
+          >
             {{ column.label }}
           </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in state.allRows" :key="row.id">
-          <td v-for="cell in row" :key="cell.column.id" :class="cell.column.align">
+          <td
+            v-for="(cell, index) in row"
+            :key="cell.column.id"
+            :class="[cell.column.align, { fixed: cell.column.fixed }]"
+            :style="
+              cell.column.fixed
+                ? `left: ${index === 0 ? 0 : state.thListWidth[index - 1]}px;`
+                : null
+            "
+          >
             <span v-if="cell.href">
               <a :href="cell.href" target="_blank">{{ cell.value }}</a>
             </span>
@@ -35,7 +54,13 @@
 </template>
 
 <script>
-import { defineComponent, reactive, onMounted } from "vue";
+import {
+  defineComponent,
+  reactive,
+  onMounted,
+  onRenderTriggered,
+  ref,
+} from "vue";
 
 import loadData from "@/lib/load-data";
 
@@ -52,6 +77,8 @@ export default defineComponent({
       offset: 0,
 
       isFetching: false,
+
+      thListWidth: [],
     });
 
     async function fetchData() {
@@ -69,13 +96,17 @@ export default defineComponent({
       );
 
       if (params.columns) {
-        state.columns = JSON.parse(params.columns);
+        state.columns = JSON.parse(params.columns).map((column, index) => {
+          column.fixed = index < params.fixedColumns;
+          return column;
+        });
       } else if (data.length > 0) {
         const firstRow = data[0];
-        state.columns = Object.keys(firstRow).map((key) => {
+        state.columns = Object.keys(firstRow).map((key, index) => {
           return {
             id: key,
             label: key,
+            fixed: index < params.fixedColumns,
           };
         });
       } else {
@@ -95,7 +126,6 @@ export default defineComponent({
           });
         })
       );
-
       state.isFetching = false;
     }
 
@@ -114,12 +144,21 @@ export default defineComponent({
       fetchData();
     });
 
+    const thead = ref(null);
+    onRenderTriggered(() => {
+      setTimeout(() => {
+        const thList = thead.value.children[0].children;
+        state.thListWidth = Array.from(thList).map((th) => th.clientWidth);
+      }, 0);
+    });
+
     return {
       state,
       handleScroll,
       width: params.width,
       height: params.height,
       padding: params.padding,
+      thead,
     };
   },
 });
