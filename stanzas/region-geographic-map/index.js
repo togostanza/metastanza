@@ -89,7 +89,7 @@ export default class regionGeographicMap extends Stanza {
         titleColor: "var(--togostanza-title-font-color)",
         titleFont: "var(--togostanza-font-family)",
         titleFontWeight: "var(--togostanza-title-font-weight)",
-        format: "0.1%",
+        format: this.params["percentage"] ? "0.1%" : "",
       },
     ];
 
@@ -98,7 +98,7 @@ export default class regionGeographicMap extends Stanza {
         type: "shape",
         from: { data: "map" },
         encode: {
-          enter: { tooltip: { signal: `datum.${this.params["value-key"]}` } },
+          enter: { tooltip: { signal: this.params["percentage"] ? `format(datum.${this.params["value-key"]}, '0.1%')` : `datum.${this.params["value-key"]}` } },
           hover: {
             fill: { value: "var(--togostanza-hover-color)" },
           },

@@ -76,6 +76,13 @@
       "stanza:choice": ["2", "3", "4", "5", "6", "7", "8"],
       "stanza:example": "5",
       "stanza:description": "Amount of Region groups"
+    },
+    {
+      "stanza:key": "percentage",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": "false",
+      "stanza:description": "Format data as percentage"
     }
   ],
   "stanza:menu-placement": "bottom-right",
