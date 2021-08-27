@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "http://localhost:8080/assets/named_map_world_test.tsv",
+      "stanza:example": "https://penqeinc.github.io/metastanza//assets/named_map_world_test.tsv",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
