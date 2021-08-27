@@ -1,40 +1,58 @@
 import Stanza from "togostanza/stanza";
 import vegaEmbed from "vega-embed";
+import loadData from "@/lib/load-data";
 
-export default class regionGeographicMap extends Stanza {
-
-  async render() {
-    const vegaJson = await fetch(
-      "https://vega.github.io/vega/examples/county-unemployment.vg.json"
-    ).then((res) => res.json());
-
-    const data = [
-      {
-        name: "unemp",
-        url: "https://vega.github.io/vega/data/unemployment.tsv",
-        format: { type: "tsv", parse: "auto" },
+const areas = new Map([
+  [
+    "us",
+    {
+      name: "map",
+      url: "https://vega.github.io/vega/data/us-10m.json",
+      format: { type: "topojson", feature: "counties" },
+    },
+  ],
+  [
+    "world",
+    {
+      name: "map",
+      url: "https://vega.github.io/vega/data/world-110m.json",
+      format: {
+        type: "topojson",
+        feature: "countries",
       },
+    },
+  ],
+]);
+export default class regionGeographicMap extends Stanza {
+  async render() {
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+
+    const valObj = {
+      name: "userData",
+      values,
+    };
+
+    const transform = [
       {
-        name: "counties",
-        url: "https://vega.github.io/vega/data/us-10m.json",
-        format: { type: "topojson", feature: "counties" },
-        transform: [
-          {
-            type: "lookup",
-            from: "unemp",
-            key: "id",
-            fields: ["id"],
-            values: ["rate"],
-          },
-          { type: "filter", expr: "datum.rate != null" },
-        ],
+        type: "lookup",
+        from: "userData",
+        key: "id",
+        fields: ["id"],
+        values: [this.params["value-key"]],
       },
     ];
+
+    const obj = areas.get(this.params["area"]);
+    obj.transform = transform;
+    const data = [valObj, obj];
 
     const projections = [
       {
         name: "projection",
-        type: "albersUsa",
+        type: this.params["area"] === "us" ? "albersUsa" : "mercator",
       },
     ];
 
@@ -49,15 +67,17 @@ export default class regionGeographicMap extends Stanza {
       "var(--togostanza-series-7-color)",
     ];
 
-    const colorRange =
-      colorRangeMax.slice(0, Number(this.params["group-amount"]));
+    const colorRange = colorRangeMax.slice(
+      0,
+      Number(this.params["group-amount"])
+    );
 
     const scales = [
       {
         name: "userColor",
         type: "quantize",
         domain: [0, 0.15],
-        range: colorRange
+        range: colorRange,
       },
     ];
 
@@ -76,14 +96,14 @@ export default class regionGeographicMap extends Stanza {
     const marks = [
       {
         type: "shape",
-        from: { data: "counties" },
+        from: { data: "map" },
         encode: {
-          enter: { tooltip: { signal: "format(datum.rate, '0.1%')" } },
+          enter: { tooltip: { signal: `datum.${this.params["value-key"]}` } },
           hover: {
             fill: { value: "var(--togostanza-hover-color)" },
           },
           update: {
-            fill: { scale: "userColor", field: "rate" },
+            fill: { scale: "userColor", field: this.params["value-key"] },
             stroke: this.params["border"]
               ? { value: "var(--togostanza-region-border-color)" }
               : "",
@@ -97,7 +117,6 @@ export default class regionGeographicMap extends Stanza {
       $schema: "https://vega.github.io/schema/vega/v5.json",
       width: 1000,
       height: 500,
-      signals: vegaJson.signals,
       data,
       projections,
       scales,
