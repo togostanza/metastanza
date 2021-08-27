@@ -120,6 +120,7 @@
     }
     > .tableWrapper {
       overflow: auto;
+      min-height: 430px;
       background-color: var(--togostanza-background-color);
       > table {
         width: 100%;

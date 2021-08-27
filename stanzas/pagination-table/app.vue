@@ -293,7 +293,6 @@ export default defineComponent({
       queryForAllColumns: "",
 
       sorting: {
-        active: null,
         direction: "desc",
       },
 
@@ -405,6 +404,8 @@ export default defineComponent({
       const reversedRows = rows.reverse().map((row, rowIndex) => {
         return row.map((cell, colIndex) => {
           if (cell.column.rowspan) {
+            delete cell.hide
+            delete cell.rowspanCount
             const aboveValue = rows[rowIndex + 1]
               ? rows[rowIndex + 1][colIndex].value
               : null;
