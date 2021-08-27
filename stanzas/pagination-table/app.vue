@@ -209,8 +209,18 @@
                     : null
                 "
               >
-                <span v-if="cell.href">
-                  <a :href="cell.href" :target="cell.column.target ? `_${cell.column.target}` : '_blank'">{{ cell.value }}</a>
+                <span v-if="cell.href && cell.column.unescape">
+                  <a
+                    :href="cell.href"
+                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
+                    v-html="cell.value"
+                  ></a>
+                </span>
+                <span v-else-if="cell.href">
+                  <a
+                    :href="cell.href"
+                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
+                  >{{ cell.value }}</a>
                 </span>
                 <span v-else-if="cell.column.unescape" v-html="cell.value">
                 </span>
