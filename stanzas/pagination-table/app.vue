@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :style="`width: ${width}px;`">
+  <div class="wrapper" :style="`width: ${width};`">
     <div class="tableOptionWrapper">
       <div class="tableOption">
         <input
@@ -32,7 +32,7 @@
           </ul>
         </div>
       </div>
-      <div class="tableWrapper" :style="`width: ${width}px;`">
+      <div class="tableWrapper" :style="`width: ${width};`">
         <table v-if="state.allRows">
           <thead ref="thead">
             <tr>
@@ -514,7 +514,7 @@ export default defineComponent({
     });
 
     return {
-      width: params.width,
+      width: params.width ? params.width + 'px' : '100%',
       sliderPagination,
       pageSizeOption,
       state,
