@@ -5992,7 +5992,7 @@ var script = defineComponent({
     });
 
     return {
-      width: params.width,
+      width: params.width ? params.width + 'px' : '100%',
       sliderPagination,
       pageSizeOption,
       state,
@@ -6172,7 +6172,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock(Fragment, null, [
     createVNode("div", {
       class: "wrapper",
-      style: `width: ${_ctx.width}px;`
+      style: `width: ${_ctx.width};`
     }, [
       createVNode("div", _hoisted_1, [
         createVNode("div", _hoisted_2, [
@@ -6225,7 +6225,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         createVNode("div", {
           class: "tableWrapper",
-          style: `width: ${_ctx.width}px;`
+          style: `width: ${_ctx.width};`
         }, [
           (_ctx.state.allRows)
             ? (openBlock(), createBlock("table", _hoisted_8, [
