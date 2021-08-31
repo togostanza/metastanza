@@ -5771,7 +5771,6 @@ var script = defineComponent({
       queryForAllColumns: "",
 
       sorting: {
-        active: null,
         direction: "desc",
       },
 
@@ -5883,6 +5882,8 @@ var script = defineComponent({
       const reversedRows = rows.reverse().map((row, rowIndex) => {
         return row.map((cell, colIndex) => {
           if (cell.column.rowspan) {
+            delete cell.hide;
+            delete cell.rowspanCount;
             const aboveValue = rows[rowIndex + 1]
               ? rows[rowIndex + 1][colIndex].value
               : null;
@@ -6162,7 +6163,8 @@ const _hoisted_17 = /*#__PURE__*/createVNode("span", { class: "rangeInputLabel" 
 const _hoisted_18 = /*#__PURE__*/createVNode("span", { class: "dash" }, null, -1 /* HOISTED */);
 const _hoisted_19 = /*#__PURE__*/createVNode("span", { class: "rangeInputLabel" }, " To ", -1 /* HOISTED */);
 const _hoisted_20 = { key: 0 };
-const _hoisted_21 = { key: 2 };
+const _hoisted_21 = { key: 1 };
+const _hoisted_22 = { key: 3 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
@@ -6438,19 +6440,27 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     : null
                 
                         }, [
-                          (cell.href)
+                          (cell.href && cell.column.unescape)
                             ? (openBlock(), createBlock("span", _hoisted_20, [
                                 createVNode("a", {
                                   href: cell.href,
-                                  target: cell.column.target ? `_${cell.column.target}` : '_blank'
-                                }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href", "target"])
-                              ]))
-                            : (cell.column.unescape)
-                              ? (openBlock(), createBlock("span", {
-                                  key: 1,
+                                  target: cell.column.target ? `_${cell.column.target}` : '_blank',
                                   innerHTML: cell.value
-                                }, null, 8 /* PROPS */, ["innerHTML"]))
-                              : (openBlock(), createBlock("span", _hoisted_21, toDisplayString(cell.value), 1 /* TEXT */))
+                                }, null, 8 /* PROPS */, ["href", "target", "innerHTML"])
+                              ]))
+                            : (cell.href)
+                              ? (openBlock(), createBlock("span", _hoisted_21, [
+                                  createVNode("a", {
+                                    href: cell.href,
+                                    target: cell.column.target ? `_${cell.column.target}` : '_blank'
+                                  }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href", "target"])
+                                ]))
+                              : (cell.column.unescape)
+                                ? (openBlock(), createBlock("span", {
+                                    key: 2,
+                                    innerHTML: cell.value
+                                  }, null, 8 /* PROPS */, ["innerHTML"]))
+                                : (openBlock(), createBlock("span", _hoisted_22, toDisplayString(cell.value), 1 /* TEXT */))
                         ], 14 /* CLASS, STYLE, PROPS */, ["rowspan"]))
                       }), 128 /* KEYED_FRAGMENT */))
                     ]))

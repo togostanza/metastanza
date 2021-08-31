@@ -468,6 +468,7 @@
 }
 .wrapper > .tableOptionWrapper > .tableWrapper {
   overflow: auto;
+  min-height: 430px;
   background-color: var(--togostanza-background-color);
 }
 .wrapper > .tableOptionWrapper > .tableWrapper > table {
