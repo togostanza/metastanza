@@ -209,8 +209,18 @@
                     : null
                 "
               >
-                <span v-if="cell.href">
-                  <a :href="cell.href" :target="cell.column.target ? `_${cell.column.target}` : '_blank'">{{ cell.value }}</a>
+                <span v-if="cell.href && cell.column.unescape">
+                  <a
+                    :href="cell.href"
+                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
+                    v-html="cell.value"
+                  ></a>
+                </span>
+                <span v-else-if="cell.href">
+                  <a
+                    :href="cell.href"
+                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
+                  >{{ cell.value }}</a>
                 </span>
                 <span v-else-if="cell.column.unescape" v-html="cell.value">
                 </span>
@@ -293,7 +303,6 @@ export default defineComponent({
       queryForAllColumns: "",
 
       sorting: {
-        active: null,
         direction: "desc",
       },
 
@@ -405,6 +414,8 @@ export default defineComponent({
       const reversedRows = rows.reverse().map((row, rowIndex) => {
         return row.map((cell, colIndex) => {
           if (cell.column.rowspan) {
+            delete cell.hide
+            delete cell.rowspanCount
             const aboveValue = rows[rowIndex + 1]
               ? rows[rowIndex + 1][colIndex].value
               : null;
