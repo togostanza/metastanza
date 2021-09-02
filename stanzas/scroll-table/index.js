@@ -2,7 +2,7 @@ import Stanza from "togostanza/stanza";
 
 import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
-import { createApp } from "vue";
+import { createApp, h } from "vue";
 import App from "./app.vue";
 
 export default class ScrollTable extends Stanza {
@@ -14,8 +14,16 @@ export default class ScrollTable extends Stanza {
       "var(--togostanza-background-color)";
     main.parentNode.style.padding = this.params["padding"];
 
-    this._app?.unmount();
-    this._app = createApp(App, this.params);
-    this._app.mount(main);
+    const self = this;
+    this._app = createApp({
+      render() {
+        return h(App, self.params);
+      },
+    });
+    this._component = this._app.mount(main);
+  }
+
+  handleAttributeChange() {
+    this._component?.$forceUpdate();
   }
 }
