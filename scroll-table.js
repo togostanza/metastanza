@@ -1,6 +1,6 @@
-import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-58b370c7.js';
+import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ce242dd6.js';
 import { e as defineComponent, p as reactive, o as onMounted, r as ref, q as onRenderTriggered, b as createBlock, g as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, z as createApp } from './runtime-dom.esm-bundler-04c4f8da.js';
-import { l as loadData } from './load-data-47f5a50f.js';
+import { l as loadData } from './load-data-5eebbe71.js';
 
 var metadata = {
 	"@context": {
