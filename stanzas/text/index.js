@@ -37,7 +37,7 @@ export default class Text extends Stanza {
   }
 
   async render() {
-    this._dataset = await this.loadText(this.params["data-url"]);
+    this._dataset = await this._loadText(this.params["data-url"]);
 
     const main = this.root.querySelector("main");
 
@@ -77,8 +77,7 @@ export default class Text extends Stanza {
     container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
   }
 
-  async loadText(url) {
-    const res = await fetch(url);
-    return await res.text();
+  async _loadText(url) {
+    return await fetch(url).then((res) => res.text());
   }
 }
