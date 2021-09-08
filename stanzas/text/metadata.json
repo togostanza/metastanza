@@ -30,6 +30,12 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "highlight-css-url",
+      "stanza:example": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/atom-one-light.min.css",
+      "stanza:description": "Stylesheet(css file) URL to highlight code blocks in markdown mode",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",

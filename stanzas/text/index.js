@@ -66,6 +66,7 @@ export default class Text extends Stanza {
       });
     }
 
+    appendCustomCss(this, this.params["highlight-css-url"]);
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const width = this.params["width"];
