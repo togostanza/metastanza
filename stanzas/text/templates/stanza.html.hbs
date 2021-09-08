@@ -9,15 +9,7 @@
   {{#if html}}
     {{{html}}}
   {{/if}}
-  {{#each rows as |row|}}
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            {{row.value}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  {{/each}}
+  {{#if text}}
+    {{text}}
+  {{/if}}
 </div>

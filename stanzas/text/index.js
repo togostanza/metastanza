@@ -4,8 +4,6 @@ import hljs from "highlight.js";
 import "katex/dist/katex";
 import renderMathInElement from "katex/dist/contrib/auto-render.mjs";
 
-import loadData from "@/lib/load-data";
-
 import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
 export default class Text extends Stanza {
@@ -23,7 +21,7 @@ export default class Text extends Stanza {
         type: "item",
         label: "Download Text",
         handler: () => {
-          const textBlob = new Blob([this._dataset.value], {
+          const textBlob = new Blob([this._dataset], {
             type: "text/plain",
           });
           const textUrl = URL.createObjectURL(textBlob);
@@ -39,14 +37,11 @@ export default class Text extends Stanza {
   }
 
   async render() {
-    this._dataset = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
+    this._dataset = await this.loadText(this.params["data-url"]);
 
     const main = this.root.querySelector("main");
 
-    const value = this._dataset.value;
+    const value = this._dataset;
     if (this.params["mode"] === "markdown") {
       const parser = new commonmark.Parser();
       const renderer = new commonmark.HtmlRenderer();
@@ -62,14 +57,11 @@ export default class Text extends Stanza {
       });
       renderMathInElement(main);
     } else {
+      const text = this._dataset;
       this.renderTemplate({
         template: "stanza.html.hbs",
         parameters: {
-          rows: [
-            {
-              value,
-            },
-          ],
+          text,
         },
       });
     }
@@ -82,5 +74,10 @@ export default class Text extends Stanza {
     const container = this.root.querySelector(".container");
     main.setAttribute("style", `padding: ${padding}px;`);
     container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
+  }
+
+  async loadText(url) {
+    const res = await fetch(url);
+    return await res.text();
   }
 }
