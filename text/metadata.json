@@ -22,17 +22,23 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "data-type",
+      "stanza:key": "mode",
       "stanza:type": "single-choice",
-      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
-      "stanza:description": "Data type",
+      "stanza:choice": ["text", "markdown"],
+      "stanza:example": "text",
+      "stanza:description": "Mode",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "highlight-css-url",
+      "stanza:example": "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/atom-one-light.min.css",
+      "stanza:description": "Stylesheet (css file) URL of highlight.js theme (only effective in markdown mode)",
+      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
-      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:description": "Stylesheet (css file) URL to override current style",
       "stanza:required": false
     },
     {

@@ -9194,7 +9194,10 @@ var dependencies = {
 	"@rollup/plugin-replace": "^3.0.0",
 	"@vue/compiler-sfc": "^3.1.4",
 	"@vueform/slider": "^1.0.3",
+	commonmark: "^0.30.0",
 	d3: "^7.0.0",
+	"highlight.js": "^11.2.0",
+	katex: "^0.13.13",
 	"lodash.mapvalues": "^4.6.0",
 	"lodash.omit": "^4.5.0",
 	"lodash.orderby": "^4.6.0",
@@ -9370,4 +9373,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, renderList as a, createVNode as b, createBlock as c, defineComponent as d, createCommentVNode as e, createApp as f, computed as g, createTextVNode as h, ref as i, octicons as j, resolveDynamicComponent as k, popScopeId as l, mergeProps as m, withScopeId as n, openBlock as o, pushScopeId as p, n as q, resolveComponent as r, script as s, toDisplayString as t, withCtx as w };
-//# sourceMappingURL=Layout-019fb09e.js.map
+//# sourceMappingURL=Layout-9a5b1e6b.js.map
