@@ -6,15 +6,18 @@
 />
 
 <div class="container">
-  {{#each rows as |row|}}
+  {{#if html}}
+    {{{html}}}
+  {{/if}}
+  {{#if text}}
     <table>
       <tbody>
         <tr>
           <td>
-            {{row.value}}
+            {{text}}
           </td>
         </tr>
       </tbody>
     </table>
-  {{/each}}
+  {{/if}}
 </div>
