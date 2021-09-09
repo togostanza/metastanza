@@ -1,4 +1,4 @@
-import { B as select, A as dispatch, S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ce242dd6.js';
+import { B as select, A as dispatch, S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-d6292f33.js';
 
 function sourceEvent(event) {
   let sourceEvent;

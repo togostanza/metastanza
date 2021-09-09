@@ -1,6 +1,6 @@
-import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ce242dd6.js';
-import { e as defineComponent, p as reactive, o as onMounted, r as ref, q as onRenderTriggered, b as createBlock, g as createVNode, F as Fragment, i as renderList, l as createCommentVNode, d as openBlock, k as toDisplayString, z as createApp } from './runtime-dom.esm-bundler-04c4f8da.js';
-import { l as loadData } from './load-data-5eebbe71.js';
+import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-d6292f33.js';
+import { e as defineComponent, u as reactive, o as onMounted, r as ref, v as onRenderTriggered, g as createElementBlock, i as createBaseVNode, F as Fragment, k as renderList, q as createCommentVNode, A as normalizeStyle, d as openBlock, n as normalizeClass, p as toDisplayString, D as createApp } from './runtime-dom.esm-bundler-7edf55a5.js';
+import { l as loadData } from './load-data-7e2e2465.js';
 
 var metadata = {
 	"@context": {
@@ -280,75 +280,80 @@ var script = defineComponent({
 
 const _hoisted_1 = { key: 0 };
 const _hoisted_2 = { ref: "thead" };
-const _hoisted_3 = { key: 0 };
-const _hoisted_4 = { key: 2 };
-const _hoisted_5 = { key: 0 };
-const _hoisted_6 = /*#__PURE__*/createVNode("div", { class: "dotTyping" }, null, -1 /* HOISTED */);
+const _hoisted_3 = ["id"];
+const _hoisted_4 = { key: 0 };
+const _hoisted_5 = ["href", "target"];
+const _hoisted_6 = ["innerHTML"];
+const _hoisted_7 = { key: 2 };
+const _hoisted_8 = { key: 0 };
+const _hoisted_9 = ["colspan"];
+const _hoisted_10 = /*#__PURE__*/createBaseVNode("div", { class: "dotTyping" }, null, -1 /* HOISTED */);
+const _hoisted_11 = [
+  _hoisted_10
+];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
+  return (openBlock(), createElementBlock("div", {
     class: "tableWrapper",
-    style: `width: ${_ctx.width}px; height: ${_ctx.height}px;`,
-    onScroll: _cache[1] || (_cache[1] = (...args) => (_ctx.handleScroll && _ctx.handleScroll(...args)))
+    style: normalizeStyle(`width: ${_ctx.width}px; height: ${_ctx.height}px;`),
+    onScroll: _cache[0] || (_cache[0] = (...args) => (_ctx.handleScroll && _ctx.handleScroll(...args)))
   }, [
     (_ctx.state.allRows)
-      ? (openBlock(), createBlock("table", _hoisted_1, [
-          createVNode("thead", _hoisted_2, [
-            createVNode("tr", null, [
-              (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.columns, (column, index) => {
-                return (openBlock(), createBlock("th", {
+      ? (openBlock(), createElementBlock("table", _hoisted_1, [
+          createBaseVNode("thead", _hoisted_2, [
+            createBaseVNode("tr", null, [
+              (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.columns, (column, index) => {
+                return (openBlock(), createElementBlock("th", {
                   id: column.id,
                   key: column.id,
-                  class: { fixed: column.fixed },
-                  style: 
+                  class: normalizeClass({ fixed: column.fixed }),
+                  style: normalizeStyle(
               column.fixed
                 ? `left: ${index === 0 ? 0 : _ctx.state.thListWidth[index - 1]}px;`
                 : null
-            
-                }, toDisplayString(column.label), 15 /* TEXT, CLASS, STYLE, PROPS */, ["id"]))
+            )
+                }, toDisplayString(column.label), 15 /* TEXT, CLASS, STYLE, PROPS */, _hoisted_3))
               }), 128 /* KEYED_FRAGMENT */))
             ])
           ], 512 /* NEED_PATCH */),
-          createVNode("tbody", null, [
-            (openBlock(true), createBlock(Fragment, null, renderList(_ctx.state.allRows, (row) => {
-              return (openBlock(), createBlock("tr", {
+          createBaseVNode("tbody", null, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.allRows, (row) => {
+              return (openBlock(), createElementBlock("tr", {
                 key: row.id
               }, [
-                (openBlock(true), createBlock(Fragment, null, renderList(row, (cell, index) => {
-                  return (openBlock(), createBlock("td", {
+                (openBlock(true), createElementBlock(Fragment, null, renderList(row, (cell, index) => {
+                  return (openBlock(), createElementBlock("td", {
                     key: cell.column.id,
-                    class: [cell.column.align, { fixed: cell.column.fixed }, cell.column.class],
-                    style: 
+                    class: normalizeClass([cell.column.align, { fixed: cell.column.fixed }, cell.column.class]),
+                    style: normalizeStyle(
               cell.column.fixed
                 ? `left: ${index === 0 ? 0 : _ctx.state.thListWidth[index - 1]}px;`
                 : null
-            
+            )
                   }, [
                     (cell.href)
-                      ? (openBlock(), createBlock("span", _hoisted_3, [
-                          createVNode("a", {
+                      ? (openBlock(), createElementBlock("span", _hoisted_4, [
+                          createBaseVNode("a", {
                             href: cell.href,
                             target: cell.target ? `_${cell.target}` : '_blank'
-                          }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, ["href", "target"])
+                          }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, _hoisted_5)
                         ]))
                       : (cell.unescape)
-                        ? (openBlock(), createBlock("span", {
+                        ? (openBlock(), createElementBlock("span", {
                             key: 1,
                             innerHTML: cell.value
-                          }, null, 8 /* PROPS */, ["innerHTML"]))
-                        : (openBlock(), createBlock("span", _hoisted_4, toDisplayString(cell.value), 1 /* TEXT */))
+                          }, null, 8 /* PROPS */, _hoisted_6))
+                        : (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString(cell.value), 1 /* TEXT */))
                   ], 6 /* CLASS, STYLE */))
                 }), 128 /* KEYED_FRAGMENT */))
               ]))
             }), 128 /* KEYED_FRAGMENT */)),
             (_ctx.state.isFetching)
-              ? (openBlock(), createBlock("tr", _hoisted_5, [
-                  createVNode("td", {
+              ? (openBlock(), createElementBlock("tr", _hoisted_8, [
+                  createBaseVNode("td", {
                     colspan: _ctx.state.columns.length,
                     class: "loadingWrapper"
-                  }, [
-                    _hoisted_6
-                  ], 8 /* PROPS */, ["colspan"])
+                  }, _hoisted_11, 8 /* PROPS */, _hoisted_9)
                 ]))
               : createCommentVNode("v-if", true)
           ])

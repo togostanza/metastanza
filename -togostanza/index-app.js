@@ -1,4 +1,4 @@
-import { d as defineComponent, s as script$1, c as createBlock, w as withCtx, r as resolveComponent, o as openBlock, F as Fragment, a as renderList, b as createVNode, t as toDisplayString, e as createCommentVNode, f as createApp } from './Layout-9a5b1e6b.js';
+import { d as defineComponent, s as script$1, c as createBlock, w as withCtx, r as resolveComponent, o as openBlock, a as createElementBlock, F as Fragment, b as renderList, e as createBaseVNode, t as toDisplayString, f as createCommentVNode, g as createApp } from './Layout-606ad6ac.js';
 
 var script = defineComponent({
   components: {
@@ -12,16 +12,17 @@ var script = defineComponent({
   }
 });
 
-const _hoisted_1 = /*#__PURE__*/createVNode("h1", { class: "display-4" }, "List of Stanzas", -1 /* HOISTED */);
+const _hoisted_1 = /*#__PURE__*/createBaseVNode("h1", { class: "display-4" }, "List of Stanzas", -1 /* HOISTED */);
 const _hoisted_2 = {
   key: 0,
   class: "list-group mt-3"
 };
-const _hoisted_3 = {
+const _hoisted_3 = ["href"];
+const _hoisted_4 = {
   key: 0,
   class: "small text-muted text-truncate mt-1 mb-0"
 };
-const _hoisted_4 = { key: 1 };
+const _hoisted_5 = { key: 1 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_Layout = resolveComponent("Layout");
@@ -30,21 +31,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     default: withCtx(() => [
       _hoisted_1,
       (_ctx.allMetadata.length > 0)
-        ? (openBlock(), createBlock("div", _hoisted_2, [
-            (openBlock(true), createBlock(Fragment, null, renderList(_ctx.allMetadata, (metadata) => {
-              return (openBlock(), createBlock("a", {
+        ? (openBlock(), createElementBlock("div", _hoisted_2, [
+            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.allMetadata, (metadata) => {
+              return (openBlock(), createElementBlock("a", {
                 key: metadata['@id'],
                 href: `./${metadata['@id']}.html`,
                 class: "list-group-item list-group-item-action py-3"
               }, [
-                createVNode("div", null, toDisplayString(metadata['stanza:label']), 1 /* TEXT */),
+                createBaseVNode("div", null, toDisplayString(metadata['stanza:label']), 1 /* TEXT */),
                 (metadata['stanza:definition'])
-                  ? (openBlock(), createBlock("p", _hoisted_3, toDisplayString(metadata['stanza:definition']), 1 /* TEXT */))
+                  ? (openBlock(), createElementBlock("p", _hoisted_4, toDisplayString(metadata['stanza:definition']), 1 /* TEXT */))
                   : createCommentVNode("v-if", true)
-              ], 8 /* PROPS */, ["href"]))
+              ], 8 /* PROPS */, _hoisted_3))
             }), 128 /* KEYED_FRAGMENT */))
           ]))
-        : (openBlock(), createBlock("p", _hoisted_4, "No stanzas defined."))
+        : (openBlock(), createElementBlock("p", _hoisted_5, "No stanzas defined."))
     ]),
     _: 1 /* STABLE */
   }))
