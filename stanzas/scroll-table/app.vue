@@ -60,6 +60,7 @@ import {
   onMounted,
   onRenderTriggered,
   ref,
+  toRefs,
 } from "vue";
 
 import loadData from "@/lib/load-data";
@@ -70,6 +71,7 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    params = toRefs(params)
     const state = reactive({
       columns: [],
       allRows: [],
@@ -84,20 +86,20 @@ export default defineComponent({
     async function fetchData() {
       state.isFetching = true;
       let urlParams = {
-        limit: params.pageSize,
+        limit: params.pageSize.value,
         offset: state.offset,
       };
       urlParams = new URLSearchParams(urlParams);
-      const { dataUrl } = params;
+      const dataUrl = params.dataUrl.value;
       const connectCharacter = new URL(dataUrl) ? "&" : "?";
       const data = await loadData(
         `${dataUrl}${connectCharacter}${urlParams}`,
-        params.dataType
+        params.dataType.value
       );
 
-      if (params.columns) {
-        state.columns = JSON.parse(params.columns).map((column, index) => {
-          column.fixed = index < params.fixedColumns;
+      if (params.columns.value) {
+        state.columns = JSON.parse(params.columns.value).map((column, index) => {
+          column.fixed = index < params.fixedColumns.value;
           return column;
         });
       } else if (data.length > 0) {
@@ -106,7 +108,7 @@ export default defineComponent({
           return {
             id: key,
             label: key,
-            fixed: index < params.fixedColumns,
+            fixed: index < params.fixedColumns.value,
           };
         });
       } else {
@@ -137,7 +139,7 @@ export default defineComponent({
           e.path[0].firstChild.clientHeight - e.path[0].clientHeight &&
         !state.isFetching
       ) {
-        state.offset = state.offset + params.pageSize;
+        state.offset = state.offset + params.pageSize.value;
         fetchData();
       }
     }
@@ -157,9 +159,9 @@ export default defineComponent({
     return {
       state,
       handleScroll,
-      width: params.width,
-      height: params.height,
-      padding: params.padding,
+      width: params.width.value,
+      height: params.height.value,
+      padding: params.padding.value,
       thead,
     };
   },

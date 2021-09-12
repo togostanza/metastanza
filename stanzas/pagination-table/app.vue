@@ -257,6 +257,7 @@ import {
   watch,
   onMounted,
   onRenderTriggered,
+  toRefs,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
@@ -291,8 +292,9 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    params = toRefs(params);
     const sliderPagination = ref();
-    const pageSizeOption = params.pageSizeOption.split(",").map(Number);
+    const pageSizeOption = params.pageSizeOption.value.split(",").map(Number);
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -309,7 +311,7 @@ export default defineComponent({
       pagination: {
         currentPage: 1,
         perPage: pageSizeOption[0],
-        isSliderOn: params.pageSlider,
+        isSliderOn: params.pageSlider.value,
       },
 
       isMenuOn: false,
@@ -476,13 +478,13 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+      const data = await loadData(params.dataUrl.value, params.dataType.value);
 
       state.responseJSON = data;
       let columns;
-      if (params.columns) {
-        columns = JSON.parse(params.columns).map((column, index) => {
-          column.fixed = index < params.fixedColumns;
+      if (params.columns.value) {
+        columns = JSON.parse(params.columns.value).map((column, index) => {
+          column.fixed = index < params.fixedColumns.value;
           return column;
         });
       } else if (data.length > 0) {
@@ -491,7 +493,7 @@ export default defineComponent({
           return {
             id: key,
             label: key,
-            fixed: index < params.fixedColumns,
+            fixed: index < params.fixedColumns.value,
           };
         });
       } else {
@@ -525,7 +527,7 @@ export default defineComponent({
     });
 
     return {
-      width: params.width ? params.width + 'px' : '100%',
+      width: params.width.value ? params.width.value + 'px' : '100%',
       sliderPagination,
       pageSizeOption,
       state,
