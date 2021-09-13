@@ -201,7 +201,7 @@
                   { hide: cell.hide },
                   cell.column.align,
                   { fixed: cell.column.fixed },
-                  cell.column.class
+                  cell.column.class,
                 ]"
                 :style="
                   cell.column.fixed
@@ -212,15 +212,20 @@
                 <span v-if="cell.href && cell.column.unescape">
                   <a
                     :href="cell.href"
-                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
+                    :target="
+                      cell.column.target ? `_${cell.column.target}` : '_blank'
+                    "
                     v-html="cell.value"
                   ></a>
                 </span>
                 <span v-else-if="cell.href">
                   <a
                     :href="cell.href"
-                    :target="cell.column.target ? `_${cell.column.target}` : '_blank'"
-                  >{{ cell.value }}</a>
+                    :target="
+                      cell.column.target ? `_${cell.column.target}` : '_blank'
+                    "
+                    >{{ cell.value }}</a
+                  >
                 </span>
                 <span v-else-if="cell.column.unescape" v-html="cell.value">
                 </span>
@@ -292,6 +297,7 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    const { pageSlider } = toRefs(params);
     params = toRefs(params);
     const sliderPagination = ref();
     const pageSizeOption = params.pageSizeOption.value.split(",").map(Number);
@@ -311,7 +317,7 @@ export default defineComponent({
       pagination: {
         currentPage: 1,
         perPage: pageSizeOption[0],
-        isSliderOn: params.pageSlider.value,
+        isSliderOn: pageSlider,
       },
 
       isMenuOn: false,
@@ -416,8 +422,8 @@ export default defineComponent({
       const reversedRows = rows.reverse().map((row, rowIndex) => {
         return row.map((cell, colIndex) => {
           if (cell.column.rowspan) {
-            delete cell.hide
-            delete cell.rowspanCount
+            delete cell.hide;
+            delete cell.rowspanCount;
             const aboveValue = rows[rowIndex + 1]
               ? rows[rowIndex + 1][colIndex].value
               : null;
@@ -527,7 +533,7 @@ export default defineComponent({
     });
 
     return {
-      width: params.width.value ? params.width.value + 'px' : '100%',
+      width: params.width.value ? params.width.value + "px" : "100%",
       sliderPagination,
       pageSizeOption,
       state,
