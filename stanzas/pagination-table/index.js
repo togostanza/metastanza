@@ -11,7 +11,7 @@ export default class PaginationTable extends Stanza {
     const main = this.root.querySelector("main");
     main.parentNode.style.backgroundColor =
       "var(--togostanza-background-color)";
-    main.parentNode.style.padding = this.params["padding"];
+    this._setMainPadding();
 
     const self = this;
     this._app = createApp({
@@ -22,7 +22,15 @@ export default class PaginationTable extends Stanza {
     this._component = this._app.mount(main);
   }
 
-  handleAttributeChange() {
+  _setMainPadding() {
+    const main = this.root.querySelector("main");
+    main.parentNode.style.padding = this.params["padding"];
+  }
+
+  handleAttributeChange(name) {
+    if (name === "padding") {
+      this._setMainPadding();
+    }
     this._component?.$forceUpdate();
   }
 }
