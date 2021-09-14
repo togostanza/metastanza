@@ -572,7 +572,7 @@ function createColumnState(columnDef, values) {
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number);
+    const nums = values.map(Number).filter(Number)
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -594,7 +594,6 @@ function createColumnState(columnDef, values) {
 
     return {
       ...baseProps,
-      parseValue: Number,
       minValue,
       maxValue,
       rangeMin,
@@ -605,6 +604,16 @@ function createColumnState(columnDef, values) {
       inputtingRangeMin,
       inputtingRangeMax,
       isSearchModalShowing: false,
+      parseValue(val) {
+        val = Number(val)
+        if(columnDef["significant-digits"]) {
+          val = val.toPrecision(columnDef["significant-digits"])
+        }
+        if(columnDef["exponent-digits"]) {
+          val = Number.parseFloat(val).toExponential(columnDef["exponent-digits"]);
+        }
+        return val
+      },
 
       isMatch(val) {
         return val > rangeMin.value && val <= rangeMax.value;

@@ -64,7 +64,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\"},{\"id\":\"raf\",\"label\":\"RAF\"},{\"id\":\"p_value\",\"label\":\"P-Value\",\"type\":\"number\"},{\"id\":\"odds_ratio\",\"label\":\"OR\"},{\"id\":\"ci_text\",\"label\":\"CI\"},{\"id\":\"beta\",\"label\":\"Beta\"},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\"},{\"id\":\"study_detail\",\"label\":\"Study details\",\"link\":\"study\"},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\"},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\": 3}]",
+      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\"},{\"id\":\"raf\",\"label\":\"RAF\"},{\"id\":\"p_value\",\"label\":\"P-Value\",\"type\":\"number\",\"exponent-digits\": 2},{\"id\":\"odds_ratio\",\"label\":\"OR\"},{\"id\":\"ci_text\",\"label\":\"CI\"},{\"id\":\"beta\",\"label\":\"Beta\"},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\"},{\"id\":\"study_detail\",\"label\":\"Study details\",\"link\":\"study\"},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\"},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\": 3}]",
       "stanza:description": "Columns' options"
     }
   ],
