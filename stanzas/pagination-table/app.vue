@@ -192,7 +192,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in rowsInCurrentPage" :key="row.id">
+            <tr v-for="(row, row_index) in rowsInCurrentPage" :key="row.id">
               <td
                 v-for="(cell, i) in row"
                 :key="cell.column.id"
@@ -209,29 +209,31 @@
                     : null
                 "
               >
-                <span v-if="cell.href && cell.column.unescape">
-                  <a
+                <span v-if="cell.href">
+                  <AnchorCell
+                    :id="`${cell.column.id}_${row_index}`"
                     :href="cell.href"
+                    :value="cell.value"
                     :target="
                       cell.column.target ? `_${cell.column.target}` : '_blank'
                     "
-                    v-html="cell.value"
-                  ></a>
+                    :unescape="cell.column.unescape"
+                    :line-clamp="cell.column.lineClamp"
+                  />
                 </span>
-                <span v-else-if="cell.href">
-                  <a
-                    :href="cell.href"
-                    :target="
-                      cell.column.target ? `_${cell.column.target}` : '_blank'
-                    "
-                    >{{ cell.value }}</a
-                  >
+                <span v-else-if="cell.column.lineClamp">
+                  <LineClampCell
+                    :id="`${cell.column.id}_${row_index}`"
+                    :line-clamp="cell.column.lineClamp"
+                    :unescape="cell.column.unescape"
+                    :value="cell.value"
+                  />
                 </span>
-                <span v-else-if="cell.column.unescape" v-html="cell.value">
-                </span>
-                <span v-else>
-                  {{ cell.value }}
-                </span>
+                <span
+                  v-else-if="cell.column.unescape"
+                  v-html="cell.value"
+                ></span>
+                <span v-else>{{ cell.value }}</span>
               </td>
             </tr>
           </tbody>
@@ -265,6 +267,8 @@ import {
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
+import AnchorCell from "./AnchorCell.vue";
+import LineClampCell from "./LineClampCell.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -290,6 +294,8 @@ export default defineComponent({
   components: {
     Slider,
     SliderPagination,
+    AnchorCell,
+    LineClampCell,
     FontAwesomeIcon,
   },
 
@@ -562,6 +568,7 @@ function createColumnState(columnDef, values) {
     align: columnDef.align,
     fixed: columnDef.fixed,
     target: columnDef.target,
+    lineClamp: columnDef["line-clamp"],
   };
 
   if (columnDef.type === "number") {

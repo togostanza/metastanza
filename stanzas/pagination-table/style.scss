@@ -370,6 +370,19 @@
                   color: inherit;
                   font-weight: inherit;
                 }
+                .label {
+                  cursor: pointer;
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  color: var(--togostanza-tbody-font-color);
+                }
+                input {
+                  display: none;
+                }
+                input:checked ~ .label {
+                  display: block;
+                }
               }
             }
             &:last-of-type {

@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in state.allRows" :key="row.id">
+        <tr v-for="(row, row_index) in state.allRows" :key="row.id">
           <td
             v-for="(cell, index) in row"
             :key="cell.column.id"
@@ -39,16 +39,25 @@
             "
           >
             <span v-if="cell.href">
-              <a
+              <AnchorCell
+                :id="`${cell.column.id}_${row_index}`"
                 :href="cell.href"
+                :value="cell.value"
                 :target="cell.target ? `_${cell.target}` : '_blank'"
-                >{{ cell.value }}</a
-              >
+                :unescape="cell.unescape"
+                :line-clamp="cell.lineClamp"
+              />
+            </span>
+            <span v-else-if="cell.lineClamp">
+              <LineClampCell
+                :id="`${cell.column.id}_${row_index}`"
+                :value="cell.value"
+                :unescape="cell.unescape"
+                :line-clamp="cell.lineClamp"
+              />
             </span>
             <span v-else-if="cell.unescape" v-html="cell.value"></span>
-            <span v-else>
-              {{ cell.value }}
-            </span>
+            <span v-else>{{ cell.value }}</span>
           </td>
         </tr>
         <tr v-if="state.isFetching">
@@ -69,14 +78,19 @@ import {
   onRenderTriggered,
   ref,
 } from "vue";
+import AnchorCell from "./AnchorCell.vue";
+import LineClampCell from "./LineClampCell.vue";
 
 import loadData from "togostanza-utils/load-data";
 
 import metadata from "./metadata.json";
 
 export default defineComponent({
+  components: {
+    AnchorCell,
+    LineClampCell,
+  },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
-
   setup(params) {
     const state = reactive({
       columns: [],
@@ -132,6 +146,7 @@ export default defineComponent({
               align: column.align,
               class: column.class,
               target: column.target,
+              lineClamp: column["line-clamp"],
             };
           });
         })
