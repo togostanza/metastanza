@@ -260,7 +260,6 @@ import {
   ref,
   computed,
   watch,
-  onMounted,
   onRenderTriggered,
   toRefs,
 } from "vue";
@@ -485,10 +484,17 @@ export default defineComponent({
       state.pagination.currentPage = currentPage;
     }
 
-    async function fetchData() {
-      const data = await loadData(params.dataUrl.value, params.dataType.value);
+    watch(
+      [params.dataUrl, params.dataType],
+      async ([dataUrl, dataType]) => {
+        state.responseJSON = await loadData(dataUrl, dataType);
+      },
+      { immediate: true }
+    );
 
-      state.responseJSON = data;
+    state.columns = computed(() => {
+      const data = state.responseJSON || [];
+
       let columns;
       if (params.columns.value) {
         columns = JSON.parse(params.columns.value).map((column, index) => {
@@ -508,12 +514,16 @@ export default defineComponent({
         columns = [];
       }
 
-      state.columns = columns.map((column) => {
+      return columns.map((column) => {
         const values = data.map((obj) => obj[column.id]);
         return createColumnState(column, values);
       });
+    });
 
-      state.allRows = data.map((row) => {
+    state.allRows = computed(() => {
+      const data = state.responseJSON || [];
+
+      return data.map((row) => {
         return state.columns.map((column) => {
           return {
             column,
@@ -522,9 +532,7 @@ export default defineComponent({
           };
         });
       });
-    }
-
-    onMounted(fetchData);
+    });
 
     const thead = ref(null);
     onRenderTriggered(() => {
