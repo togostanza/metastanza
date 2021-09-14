@@ -491,6 +491,7 @@ export default defineComponent({
     watch(
       [dataUrl, dataType],
       async ([dataUrl, dataType]) => {
+        state.responseJSON = null;
         state.responseJSON = await loadData(dataUrl, dataType);
       },
       { immediate: true }
