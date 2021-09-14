@@ -296,8 +296,12 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const { pageSlider, pageSizeOption: pageSizeOptionStr } = toRefs(params);
-    params = toRefs(params);
+    const {
+      pageSlider,
+      pageSizeOption: pageSizeOptionStr,
+      dataUrl,
+      dataType,
+    } = toRefs(params);
     const sliderPagination = ref();
     const pageSizeOption = computed(() =>
       pageSizeOptionStr.value.split(",").map(Number)
@@ -485,7 +489,7 @@ export default defineComponent({
     }
 
     watch(
-      [params.dataUrl, params.dataType],
+      [dataUrl, dataType],
       async ([dataUrl, dataType]) => {
         state.responseJSON = await loadData(dataUrl, dataType);
       },
@@ -496,9 +500,9 @@ export default defineComponent({
       const data = state.responseJSON || [];
 
       let columns;
-      if (params.columns.value) {
-        columns = JSON.parse(params.columns.value).map((column, index) => {
-          column.fixed = index < params.fixedColumns.value;
+      if (params.columns) {
+        columns = JSON.parse(params.columns).map((column, index) => {
+          column.fixed = index < params.fixedColumns;
           return column;
         });
       } else if (data.length > 0) {
@@ -507,7 +511,7 @@ export default defineComponent({
           return {
             id: key,
             label: key,
-            fixed: index < params.fixedColumns.value,
+            fixed: index < params.fixedColumns,
           };
         });
       } else {
@@ -543,7 +547,7 @@ export default defineComponent({
     });
 
     return {
-      width: params.width.value ? params.width.value + "px" : "100%",
+      width: computed(() => (params.width ? params.width + "px" : "100%")),
       sliderPagination,
       pageSizeOption,
       state,
