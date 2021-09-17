@@ -7,9 +7,34 @@ main {
   padding: 1rem 2rem;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+section {
+  display: flex;
+}
+* {
+  font-family: var(--togostanza-font-family);
+  font-size: var(--togostanza-font-size);
+  color: var(--togostanza-font-color);
+}
+
+#wrapper {
+  > .container {
+    display: flex;
+    > .column {
+      background-color: var(--togostanza-node-background-color);
+      margin-right: 0.2rem;
+      display: grid;
+      min-width: max-content;
+      height: fit-content;
+      > .node {
+        &:hover {
+          background-color: var(--togostanza-hover-background-color);
+          color: var(--togostanza-hover-text-color);
+          cursor: pointer;
+        }
+        > .icon {
+          width: calc(var(--togostanza-font-size) * 0.8);
+        }
+      }
+    }
+  }
 }

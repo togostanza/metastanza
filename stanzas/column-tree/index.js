@@ -1,5 +1,6 @@
 import Stanza from "togostanza/stanza";
-import loadData from "@/lib/load-data";
+import { createApp } from "vue";
+import App from "./app.vue";
 import { appendCustomCss } from "@/lib/metastanza_utils.js";
 
 // {/* <table class="layer0">
@@ -15,52 +16,42 @@ import { appendCustomCss } from "@/lib/metastanza_utils.js";
 //   </tbody>
 // </table> */}
 
-const node = (name) => {
-  const tr = document.createElement("tr");
-  tr.innerText = name;
-};
+// const node = (name) => {
+//   const tr = document.createElement("tr");
+//   tr.innerText = name;
+// };
 
-export default class ColumnTree extends Stanza {
-  async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    // const getNodes = (parentId) => {
+    //   return dataset.filter((record) => parentId === record.parent);
+    // };
 
-    const dataset = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
-    console.log(dataset);
+    // const addTable = (nodes, depth, target) => {
+    //   const table = document.createElement("table");
+    //   table.className = `layer${depth}`;
+    //   table.innerHTML = `
+    //     <tbody>
+    //       <tr>
+    //         <th>LAYER${depth}</th>
+    //       </tr>
+    //         <tr class="node" data-id=${nodes[0].id}>
+    //           <td>${nodes[0].name}</td>
+    //         </tr>
+    //     </tbody>`;
+    //   this.root.querySelector(".container").appendChild(table);
+    // };
 
-    const getNodes = (parentId) => {
-      return dataset.filter((record) => parentId === record.parent);
-    };
-
-    const addTable = (nodes, depth, target) => {
-      const table = document.createElement("table");
-      table.className = `layer${depth}`;
-      table.innerHTML = `
-        <tbody>
-          <tr>
-            <th>LAYER${depth}</th>
-          </tr>
-            <tr class="node" data-id=${nodes[0].id}>
-              <td>${nodes[0].name}</td>
-            </tr>
-        </tbody>`;
-      this.root.querySelector(".container").appendChild(table);
-    };
-
-    const node = (name) => {
-      const tr = document.createElement("tr");
-      tr.innerText = name;
-    };
-    const layers = new Map([
-      ["layer0", dataset.filter((record) => !record.parent)],
-      ["layer1", []],
-      ["layer2", []],
-      ["layer3", []],
-      ["layer4", []],
-      ["layer5", []],
-    ]);
+    // const node = (name) => {
+    //   const tr = document.createElement("tr");
+    //   tr.innerText = name;
+    // };
+    // const layers = new Map([
+    //   ["layer0", dataset.filter((record) => !record.parent)],
+    //   ["layer1", []],
+    //   ["layer2", []],
+    //   ["layer3", []],
+    //   ["layer4", []],
+    //   ["layer5", []],
+    // ]);
     // let nestedData = {};
     // nestedData = first;
     // const firstIds = first.map(record => record.id);
@@ -84,30 +75,43 @@ export default class ColumnTree extends Stanza {
     // console.log(second);
     // console.log(third);
     // const values = dataset.map(record => { return { name: record.name} });
-      this.renderTemplate({
-        template: "stanza.html.hbs",
-        parameters: {
-          layer0: layers.get("layer0"),
-          layer1: layers.get("layer1"),
-          layer2: layers.get("layer2"),
-          layer3: layers.get("layer3"),
-          layer4: layers.get("layer4"),
-          layer5: layers.get("layer5"),
-        },
-      });
+    // this.renderTemplate({
+    //   template: "stanza.html.hbs",
+    //   parameters: {
+    //     layer0: layers.get("layer0"),
+    //     layer1: layers.get("layer1"),
+    //     layer2: layers.get("layer2"),
+    //     layer3: layers.get("layer3"),
+    //     layer4: layers.get("layer4"),
+    //     layer5: layers.get("layer5"),
+    //   },
+    // });
 
-    function eventHandlerNode(el) {
-      const parentTable = el.closest("table").className;
-      const depth = parseInt(parentTable.slice(-1));
-      const childNodes = getNodes(parseInt(el.dataset.id));
-      layers.set(`layer${depth + 1}`, childNodes);
-      // addTable(childNodes, depth + 1, parentTable);
-      console.log(layers);
-    }
+    // function eventHandlerNode(el) {
+    //   const parentTable = el.closest("table").className;
+    //   const depth = parseInt(parentTable.slice(-1));
+    //   const childNodes = getNodes(parseInt(el.dataset.id));
+    //   layers.set(`layer${depth + 1}`, childNodes);
+    //   // addTable(childNodes, depth + 1, parentTable);
+    //   console.log(layers);
+    // }
 
-    for (const node of this.root.querySelectorAll(".node")) {
-      console.log(node);
-      node.addEventListener("click", () => eventHandlerNode(node));
-    }
+    // for (const node of this.root.querySelectorAll(".node")) {
+    //   console.log(node);
+    //   node.addEventListener("click", () => eventHandlerNode(node));
+    // }
+
+export default class ColumnTree extends Stanza {
+  async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
+
+    const main = this.root.querySelector("main");
+    main.parentNode.style.backgroundColor =
+      "var(--togostanza-background-color)";
+
+    this._app?.unmount();
+    this._app = createApp(App, this.params);
+    this._app.mount(main);
+
   }
 }
