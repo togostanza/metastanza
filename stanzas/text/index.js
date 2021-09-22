@@ -4,7 +4,7 @@ import hljs from "highlight.js";
 import "katex/dist/katex";
 import renderMathInElement from "katex/dist/contrib/auto-render.mjs";
 
-import { appendCustomCss } from "@/lib/metastanza_utils.js";
+import { appendCustomCss } from "togostanza-utils";
 
 export default class Text extends Stanza {
   constructor() {
