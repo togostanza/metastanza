@@ -1,6 +1,6 @@
-import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './metastanza_utils-ae3db7d4.js';
+import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './index-e0b42b46.js';
 import { e as defineComponent, u as reactive, o as onMounted, r as ref, v as onRenderTriggered, g as createElementBlock, i as createBaseVNode, F as Fragment, k as renderList, q as createCommentVNode, A as normalizeStyle, d as openBlock, n as normalizeClass, p as toDisplayString, D as createApp } from './runtime-dom.esm-bundler-7edf55a5.js';
-import { l as loadData } from './load-data-192a367a.js';
+import { l as loadData } from './load-data-0c021b7f.js';
 
 var metadata = {
 	"@context": {
@@ -236,7 +236,7 @@ var script = defineComponent({
               unescape: column.escape === false,
               align: column.align,
               class: column.class,
-              target: column.target
+              target: column.target,
             };
           });
         })
@@ -324,7 +324,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 (openBlock(true), createElementBlock(Fragment, null, renderList(row, (cell, index) => {
                   return (openBlock(), createElementBlock("td", {
                     key: cell.column.id,
-                    class: normalizeClass([cell.column.align, { fixed: cell.column.fixed }, cell.column.class]),
+                    class: normalizeClass([
+              cell.column.align,
+              { fixed: cell.column.fixed },
+              cell.column.class,
+            ]),
                     style: normalizeStyle(
               cell.column.fixed
                 ? `left: ${index === 0 ? 0 : _ctx.state.thListWidth[index - 1]}px;`
