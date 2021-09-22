@@ -1,12 +1,12 @@
 import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "metastanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "metastanza-utils";
 
 export default class Tree extends Stanza {
   menu() {

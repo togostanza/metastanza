@@ -27,7 +27,11 @@
           <td
             v-for="(cell, index) in row"
             :key="cell.column.id"
-            :class="[cell.column.align, { fixed: cell.column.fixed }, cell.column.class]"
+            :class="[
+              cell.column.align,
+              { fixed: cell.column.fixed },
+              cell.column.class,
+            ]"
             :style="
               cell.column.fixed
                 ? `left: ${index === 0 ? 0 : state.thListWidth[index - 1]}px;`
@@ -35,7 +39,11 @@
             "
           >
             <span v-if="cell.href">
-              <a :href="cell.href" :target="cell.target ? `_${cell.target}` : '_blank'">{{ cell.value }}</a>
+              <a
+                :href="cell.href"
+                :target="cell.target ? `_${cell.target}` : '_blank'"
+                >{{ cell.value }}</a
+              >
             </span>
             <span v-else-if="cell.unescape" v-html="cell.value"></span>
             <span v-else>
@@ -62,7 +70,7 @@ import {
   ref,
 } from "vue";
 
-import loadData from "@/lib/load-data";
+import loadData from "metastanza-utils/load-data";
 
 import metadata from "./metadata.json";
 
@@ -123,7 +131,7 @@ export default defineComponent({
               unescape: column.escape === false,
               align: column.align,
               class: column.class,
-              target: column.target
+              target: column.target,
             };
           });
         })

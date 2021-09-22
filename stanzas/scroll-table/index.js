@@ -1,6 +1,6 @@
 import Stanza from "togostanza/stanza";
 
-import { appendCustomCss } from "@/lib/metastanza_utils.js";
+import { appendCustomCss } from "metastanza-utils";
 
 import { createApp } from "vue";
 import App from "./app.vue";
