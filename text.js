@@ -80067,12 +80067,8 @@ var metadata = {
 	"@id": "text",
 	"stanza:label": "Text",
 	"stanza:definition": "Text MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Text",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-12-02",

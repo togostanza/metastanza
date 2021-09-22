@@ -60,12 +60,8 @@ var metadata = {
 	"@id": "hash-table",
 	"stanza:label": "Hash table",
 	"stanza:definition": "Hash table MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Table",
-	"stanza:provider": "",
 	"stanza:license": "MIT",
-	"stanza:author": "reika0717",
-	"stanza:address": "hirahara@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2021-03-18",

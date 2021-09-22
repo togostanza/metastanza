@@ -352,12 +352,8 @@ var metadata = {
 	"@id": "barchart",
 	"stanza:label": "Barchart",
 	"stanza:definition": "Barchart MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Chart",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c_nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-11-06",

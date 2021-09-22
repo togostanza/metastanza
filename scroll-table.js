@@ -9,12 +9,8 @@ var metadata = {
 	"@id": "scroll-table",
 	"stanza:label": "Scroll table",
 	"stanza:definition": "Scroll table MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Table",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-12-09",

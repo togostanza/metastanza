@@ -82,12 +82,8 @@ var metadata = {
 	"@id": "scorecard",
 	"stanza:label": "Scorecard",
 	"stanza:definition": "Scorecard MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Image",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-12-02",

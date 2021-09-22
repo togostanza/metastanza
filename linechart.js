@@ -256,12 +256,8 @@ var metadata = {
 	"@id": "linechart",
 	"stanza:label": "Linechart",
 	"stanza:definition": "Linechart MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Text",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-11-07",

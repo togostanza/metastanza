@@ -189,12 +189,8 @@ var metadata = {
 	"@id": "tree",
 	"stanza:label": "Tree",
 	"stanza:definition": "Tree MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "tree",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-11-26",
