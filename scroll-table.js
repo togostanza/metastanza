@@ -1,6 +1,139 @@
 import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './index-e0b42b46.js';
-import { e as defineComponent, u as reactive, o as onMounted, r as ref, v as onRenderTriggered, g as createElementBlock, i as createBaseVNode, F as Fragment, k as renderList, q as createCommentVNode, A as normalizeStyle, d as openBlock, n as normalizeClass, p as toDisplayString, D as createApp } from './runtime-dom.esm-bundler-7edf55a5.js';
+import { e as defineComponent, g as createElementBlock, i as createBaseVNode, u as normalizeStyle, p as toDisplayString, F as Fragment, d as openBlock, j as createVNode, q as createCommentVNode, b as createBlock, l as createTextVNode, s as resolveComponent, v as reactive, o as onMounted, r as ref, x as onRenderTriggered, k as renderList, n as normalizeClass, D as createApp } from './runtime-dom.esm-bundler-bcdf4715.js';
 import { l as loadData } from './load-data-0c021b7f.js';
+
+var script$2 = defineComponent({
+  props: {
+    id: {
+      type: String,
+      default: null,
+    },
+    unescape: {
+      type: Boolean,
+      default: false,
+    },
+    lineClamp: {
+      type: Number,
+      default: null,
+    },
+    value: {
+      type: String,
+      default: null,
+    },
+  },
+});
+
+const _hoisted_1$2 = ["id", "name"];
+const _hoisted_2$2 = ["for", "innerHTML"];
+const _hoisted_3$2 = ["for"];
+
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("input", {
+      id: _ctx.id,
+      type: "checkbox",
+      name: _ctx.id
+    }, null, 8 /* PROPS */, _hoisted_1$2),
+    (_ctx.unescape)
+      ? (openBlock(), createElementBlock("label", {
+          key: 0,
+          for: _ctx.id,
+          style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`),
+          innerHTML: _ctx.value
+        }, null, 12 /* STYLE, PROPS */, _hoisted_2$2))
+      : (openBlock(), createElementBlock("label", {
+          key: 1,
+          for: _ctx.id,
+          style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`)
+        }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$2))
+  ], 64 /* STABLE_FRAGMENT */))
+}
+
+script$2.render = render$2;
+script$2.__file = "stanzas/scroll-table/LineClampCell.vue";
+
+var script$1 = defineComponent({
+  components: {
+    LineClampCell: script$2,
+  },
+  props: {
+    id: {
+      type: String,
+      default: null,
+    },
+    href: {
+      type: String,
+      default: null,
+    },
+    value: {
+      type: String,
+      default: null,
+    },
+    target: {
+      type: String,
+      default: "_blank",
+    },
+    unescape: {
+      type: Boolean,
+      default: false,
+    },
+    lineClamp: {
+      type: Number,
+      default: null,
+    },
+  },
+});
+
+const _hoisted_1$1 = ["href", "target"];
+const _hoisted_2$1 = ["href", "target", "innerHTML"];
+const _hoisted_3$1 = ["href", "target"];
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_LineClampCell = resolveComponent("LineClampCell");
+
+  return (openBlock(), createElementBlock(Fragment, null, [
+    (_ctx.unescape && _ctx.lineClamp)
+      ? (openBlock(), createElementBlock("a", {
+          key: 0,
+          href: _ctx.href,
+          target: _ctx.target
+        }, [
+          createVNode(_component_LineClampCell, {
+            id: _ctx.id,
+            "line-clamp": _ctx.lineClamp,
+            unescape: _ctx.unescape,
+            value: _ctx.value
+          }, null, 8 /* PROPS */, ["id", "line-clamp", "unescape", "value"])
+        ], 8 /* PROPS */, _hoisted_1$1))
+      : createCommentVNode("v-if", true),
+    (_ctx.unescape && !_ctx.lineClamp)
+      ? (openBlock(), createElementBlock("a", {
+          key: 1,
+          href: _ctx.href,
+          target: _ctx.target,
+          innerHTML: _ctx.value
+        }, null, 8 /* PROPS */, _hoisted_2$1))
+      : (openBlock(), createElementBlock("a", {
+          key: 2,
+          href: _ctx.href,
+          target: _ctx.target
+        }, [
+          (_ctx.lineClamp)
+            ? (openBlock(), createBlock(_component_LineClampCell, {
+                key: 0,
+                id: _ctx.id,
+                "line-clamp": _ctx.lineClamp,
+                value: _ctx.value
+              }, null, 8 /* PROPS */, ["id", "line-clamp", "value"]))
+            : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                createTextVNode(toDisplayString(_ctx.value), 1 /* TEXT */)
+              ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+        ], 8 /* PROPS */, _hoisted_3$1))
+  ], 64 /* STABLE_FRAGMENT */))
+}
+
+script$1.render = render$1;
+script$1.__file = "stanzas/scroll-table/AnchorCell.vue";
 
 var metadata = {
 	"@context": {
@@ -18,7 +151,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606",
+		"stanza:example": "https://togovar-dev.biosciencedbc.jp/sparqlist/api/gene_gwas?ep=https%3A%2F%2Ftogovar-dev.biosciencedbc.jp%2Fsparql&hgnc_id=404",
 		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
@@ -76,7 +209,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"label\": \"Mnemonic\",\"class\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\",\"escape\": false},{\"id\": \"mass\",\"label\": \"Mass\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\"}]",
+		"stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\"},{\"id\":\"raf\",\"label\":\"RAF\"},{\"id\":\"p_value\",\"label\":\"P-Value\",\"type\":\"number\"},{\"id\":\"odds_ratio\",\"label\":\"OR\"},{\"id\":\"ci_text\",\"label\":\"CI\"},{\"id\":\"beta\",\"label\":\"Beta\"},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\"},{\"id\":\"study_detail\",\"label\":\"Study details\",\"link\":\"study\"},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\"},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\": 3}]",
 		"stanza:description": "Columns' options"
 	}
 ],
@@ -176,8 +309,11 @@ var metadata = {
 };
 
 var script = defineComponent({
+  components: {
+    AnchorCell: script$1,
+    LineClampCell: script$2,
+  },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
-
   setup(params) {
     const state = reactive({
       columns: [],
@@ -233,6 +369,7 @@ var script = defineComponent({
               align: column.align,
               class: column.class,
               target: column.target,
+              lineClamp: column["line-clamp"],
             };
           });
         })
@@ -278,9 +415,9 @@ const _hoisted_1 = { key: 0 };
 const _hoisted_2 = { ref: "thead" };
 const _hoisted_3 = ["id"];
 const _hoisted_4 = { key: 0 };
-const _hoisted_5 = ["href", "target"];
+const _hoisted_5 = { key: 1 };
 const _hoisted_6 = ["innerHTML"];
-const _hoisted_7 = { key: 2 };
+const _hoisted_7 = { key: 3 };
 const _hoisted_8 = { key: 0 };
 const _hoisted_9 = ["colspan"];
 const _hoisted_10 = /*#__PURE__*/createBaseVNode("div", { class: "dotTyping" }, null, -1 /* HOISTED */);
@@ -289,6 +426,9 @@ const _hoisted_11 = [
 ];
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
+  const _component_AnchorCell = resolveComponent("AnchorCell");
+  const _component_LineClampCell = resolveComponent("LineClampCell");
+
   return (openBlock(), createElementBlock("div", {
     class: "tableWrapper",
     style: normalizeStyle(`width: ${_ctx.width}px; height: ${_ctx.height}px;`),
@@ -313,7 +453,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ])
           ], 512 /* NEED_PATCH */),
           createBaseVNode("tbody", null, [
-            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.allRows, (row) => {
+            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.allRows, (row, row_index) => {
               return (openBlock(), createElementBlock("tr", {
                 key: row.id
               }, [
@@ -333,17 +473,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }, [
                     (cell.href)
                       ? (openBlock(), createElementBlock("span", _hoisted_4, [
-                          createBaseVNode("a", {
+                          createVNode(_component_AnchorCell, {
+                            id: `${cell.column.id}_${row_index}`,
                             href: cell.href,
-                            target: cell.target ? `_${cell.target}` : '_blank'
-                          }, toDisplayString(cell.value), 9 /* TEXT, PROPS */, _hoisted_5)
+                            value: cell.value,
+                            target: cell.target ? `_${cell.target}` : '_blank',
+                            unescape: cell.unescape,
+                            "line-clamp": cell.lineClamp
+                          }, null, 8 /* PROPS */, ["id", "href", "value", "target", "unescape", "line-clamp"])
                         ]))
-                      : (cell.unescape)
-                        ? (openBlock(), createElementBlock("span", {
-                            key: 1,
-                            innerHTML: cell.value
-                          }, null, 8 /* PROPS */, _hoisted_6))
-                        : (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString(cell.value), 1 /* TEXT */))
+                      : (cell.lineClamp)
+                        ? (openBlock(), createElementBlock("span", _hoisted_5, [
+                            createVNode(_component_LineClampCell, {
+                              id: `${cell.column.id}_${row_index}`,
+                              value: cell.value,
+                              unescape: cell.unescape,
+                              "line-clamp": cell.lineClamp
+                            }, null, 8 /* PROPS */, ["id", "value", "unescape", "line-clamp"])
+                          ]))
+                        : (cell.unescape)
+                          ? (openBlock(), createElementBlock("span", {
+                              key: 2,
+                              innerHTML: cell.value
+                            }, null, 8 /* PROPS */, _hoisted_6))
+                          : (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString(cell.value), 1 /* TEXT */))
                   ], 6 /* CLASS, STYLE */))
                 }), 128 /* KEYED_FRAGMENT */))
               ]))

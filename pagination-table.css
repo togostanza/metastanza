@@ -724,6 +724,19 @@
   color: inherit;
   font-weight: inherit;
 }
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span .label {
+  cursor: pointer;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  color: var(--togostanza-tbody-font-color);
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input {
+  display: none;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input:checked ~ .label {
+  display: block;
+}
 .wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
 }

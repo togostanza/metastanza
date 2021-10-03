@@ -101,6 +101,19 @@
 .tableWrapper > table > tbody > tr > td > span > a {
   color: var(--togostanza-tbody-font-color);
 }
+.tableWrapper > table > tbody > tr > td label {
+  cursor: pointer;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  color: var(--togostanza-tbody-font-color);
+}
+.tableWrapper > table > tbody > tr > td input {
+  display: none;
+}
+.tableWrapper > table > tbody > tr > td input:checked ~ label {
+  display: block;
+}
 .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
 }
