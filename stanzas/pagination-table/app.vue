@@ -572,7 +572,7 @@ function createColumnState(columnDef, values) {
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number).filter(Number)
+    const nums = values.map(Number)
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -605,25 +605,29 @@ function createColumnState(columnDef, values) {
       inputtingRangeMax,
       isSearchModalShowing: false,
       parseValue(val) {
-        val = Number(val)
-        if(columnDef["significant-digits"]) {
-          val = Number.parseFloat(val).toExponential(Number(columnDef["significant-digits"]) - 1)
+        val = Number(val);
+        if (columnDef["significant-digits"]) {
+          val = Number.parseFloat(val).toExponential(
+            Number(columnDef["significant-digits"]) - 1
+          );
         }
-        if(columnDef["exponent-digits"]) {
-          const decimalPoint = Number(val).toExponential(1)
-          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/)
-          index = index ? index[1] : null
-          if(columnDef["exponent-digits"] <= +index) {
-            val = Number.parseFloat(val).toExponential(Number(columnDef["significant-digits"]) - 1);
+        if (columnDef["exponent-digits"]) {
+          const decimalPoint = Number(val).toExponential(1);
+          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/);
+          index = index ? index[1] : null;
+          if (columnDef["exponent-digits"] <= +index) {
+            val = Number.parseFloat(val).toExponential(
+              Number(columnDef["significant-digits"]) - 1
+            );
           } else {
-            val = Number(val)
+            val = Number(val);
           }
         }
-        return val
+        return val;
       },
 
       isMatch(val) {
-        return val > rangeMin.value && val <= rangeMax.value;
+        return val >= rangeMin.value && val <= rangeMax.value;
       },
     };
   } else {
