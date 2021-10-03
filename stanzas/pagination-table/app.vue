@@ -607,10 +607,17 @@ function createColumnState(columnDef, values) {
       parseValue(val) {
         val = Number(val)
         if(columnDef["significant-digits"]) {
-          val = val.toPrecision(columnDef["significant-digits"])
+          val = Number.parseFloat(val).toExponential(Number(columnDef["significant-digits"]) - 1)
         }
         if(columnDef["exponent-digits"]) {
-          val = Number.parseFloat(val).toExponential(columnDef["exponent-digits"]);
+          const decimalPoint = Number(val).toExponential(1)
+          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/)
+          index = index ? index[1] : null
+          if(columnDef["exponent-digits"] <= +index) {
+            val = Number.parseFloat(val).toExponential(Number(columnDef["significant-digits"]) - 1);
+          } else {
+            val = Number(val)
+          }
         }
         return val
       },
