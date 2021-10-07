@@ -18,21 +18,38 @@ section {
 
 #wrapper {
   > .container {
-    display: flex;
+    background-color: var(--togostanza-node-background-color);
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
     > .column {
-      background-color: var(--togostanza-node-background-color);
-      margin-right: 0.2rem;
       display: grid;
       min-width: max-content;
       height: fit-content;
       > .node {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 0.2rem;
+        padding: 0 0.2rem;
         &:hover {
-          background-color: var(--togostanza-hover-background-color);
-          color: var(--togostanza-hover-text-color);
+          background-color: var(--togostanza-hover-background-color) !important;
+          color: var(--togostanza-hover-text-color) !important;
           cursor: pointer;
+          > svg > path {
+            color: var(--togostanza-hover-text-color);
+          }
         }
-        > .icon {
-          width: calc(var(--togostanza-font-size) * 0.8);
+        > .content
+          > .icon {
+            width: calc(var(--togostanza-font-size) * 0.6);
+            padding-left: 2rem;
+          }
+        &.-selected {
+          background-color: var(--togostanza-selected-background-color);
+          color: var(--togostanza-selected-text-color);
+          > svg > path {
+            color: var(--togostanza-selected-text-color);
+          }
         }
       }
     }
