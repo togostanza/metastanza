@@ -54,7 +54,7 @@
     {
       "stanza:key": "--togostanza-node-background-color",
       "stanza:type": "color",
-      "stanza:default": "#f5fffa",
+      "stanza:default": "#E9EAED",
       "stanza:description": "Background color"
     },
     {
@@ -72,19 +72,31 @@
     {
       "stanza:key": "--togostanza-hover-background-color",
       "stanza:type": "color",
-      "stanza:default": "#6699CC",
+      "stanza:default": "#C3ACCE",
       "stanza:description": "Hover color for background when hovering over Node"
     },
     {
       "stanza:key": "--togostanza-hover-text-color",
       "stanza:type": "color",
-      "stanza:default": "#ffffff",
+      "stanza:default": "#221727",
       "stanza:description": "Hover color for text when hovering over Node"
     },
     {
       "stanza:key": "--togostanza-font-color",
       "stanza:type": "color",
-      "stanza:default": "#0f0f0f",
+      "stanza:default": "#3c3744",
+      "stanza:description": "Text color"
+    },
+    {
+      "stanza:key": "--togostanza-selected-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#C2EFB3",
+      "stanza:description": "Text color"
+    },
+    {
+      "stanza:key": "--togostanza-selected-text-color",
+      "stanza:type": "color",
+      "stanza:default": "#15320B",
       "stanza:description": "Text color"
     }
   ],
