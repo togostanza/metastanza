@@ -39,16 +39,23 @@ section {
             color: var(--togostanza-hover-text-color);
           }
         }
-        > .content
+        > input[type="checkbox"] {
+          margin-right: 2rem;
+        }
+        &.content {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
           > .icon {
             width: calc(var(--togostanza-font-size) * 0.6);
             padding-left: 2rem;
           }
-        &.-selected {
-          background-color: var(--togostanza-selected-background-color);
-          color: var(--togostanza-selected-text-color);
-          > svg > path {
+          &.-highlighted {
+            background-color: var(--togostanza-selected-background-color);
             color: var(--togostanza-selected-text-color);
+            > svg > path {
+              color: var(--togostanza-selected-text-color);
+            }
           }
         }
       }
