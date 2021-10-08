@@ -8,7 +8,11 @@
     >
       <NodeColumn
         v-if="column.length > 0"
-        ref="layerRef"
+        :ref="
+          (el) => {
+            layerRefs[index] = el;
+          }
+        "
         :nodes="column"
         :layer="index"
         @setParent="getChildNodes"
@@ -36,20 +40,19 @@ import NodeColumn from "./NodeColumn.vue";
 export default defineComponent({
   components: { NodeColumn },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
-  emits: ["resetSelectedNode"],
+  emits: ["resetHighlightedNode"],
 
   setup(params) {
     const { testBool } = toRefs(params);
     params = toRefs(params);
 
-    const layerRef = ref(null);
+    const layerRefs = ref([]);
 
     const state = reactive({
       testBoolFromParam: testBool,
       responseJSON: null,
       columnData: [],
       checkedNodes: new Map(),
-      layerRef: ref(null),
     });
 
     //TODO: set so that data is not null when being executed
@@ -70,11 +73,20 @@ export default defineComponent({
         : state.checkedNodes.set(id, obj);
     }
 
+    function resetHighlightedNodes() {
+      for (const [index, layer] of layerRefs.value.entries()) {
+        if (layer && index >= state.columnData.length - 1) {
+          layer.resetHighlightedNode();
+        }
+      }
+    }
+
     function getChildNodes([layer, parentId]) {
       const children = data.filter((node) => node.parent === parentId);
       const indexesToRemove = state.columnData.length - layer;
       state.columnData.splice(layer, indexesToRemove, children);
-      layerRef.value.resetSelectedNode(state.columnData.length);
+
+      resetHighlightedNodes();
 
       return children;
     }
@@ -83,7 +95,7 @@ export default defineComponent({
     return {
       state,
       rootParents,
-      layerRef,
+      layerRefs,
       updateCheckedNodes,
       getChildNodes,
     };
