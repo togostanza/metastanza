@@ -1,14 +1,17 @@
 <template>
   <div class="column">
-    <span v-for="node in nodes" :key="node.id">
-      <input type="checkbox" @input="setCheckedNode(node)" />
-      <span
-        class="content"
-        :class="
-          node.id === state.highlightedNode ? 'node -highlighted' : 'node'
-        "
-        @click="node.children ? setParent(node.id) : null"
-      >
+    <span
+      v-for="node in nodes"
+      :key="node.id"
+      class="node"
+      :class="{ '-highlighted': node.id === state.highlightedNode }"
+    >
+      <input
+        type="checkbox"
+        :checked="checkedNodes.get(node.id)"
+        @input="setCheckedNode(node)"
+      />
+      <span class="content" @click="node.children ? setParent(node.id) : null">
         <span>{{ node.label }}</span>
         <font-awesome-icon
           v-if="node.children"
@@ -44,6 +47,10 @@ export default defineComponent({
     children: {
       type: Boolean,
       default: false,
+    },
+    checkedNodes: {
+      type: Map,
+      required: true,
     },
   },
   emits: ["setParent", "setCheckedNode"],
