@@ -15,6 +15,7 @@
         "
         :nodes="column"
         :layer="index"
+        :checked-nodes="state.checkedNodes"
         @setParent="getChildNodes"
         @setCheckedNode="updateCheckedNodes"
       />
@@ -70,7 +71,9 @@ export default defineComponent({
       const { id, ...obj } = node;
       state.checkedNodes.has(id)
         ? state.checkedNodes.delete(id)
-        : state.checkedNodes.set(id, obj);
+        : state.checkedNodes.set(id, { id, ...obj });
+      // TODO: add event handler
+      console.log([...state.checkedNodes.values()]);
     }
 
     function resetHighlightedNodes() {
