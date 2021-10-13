@@ -328,7 +328,7 @@ export default defineComponent({
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
-      const filtered = state.allRows.filter((row) => {
+      let filtered = state.allRows.filter((row) => {
         return (
           searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
         );
@@ -337,7 +337,17 @@ export default defineComponent({
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
-        return orderBy(
+        // TODO: refactoring
+        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
+          filtered = filtered.map(row => row.map(cell => {
+            if (cell.column.significantDigits || cell.column.exponentDigits) {
+              cell.value = Number.parseFloat(cell.value)
+            }
+            return cell
+          }))
+        }
+
+        filtered = orderBy(
           filtered,
           (cells) => {
             const cell = cells.find((cell) => cell.column === sortColumn);
@@ -345,6 +355,16 @@ export default defineComponent({
           },
           [state.sorting.direction]
         );
+
+        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
+          filtered = filtered.map(row => row.map(cell => {
+            if (cell.column.significantDigits || cell.column.exponentDigits) {
+              cell.value = cell.column.parseValue(cell.value)
+            }
+            return cell
+          }))
+        }
+        return filtered
       } else {
         return filtered;
       }
@@ -569,6 +589,8 @@ function createColumnState(columnDef, values) {
     fixed: columnDef.fixed,
     target: columnDef.target,
     lineClamp: columnDef["line-clamp"],
+    significantDigits: columnDef["significant-digits"],
+    exponentDigits: columnDef["exponent-digits"],
   };
 
   if (columnDef.type === "number") {
@@ -615,12 +637,15 @@ function createColumnState(columnDef, values) {
           const decimalPoint = Number(val).toExponential(1);
           let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/);
           index = index ? index[1] : null;
-          if (columnDef["exponent-digits"] <= +index) {
-            val = Number.parseFloat(val).toExponential(
-              Number(columnDef["significant-digits"]) - 1
-            );
+          const exponentDigits = columnDef["exponent-digits"]
+          const significantDigits = columnDef["significant-digits"]
+          if (exponentDigits <= +index) {
+            val = Number.parseFloat(val).toExponential(Number(significantDigits) - 1);
+          } else if (Number.parseFloat(val) !== 0) {
+            val = Number.parseFloat(val).toFixed(exponentDigits);
+            val = val.toString().slice(0, +index - exponentDigits)
           } else {
-            val = Number(val);
+            val = Number.parseFloat(val).toString()
           }
         }
         return val;
