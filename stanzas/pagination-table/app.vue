@@ -303,7 +303,12 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const { pageSlider, pageSizeOption: pageSizeOptionStr } = toRefs(params);
+    const {
+      pageSlider,
+      pageSizeOption: pageSizeOptionStr,
+      dataUrl,
+      dataType,
+    } = toRefs(params);
     const sliderPagination = ref();
     const pageSizeOption = computed(() =>
       pageSizeOptionStr.value.split(",").map(Number)
@@ -514,10 +519,17 @@ export default defineComponent({
       state.pagination.currentPage = currentPage;
     }
 
-    async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+    watch(
+      [dataUrl, dataType],
+      async ([dataUrl, dataType]) => {
+        state.responseJSON = null;
+        state.responseJSON = await loadData(dataUrl, dataType);
+      },
+      { immediate: true }
+    );
 
-      state.responseJSON = data;
+    state.columns = computed(() => {
+      const data = state.responseJSON || [];
       let columns;
       if (params.columns) {
         columns = JSON.parse(params.columns).map((column, index) => {
@@ -536,13 +548,15 @@ export default defineComponent({
       } else {
         columns = [];
       }
-
-      state.columns = columns.map((column) => {
+      return columns.map((column) => {
         const values = data.map((obj) => obj[column.id]);
         return createColumnState(column, values);
       });
+    });
 
-      state.allRows = data.map((row) => {
+    state.allRows = computed(() => {
+      const data = state.responseJSON || [];
+      return data.map((row) => {
         return state.columns.map((column) => {
           return {
             column,
@@ -551,9 +565,7 @@ export default defineComponent({
           };
         });
       });
-    }
-
-    onMounted(fetchData);
+    });
 
     const thead = ref(null);
     onRenderTriggered(() => {
