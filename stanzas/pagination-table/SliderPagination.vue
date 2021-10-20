@@ -123,6 +123,9 @@ export default defineComponent({
     const paginationNumList = ref(null);
     function drawKnobArrow() {
       setTimeout(() => {
+        if (!canvas.value) {
+          return;
+        }
         const totalPages = props.totalPages;
         if (totalPages <= 5) {
           return;

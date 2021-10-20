@@ -264,6 +264,7 @@ import {
   watch,
   onMounted,
   onRenderTriggered,
+  toRefs,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
@@ -302,6 +303,7 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    const { pageSlider } = toRefs(params);
     const sliderPagination = ref();
     const pageSizeOption = params.pageSizeOption.split(",").map(Number);
 
@@ -320,7 +322,7 @@ export default defineComponent({
       pagination: {
         currentPage: 1,
         perPage: pageSizeOption[0],
-        isSliderOn: params.pageSlider,
+        isSliderOn: pageSlider,
       },
 
       isMenuOn: false,
