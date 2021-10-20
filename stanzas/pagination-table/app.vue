@@ -303,9 +303,11 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const { pageSlider } = toRefs(params);
+    const { pageSlider, pageSizeOption: pageSizeOptionStr } = toRefs(params);
     const sliderPagination = ref();
-    const pageSizeOption = params.pageSizeOption.split(",").map(Number);
+    const pageSizeOption = computed(() =>
+      pageSizeOptionStr.value.split(",").map(Number)
+    );
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -321,7 +323,7 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: pageSizeOption[0],
+        perPage: pageSizeOption.value[0],
         isSliderOn: pageSlider,
       },
 
