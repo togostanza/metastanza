@@ -575,8 +575,10 @@ export default defineComponent({
       }, 0);
     });
 
+    const width = computed(() => (params.width ? params.width + "px" : "100%"));
+
     return {
-      width: params.width ? params.width + "px" : "100%",
+      width,
       sliderPagination,
       pageSizeOption,
       state,
