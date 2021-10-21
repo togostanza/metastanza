@@ -361,7 +361,7 @@ export default defineComponent({
         filtered = orderBy(
           filtered,
           (cells) => {
-            const cell = cells.find((cell) => cell.column === sortColumn);
+            const cell = cells.find((cell) => cell.column.id === sortColumn.id);
             return cell.value;
           },
           [state.sorting.direction]
