@@ -526,35 +526,33 @@ export default defineComponent({
       async ([dataUrl, dataType]) => {
         state.responseJSON = null;
         state.responseJSON = await loadData(dataUrl, dataType);
+
+        const data = state.responseJSON || [];
+        let columns;
+        if (params.columns) {
+          columns = JSON.parse(params.columns).map((column, index) => {
+            column.fixed = index < params.fixedColumns;
+            return column;
+          });
+        } else if (data.length > 0) {
+          const firstRow = data[0];
+          columns = Object.keys(firstRow).map((key, index) => {
+            return {
+              id: key,
+              label: key,
+              fixed: index < params.fixedColumns,
+            };
+          });
+        } else {
+          columns = [];
+        }
+        state.columns = columns.map((column) => {
+          const values = data.map((obj) => obj[column.id]);
+          return createColumnState(column, values);
+        });
       },
       { immediate: true }
     );
-
-    state.columns = computed(() => {
-      const data = state.responseJSON || [];
-      let columns;
-      if (params.columns) {
-        columns = JSON.parse(params.columns).map((column, index) => {
-          column.fixed = index < params.fixedColumns;
-          return column;
-        });
-      } else if (data.length > 0) {
-        const firstRow = data[0];
-        columns = Object.keys(firstRow).map((key, index) => {
-          return {
-            id: key,
-            label: key,
-            fixed: index < params.fixedColumns,
-          };
-        });
-      } else {
-        columns = [];
-      }
-      return columns.map((column) => {
-        const values = data.map((obj) => obj[column.id]);
-        return createColumnState(column, values);
-      });
-    });
 
     state.allRows = computed(() => {
       const data = state.responseJSON || [];
