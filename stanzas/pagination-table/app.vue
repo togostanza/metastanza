@@ -48,7 +48,10 @@
               >
                 {{ column.label }}
                 <font-awesome-icon
-                  v-if="state.sorting.column === column"
+                  v-if="
+                    state.sorting.column &&
+                    state.sorting.column.id === column.id
+                  "
                   :key="`sort-${
                     state.sorting.direction === 'asc' ? 'up' : 'down'
                   }`"
