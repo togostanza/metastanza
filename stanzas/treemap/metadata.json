@@ -4,16 +4,16 @@
   },
   "@id": "treemap",
   "stanza:label": "Treemap",
-  "stanza:definition": "Treemap MetaStanza ",
+  "stanza:definition": "Treemap MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Tree",
   "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "teraomoyu",
-  "stanza:address": "",
+  "stanza:author": "anton",
+  "stanza:address": "anton@penqe.com",
   "stanza:contributor": [],
-  "stanza:created": "2021-08-05",
-  "stanza:updated": "2021-08-05",
+  "stanza:created": "2021-10-25",
+  "stanza:updated": "2021-10-25",
   "stanza:parameter": [
     {
       "stanza:key": "say-to",
@@ -21,12 +21,6 @@
       "stanza:example": "world",
       "stanza:description": "who to say hello to",
       "stanza:required": false
-    },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 960,
-      "stanza:description": "Width"
     }
   ],
   "stanza:menu-placement": "bottom-right",
