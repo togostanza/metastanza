@@ -1,7 +1,8 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
+import * as d3Collection from "d3-collection";
 import uid from "./uid";
-import data from "./sampleData";
+import data from "./sampleData2";
 
 import {
   downloadSvgMenuItem,
@@ -23,19 +24,39 @@ export default class TreeMapStanza extends Stanza {
 
     const width = 300;
     const height = 200;
+
+    data.push({ id: 0, value: "", label: "" });
+    for (let i = 0; i < data.length - 1; i++) {
+      if (!data[i]?.parent) {
+        data[i].parent = 0;
+      }
+    }
+
     draw(treeMapElement, data, width, height);
   }
 }
 
 function draw(el, dataset, width, height) {
+  const nested = d3
+    .stratify()
+    .id(function (d) {
+      return d.id;
+    })
+    .parentId(function (d) {
+      return d.parent;
+    })(dataset);
+
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, height]);
-  const name = (d) =>
-    d
+  const name = (d) => {
+    return d
       .ancestors()
       .reverse()
-      .map((d) => d.data.name)
+      .map((d) => {
+        return d.data.data.label;
+      })
       .join("/");
+  };
 
   const format = d3.format(",d");
   const color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -52,10 +73,8 @@ function draw(el, dataset, width, height) {
 
   const treemap = (data) =>
     d3.treemap().tile(tile)(
-      d3
-        .hierarchy(data)
-        .sum((d) => d.value)
-        .sort((a, b) => b.value - a.value)
+      d3.hierarchy(data).sum((d) => 1)
+      //.sort((a, b) => b?.children?.length || 0 - a?.children?.length || 0)
     );
 
   const svg = d3
@@ -64,11 +83,46 @@ function draw(el, dataset, width, height) {
     .attr("viewBox", [0.5, -30.5, width, height + 30])
     .style("font", "10px sans-serif");
 
-  let group = svg.append("g").call(render, treemap(dataset));
+  let group = svg.append("g").call(render, treemap(nested));
 
   function render(group, root) {
-    const dMax = d3.max(root, (d) => +d.value);
-    const dMin = d3.min(root, (d) => +d.value);
+    // function to wrap text
+    function wrap(text, width) {
+      text.each(function () {
+        var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          x = text.attr("x"),
+          y = text.attr("y"),
+          dy = 0, //parseFloat(text.attr("dy")),
+          tspan = text
+            .text(null)
+            .append("tspan")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("dy", dy + "em");
+        while ((word = words.pop())) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          if (tspan.node().getComputedTextLength() > width) {
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+            tspan = text
+              .append("tspan")
+              .attr("x", x)
+              .attr("y", y)
+              .attr("dy", ++lineNumber * lineHeight + dy + "em")
+              .text(word);
+          }
+        }
+      });
+    }
+    const dMax = d3.max(root, (d) => d?.children?.length || 1);
+    const dMin = d3.min(root, (d) => d?.children?.length || 1);
 
     const node = group
       .selectAll("g")
@@ -80,7 +134,9 @@ function draw(el, dataset, width, height) {
       .attr("cursor", "pointer")
       .on("click", (event, d) => (d === root ? zoomout(root) : zoomin(d)));
 
-    node.append("title").text((d) => `${name(d)}\n${format(d.value)}`);
+    node
+      .append("title")
+      .text((d) => `${name(d)}\n${format(d?.children?.length || 0)}`);
 
     node
       .append("rect")
@@ -97,28 +153,45 @@ function draw(el, dataset, width, height) {
       .attr("href", (d) => d.leafUid.href);
 
     node
+
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
       .attr("font-weight", (d) => (d === root ? "bold" : null))
-      .selectAll("tspan")
-      .data((d) =>
-        (d === root ? name(d) : d.data.name)
-          .split(/(?=[A-Z][^A-Z])/g)
-          .concat(format(d.value))
-      )
-      .join("tspan")
-      .attr("x", 3)
-      .attr(
-        "y",
-        (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`
-      )
-      .attr("fill-opacity", (d, i, nodes) =>
-        i === nodes.length - 1 ? 0.7 : null
-      )
-      .attr("font-weight", (d, i, nodes) =>
-        i === nodes.length - 1 ? "normal" : null
-      )
-      .text((d) => d);
+      .attr("y", (d) => `${d.y0 + 10}px`)
+      .attr("x", "0.1em")
+      //.selectAll("tspan")
+      // .data((d) => {
+      //   return d === root ? name(d) : d.data.data.label;
+      //   // .split(/(?=[A-Z][^A-Z])/g)
+      //   // .concat(format(d.value));
+      // })
+      // .join("tspan")
+      // .attr("x", 3)
+      // .attr(
+      //   "y",
+      //   (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`
+      // )
+      // .attr("fill-opacity", (d, i, nodes) =>
+      //   i === nodes.length - 1 ? 0.7 : null
+      // )
+      // .attr("font-weight", (d, i, nodes) =>
+      //   i === nodes.length - 1 ? "normal" : null
+      // )
+      .text((d) => d.data.data.label)
+      .append("tspan")
+      .attr("dy", "1.1em")
+      .attr("x", "0.1em")
+      .text((d) => {
+        if (d === root) return "";
+        else {
+          if (d?.children?.length) {
+            return d?.children?.length;
+          }
+          return "";
+        }
+      });
+
+    //.call(wrap, (d) => d.x1 - d.x0);
 
     group.call(position, root);
   }
