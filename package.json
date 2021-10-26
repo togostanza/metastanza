@@ -23,6 +23,7 @@
     "@vueform/slider": "^1.0.3",
     "commonmark": "^0.30.0",
     "d3": "^7.0.1",
+    "d3-collection": "^1.0.7",
     "highlight.js": "^11.2.0",
     "katex": "^0.13.18",
     "lodash.mapvalues": "^4.6.0",
