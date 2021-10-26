@@ -5,40 +5,22 @@ import loadData from "@/lib/load-data";
 const areas = new Map([
   [
     "us",
-    [
-      {
-        name: "us-counties",
-        url: "https://vega.github.io/vega/data/us-10m.json",
-        format: { type: "topojson", feature: "counties" },
-        transform: [
-          {
-            type: "lookup",
-            from: "userData",
-            key: "id",
-            fields: ["id"],
-            values: ["rate"],
-          },
-          { type: "filter", expr: "datum.rate != null" },
-        ],
-      },
-    ],
+    {
+      name: "map",
+      url: "https://vega.github.io/vega/data/us-10m.json",
+      format: { type: "topojson", feature: "counties" },
+    },
   ],
   [
     "world",
-    [
-      {
-        name: "world",
-        url: "data/world-110m.json",
-        format: {
-          type: "topojson",
-          feature: "countries",
-        },
+    {
+      name: "map",
+      url: "https://vega.github.io/vega/data/world-110m.json",
+      format: {
+        type: "topojson",
+        feature: "countries",
       },
-      {
-        name: "graticule",
-        transform: [{ type: "graticule" }],
-      },
-    ],
+    },
   ],
 ]);
 export default class regionGeographicMap extends Stanza {
@@ -47,34 +29,30 @@ export default class regionGeographicMap extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
-        const arr = [];
-    // console.log(vegaJson);
+
     const valObj = {
       name: "userData",
-      url: this.params["data-url"],
-      format: { type: this.params["data-type"], parse: "auto" },
+      values,
     };
 
-    arr.push(valObj);
+    const transform = [
+      {
+        type: "lookup",
+        from: "userData",
+        key: "id",
+        fields: ["id"],
+        values: [this.params["value-key"]],
+      },
+    ];
 
-    for (const obj of areas.get(this.params["area"])) {
-      // console.log("obj");
-      // console.log(obj);
-      arr.push(obj);
-    }
-    // console.log("arr");
-    // console.log(arr);
-
-    const data = arr;
-    // const data = areas.get(this.params["area"]);
-    // console.log(areas.get(this.params["area"]));
-    // console.log(values);
-    // console.log(data);
+    const obj = areas.get(this.params["area"]);
+    obj.transform = transform;
+    const data = [valObj, obj];
 
     const projections = [
       {
         name: "projection",
-        type: "albersUsa",
+        type: this.params["area"] === "us" ? "albersUsa" : "mercator",
       },
     ];
 
@@ -111,21 +89,21 @@ export default class regionGeographicMap extends Stanza {
         titleColor: "var(--togostanza-title-font-color)",
         titleFont: "var(--togostanza-font-family)",
         titleFontWeight: "var(--togostanza-title-font-weight)",
-        format: "0.1%",
+        format: this.params["percentage"] ? "0.1%" : "",
       },
     ];
 
     const marks = [
       {
         type: "shape",
-        from: { data: "us-counties" },
+        from: { data: "map" },
         encode: {
-          enter: { tooltip: { signal: "format(datum.rate, '0.1%')" } },
+          enter: { tooltip: { signal: this.params["percentage"] ? `format(datum.${this.params["value-key"]}, '0.1%')` : `datum.${this.params["value-key"]}` } },
           hover: {
             fill: { value: "var(--togostanza-hover-color)" },
           },
           update: {
-            fill: { scale: "userColor", field: "rate" },
+            fill: { scale: "userColor", field: this.params["value-key"] },
             stroke: this.params["border"]
               ? { value: "var(--togostanza-region-border-color)" }
               : "",
