@@ -2,6 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import uid from "./uid";
 import data from "./sampleData";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -35,7 +36,9 @@ function draw(el, dataset, width, height) {
       .reverse()
       .map((d) => d.data.name)
       .join("/");
+
   const format = d3.format(",d");
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
   function tile(node, x0, y0, x1, y1) {
     d3.treemapBinary(node, 0, 0, width, height);
@@ -64,6 +67,9 @@ function draw(el, dataset, width, height) {
   let group = svg.append("g").call(render, treemap(dataset));
 
   function render(group, root) {
+    const dMax = d3.max(root, (d) => +d.value);
+    const dMin = d3.min(root, (d) => +d.value);
+
     const node = group
       .selectAll("g")
       .data(root.children.concat(root))
@@ -79,7 +85,9 @@ function draw(el, dataset, width, height) {
     node
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
-      .attr("fill", (d) => (d === root ? "#fff" : d.children ? "#ccc" : "#ddd"))
+      .attr("fill", (d) =>
+        d === root ? "#fff" : color((d.value - dMin) / (dMax - dMin))
+      ) //d.children ? "#ccc" : "#ddd"))
       .attr("stroke", "#fff");
 
     node
