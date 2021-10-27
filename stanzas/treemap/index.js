@@ -1,7 +1,6 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import uid from "./uid";
-//import data from "./sampleData2";
 import loadData from "@/lib/load-data";
 
 import {
@@ -20,6 +19,7 @@ export default class TreeMapStanza extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
@@ -48,11 +48,27 @@ export default class TreeMapStanza extends Stanza {
 
     const treeMapElement = this.root.querySelector("#treemap");
 
-    draw(treeMapElement, data, width, height, colorScale);
+    const opts = {
+      width,
+      height,
+      colorScale,
+      styles: {
+        "font-family": css("--togostanza-font-family"),
+        "label-font-color": css("--togostanza-label-font-color"),
+        "label-font-size": css("--togostanza-label-font-size"),
+        "border-color": css("--togostanza-border-color"),
+        "border-width": css("--togostanza-border-width"),
+        "edge-color": css("--togostanza-edge-color"),
+        "background-color": css("--togostanza-background-color"),
+      },
+    };
+    //draw(treeMapElement, data, width, height, colorScale);
+    draw(treeMapElement, data, opts);
   }
 }
 
-function draw(el, dataset, width, height, colorScale) {
+function draw(el, dataset, opts) {
+  const { width, height, colorScale, styles } = opts;
   // create nested structure by item.parent
   const nested = d3
     .stratify()
@@ -100,18 +116,25 @@ function draw(el, dataset, width, height, colorScale) {
       //.sort((a, b) => b?.children?.length || 1 - a?.children?.length || 1)
     );
 
+  //create svg and add outline
   const svg = d3
     .select(el)
     .append("svg")
-    .attr("viewBox", [0.5, -30.5, width, height + 30])
-    .style("font", "10px sans-serif");
+    .attr("viewBox", [0, -30, width, height + 30])
+    .style("font", "10px sans-serif")
+    .attr(
+      "style",
+      `outline: ${styles["border-width"]}px solid ${styles["edge-color"]};`
+    );
 
+  //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested));
 
   function render(group, root) {
     const dMax = d3.max(root, (d) => d?.children?.length || 1);
     const dMin = d3.min(root, (d) => d?.children?.length || 1);
 
+    //add g's for every node
     const node = group
       .selectAll("g")
       .data(root.children.concat(root))
@@ -122,6 +145,7 @@ function draw(el, dataset, width, height, colorScale) {
       .attr("cursor", "pointer")
       .on("click", (event, d) => (d === root ? zoomout(root) : zoomin(d)));
 
+    //add popup description
     node
       .append("title")
       .text((d) =>
@@ -134,27 +158,35 @@ function draw(el, dataset, width, height, colorScale) {
             }`
       );
 
+    //add rectangle for every node
     node
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
       .attr("fill", (d) =>
-        d === root ? "#fff" : color((d.value - dMin) / (dMax - dMin))
+        d === root
+          ? styles["background-color"]
+          : color((d.value - dMin) / (dMax - dMin))
       )
-      .attr("stroke", "#fff");
+      .attr("stroke", styles["border-color"])
+      .attr("stroke-width", styles["border-width"]);
 
+    //add clip paths to nodes to trim text
     node
       .append("clipPath")
       .attr("id", (d) => (d.clipUid = uid("clip")).id)
       .append("use")
       .attr("href", (d) => d.leafUid.href);
 
+    //add text contents
     const txt = node
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
       .attr("font-weight", (d) => (d === root ? "bold" : null))
-
       .attr("y", (d) => `${d.y0 + 10}px`)
       .attr("x", "0.5em")
+      .style("font-family", styles["font-family"])
+      .style("fill", styles["label-font-color"])
+      .style("font-size", styles["label-font-size"])
       //.selectAll("tspan")
       // .data((d) => {
       //   return d === root ? name(d) : d.data.data.label;
@@ -182,9 +214,11 @@ function draw(el, dataset, width, height, colorScale) {
         return `${d.data.data.label}`;
       });
 
+    //adjust rectangles positions
     group.call(position, root);
   }
 
+  //function to wrap long text in svg
   function wrap() {
     const text = d3.select(this).selectAll("text");
 
@@ -214,11 +248,11 @@ function draw(el, dataset, width, height, colorScale) {
           .attr("x", x)
           .attr("y", y)
           .attr("dy", dy + "em");
-      console.log(words);
+
       while ((word = words.pop())) {
         line.push(word);
         tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > rectWidth) {
+        if (tspan.node().getComputedTextLength() > rectWidth - 5) {
           line.pop();
           tspan.text(line.join(" "));
           line = [word];
@@ -232,6 +266,7 @@ function draw(el, dataset, width, height, colorScale) {
       }
     });
   }
+
   //place elements according to data
   function position(group, root) {
     group
