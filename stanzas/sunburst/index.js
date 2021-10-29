@@ -130,11 +130,22 @@ function draw(el, dataset, opts) {
       return rScale(d.y1);
     });
 
+  // div for tooltips
+  const div = d3
+    .select("#chart")
+    .append("div")
+    .style("position", "absolute")
+    .style("visibility", "hidden")
+
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
   const innerG = g.selectAll("g").data(root.descendants()).enter().append("g");
 
   innerG
     .append("path")
     .attr("d", arc)
+    .attr("id", (d) => (d.leafUid = uid("leaf")).id)
     .attr("stroke", "#fff")
     .attr("fill", function (d) {
       while (d.depth > 1) d = d.parent;
@@ -146,6 +157,12 @@ function draw(el, dataset, opts) {
     .text(function (d) {
       return d.data.data.label + "\n" + d.value;
     });
+
+  innerG
+    .append("clipPath")
+    .attr("id", (d) => (d.clipUid = uid("clip")).id)
+    .append("use")
+    .attr("href", (d) => d.leafUid.href);
 
   innerG
     .append("path")
@@ -170,113 +187,82 @@ function draw(el, dataset, opts) {
       return context.toString();
     })
     .attr("id", (d) => (d.guideId = uid("guide")).id)
-    .attr("opacity", 0);
+    .style("display", "none");
+  // .style("fill", "none")
+  // .style("stroke", "#000")
+  // .style("stroke-width", "1px");
 
-  g.selectAll("text")
+  const labels = g
+    .selectAll("text")
     .data(root.descendants())
     .enter()
     .append("text")
     .append("textPath")
+    .attr("clip-path", (d) => d.clipUid)
     .attr("href", (d) => {
       return d.guideId.href;
     })
-    .attr("fill", "red")
+    .attr("fill", "black")
     .attr("dy", "5px")
     .style("font-size", "6px")
     .attr("text-anchor", "middle")
     .attr("startOffset", "50%")
+
     .text(function (d) {
-      console.log("x0, x1: ", d.x0, d.x1);
-      console.log("Name: ", d.data.data.label);
       return d.data.data.label;
     });
-  //.call(wrap);
 
-  function labelTransform(d) {
-    const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
-    const y = (d.y0 + d.y1) / 2;
+  labels.each(wrap);
 
-    return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-  }
+  // function labelTransform(d) {
+  //   const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
+  //   const y = (d.y0 + d.y1) / 2;
 
-  function makeGuidePaths(g) {
-    g.each((item) => {
-      const context = d3.path();
-      context.arc(
-        width / 2,
-        height / 2,
-        (item.y1 + item.y0) / 2,
-        item.x0 - item.x1
-      );
+  //   return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+  // }
 
-      svg
-        .selectAll("path")
-        .data(root.descendants())
-        .append("path")
-        .attr("d", context.toString())
-        .attr("stroke", "red")
-        .attr("stroke-width", 1);
+  function wrap(d, i, nodes) {
+    const maxWidthTangential = ((d.x1 - d.x0) * (d.y0 + d.y1)) / 2;
 
-      defs
-        .selectAll("path")
-        .data(root.descendants())
-        .enter()
-        .append("path")
-        .attr("d", context.toString())
+    const text = d3.select(nodes[i]);
+    let words = d.data.data.label.split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      lineHeight = 0.9, // ems
+      x = text.attr("x") || 0,
+      y = text.attr("y") || 0,
+      dy = 0,
+      tspan = text
+        .text(null)
+        .append("tspan")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("dy", dy + "em");
 
-        .attr("id", (d) => (d.guideId = uid("guide")).id);
-    });
-  }
+    while ((word = words.pop())) {
+      line.push(word);
+      tspan.text(line.join(" "));
 
-  function wrap(d) {
-    //const text = d3.select(this).selectAll("text");
+      if (tspan.node().getComputedTextLength() > maxWidthTangential - 5) {
+        if (line.length === 1) {
+          // if there is only one word in line and its not fitting then hide it all
+          tspan.attr("display", "none");
+          text.attr("display", "none");
+          break;
+        }
 
-    d.each(function (item) {
-      console.log(item);
-      const maxWidthTangential =
-        ((item.x1 - item.x0) * (item.y0 + item.y1)) / 2;
-      const maxWidthRadial = item.y1 - item.y0;
-
-      let words = item.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = 1.1, // ems
-        x = text.attr("x") || 0,
-        y = text.attr("y") || 0,
-        dy = 0,
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
         tspan = text
-          .text(null)
           .append("tspan")
           .attr("x", x)
           .attr("y", y)
-          .attr("dy", dy + "em");
-
-      return null;
-      let rectWidth = d3
-        .select(text.node().parentNode)
-        .select("rect")
-        .node()
-        .getAttribute("width");
-
-      //get to know if this is a root element (white bar at the top)
-      const isRoot = Math.round(rectWidth) === Math.round(width);
-
-      while ((word = words.pop())) {
-        line.push(word);
-        tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > rectWidth - 5) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text
-            .append("tspan")
-            .attr("x", x)
-            .attr("y", y)
-            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-            .text(word);
-        }
+          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .text(word);
       }
-    });
+    }
+    console.log("text length:", text.node().getComputedTextLength());
   }
 }
