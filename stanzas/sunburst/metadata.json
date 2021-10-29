@@ -1,0 +1,115 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "sunburst",
+  "stanza:label": "Sunburst",
+  "stanza:definition": "Sunburst MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "Anton Zhuravlev",
+  "stanza:address": "anton@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2021-10-28",
+  "stanza:updated": "2021-10-28",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/tree-data.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 300,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "color-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "schemeCategory10",
+        "schemeAccent",
+        "schemeDark2",
+        "schemePastel2",
+        "schemeSet2",
+        "schemeSet1",
+        "schemePastel1",
+        "schemeSet3",
+        "schemePaired"
+      ],
+      "stanza:example": "schemePastel1",
+      "stanza:description": "Color scale to display"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 11,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Border width"
+    },
+    {
+      "stanza:key": "--togostanza-edge-color",
+      "stanza:type": "color",
+      "stanza:default": "#AEB3BF",
+      "stanza:description": "Edge color"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
