@@ -11,6 +11,8 @@ export default class VennStanza extends Stanza {
 
   colorSeries;
   data;
+  dataLabels;
+  numberOfData;
 
   menu() {
     return [
@@ -32,23 +34,14 @@ export default class VennStanza extends Stanza {
 
     //get data
     this.data = await this.getData();
+    this.dataLabels = Array.from(new Set(this.data.map(datum => datum.orgs).flat()));
+    this.numberOfData = this.dataLabels.length;
     console.log(this.data)
-
-
-    // get circle number to draw
-    let datasetNums = [];
-    for (let i = 0; i < this.data.length; i++) {
-      datasetNums.push(this.data[i].orgs.length);
-    }
-
-    const aryMax = function (a, b) { return Math.max(a, b); }
-    const circleNum = datasetNums.reduce(aryMax); //TODO 円の数はユーザーParameterとして入力する形でもいいかもしれません
-    console.log(circleNum)
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
     Array.from(vennDiagrams).forEach((vennDiagram, i) => {
-      vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = 'block' : vennDiagram.style.display = 'none';
+      vennDiagram.getAttribute('id') === `venn-diagram${this.numberOfData}` ? vennDiagram.style.display = 'block' : vennDiagram.style.display = 'none';
     })
 
     // assign labels to each circles : set as parameter by user 
@@ -80,7 +73,7 @@ export default class VennStanza extends Stanza {
     const vennSet5Arr = ['5-0', '5-1', '5-2', '5-3', '5-4', '5-0_1', '5-0_2', '5-0_3', '5-0_4', '5-1_2', '5-1_3', '5-1_4', '5-2_3', '5-2_4', '5-3_4', '5-0_1_2', '5-0_1_3', '5-0_1_4', '5-0_2_3', '5-0_2_4', '5-0_3_4', '5-1_2_3', '5-1_2_4', '5-1_3_4', '5-2_3_4', '5-0_1_2_3', '5-0_1_2_4', '5-0_1_3_4', '5-0_2_3_4', '5-1_2_3_4', '5-0_1_2_3_4'];
 
     //set venn diagram depends on circle numbers //TODO: check and adjust opacity value
-    switch (circleNum) {
+    switch (this.numberOfData) {
       case 1:
         set1Venn(this.data);
         part1Paths[0].setAttribute('fill',this.colorSeries[0].trim());
@@ -166,7 +159,7 @@ export default class VennStanza extends Stanza {
         part5Paths.forEach((path, i) => {path.setAttribute('fill', part5ColorScheme[i]);})
         break;
       default:
-        console.log(`Circle number(${circleNum}) is invalid. Please set from 1 to 5 circles.`);
+        console.log(`Circle number(${this.numberOfData}) is invalid. Please set from 1 to 5 circles.`);
     }
 
     //convert hex to rgb (retrun [red, green, blue])
