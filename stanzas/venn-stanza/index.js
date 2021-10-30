@@ -23,22 +23,12 @@ export default class VennStanza extends Stanza {
 
     appendCustomCss(this, this.params['custom-css-url']);
     this.colorSeries = this.getColorSeries();
-    console.log(this.colorSeries)
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
     //set common parameters and styles
-    const width = this.params['width'];
-    const height = this.params['height'];
+    this.defineSizeOfDiagram(this.params['width'], this.params['height']);
 
-    // draw venn diagram
-    // const drawArea = this.root.querySelector('#drawArea'); //TODO: set to use tooltip
-    const vennElement = this.root.querySelector('#venn-diagrams');
-    const vennGroup = d3.select(vennElement);
-
-    vennGroup
-      .attr('width', width)
-      .attr('height', height);
 
     //get data
     let dataset = await loadData(
@@ -565,16 +555,13 @@ export default class VennStanza extends Stanza {
       series[i] = `--togostanza-series-${i}-color`;
     }
     return series.map(variable => getPropertyValue(variable));
-    // console.log(colors)
+  }
 
-    // this.colorSeries = [
-    //   getPropertyValue('--togostanza-series-0-color'),
-    //   getPropertyValue('--togostanza-series-1-color'),
-    //   getPropertyValue('--togostanza-series-2-color'),
-    //   getPropertyValue('--togostanza-series-3-color'),
-    //   getPropertyValue('--togostanza-series-4-color'),
-    //   getPropertyValue('--togostanza-series-5-color')
-    // ];
-    // console.log(this.colorSeries)
+  defineSizeOfDiagram(width, height) {
+    // const drawArea = this.root.querySelector('#drawArea'); //TODO: set to use tooltip
+    const vennElement = this.root.querySelector('#venn-diagrams');
+    vennElement.setAttribute('width', width);
+    vennElement.setAttribute('height', height);
+    // TODO: svgのサイズしか定義できてない
   }
 }
