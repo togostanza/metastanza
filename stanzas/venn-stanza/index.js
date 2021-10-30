@@ -39,10 +39,7 @@ export default class VennStanza extends Stanza {
     console.log(this.data)
 
     // show venn diagram corresponds to data(circle numbers to draw)
-    const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
-    Array.from(vennDiagrams).forEach((vennDiagram, i) => {
-      vennDiagram.getAttribute('id') === `venn-diagram${this.numberOfData}` ? vennDiagram.style.display = 'block' : vennDiagram.style.display = 'none';
-    })
+    this.root.querySelector(`.venn-diagram[data-number-of-data="${this.numberOfData}"]`).classList.add('-current');
 
     // assign labels to each circles : set as parameter by user 
     const LABEL0 = this.params['label-0'];

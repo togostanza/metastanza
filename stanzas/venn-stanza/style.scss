@@ -1,5 +1,9 @@
 //TogoGenome Venn diagram
 .venn-diagram {
+  display: none;
+  &.-current {
+    display: block;
+  }
   &:hover {
     cursor: pointer;
   }
