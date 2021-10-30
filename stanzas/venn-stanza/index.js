@@ -30,16 +30,10 @@ export default class VennStanza extends Stanza {
     //set common parameters and styles
     this.defineSizeOfDiagram(this.params['width'], this.params['height']);
 
-
     //get data
-    this.data = await loadData(this.params['data-url'], this.params['data-type']);
+    this.data = await this.getData();
     console.log(this.data)
 
-    //convert data
-    for (let i = 0; i < this.data.length; i++) {
-      this.data[i].orgs = this.data[i].orgs.split(', ');
-      this.data[i].count = Number(this.data[i].count);
-    }
 
     // get circle number to draw
     let datasetNums = [];
@@ -561,5 +555,15 @@ export default class VennStanza extends Stanza {
     vennElement.setAttribute('width', width);
     vennElement.setAttribute('height', height);
     // TODO: svgのサイズしか定義できてない
+  }
+
+  async getData() {
+    const data = await loadData(this.params['data-url'], this.params['data-type']);
+    // processing
+    for (const datum of data) {
+      datum.orgs = datum.orgs.split(', ');
+      datum.count = Number(datum.count);
+    }
+    return data;
   }
 }
