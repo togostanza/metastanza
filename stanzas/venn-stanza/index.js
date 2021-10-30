@@ -10,6 +10,7 @@ import {
 export default class VennStanza extends Stanza {
 
   colorSeries;
+  data;
 
   menu() {
     return [
@@ -31,22 +32,19 @@ export default class VennStanza extends Stanza {
 
 
     //get data
-    let dataset = await loadData(
-      this.params['data-url'],
-      this.params['data-type']
-    );
-    console.log(dataset)
+    this.data = await loadData(this.params['data-url'], this.params['data-type']);
+    console.log(this.data)
 
     //convert data
-    for (let i = 0; i < dataset.length; i++) {
-      dataset[i].orgs = dataset[i].orgs.split(', ');
-      dataset[i].count = Number(dataset[i].count);
+    for (let i = 0; i < this.data.length; i++) {
+      this.data[i].orgs = this.data[i].orgs.split(', ');
+      this.data[i].count = Number(this.data[i].count);
     }
 
     // get circle number to draw
     let datasetNums = [];
-    for (let i = 0; i < dataset.length; i++) {
-      datasetNums.push(dataset[i].orgs.length);
+    for (let i = 0; i < this.data.length; i++) {
+      datasetNums.push(this.data[i].orgs.length);
     }
 
     const aryMax = function (a, b) { return Math.max(a, b); }
@@ -90,11 +88,11 @@ export default class VennStanza extends Stanza {
     //set venn diagram depends on circle numbers //TODO: check and adjust opacity value
     switch (circleNum) {
       case 1:
-        set1Venn();
+        set1Venn(this.data);
         part1Paths[0].setAttribute('fill',this.colorSeries[0].trim());
         break;
       case 2:
-        set2Venn();
+        set2Venn(this.data);
         const part2ColorScheme = [
           this.colorSeries[0].trim(),
           this.colorSeries[1].trim(),
@@ -103,7 +101,7 @@ export default class VennStanza extends Stanza {
         part2Paths.forEach((path, i) => {path.setAttribute('fill', part2ColorScheme[i]);})
         break;
       case 3:
-        set3Venn();
+        set3Venn(this.data);
         const part3ColorScheme = [
           this.colorSeries[0].trim(),
           this.colorSeries[1].trim(),
@@ -116,7 +114,7 @@ export default class VennStanza extends Stanza {
         part3Paths.forEach((path, i) => {path.setAttribute('fill', part3ColorScheme[i]);})
         break;
       case 4:
-        set4Venn();
+        set4Venn(this.data);
         const part4ColorScheme = [
           this.colorSeries[0].trim(),
           this.colorSeries[1].trim(),
@@ -137,7 +135,7 @@ export default class VennStanza extends Stanza {
         part4Paths.forEach((path, i) => {path.setAttribute('fill', part4ColorScheme[i]);})
         break;
       case 5:
-        set5Venn();
+        set5Venn(this.data);
         const part5ColorScheme = [
           this.colorSeries[0].trim(),
           this.colorSeries[1].trim(),
@@ -259,8 +257,8 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 2】set highlight event and count labels to each parts
-    function set1Venn() {
-      dataset.forEach(data => {
+    function set1Venn(data) {
+      data.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
 
@@ -273,8 +271,8 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 2】set highlight event and count labels to each parts
-    function set2Venn() {
-      dataset.forEach(data => {
+    function set2Venn(data) {
+      data.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
@@ -296,8 +294,8 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 3】set highlight event and count labels to each parts
-    function set3Venn() {
-      dataset.forEach(data => {
+    function set3Venn(data) {
+      data.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
@@ -336,8 +334,8 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 4】set highlight event and count labels to each parts
-    function set4Venn() {
-      dataset.forEach(data => {
+    function set4Venn(data) {
+      data.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
@@ -409,8 +407,8 @@ export default class VennStanza extends Stanza {
     }
 
     //【organism num: 5】set highlight event and count labels to each parts
-    function set5Venn() {
-      dataset.forEach(data => {
+    function set5Venn(data) {
+      data.forEach(data => {
         const orgArray = data.orgs;
         const hasLabel0 = orgArray.includes(LABEL0); //boolean
         const hasLabel1 = orgArray.includes(LABEL1); //boolean
