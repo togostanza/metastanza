@@ -8,6 +8,9 @@ import {
 } from '@/lib/metastanza_utils.js';
 
 export default class VennStanza extends Stanza {
+
+  colorSeries;
+
   menu() {
     return [
       downloadSvgMenuItem(this, 'vennstanza'),
@@ -16,22 +19,17 @@ export default class VennStanza extends Stanza {
   }
 
   async render() {
+    // TODO: 'Venn' or 'Euler'
+
     appendCustomCss(this, this.params['custom-css-url']);
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    this.colorSeries = this.getColorSeries();
+    console.log(this.colorSeries)
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
     //set common parameters and styles
     const width = this.params['width'];
     const height = this.params['height'];
-    const colorScheme = [
-      css('--togostanza-series-0-color'),
-      css('--togostanza-series-1-color'),
-      css('--togostanza-series-2-color'),
-      css('--togostanza-series-3-color'),
-      css('--togostanza-series-4-color'),
-      css('--togostanza-series-5-color')
-    ];
 
     // draw venn diagram
     // const drawArea = this.root.querySelector('#drawArea'); //TODO: set to use tooltip
@@ -47,6 +45,7 @@ export default class VennStanza extends Stanza {
       this.params['data-url'],
       this.params['data-type']
     );
+    console.log(dataset)
 
     //convert data
     for (let i = 0; i < dataset.length; i++) {
@@ -62,6 +61,7 @@ export default class VennStanza extends Stanza {
 
     const aryMax = function (a, b) { return Math.max(a, b); }
     const circleNum = datasetNums.reduce(aryMax); //TODO 円の数はユーザーParameterとして入力する形でもいいかもしれません
+    console.log(circleNum)
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
@@ -101,13 +101,13 @@ export default class VennStanza extends Stanza {
     switch (circleNum) {
       case 1:
         set1Venn();
-        part1Paths[0].setAttribute('fill',colorScheme[0].trim());
+        part1Paths[0].setAttribute('fill',this.colorSeries[0].trim());
         break;
       case 2:
         set2Venn();
         const part2ColorScheme = [
-          colorScheme[0].trim(),
-          colorScheme[1].trim(),
+          this.colorSeries[0].trim(),
+          this.colorSeries[1].trim(),
           '#FFFFFF'
         ];
         part2Paths.forEach((path, i) => {path.setAttribute('fill', part2ColorScheme[i]);})
@@ -115,12 +115,12 @@ export default class VennStanza extends Stanza {
       case 3:
         set3Venn();
         const part3ColorScheme = [
-          colorScheme[0].trim(),
-          colorScheme[1].trim(),
-          colorScheme[2].trim(),
-          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
-          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.8, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
+          this.colorSeries[0].trim(),
+          this.colorSeries[1].trim(),
+          this.colorSeries[2].trim(),
+          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
+          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
           '#FFFFFF'
         ];
         part3Paths.forEach((path, i) => {path.setAttribute('fill', part3ColorScheme[i]);})
@@ -128,20 +128,20 @@ export default class VennStanza extends Stanza {
       case 4:
         set4Venn();
         const part4ColorScheme = [
-          colorScheme[0].trim(),
-          colorScheme[1].trim(),
-          colorScheme[2].trim(),
-          colorScheme[3].trim(),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
+          this.colorSeries[0].trim(),
+          this.colorSeries[1].trim(),
+          this.colorSeries[2].trim(),
+          this.colorSeries[3].trim(),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
           '#FFFFFF'
         ];
         part4Paths.forEach((path, i) => {path.setAttribute('fill', part4ColorScheme[i]);})
@@ -149,36 +149,36 @@ export default class VennStanza extends Stanza {
       case 5:
         set5Venn();
         const part5ColorScheme = [
-          colorScheme[0].trim(),
-          colorScheme[1].trim(),
-          colorScheme[2].trim(),
-          colorScheme[3].trim(),
-          colorScheme[4].trim(),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[0].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(colorScheme[1].trim()), hex2rgb(colorScheme[2].trim()), hex2rgb(colorScheme[3].trim()), hex2rgb(colorScheme[4].trim()))),
+          this.colorSeries[0].trim(),
+          this.colorSeries[1].trim(),
+          this.colorSeries[2].trim(),
+          this.colorSeries[3].trim(),
+          this.colorSeries[4].trim(),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
+          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
           '#FFFFFF'
         ];
         part5Paths.forEach((path, i) => {path.setAttribute('fill', part5ColorScheme[i]);})
@@ -556,5 +556,25 @@ export default class VennStanza extends Stanza {
       })
     }
 
+  }
+
+  getColorSeries() {
+    const getPropertyValue = (key) => window.getComputedStyle(this.element).getPropertyValue(key);
+    const series = Array(6);
+    for (let i = 0; i < series.length; i++) {
+      series[i] = `--togostanza-series-${i}-color`;
+    }
+    return series.map(variable => getPropertyValue(variable));
+    // console.log(colors)
+
+    // this.colorSeries = [
+    //   getPropertyValue('--togostanza-series-0-color'),
+    //   getPropertyValue('--togostanza-series-1-color'),
+    //   getPropertyValue('--togostanza-series-2-color'),
+    //   getPropertyValue('--togostanza-series-3-color'),
+    //   getPropertyValue('--togostanza-series-4-color'),
+    //   getPropertyValue('--togostanza-series-5-color')
+    // ];
+    // console.log(this.colorSeries)
   }
 }
