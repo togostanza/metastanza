@@ -6,6 +6,14 @@
   }
   &:hover {
     cursor: pointer;
+    > * {
+      opacity: .2;
+    }
+  }
+  > g {
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
@@ -16,33 +24,6 @@
     background-color: #fff;
     padding: 5px 10px;
     border-radius: 2px;
-  }
-}
-
-//common styles between shapes and text
-path,text {
-  &[data-highlight="default"] {
-    opacity:  1;
-  }
-  &[data-highlight="selected"] {
-    opacity: 1;
-  }
-  &[data-highlight="unselected"] {
-    opacity: .2;
-  }
-}
-
-//only shape's styles
-path {
-  &[data-highlight="default"] {
-    stroke-width: 0px;
-  }
-  &[data-highlight="selected"] {
-    stroke: #333;
-    stroke-width: 2px;
-  }
-  &[data-highlight="unselected"] {
-    stroke-width: 0px;
   }
 }
 
