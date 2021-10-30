@@ -1,22 +1,22 @@
 import Stanza from 'togostanza/stanza';
-import loadData from "@/lib/load-data";
-import * as d3 from "d3";
+import loadData from '@/lib/load-data';
+import * as d3 from 'd3';
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from '@/lib/metastanza_utils.js';
 
 export default class VennStanza extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "vennstanza"),
-      downloadPngMenuItem(this, "vennstanza"),
+      downloadSvgMenuItem(this, 'vennstanza'),
+      downloadPngMenuItem(this, 'vennstanza'),
     ];
   }
 
   async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    appendCustomCss(this, this.params['custom-css-url']);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
@@ -44,8 +44,8 @@ export default class VennStanza extends Stanza {
 
     //get data
     let dataset = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
+      this.params['data-url'],
+      this.params['data-type']
     );
 
     //convert data
@@ -66,15 +66,15 @@ export default class VennStanza extends Stanza {
     // show venn diagram corresponds to data(circle numbers to draw)
     const vennDiagrams = this.root.querySelectorAll('.venn-diagram');
     Array.from(vennDiagrams).forEach((vennDiagram, i) => {
-      vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = "block" : vennDiagram.style.display = "none";
+      vennDiagram.getAttribute('id') === `venn-diagram${circleNum}` ? vennDiagram.style.display = 'block' : vennDiagram.style.display = 'none';
     })
 
     // assign labels to each circles : set as parameter by user 
-    const LABEL0 = this.params["label-0"];
-    const LABEL1 = this.params["label-1"];
-    const LABEL2 = this.params["label-2"];
-    const LABEL3 = this.params["label-3"];
-    const LABEL4 = this.params["label-4"];
+    const LABEL0 = this.params['label-0'];
+    const LABEL1 = this.params['label-1'];
+    const LABEL2 = this.params['label-2'];
+    const LABEL3 = this.params['label-3'];
+    const LABEL4 = this.params['label-4'];
 
     //get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's order
     const part1Paths = this.root.querySelectorAll('.part1-path');
@@ -197,9 +197,9 @@ export default class VennStanza extends Stanza {
     
     //convert hex to rgb (retrun [red, green, blue])
     function rgb2hex(rgb) {
-      return "#" + rgb.map(  value => {
-        return ("0" + value.toString(16)).slice(-2);
-      } ).join( "" ) ;
+      return '#' + rgb.map(  value => {
+        return ('0' + value.toString(16)).slice(-2);
+      } ).join( '' ) ;
     }
 
     //blend two colors to draw overlapping color
@@ -227,12 +227,12 @@ export default class VennStanza extends Stanza {
     //function: set highlight event which fire when hovered
     function highlightParts(vennSetArr, pathsArr, TextsArr, targetElm, label, count) {
       d3.select(targetElm)
-        .on("mouseenter", function (e) {
+        .on('mouseenter', function (e) {
           // tooltip //TODO: set tooltip
-          //   .style("display", "block")
-          //   .style("left", `${d3.pointer(e)[0] + 8}px`)
+          //   .style('display', 'block')
+          //   .style('left', `${d3.pointer(e)[0] + 8}px`)
           //   .style(
-          //     "top",
+          //     'top',
           //     `${d3.pointer(e)[1]}px`
           //   ).html(`
           //     <p>Organisms: ${label}</p>
@@ -241,29 +241,29 @@ export default class VennStanza extends Stanza {
           //highlight the selected part
           for (let i = 0; i < vennSetArr.length; i++) {
             if (targetElm.id === `venn-shape-set${vennSetArr[i]}` || targetElm.id === `venn-text-set${vennSetArr[i]}`) {
-              pathsArr[i].dataset.highlight = "selected";
-              TextsArr[i].dataset.highlight = "selected";
+              pathsArr[i].dataset.highlight = 'selected';
+              TextsArr[i].dataset.highlight = 'selected';
             } else {
-              pathsArr[i].dataset.highlight = "unselected";
-              TextsArr[i].dataset.highlight = "unselected";
+              pathsArr[i].dataset.highlight = 'unselected';
+              TextsArr[i].dataset.highlight = 'unselected';
             }
           }
         })
-        .on("mousemove", function (e) {
+        .on('mousemove', function (e) {
           // tooltip //TODO: set tooltip
-          //   .style("left", `${d3.pointer(e)[0] + 8}px`)
+          //   .style('left', `${d3.pointer(e)[0] + 8}px`)
           //   .style(
-          //     "top",
+          //     'top',
           //     `${d3.pointer(e)[1]}px`
           //   )
         })
-        .on("mouseleave", function () {
-          tooltip.style("display", "none");
+        .on('mouseleave', function () {
+          tooltip.style('display', 'none');
           Array.from(pathsArr).forEach(path => {
-            path.dataset.highlight = "default";
+            path.dataset.highlight = 'default';
           });
           Array.from(TextsArr).forEach(text => {
-            text.dataset.highlight = "default";
+            text.dataset.highlight = 'default';
           });
         });
     }
