@@ -1,8 +1,11 @@
 //TogoGenome Venn diagram
-main {
-  #drawArea {
-    font-family: var(--togostanza-font-family)
-  }
+
+text {
+  // font-size: var(--togostanza-label-font-size); CSS で単位付きの値は無効
+}
+
+#drawArea {
+  font-family: var(--togostanza-font-family)
 }
 
 
@@ -38,6 +41,42 @@ main {
     > text {
       fill: black !important;
     }
+    // &:nth-child(1) {
+    //   > path {
+    //     fill: var(--togostanza-series-0-color) !important;
+    //     stroke: var(--togostanza-series-0-color) !important;
+    //   }
+    // }
+    // &:nth-child(2) {
+    //   > path {
+    //     fill: var(--togostanza-series-1-color) !important;
+    //     stroke: var(--togostanza-series-1-color) !important;
+    //   }
+    // }
+    // &:nth-child(3) {
+    //   > path {
+    //     fill: var(--togostanza-series-2-color) !important;
+    //     stroke: var(--togostanza-series-2-color) !important;
+    //   }
+    // }
+    // &:nth-child(4) {
+    //   > path {
+    //     fill: var(--togostanza-series-3-color) !important;
+    //     stroke: var(--togostanza-series-3-color) !important;
+    //   }
+    // }
+    // &:nth-child(5) {
+    //   > path {
+    //     fill: var(--togostanza-series-4-color) !important;
+    //     stroke: var(--togostanza-series-4-color) !important;
+    //   }
+    // }
+    // &:nth-child(6) {
+    //   > path {
+    //     fill: var(--togostanza-series-5-color) !important;
+    //     stroke: var(--togostanza-series-5-color) !important;
+    //   }
+    // }
   }
 
 }

@@ -64,14 +64,26 @@ export default class VennStanza extends Stanza {
       return;
     }
     selectedDiagram.classList.add('-current');
-    selectedDiagram.querySelectorAll(':scope > g').forEach(part => {
-      const targets1 = part.dataset.targets;
-      // set count label
-      part.querySelector(':scope > text').textContent = this.setCounts.get(targets1);
+    const rootRect = this.root.querySelector('main').getBoundingClientRect();
+    console.log(rootRect);
+    selectedDiagram.querySelectorAll(':scope > g').forEach(group => {
+      const targets1 = group.dataset.targets;
+
+      const rect = group.querySelector(':scope > .part').getBoundingClientRect()
+      // const text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      // console.log(rect)
+      // text1.setAttribute('x', rect.x + rect.width * .5 - rootRect.x)
+      // text1.setAttribute('y', rect.y + rect.height * .5 - rootRect.y)
+      // text1.setAttribute('text-anchor', 'middle');
+      // text1.textContent = 'HGOE'
+      // group.appendChild(text1)
+
       // set color
       const targets2 = targets1.split(',').map(target => +target);
       const color = this.getBlendedColor(targets2);
-      part.querySelector(':scope > .part').setAttribute('fill', color.toString());
+      group.querySelector(':scope > .part').setAttribute('fill', color.toString());
+      // set count label
+      group.querySelector(':scope > text').textContent = this.setCounts.get(targets1);
     });
   }
 
