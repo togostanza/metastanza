@@ -1,6 +1,7 @@
 import Stanza from 'togostanza/stanza';
 import loadData from '@/lib/load-data';
 import * as d3 from 'd3';
+import venn from 'venn.js';
 import Color from 'color';
 import {
   downloadSvgMenuItem,
@@ -39,14 +40,21 @@ export default class VennStanza extends Stanza {
 
     // draw
     // TODO: 'Venn' or 'Euler'
-    this.drawVennDiagram();
+    switch (this.params['chart-type']) {
+      case 'Venn diagram':
+        this.drawVennDiagram();
+        break;
+      case 'Euler diagram':
+        this.drawEulerDiagram();
+        break;
+    }
   }
 
   drawVennDiagram() {
     //set common parameters and styles
-    const vennElement = this.root.querySelector('#venn-diagrams');
-    vennElement.setAttribute('width', this.params['width']);
-    vennElement.setAttribute('height', this.params['height']);
+    const container = this.root.querySelector('#venn-diagrams');
+    container.style.width = this.params['width'] + 'px';
+    container.style.height = this.params['height'] + 'px';
     // TODO: svgのサイズしか定義できてない
 
     // show venn diagram corresponds to data(circle numbers to draw)
@@ -68,7 +76,17 @@ export default class VennStanza extends Stanza {
   }
 
   drawEulerDiagram() {
-    // TODO: support euler diagram
+
+    const container = this.root.querySelector('#euler-diagram');
+    container.style.width = this.params['width'] + 'px';
+    container.style.height = this.params['height'] + 'px';
+    const convertedData = this.data.map(datum => Object.fromEntries([
+      ['sets', datum.set],
+      ['size', datum.size]
+    ]));
+    const euler = venn.VennDiagram();
+    d3.select(container).datum(convertedData).call(euler);
+
   }
 
   getColorSeries() {
