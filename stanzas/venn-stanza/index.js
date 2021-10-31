@@ -32,8 +32,9 @@ export default class VennStanza extends Stanza {
 
     //get data
     this.data = await this.getData();
-    this.dataLabels = Array.from(new Set(this.data.map(datum => datum.orgs).flat()));
-    this.setCounts = new Map(this.data.map(datum => [datum.orgs.map(org => this.dataLabels.indexOf(org)).join(','), datum.count]));
+    console.log(this.data)
+    this.dataLabels = Array.from(new Set(this.data.map(datum => datum.set).flat()));
+    this.setCounts = new Map(this.data.map(datum => [datum.set.map(set => this.dataLabels.indexOf(set)).join(','), datum.size]));
     this.numberOfData = this.dataLabels.length;
 
     // draw
@@ -50,6 +51,10 @@ export default class VennStanza extends Stanza {
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const selectedDiagram = this.root.querySelector(`.venn-diagram[data-number-of-data="${this.numberOfData}"]`);
+    if (!selectedDiagram) {
+      console.error('Venn diagrams with more than six elements are not supported. Please try using Euler diagrams.');
+      return;
+    }
     selectedDiagram.classList.add('-current');
     selectedDiagram.querySelectorAll(':scope > g').forEach(part => {
       const targets1 = part.dataset.targets;
@@ -87,11 +92,11 @@ export default class VennStanza extends Stanza {
 
   async getData() {
     const data = await loadData(this.params['data-url'], this.params['data-type']);
-    // processing
-    for (const datum of data) {
-      datum.orgs = datum.orgs.split(', ');
-      datum.count = Number(datum.count);
-    }
+    // // processing
+    // for (const datum of data) {
+    //   datum.orgs = datum.orgs.split(', ');
+    //   datum.count = Number(datum.count);
+    // }
     return data;
   }
 }

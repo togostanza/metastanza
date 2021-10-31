@@ -25,7 +25,7 @@
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-3orgs-sparql.json",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/4sets-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -33,7 +33,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "sparql-results-json",
+      "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
     },
