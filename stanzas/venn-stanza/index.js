@@ -13,6 +13,7 @@ export default class VennStanza extends Stanza {
   colorSeries;
   data;
   dataLabels;
+  setCounts;
   numberOfData;
 
   menu() {
@@ -23,25 +24,29 @@ export default class VennStanza extends Stanza {
   }
 
   async render() {
-    // TODO: 'Venn' or 'Euler'
 
     appendCustomCss(this, this.params['custom-css-url']);
     this.colorSeries = this.getColorSeries();
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
-    //set common parameters and styles
-    this.defineSizeOfDiagram(this.params['width'], this.params['height']);
-
     //get data
     this.data = await this.getData();
     this.dataLabels = Array.from(new Set(this.data.map(datum => datum.orgs).flat()));
-    const setCounts = new Map(this.data.map(datum => [datum.orgs.map(org => this.dataLabels.indexOf(org)).join(','), datum.count]));
+    this.setCounts = new Map(this.data.map(datum => [datum.orgs.map(org => this.dataLabels.indexOf(org)).join(','), datum.count]));
     this.numberOfData = this.dataLabels.length;
-    console.log(this.data)
-    console.log(this.dataLabels)
-    console.log(setCounts)
-    console.log(this.colorSeries)
+
+    // draw
+    // TODO: 'Venn' or 'Euler'
+    this.drawVennDiagram();
+  }
+
+  drawVennDiagram() {
+    //set common parameters and styles
+    const vennElement = this.root.querySelector('#venn-diagrams');
+    vennElement.setAttribute('width', this.params['width']);
+    vennElement.setAttribute('height', this.params['height']);
+    // TODO: svgのサイズしか定義できてない
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const selectedDiagram = this.root.querySelector(`.venn-diagram[data-number-of-data="${this.numberOfData}"]`);
@@ -49,13 +54,16 @@ export default class VennStanza extends Stanza {
     selectedDiagram.querySelectorAll(':scope > g').forEach(part => {
       const targets1 = part.dataset.targets;
       // set count label
-      part.querySelector(':scope > text').textContent = setCounts.get(targets1);
+      part.querySelector(':scope > text').textContent = this.setCounts.get(targets1);
       // set color
       const targets2 = targets1.split(',').map(target => +target);
       const color = this.getBlendedColor(targets2);
       part.querySelector(':scope > .part').setAttribute('fill', color.toString());
     });
+  }
 
+  drawEulerDiagram() {
+    // TODO: support euler diagram
   }
 
   getColorSeries() {
@@ -65,13 +73,6 @@ export default class VennStanza extends Stanza {
       series[i] = `--togostanza-series-${i}-color`;
     }
     return series.map(variable => getPropertyValue(variable).trim());
-  }
-
-  defineSizeOfDiagram(width, height) {
-    const vennElement = this.root.querySelector('#venn-diagrams');
-    vennElement.setAttribute('width', width);
-    vennElement.setAttribute('height', height);
-    // TODO: svgのサイズしか定義できてない
   }
 
   getBlendedColor(targets) {
