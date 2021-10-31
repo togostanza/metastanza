@@ -1,4 +1,11 @@
 //TogoGenome Venn diagram
+main {
+  #drawArea {
+    font-family: var(--togostanza-font-family)
+  }
+}
+
+
 #venn-diagrams {
   width: 0;
   height: 0;
@@ -20,6 +27,19 @@
       opacity: 1;
     }
   }
+}
+
+#euler-diagram {
+  .venn-circle {
+    > path {
+      stroke-width: 1px;
+      fill-opacity: .1 !important;
+    }
+    > text {
+      fill: black !important;
+    }
+  }
+
 }
 
 // #fixed {
