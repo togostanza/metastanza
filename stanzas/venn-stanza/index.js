@@ -1,6 +1,7 @@
 import Stanza from 'togostanza/stanza';
 import loadData from '@/lib/load-data';
 import * as d3 from 'd3';
+import Color from 'color';
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -40,141 +41,20 @@ export default class VennStanza extends Stanza {
     console.log(this.data)
     console.log(this.dataLabels)
     console.log(setCounts)
+    console.log(this.colorSeries)
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const selectedDiagram = this.root.querySelector(`.venn-diagram[data-number-of-data="${this.numberOfData}"]`);
     selectedDiagram.classList.add('-current');
     selectedDiagram.querySelectorAll(':scope > g').forEach(part => {
-      part.querySelector(':scope > text').textContent = setCounts.get(part.dataset.target);
+      const targets1 = part.dataset.targets;
+      // set count label
+      part.querySelector(':scope > text').textContent = setCounts.get(targets1);
+      // set color
+      const targets2 = targets1.split(',').map(target => +target);
+      const color = this.getBlendedColor(targets2);
+      part.querySelector(':scope > .part').setAttribute('fill', color.toString());
     });
-
-    // get paths(=venn shapes) and texts(=venn labels), and these nodelists are listed in vennSet3Arr's order
-    const part1Paths = this.root.querySelectorAll('.part1-path');
-
-    const part2Paths = this.root.querySelectorAll('.part2-path');
-
-    const part3Paths = this.root.querySelectorAll('.part3-path');
-
-    const part4Paths = this.root.querySelectorAll('.part4-path');
-
-    const part5Paths = this.root.querySelectorAll('.part5-path');
-
-    //set venn diagram depends on circle numbers //TODO: check and adjust opacity value
-    switch (this.numberOfData) {
-      case 1:
-        part1Paths[0].setAttribute('fill',this.colorSeries[0].trim());
-        break;
-      case 2:
-        const part2ColorScheme = [
-          this.colorSeries[0].trim(),
-          this.colorSeries[1].trim(),
-          '#FFFFFF'
-        ];
-        part2Paths.forEach((path, i) => {path.setAttribute('fill', part2ColorScheme[i]);})
-        break;
-      case 3:
-        const part3ColorScheme = [
-          this.colorSeries[0].trim(),
-          this.colorSeries[1].trim(),
-          this.colorSeries[2].trim(),
-          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
-          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.8, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          '#FFFFFF'
-        ];
-        part3Paths.forEach((path, i) => {path.setAttribute('fill', part3ColorScheme[i]);})
-        break;
-      case 4:
-        const part4ColorScheme = [
-          this.colorSeries[0].trim(),
-          this.colorSeries[1].trim(),
-          this.colorSeries[2].trim(),
-          this.colorSeries[3].trim(),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          '#FFFFFF'
-        ];
-        part4Paths.forEach((path, i) => {path.setAttribute('fill', part4ColorScheme[i]);})
-        break;
-      case 5:
-        const part5ColorScheme = [
-          this.colorSeries[0].trim(),
-          this.colorSeries[1].trim(),
-          this.colorSeries[2].trim(),
-          this.colorSeries[3].trim(),
-          this.colorSeries[4].trim(),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[0].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          rgb2hex(blendRgb(.6, hex2rgb(this.colorSeries[1].trim()), hex2rgb(this.colorSeries[2].trim()), hex2rgb(this.colorSeries[3].trim()), hex2rgb(this.colorSeries[4].trim()))),
-          '#FFFFFF'
-        ];
-        part5Paths.forEach((path, i) => {path.setAttribute('fill', part5ColorScheme[i]);})
-        break;
-      default:
-        console.log(`Circle number(${this.numberOfData}) is invalid. Please set from 1 to 5 circles.`);
-    }
-
-    //convert hex to rgb (retrun [red, green, blue])
-    function hex2rgb(colorCode){
-      const red = parseInt(colorCode.substring(1, 3), 16);
-      const green = parseInt(colorCode.substring(3, 5), 16);
-      const blue = parseInt(colorCode.substring(5, 7), 16);
-      return [red,green,blue];
-    }
-    
-    //convert hex to rgb (retrun [red, green, blue])
-    function rgb2hex(rgb) {
-      return '#' + rgb.map(  value => {
-        return ('0' + value.toString(16)).slice(-2);
-      } ).join( '' ) ;
-    }
-
-    //blend two colors to draw overlapping color
-    //rgbArr is supporsed to be like [red, green, blue]
-    function blendRgb(opacity, rgbArr1, rgbArr2, rgbArr3, rgbArr4){
-      rgbArr3 ? rgbArr3 : rgbArr3 = [0,0,0];
-      rgbArr4 ? rgbArr4 : rgbArr4 = [0,0,0];
-
-      let red = Math.round((rgbArr1[0] + rgbArr2[0] + rgbArr3[0] + rgbArr4[0]) * opacity);
-      let green = Math.round((rgbArr1[1] + rgbArr2[1] + rgbArr3[1] + rgbArr4[1]) * opacity);
-      let blue = Math.round((rgbArr1[2] + rgbArr2[2] + rgbArr3[2] + rgbArr4[2]) * opacity);
-
-      red > 255 ? red = 255 : red; 
-      green > 255 ? green = 255 : green; 
-      blue > 255 ? blue = 255 : blue;       
-      
-      return [red, green, blue];
-    }
 
   }
 
@@ -184,15 +64,24 @@ export default class VennStanza extends Stanza {
     for (let i = 0; i < series.length; i++) {
       series[i] = `--togostanza-series-${i}-color`;
     }
-    return series.map(variable => getPropertyValue(variable));
+    return series.map(variable => getPropertyValue(variable).trim());
   }
 
   defineSizeOfDiagram(width, height) {
-    // const drawArea = this.root.querySelector('#drawArea'); //TODO: set to use tooltip
     const vennElement = this.root.querySelector('#venn-diagrams');
     vennElement.setAttribute('width', width);
     vennElement.setAttribute('height', height);
     // TODO: svgのサイズしか定義できてない
+  }
+
+  getBlendedColor(targets) {
+    let blendedColor = Color(this.colorSeries[targets[0]]);
+    targets.forEach((target, index) => {
+      if (index > 0) {
+        blendedColor = blendedColor.mix(Color(this.colorSeries[target]), 1 / (index + 1));
+      }
+    });
+    return blendedColor;
   }
 
   async getData() {
