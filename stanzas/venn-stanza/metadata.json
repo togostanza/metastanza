@@ -18,8 +18,8 @@
     {
       "stanza:key": "chart-type",
       "stanza:type": "single-choice",
-      "stanza:choice": ["original", "rings", "mono"],
-      "stanza:example": "original",
+      "stanza:choice": ["Venn diagram", "Euler diagram"],
+      "stanza:example": "Euler diagram",
       "stanza:description": "Type of venn diagram",
       "stanza:required": true
     },
