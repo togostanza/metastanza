@@ -80,13 +80,29 @@ export default class VennStanza extends Stanza {
     const container = this.root.querySelector('#euler-diagram');
     container.style.width = this.params['width'] + 'px';
     container.style.height = this.params['height'] + 'px';
+    const d3Container = d3.select(container);
     const convertedData = this.data.map(datum => Object.fromEntries([
       ['sets', datum.set],
       ['size', datum.size]
     ]));
-    const euler = venn.VennDiagram();
-    d3.select(container).datum(convertedData).call(euler);
+    const euler = venn.VennDiagram()
+      .width(this.params['width'])
+      .height(this.params['height']);
+    d3Container.datum(convertedData).call(euler);
 
+    // path
+    d3Container.selectAll('.venn-circle path')
+      .style('fill', (d, i) => this.colorSeries[i])
+      .style('stroke', (d, i) => this.colorSeries[i]);
+
+
+    return;
+
+
+    d3.selectAll("#rings .venn-circle text")
+      .style("fill", function(d,i) { return colours[i]})
+      .style("font-size", "24px")
+      .style("font-weight", "100");
   }
 
   getColorSeries() {
