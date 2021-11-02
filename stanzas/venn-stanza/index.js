@@ -161,19 +161,22 @@ export default class VennStanza extends Stanza {
    * @param {*} position 
    */
   makeLegend(data, container, direction = 'vertical', positions = ['top', 'right']) {
-    const table = document.createElement('table');
-    table.className = 'legends';
-    table.innerHTML = data.map(datum => {
-      return `
-      <tr data-targets="">
-        <td><span class="marker" style="background-color: ${datum.color}"></span>${datum.label}</td>
-        ${datum.value ? `<td class="${(typeof datum.value).toLowerCase()}">${datum.value}</td>` : ''}
-      </tr>`;
-    }).join('');
-    positions.forEach(position => {
-      table.style[position] = 0;
-    });
-    container.append(table);
+    const div = document.createElement('div');
+    div.className = 'legends';
+    div.innerHTML = `
+    <table>
+      <tbody>
+      ${data.map(datum => {
+        return `
+        <tr data-targets="">
+          <td><span class="marker" style="background-color: ${datum.color}"></span>${datum.label}</td>
+          ${datum.value ? `<td class="${(typeof datum.value).toLowerCase()}">${datum.value}</td>` : ''}
+        </tr>`;
+      }).join('')}
+      </tbody>
+    <table>`;
+    positions.forEach(position => div.style[position] = 0);
+    container.append(div);
   }
 
   async getData() {

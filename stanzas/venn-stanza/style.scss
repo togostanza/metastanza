@@ -59,19 +59,23 @@ text {
   position: absolute;
   font-size: 10px;
   line-height: 1.5;
-  > tbody {
-    > tr {
-      > td {
-        > .marker {
-          display: inline-block;
-          width: 1em;
-          height: 1em;
-          border-radius: 100%;
-          vertical-align: middle;
-          margin-right: .3em;
-        }
-        &.number {
-          text-align: right;
+  height: 100%;
+  overflow-y: auto;
+  > table {
+    > tbody {
+      > tr {
+        > td {
+          > .marker {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border-radius: 100%;
+            vertical-align: middle;
+            margin-right: .3em;
+          }
+          &.number {
+            text-align: right;
+          }
         }
       }
     }
