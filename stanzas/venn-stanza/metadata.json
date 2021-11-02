@@ -59,7 +59,7 @@
       "stanza:key": "blend-mode",
       "stanza:type": "single-choice",
       "stanza:choice": ["normal", "multiply", "screen"],
-      "stanza:example": "multiply",
+      "stanza:example": "screen",
       "stanza:description": "How to mix colors in overlapping areas",
       "stanza:required": true
     }
@@ -111,7 +111,7 @@
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "#000000",
       "stanza:description": "Label font color"
     },
     {
@@ -119,24 +119,6 @@
       "stanza:type": "number",
       "stanza:default": 12,
       "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 2,
-      "stanza:description": "Border width"
-    },
-    {
-      "stanza:key": "--togostanza-border-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border opacity"
-    },
-    {
-      "stanza:key": "--togostanza-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Fill opacity"
     }
   ],
   "stanza:incomingEvent": [],

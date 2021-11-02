@@ -128,11 +128,6 @@ export default class VennStanza extends Stanza {
     d3Container.selectAll('.venn-circle path')
       .style('fill', (d, i) => this.colorSeries[i])
       .style('stroke', (d, i) => this.colorSeries[i]);
-
-    // d3.selectAll("#rings .venn-circle text")
-    //   .style("fill", function(d,i) { return colours[i]})
-    //   .style("font-size", "24px")
-    //   .style("font-weight", "100");
   }
 
   getColorSeries() {

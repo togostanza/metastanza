@@ -2,6 +2,7 @@
 
 text {
   font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
 }
 
 #drawArea {
@@ -47,7 +48,7 @@ text {
       fill-opacity: .1 !important;
     }
     > text {
-      fill: black !important;
+      fill: var(--togostanza-label-font-color) !important;
     }
   }
 
@@ -69,6 +70,7 @@ text {
   line-height: 1.5;
   height: 100%;
   overflow-y: auto;
+  color: var(--togostanza-label-font-color);
   > table {
     > tbody {
       > tr {
