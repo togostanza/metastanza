@@ -19,23 +19,23 @@ text {
   display: none;
   &.-current {
     display: block;
-  }
-  &:hover {
-    // cursor: pointer;
-    > g {
-      opacity: .2;
-    }
-  }
-  > g {
     &:hover {
-      opacity: 1;
+      > g {
+        opacity: .2;
+      }
     }
-  }
-  &.-hoverlegends {
     > g {
-      opacity: .2;
-      &.-selected {
+      transition: opacity 0.2s;
+      &:hover {
         opacity: 1;
+      }
+    }
+    &.-hoverlegends {
+      > g {
+        opacity: .2;
+        &.-selected {
+          opacity: 1;
+        }
       }
     }
   }
