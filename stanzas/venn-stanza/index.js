@@ -86,7 +86,7 @@ export default class VennStanza extends Stanza {
       const labels = targets.map(target => this.dataLabels[target]);
       const count = this.data.find(datum => {
         return datum.set.length === labels.length && labels.every(label => datum.set.find(label2 => label === label2));
-      }).size;
+      })?.size ?? '';
       // set color
       const color = this.getBlendedColor(targets);
       group.querySelector(':scope > .part').setAttribute('fill', color.toString());
