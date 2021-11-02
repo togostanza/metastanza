@@ -36,7 +36,6 @@ export default class VennStanza extends Stanza {
     this.data = await this.getData();
     console.log(this.data)
     this.dataLabels = Array.from(new Set(this.data.map(datum => datum.set).flat()));
-    this.setCounts = new Map(this.data.map(datum => [datum.set.map(set => this.dataLabels.indexOf(set)).join(','), datum.size]));
     this.numberOfData = this.dataLabels.length;
     this.venn = new Map();
 
@@ -84,14 +83,19 @@ export default class VennStanza extends Stanza {
 
     // shapes
     selectedDiagram.querySelectorAll(':scope > g').forEach(group => {
-      const targets1 = group.dataset.targets;
+      const targets = group.dataset.targets.split(',').map(target => +target);
+      const labels = targets.map(target => this.dataLabels[target]);
+      const count = this.data.find(datum => {
+        return datum.set.length === labels.length && labels.every(label => datum.set.find(label2 => label === label2));
+      }).size;
       // set color
-      const targets2 = targets1.split(',').map(target => +target);
-      const color = this.getBlendedColor(targets2);
+      const color = this.getBlendedColor(targets);
       group.querySelector(':scope > .part').setAttribute('fill', color.toString());
       // set label
-      group.querySelector(':scope > text.label').textContent = targets2.map(target => this.dataLabels[target]).join(',');
-      group.querySelector(':scope > text.value').textContent = this.setCounts.get(targets1);
+      group.querySelector(':scope > text.label').textContent = labels.join(',');
+      group.querySelector(':scope > text.value').textContent = count;
+      // tooltip
+      group.dataset.tooltip = labels.join('∩');
     });
 
     // legends
