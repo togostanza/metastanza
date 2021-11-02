@@ -11,11 +11,11 @@ import {
 
 export default class VennStanza extends Stanza {
 
-  colorSeries;
-  data;
-  dataLabels;
-  setCounts;
-  numberOfData;
+  // colorSeries;
+  // data;
+  // dataLabels;
+  // setCounts;
+  // numberOfData;
 
   menu() {
     return [
@@ -52,8 +52,10 @@ export default class VennStanza extends Stanza {
   drawVennDiagram() {
     //set common parameters and styles
     const container = this.root.querySelector('#venn-diagrams');
-    container.style.width = this.params['width'] + 'px';
-    container.style.height = this.params['height'] + 'px';
+    const svgWidth = this.params['width'];
+    const svgHeight = this.params['height'];
+    container.style.width = svgWidth + 'px';
+    container.style.height = svgHeight + 'px';
     // TODO: svgのサイズしか定義できてない
 
     // show venn diagram corresponds to data(circle numbers to draw)
@@ -63,13 +65,27 @@ export default class VennStanza extends Stanza {
       return;
     }
     selectedDiagram.classList.add('-current');
+    // set scale
+    const containerRect = this.root.querySelector('main').getBoundingClientRect();
+    const rect = selectedDiagram.getBoundingClientRect();
+    const margin = Math.max(rect.x - containerRect.x, rect.y - containerRect.y);
+    const scale = Math.min(
+      svgWidth / (rect.width + margin * 2),
+      svgHeight / (rect.height + margin * 2)
+    );
+    selectedDiagram.setAttribute('transform', `scale(${scale})`);
+    const labelFontSize = +window.getComputedStyle(this.element).getPropertyValue('--togostanza-label-font-size').trim();
+    selectedDiagram.querySelectorAll('text').forEach(text => {
+      text.style.fontSize = (labelFontSize / scale) + 'px';
+    })
+    // shapes
     selectedDiagram.querySelectorAll(':scope > g').forEach(group => {
       const targets1 = group.dataset.targets;
       // set color
       const targets2 = targets1.split(',').map(target => +target);
       const color = this.getBlendedColor(targets2);
       group.querySelector(':scope > .part').setAttribute('fill', color.toString());
-      // set count label
+      // set label
       group.querySelector(':scope > text.label').textContent = targets2.map(target => this.dataLabels[target]).join(',');
       group.querySelector(':scope > text.value').textContent = this.setCounts.get(targets1);
     });
@@ -95,14 +111,10 @@ export default class VennStanza extends Stanza {
       .style('fill', (d, i) => this.colorSeries[i])
       .style('stroke', (d, i) => this.colorSeries[i]);
 
-
-    return;
-
-
-    d3.selectAll("#rings .venn-circle text")
-      .style("fill", function(d,i) { return colours[i]})
-      .style("font-size", "24px")
-      .style("font-weight", "100");
+    // d3.selectAll("#rings .venn-circle text")
+    //   .style("fill", function(d,i) { return colours[i]})
+    //   .style("font-size", "24px")
+    //   .style("font-weight", "100");
   }
 
   getColorSeries() {
