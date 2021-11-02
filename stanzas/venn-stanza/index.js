@@ -14,7 +14,6 @@ export default class VennStanza extends Stanza {
   // colorSeries;
   // data;
   // dataLabels;
-  // setCounts;
   // numberOfData;
   // venn;
 
