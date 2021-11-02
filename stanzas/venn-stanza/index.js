@@ -16,6 +16,7 @@ export default class VennStanza extends Stanza {
   // dataLabels;
   // setCounts;
   // numberOfData;
+  // venn;
 
   menu() {
     return [
@@ -37,6 +38,7 @@ export default class VennStanza extends Stanza {
     this.dataLabels = Array.from(new Set(this.data.map(datum => datum.set).flat()));
     this.setCounts = new Map(this.data.map(datum => [datum.set.map(set => this.dataLabels.indexOf(set)).join(','), datum.size]));
     this.numberOfData = this.dataLabels.length;
+    this.venn = new Map();
     console.log(this.dataLabels)
     console.log(this.setCounts)
     console.log(this.colorSeries)
@@ -67,6 +69,7 @@ export default class VennStanza extends Stanza {
       return;
     }
     selectedDiagram.classList.add('-current');
+    this.venn.set('node', selectedDiagram);
 
     // set scale
     const containerRect = this.root.querySelector('main').getBoundingClientRect();
@@ -99,6 +102,7 @@ export default class VennStanza extends Stanza {
       this.data.map(datum => {
         const color = this.getBlendedColor(datum.set.map(item => this.dataLabels.indexOf(item)));
         return Object.fromEntries([
+          ['id', datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',')],
           ['label', datum.set.map(item => item).join('∩')],
           ['color', color.toString()],
           ['value', datum.size],
@@ -168,7 +172,7 @@ export default class VennStanza extends Stanza {
       <tbody>
       ${data.map(datum => {
         return `
-        <tr data-targets="">
+        <tr data-targets="${datum.id}">
           <td><span class="marker" style="background-color: ${datum.color}"></span>${datum.label}</td>
           ${datum.value ? `<td class="${(typeof datum.value).toLowerCase()}">${datum.value}</td>` : ''}
         </tr>`;
@@ -177,6 +181,17 @@ export default class VennStanza extends Stanza {
     <table>`;
     positions.forEach(position => div.style[position] = 0);
     container.append(div);
+    // event
+    container.querySelectorAll(':scope > div > table > tbody > tr').forEach(tr => {
+      tr.addEventListener('mouseover', () => {
+        this.venn.get('node').classList.add('-hoverlegends');
+        this.venn.get('node').querySelector(`:scope > [data-targets="${tr.dataset.targets}"]`)?.classList.add('-selected');
+      });
+      tr.addEventListener('mouseleave', () => {
+        this.venn.get('node').classList.remove('-hoverlegends');
+        this.venn.get('node').querySelector(`:scope > [data-targets="${tr.dataset.targets}"]`)?.classList.remove('-selected');
+      });
+    });
   }
 
   async getData() {

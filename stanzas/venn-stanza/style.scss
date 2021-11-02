@@ -20,14 +20,22 @@ text {
     display: block;
   }
   &:hover {
-    cursor: pointer;
-    > * {
+    // cursor: pointer;
+    > g {
       opacity: .2;
     }
   }
   > g {
     &:hover {
       opacity: 1;
+    }
+  }
+  &.-hoverlegends {
+    > g {
+      opacity: .2;
+      &.-selected {
+        opacity: 1;
+      }
     }
   }
 }
