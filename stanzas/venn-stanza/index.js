@@ -39,7 +39,6 @@ export default class VennStanza extends Stanza {
     this.numberOfData = this.dataLabels.length;
 
     // draw
-    // TODO: 'Venn' or 'Euler'
     switch (this.params['chart-type']) {
       case 'Venn diagram':
         this.drawVennDiagram();
@@ -64,26 +63,15 @@ export default class VennStanza extends Stanza {
       return;
     }
     selectedDiagram.classList.add('-current');
-    const rootRect = this.root.querySelector('main').getBoundingClientRect();
-    console.log(rootRect);
     selectedDiagram.querySelectorAll(':scope > g').forEach(group => {
       const targets1 = group.dataset.targets;
-
-      const rect = group.querySelector(':scope > .part').getBoundingClientRect()
-      // const text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      // console.log(rect)
-      // text1.setAttribute('x', rect.x + rect.width * .5 - rootRect.x)
-      // text1.setAttribute('y', rect.y + rect.height * .5 - rootRect.y)
-      // text1.setAttribute('text-anchor', 'middle');
-      // text1.textContent = 'HGOE'
-      // group.appendChild(text1)
-
       // set color
       const targets2 = targets1.split(',').map(target => +target);
       const color = this.getBlendedColor(targets2);
       group.querySelector(':scope > .part').setAttribute('fill', color.toString());
       // set count label
-      group.querySelector(':scope > text').textContent = this.setCounts.get(targets1);
+      group.querySelector(':scope > text.label').textContent = targets2.map(target => this.dataLabels[target]).join(',');
+      group.querySelector(':scope > text.value').textContent = this.setCounts.get(targets1);
     });
   }
 
