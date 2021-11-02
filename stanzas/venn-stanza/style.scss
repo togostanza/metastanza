@@ -41,42 +41,6 @@ text {
     > text {
       fill: black !important;
     }
-    // &:nth-child(1) {
-    //   > path {
-    //     fill: var(--togostanza-series-0-color) !important;
-    //     stroke: var(--togostanza-series-0-color) !important;
-    //   }
-    // }
-    // &:nth-child(2) {
-    //   > path {
-    //     fill: var(--togostanza-series-1-color) !important;
-    //     stroke: var(--togostanza-series-1-color) !important;
-    //   }
-    // }
-    // &:nth-child(3) {
-    //   > path {
-    //     fill: var(--togostanza-series-2-color) !important;
-    //     stroke: var(--togostanza-series-2-color) !important;
-    //   }
-    // }
-    // &:nth-child(4) {
-    //   > path {
-    //     fill: var(--togostanza-series-3-color) !important;
-    //     stroke: var(--togostanza-series-3-color) !important;
-    //   }
-    // }
-    // &:nth-child(5) {
-    //   > path {
-    //     fill: var(--togostanza-series-4-color) !important;
-    //     stroke: var(--togostanza-series-4-color) !important;
-    //   }
-    // }
-    // &:nth-child(6) {
-    //   > path {
-    //     fill: var(--togostanza-series-5-color) !important;
-    //     stroke: var(--togostanza-series-5-color) !important;
-    //   }
-    // }
   }
 
 }
@@ -90,3 +54,26 @@ text {
 //     border-radius: 2px;
 //   }
 // }
+
+.legends {
+  position: absolute;
+  font-size: 10px;
+  line-height: 1.5;
+  > tbody {
+    > tr {
+      > td {
+        > .marker {
+          display: inline-block;
+          width: 1em;
+          height: 1em;
+          border-radius: 100%;
+          vertical-align: middle;
+          margin-right: .3em;
+        }
+        &.number {
+          text-align: right;
+        }
+      }
+    }
+  }
+}

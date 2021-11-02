@@ -37,6 +37,9 @@ export default class VennStanza extends Stanza {
     this.dataLabels = Array.from(new Set(this.data.map(datum => datum.set).flat()));
     this.setCounts = new Map(this.data.map(datum => [datum.set.map(set => this.dataLabels.indexOf(set)).join(','), datum.size]));
     this.numberOfData = this.dataLabels.length;
+    console.log(this.dataLabels)
+    console.log(this.setCounts)
+    console.log(this.colorSeries)
 
     // draw
     switch (this.params['chart-type']) {
@@ -50,13 +53,12 @@ export default class VennStanza extends Stanza {
   }
 
   drawVennDiagram() {
-    //set common parameters and styles
+    // set common parameters and styles
     const container = this.root.querySelector('#venn-diagrams');
     const svgWidth = this.params['width'];
     const svgHeight = this.params['height'];
     container.style.width = svgWidth + 'px';
     container.style.height = svgHeight + 'px';
-    // TODO: svgのサイズしか定義できてない
 
     // show venn diagram corresponds to data(circle numbers to draw)
     const selectedDiagram = this.root.querySelector(`.venn-diagram[data-number-of-data="${this.numberOfData}"]`);
@@ -65,6 +67,7 @@ export default class VennStanza extends Stanza {
       return;
     }
     selectedDiagram.classList.add('-current');
+
     // set scale
     const containerRect = this.root.querySelector('main').getBoundingClientRect();
     const rect = selectedDiagram.getBoundingClientRect();
@@ -78,6 +81,7 @@ export default class VennStanza extends Stanza {
     selectedDiagram.querySelectorAll('text').forEach(text => {
       text.style.fontSize = (labelFontSize / scale) + 'px';
     })
+
     // shapes
     selectedDiagram.querySelectorAll(':scope > g').forEach(group => {
       const targets1 = group.dataset.targets;
@@ -89,6 +93,19 @@ export default class VennStanza extends Stanza {
       group.querySelector(':scope > text.label').textContent = targets2.map(target => this.dataLabels[target]).join(',');
       group.querySelector(':scope > text.value').textContent = this.setCounts.get(targets1);
     });
+
+    // legends
+    this.makeLegend(
+      this.data.map(datum => {
+        const color = this.getBlendedColor(datum.set.map(item => this.dataLabels.indexOf(item)));
+        return Object.fromEntries([
+          ['label', datum.set.map(item => item).join('∩')],
+          ['color', color.toString()],
+          ['value', datum.size],
+        ]);
+      }),
+      this.root.querySelector('main')
+    );
   }
 
   drawEulerDiagram() {
@@ -134,6 +151,29 @@ export default class VennStanza extends Stanza {
       }
     });
     return blendedColor;
+  }
+
+  /**
+   * 
+   * @param {*} data 
+   * @param {Node} container 
+   * @param {String} direction 'vertical' or 'horizontal'
+   * @param {*} position 
+   */
+  makeLegend(data, container, direction = 'vertical', positions = ['top', 'right']) {
+    const table = document.createElement('table');
+    table.className = 'legends';
+    table.innerHTML = data.map(datum => {
+      return `
+      <tr data-targets="">
+        <td><span class="marker" style="background-color: ${datum.color}"></span>${datum.label}</td>
+        ${datum.value ? `<td class="${(typeof datum.value).toLowerCase()}">${datum.value}</td>` : ''}
+      </tr>`;
+    }).join('');
+    positions.forEach(position => {
+      table.style[position] = 0;
+    });
+    container.append(table);
   }
 
   async getData() {
