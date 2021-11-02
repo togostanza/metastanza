@@ -1,7 +1,7 @@
 //TogoGenome Venn diagram
 
 text {
-  // font-size: var(--togostanza-label-font-size); CSS で単位付きの値は無効
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
 }
 
 #drawArea {
