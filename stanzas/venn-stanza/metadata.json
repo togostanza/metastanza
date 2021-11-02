@@ -25,7 +25,7 @@
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/5sets-data.json",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -54,6 +54,14 @@
       "stanza:type": "number",
       "stanza:example": 380,
       "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "blend-mode",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["normal", "multiply", "screen"],
+      "stanza:example": "multiply",
+      "stanza:description": "How to mix colors in overlapping areas",
+      "stanza:required": true
     }
   ],
   "stanza:menu-placement": "bottom-right",

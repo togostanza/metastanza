@@ -39,9 +39,6 @@ export default class VennStanza extends Stanza {
     this.setCounts = new Map(this.data.map(datum => [datum.set.map(set => this.dataLabels.indexOf(set)).join(','), datum.size]));
     this.numberOfData = this.dataLabels.length;
     this.venn = new Map();
-    console.log(this.dataLabels)
-    console.log(this.setCounts)
-    console.log(this.colorSeries)
 
     // draw
     switch (this.params['chart-type']) {
@@ -154,6 +151,17 @@ export default class VennStanza extends Stanza {
         blendedColor = blendedColor.mix(Color(this.colorSeries[target]), 1 / (index + 1));
       }
     });
+    const ratio = (targets.length - 1) / (this.numberOfData - 1);
+    switch (this.params['blend-mode']) {
+      case 'multiply':
+        blendedColor = blendedColor.saturate(ratio);
+        blendedColor = blendedColor.darken(ratio * .5);
+        break;
+      case 'screen':
+        blendedColor = blendedColor.saturate(ratio);
+        blendedColor = blendedColor.lighten(ratio * .5);
+        break;
+    }
     return blendedColor;
   }
 
