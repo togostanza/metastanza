@@ -95,7 +95,9 @@ export default class VennStanza extends Stanza {
       group.querySelector(':scope > text.label').textContent = labels.join(',');
       group.querySelector(':scope > text.value').textContent = count;
       // tooltip
-      group.dataset.tooltip = labels.join('∩');
+      group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
+      group.dataset.tooltipHtml = true;
+      this.setTooltip(group);
     });
 
     // legends
@@ -199,6 +201,31 @@ export default class VennStanza extends Stanza {
         this.venn.get('node').querySelector(`:scope > [data-targets="${tr.dataset.targets}"]`)?.classList.remove('-selected');
       });
     });
+  }
+
+  setTooltip(node) {
+    let tooltip = this.root.querySelector('#StanzaToolTip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.id = 'StanzaToolTip';
+      this.root.append(tooltip);
+    }
+    if (node.dataset.tooltip) {
+      node.addEventListener('mouseover', () => {
+        const rect = node.getBoundingClientRect();
+        if (node.dataset.tooltipHtml === 'true') {
+          tooltip.innerHTML = node.dataset.tooltip;
+        } else {
+          tooltip.textContent = node.dataset.tooltip;
+        }
+        tooltip.style.left = (rect.x + rect.width * .5) + 'px';
+        tooltip.style.top = (rect.y) + 'px';
+        tooltip.classList.add('-show');
+      });
+      node.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('-show');
+      });
+    }
   }
 
   async getData() {
