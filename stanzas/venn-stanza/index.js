@@ -102,15 +102,20 @@ export default class VennStanza extends Stanza {
     // legends
     this.makeLegend(
       this.data.map(datum => {
+        const id = datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',');
         const color = this.getBlendedColor(datum.set.map(item => this.dataLabels.indexOf(item)));
         return Object.fromEntries([
-          ['id', datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',')],
+          ['id', id],
           ['label', datum.set.map(item => item).join('∩')],
           ['color', color.toString()],
           ['value', datum.size],
+          ['node', selectedDiagram.querySelector(`:scope > g[data-targets="${id}"]`)]
         ]);
       }),
-      this.root.querySelector('main')
+      this.root.querySelector('main'),
+      {
+        fadeoutNodes: selectedDiagram.querySelectorAll(':scope > g')
+      }
     );
   }
 
@@ -169,18 +174,24 @@ export default class VennStanza extends Stanza {
    * 
    * @param {*} data 
    * @param {Node} container 
-   * @param {String} direction 'vertical' or 'horizontal'
-   * @param {*} position 
+   * @param {Object} opt
+   *  - direction 'vertical' or 'horizontal'
+   *  - position 
+   *  - fadeoutNodes
    */
-  makeLegend(data, container, direction = 'vertical', positions = ['top', 'right']) {
+  makeLegend(data, container, opt) {
+    console.log(data)
+    const positions = opt.position || ['top', 'right'];
+
+    // make legend
     const div = document.createElement('div');
-    div.className = 'legends';
+    div.id = 'MetaStanzalegend';
     div.innerHTML = `
     <table>
       <tbody>
       ${data.map(datum => {
         return `
-        <tr data-targets="${datum.id}">
+        <tr data-id="${datum.id}">
           <td><span class="marker" style="background-color: ${datum.color}"></span>${datum.label}</td>
           ${datum.value ? `<td class="${(typeof datum.value).toLowerCase()}">${datum.value}</td>` : ''}
         </tr>`;
@@ -189,24 +200,28 @@ export default class VennStanza extends Stanza {
     <table>`;
     positions.forEach(position => div.style[position] = 0);
     container.append(div);
+
     // event
+    if (!opt.fadeoutNodes) {return;};
     container.querySelectorAll(':scope > div > table > tbody > tr').forEach(tr => {
       tr.addEventListener('mouseover', () => {
-        this.venn.get('node').classList.add('-hoverlegends');
-        this.venn.get('node').querySelector(`:scope > [data-targets="${tr.dataset.targets}"]`)?.classList.add('-selected');
+        opt.fadeoutNodes.forEach(node => node.style.opacity = .2);
+        const datum = data.find(datum => datum.id === tr.dataset.id);
+        if (datum) {
+          datum.node.style.opacity = "";
+        };
       });
       tr.addEventListener('mouseleave', () => {
-        this.venn.get('node').classList.remove('-hoverlegends');
-        this.venn.get('node').querySelector(`:scope > [data-targets="${tr.dataset.targets}"]`)?.classList.remove('-selected');
+        opt.fadeoutNodes.forEach(node => node.style.opacity = "");
       });
     });
   }
 
   setTooltip(node) {
-    let tooltip = this.root.querySelector('#StanzaToolTip');
+    let tooltip = this.root.querySelector('#MetaStanzaToolTip');
     if (!tooltip) {
       tooltip = document.createElement('div');
-      tooltip.id = 'StanzaToolTip';
+      tooltip.id = 'MetaStanzaToolTip';
       this.root.append(tooltip);
     }
     if (node.dataset.tooltip) {

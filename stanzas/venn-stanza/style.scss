@@ -19,25 +19,25 @@ text {
   display: none;
   &.-current {
     display: block;
-    &:hover {
-      > g {
-        opacity: .2;
-      }
-    }
+    // &:hover {
+    //   > g {
+    //     opacity: .2;
+    //   }
+    // }
     > g {
       transition: opacity 0.2s;
       &:hover {
         opacity: 1;
       }
     }
-    &.-hoverlegends {
-      > g {
-        opacity: .2;
-        &.-selected {
-          opacity: 1;
-        }
-      }
-    }
+    // &.-hoverlegends {
+    //   > g {
+    //     opacity: .2;
+    //     &.-selected {
+    //       opacity: 1;
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -64,7 +64,7 @@ text {
 //   }
 // }
 
-.legends {
+#MetaStanzalegend {
   position: absolute;
   font-size: 10px;
   line-height: 1.5;
@@ -92,7 +92,7 @@ text {
   }
 }
 
-#StanzaToolTip {
+#MetaStanzaToolTip {
   padding: 2px 6px;
   position: absolute;
   transition: all .2s;
