@@ -19,25 +19,12 @@ text {
   display: none;
   &.-current {
     display: block;
-    // &:hover {
-    //   > g {
-    //     opacity: .2;
-    //   }
-    // }
     > g {
       transition: opacity 0.2s;
       &:hover {
         opacity: 1;
       }
     }
-    // &.-hoverlegends {
-    //   > g {
-    //     opacity: .2;
-    //     &.-selected {
-    //       opacity: 1;
-    //     }
-    //   }
-    // }
   }
 }
 
@@ -54,23 +41,15 @@ text {
 
 }
 
-// #fixed {
-//   position: relative;
-//   .fixed-tooltip {
-//     position: absolute;
-//     background-color: #fff;
-//     padding: 5px 10px;
-//     border-radius: 2px;
-//   }
-// }
-
-#MetaStanzalegend {
+#MetaStanzaLegend {
+  padding: 4px 8px;
   position: absolute;
   font-size: 10px;
   line-height: 1.5;
-  height: 100%;
+  max-height: 100%;
   overflow-y: auto;
   color: var(--togostanza-label-font-color);
+  background-color: white;
   > table {
     > tbody {
       > tr {
@@ -89,6 +68,23 @@ text {
         }
       }
     }
+  }
+}
+#MetaStanzaLegendLeader {
+  position: absolute;
+  border-left: dotted 1px black;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .2s;
+  &[data-direction="top"] {
+    border-top: dotted 1px black;
+  }
+  &[data-direction="bottom"] {
+    border-bottom: dotted 1px black;
+  }
+  &.-show {
+    opacity: .5;
   }
 }
 
