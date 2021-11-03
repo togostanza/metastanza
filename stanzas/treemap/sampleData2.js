@@ -16,6 +16,7 @@ export default [
     id: 3,
     value: "coding_sequence_variant",
     label: "Coding sequence variant",
+    n: 18057,
     description: "A sequence variant that changes the coding sequence",
     parent: 2,
   },
@@ -23,6 +24,7 @@ export default [
     id: 4,
     value: "feature_elongation",
     label: "Feature elongation",
+    n: 0,
     description:
       "A sequence variant that causes the extension of a genomic feature, with regard to the reference sequence",
     parent: 2,
@@ -31,6 +33,7 @@ export default [
     id: 5,
     value: "feature_truncation",
     label: "Feature truncation",
+    n: 0,
     description:
       "A sequence variant that causes the reduction of a genomic feature, with regard to the reference sequence",
     parent: 2,
@@ -39,6 +42,7 @@ export default [
     id: 6,
     value: "frameshift_variant",
     label: "Frameshift variant",
+    n: 506417,
     description:
       "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three",
     parent: 2,
@@ -47,6 +51,7 @@ export default [
     id: 7,
     value: "incomplete_terminal_codon_variant",
     label: "Incomplete terminal codon variant",
+    n: 3443,
     description:
       "A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed",
     parent: 2,
@@ -55,6 +60,7 @@ export default [
     id: 8,
     value: "inframe_deletion",
     label: "Inframe deletion",
+    n: 143302,
     description:
       "An inframe non synonymous variant that deletes bases from the coding sequence",
     parent: 2,
@@ -63,6 +69,7 @@ export default [
     id: 9,
     value: "inframe_insertion",
     label: "Inframe insertion",
+    n: 50924,
     description:
       "An inframe non synonymous variant that inserts bases into in the coding sequence",
     parent: 2,
@@ -71,6 +78,7 @@ export default [
     id: 10,
     value: "missense_variant",
     label: "Missense variant",
+    n: 12385885,
     description:
       "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved",
     parent: 2,
@@ -79,6 +87,7 @@ export default [
     id: 11,
     value: "NMD_transcript_variant",
     label: "NMD transcript variant",
+    n: 20962310,
     description: "A variant in a transcript that is the target of NMD",
     parent: 2,
   },
@@ -86,6 +95,7 @@ export default [
     id: 12,
     value: "protein_altering_variant",
     label: "Protein altering variant",
+    n: 3482,
     description:
       "A sequence_variant which is predicted to change the protein encoded in the coding sequence",
     parent: 2,
@@ -94,6 +104,7 @@ export default [
     id: 13,
     value: "synonymous_variant",
     label: "Synonymous variant",
+    n: 6340518,
     description:
       "A sequence variant where there is no resulting change to the encoded amino acid",
     parent: 2,
@@ -102,6 +113,7 @@ export default [
     id: 14,
     value: "start_lost",
     label: "Start lost",
+    n: 38719,
     description:
       "A codon variant that changes at least one base of the canonical start codon",
     parent: 2,
@@ -110,6 +122,7 @@ export default [
     id: 15,
     value: "stop_gained",
     label: "Stop gained",
+    n: 402831,
     description:
       "A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon, leading to a shortened transcript",
     parent: 2,
@@ -118,6 +131,7 @@ export default [
     id: 16,
     value: "stop_lost",
     label: "Stop lost",
+    n: 16247,
     description:
       "A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript",
     parent: 2,
@@ -126,6 +140,7 @@ export default [
     id: 17,
     value: "start_retained_variant",
     label: "Start retained variant",
+    n: 585,
     description:
       "A sequence variant where at least one base in the start codon is changed, but the start remains",
     parent: 2,
@@ -134,6 +149,7 @@ export default [
     id: 18,
     value: "stop_retained_variant",
     label: "Stop retained variant",
+    n: 7754,
     description:
       "A sequence variant where at least one base in the terminator codon is changed, but the terminator remains",
     parent: 2,
@@ -148,6 +164,7 @@ export default [
     id: 20,
     value: "3_prime_UTR_variant",
     label: "3 prime UTR variant",
+    n: 4109311,
     description: "A UTR variant of the 3' UTR",
     parent: 19,
   },
@@ -163,6 +180,7 @@ export default [
     id: 22,
     value: "intron_variant",
     label: "Intron variant",
+    n: 212366571,
     description: "A transcript variant occurring within an intron",
     parent: 19,
   },
@@ -170,6 +188,7 @@ export default [
     id: 23,
     value: "non_coding_transcript_exon_variant",
     label: "Non coding transcript exon variant",
+    n: 7450628,
     description:
       "A sequence variant that changes non-coding exon sequence in a non-coding transcript",
     parent: 19,
@@ -178,6 +197,7 @@ export default [
     id: 24,
     value: "non_coding_transcript_variant",
     label: "Non coding transcript variant",
+    n: 52390424,
     description: "A transcript variant of a non coding RNA gene",
     parent: 19,
   },
@@ -191,6 +211,7 @@ export default [
     id: 26,
     value: "splice_acceptor_variant",
     label: "Splice acceptor variant",
+    n: 172987,
     description:
       "A splice variant that changes the 2 base region at the 3' end of an intron",
     parent: 25,
@@ -199,6 +220,7 @@ export default [
     id: 27,
     value: "splice_donor_variant",
     label: "Splice donor variant",
+    n: 210311,
     description:
       "A splice variant that changes the 2 base region at the 5' end of an intron",
     parent: 25,
@@ -207,6 +229,7 @@ export default [
     id: 28,
     value: "splice_region_variant",
     label: "Splice region variant",
+    n: 2785532,
     description:
       "A sequence variant in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8 bases of the intron",
     parent: 25,
@@ -215,6 +238,7 @@ export default [
     id: 29,
     value: "transcript_ablation",
     label: "Transcript ablation",
+    n: 18,
     description:
       "A feature ablation whereby the deleted region includes a transcript feature",
     parent: 1,
@@ -223,6 +247,7 @@ export default [
     id: 30,
     value: "transcript_amplification",
     label: "Transcript amplification",
+    n: 0,
     description: "A feature amplification of a region containing a transcript",
     parent: 1,
   },
@@ -235,6 +260,7 @@ export default [
     id: 32,
     value: "mature_miRNA_variant",
     label: "Mature miRNA variant",
+    n: 6871,
     description:
       "A transcript variant located with the sequence of the mature miRNA",
     parent: 31,
@@ -243,6 +269,7 @@ export default [
     id: 33,
     value: "regulatory_region_ablation",
     label: "Regulatory region ablation",
+    n: 0,
     description:
       "A feature ablation whereby the deleted region includes a regulatory region",
     parent: 31,
@@ -251,6 +278,7 @@ export default [
     id: 34,
     value: "regulatory_region_amplification",
     label: "Regulatory region amplification",
+    n: 0,
     description:
       "A feature amplification of a region containing a regulatory region",
     parent: 31,
@@ -259,6 +287,7 @@ export default [
     id: 35,
     value: "regulatory_region_variant",
     label: "Regulatory region variant",
+    n: 0,
     description: "A sequence variant located within a regulatory region",
     parent: 31,
   },
@@ -266,6 +295,7 @@ export default [
     id: 36,
     value: "TF_binding_site_variant",
     label: "TF binding site variant",
+    n: 0,
     description:
       "A sequence variant located within a transcription factor binding site",
     parent: 31,
@@ -274,6 +304,7 @@ export default [
     id: 37,
     value: "TFBS_ablation",
     label: "TFBS ablation",
+    n: 0,
     description:
       "A feature ablation whereby the deleted region includes a transcription factor binding site",
     parent: 31,
@@ -282,6 +313,7 @@ export default [
     id: 38,
     value: "TFBS_amplification",
     label: "TFBS amplification",
+    n: 0,
     description:
       "A feature amplification of a region containing a transcription factor binding site",
     parent: 31,
@@ -295,6 +327,7 @@ export default [
     id: 40,
     value: "downstream_gene_variant",
     label: "Downstream gene variant",
+    n: 0,
     description: "A sequence variant located 3' of a gene",
     parent: 39,
   },
@@ -302,6 +335,7 @@ export default [
     id: 41,
     value: "intergenic_variant",
     label: "Intergenic variant",
+    n: 38329053,
     description:
       "A sequence variant located in the intergenic region, between genes",
     parent: 39,
@@ -310,6 +344,7 @@ export default [
     id: 42,
     value: "upstream_gene_variant",
     label: "Upstream gene variant",
+    n: 0,
     description: "A sequence variant located 5' of a gene",
     parent: 39,
   },
@@ -326,6 +361,7 @@ export default [
     id: 44,
     value: "pyrimidine",
     label: "Pyrimidine",
+    n: 1546374,
     description: "aromatic heterocyclic organic compound similar to pyridine",
     parent: 43,
   },

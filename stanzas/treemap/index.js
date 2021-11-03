@@ -2,12 +2,13 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import uid from "./uid";
 import loadData from "@/lib/load-data";
-
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
+
+import expandSvg from "./assets/expand-solid.svg";
 
 export default class TreeMapStanza extends Stanza {
   menu() {
@@ -24,6 +25,10 @@ export default class TreeMapStanza extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const colorScale = this.params["color-scale"];
+    const logScale = this.params["log-scale"];
+    const edgeWidth = css("--togostanza-edge-width");
+    const borderWidth = css("--togostanza-border-width");
+
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -31,18 +36,32 @@ export default class TreeMapStanza extends Stanza {
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
-    //Add root element if there are more than one elements without parent. D3 cannot precess data with more than one root elements
-    let rootElemIndexes = [];
-    for (let i = 0; i < data.length - 1; i++) {
-      if (!data[i]?.parent) {
+    // filter out all elements with n=0
+
+    const filteredData = data.filter(
+      (item) => (item.children && !item.n) || (item.n && item.n > 0)
+    );
+
+    // if (logScale) {
+    //   filteredData = filteredData.map((item) => {
+    //     if (item.n) {
+    //       return { ...item, n: transformValue(logScale, item.n) };
+    //     }
+    //     return item;
+    //   });
+    // }
+    //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
+    const rootElemIndexes = [];
+    for (let i = 0; i < filteredData.length - 1; i++) {
+      if (!filteredData[i]?.parent) {
         rootElemIndexes.push(i);
       }
     }
     if (rootElemIndexes.length > 1) {
-      data.push({ id: -1, value: "", label: "" });
+      filteredData.push({ id: -1, value: "", label: "" });
 
       rootElemIndexes.forEach((index) => {
-        data[index].parent = -1;
+        filteredData[index].parent = -1;
       });
     }
 
@@ -52,23 +71,53 @@ export default class TreeMapStanza extends Stanza {
       width,
       height,
       colorScale,
+      logScale,
+      edgeWidth,
+      borderWidth,
       styles: {
-        "font-family": css("--togostanza-font-family"),
-        "label-font-color": css("--togostanza-label-font-color"),
-        "label-font-size": css("--togostanza-label-font-size"),
-        "border-color": css("--togostanza-border-color"),
-        "border-width": css("--togostanza-border-width"),
-        "edge-color": css("--togostanza-edge-color"),
         "background-color": css("--togostanza-background-color"),
       },
     };
+
     //draw(treeMapElement, data, width, height, colorScale);
-    draw(treeMapElement, data, opts);
+    draw(treeMapElement, filteredData, opts);
   }
 }
 
+function transformValue(logScale, value) {
+  if (!value || value <= 0) {
+    return null;
+  }
+
+  if (logScale) {
+    return Math.log10(value);
+  }
+  return value;
+}
+
+function transformValueBack(logScale, value) {
+  if (!value) {
+    return null;
+  }
+  if (logScale) {
+    return Math.exp(value);
+  }
+  return value;
+}
+
 function draw(el, dataset, opts) {
-  const { width, height, colorScale, styles } = opts;
+  const iconWidth = 10;
+  const iconHeight = 10;
+
+  const {
+    width,
+    height,
+    logScale,
+    colorScale,
+    styles,
+    edgeWidth,
+    borderWidth,
+  } = opts;
   // create nested structure by item.parent
   const nested = d3
     .stratify()
@@ -112,27 +161,33 @@ function draw(el, dataset, opts) {
 
   const treemap = (data) =>
     d3.treemap().tile(tile)(
-      d3.hierarchy(data).sum((d) => d?.children?.length || 1)
-      //.sort((a, b) => b?.children?.length || 1 - a?.children?.length || 1)
+      d3
+        .hierarchy(data)
+        .sum((d) => transformValue(logScale, d.data.n))
+        .sort((a, b) => b.value - a.value)
     );
-
   //create svg and add outline
   const svg = d3
     .select(el)
     .append("svg")
-    .attr("viewBox", [0, -30, width, height + 30])
-    .style("font", "10px sans-serif")
-    .attr(
-      "style",
-      `outline: ${styles["border-width"]}px solid ${styles["edge-color"]};`
-    );
+    .attr("viewBox", [0, -30, width, height + 30]);
+  // .style("font-family", styles["--togostanza-font-family"])
+  // .attr(
+  //   "style",
+  //   `outline: ${styles["border-width"]}px solid ${styles["edge-color"]};`
+  // );
 
   //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested));
+  // svg
+  //   .append("rect")
+  //   .attr("width", width)
+  //   .attr("height", height + 30)
+  //   .attr("class", "svg-border");
 
   function render(group, root) {
-    const dMax = d3.max(root, (d) => d?.children?.length || 1);
-    const dMin = d3.min(root, (d) => d?.children?.length || 1);
+    const dMax = d3.max(root, (d) => d.value || 1);
+    const dMin = d3.min(root, (d) => d.value || 1);
 
     //add g's for every node
     const node = group
@@ -141,7 +196,9 @@ function draw(el, dataset, opts) {
       .join("g");
 
     node
-      .filter((d) => (d === root ? d.parent : d.children))
+      .filter((d) => {
+        return d === root ? d.parent : d.children;
+      })
       .attr("cursor", "pointer")
       .on("click", (event, d) => (d === root ? zoomout(root) : zoomin(d)));
 
@@ -153,8 +210,8 @@ function draw(el, dataset, opts) {
           ? ""
           : `${name(d)}\n${
               d?.children
-                ? format(d?.children?.length)
-                : d.data.data.description
+                ? format(d3.sum(d, (d) => d?.data?.data?.n || 0))
+                : d.data.data.n
             }`
       );
 
@@ -166,9 +223,22 @@ function draw(el, dataset, opts) {
         d === root
           ? styles["background-color"]
           : color((d.value - dMin) / (dMax - dMin))
-      )
-      .attr("stroke", styles["border-color"])
-      .attr("stroke-width", styles["border-width"]);
+      );
+
+    // //add expand icons
+    // node
+    //   .filter((d) => d !== root || !d.children)
+    //   .append("image")
+    //   .attr("x", (d, i, nodes) => {
+    //     console.log(
+    //       d3.select(nodes[i].parentNode).select("rect")
+    //     );
+    //     return x((d.x1 - d.x0) / 2) - iconWidth / 2;
+    //   })
+    //   .attr("y", (d) => y((d.y1 - d.y0) / 2) - iconHeight / 2)
+    //   .attr("width", 10)
+    //   .attr("height", 10)
+    //   .attr("href", expandSvg);
 
     //add clip paths to nodes to trim text
     node
@@ -184,9 +254,7 @@ function draw(el, dataset, opts) {
       .attr("font-weight", (d) => (d === root ? "bold" : null))
       .attr("y", (d) => `${d.y0 + 10}px`)
       .attr("x", "0.5em")
-      .style("font-family", styles["font-family"])
-      .style("fill", styles["label-font-color"])
-      .style("font-size", styles["label-font-size"])
+
       //.selectAll("tspan")
       // .data((d) => {
       //   return d === root ? name(d) : d.data.data.label;
@@ -208,10 +276,12 @@ function draw(el, dataset, opts) {
       .text((d) => {
         if (d === root) {
           return name(d);
-        } else if (d?.children?.length) {
-          return `${d.data.data.label} : ${d?.children?.length}`;
+        } else {
+          return `${d.data.data.label}: ${format(
+            d3.sum(d, (d) => d?.data?.data?.n || 0)
+          )}`;
         }
-        return `${d.data.data.label}`;
+        //return `${d.data.label} : ${d?.value}`;
       });
 
     //adjust rectangles positions
@@ -219,22 +289,29 @@ function draw(el, dataset, opts) {
   }
 
   //function to wrap long text in svg
-  function wrap() {
-    const text = d3.select(this).selectAll("text");
+  function wrap(ii, d, i, nodes) {
+    // on positioning elements that are about to display
 
-    text.each(function () {
-      let text = d3.select(this);
+    if (!ii) {
+      let lineSeparator;
 
-      let rectWidth = d3
-        .select(text.node().parentNode)
-        .select("rect")
-        .node()
-        .getAttribute("width");
+      //nodes[i] is rect
+      const text = d3.select(nodes[i].parentNode).select("text");
 
+      let rectWidth = nodes[i].width.animVal.value; //d3.select(nodes[i]).select("rect").attr("width");
+
+      // here is d before animation. animVal - is d in animation
       //get to know if this is a root element (white bar at the top)
       const isRoot = Math.round(rectWidth) === Math.round(width);
 
-      let words = text.text().split(/\s+/).reverse(),
+      if (isRoot) {
+        lineSeparator = /(?=[\/])|(?<=[\/])/g;
+      } else {
+        console.log(text.text());
+        console.log(nodes[i].width.animVal.value);
+        lineSeparator = /\s+/;
+      }
+      let words = text.text().split(lineSeparator).reverse(),
         word,
         line = [],
         lineNumber = 0,
@@ -251,10 +328,13 @@ function draw(el, dataset, opts) {
 
       while ((word = words.pop())) {
         line.push(word);
-        tspan.text(line.join(" "));
+        tspan.text(line.join(isRoot ? "" : " "));
         if (tspan.node().getComputedTextLength() > rectWidth - 5) {
+          //   text.style("display", "none");
+          //   break;
+          // }
           line.pop();
-          tspan.text(line.join(" "));
+          tspan.text(line.join(isRoot ? "" : " "));
           line = [word];
           tspan = text
             .append("tspan")
@@ -264,11 +344,11 @@ function draw(el, dataset, opts) {
             .text(word);
         }
       }
-    });
+    }
   }
 
   //place elements according to data
-  function position(group, root) {
+  function position(group, root, ii) {
     group
       .selectAll("g")
       .attr("transform", (d) =>
@@ -276,7 +356,17 @@ function draw(el, dataset, opts) {
       )
       .select("rect")
       .attr("width", (d) => (d === root ? width : x(d.x1) - x(d.x0)))
-      .attr("height", (d) => (d === root ? 30 : y(d.y1) - y(d.y0)));
+      .attr("height", (d) => (d === root ? 30 : y(d.y1) - y(d.y0)))
+      .each(wrap.bind(this, ii));
+
+    //console.log("position called: ", ii);
+    //.select((d, i, nodes) => d3.select(nodes[i].parentNode));
+    // .select("image")
+    // .attr("x", (d) => x(d.x1 - d.x0) / 2)
+    // .attr("y", (d) => y(d.y1 - d.y0) / 2)
+    // .attr("width", 10)
+    // .attr("height", 10)
+    // .attr("href", expandSvg);
   }
 
   // When zooming in, draw the new nodes on top, and fade them in.
@@ -290,14 +380,16 @@ function draw(el, dataset, opts) {
     svg
       .transition()
       .duration(750)
-      .call((t) => group0.transition(t).remove().call(position, d.parent))
+      .call((t) => {
+        return group0.transition(t).remove().call(position, d.parent, 1);
+      })
       .call((t) =>
         group1
           .transition(t)
           .attrTween("opacity", () => d3.interpolate(0, 1))
-          .call(position, d)
-      )
-      .on("end", wrap);
+          .call(position, d, 2)
+      );
+    //.on("end", wrap);
   }
 
   // When zooming out, draw the old nodes on top, and fade them out.
@@ -316,9 +408,9 @@ function draw(el, dataset, opts) {
           .transition(t)
           .remove()
           .attrTween("opacity", () => d3.interpolate(1, 0))
-          .call(position, d)
+          .call(position, d, 2)
       )
-      .call((t) => group1.transition(t).call(position, d.parent))
-      .on("end", wrap);
+      .call((t) => group1.transition(t).call(position, d.parent, 1));
+    //.on("end", wrap);
   }
 }

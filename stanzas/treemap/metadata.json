@@ -30,6 +30,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "log-scale",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Log scale for values",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -103,6 +110,13 @@
       "stanza:default": "#AEB3BF",
       "stanza:description": "Edge color"
     },
+    {
+      "stanza:key": "--togostanza-edge-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Edge width"
+    },
+
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
