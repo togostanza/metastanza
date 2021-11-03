@@ -99,7 +99,7 @@ export default class VennStanza extends Stanza {
       this.setTooltip(group);
     });
 
-    // legends
+    // legend
     this.makeLegend(
       this.data.map(datum => {
         const id = datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',');
@@ -141,6 +141,7 @@ export default class VennStanza extends Stanza {
     //   .style('fill', (d, i) => this.colorSeries[i])
     //   .style('stroke', (d, i) => this.colorSeries[i]);
 
+    const legendData = [];
     container.querySelectorAll('.venn-area').forEach(group => {
       const labels = group.dataset.vennSets.split('_');
       const targets = labels.map(label => this.dataLabels.indexOf(label));
@@ -165,7 +166,25 @@ export default class VennStanza extends Stanza {
       group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
       this.setTooltip(group);
-    })
+      // legend
+      legendData.push({
+        id: group.dataset.vennSets,
+        label: labels.join('∩'),
+        color: color.toString(),
+        value: count,
+        node: group
+      });
+    });
+    console.log(legendData)
+
+    // legend
+    this.makeLegend(
+      legendData,
+      this.root.querySelector('main'),
+      {
+        fadeoutNodes: container.querySelectorAll('.venn-area')
+      }
+    );
   }
 
   getColorSeries() {
