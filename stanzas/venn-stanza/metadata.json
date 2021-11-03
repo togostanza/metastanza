@@ -19,7 +19,7 @@
       "stanza:key": "chart-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["Venn diagram", "Euler diagram"],
-      "stanza:example": "Venn diagram",
+      "stanza:example": "Euler diagram",
       "stanza:description": "Type of venn diagram",
       "stanza:required": true
     },

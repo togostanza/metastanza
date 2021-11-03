@@ -31,8 +31,8 @@ text {
 #euler-diagram {
   .venn-circle {
     > path {
-      stroke-width: 1px;
-      fill-opacity: .1 !important;
+      // stroke-width: 1px;
+      // fill-opacity: .1 !important;
     }
     > text {
       fill: var(--togostanza-label-font-color) !important;
