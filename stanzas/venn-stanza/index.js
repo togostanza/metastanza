@@ -184,9 +184,9 @@ export default class VennStanza extends Stanza {
     const positions = opt.position || ['top', 'right'];
 
     // make legend
-    const div = document.createElement('div');
-    div.id = 'MetaStanzalegend';
-    div.innerHTML = `
+    const legend = document.createElement('div');
+    legend.id = 'MetaStanzaLegend';
+    legend.innerHTML = `
     <table>
       <tbody>
       ${data.map(datum => {
@@ -198,21 +198,45 @@ export default class VennStanza extends Stanza {
       }).join('')}
       </tbody>
     <table>`;
-    positions.forEach(position => div.style[position] = 0);
-    container.append(div);
+    positions.forEach(position => legend.style[position] = 0);
+    container.append(legend);
+
+    if (!opt.fadeoutNodes) {return;};
+    // make leader
+    const leader = document.createElement('div');
+    leader.id = 'MetaStanzaLegendLeader';
+    container.append(leader);
 
     // event
-    if (!opt.fadeoutNodes) {return;};
     container.querySelectorAll(':scope > div > table > tbody > tr').forEach(tr => {
       tr.addEventListener('mouseover', () => {
-        opt.fadeoutNodes.forEach(node => node.style.opacity = .2);
         const datum = data.find(datum => datum.id === tr.dataset.id);
         if (datum) {
+          opt.fadeoutNodes.forEach(node => node.style.opacity = .2);
           datum.node.style.opacity = "";
+          leader.classList.add('-show');
+          const containerRect = this.root.querySelector('main').getBoundingClientRect();
+          const legendRect = tr.getBoundingClientRect();
+          const targetRect = datum.node.getBoundingClientRect();
+          leader.style.left = (targetRect.left + targetRect.width * .5 - containerRect.left) + 'px';
+          leader.style.width = (legendRect.left - targetRect.right + targetRect.width * .5) + 'px';
+          const legendMiddle = legendRect.top + legendRect.height * .5;
+          const targetMiddle = targetRect.top + targetRect.height * .5;
+          if (legendMiddle < targetMiddle) {
+            leader.dataset.direction = 'top';
+            leader.style.top = (legendMiddle - containerRect.top) + 'px';
+            leader.style.height = (targetMiddle - legendMiddle) + 'px';
+
+          } else {
+            leader.dataset.direction = 'bottom';
+            leader.style.top = (targetMiddle - containerRect.top) + 'px';
+            leader.style.height = (legendMiddle - targetMiddle) + 'px';
+          }
         };
       });
       tr.addEventListener('mouseleave', () => {
         opt.fadeoutNodes.forEach(node => node.style.opacity = "");
+        leader.classList.remove('-show');
       });
     });
   }

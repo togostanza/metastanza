@@ -25,7 +25,7 @@
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/4sets-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
