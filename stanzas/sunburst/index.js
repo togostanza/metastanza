@@ -7,7 +7,6 @@ import {
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
-import data from "./data";
 
 export default class Sunburst extends Stanza {
   menu() {
@@ -105,7 +104,8 @@ function draw(el, dataset, opts) {
 
   root
     .sum(function (d) {
-      return d?.children ? 0 : 1;
+      return d.data.n;
+      // return d?.children ? 0 : 1;
     })
     .sort(function (a, b) {
       return b.value - a.value;
