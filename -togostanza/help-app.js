@@ -1,13 +1,13 @@
-import { d as defineComponent, g as computed, c as createBlock, b as createVNode, e as createCommentVNode, h as createTextVNode, t as toDisplayString, F as Fragment, a as renderList, o as openBlock, i as ref, j as octicons, m as mergeProps, r as resolveComponent, s as script$4, p as pushScopeId, k as popScopeId, l as withScopeId, n, f as createApp } from './Layout-9ade2339.js';
+import { d as defineComponent, h as computed, a as createElementBlock, e as createBaseVNode, f as createCommentVNode, i as createTextVNode, t as toDisplayString, F as Fragment, b as renderList, n as normalizeClass, o as openBlock, j as ref, k as octicons, m as mergeProps, l as createVNode, c as createBlock, p as normalizeProps, q as guardReactiveProps, u as resolveDynamicComponent, r as resolveComponent, s as script$4, v as pushScopeId, x as popScopeId, w as withCtx, y as n, g as createApp } from './Layout-64eceae1.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 var tab = {exports: {}};
 
-var selectorEngine = {exports: {}};
+var eventHandler = {exports: {}};
 
 /*!
-  * Bootstrap selector-engine.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -18,93 +18,11 @@ var selectorEngine = {exports: {}};
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/selector-engine.js
+   * Bootstrap (v5.1.1): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-  const NODE_TEXT = 3;
-  const SelectorEngine = {
-    find(selector, element = document.documentElement) {
-      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
-    },
-
-    findOne(selector, element = document.documentElement) {
-      return Element.prototype.querySelector.call(element, selector);
-    },
-
-    children(element, selector) {
-      return [].concat(...element.children).filter(child => child.matches(selector));
-    },
-
-    parents(element, selector) {
-      const parents = [];
-      let ancestor = element.parentNode;
-
-      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
-        if (ancestor.matches(selector)) {
-          parents.push(ancestor);
-        }
-
-        ancestor = ancestor.parentNode;
-      }
-
-      return parents;
-    },
-
-    prev(element, selector) {
-      let previous = element.previousElementSibling;
-
-      while (previous) {
-        if (previous.matches(selector)) {
-          return [previous];
-        }
-
-        previous = previous.previousElementSibling;
-      }
-
-      return [];
-    },
-
-    next(element, selector) {
-      let next = element.nextElementSibling;
-
-      while (next) {
-        if (next.matches(selector)) {
-          return [next];
-        }
-
-        next = next.nextElementSibling;
-      }
-
-      return [];
-    }
-
-  };
-
-  return SelectorEngine;
-
-})));
-
-}(selectorEngine));
-
-var eventHandler = {exports: {}};
-
-/*!
-  * Bootstrap event-handler.js v5.0.2 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-  */
-
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-}(commonjsGlobal, (function () {
   const getjQuery = () => {
     const {
       jQuery
@@ -119,7 +37,7 @@ var eventHandler = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/event-handler.js
+   * Bootstrap (v5.1.1): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -182,7 +100,6 @@ var eventHandler = {exports: {}};
             event.delegateTarget = target;
 
             if (handler.oneOff) {
-              // eslint-disable-next-line unicorn/consistent-destructuring
               EventHandler.off(element, event.type, selector, fn);
             }
 
@@ -412,12 +329,10 @@ var eventHandler = {exports: {}};
 
 }(eventHandler));
 
-var baseComponent = {exports: {}};
-
-var data = {exports: {}};
+var selectorEngine = {exports: {}};
 
 /*!
-  * Bootstrap data.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -428,7 +343,140 @@ var data = {exports: {}};
 }(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): dom/data.js
+   * Bootstrap (v5.1.1): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+
+  const isElement = obj => {
+    if (!obj || typeof obj !== 'object') {
+      return false;
+    }
+
+    if (typeof obj.jquery !== 'undefined') {
+      obj = obj[0];
+    }
+
+    return typeof obj.nodeType !== 'undefined';
+  };
+
+  const isVisible = element => {
+    if (!isElement(element) || element.getClientRects().length === 0) {
+      return false;
+    }
+
+    return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
+  };
+
+  const isDisabled = element => {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+      return true;
+    }
+
+    if (element.classList.contains('disabled')) {
+      return true;
+    }
+
+    if (typeof element.disabled !== 'undefined') {
+      return element.disabled;
+    }
+
+    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
+  };
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.1): dom/selector-engine.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
+  const NODE_TEXT = 3;
+  const SelectorEngine = {
+    find(selector, element = document.documentElement) {
+      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
+    },
+
+    findOne(selector, element = document.documentElement) {
+      return Element.prototype.querySelector.call(element, selector);
+    },
+
+    children(element, selector) {
+      return [].concat(...element.children).filter(child => child.matches(selector));
+    },
+
+    parents(element, selector) {
+      const parents = [];
+      let ancestor = element.parentNode;
+
+      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
+        if (ancestor.matches(selector)) {
+          parents.push(ancestor);
+        }
+
+        ancestor = ancestor.parentNode;
+      }
+
+      return parents;
+    },
+
+    prev(element, selector) {
+      let previous = element.previousElementSibling;
+
+      while (previous) {
+        if (previous.matches(selector)) {
+          return [previous];
+        }
+
+        previous = previous.previousElementSibling;
+      }
+
+      return [];
+    },
+
+    next(element, selector) {
+      let next = element.nextElementSibling;
+
+      while (next) {
+        if (next.matches(selector)) {
+          return [next];
+        }
+
+        next = next.nextElementSibling;
+      }
+
+      return [];
+    },
+
+    focusableChildren(element) {
+      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
+      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
+    }
+
+  };
+
+  return SelectorEngine;
+
+})));
+
+}(selectorEngine));
+
+var baseComponent = {exports: {}};
+
+var data = {exports: {}};
+
+/*!
+  * Bootstrap data.js v5.1.1 (https://getbootstrap.com/)
+  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+(function (module, exports) {
+(function (global, factory) {
+  module.exports = factory() ;
+}(commonjsGlobal, (function () {
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.1): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -487,21 +535,26 @@ var data = {exports: {}};
 }(data));
 
 /*!
-  * Bootstrap base-component.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
 (function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(data.exports, selectorEngine.exports, eventHandler.exports) ;
-}(commonjsGlobal, (function (Data, SelectorEngine, EventHandler) {
+  module.exports = factory(data.exports, eventHandler.exports) ;
+}(commonjsGlobal, (function (Data, EventHandler) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
 
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.1): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
   const MILLISECONDS_MULTIPLIER = 1000;
   const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
 
@@ -551,7 +604,7 @@ var data = {exports: {}};
     }
 
     if (typeof obj === 'string' && obj.length > 0) {
-      return SelectorEngine__default['default'].findOne(obj);
+      return document.querySelector(obj);
     }
 
     return null;
@@ -595,7 +648,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): base-component.js
+   * Bootstrap (v5.1.1): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -605,7 +658,7 @@ var data = {exports: {}};
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.0.2';
+  const VERSION = '5.1.1';
 
   class BaseComponent {
     constructor(element) {
@@ -634,7 +687,7 @@ var data = {exports: {}};
 
 
     static getInstance(element) {
-      return Data__default['default'].get(element, this.DATA_KEY);
+      return Data__default['default'].get(getElement(element), this.DATA_KEY);
     }
 
     static getOrCreateInstance(element, config = {}) {
@@ -666,20 +719,27 @@ var data = {exports: {}};
 }(baseComponent));
 
 /*!
-  * Bootstrap tab.js v5.0.2 (https://getbootstrap.com/)
+  * Bootstrap tab.js v5.1.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
 (function (module, exports) {
 (function (global, factory) {
-  module.exports = factory(selectorEngine.exports, eventHandler.exports, baseComponent.exports) ;
-}(commonjsGlobal, (function (SelectorEngine, EventHandler, BaseComponent) {
+  module.exports = factory(eventHandler.exports, selectorEngine.exports, baseComponent.exports) ;
+}(commonjsGlobal, (function (EventHandler, SelectorEngine, BaseComponent) {
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
   var BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+
+  /**
+   * --------------------------------------------------------------------------
+   * Bootstrap (v5.1.1): util/index.js
+   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+   * --------------------------------------------------------------------------
+   */
 
   const getSelector = element => {
     let selector = element.getAttribute('data-bs-target');
@@ -725,8 +785,20 @@ var data = {exports: {}};
 
     return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
   };
+  /**
+   * Trick to restart an element's animation
+   *
+   * @param {HTMLElement} element
+   * @return void
+   *
+   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
+   */
 
-  const reflow = element => element.offsetHeight;
+
+  const reflow = element => {
+    // eslint-disable-next-line no-unused-expressions
+    element.offsetHeight;
+  };
 
   const getjQuery = () => {
     const {
@@ -778,7 +850,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.0.2): tab.js
+   * Bootstrap (v5.1.1): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -1001,79 +1073,85 @@ var script$3 = defineComponent({
 
 const _hoisted_1$3 = { class: "form-label d-flex" };
 const _hoisted_2$3 = { class: "me-auto" };
-const _hoisted_3$2 = {
+const _hoisted_3$3 = {
   key: 0,
   class: "text-danger"
 };
 const _hoisted_4$2 = { class: "text-muted" };
-const _hoisted_5$1 = { class: "input-group" };
-const _hoisted_6$1 = { class: "input-group-text" };
-const _hoisted_7$1 = {
+const _hoisted_5$2 = { class: "input-group" };
+const _hoisted_6$1 = ["value"];
+const _hoisted_7$1 = ["value"];
+const _hoisted_8$1 = { class: "input-group-text" };
+const _hoisted_9$1 = ["checked", "id"];
+const _hoisted_10$1 = ["for"];
+const _hoisted_11$1 = ["type", "value"];
+const _hoisted_12$1 = ["disabled"];
+const _hoisted_13$1 = {
   key: 0,
   class: "form-text text-muted"
 };
 
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock(Fragment, null, [
-    createVNode("label", _hoisted_1$3, [
-      createVNode("span", _hoisted_2$3, [
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("label", _hoisted_1$3, [
+      createBaseVNode("span", _hoisted_2$3, [
         (_ctx.required)
-          ? (openBlock(), createBlock("span", _hoisted_3$2, "*"))
+          ? (openBlock(), createElementBlock("span", _hoisted_3$3, "*"))
           : createCommentVNode("v-if", true),
         createTextVNode(" " + toDisplayString(_ctx.name), 1 /* TEXT */)
       ]),
-      createVNode("small", _hoisted_4$2, toDisplayString(_ctx.type || 'string'), 1 /* TEXT */)
+      createBaseVNode("small", _hoisted_4$2, toDisplayString(_ctx.type || 'string'), 1 /* TEXT */)
     ]),
-    createVNode("div", _hoisted_5$1, [
+    createBaseVNode("div", _hoisted_5$2, [
       (_ctx.formType === 'single-choice')
-        ? (openBlock(), createBlock("select", {
+        ? (openBlock(), createElementBlock("select", {
             key: 0,
             value: _ctx.input.valueStr.value,
-            onChange: _cache[1] || (_cache[1] = $event => (_ctx.input.setValueStr($event.target.value))),
+            onChange: _cache[0] || (_cache[0] = $event => (_ctx.input.setValueStr($event.target.value))),
             class: "form-select"
           }, [
-            (openBlock(true), createBlock(Fragment, null, renderList(_ctx.choices, (choice) => {
-              return (openBlock(), createBlock("option", {
+            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.choices, (choice) => {
+              return (openBlock(), createElementBlock("option", {
                 value: choice,
                 key: choice
-              }, toDisplayString(choice), 9 /* TEXT, PROPS */, ["value"]))
+              }, toDisplayString(choice), 9 /* TEXT, PROPS */, _hoisted_7$1))
             }), 128 /* KEYED_FRAGMENT */))
-          ], 40 /* PROPS, HYDRATE_EVENTS */, ["value"]))
+          ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_6$1))
         : (_ctx.formType === 'boolean')
-          ? (openBlock(), createBlock(Fragment, { key: 1 }, [
-              createVNode("div", _hoisted_6$1, [
-                createVNode("input", {
+          ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+              createBaseVNode("div", _hoisted_8$1, [
+                createBaseVNode("input", {
                   class: "form-check-input mt-0",
                   type: "checkbox",
                   checked: _ctx.input.valueParsed.value,
-                  onChange: _cache[2] || (_cache[2] = $event => (_ctx.input.setValueStr($event.target.checked.toString()))),
+                  onChange: _cache[1] || (_cache[1] = $event => (_ctx.input.setValueStr($event.target.checked.toString()))),
                   id: _ctx.name
-                }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["checked", "id"])
+                }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_9$1)
               ]),
-              createVNode("label", {
+              createBaseVNode("label", {
                 class: "input-group-text flex-fill bg-body",
                 for: _ctx.name
-              }, toDisplayString(_ctx.helpText), 9 /* TEXT, PROPS */, ["for"])
+              }, toDisplayString(_ctx.helpText), 9 /* TEXT, PROPS */, _hoisted_10$1)
             ], 64 /* STABLE_FRAGMENT */))
-          : (openBlock(), createBlock("input", {
+          : (openBlock(), createElementBlock("input", {
               key: 2,
               type: _ctx.formType,
               value: _ctx.input.valueStr.value,
-              onInput: _cache[3] || (_cache[3] = $event => (_ctx.input.setValueStr($event.target.value))),
-              class: ["form-control mw-100", {'form-control-color': _ctx.formType === 'color'}]
-            }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, ["type", "value"])),
+              onInput: _cache[2] || (_cache[2] = $event => (_ctx.input.setValueStr($event.target.value))),
+              class: normalizeClass(["form-control mw-100", {'form-control-color': _ctx.formType === 'color'}])
+            }, null, 42 /* CLASS, PROPS, HYDRATE_EVENTS */, _hoisted_11$1)),
       (_ctx.input.hasDefault)
-        ? (openBlock(), createBlock("button", {
+        ? (openBlock(), createElementBlock("button", {
             key: 3,
-            onClick: _cache[4] || (_cache[4] = $event => (_ctx.input.resetToDefault())),
+            onClick: _cache[3] || (_cache[3] = $event => (_ctx.input.resetToDefault())),
             disabled: _ctx.input.isDefault.value,
             type: "button",
             class: "btn btn-light border"
-          }, "Reset", 8 /* PROPS */, ["disabled"]))
+          }, "Reset", 8 /* PROPS */, _hoisted_12$1))
         : createCommentVNode("v-if", true)
     ]),
     (_ctx.formType !== 'boolean')
-      ? (openBlock(), createBlock("small", _hoisted_7$1, toDisplayString(_ctx.helpText), 1 /* TEXT */))
+      ? (openBlock(), createElementBlock("small", _hoisted_13$1, toDisplayString(_ctx.helpText), 1 /* TEXT */))
       : createCommentVNode("v-if", true)
   ], 64 /* STABLE_FRAGMENT */))
 }
@@ -1484,23 +1562,24 @@ var script$2 = defineComponent({
   }
 });
 
-const _hoisted_1$2 = /*#__PURE__*/createTextVNode(" Copied ");
-const _hoisted_2$2 = /*#__PURE__*/createTextVNode(" Copy to clipboard ");
+const _hoisted_1$2 = ["innerHTML"];
+const _hoisted_2$2 = /*#__PURE__*/createTextVNode(" Copied ");
+const _hoisted_3$2 = /*#__PURE__*/createTextVNode(" Copy to clipboard ");
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("button", mergeProps({
+  return (openBlock(), createElementBlock("button", mergeProps({
     type: "button",
-    onClick: _cache[1] || (_cache[1] = $event => (_ctx.copyToClipboard()))
+    onClick: _cache[0] || (_cache[0] = $event => (_ctx.copyToClipboard()))
   }, _ctx.$attrs), [
     (_ctx.isCopiedShown)
-      ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-          createVNode("span", {
+      ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+          createBaseVNode("span", {
             innerHTML: _ctx.checkIcon.toSVG({height: 19})
-          }, null, 8 /* PROPS */, ["innerHTML"]),
-          _hoisted_1$2
-        ], 64 /* STABLE_FRAGMENT */))
-      : (openBlock(), createBlock(Fragment, { key: 1 }, [
+          }, null, 8 /* PROPS */, _hoisted_1$2),
           _hoisted_2$2
+        ], 64 /* STABLE_FRAGMENT */))
+      : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+          _hoisted_3$2
         ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
   ], 16 /* FULL_PROPS */))
 }
@@ -3059,45 +3138,45 @@ var script$1 = defineComponent({
   props: ['metadata', 'params', 'styleVars'],
 
   components: {
-    CopyButton: script$2
+    CopyButton: script$2,
   },
 
   setup(props) {
-    const id      = props.metadata['@id'];
+    const id = props.metadata['@id'];
     const tagName = `togostanza-${id}`;
 
     const stanzaProps = computed(() => {
       return props.params.reduce((acc, param) => {
-        return (param.type === "boolean" && param.value === "false") ? acc : {
-          ...acc,
-          [param.name]: param.value
-        }
+        return param.type === 'boolean' && param.value === 'false'
+          ? acc
+          : {
+              ...acc,
+              [param.name]: param.value,
+            };
       }, {});
     });
 
     const stanzaSnippet = computed(() => {
       return stanzaSnippetTemplate({
         tagName,
-        params: props.params
+        params: props.params,
       });
     });
 
     const styleSnippet = computed(() => {
       return styleSnippetTemplate({
         tagName,
-        styleVars: props.styleVars
+        styleVars: props.styleVars,
       });
     });
 
-    const scriptSrc     = new URL(`./${id}.js`, location.href).href;
-    const loaderSnippet = loaderSnippetTemplate({scriptSrc});
+    const scriptSrc = new URL(`./${id}.js`, location.href).href;
+    const loaderSnippet = loaderSnippetTemplate({ scriptSrc });
 
     const combinedSnippet = computed(() => {
-      return [
-        loaderSnippet,
-        styleSnippet.value,
-        stanzaSnippet.value
-      ].filter(Boolean).join('\n');
+      return [loaderSnippet, styleSnippet.value, stanzaSnippet.value]
+        .filter(Boolean)
+        .join('\n');
     });
 
     return {
@@ -3105,36 +3184,35 @@ var script$1 = defineComponent({
       props: stanzaProps,
       styleSnippet,
       stanzaSnippet,
-      combinedSnippet
+      combinedSnippet,
     };
-  }
+  },
 });
 
 const _hoisted_1$1 = { class: "bg-dark" };
 const _hoisted_2$1 = { class: "text-end p-2" };
 const _hoisted_3$1 = { class: "overflow-auto p-3 pt-0 text-white" };
 const _hoisted_4$1 = { class: "overflow-auto p-3 bg-light" };
+const _hoisted_5$1 = ["innerHTML"];
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_CopyButton = resolveComponent("CopyButton");
 
-  return (openBlock(), createBlock(Fragment, null, [
-    createVNode("div", _hoisted_1$1, [
-      createVNode("div", _hoisted_2$1, [
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("div", _hoisted_1$1, [
+      createBaseVNode("div", _hoisted_2$1, [
         createVNode(_component_CopyButton, {
           value: _ctx.combinedSnippet,
           class: "btn btn-sm btn-light"
         }, null, 8 /* PROPS */, ["value"])
       ]),
-      createVNode("pre", _hoisted_3$1, [
-        createVNode("code", null, toDisplayString(_ctx.combinedSnippet), 1 /* TEXT */)
+      createBaseVNode("pre", _hoisted_3$1, [
+        createBaseVNode("code", null, toDisplayString(_ctx.combinedSnippet), 1 /* TEXT */)
       ])
     ]),
-    createVNode("div", _hoisted_4$1, [
-      createVNode("div", { innerHTML: _ctx.styleSnippet }, null, 8 /* PROPS */, ["innerHTML"]),
-      createVNode("div", { innerHTML: _ctx.stanzaSnippet }, null, 8 /* PROPS */, ["innerHTML"]),
-      createCommentVNode(" <component :is=\"tagName\" v-bind=\"props\"></component> "),
-      createCommentVNode(" temporary disable this because some stanzas don't seem to work as expected with the \"component\" approach ")
+    createBaseVNode("div", _hoisted_4$1, [
+      createBaseVNode("div", { innerHTML: _ctx.styleSnippet }, null, 8 /* PROPS */, _hoisted_5$1),
+      (openBlock(), createBlock(resolveDynamicComponent(_ctx.tagName), normalizeProps(guardReactiveProps(_ctx.props)), null, 16 /* FULL_PROPS */))
     ])
   ], 64 /* STABLE_FRAGMENT */))
 }
@@ -3146,76 +3224,83 @@ var script = defineComponent({
   components: {
     FormField: script$3,
     Layout: script$4,
-    StanzaPreviewer: script$1
+    StanzaPreviewer: script$1,
   },
 
   props: ['metadata', 'readme'],
 
-  setup({metadata, readme}) {
+  setup({ metadata, readme }) {
     const paramFields = (metadata['stanza:parameter'] || []).map((param) => {
       return {
         param,
-        input: useInput(param['stanza:example'], param['stanza:type'], false)
+        input: useInput(param['stanza:example'], param['stanza:type'], false),
       };
     });
 
-    const menuPlacement = useInput(metadata['stanza:menu-placement'] || 'bottom-right', 'string');
+    const menuPlacement = useInput(
+      metadata['stanza:menu-placement'] || 'bottom-right',
+      'string'
+    );
 
     const params = computed(() => {
       return [
-        ...paramFields.map(({param, input}) => {
+        ...paramFields.map(({ param, input }) => {
           return {
             name: param['stanza:key'],
             type: param['stanza:type'],
-            input
+            input,
           };
         }),
         {
-          name:  'togostanza-menu-placement',
-          input: menuPlacement
-        }
-      ].filter(({input}) => (
-        !input.isDefault.value
-      )).map(({name, input, type}) => {
-        return {
-          name,
-          type,
-          value: input.valueStr.value
-        };
-      });
+          name: 'togostanza-menu-placement',
+          input: menuPlacement,
+        },
+      ]
+        .filter(({ input }) => !input.isDefault.value)
+        .map(({ name, input, type }) => {
+          return {
+            name,
+            type,
+            value: input.valueStr.value,
+          };
+        });
     });
 
     const styleFields = (metadata['stanza:style'] || []).map((style) => {
       return {
         style,
-        input: useInput(style['stanza:default'], style['stanza:type'])
+        input: useInput(style['stanza:default'], style['stanza:type']),
       };
     });
 
     const styleVars = computed(() => {
-      return styleFields.filter(({input}) => (
-        !input.isDefault.value
-      )).map(({style, input}) => {
+      return styleFields
+        .filter(({ input }) => !input.isDefault.value)
+        .map(({ style, input }) => {
+          return {
+            name: style['stanza:key'],
+            value: input.valueStr.value,
+          };
+        });
+    });
+
+    const outgoingEvents = (metadata['stanza:outgoingEvent'] || []).map(
+      (event) => {
         return {
-          name:  style['stanza:key'],
-          value: input.valueStr.value
+          name: event['stanza:key'],
+          description: event['stanza:description'],
         };
-      });
-    });
+      }
+    );
 
-    const outgoingEvents = (metadata['stanza:outgoingEvent'] || []).map((event) => {
-      return {
-        name:        event['stanza:key'],
-        description: event['stanza:description']
-      };
-    });
-
-    const incomingEvents = (metadata['stanza:incomingEvent'] || []).map((event) => {
-      return {
-        name:        event['stanza:key'],
-        description: event['stanza:description']
-      };
-    });
+    const incomingEvents = (metadata['stanza:incomingEvent'] || []).map(
+      (event) => {
+        return {
+          name: event['stanza:key'],
+          description: event['stanza:description'],
+        };
+      }
+    );
 
     return {
       metadata,
@@ -3226,23 +3311,27 @@ var script = defineComponent({
       styleFields,
       styleVars,
       outgoingEvents,
-      incomingEvents
+      incomingEvents,
     };
-  }
+  },
 });
 
 function useInput(initValue, type, hasDefault = true) {
   const initValueStr = stringify(initValue, type);
-  const valueStr     = ref(initValueStr);
-  const valueParsed  = computed(() => parse(valueStr.value, type));
-  const isDefault    = computed(() => hasDefault && (valueStr.value === initValueStr));
+  const valueStr = ref(initValueStr);
+  const valueParsed = computed(() => parse(valueStr.value, type));
+  const isDefault = computed(
+    () => hasDefault && valueStr.value === initValueStr
+  );
 
   function setValueStr(newValStr) {
     valueStr.value = newValStr;
   }
 
   function resetToDefault() {
-    if (!hasDefault) { return; }
+    if (!hasDefault) {
+      return;
+    }
 
     this.setValueStr(initValueStr);
   }
@@ -3253,25 +3342,30 @@ function useInput(initValue, type, hasDefault = true) {
     setValueStr,
     hasDefault,
     isDefault,
-    resetToDefault
+    resetToDefault,
   };
 }
 
 function stringify(value, type) {
-  if (value === null || value === undefined) { return null; }
+  if (value === null || value === undefined) {
+    return null;
+  }
 
   switch (type) {
     case 'boolean':
     case 'number':
     case 'json':
       return JSON.stringify(value);
-    default: // value is a string (event if type is not a string. e.g. date)
+    default:
+      // value is a string (event if type is not a string. e.g. date)
       return value;
   }
 }
 
 function parse(valueStr, type) {
-  if (valueStr === null || valueStr === undefined) { return null; }
+  if (valueStr === null || valueStr === undefined) {
+    return null;
+  }
 
   switch (type) {
     case 'boolean':
@@ -3286,30 +3380,28 @@ function parse(valueStr, type) {
   }
 }
 
-const _withId = /*#__PURE__*/withScopeId("data-v-0732abc2");
-
 pushScopeId("data-v-0732abc2");
 const _hoisted_1 = { class: "display-4" };
 const _hoisted_2 = { class: "lead" };
 const _hoisted_3 = { class: "row" };
 const _hoisted_4 = { class: "col-lg-6" };
-const _hoisted_5 = /*#__PURE__*/createVNode("nav", {
+const _hoisted_5 = /*#__PURE__*/createBaseVNode("nav", {
   class: "nav nav-tabs",
   role: "tablist"
 }, [
-  /*#__PURE__*/createVNode("a", {
+  /*#__PURE__*/createBaseVNode("a", {
     class: "nav-link active",
     href: "#overview",
     "data-bs-toggle": "tab",
     role: "tab"
   }, "Overview"),
-  /*#__PURE__*/createVNode("a", {
+  /*#__PURE__*/createBaseVNode("a", {
     class: "nav-link",
     href: "#customize",
     "data-bs-toggle": "tab",
     role: "tab"
   }, "Customize"),
-  /*#__PURE__*/createVNode("a", {
+  /*#__PURE__*/createBaseVNode("a", {
     class: "nav-link",
     href: "#event",
     "data-bs-toggle": "tab",
@@ -3323,150 +3415,127 @@ const _hoisted_7 = {
   role: "tabpanel"
 };
 const _hoisted_8 = { class: "table table-borderless border mb-1" };
-const _hoisted_9 = /*#__PURE__*/createVNode("th", null, "Display", -1 /* HOISTED */);
-const _hoisted_10 = /*#__PURE__*/createVNode("th", null, "Type", -1 /* HOISTED */);
-const _hoisted_11 = /*#__PURE__*/createVNode("th", null, "Provider", -1 /* HOISTED */);
-const _hoisted_12 = /*#__PURE__*/createVNode("th", null, "Author", -1 /* HOISTED */);
-const _hoisted_13 = { class: "mb-0" };
-const _hoisted_14 = /*#__PURE__*/createTextVNode(" <");
-const _hoisted_15 = /*#__PURE__*/createTextVNode("> ");
-const _hoisted_16 = /*#__PURE__*/createVNode("th", null, "Contributors", -1 /* HOISTED */);
-const _hoisted_17 = {
+const _hoisted_9 = /*#__PURE__*/createBaseVNode("th", null, "Author", -1 /* HOISTED */);
+const _hoisted_10 = { class: "mb-0" };
+const _hoisted_11 = /*#__PURE__*/createBaseVNode("th", null, "Contributors", -1 /* HOISTED */);
+const _hoisted_12 = {
   key: 0,
   class: "list-unstyled mb-0"
 };
-const _hoisted_18 = /*#__PURE__*/createTextVNode(" - ");
-const _hoisted_19 = /*#__PURE__*/createVNode("th", null, "License", -1 /* HOISTED */);
-const _hoisted_20 = /*#__PURE__*/createVNode("th", null, "Created", -1 /* HOISTED */);
-const _hoisted_21 = /*#__PURE__*/createVNode("th", null, "Updated", -1 /* HOISTED */);
-const _hoisted_22 = { class: "text-end" };
-const _hoisted_23 = {
+const _hoisted_13 = /*#__PURE__*/createTextVNode(" - ");
+const _hoisted_14 = /*#__PURE__*/createBaseVNode("th", null, "License", -1 /* HOISTED */);
+const _hoisted_15 = /*#__PURE__*/createBaseVNode("th", null, "Created", -1 /* HOISTED */);
+const _hoisted_16 = /*#__PURE__*/createBaseVNode("th", null, "Updated", -1 /* HOISTED */);
+const _hoisted_17 = { class: "text-end" };
+const _hoisted_18 = ["href"];
+const _hoisted_19 = ["innerHTML"];
+const _hoisted_20 = {
   class: "tab-pane",
   id: "customize",
   role: "tabpanel"
 };
-const _hoisted_24 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */);
-const _hoisted_25 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
-const _hoisted_26 = { class: "col" };
-const _hoisted_27 = /*#__PURE__*/createVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */);
-const _hoisted_28 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */);
-const _hoisted_29 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
-const _hoisted_30 = {
+const _hoisted_21 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */);
+const _hoisted_22 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
+const _hoisted_23 = { class: "col" };
+const _hoisted_24 = /*#__PURE__*/createBaseVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */);
+const _hoisted_25 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */);
+const _hoisted_26 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
+const _hoisted_27 = {
   key: 0,
   class: "fst-italic"
 };
-const _hoisted_31 = {
+const _hoisted_28 = {
   class: "tab-pane",
   id: "event",
   role: "tabpanel"
 };
-const _hoisted_32 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */);
-const _hoisted_33 = { class: "row row-cols-2" };
-const _hoisted_34 = { class: "text-muted" };
-const _hoisted_35 = {
+const _hoisted_29 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */);
+const _hoisted_30 = { class: "row row-cols-2" };
+const _hoisted_31 = { class: "text-muted" };
+const _hoisted_32 = {
   key: 0,
   class: "fst-italic"
 };
-const _hoisted_36 = /*#__PURE__*/createVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */);
-const _hoisted_37 = { class: "row row-cols-2" };
-const _hoisted_38 = { class: "text-muted" };
-const _hoisted_39 = {
+const _hoisted_33 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */);
+const _hoisted_34 = { class: "row row-cols-2" };
+const _hoisted_35 = { class: "text-muted" };
+const _hoisted_36 = {
   key: 1,
   class: "fst-italic"
 };
-const _hoisted_40 = { class: "col-lg-6" };
-const _hoisted_41 = /*#__PURE__*/createVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
+const _hoisted_37 = { class: "col-lg-6" };
+const _hoisted_38 = /*#__PURE__*/createBaseVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
 popScopeId();
 
-const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $options) => {
+function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FormField = resolveComponent("FormField");
   const _component_StanzaPreviewer = resolveComponent("StanzaPreviewer");
   const _component_Layout = resolveComponent("Layout");
 
   return (openBlock(), createBlock(_component_Layout, { containerClass: "container-fluid" }, {
-    default: _withId(() => [
-      createVNode("h1", _hoisted_1, toDisplayString(_ctx.metadata['stanza:label']), 1 /* TEXT */),
-      createVNode("p", _hoisted_2, toDisplayString(_ctx.metadata['stanza:definition']), 1 /* TEXT */),
-      createVNode("div", _hoisted_3, [
-        createVNode("div", _hoisted_4, [
+    default: withCtx(() => [
+      createBaseVNode("h1", _hoisted_1, toDisplayString(_ctx.metadata['stanza:label']), 1 /* TEXT */),
+      createBaseVNode("p", _hoisted_2, toDisplayString(_ctx.metadata['stanza:definition']), 1 /* TEXT */),
+      createBaseVNode("div", _hoisted_3, [
+        createBaseVNode("div", _hoisted_4, [
           _hoisted_5,
-          createVNode("div", _hoisted_6, [
-            createVNode("div", _hoisted_7, [
-              createVNode("table", _hoisted_8, [
-                createVNode("tbody", null, [
-                  createVNode("tr", null, [
+          createBaseVNode("div", _hoisted_6, [
+            createBaseVNode("div", _hoisted_7, [
+              createBaseVNode("table", _hoisted_8, [
+                createBaseVNode("tbody", null, [
+                  createBaseVNode("tr", null, [
                     _hoisted_9,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:display'] || '-'), 1 /* TEXT */)
-                  ]),
-                  createVNode("tr", null, [
-                    _hoisted_10,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:type'] || '-'), 1 /* TEXT */)
-                  ]),
-                  createVNode("tr", null, [
-                    _hoisted_11,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:provider'] || '-'), 1 /* TEXT */)
-                  ]),
-                  createVNode("tr", null, [
-                    _hoisted_12,
-                    createVNode("td", null, [
-                      createVNode("address", _hoisted_13, [
-                        createTextVNode(toDisplayString(_ctx.metadata['stanza:author'] || '-') + " ", 1 /* TEXT */),
-                        (_ctx.metadata['stanza:address'])
-                          ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                              _hoisted_14,
-                              createVNode("a", {
-                                href: `mailto:${_ctx.metadata['stanza:address']}`
-                              }, toDisplayString(_ctx.metadata['stanza:address']), 9 /* TEXT, PROPS */, ["href"]),
-                              _hoisted_15
-                            ], 64 /* STABLE_FRAGMENT */))
-                          : createCommentVNode("v-if", true)
-                      ])
+                    createBaseVNode("td", null, [
+                      createBaseVNode("address", _hoisted_10, toDisplayString(_ctx.metadata['stanza:author'] || '-'), 1 /* TEXT */)
                     ])
                   ]),
-                  createVNode("tr", null, [
-                    _hoisted_16,
-                    createVNode("td", null, [
-                      (_ctx.metadata['stanza:contributor'] && _ctx.metadata['stanza:contributor'].length > 0)
-                        ? (openBlock(), createBlock("ul", _hoisted_17, [
-                            (openBlock(true), createBlock(Fragment, null, renderList(_ctx.metadata['stanza:contributor'], (contributor) => {
-                              return (openBlock(), createBlock("li", { key: contributor }, toDisplayString(contributor), 1 /* TEXT */))
+                  createBaseVNode("tr", null, [
+                    _hoisted_11,
+                    createBaseVNode("td", null, [
+                      (
+                        _ctx.metadata['stanza:contributor'] &&
+                        _ctx.metadata['stanza:contributor'].length > 0
+                      )
+                        ? (openBlock(), createElementBlock("ul", _hoisted_12, [
+                            (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.metadata['stanza:contributor'], (contributor) => {
+                              return (openBlock(), createElementBlock("li", { key: contributor }, toDisplayString(contributor), 1 /* TEXT */))
                             }), 128 /* KEYED_FRAGMENT */))
                           ]))
-                        : (openBlock(), createBlock(Fragment, { key: 1 }, [
-                            _hoisted_18
+                        : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+                            _hoisted_13
                           ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
                     ])
                   ]),
-                  createVNode("tr", null, [
-                    _hoisted_19,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:license'] || '-'), 1 /* TEXT */)
+                  createBaseVNode("tr", null, [
+                    _hoisted_14,
+                    createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:license'] || '-'), 1 /* TEXT */)
                   ]),
-                  createVNode("tr", null, [
-                    _hoisted_20,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:created'] || '-'), 1 /* TEXT */)
+                  createBaseVNode("tr", null, [
+                    _hoisted_15,
+                    createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:created'] || '-'), 1 /* TEXT */)
                   ]),
-                  createVNode("tr", null, [
-                    _hoisted_21,
-                    createVNode("td", null, toDisplayString(_ctx.metadata['stanza:updated'] || '-'), 1 /* TEXT */)
+                  createBaseVNode("tr", null, [
+                    _hoisted_16,
+                    createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:updated'] || '-'), 1 /* TEXT */)
                   ])
                 ])
               ]),
-              createVNode("div", _hoisted_22, [
-                createVNode("a", {
+              createBaseVNode("div", _hoisted_17, [
+                createBaseVNode("a", {
                   href: `./${_ctx.metadata['@id']}/metadata.json`
-                }, "Download JSON", 8 /* PROPS */, ["href"])
+                }, "Download JSON", 8 /* PROPS */, _hoisted_18)
               ]),
-              createVNode("div", {
+              createBaseVNode("div", {
                 innerHTML: _ctx.readme,
                 class: "mt-4"
-              }, null, 8 /* PROPS */, ["innerHTML"])
+              }, null, 8 /* PROPS */, _hoisted_19)
             ]),
-            createVNode("div", _hoisted_23, [
-              createVNode("section", null, [
-                _hoisted_24,
-                createVNode("div", _hoisted_25, [
-                  (openBlock(true), createBlock(Fragment, null, renderList(_ctx.paramFields, ({param, input}) => {
-                    return (openBlock(), createBlock("div", {
+            createBaseVNode("div", _hoisted_20, [
+              createBaseVNode("section", null, [
+                _hoisted_21,
+                createBaseVNode("div", _hoisted_22, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.paramFields, ({ param, input }) => {
+                    return (openBlock(), createElementBlock("div", {
                       key: param['stanza:key'],
                       class: "col"
                     }, [
@@ -3480,23 +3549,29 @@ const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $optio
                       }, null, 8 /* PROPS */, ["input", "name", "type", "choices", "required", "help-text"])
                     ]))
                   }), 128 /* KEYED_FRAGMENT */)),
-                  createVNode("div", _hoisted_26, [
+                  createBaseVNode("div", _hoisted_23, [
                     createVNode(_component_FormField, {
                       input: _ctx.menuPlacement,
                       name: "togostanza-menu-placement",
                       type: "single-choice",
-                      choices: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'none'],
+                      choices: [
+                      'top-left',
+                      'top-right',
+                      'bottom-left',
+                      'bottom-right',
+                      'none',
+                    ],
                       "help-text": 'Placement of the information icon which links to this page.'
                     }, null, 8 /* PROPS */, ["input", "help-text"])
                   ])
                 ])
               ]),
-              _hoisted_27,
-              createVNode("section", null, [
-                _hoisted_28,
-                createVNode("div", _hoisted_29, [
-                  (openBlock(true), createBlock(Fragment, null, renderList(_ctx.styleFields, ({style, input}) => {
-                    return (openBlock(), createBlock("div", {
+              _hoisted_24,
+              createBaseVNode("section", null, [
+                _hoisted_25,
+                createBaseVNode("div", _hoisted_26, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.styleFields, ({ style, input }) => {
+                    return (openBlock(), createElementBlock("div", {
                       key: style['stanza:key'],
                       class: "col"
                     }, [
@@ -3511,46 +3586,46 @@ const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $optio
                   }), 128 /* KEYED_FRAGMENT */))
                 ]),
                 (_ctx.styleFields.length === 0)
-                  ? (openBlock(), createBlock("p", _hoisted_30, " No styles defined. "))
+                  ? (openBlock(), createElementBlock("p", _hoisted_27, " No styles defined. "))
                   : createCommentVNode("v-if", true)
               ])
             ]),
-            createVNode("div", _hoisted_31, [
-              _hoisted_32,
-              createVNode("div", _hoisted_33, [
-                (openBlock(true), createBlock(Fragment, null, renderList(_ctx.outgoingEvents, ({name, description}) => {
-                  return (openBlock(), createBlock("div", {
+            createBaseVNode("div", _hoisted_28, [
+              _hoisted_29,
+              createBaseVNode("div", _hoisted_30, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.outgoingEvents, ({ name, description }) => {
+                  return (openBlock(), createElementBlock("div", {
                     key: name,
                     class: "col"
                   }, [
-                    createVNode("div", null, toDisplayString(name), 1 /* TEXT */),
-                    createVNode("div", _hoisted_34, toDisplayString(description), 1 /* TEXT */)
+                    createBaseVNode("div", null, toDisplayString(name), 1 /* TEXT */),
+                    createBaseVNode("div", _hoisted_31, toDisplayString(description), 1 /* TEXT */)
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]),
               (_ctx.outgoingEvents.length === 0)
-                ? (openBlock(), createBlock("p", _hoisted_35, " No events defined. "))
+                ? (openBlock(), createElementBlock("p", _hoisted_32, " No events defined. "))
                 : createCommentVNode("v-if", true),
-              _hoisted_36,
-              createVNode("div", _hoisted_37, [
-                (openBlock(true), createBlock(Fragment, null, renderList(_ctx.incomingEvents, ({name, description}) => {
-                  return (openBlock(), createBlock("div", {
+              _hoisted_33,
+              createBaseVNode("div", _hoisted_34, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.incomingEvents, ({ name, description }) => {
+                  return (openBlock(), createElementBlock("div", {
                     key: name,
                     class: "col"
                   }, [
-                    createVNode("div", null, toDisplayString(name), 1 /* TEXT */),
-                    createVNode("div", _hoisted_38, toDisplayString(description), 1 /* TEXT */)
+                    createBaseVNode("div", null, toDisplayString(name), 1 /* TEXT */),
+                    createBaseVNode("div", _hoisted_35, toDisplayString(description), 1 /* TEXT */)
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]),
               (_ctx.incomingEvents.length === 0)
-                ? (openBlock(), createBlock("p", _hoisted_39, " No events defined. "))
+                ? (openBlock(), createElementBlock("p", _hoisted_36, " No events defined. "))
                 : createCommentVNode("v-if", true)
             ])
           ])
         ]),
-        createVNode("div", _hoisted_40, [
-          _hoisted_41,
+        createBaseVNode("div", _hoisted_37, [
+          _hoisted_38,
           createVNode(_component_StanzaPreviewer, {
             metadata: _ctx.metadata,
             params: _ctx.params,
@@ -3561,9 +3636,9 @@ const render = /*#__PURE__*/_withId((_ctx, _cache, $props, $setup, $data, $optio
     ]),
     _: 1 /* STABLE */
   }))
-});
+}
 
-var css = "\nth[data-v-0732abc2] {\n  background-color: var(--bs-light);\n  text-align: center;\n  white-space: nowrap;\n  width: 1%;\n}\nth[data-v-0732abc2], td[data-v-0732abc2] {\n  padding-left: 1.5rem;\n  padding-right: 1.5rem;\n}\n";
+var css = "\nth[data-v-0732abc2] {\n  background-color: var(--bs-light);\n  text-align: center;\n  white-space: nowrap;\n  width: 1%;\n}\nth[data-v-0732abc2],\ntd[data-v-0732abc2] {\n  padding-left: 1.5rem;\n  padding-right: 1.5rem;\n}\n";
 n(css,{});
 
 script.render = render;
@@ -3574,5 +3649,5 @@ function helpApp({metadata, readme}) {
   return createApp(script, {metadata, readme})
 }
 
-export default helpApp;
+export { helpApp as default };
 //# sourceMappingURL=help-app.js.map

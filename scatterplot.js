@@ -1,7 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
-import { e as embed } from './vega-embed.module-a9808fed.js';
-import { l as loadData } from './load-data-8f706a23.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem } from './metastanza_utils-99a9ac59.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-e0b42b46.js';
+import { e as embed } from './vega-embed.module-b05919cd.js';
+import { l as loadData } from './load-data-0c021b7f.js';
 
 class ScatterPlot extends Stanza {
   menu() {
@@ -12,6 +11,7 @@ class ScatterPlot extends Stanza {
   }
 
   async render() {
+    appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding
@@ -244,12 +244,8 @@ var metadata = {
 	"@id": "scatterplot",
 	"stanza:label": "Scatterplot",
 	"stanza:definition": "Scatterplot MetaStanza",
-	"stanza:type": "Stanza",
-	"stanza:display": "Graph",
-	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2020-11-06",
@@ -307,6 +303,12 @@ var metadata = {
 		"stanza:key": "legend-title",
 		"stanza:example": "",
 		"stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z' variable name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "custom-css-url",
+		"stanza:example": "",
+		"stanza:description": "Stylesheet(css file) URL to override current style",
 		"stanza:required": false
 	},
 	{
@@ -437,22 +439,9 @@ var metadata = {
 		"stanza:key": "symbol-shape",
 		"stanza:example": "circle",
 		"stanza:description": "Plot shape"
-	},
-	{
-		"stanza:key": "metastanza-menu-placement",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"top-left",
-			"top-right",
-			"bottom-left",
-			"bottom-right",
-			"none"
-		],
-		"stanza:example": "top-right",
-		"stanza:description": "Menu button placement"
 	}
 ],
-	"stanza:about-link-placement": "bottom-right",
+	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--togostanza-series-0-color",

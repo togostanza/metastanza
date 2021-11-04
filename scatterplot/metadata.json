@@ -5,12 +5,8 @@
   "@id": "scatterplot",
   "stanza:label": "Scatterplot",
   "stanza:definition": "Scatterplot MetaStanza",
-  "stanza:type": "Stanza",
-  "stanza:display": "Graph",
-  "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
+  "stanza:author": "DBCLS",
   "stanza:contributor": [],
   "stanza:created": "2020-11-06",
   "stanza:updated": "2020-11-06",
@@ -62,6 +58,12 @@
       "stanza:key": "legend-title",
       "stanza:example": "",
       "stanza:description": "Title for z variable, which is used as legend title (In case of blank, 'z' variable name will be assigned)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
     },
     {
@@ -171,22 +173,9 @@
       "stanza:key": "symbol-shape",
       "stanza:example": "circle",
       "stanza:description": "Plot shape"
-    },
-    {
-      "stanza:key": "metastanza-menu-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Menu button placement"
     }
   ],
-  "stanza:about-link-placement": "bottom-right",
+  "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
       "stanza:key": "--togostanza-series-0-color",

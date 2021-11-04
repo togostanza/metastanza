@@ -408,45 +408,42 @@
   left: 0;
   z-index: 2;
 }
-.modalBackground.black {
-  background-color: rgba(0, 0, 0, 0.3);
-}
 
 .wrapper {
   display: flex;
   flex-direction: var(--togostanza-vertical-pagination-placement);
 }
-.wrapper > .tableWrapper {
+.wrapper > .tableOptionWrapper {
   min-height: 430px;
 }
-.wrapper > .tableWrapper > .tableOption {
+.wrapper > .tableOptionWrapper > .tableOption {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   margin: 0px 0px 10px 0px;
 }
-.wrapper > .tableWrapper > .tableOption > .entries {
+.wrapper > .tableOptionWrapper > .tableOption > .entries {
   margin-left: auto;
   margin-right: 10px;
   font-size: var(--togostanza-control-font-color);
 }
-.wrapper > .tableWrapper > .tableOption > .entries select {
+.wrapper > .tableOptionWrapper > .tableOption > .entries select {
   border: var(--togostanza-control-border);
   border-radius: var(--togostanza-control-border-radius);
   height: 20px;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper {
   position: relative;
   line-height: 1;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper > .menuIcon {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper > .menuIcon {
   width: 16px;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper > .menuIcon:hover {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper > .menuIcon:hover {
   cursor: pointer;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper > ul.menu {
   position: absolute;
   top: 24px;
   right: 0px;
@@ -456,12 +453,12 @@
   z-index: 3;
   list-style: none;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu > li > .downloadBtn {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper > ul.menu > li > .downloadBtn {
   white-space: nowrap;
   line-height: 24px;
   font-weight: bold;
 }
-.wrapper > .tableWrapper > .tableOption > .menuWrapper > ul.menu:before {
+.wrapper > .tableOptionWrapper > .tableOption > .menuWrapper > ul.menu:before {
   content: "";
   position: absolute;
   top: -10px;
@@ -469,40 +466,56 @@
   border: 5px solid rgba(255, 255, 255, 0);
   border-bottom: 5px solid #ffffff;
 }
-.wrapper > .tableWrapper > table {
+.wrapper > .tableOptionWrapper > .tableWrapper {
+  overflow: auto;
+  min-height: 430px;
+  background-color: var(--togostanza-background-color);
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
   margin: 0;
   border: var(--togostanza-table-border);
+  border-left: 0px none;
+  border-right: 0px none;
   box-shadow: var(--togostanza-table-shadow);
 }
-.wrapper > .tableWrapper > table > thead {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead {
   background-color: var(--togostanza-thead-background-color);
   color: var(--togostanza-thead-font-color);
   margin-bottom: 0;
   border-bottom: var(--togostanza-thead-border-bottom);
 }
-.wrapper > .tableWrapper > table > thead > tr > th {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th {
   color: var(--togostanza-thead-font-color);
   font-size: var(--togostanza-thead-font-size);
   font-weight: var(--togostanza-thead-font-weight);
   padding: 10px;
   white-space: nowrap;
+  position: relative;
 }
-.wrapper > .tableWrapper > table > thead > tr > th:first-child {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th.fixed {
+  position: sticky;
+  z-index: 20;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th:first-child {
   background-color: var(--togostanza-thead-background-color);
   padding-left: 20px;
   padding-right: 20px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper {
   display: inline-block;
   position: relative;
-}
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow {
   position: absolute;
-  top: 0;
-  left: -22px;
+  top: calc(var(--togostanza-thead-font-size) + 16px);
+  left: 0;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper.lastCol {
+  left: auto;
+  right: 0;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow {
   z-index: 3;
   width: auto;
   height: auto;
@@ -510,12 +523,12 @@
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   border-radius: var(--togostanza-control-border-radius);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .filterWindowTitle {
   padding: 4px 8px;
   background-color: var(--togostanza-thead-background-color);
   color: var(--togostanza-thead-font-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters {
   padding: 9px 8px;
   margin: 9px 8px 6px;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -523,26 +536,26 @@
   max-height: 300px;
   overflow: auto;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li {
   display: flex;
   margin-bottom: 8px;
   line-height: 1.4em;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label {
   display: flex;
   align-items: center;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label > input[type=checkbox] {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > ul.filters > li > label > input[type=checkbox] {
   margin-right: 6px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton {
   display: flex;
   justify-content: center;
   padding: 0 8px;
   margin-bottom: 9px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll,
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear {
   border: var(--togostanza-control-border);
   border-radius: 3px;
   background-color: var(--togostanza-thead-background-color);
@@ -553,62 +566,65 @@
   white-space: nowrap;
   padding: 3px 10px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:first-of-type,
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:first-of-type {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:first-of-type,
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:first-of-type {
   margin-right: 4px;
   width: 60%;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:last-of-type,
-.wrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:last-of-type {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.selectAll:last-of-type,
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow > .toggleAllButton > button.clear:last-of-type {
   width: 40%;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper {
+  position: absolute;
+  top: calc(var(--togostanza-thead-font-size) + 16px);
+  left: 0;
   z-index: 3;
   background: #ffffff;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > p.title {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper.lastCol {
+  left: auto;
+  right: 0;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > p.title {
   display: block;
   padding: 6px 16px;
   background-color: var(--togostanza-thead-background-color);
   color: var(--togostanza-thead-font-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > input.textSearchInput[name=queryInputByColumn] {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper > input.textSearchInput[name=queryInputByColumn] {
   margin: 20px 30px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-base {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-base {
   background-color: var(--togostanza-non-active-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider {
   margin: 30px 40px 8px;
   width: 230px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper #slider .slider-connect {
   background-color: var(--togostanza-control-active-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .slider-horizontal .slider-handle {
   width: 14px;
   height: 14px;
   top: -5px;
   background-color: var(--togostanza-control-active-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput {
   width: 242px;
   margin: 0 34px 30px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > .rangeInputLabel {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > .rangeInputLabel {
   font-size: 10px;
   display: block;
   margin-left: 2px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text] {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text] {
   width: 164px;
   height: 20px;
   border: var(--togostanza-control-border);
@@ -617,11 +633,11 @@
   color: var(--togostanza-control-font-color);
   width: 100%;
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text]::placeholder {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > div > input[type=text]::placeholder {
   padding: 0px 0px 0px 4px;
   color: var(--searchbox-font-color);
 }
-.wrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > .dash {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .textSearchByColumnWrapper .rangeInput > .dash {
   width: 8px;
   height: 1px;
   background-color: var(--togostanza-control-font-color);
@@ -629,11 +645,11 @@
   margin-right: 4px;
   margin-bottom: 10px;
 }
-.wrapper > .tableWrapper > table > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th:last-of-type > .filterWrapper > div.filterWindow {
   left: auto;
   right: 0px;
 }
-.wrapper > .tableWrapper > table > thead > tr .icon {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon {
   cursor: pointer;
   content: "";
   display: inline-block;
@@ -641,63 +657,87 @@
   height: var(--togostanza-control-font-size);
   transform: translateY(1px);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon path {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon path {
   color: var(--togostanza-non-active-color);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.active path {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.active path {
   color: var(--togostanza-control-active-color);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.search {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.search {
   margin-left: 1px;
   width: calc(var(--togostanza-control-font-size) - 1px);
   height: calc(var(--togostanza-control-font-size) - 1px);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.filter {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.filter {
   padding: 0 2px;
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.sort {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.sort {
   display: var(--sorticon-display);
   position: relative;
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.isShowing {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.isShowing {
   z-index: 3;
   position: relative;
   background-color: var(--togostanza-thead-background-color);
 }
-.wrapper > .tableWrapper > table > thead > tr .icon.isShowing path {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr .icon.isShowing path {
   color: var(--togostanza-thead-font-color);
 }
-.wrapper > .tableWrapper > table > tbody > tr:nth-child(odd) {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr:nth-child(odd) {
   background-color: var(--togostanza-tbody-odd-background-color);
 }
-.wrapper > .tableWrapper > table > tbody > tr:nth-child(even) {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr:nth-child(even) {
   background-color: var(--togostanza-tbody-even-background-color);
 }
-.wrapper > .tableWrapper > table > tbody > tr > td {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td {
   border-bottom: var(--togostanza-tbody-border-bottom);
   border-collapse: collapse;
   padding: 10px;
 }
-.wrapper > .tableWrapper > table > tbody > tr > td.hide {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td.fixed {
+  position: sticky;
+  z-index: 10;
+  background-color: var(--togostanza-background-color);
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td.hide {
   display: none;
 }
-.wrapper > .tableWrapper > table > tbody > tr > td:first-child {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td.center {
+  text-align: center;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td.right {
+  text-align: right;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td:first-child {
   padding-left: 20px;
 }
-.wrapper > .tableWrapper > table > tbody > tr > td:last-child {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td:last-child {
   padding-right: 20px;
 }
-.wrapper > .tableWrapper > table > tbody > tr > td > span {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span {
   font-size: var(--togostanza-tbody-font-size);
   color: var(--togostanza-tbody-font-color);
   font-weight: var(--togostanza-tbody-font-weight);
 }
-.wrapper > .tableWrapper > table > tbody > tr > td > span > a {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span > a {
   font-size: inherit;
   color: inherit;
   font-weight: inherit;
 }
-.wrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span .label {
+  cursor: pointer;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  color: var(--togostanza-tbody-font-color);
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input {
+  display: none;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input:checked ~ .label {
+  display: block;
+}
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
 }
 .wrapper > .paginationWrapper {
@@ -755,6 +795,7 @@
   display: inline-block;
   width: 15px;
   height: 15px;
+  /* stylelint-disable-next-line no-descending-specificity */
 }
 .wrapper > .paginationWrapper > .serialPagination > .arrowWrapper > .arrow.left {
   margin-right: 2px;
@@ -784,6 +825,7 @@
 }
 .wrapper > .paginationWrapper > #slider.pageSlider .slider-connects {
   background-color: #bbbbbb;
+  /* stylelint-disable-next-line no-descending-specificity */
 }
 .wrapper > .paginationWrapper > #slider.pageSlider .slider-connects .slider-connect {
   background-color: #bbbbbb;
