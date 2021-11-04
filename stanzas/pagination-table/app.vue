@@ -48,7 +48,10 @@
               >
                 {{ column.label }}
                 <font-awesome-icon
-                  v-if="state.sorting.column === column"
+                  v-if="
+                    state.sorting.column &&
+                    state.sorting.column.id === column.id
+                  "
                   :key="`sort-${
                     state.sorting.direction === 'asc' ? 'up' : 'down'
                   }`"
@@ -262,8 +265,9 @@ import {
   ref,
   computed,
   watch,
-  onMounted,
   onRenderTriggered,
+  toRefs,
+  watchEffect,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
@@ -302,8 +306,11 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
+    const { pageSlider, pageSizeOption: pageSizeOptionStr } = toRefs(params);
     const sliderPagination = ref();
-    const pageSizeOption = params.pageSizeOption.split(",").map(Number);
+    const pageSizeOption = computed(() =>
+      pageSizeOptionStr.value.split(",").map(Number)
+    );
 
     const state = reactive({
       responseJSON: null, // for download. may consume extra memory
@@ -319,8 +326,8 @@ export default defineComponent({
 
       pagination: {
         currentPage: 1,
-        perPage: pageSizeOption[0],
-        isSliderOn: params.pageSlider,
+        perPage: pageSizeOption.value[0],
+        isSliderOn: pageSlider,
       },
 
       isMenuOn: false,
@@ -352,7 +359,7 @@ export default defineComponent({
         filtered = orderBy(
           filtered,
           (cells) => {
-            const cell = cells.find((cell) => cell.column === sortColumn);
+            const cell = cells.find((cell) => cell.column.id === sortColumn.id);
             return cell.value;
           },
           [state.sorting.direction]
@@ -510,35 +517,46 @@ export default defineComponent({
       state.pagination.currentPage = currentPage;
     }
 
-    async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+    watchEffect(
+      async () => {
+        state.responseJSON = null;
+        state.responseJSON = await loadData(params.dataUrl, params.dataType);
+      },
+      { immediate: true }
+    );
 
-      state.responseJSON = data;
-      let columns;
-      if (params.columns) {
-        columns = JSON.parse(params.columns).map((column, index) => {
-          column.fixed = index < params.fixedColumns;
-          return column;
+    watchEffect(
+      () => {
+        const data = state.responseJSON || [];
+        let columns;
+        if (params.columns) {
+          columns = JSON.parse(params.columns).map((column, index) => {
+            column.fixed = index < params.fixedColumns;
+            return column;
+          });
+        } else if (data.length > 0) {
+          const firstRow = data[0];
+          columns = Object.keys(firstRow).map((key, index) => {
+            return {
+              id: key,
+              label: key,
+              fixed: index < params.fixedColumns,
+            };
+          });
+        } else {
+          columns = [];
+        }
+        state.columns = columns.map((column) => {
+          const values = data.map((obj) => obj[column.id]);
+          return createColumnState(column, values);
         });
-      } else if (data.length > 0) {
-        const firstRow = data[0];
-        columns = Object.keys(firstRow).map((key, index) => {
-          return {
-            id: key,
-            label: key,
-            fixed: index < params.fixedColumns,
-          };
-        });
-      } else {
-        columns = [];
-      }
+      },
+      { immediate: true }
+    );
 
-      state.columns = columns.map((column) => {
-        const values = data.map((obj) => obj[column.id]);
-        return createColumnState(column, values);
-      });
-
-      state.allRows = data.map((row) => {
+    state.allRows = computed(() => {
+      const data = state.responseJSON || [];
+      return data.map((row) => {
         return state.columns.map((column) => {
           return {
             column,
@@ -547,9 +565,7 @@ export default defineComponent({
           };
         });
       });
-    }
-
-    onMounted(fetchData);
+    });
 
     const thead = ref(null);
     onRenderTriggered(() => {
@@ -559,8 +575,10 @@ export default defineComponent({
       }, 0);
     });
 
+    const width = computed(() => (params.width ? params.width + "px" : "100%"));
+
     return {
-      width: params.width ? params.width + "px" : "100%",
+      width,
       sliderPagination,
       pageSizeOption,
       state,
