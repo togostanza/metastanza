@@ -13,6 +13,7 @@ export default class VennStanza extends Stanza {
 
   // colorSeries;
   // data;
+  // totals;
   // dataLabels;
   // numberOfData;
   // venn;
@@ -34,6 +35,16 @@ export default class VennStanza extends Stanza {
     //get data
     this.data = await this.getData();
     console.log(this.data)
+    this.totals = this.data.map(datum => {
+      const total = {
+        set: datum.set,
+        size: 0
+      };
+      const matchedData = this.data.filter(datum2 => datum.set.every(item => datum2.set.indexOf(item) !== -1));
+      total.size = matchedData.reduce((acc, datum) => acc + datum.size, 0);
+      return total;
+    });
+    console.log(this.totals)
     this.dataLabels = Array.from(new Set(this.data.map(datum => datum.set).flat()));
     this.numberOfData = this.dataLabels.length;
     this.venn = new Map();
@@ -126,7 +137,7 @@ export default class VennStanza extends Stanza {
     container.style.height = this.params['height'] + 'px';
     container.dataset.blendMode = this.params['blend-mode'];
     const d3Container = d3.select(container);
-    const convertedData = this.data.map(datum => Object.fromEntries([
+    const convertedData = this.totals.map(datum => Object.fromEntries([
       ['sets', datum.set],
       ['size', datum.size]
     ]));
