@@ -55,6 +55,13 @@
       "stanza:description": "Height"
     },
     {
+      "stanza:key": "border-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Border width"
+    },
+
+    {
       "stanza:key": "color-scale",
       "stanza:type": "single-choice",
       "stanza:choice": [
@@ -91,30 +98,6 @@
       "stanza:type": "number",
       "stanza:default": 11,
       "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
-    },
-    {
-      "stanza:key": "--togostanza-edge-color",
-      "stanza:type": "color",
-      "stanza:default": "#AEB3BF",
-      "stanza:description": "Edge color"
-    },
-    {
-      "stanza:key": "--togostanza-edge-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Edge width"
     },
 
     {

@@ -26,8 +26,7 @@ export default class TreeMapStanza extends Stanza {
     const height = this.params["height"];
     const colorScale = this.params["color-scale"];
     const logScale = this.params["log-scale"];
-    const edgeWidth = css("--togostanza-edge-width");
-    const borderWidth = css("--togostanza-border-width");
+    const borderWidth = this.params["border-width"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -72,7 +71,7 @@ export default class TreeMapStanza extends Stanza {
       height,
       colorScale,
       logScale,
-      edgeWidth,
+
       borderWidth,
       styles: {
         "background-color": css("--togostanza-background-color"),
@@ -115,7 +114,7 @@ function draw(el, dataset, opts) {
     logScale,
     colorScale,
     styles,
-    edgeWidth,
+
     borderWidth,
   } = opts;
   // create nested structure by item.parent
@@ -166,11 +165,13 @@ function draw(el, dataset, opts) {
         .sum((d) => transformValue(logScale, d.data.n))
         .sort((a, b) => b.value - a.value)
     );
+
+  const rootHeight = 30;
   //create svg and add outline
   const svg = d3
     .select(el)
     .append("svg")
-    .attr("viewBox", [0, -30, width, height + 30]);
+    .attr("viewBox", [0, -rootHeight, width, height + rootHeight]);
   // .style("font-family", styles["--togostanza-font-family"])
   // .attr(
   //   "style",
@@ -185,7 +186,7 @@ function draw(el, dataset, opts) {
   //   .attr("height", height + 30)
   //   .attr("class", "svg-border");
 
-  function render(group, root) {
+  function render(group, root, zoomInOut) {
     const dMax = d3.max(root, (d) => d.value || 1);
     const dMin = d3.min(root, (d) => d.value || 1);
 
@@ -281,18 +282,17 @@ function draw(el, dataset, opts) {
             d3.sum(d, (d) => d?.data?.data?.n || 0)
           )}`;
         }
-        //return `${d.data.label} : ${d?.value}`;
       });
 
     //adjust rectangles positions
-    group.call(position, root);
+    group.call(position, root, true, zoomInOut);
   }
 
   //function to wrap long text in svg
-  function wrap(ii, d, i, nodes) {
+  function wrap(root, isFirstRender, zoomInOut, d, i, nodes) {
     // on positioning elements that are about to display
 
-    if (!ii) {
+    if (isFirstRender) {
       let lineSeparator;
 
       //nodes[i] is rect
@@ -300,19 +300,27 @@ function draw(el, dataset, opts) {
 
       let rectWidth = nodes[i].width.animVal.value; //d3.select(nodes[i]).select("rect").attr("width");
 
+      // if (zoomInOut === "zoomout" && d === root) {
+
+      //   //rectWidth = d.node().parentNode.width.baseVal.value; //d3.select(nodes[i]).select("rect").attr("width");
+      // }
+
       // here is d before animation. animVal - is d in animation
       //get to know if this is a root element (white bar at the top)
-      const isRoot = Math.round(rectWidth) === Math.round(width);
+      const isRoot = d === root; // Math.round(rectWidth) === Math.round(width);
 
+      let maxWidth;
       if (isRoot) {
-        lineSeparator = /(?=[\/])|(?<=[\/])/g;
+        lineSeparator = /(?=[\/])/g;
+        maxWidth = width;
       } else {
-        console.log(text.text());
-        console.log(nodes[i].width.animVal.value);
         lineSeparator = /\s+/;
+        maxWidth = 60;
       }
-      let words = text.text().split(lineSeparator).reverse(),
-        word,
+
+      let words = text.text().split(lineSeparator).reverse();
+
+      let word,
         line = [],
         lineNumber = 0,
         lineHeight = 1.1, // ems
@@ -329,50 +337,60 @@ function draw(el, dataset, opts) {
       while ((word = words.pop())) {
         line.push(word);
         tspan.text(line.join(isRoot ? "" : " "));
-        if (tspan.node().getComputedTextLength() > rectWidth - 5) {
-          //   text.style("display", "none");
-          //   break;
-          // }
-          line.pop();
-          tspan.text(line.join(isRoot ? "" : " "));
-          line = [word];
-          tspan = text
-            .append("tspan")
-            .attr("x", x)
-            .attr("y", y)
-            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-            .text(word);
+
+        if (tspan.node().getComputedTextLength() > maxWidth - 5) {
+          if (isRoot) {
+            line.shift();
+            line[0] = `...${line[0]}`;
+            tspan.text(line.join(""));
+          } else {
+            if (line.length < 2) {
+              continue;
+            }
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+
+            //set tspan to last added tspan and append word that didnt fit
+            tspan = text
+              .append("tspan")
+              .attr("x", x)
+              .attr("y", y)
+              .attr("dy", ++lineNumber * lineHeight + dy + "em")
+              .text(word);
+          }
         }
       }
     }
   }
 
   //place elements according to data
-  function position(group, root, ii) {
+  function position(group, root, isFirstRender, zoomInOut) {
     group
       .selectAll("g")
       .attr("transform", (d) =>
-        d === root ? `translate(0,-30)` : `translate(${x(d.x0)},${y(d.y0)})`
+        d === root
+          ? `translate(0,${-rootHeight})`
+          : `translate(${x(d.x0)},${y(d.y0)})`
       )
       .select("rect")
-      .attr("width", (d) => (d === root ? width : x(d.x1) - x(d.x0)))
-      .attr("height", (d) => (d === root ? 30 : y(d.y1) - y(d.y0)))
-      .each(wrap.bind(this, ii));
-
-    //console.log("position called: ", ii);
-    //.select((d, i, nodes) => d3.select(nodes[i].parentNode));
-    // .select("image")
-    // .attr("x", (d) => x(d.x1 - d.x0) / 2)
-    // .attr("y", (d) => y(d.y1 - d.y0) / 2)
-    // .attr("width", 10)
-    // .attr("height", 10)
-    // .attr("href", expandSvg);
+      .attr("width", (d) =>
+        d === root
+          ? width
+          : x(d.x1) === width
+          ? x(d.x1) - x(d.x0)
+          : x(d.x1) - x(d.x0) - borderWidth / 2
+      )
+      .attr("height", (d) =>
+        d === root ? rootHeight : y(d.y1) - y(d.y0) - borderWidth / 2
+      )
+      .each(wrap.bind(this, root, isFirstRender, zoomInOut));
   }
 
   // When zooming in, draw the new nodes on top, and fade them in.
   function zoomin(d) {
     const group0 = group.attr("pointer-events", "none");
-    const group1 = (group = svg.append("g").call(render, d));
+    const group1 = (group = svg.append("g").call(render, d, "zoomin"));
 
     x.domain([d.x0, d.x1]);
     y.domain([d.y0, d.y1]);
@@ -381,21 +399,22 @@ function draw(el, dataset, opts) {
       .transition()
       .duration(750)
       .call((t) => {
-        return group0.transition(t).remove().call(position, d.parent, 1);
+        return group0.transition(t).remove().call(position, d.parent, false);
       })
       .call((t) =>
         group1
           .transition(t)
           .attrTween("opacity", () => d3.interpolate(0, 1))
-          .call(position, d, 2)
+          .call(position, d, false)
       );
-    //.on("end", wrap);
   }
 
   // When zooming out, draw the old nodes on top, and fade them out.
   function zoomout(d) {
     const group0 = group.attr("pointer-events", "none");
-    const group1 = (group = svg.insert("g", "*").call(render, d.parent));
+    const group1 = (group = svg
+      .insert("g", "*")
+      .call(render, d.parent, "zoomout"));
 
     x.domain([d.parent.x0, d.parent.x1]);
     y.domain([d.parent.y0, d.parent.y1]);
@@ -408,9 +427,8 @@ function draw(el, dataset, opts) {
           .transition(t)
           .remove()
           .attrTween("opacity", () => d3.interpolate(1, 0))
-          .call(position, d, 2)
-      )
-      .call((t) => group1.transition(t).call(position, d.parent, 1));
-    //.on("end", wrap);
+          .call(position, d, false)
+      ) //when zooming out at first parent has width = width, so wrap thinks its root
+      .call((t) => group1.transition(t).call(position, d.parent, false));
   }
 }
