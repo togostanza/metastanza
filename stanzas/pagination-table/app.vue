@@ -267,6 +267,7 @@ import {
   watch,
   onRenderTriggered,
   toRefs,
+  watchEffect,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
@@ -305,12 +306,7 @@ export default defineComponent({
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
 
   setup(params) {
-    const {
-      pageSlider,
-      pageSizeOption: pageSizeOptionStr,
-      dataUrl,
-      dataType,
-    } = toRefs(params);
+    const { pageSlider, pageSizeOption: pageSizeOptionStr } = toRefs(params);
     const sliderPagination = ref();
     const pageSizeOption = computed(() =>
       pageSizeOptionStr.value.split(",").map(Number)
@@ -521,12 +517,16 @@ export default defineComponent({
       state.pagination.currentPage = currentPage;
     }
 
-    watch(
-      [dataUrl, dataType],
-      async ([dataUrl, dataType]) => {
+    watchEffect(
+      async () => {
         state.responseJSON = null;
-        state.responseJSON = await loadData(dataUrl, dataType);
+        state.responseJSON = await loadData(params.dataUrl, params.dataType);
+      },
+      { immediate: true }
+    );
 
+    watchEffect(
+      () => {
         const data = state.responseJSON || [];
         let columns;
         if (params.columns) {
