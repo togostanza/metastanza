@@ -156,7 +156,7 @@ export default class VennStanza extends Stanza {
     container.querySelectorAll('.venn-area').forEach(group => {
       const labels = group.dataset.vennSets.split('_');
       const targets = labels.map(label => this.dataLabels.indexOf(label));
-      const count = this.data.find(datum => {
+      const count = this.totals.find(datum => {
         return datum.set.length === labels.length && labels.every(label => datum.set.find(label2 => label === label2));
       })?.size ?? '';
       // set color
