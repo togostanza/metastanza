@@ -16,7 +16,6 @@
 
 .tableWrapper {
   overflow: auto;
-  background-color: var(--togostanza-background-color);
 }
 .tableWrapper > table {
   width: 100%;
@@ -24,8 +23,6 @@
   border-collapse: collapse;
   margin: 0;
   border: var(--togostanza-table-border);
-  border-left: 0px none;
-  border-right: 0px none;
   box-shadow: var(--togostanza-table-shadow);
 }
 .tableWrapper > table > thead {
@@ -42,10 +39,6 @@
   padding: 10px;
   position: sticky;
   top: -1px;
-}
-.tableWrapper > table > thead > tr > th.fixed {
-  position: sticky;
-  z-index: 20;
 }
 .tableWrapper > table > thead > tr > th:after {
   content: "";
@@ -78,17 +71,6 @@
   border-collapse: collapse;
   padding: 10px;
 }
-.tableWrapper > table > tbody > tr > td.fixed {
-  position: sticky;
-  z-index: 10;
-  background-color: var(--togostanza-background-color);
-}
-.tableWrapper > table > tbody > tr > td.center {
-  text-align: center;
-}
-.tableWrapper > table > tbody > tr > td.right {
-  text-align: right;
-}
 .tableWrapper > table > tbody > tr > td:first-child {
   padding-left: 20px;
 }
@@ -101,19 +83,6 @@
 .tableWrapper > table > tbody > tr > td > span > a {
   color: var(--togostanza-tbody-font-color);
 }
-.tableWrapper > table > tbody > tr > td label {
-  cursor: pointer;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  color: var(--togostanza-tbody-font-color);
-}
-.tableWrapper > table > tbody > tr > td input {
-  display: none;
-}
-.tableWrapper > table > tbody > tr > td input:checked ~ label {
-  display: block;
-}
 .tableWrapper > table > tbody > tr:last-of-type > td {
   border-bottom: none;
 }
@@ -125,31 +94,31 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: var(--togostanza-tbody-font-color);
-  box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+  background-color: var(--togostanza-thead-font-color);
+  box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   animation: dot-typing 1.5s infinite linear;
 }
 
 @keyframes dot-typing {
   0% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
   16.667% {
-    box-shadow: 9993px -5px 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px -5px 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
   33.333% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
   50% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px -5px 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px -5px 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
   66.667% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
   83.333% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px -5px 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px -5px 0 0 var(--togostanza-thead-font-color);
   }
   100% {
-    box-shadow: 9993px 0 0 0 var(--togostanza-tbody-font-color), 9999px 0 0 0 var(--togostanza-tbody-font-color), 10005px 0 0 0 var(--togostanza-tbody-font-color);
+    box-shadow: 9993px 0 0 0 var(--togostanza-thead-font-color), 9999px 0 0 0 var(--togostanza-thead-font-color), 10005px 0 0 0 var(--togostanza-thead-font-color);
   }
 }

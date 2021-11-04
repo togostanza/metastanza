@@ -1,10 +1,8 @@
-import { S as Stanza, b as appendCustomCss, c as defineStanzaElement } from './index-e0b42b46.js';
-import { l as loadData } from './load-data-0c021b7f.js';
+import { S as Stanza, d as defineStanzaElement } from './index-28113ace.js';
+import { l as loadData } from './load-data-8f706a23.js';
 
 class HashTable extends Stanza {
   async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
-
     let dataset = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -60,8 +58,12 @@ var metadata = {
 	"@id": "hash-table",
 	"stanza:label": "Hash table",
 	"stanza:definition": "Hash table MetaStanza",
+	"stanza:type": "Stanza",
+	"stanza:display": "Table",
+	"stanza:provider": "",
 	"stanza:license": "MIT",
-	"stanza:author": "DBCLS",
+	"stanza:author": "reika0717",
+	"stanza:address": "hirahara@penqe.com",
 	"stanza:contributor": [
 ],
 	"stanza:created": "2021-03-18",
@@ -87,12 +89,6 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "custom-css-url",
-		"stanza:example": "",
-		"stanza:description": "Stylesheet(css file) URL to override current style",
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
 		"stanza:example": 0,
@@ -114,7 +110,7 @@ var metadata = {
 		"stanza:description": "Capitalize the acronym and convert underscore to blank"
 	}
 ],
-	"stanza:menu-placement": "bottom-right",
+	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
 		"stanza:key": "--column-count",

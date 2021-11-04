@@ -5,8 +5,12 @@
   "@id": "barchart",
   "stanza:label": "Barchart",
   "stanza:definition": "Barchart MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "DBCLS",
+  "stanza:author": "c_nakashima",
+  "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
   "stanza:created": "2020-11-06",
   "stanza:updated": "2020-11-06",
@@ -67,12 +71,6 @@
       "stanza:key": "legend-title",
       "stanza:example": "",
       "stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "custom-css-url",
-      "stanza:example": "",
-      "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
     },
     {
@@ -228,9 +226,22 @@
       "stanza:type": "number",
       "stanza:example": 18,
       "stanza:description": "Padding between chart and legend"
+    },
+    {
+      "stanza:key": "metastanza-menu-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Placement of the menu button"
     }
   ],
-  "stanza:menu-placement": "bottom-right",
+  "stanza:about-link-placement": "bottom-right",
   "stanza:style": [
     {
       "stanza:key": "--togostanza-series-0-color",
