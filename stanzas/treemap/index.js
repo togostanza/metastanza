@@ -27,7 +27,7 @@ export default class TreeMapStanza extends Stanza {
     const colorScale = this.params["color-scale"];
     const logScale = this.params["log-scale"];
     const borderWidth = this.params["border-width"];
-
+    const backgroundColor = this.params["background-color"];
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -36,19 +36,10 @@ export default class TreeMapStanza extends Stanza {
     this.renderTemplate({ template: "stanza.html.hbs" });
 
     // filter out all elements with n=0
-
     const filteredData = data.filter(
       (item) => (item.children && !item.n) || (item.n && item.n > 0)
     );
 
-    // if (logScale) {
-    //   filteredData = filteredData.map((item) => {
-    //     if (item.n) {
-    //       return { ...item, n: transformValue(logScale, item.n) };
-    //     }
-    //     return item;
-    //   });
-    // }
     //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
     const rootElemIndexes = [];
     for (let i = 0; i < filteredData.length - 1; i++) {
@@ -71,14 +62,10 @@ export default class TreeMapStanza extends Stanza {
       height,
       colorScale,
       logScale,
-
       borderWidth,
-      styles: {
-        "background-color": css("--togostanza-background-color"),
-      },
+      backgroundColor,
     };
 
-    //draw(treeMapElement, data, width, height, colorScale);
     draw(treeMapElement, filteredData, opts);
   }
 }
@@ -94,29 +81,12 @@ function transformValue(logScale, value) {
   return value;
 }
 
-function transformValueBack(logScale, value) {
-  if (!value) {
-    return null;
-  }
-  if (logScale) {
-    return Math.exp(value);
-  }
-  return value;
-}
-
 function draw(el, dataset, opts) {
   const iconWidth = 10;
   const iconHeight = 10;
 
-  const {
-    width,
-    height,
-    logScale,
-    colorScale,
-    styles,
-
-    borderWidth,
-  } = opts;
+  const { width, height, logScale, colorScale, backgroundColor, borderWidth } =
+    opts;
   // create nested structure by item.parent
   const nested = d3
     .stratify()
@@ -167,29 +137,25 @@ function draw(el, dataset, opts) {
     );
 
   const rootHeight = 30;
-  //create svg and add outline
+
   const svg = d3
     .select(el)
     .append("svg")
     .attr("viewBox", [0, -rootHeight, width, height + rootHeight]);
-  // .style("font-family", styles["--togostanza-font-family"])
-  // .attr(
-  //   "style",
-  //   `outline: ${styles["border-width"]}px solid ${styles["edge-color"]};`
-  // );
 
   //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested));
-  // svg
-  //   .append("rect")
-  //   .attr("width", width)
-  //   .attr("height", height + 30)
-  //   .attr("class", "svg-border");
 
   function render(group, root, zoomInOut) {
     const dMax = d3.max(root, (d) => d.value || 1);
     const dMin = d3.min(root, (d) => d.value || 1);
-
+    group
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", -rootHeight)
+      .attr("width", width)
+      .attr("height", height + rootHeight)
+      .attr("fill", backgroundColor);
     //add g's for every node
     const node = group
       .selectAll("g")
@@ -221,25 +187,8 @@ function draw(el, dataset, opts) {
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
       .attr("fill", (d) =>
-        d === root
-          ? styles["background-color"]
-          : color((d.value - dMin) / (dMax - dMin))
+        d === root ? backgroundColor : color((d.value - dMin) / (dMax - dMin))
       );
-
-    // //add expand icons
-    // node
-    //   .filter((d) => d !== root || !d.children)
-    //   .append("image")
-    //   .attr("x", (d, i, nodes) => {
-    //     console.log(
-    //       d3.select(nodes[i].parentNode).select("rect")
-    //     );
-    //     return x((d.x1 - d.x0) / 2) - iconWidth / 2;
-    //   })
-    //   .attr("y", (d) => y((d.y1 - d.y0) / 2) - iconHeight / 2)
-    //   .attr("width", 10)
-    //   .attr("height", 10)
-    //   .attr("href", expandSvg);
 
     //add clip paths to nodes to trim text
     node
@@ -253,36 +202,22 @@ function draw(el, dataset, opts) {
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
       .attr("font-weight", (d) => (d === root ? "bold" : null))
-      .attr("y", (d) => `${d.y0 + 10}px`)
+      .attr("y", (d) => "1.5em") //${d.y0 + 10}px
       .attr("x", "0.5em")
-
-      //.selectAll("tspan")
-      // .data((d) => {
-      //   return d === root ? name(d) : d.data.data.label;
-      //   // .split(/(?=[A-Z][^A-Z])/g)
-      //   // .concat(format(d.value));
-      // })
-      // .join("tspan")
-      // .attr("x", 3)
-      // .attr(
-      //   "y",
-      //   (d, i, nodes) => `${(i === nodes.length - 1) * 0.3 + 1.1 + i * 0.9}em`
-      // )
-      // .attr("fill-opacity", (d, i, nodes) =>
-      //   i === nodes.length - 1 ? 0.7 : null
-      // )
-      // .attr("font-weight", (d, i, nodes) =>
-      //   i === nodes.length - 1 ? "normal" : null
-      // )
       .text((d) => {
         if (d === root) {
           return name(d);
         } else {
-          return `${d.data.data.label}: ${format(
-            d3.sum(d, (d) => d?.data?.data?.n || 0)
-          )}`;
+          return `${d.data.data.label}`;
         }
       });
+
+    node
+      .filter((d) => d !== root && d.children)
+      .append("image")
+      .attr("width", 10)
+      .attr("height", 10)
+      .attr("href", expandSvg);
 
     //adjust rectangles positions
     group.call(position, root, true, zoomInOut);
@@ -298,16 +233,7 @@ function draw(el, dataset, opts) {
       //nodes[i] is rect
       const text = d3.select(nodes[i].parentNode).select("text");
 
-      let rectWidth = nodes[i].width.animVal.value; //d3.select(nodes[i]).select("rect").attr("width");
-
-      // if (zoomInOut === "zoomout" && d === root) {
-
-      //   //rectWidth = d.node().parentNode.width.baseVal.value; //d3.select(nodes[i]).select("rect").attr("width");
-      // }
-
-      // here is d before animation. animVal - is d in animation
-      //get to know if this is a root element (white bar at the top)
-      const isRoot = d === root; // Math.round(rectWidth) === Math.round(width);
+      const isRoot = d === root;
 
       let maxWidth;
       if (isRoot) {
@@ -337,7 +263,6 @@ function draw(el, dataset, opts) {
       while ((word = words.pop())) {
         line.push(word);
         tspan.text(line.join(isRoot ? "" : " "));
-
         if (tspan.node().getComputedTextLength() > maxWidth - 5) {
           if (isRoot) {
             line.shift();
@@ -361,29 +286,82 @@ function draw(el, dataset, opts) {
           }
         }
       }
+      text
+        .append("tspan")
+        .attr("dy", "1.5em")
+        .style("font", "bold 7px sans-serif")
+        .style("fill", "rgba(0,0,0,0.75)")
+        .attr("x", "1em")
+        .text((d) => format(d3.sum(d, (d) => d?.data?.data?.n || 0)));
     }
   }
 
   //place elements according to data
   function position(group, root, isFirstRender, zoomInOut) {
-    group
+    const a = group
       .selectAll("g")
       .attr("transform", (d) =>
         d === root
           ? `translate(0,${-rootHeight})`
-          : `translate(${x(d.x0)},${y(d.y0)})`
-      )
-      .select("rect")
-      .attr("width", (d) =>
-        d === root
-          ? width
-          : x(d.x1) === width
-          ? x(d.x1) - x(d.x0)
-          : x(d.x1) - x(d.x0) - borderWidth / 2
-      )
-      .attr("height", (d) =>
-        d === root ? rootHeight : y(d.y1) - y(d.y0) - borderWidth / 2
-      )
+          : `translate(${x(d.x0) + borderWidth},${y(d.y0) + borderWidth})`
+      );
+
+    group
+      .selectAll("image")
+      .attr("x", (d) => {
+        if (x(d.x0) === width) {
+          return (
+            (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - 2 * borderWidth
+          );
+        } else {
+          return (
+            (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - borderWidth
+          );
+        }
+      })
+      .attr("y", (d) => {
+        if (y(d.y0) === height) {
+          return (
+            (y(d.y0) + y(d.y1) - 2 * borderWidth) / 2 - y(d.y0) - iconHeight / 2
+          );
+        } else {
+          return (
+            (y(d.y0) + y(d.y1) - borderWidth) / 2 - y(d.y0) - iconHeight / 2
+          );
+        }
+      });
+
+    a.select("rect")
+      .attr("width", (d) => {
+        if (d === root) {
+          return width;
+        } else if (x(d.x1) === width) {
+          if (x(d.x1) - x(d.x0) - 2 * borderWidth < 0) {
+            return 0;
+          }
+          return x(d.x1) - x(d.x0) - 2 * borderWidth;
+        } else {
+          if (x(d.x1) - x(d.x0) - borderWidth < 0) {
+            return 0;
+          }
+          return x(d.x1) - x(d.x0) - borderWidth;
+        }
+      })
+      .attr("height", (d) => {
+        if (d === root) {
+          return rootHeight;
+        } else if (y(d.y1) === height) {
+          if (y(d.y1) - y(d.y0) - 2 * borderWidth < 0) {
+            return 0;
+          }
+          return y(d.y1) - y(d.y0) - 2 * borderWidth;
+        } else {
+          if (y(d.y1) - y(d.y0) - borderWidth < 0) {
+            return 0;
+          }
+          return y(d.y1) - y(d.y0) - borderWidth;
+        }
+      })
       .each(wrap.bind(this, root, isFirstRender, zoomInOut));
   }
 
@@ -428,7 +406,7 @@ function draw(el, dataset, opts) {
           .remove()
           .attrTween("opacity", () => d3.interpolate(1, 0))
           .call(position, d, false)
-      ) //when zooming out at first parent has width = width, so wrap thinks its root
+      )
       .call((t) => group1.transition(t).call(position, d.parent, false));
   }
 }
