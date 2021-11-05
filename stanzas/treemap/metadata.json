@@ -55,20 +55,14 @@
       "stanza:description": "Height"
     },
     {
-      "stanza:key": "border-width",
+      "stanza:key": "gap-width",
       "stanza:type": "number",
       "stanza:example": 2,
-      "stanza:description": "Border width"
+      "stanza:description": "Gap width"
     },
 
     {
-      "stanza:key": "background-color",
-      "stanza:type": "color",
-      "stanza:example": "#eee",
-      "stanza:description": "Background color"
-    },
-    {
-      "stanza:key": "color-scale",
+      "stanza:key": "color-scheme",
       "stanza:type": "single-choice",
       "stanza:choice": [
         "schemeCategory10",
@@ -82,16 +76,22 @@
         "schemePaired"
       ],
       "stanza:example": "schemePastel1",
-      "stanza:description": "Color scale to display"
+      "stanza:description": "Color scheme selection"
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "background-color",
+      "stanza:type": "color",
+      "stanza:example": "white",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family"
+      "stanza:description": "Label font family"
     },
     {
       "stanza:key": "--togostanza-label-font-color",
@@ -101,9 +101,39 @@
     },
     {
       "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 11,
+      "stanza:type": "string",
+      "stanza:default": "11px",
       "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-weight",
+      "stanza:type": "string",
+      "stanza:default": "normal",
+      "stanza:description": "Label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Number label font family"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#ebebeb",
+      "stanza:description": "Number label font color"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-size",
+      "stanza:type": "string",
+      "stanza:default": "7px",
+      "stanza:description": "Number label font size"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-weight",
+      "stanza:type": "string",
+      "stanza:default": "normal",
+      "stanza:description": "Number label font weight"
     }
   ],
   "stanza:incomingEvent": [],

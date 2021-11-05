@@ -24,10 +24,11 @@ export default class TreeMapStanza extends Stanza {
 
     const width = this.params["width"];
     const height = this.params["height"];
-    const colorScale = this.params["color-scale"];
+    const colorScale = this.params["color-scheme"];
     const logScale = this.params["log-scale"];
-    const borderWidth = this.params["border-width"];
-    const backgroundColor = this.params["background-color"];
+    const borderWidth = this.params["gap-width"];
+    const backgroundColor = css("background-color");
+
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -97,9 +98,16 @@ function draw(el, dataset, opts) {
       return d.parent;
     })(dataset);
 
-  const x = d3.scaleLinear().rangeRound([0, width]);
-  const y = d3.scaleLinear().rangeRound([0, height]);
+  const rootHeight = 30;
 
+  let adjustedHeight = height - rootHeight;
+  if (height === rootHeight) {
+    adjustedHeight = 10;
+  }
+
+  const x = d3.scaleLinear().rangeRound([0, width]);
+  const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
+  //const yMinusRoot = d3.scaleLinear().rangeRound([0, height-rootHeight]);
   // make path-like string for node
   const name = (d) => {
     if (d.data.data.id === -1) {
@@ -119,12 +127,12 @@ function draw(el, dataset, opts) {
   const color = d3.scaleOrdinal(d3[colorScale]);
 
   function tile(node, x0, y0, x1, y1) {
-    d3.treemapBinary(node, 0, 0, width, height);
+    d3.treemapBinary(node, 0, 0, width, adjustedHeight);
     for (const child of node.children) {
       child.x0 = x0 + (child.x0 / width) * (x1 - x0);
       child.x1 = x0 + (child.x1 / width) * (x1 - x0);
-      child.y0 = y0 + (child.y0 / height) * (y1 - y0);
-      child.y1 = y0 + (child.y1 / height) * (y1 - y0);
+      child.y0 = y0 + (child.y0 / adjustedHeight) * (y1 - y0);
+      child.y1 = y0 + (child.y1 / adjustedHeight) * (y1 - y0);
     }
   }
 
@@ -136,12 +144,16 @@ function draw(el, dataset, opts) {
         .sort((a, b) => b.value - a.value)
     );
 
-  const rootHeight = 30;
-
   const svg = d3
     .select(el)
+    .append("div")
+    .style("width", width + "px")
+    .style("height", height + "px")
+    .style("overflow", "hidden")
+    //.style("position", "absolute")
+
     .append("svg")
-    .attr("viewBox", [0, -rootHeight, width, height + rootHeight]);
+    .attr("viewBox", [0, 0, width, height]); // + rootHeight]);
 
   //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested));
@@ -152,10 +164,11 @@ function draw(el, dataset, opts) {
     group
       .append("rect")
       .attr("x", 0)
-      .attr("y", -rootHeight)
-      .attr("width", width)
-      .attr("height", height + rootHeight)
-      .attr("fill", backgroundColor);
+      .attr("y", 0) //`${-rootHeight}px`)
+      .attr("width", `${width}px`)
+      .attr("height", `${height}px`) // + rootHeight}px`)
+      .attr("class", "background-color");
+    //.attr("fill", backgroundColor);
     //add g's for every node
     const node = group
       .selectAll("g")
@@ -182,13 +195,22 @@ function draw(el, dataset, opts) {
             }`
       );
 
+    let classToAdd;
     //add rectangle for every node
     node
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
+
       .attr("fill", (d) =>
-        d === root ? backgroundColor : color((d.value - dMin) / (dMax - dMin))
+        d !== root ? backgroundColor : color((d.value - dMin) / (dMax - dMin))
       );
+
+    group.selectAll("rect").attr("class", (d, i, nodes) => {
+      if (d === root) {
+        return "background-color";
+      }
+      return "";
+    });
 
     //add clip paths to nodes to trim text
     node
@@ -201,9 +223,9 @@ function draw(el, dataset, opts) {
     const txt = node
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
-      .attr("font-weight", (d) => (d === root ? "bold" : null))
+      //.attr("font-weight", (d) => (d === root ? "bold" : null))
       .attr("y", (d) => "1.5em") //${d.y0 + 10}px
-      .attr("x", "0.5em")
+      .attr("x", "0.5rem")
       .text((d) => {
         if (d === root) {
           return name(d);
@@ -249,7 +271,7 @@ function draw(el, dataset, opts) {
       let word,
         line = [],
         lineNumber = 0,
-        lineHeight = 1.1, // ems
+        lineHeight = 1.15, // rems
         x = text.attr("x") || 0,
         y = text.attr("y") || 0,
         dy = 0,
@@ -266,7 +288,7 @@ function draw(el, dataset, opts) {
         if (tspan.node().getComputedTextLength() > maxWidth - 5) {
           if (isRoot) {
             line.shift();
-            line[0] = `...${line[0]}`;
+            line[0] = `..${line[0]}`;
             tspan.text(line.join(""));
           } else {
             if (line.length < 2) {
@@ -288,23 +310,24 @@ function draw(el, dataset, opts) {
       }
       text
         .append("tspan")
-        .attr("dy", "1.5em")
-        .style("font", "bold 7px sans-serif")
-        .style("fill", "rgba(0,0,0,0.75)")
-        .attr("x", "1em")
+        .attr("class", "number-label")
+        .attr("dy", "1.6em")
+        // .style("font", "noraml 7px sans-serif")
+        // .style("fill", "rgba(0,0,0,0.75)")
+        .attr("x", "0.5rem")
         .text((d) => format(d3.sum(d, (d) => d?.data?.data?.n || 0)));
     }
   }
 
   //place elements according to data
   function position(group, root, isFirstRender, zoomInOut) {
-    const a = group
-      .selectAll("g")
-      .attr("transform", (d) =>
-        d === root
-          ? `translate(0,${-rootHeight})`
-          : `translate(${x(d.x0) + borderWidth},${y(d.y0) + borderWidth})`
-      );
+    const a = group.selectAll("g").attr("transform", (d) =>
+      d === root
+        ? `translate(0,0)` //${-rootHeight})`
+        : `translate(${x(d.x0) + borderWidth},${
+            y(d.y0) + rootHeight + borderWidth
+          })`
+    );
 
     group
       .selectAll("image")
@@ -350,7 +373,7 @@ function draw(el, dataset, opts) {
       .attr("height", (d) => {
         if (d === root) {
           return rootHeight;
-        } else if (y(d.y1) === height) {
+        } else if (y(d.y1) === adjustedHeight) {
           if (y(d.y1) - y(d.y0) - 2 * borderWidth < 0) {
             return 0;
           }
