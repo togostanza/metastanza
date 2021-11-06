@@ -8,6 +8,7 @@ import {
   downloadPngMenuItem,
   appendCustomCss,
 } from '@/lib/metastanza_utils.js';
+import ToolTip from '@/lib/ToolTip';
 
 export default class VennStanza extends Stanza {
 
@@ -17,6 +18,7 @@ export default class VennStanza extends Stanza {
   // dataLabels;
   // numberOfData;
   // venn;
+  // tooltip;
 
   menu() {
     return [
@@ -32,7 +34,11 @@ export default class VennStanza extends Stanza {
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
-    //get data
+    // tooltip
+    this.tooltip = document.createElement('togostanza--tooltip');
+    this.root.append(this.tooltip);
+
+    // get data
     this.data = await this.getData();
     console.log(this.data)
     this.totals = this.data.map(datum => {
@@ -107,8 +113,9 @@ export default class VennStanza extends Stanza {
       // tooltip
       group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
-      this.setTooltip(group);
+      // this.setTooltip(group);
     });
+    this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
 
     // legend
     this.makeLegend(
@@ -176,7 +183,7 @@ export default class VennStanza extends Stanza {
       // tooltip
       group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
-      this.setTooltip(group);
+      // this.setTooltip(group);
       // legend
       legendData.push({
         id: group.dataset.vennSets,
@@ -186,7 +193,7 @@ export default class VennStanza extends Stanza {
         node: group
       });
     });
-    console.log(legendData)
+    this.tooltip.setup(container.querySelectorAll('[data-tooltip]'));
 
     // legend
     this.makeLegend(
@@ -297,31 +304,6 @@ export default class VennStanza extends Stanza {
         leader.classList.remove('-show');
       });
     });
-  }
-
-  setTooltip(node) {
-    let tooltip = this.root.querySelector('#MetaStanzaToolTip');
-    if (!tooltip) {
-      tooltip = document.createElement('div');
-      tooltip.id = 'MetaStanzaToolTip';
-      this.root.append(tooltip);
-    }
-    if (node.dataset.tooltip) {
-      node.addEventListener('mouseover', () => {
-        const rect = node.getBoundingClientRect();
-        if (node.dataset.tooltipHtml === 'true') {
-          tooltip.innerHTML = node.dataset.tooltip;
-        } else {
-          tooltip.textContent = node.dataset.tooltip;
-        }
-        tooltip.style.left = (rect.x + rect.width * .5) + 'px';
-        tooltip.style.top = (rect.y) + 'px';
-        tooltip.classList.add('-show');
-      });
-      node.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('-show');
-      });
-    }
   }
 
   async getData() {
