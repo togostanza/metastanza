@@ -82,9 +82,9 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "background-color",
+      "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:example": "white",
+      "stanza:default": "#eee",
       "stanza:description": "Background color"
     },
     {

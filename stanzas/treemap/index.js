@@ -107,7 +107,12 @@ function draw(el, dataset, opts) {
 
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
-  //const yMinusRoot = d3.scaleLinear().rangeRound([0, height-rootHeight]);
+
+  const nestedX = (startX, nestedWidth) =>
+    d.scaleLinear().rangeRound([startX, nestedWidth]);
+  const nestedY = (startY, nestedHeight) =>
+    d.scaleLinear().rangeRound([startY, nestedHeight]);
+
   // make path-like string for node
   const name = (d) => {
     if (d.data.data.id === -1) {
@@ -156,7 +161,7 @@ function draw(el, dataset, opts) {
     .attr("viewBox", [0, 0, width, height]); // + rootHeight]);
 
   //create g insige svg and generate all contents inside
-  let group = svg.append("g").call(render, treemap(nested));
+  let group = svg.append("g").call(render, treemap(nested), null);
 
   function render(group, root, zoomInOut) {
     const dMax = d3.max(root, (d) => d.value || 1);
@@ -167,13 +172,21 @@ function draw(el, dataset, opts) {
       .attr("y", 0) //`${-rootHeight}px`)
       .attr("width", `${width}px`)
       .attr("height", `${height}px`) // + rootHeight}px`)
-      .attr("class", "background-color");
-    //.attr("fill", backgroundColor);
+      .attr("style", "fill: var(--togostanza-background-color)");
+
     //add g's for every node
     const node = group
       .selectAll("g")
       .data(root.children.concat(root))
       .join("g");
+
+    // node
+    //   .selectAll("g")
+    //   .data((d) => d.children)
+    //   .join("g")
+    //   .attr("transform", (d) => `translate(${d.x0},${d.y0})`)
+    //   .append("rect")
+    //   .attr("fill", (d) => color((d.value - dMin) / (dMax - dMin)));
 
     node
       .filter((d) => {
@@ -195,22 +208,27 @@ function draw(el, dataset, opts) {
             }`
       );
 
-    let classToAdd;
     //add rectangle for every node
     node
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
 
-      .attr("fill", (d) =>
-        d !== root ? backgroundColor : color((d.value - dMin) / (dMax - dMin))
+      .attr(
+        "style",
+        (d) =>
+          `fill: ${
+            d === root
+              ? "var(--togostanza-background-color)"
+              : color((d.value - dMin) / (dMax - dMin))
+          }`
       );
 
-    group.selectAll("rect").attr("class", (d, i, nodes) => {
-      if (d === root) {
-        return "background-color";
-      }
-      return "";
-    });
+    // group.selectAll("rect").attr("class", (d, i, nodes) => {
+    //   if (d === root) {
+    //     return "background-color";
+    //   }
+    //   return "";
+    // });
 
     //add clip paths to nodes to trim text
     node
