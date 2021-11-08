@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <input :id="id" type="checkbox" :name="id" />
   <label

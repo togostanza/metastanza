@@ -56,6 +56,7 @@
                 :line-clamp="cell.lineClamp"
               />
             </span>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-else-if="cell.unescape" v-html="cell.value"></span>
             <span v-else>{{ cell.value }}</span>
           </td>

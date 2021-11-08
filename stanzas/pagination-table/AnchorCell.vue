@@ -7,6 +7,7 @@
       :value="value"
     />
   </a>
+  <!-- eslint-disable-next-line vue/no-v-html -->
   <a v-if="unescape && !lineClamp" :href="href" :target="target" v-html="value">
   </a>
   <a v-else :href="href" :target="target">

@@ -1,13 +1,14 @@
 import Stanza from "togostanza/stanza";
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+// import loadData from "@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 
-export default class Treemap extends Stanza { //TODO ここのclass名はスタンザ名にする必要があります
+export default class Treemap extends Stanza {
+  //TODO ここのclass名はスタンザ名にする必要があります
   menu() {
     return [
       downloadSvgMenuItem(this, "tree"),
@@ -18,7 +19,7 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    // const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width,height,padding
     const width = 960;
@@ -43,17 +44,13 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
         value: "squarify",
         bind: {
           input: "select",
-          options: [
-            "squarify",
-            "binary",
-            "slicedice"
-          ]
-        }
+          options: ["squarify", "binary", "slicedice"],
+        },
       },
       {
         name: "aspectRatio",
         value: "1.6",
-        bind: {input: "range", min: 1, max: 5, step: 0.1}
+        bind: { input: "range", min: 1, max: 5, step: 0.1 },
       },
     ];
 
@@ -75,7 +72,7 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
             round: true,
             method: { signal: "layout" },
             ratio: { signal: "aspectRatio" },
-            size: [{ signal: "width" }, { signal: "height" }]
+            size: [{ signal: "width" }, { signal: "height" }],
           },
         ],
       },
@@ -83,9 +80,9 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
         name: "nodes",
         source: "tree",
         transform: [
-          { 
+          {
             type: "filter",
-            expr: "datum.children" 
+            expr: "datum.children",
           },
         ],
       },
@@ -93,9 +90,9 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
         name: "leaves",
         source: "tree",
         transform: [
-          { 
+          {
             type: "filter",
-            expr: "!datum.children" 
+            expr: "!datum.children",
           },
         ],
       },
@@ -108,23 +105,39 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
         type: "ordinal",
         domain: { data: "nodes", field: "name" },
         range: [
-          "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#e6550d",
-          "#fd8d3c", "#fdae6b", "#fdd0a2", "#31a354", "#74c476",
-          "#a1d99b", "#c7e9c0", "#756bb1", "#9e9ac8", "#bcbddc",
-          "#dadaeb", "#636363", "#969696", "#bdbdbd", "#d9d9d9"
+          "#3182bd",
+          "#6baed6",
+          "#9ecae1",
+          "#c6dbef",
+          "#e6550d",
+          "#fd8d3c",
+          "#fdae6b",
+          "#fdd0a2",
+          "#31a354",
+          "#74c476",
+          "#a1d99b",
+          "#c7e9c0",
+          "#756bb1",
+          "#9e9ac8",
+          "#bcbddc",
+          "#dadaeb",
+          "#636363",
+          "#969696",
+          "#bdbdbd",
+          "#d9d9d9",
         ],
       },
       {
         name: "size",
         type: "ordinal",
         domain: [0, 1, 2, 3],
-        range: [256, 28, 20, 14]
+        range: [256, 28, 20, 14],
       },
       {
         name: "opacity",
         type: "ordinal",
         domain: [0, 1, 2, 3],
-        range: [0.15, 0.5, 0.8, 1.0]
+        range: [0.15, 0.5, 0.8, 1.0],
       },
     ];
 
@@ -172,12 +185,12 @@ export default class Treemap extends Stanza { //TODO ここのclass名はスタ�
         encode: {
           enter: {
             font: { value: "Helvetica Neue, Arial" },
-            align: { value: "center"},
-            baseline: { value: "middle"},
-            fill: { value: "#000"},
-            text: { field: "name"},
-            fontSize: { scale: "size", field: "depth"},
-            fillOpacity: {scale: "opacity", field: "depth"},
+            align: { value: "center" },
+            baseline: { value: "middle" },
+            fill: { value: "#000" },
+            text: { field: "name" },
+            fontSize: { scale: "size", field: "depth" },
+            fillOpacity: { scale: "opacity", field: "depth" },
           },
           update: {
             x: { signal: "0.5 * (datum.x0 + datum.x1)" },

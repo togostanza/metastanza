@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="wrapper" :style="`width: ${width};`">
     <div class="tableOptionWrapper">
