@@ -8,7 +8,7 @@ import {
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
 import shadeColor from "./pSBC";
-import expandSvg from "./assets/expand-solid.svg";
+//import expandSvg from "./assets/expand-solid.svg";
 
 export default class TreeMapStanza extends Stanza {
   menu() {
@@ -24,10 +24,16 @@ export default class TreeMapStanza extends Stanza {
 
     const width = this.params["width"];
     const height = this.params["height"];
-    const colorScale = this.params["color-scheme"];
+    //const colorScale = this.params["color-scheme"];
     const logScale = this.params["log-scale"];
     const borderWidth = this.params["gap-width"];
-    const backgroundColor = css("background-color");
+    //const backgroundColor = css("background-color");
+
+    const colorScale = [];
+
+    for (let i = 1; i <= 6; i++) {
+      colorScale.push(this.params["color-" + i]);
+    }
 
     const data = await loadData(
       this.params["data-url"],
@@ -64,7 +70,6 @@ export default class TreeMapStanza extends Stanza {
       colorScale,
       logScale,
       borderWidth,
-      backgroundColor,
     };
 
     draw(treeMapElement, filteredData, opts);
@@ -86,8 +91,7 @@ function draw(el, dataset, opts) {
   const iconWidth = 10;
   const iconHeight = 10;
 
-  const { width, height, logScale, colorScale, backgroundColor, borderWidth } =
-    opts;
+  const { width, height, logScale, colorScale, borderWidth } = opts;
   // create nested structure by item.parent
   const nested = d3
     .stratify()
@@ -108,11 +112,6 @@ function draw(el, dataset, opts) {
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
 
-  const nestedX = (startX, nestedWidth) =>
-    d.scaleLinear().rangeRound([startX, nestedWidth]);
-  const nestedY = (startY, nestedHeight) =>
-    d.scaleLinear().rangeRound([startY, nestedHeight]);
-
   // make path-like string for node
   const name = (d) => {
     if (d.data.data.id === -1) {
@@ -129,7 +128,7 @@ function draw(el, dataset, opts) {
 
   const format = d3.format(",d");
 
-  const color = d3.scaleOrdinal(d3[colorScale]);
+  const color = d3.scaleOrdinal(colorScale);
 
   function tile(node, x0, y0, x1, y1) {
     d3.treemapBinary(node, 0, 0, width, adjustedHeight);
@@ -213,15 +212,15 @@ function draw(el, dataset, opts) {
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
 
-      .attr(
-        "style",
-        (d) =>
-          `fill: ${
-            d === root
-              ? "var(--togostanza-background-color)"
-              : color((d.value - dMin) / (dMax - dMin))
-          }`
-      );
+      .attr("style", (d) => {
+        console.log("value: ", d.value);
+        console.log("color: ", color(d.data.data.label));
+        return `fill: ${
+          d === root
+            ? "var(--togostanza-background-color)"
+            : color(d.data.data.label) //(d.value - dMin) / (dMax - dMin))
+        }`;
+      });
 
     //Add inner nodes
     const innerNode = node
@@ -238,7 +237,7 @@ function draw(el, dataset, opts) {
       .attr("fill", "none")
       .attr("stroke-width", 1)
       .attr("stroke", (d) => {
-        return shadeColor(color((d.parent.value - dMin) / (dMax - dMin)), -15);
+        return shadeColor(color(d.parent.data.data.label), -15); //(d.parent.value - dMin) / (dMax - dMin)), -15);
       });
 
     innerNode
@@ -314,7 +313,7 @@ function draw(el, dataset, opts) {
         maxWidth = width;
       } else {
         lineSeparator = /\s+/;
-        maxWidth = 60;
+        maxWidth = width / 6;
       }
 
       let words = text.text().split(lineSeparator).reverse();
@@ -389,6 +388,7 @@ function draw(el, dataset, opts) {
       }
     });
 
+    // Placing icons in the middle of nodes
     // group
     //   .selectAll("image")
     //   .attr("x", (d) => {

@@ -60,23 +60,41 @@
       "stanza:example": 2,
       "stanza:description": "Gap width"
     },
-
     {
-      "stanza:key": "color-scheme",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "schemeCategory10",
-        "schemeAccent",
-        "schemeDark2",
-        "schemePastel2",
-        "schemeSet2",
-        "schemeSet1",
-        "schemePastel1",
-        "schemeSet3",
-        "schemePaired"
-      ],
-      "stanza:example": "schemePastel1",
-      "stanza:description": "Color scheme selection"
+      "stanza:key": "color-1",
+      "stanza:type": "color",
+      "stanza:example": "#6590e6",
+      "stanza:description": "Color 1"
+    },
+    {
+      "stanza:key": "color-2",
+      "stanza:type": "color",
+      "stanza:example": "#3ac9b6",
+      "stanza:description": "Color 2"
+    },
+    {
+      "stanza:key": "color-3",
+      "stanza:type": "color",
+      "stanza:example": "#9ede2f",
+      "stanza:description": "Color 3"
+    },
+    {
+      "stanza:key": "color-4",
+      "stanza:type": "color",
+      "stanza:example": "#F5DA64",
+      "stanza:description": "Color 4"
+    },
+    {
+      "stanza:key": "color-5",
+      "stanza:type": "color",
+      "stanza:example": "#F57F5B",
+      "stanza:description": "Color 5"
+    },
+    {
+      "stanza:key": "color-6",
+      "stanza:type": "color",
+      "stanza:example": "#F75976",
+      "stanza:description": "Color 6"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -96,7 +114,7 @@
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#333333",
+      "stanza:default": "#4E5059",
       "stanza:description": "Label font color"
     },
     {
@@ -120,7 +138,7 @@
     {
       "stanza:key": "--togostanza-number-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#333333",
+      "stanza:default": "#4E5059",
       "stanza:description": "Number label font color"
     },
     {
