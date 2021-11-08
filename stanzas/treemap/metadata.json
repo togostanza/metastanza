@@ -84,7 +84,7 @@
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:default": "#eee",
+      "stanza:default": "#eeeeee",
       "stanza:description": "Background color"
     },
     {
@@ -120,7 +120,7 @@
     {
       "stanza:key": "--togostanza-number-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#ebebeb",
+      "stanza:default": "#333333",
       "stanza:description": "Number label font color"
     },
     {

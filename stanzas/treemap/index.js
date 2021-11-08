@@ -7,7 +7,7 @@ import {
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
-
+import shadeColor from "./pSBC";
 import expandSvg from "./assets/expand-solid.svg";
 
 export default class TreeMapStanza extends Stanza {
@@ -223,12 +223,40 @@ function draw(el, dataset, opts) {
           }`
       );
 
-    // group.selectAll("rect").attr("class", (d, i, nodes) => {
-    //   if (d === root) {
-    //     return "background-color";
-    //   }
-    //   return "";
-    // });
+    //Add inner nodes
+    const innerNode = node
+      .filter((d) => {
+        return d !== root && d.children;
+      })
+      .selectAll("g")
+      .data((d) => d.children)
+      .join("g");
+
+    innerNode
+      .append("rect")
+      .attr("id", (d) => (d.leafUid = uid("leaf")).id)
+      .attr("fill", "none")
+      .attr("stroke-width", 1)
+      .attr("stroke", (d) => {
+        return shadeColor(color((d.parent.value - dMin) / (dMax - dMin)), -15);
+      });
+
+    innerNode
+      .append("clipPath")
+      .attr("id", (d) => (d.clipUid = uid("clip")).id)
+      .append("use")
+      .attr("href", (d) => d.leafUid.href);
+
+    // innerNode
+    //   .append("text")
+    //   .attr("clipPath", (d) => d.clipUid)
+    //   .attr("x", "0.5rem")
+    //   .attr("y", "1.5rem")
+    //   .text((d) => d.data.data.label)
+    //   .attr("stroke", "none")
+    //   .attr("fill", (d) =>
+    //     shadeColor(color((d.parent.value - dMin) / (dMax - dMin)), -20)
+    //   );
 
     //add clip paths to nodes to trim text
     node
@@ -252,12 +280,13 @@ function draw(el, dataset, opts) {
         }
       });
 
-    node
-      .filter((d) => d !== root && d.children)
-      .append("image")
-      .attr("width", 10)
-      .attr("height", 10)
-      .attr("href", expandSvg);
+    // append expand icon
+    // node
+    //   .filter((d) => d !== root && d.children)
+    //   .append("image")
+    //   .attr("width", 10)
+    //   .attr("height", 10)
+    //   .attr("href", expandSvg);
 
     //adjust rectangles positions
     group.call(position, root, true, zoomInOut);
@@ -272,6 +301,10 @@ function draw(el, dataset, opts) {
 
       //nodes[i] is rect
       const text = d3.select(nodes[i].parentNode).select("text");
+
+      if (text.empty()) {
+        return;
+      }
 
       const isRoot = d === root;
 
@@ -302,6 +335,7 @@ function draw(el, dataset, opts) {
 
       while ((word = words.pop())) {
         line.push(word);
+
         tspan.text(line.join(isRoot ? "" : " "));
         if (tspan.node().getComputedTextLength() > maxWidth - 5) {
           if (isRoot) {
@@ -326,6 +360,7 @@ function draw(el, dataset, opts) {
           }
         }
       }
+
       text
         .append("tspan")
         .attr("class", "number-label")
@@ -339,38 +374,45 @@ function draw(el, dataset, opts) {
 
   //place elements according to data
   function position(group, root, isFirstRender, zoomInOut) {
-    const a = group.selectAll("g").attr("transform", (d) =>
-      d === root
-        ? `translate(0,0)` //${-rootHeight})`
-        : `translate(${x(d.x0) + borderWidth},${
-            y(d.y0) + rootHeight + borderWidth
-          })`
-    );
+    const a = group.selectAll("g").attr("transform", (d) => {
+      if (d === root) {
+        return `translate(0,0)`;
+      } else if (d.parent !== root) {
+        console.log(d.data.data.label);
+        return `translate(${x(d.x0) - x(d.parent.x0)},${
+          y(d.y0) - y(d.parent.y0)
+        })`;
+      } else {
+        return `translate(${x(d.x0) + borderWidth},${
+          y(d.y0) + rootHeight + borderWidth
+        })`;
+      }
+    });
 
-    group
-      .selectAll("image")
-      .attr("x", (d) => {
-        if (x(d.x0) === width) {
-          return (
-            (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - 2 * borderWidth
-          );
-        } else {
-          return (
-            (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - borderWidth
-          );
-        }
-      })
-      .attr("y", (d) => {
-        if (y(d.y0) === height) {
-          return (
-            (y(d.y0) + y(d.y1) - 2 * borderWidth) / 2 - y(d.y0) - iconHeight / 2
-          );
-        } else {
-          return (
-            (y(d.y0) + y(d.y1) - borderWidth) / 2 - y(d.y0) - iconHeight / 2
-          );
-        }
-      });
+    // group
+    //   .selectAll("image")
+    //   .attr("x", (d) => {
+    //     if (x(d.x0) === width) {
+    //       return (
+    //         (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - 2 * borderWidth
+    //       );
+    //     } else {
+    //       return (
+    //         (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - borderWidth
+    //       );
+    //     }
+    //   })
+    //   .attr("y", (d) => {
+    //     if (y(d.y0) === height) {
+    //       return (
+    //         (y(d.y0) + y(d.y1) - 2 * borderWidth) / 2 - y(d.y0) - iconHeight / 2
+    //       );
+    //     } else {
+    //       return (
+    //         (y(d.y0) + y(d.y1) - borderWidth) / 2 - y(d.y0) - iconHeight / 2
+    //       );
+    //     }
+    //   });
 
     a.select("rect")
       .attr("width", (d) => {
