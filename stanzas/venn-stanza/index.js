@@ -35,7 +35,7 @@ export default class VennStanza extends Stanza {
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
     // tooltip
-    this.tooltip = document.createElement('togostanza--tooltip');
+    this.tooltip = new ToolTip();
     this.root.append(this.tooltip);
 
     // get data
@@ -115,9 +115,7 @@ export default class VennStanza extends Stanza {
       group.dataset.tooltipHtml = true;
       // this.setTooltip(group);
     });
-    if (this.tooltip instanceof ToolTip) { // TODO: この処理は本来不要
-      this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
-    }
+    this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
 
     // legend
     this.makeLegend(
@@ -195,9 +193,7 @@ export default class VennStanza extends Stanza {
         node: group
       });
     });
-    if (this.tooltip instanceof ToolTip) {
-      this.tooltip.setup(container.querySelectorAll('[data-tooltip]'));
-    }
+    this.tooltip.setup(container.querySelectorAll('[data-tooltip]'));
 
     // legend
     this.makeLegend(
