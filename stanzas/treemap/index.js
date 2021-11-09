@@ -7,7 +7,7 @@ import {
   downloadPngMenuItem,
   appendCustomCss,
 } from "@/lib/metastanza_utils.js";
-import shadeColor from "./pSBC";
+import shadeColor from "./shadeColor";
 //import expandSvg from "./assets/expand-solid.svg";
 
 export default class TreeMapStanza extends Stanza {
@@ -20,14 +20,11 @@ export default class TreeMapStanza extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
-    //const colorScale = this.params["color-scheme"];
     const logScale = this.params["log-scale"];
     const borderWidth = this.params["gap-width"];
-    //const backgroundColor = css("background-color");
 
     const colorScale = [];
 
@@ -88,9 +85,6 @@ function transformValue(logScale, value) {
 }
 
 function draw(el, dataset, opts) {
-  const iconWidth = 10;
-  const iconHeight = 10;
-
   const { width, height, logScale, colorScale, borderWidth } = opts;
   // create nested structure by item.parent
   const nested = d3
@@ -109,8 +103,14 @@ function draw(el, dataset, opts) {
     adjustedHeight = 10;
   }
 
+  //let x, y;
+
   const x = d3.scaleLinear().rangeRound([0, width]);
+
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
+  // const x = d3.scaleLog([0, width]).domain([1, 2]);
+
+  // const y = d3.scaleLog([0, adjustedHeight]).domain([1, 2]);
 
   // make path-like string for node
   const name = (d) => {
@@ -130,22 +130,73 @@ function draw(el, dataset, opts) {
 
   const color = d3.scaleOrdinal(colorScale);
 
+  //move and scale children nodes to fit into parent node
   function tile(node, x0, y0, x1, y1) {
-    d3.treemapBinary(node, 0, 0, width, adjustedHeight);
+    //d3.treemapBinary(node, 0, 0, width, adjustedHeight);
+    slice2(node, 0, 0, width, adjustedHeight);
     for (const child of node.children) {
+      //if (node.depth === 0) console.log(x0 + (child.x0 / width) * (x1 - x0));
       child.x0 = x0 + (child.x0 / width) * (x1 - x0);
       child.x1 = x0 + (child.x1 / width) * (x1 - x0);
       child.y0 = y0 + (child.y0 / adjustedHeight) * (y1 - y0);
+
       child.y1 = y0 + (child.y1 / adjustedHeight) * (y1 - y0);
     }
   }
+
+  function slice2(parent, x0, y0, x1, y1) {
+    let nodes = parent.children,
+      node,
+      i = -1,
+      n = nodes.length;
+    let nodeSum = 0;
+
+    while (++i < n) {
+      nodeSum += nodes[i].value2;
+    }
+    i = -1;
+
+    let k = parent.value && (y1 - y0) / nodeSum;
+
+    while (++i < n) {
+      (node = nodes[i]), (node.x0 = x0), (node.x1 = x1);
+      (node.y0 = y0), (node.y1 = y0 += node.value2 * k);
+    }
+  }
+  // const maxD = d3.max(scaledNested, (d) => d.value);
+
+  // scaledNested.eachBefore((d) => {
+  //   d.value = d.value / maxD;
+  //   console.log(d.value);
+  // });
+
+  // console.log(d3.treemap()(d3.hierarchy(nested).sum((d) => d.data.n)));
+
+  // console.log(
+  //   d3.treemap().tile(tile)(d3.hierarchy(nested).sum((d) => d.data.n))
+  // );
+  const dataScale = d3
+    .scaleLog([0, 100])
+    .domain([d3.min(nested, (d) => d.data.n), d3.max(nested, (d) => d.data.n)]);
 
   const treemap = (data) =>
     d3.treemap().tile(tile)(
       d3
         .hierarchy(data)
-        .sum((d) => transformValue(logScale, d.data.n))
+        .sum((d) => d.data.n)
+
         .sort((a, b) => b.value - a.value)
+        // get logs of all values
+        .each((d, i, nodes) => {
+          d.value2 = Math.log10(d.value);
+          console.log(d);
+        })
+      // set value2 as sum of logs
+      // .eachBefore((d) => {
+      //   if (d.children) {
+      //     d.value2 = d3.sum((d1) => Math.log(d1.data.data.n));
+      //   }
+      // })
     );
 
   const svg = d3
@@ -154,10 +205,8 @@ function draw(el, dataset, opts) {
     .style("width", width + "px")
     .style("height", height + "px")
     .style("overflow", "hidden")
-    //.style("position", "absolute")
-
     .append("svg")
-    .attr("viewBox", [0, 0, width, height]); // + rootHeight]);
+    .attr("viewBox", [0, 0, width, height]);
 
   //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested), null);
@@ -168,9 +217,9 @@ function draw(el, dataset, opts) {
     group
       .append("rect")
       .attr("x", 0)
-      .attr("y", 0) //`${-rootHeight}px`)
+      .attr("y", 0)
       .attr("width", `${width}px`)
-      .attr("height", `${height}px`) // + rootHeight}px`)
+      .attr("height", `${height}px`)
       .attr("style", "fill: var(--togostanza-background-color)");
 
     //add g's for every node
@@ -178,14 +227,6 @@ function draw(el, dataset, opts) {
       .selectAll("g")
       .data(root.children.concat(root))
       .join("g");
-
-    // node
-    //   .selectAll("g")
-    //   .data((d) => d.children)
-    //   .join("g")
-    //   .attr("transform", (d) => `translate(${d.x0},${d.y0})`)
-    //   .append("rect")
-    //   .attr("fill", (d) => color((d.value - dMin) / (dMax - dMin)));
 
     node
       .filter((d) => {
@@ -213,12 +254,10 @@ function draw(el, dataset, opts) {
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
 
       .attr("style", (d) => {
-        console.log("value: ", d.value);
-        console.log("color: ", color(d.data.data.label));
         return `fill: ${
           d === root
             ? "var(--togostanza-background-color)"
-            : color(d.data.data.label) //(d.value - dMin) / (dMax - dMin))
+            : color(d.data.data.label)
         }`;
       });
 
@@ -237,7 +276,7 @@ function draw(el, dataset, opts) {
       .attr("fill", "none")
       .attr("stroke-width", 1)
       .attr("stroke", (d) => {
-        return shadeColor(color(d.parent.data.data.label), -15); //(d.parent.value - dMin) / (dMax - dMin)), -15);
+        return shadeColor(color(d.parent.data.data.label), -15);
       });
 
     innerNode
@@ -245,17 +284,6 @@ function draw(el, dataset, opts) {
       .attr("id", (d) => (d.clipUid = uid("clip")).id)
       .append("use")
       .attr("href", (d) => d.leafUid.href);
-
-    // innerNode
-    //   .append("text")
-    //   .attr("clipPath", (d) => d.clipUid)
-    //   .attr("x", "0.5rem")
-    //   .attr("y", "1.5rem")
-    //   .text((d) => d.data.data.label)
-    //   .attr("stroke", "none")
-    //   .attr("fill", (d) =>
-    //     shadeColor(color((d.parent.value - dMin) / (dMax - dMin)), -20)
-    //   );
 
     //add clip paths to nodes to trim text
     node
@@ -364,8 +392,6 @@ function draw(el, dataset, opts) {
         .append("tspan")
         .attr("class", "number-label")
         .attr("dy", "1.6em")
-        // .style("font", "noraml 7px sans-serif")
-        // .style("fill", "rgba(0,0,0,0.75)")
         .attr("x", "0.5rem")
         .text((d) => format(d3.sum(d, (d) => d?.data?.data?.n || 0)));
     }
@@ -377,7 +403,6 @@ function draw(el, dataset, opts) {
       if (d === root) {
         return `translate(0,0)`;
       } else if (d.parent !== root) {
-        console.log(d.data.data.label);
         return `translate(${x(d.x0) - x(d.parent.x0)},${
           y(d.y0) - y(d.parent.y0)
         })`;
@@ -427,7 +452,7 @@ function draw(el, dataset, opts) {
           if (x(d.x1) - x(d.x0) - borderWidth < 0) {
             return 0;
           }
-          return x(d.x1) - x(d.x0) - borderWidth;
+          return x(d.x1) - x(d.x0) - borderWidth; //scale as log here
         }
       })
       .attr("height", (d) => {
