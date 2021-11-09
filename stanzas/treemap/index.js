@@ -6,9 +6,8 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils";
 import shadeColor from "./shadeColor";
-//import expandSvg from "./assets/expand-solid.svg";
 
 export default class TreeMapStanza extends Stanza {
   menu() {
@@ -28,7 +27,9 @@ export default class TreeMapStanza extends Stanza {
 
     const colorScale = [];
 
-    for (let i = 1; i <= 6; i++) {
+    // in metadata.json there is 6 hard-coded colors for color scheme
+    const colorNum = 6;
+    for (let i = 1; i <= colorNum; i++) {
       colorScale.push(this.params["color-" + i]);
     }
 
@@ -86,6 +87,7 @@ function transformValue(logScale, value) {
 
 function draw(el, dataset, opts) {
   const { width, height, logScale, colorScale, borderWidth } = opts;
+
   // create nested structure by item.parent
   const nested = d3
     .stratify()
@@ -96,21 +98,16 @@ function draw(el, dataset, opts) {
       return d.parent;
     })(dataset);
 
-  const rootHeight = 30;
+  // Height of upper "root" element tile
+  const rootHeight = getLineHeight(el) * 1.3;
 
+  // Height of the rest chart
   let adjustedHeight = height - rootHeight;
-  if (height === rootHeight) {
-    adjustedHeight = 10;
-  }
 
-  //let x, y;
+  if (adjustedHeight < 0) adjustedHeight = 10;
 
   const x = d3.scaleLinear().rangeRound([0, width]);
-
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
-  // const x = d3.scaleLog([0, width]).domain([1, 2]);
-
-  // const y = d3.scaleLog([0, adjustedHeight]).domain([1, 2]);
 
   // make path-like string for node
   const name = (d) => {
@@ -126,77 +123,88 @@ function draw(el, dataset, opts) {
       .join("/");
   };
 
+  //format number to abc,def,ghj
   const format = d3.format(",d");
 
+  //define color scheme
   const color = d3.scaleOrdinal(colorScale);
 
-  //move and scale children nodes to fit into parent node
+  //move and scale children nodes to fit into parent nodes
   function tile(node, x0, y0, x1, y1) {
-    //d3.treemapBinary(node, 0, 0, width, adjustedHeight);
-    slice2(node, 0, 0, width, adjustedHeight);
+    treemapBinaryLog(node, 0, 0, width, adjustedHeight);
     for (const child of node.children) {
-      //if (node.depth === 0) console.log(x0 + (child.x0 / width) * (x1 - x0));
       child.x0 = x0 + (child.x0 / width) * (x1 - x0);
       child.x1 = x0 + (child.x1 / width) * (x1 - x0);
       child.y0 = y0 + (child.y0 / adjustedHeight) * (y1 - y0);
-
       child.y1 = y0 + (child.y1 / adjustedHeight) * (y1 - y0);
     }
   }
 
-  function slice2(parent, x0, y0, x1, y1) {
-    let nodes = parent.children,
-      node,
-      i = -1,
-      n = nodes.length;
-    let nodeSum = 0;
+  //tiling function with log scale support
+  function treemapBinaryLog(parent, x0, y0, x1, y1) {
+    var nodes = parent.children,
+      i,
+      n = nodes.length,
+      sum,
+      sums = new Array(n + 1);
 
-    while (++i < n) {
-      nodeSum += nodes[i].value2;
+    for (sums[0] = sum = i = 0; i < n; ++i) {
+      sums[i + 1] = sum += nodes[i].value2;
     }
-    i = -1;
+    let nodeSum = 0;
+    let kkk = -1;
+    while (++kkk < n) {
+      nodeSum += nodes[kkk].value2;
+    }
+    kkk = -1;
 
-    let k = parent.value && (y1 - y0) / nodeSum;
+    partition(0, n, nodeSum, x0, y0, x1, y1);
 
-    while (++i < n) {
-      (node = nodes[i]), (node.x0 = x0), (node.x1 = x1);
-      (node.y0 = y0), (node.y1 = y0 += node.value2 * k);
+    function partition(i, j, value, x0, y0, x1, y1) {
+      if (i >= j - 1) {
+        var node = nodes[i];
+        (node.x0 = x0), (node.y0 = y0);
+        (node.x1 = x1), (node.y1 = y1);
+        return;
+      }
+
+      var valueOffset = sums[i],
+        valueTarget = value / 2 + valueOffset,
+        k = i + 1,
+        hi = j - 1;
+
+      while (k < hi) {
+        var mid = (k + hi) >>> 1;
+        if (sums[mid] < valueTarget) k = mid + 1;
+        else hi = mid;
+      }
+
+      if (valueTarget - sums[k - 1] < sums[k] - valueTarget && i + 1 < k) --k;
+
+      var valueLeft = sums[k] - valueOffset,
+        valueRight = value - valueLeft;
+
+      if (x1 - x0 > y1 - y0) {
+        var xk = value ? (x0 * valueRight + x1 * valueLeft) / value : x1;
+        partition(i, k, valueLeft, x0, y0, xk, y1);
+        partition(k, j, valueRight, xk, y0, x1, y1);
+      } else {
+        var yk = value ? (y0 * valueRight + y1 * valueLeft) / value : y1;
+        partition(i, k, valueLeft, x0, y0, x1, yk);
+        partition(k, j, valueRight, x0, yk, x1, y1);
+      }
     }
   }
-  // const maxD = d3.max(scaledNested, (d) => d.value);
-
-  // scaledNested.eachBefore((d) => {
-  //   d.value = d.value / maxD;
-  //   console.log(d.value);
-  // });
-
-  // console.log(d3.treemap()(d3.hierarchy(nested).sum((d) => d.data.n)));
-
-  // console.log(
-  //   d3.treemap().tile(tile)(d3.hierarchy(nested).sum((d) => d.data.n))
-  // );
-  const dataScale = d3
-    .scaleLog([0, 100])
-    .domain([d3.min(nested, (d) => d.data.n), d3.max(nested, (d) => d.data.n)]);
 
   const treemap = (data) =>
     d3.treemap().tile(tile)(
       d3
         .hierarchy(data)
         .sum((d) => d.data.n)
-
         .sort((a, b) => b.value - a.value)
-        // get logs of all values
-        .each((d, i, nodes) => {
-          d.value2 = Math.log10(d.value);
-          console.log(d);
+        .each((d) => {
+          d.value2 = transformValue(logScale, d.value);
         })
-      // set value2 as sum of logs
-      // .eachBefore((d) => {
-      //   if (d.children) {
-      //     d.value2 = d3.sum((d1) => Math.log(d1.data.data.n));
-      //   }
-      // })
     );
 
   const svg = d3
@@ -261,7 +269,7 @@ function draw(el, dataset, opts) {
         }`;
       });
 
-    //Add inner nodes
+    //Add inner nodes to show that it's a zoomable tile
     const innerNode = node
       .filter((d) => {
         return d !== root && d.children;
@@ -296,8 +304,7 @@ function draw(el, dataset, opts) {
     const txt = node
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
-      //.attr("font-weight", (d) => (d === root ? "bold" : null))
-      .attr("y", (d) => "1.5em") //${d.y0 + 10}px
+      .attr("y", (d) => "1.5em")
       .attr("x", "0.5rem")
       .text((d) => {
         if (d === root) {
@@ -452,7 +459,7 @@ function draw(el, dataset, opts) {
           if (x(d.x1) - x(d.x0) - borderWidth < 0) {
             return 0;
           }
-          return x(d.x1) - x(d.x0) - borderWidth; //scale as log here
+          return x(d.x1) - x(d.x0) - borderWidth;
         }
       })
       .attr("height", (d) => {
@@ -478,6 +485,7 @@ function draw(el, dataset, opts) {
     const group0 = group.attr("pointer-events", "none");
     const group1 = (group = svg.append("g").call(render, d, "zoomin"));
 
+    //re-define domain for scaling
     x.domain([d.x0, d.x1]);
     y.domain([d.y0, d.y1]);
 
@@ -517,4 +525,26 @@ function draw(el, dataset, opts) {
       )
       .call((t) => group1.transition(t).call(position, d.parent, false));
   }
+}
+
+// Get text line height
+function getLineHeight(el) {
+  var temp = document.createElement(el.nodeName),
+    ret;
+  temp.setAttribute(
+    "style",
+    "margin:0; padding:0; " +
+      "font-family:" +
+      (el.style.fontFamily || "inherit") +
+      "; " +
+      "font-size:" +
+      (el.style.fontSize || "inherit")
+  );
+  temp.innerHTML = "A";
+
+  el.parentNode.appendChild(temp);
+  ret = temp.clientHeight;
+  temp.parentNode.removeChild(temp);
+
+  return ret;
 }
