@@ -184,7 +184,9 @@ function draw(el, dataset, opts) {
         }
       }
 
-      if (valueTarget - sums[k - 1] < sums[k] - valueTarget && i + 1 < k) --k;
+      if (valueTarget - sums[k - 1] < sums[k] - valueTarget && i + 1 < k) {
+        --k;
+      }
 
       var valueLeft = sums[k] - valueOffset,
         valueRight = value - valueLeft;
