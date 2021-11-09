@@ -1,11 +1,11 @@
 import Stanza from "togostanza/stanza";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import * as d3 from "d3";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils/metastanza_utils.js";
 
 export default class VennStanza extends Stanza {
   menu() {
