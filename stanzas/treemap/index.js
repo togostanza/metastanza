@@ -7,7 +7,7 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils/metastanza_utils.js";
 
 export default class TreeMapStanza extends Stanza {
   menu() {

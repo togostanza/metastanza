@@ -1,6 +1,6 @@
 import Stanza from "togostanza/stanza";
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 
 const areas = new Map([
   [
