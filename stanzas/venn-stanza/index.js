@@ -115,7 +115,9 @@ export default class VennStanza extends Stanza {
       group.dataset.tooltipHtml = true;
       // this.setTooltip(group);
     });
-    this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
+    if (this.tooltip instanceof ToolTip) { // TODO: この処理は本来不要
+      this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
+    }
 
     // legend
     this.makeLegend(
@@ -193,7 +195,9 @@ export default class VennStanza extends Stanza {
         node: group
       });
     });
-    this.tooltip.setup(container.querySelectorAll('[data-tooltip]'));
+    if (this.tooltip instanceof ToolTip) {
+      this.tooltip.setup(container.querySelectorAll('[data-tooltip]'));
+    }
 
     // legend
     this.makeLegend(
@@ -236,12 +240,12 @@ export default class VennStanza extends Stanza {
   }
 
   /**
-   * 
-   * @param {*} data 
-   * @param {Node} container 
+   *
+   * @param {*} data
+   * @param {Node} container
    * @param {Object} opt
    *  - direction 'vertical' or 'horizontal'
-   *  - position 
+   *  - position
    *  - fadeoutNodes
    */
   makeLegend(data, container, opt) {
