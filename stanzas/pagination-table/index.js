@@ -2,7 +2,7 @@ import Stanza from "togostanza/stanza";
 import { createApp } from "vue";
 import App from "./app.vue";
 
-import { appendCustomCss } from "@/lib/metastanza_utils.js";
+import { appendCustomCss } from "togostanza-utils";
 
 export default class PaginationTable extends Stanza {
   async render() {

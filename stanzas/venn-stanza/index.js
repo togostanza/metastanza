@@ -1,5 +1,5 @@
 import Stanza from 'togostanza/stanza';
-import loadData from '@/lib/load-data';
+import loadData from 'togostanza-utils/load-data';
 import * as d3 from 'd3';
 import venn from 'venn.js';
 import Color from 'color';
@@ -7,7 +7,7 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from '@/lib/metastanza_utils.js';
+} from 'togostanza-utils';
 import ToolTip from '@/lib/ToolTip';
 
 export default class VennStanza extends Stanza {

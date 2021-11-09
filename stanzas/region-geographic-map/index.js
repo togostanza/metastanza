@@ -1,6 +1,6 @@
 import Stanza from "togostanza/stanza";
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 
 const areas = new Map([
   [
@@ -98,7 +98,13 @@ export default class regionGeographicMap extends Stanza {
         type: "shape",
         from: { data: "map" },
         encode: {
-          enter: { tooltip: { signal: this.params["percentage"] ? `format(datum.${this.params["value-key"]}, '0.1%')` : `datum.${this.params["value-key"]}` } },
+          enter: {
+            tooltip: {
+              signal: this.params["percentage"]
+                ? `format(datum.${this.params["value-key"]}, '0.1%')`
+                : `datum.${this.params["value-key"]}`,
+            },
+          },
           hover: {
             fill: { value: "var(--togostanza-hover-color)" },
           },
