@@ -6,7 +6,7 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "togostanza-utils";
+} from "@/lib/metastanza_utils.js"; //from "togostanza-utils";
 import shadeColor from "./shadeColor";
 
 export default class TreeMapStanza extends Stanza {
@@ -104,7 +104,9 @@ function draw(el, dataset, opts) {
   // Height of the rest chart
   let adjustedHeight = height - rootHeight;
 
-  if (adjustedHeight < 0) adjustedHeight = 10;
+  if (adjustedHeight < 0) {
+    adjustedHeight = 10;
+  }
 
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
@@ -175,8 +177,11 @@ function draw(el, dataset, opts) {
 
       while (k < hi) {
         var mid = (k + hi) >>> 1;
-        if (sums[mid] < valueTarget) k = mid + 1;
-        else hi = mid;
+        if (sums[mid] < valueTarget) {
+          k = mid + 1;
+        } else {
+          hi = mid;
+        }
       }
 
       if (valueTarget - sums[k - 1] < sums[k] - valueTarget && i + 1 < k) --k;
@@ -220,8 +225,6 @@ function draw(el, dataset, opts) {
   let group = svg.append("g").call(render, treemap(nested), null);
 
   function render(group, root, zoomInOut) {
-    const dMax = d3.max(root, (d) => d.value || 1);
-    const dMin = d3.min(root, (d) => d.value || 1);
     group
       .append("rect")
       .attr("x", 0)
@@ -301,10 +304,10 @@ function draw(el, dataset, opts) {
       .attr("href", (d) => d.leafUid.href);
 
     //add text contents
-    const txt = node
+    node
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
-      .attr("y", (d) => "1.5em")
+      .attr("y", "1.5em")
       .attr("x", "0.5rem")
       .text((d) => {
         if (d === root) {
@@ -344,28 +347,29 @@ function draw(el, dataset, opts) {
 
       let maxWidth;
       if (isRoot) {
-        lineSeparator = /(?=[\/])/g;
+        lineSeparator = /(?=[/])/g;
         maxWidth = width;
       } else {
         lineSeparator = /\s+/;
         maxWidth = width / 6;
       }
 
-      let words = text.text().split(lineSeparator).reverse();
+      const words = text.text().split(lineSeparator).reverse();
 
       let word,
         line = [],
-        lineNumber = 0,
-        lineHeight = 1.15, // rems
+        lineNumber = 0;
+      const lineHeight = 1.15, // rems
         x = text.attr("x") || 0,
         y = text.attr("y") || 0,
-        dy = 0,
-        tspan = text
-          .text(null)
-          .append("tspan")
-          .attr("x", x)
-          .attr("y", y)
-          .attr("dy", dy + "em");
+        dy = 0;
+
+      let tspan = text
+        .text(null)
+        .append("tspan")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("dy", dy + "em");
 
       while ((word = words.pop())) {
         line.push(word);
