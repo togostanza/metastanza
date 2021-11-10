@@ -7,20 +7,21 @@ main {
   padding: 1rem 2rem;
 }
 
-#chart .slice {
+#sunburst .slice {
   cursor: pointer;
 }
 
-#chart .slice .main-arc {
+#sunburst .slice .main-arc {
   stroke: #fff;
-  stroke-width: 1px;
+  stroke-width: var(--togostanza-border-width);
 }
 
-#chart .slice .hidden-arc {
+#sunburst .slice .hidden-arc {
   fill: none;
+  stroke: none;
 }
 
-#chart .slice text {
+#sunburst .slice text {
   pointer-events: none;
   dominant-baseline: middle;
   text-anchor: middle;

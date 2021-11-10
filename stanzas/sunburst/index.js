@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "@/lib/load-data";
-import uid from "./uid";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -18,61 +18,70 @@ export default class Sunburst extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    //const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
-    const colorScale = this.params["color-scale"];
+    const colorScale = [];
+    const logScale = this.params["log-scale"];
+    const borderWidth = this.params["gap-width"];
 
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
     );
 
+    for (let i = 1; i <= 6; i++) {
+      colorScale.push(this.params["color-" + i]);
+    }
+
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
 
-    //Add root element if there are more than one elements without parent. D3 cannot precess data with more than one root elements
-    let rootElemIndexes = [];
-    for (let i = 0; i < data.length - 1; i++) {
-      if (!data[i]?.parent) {
+    // filter out all elements with n=0
+    const filteredData = data.filter(
+      (item) => (item.children && !item.n) || (item.n && item.n > 0)
+    );
+
+    //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
+    const rootElemIndexes = [];
+    for (let i = 0; i < filteredData.length - 1; i++) {
+      if (!filteredData[i]?.parent) {
         rootElemIndexes.push(i);
       }
     }
     if (rootElemIndexes.length > 1) {
-      data.push({ id: -1, value: "", label: "" });
+      filteredData.push({ id: -1, value: "", label: "" });
 
       rootElemIndexes.forEach((index) => {
-        data[index].parent = -1;
+        filteredData[index].parent = -1;
       });
     }
 
-    const sunburstElement = this.root.querySelector("#chart");
+    const sunburstElement = this.root.querySelector("#sunburst");
 
     const opts = {
       width,
       height,
       colorScale,
-      styles: {
-        "font-family": css("--togostanza-font-family"),
-        "label-font-color": css("--togostanza-label-font-color"),
-        "label-font-size": css("--togostanza-label-font-size"),
-        "border-color": css("--togostanza-border-color"),
-        "border-width": css("--togostanza-border-width"),
-        "edge-color": css("--togostanza-edge-color"),
-        "background-color": css("--togostanza-background-color"),
-      },
+      logScale,
+      borderWidth,
     };
 
-    draw(sunburstElement, data, opts);
+    draw(sunburstElement, filteredData, opts);
   }
 }
-
+function transformValue(logScale, value) {
+  if (logScale) {
+    return Math.log10(value);
+  }
+  return value;
+}
 function draw(el, dataset, opts) {
-  const { width, height, colorScale: customColorScale, styles } = opts;
+  const { width, height, colorScale, logScale, borderWidth } = opts;
 
-  const radius = Math.min(width, height) / 2;
+  //const radius = Math.min(width, height) / 2;
 
   const data = d3
     .stratify()
@@ -94,7 +103,7 @@ function draw(el, dataset, opts) {
 
   const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
 
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  const color = d3.scaleOrdinal(colorScale);
 
   const partition = d3.partition();
 
@@ -102,8 +111,10 @@ function draw(el, dataset, opts) {
     .arc()
     .startAngle((d) => x(d.x0))
     .endAngle((d) => x(d.x1))
-    .innerRadius((d) => Math.max(0, y(d.y0)))
-    .outerRadius((d) => Math.max(0, y(d.y1)));
+    .innerRadius((d) => Math.max(0, y(d.y0) + 1))
+    .outerRadius((d) => Math.max(0, y(d.y1) - 1));
+  //.padAngle(0.05)
+  //.padRadius(this, (d) => (y(d.y0) + y(d.y1)) / 2);
 
   const middleArcLine = (d) => {
     const halfPi = Math.PI / 2;
@@ -141,6 +152,7 @@ function draw(el, dataset, opts) {
 
   const root = d3.hierarchy(data);
   root.sum((d) => d.data.n);
+  root.each((d) => (d.value2 = transformValue(logScale, d.value)));
 
   const slice = svg.selectAll("g.slice").data(partition(root).descendants());
 
@@ -151,9 +163,8 @@ function draw(el, dataset, opts) {
     .append("g")
     .attr("class", "slice")
     .on("click", (e, d) => {
-      console.log(d);
       e.stopPropagation();
-      focusOn(d);
+      focusOn(e, d);
     });
 
   newSlice
@@ -194,7 +205,7 @@ function draw(el, dataset, opts) {
     .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
     .text((d) => d.data.data.label);
 
-  function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
+  function focusOn(event, d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
     // Reset to top-level if no data point specified
 
     const transition = svg
