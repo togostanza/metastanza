@@ -31,18 +31,23 @@ export default class TreeMapStanza extends Stanza {
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
-    //Add root element if there are more than one elements without parent. D3 cannot precess data with more than one root elements
-    let rootElemIndexes = [];
-    for (let i = 0; i < data.length - 1; i++) {
-      if (!data[i]?.parent) {
+    // filter out all elements with n=0
+    const filteredData = data.filter(
+      (item) => (item.children && !item.n) || (item.n && item.n > 0)
+    );
+
+    //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
+    const rootElemIndexes = [];
+    for (let i = 0; i < filteredData.length - 1; i++) {
+      if (!filteredData[i]?.parent) {
         rootElemIndexes.push(i);
       }
     }
     if (rootElemIndexes.length > 1) {
-      data.push({ id: -1, value: "", label: "" });
+      filteredData.push({ id: -1, value: "", label: "" });
 
       rootElemIndexes.forEach((index) => {
-        data[index].parent = -1;
+        filteredData[index].parent = -1;
       });
     }
 
@@ -52,18 +57,11 @@ export default class TreeMapStanza extends Stanza {
       width,
       height,
       colorScale,
-      styles: {
-        "font-family": css("--togostanza-font-family"),
-        "label-font-color": css("--togostanza-label-font-color"),
-        "label-font-size": css("--togostanza-label-font-size"),
-        "border-color": css("--togostanza-border-color"),
-        "border-width": css("--togostanza-border-width"),
-        "edge-color": css("--togostanza-edge-color"),
-        "background-color": css("--togostanza-background-color"),
-      },
+      logScale,
+      borderWidth,
     };
-    //draw(treeMapElement, data, width, height, colorScale);
-    draw(treeMapElement, data, opts);
+
+    draw(treeMapElement, filteredData, opts);
   }
 }
 
