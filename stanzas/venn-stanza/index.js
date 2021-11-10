@@ -36,13 +36,14 @@ export default class VennStanza extends Stanza {
 
     this.renderTemplate({ template: 'stanza.html.hbs' });
 
-    // tooltip
-    this.tooltip = new ToolTip();
-    this.root.append(this.tooltip);
-
-    // legend
-    this.legend = new Legend();
-    this.root.append(this.legend);
+    // append tooltip, legend
+    const root = this.root.querySelector(':scope > div');
+    if (!this.tooltip) {
+      this.tooltip = new ToolTip();
+      root.append(this.tooltip);
+      this.legend = new Legend();
+      root.append(this.legend);
+    }
 
     // get data
     this.data = await this.getData();
@@ -123,18 +124,19 @@ export default class VennStanza extends Stanza {
     this.tooltip.setup(selectedDiagram.querySelectorAll('[data-tooltip]'));
 
     // legend
+    const items = this.data.map(datum => {
+      const id = datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',');
+      const color = this.getBlendedColor(datum.set.map(item => this.dataLabels.indexOf(item)));
+      return Object.fromEntries([
+        ['id', id],
+        ['label', datum.set.map(item => item).join('∩')],
+        ['color', color.toString()],
+        ['value', datum.size],
+        ['node', selectedDiagram.querySelector(`:scope > g[data-targets="${id}"]`)]
+      ]);
+    });
     this.legend.setup(
-      this.data.map(datum => {
-        const id = datum.set.map(item => this.dataLabels.indexOf(item)).sort().join(',');
-        const color = this.getBlendedColor(datum.set.map(item => this.dataLabels.indexOf(item)));
-        return Object.fromEntries([
-          ['id', id],
-          ['label', datum.set.map(item => item).join('∩')],
-          ['color', color.toString()],
-          ['value', datum.size],
-          ['node', selectedDiagram.querySelector(`:scope > g[data-targets="${id}"]`)]
-        ]);
-      }),
+      items,
       this.root.querySelector('main'),
       {
         fadeoutNodes: selectedDiagram.querySelectorAll(':scope > g')
@@ -164,7 +166,7 @@ export default class VennStanza extends Stanza {
     //   .style('fill', (d, i) => this.colorSeries[i])
     //   .style('stroke', (d, i) => this.colorSeries[i]);
 
-    const legendData = [];
+    const legendItems = [];
     container.querySelectorAll('.venn-area').forEach(group => {
       const labels = group.dataset.vennSets.split('_');
       const targets = labels.map(label => this.dataLabels.indexOf(label));
@@ -188,9 +190,8 @@ export default class VennStanza extends Stanza {
       // tooltip
       group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
-      // this.setTooltip(group);
       // legend
-      legendData.push({
+      legendItems.push({
         id: group.dataset.vennSets,
         label: labels.join('∩'),
         color: color.toString(),
@@ -202,7 +203,7 @@ export default class VennStanza extends Stanza {
 
     // legend
     this.legend.setup(
-      legendData,
+      legendItems,
       this.root.querySelector('main'),
       {
         fadeoutNodes: container.querySelectorAll('.venn-area')
