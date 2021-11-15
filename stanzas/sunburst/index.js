@@ -78,10 +78,9 @@ function transformValue(logScale, value) {
   }
   return value;
 }
+
 function draw(el, dataset, opts) {
   const { width, height, colorScale, logScale, borderWidth } = opts;
-
-  //const radius = Math.min(width, height) / 2;
 
   const data = d3
     .stratify()
@@ -94,34 +93,40 @@ function draw(el, dataset, opts) {
 
   const maxRadius = Math.min(width, height) / 2 - 5;
 
-  const formatNumber = d3.format(",d");
-
-  const x = d3
-    .scaleLinear()
-    .range([0, 2 * Math.PI])
-    .clamp(true);
-
-  const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
-
-  const color = d3.scaleOrdinal(colorScale);
-
-  const partition = d3.partition();
+  const radius = width / 6;
 
   const arc = d3
     .arc()
-    .startAngle((d) => x(d.x0))
-    .endAngle((d) => x(d.x1))
-    .innerRadius((d) => Math.max(0, y(d.y0) + 1))
-    .outerRadius((d) => Math.max(0, y(d.y1) - 1));
-  //.padAngle(0.05)
-  //.padRadius(this, (d) => (y(d.y0) + y(d.y1)) / 2);
+    .startAngle((d) => d.x0)
+    .endAngle((d) => d.x1)
+    .padAngle((d) => 0.009)
+    .padRadius(radius * 1.5)
+    .innerRadius((d) => d.y0 * radius)
+    .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 1));
+
+  const format = d3.format(",d");
+
+  // const color = d3.scaleOrdinal(
+  //   d3.quantize(d3.interpolateRainbow, data.children.length + 1)
+  // );
+
+  const color = d3.scaleOrdinal(colorScale);
+
+  const partition = (data) => {
+    const root = d3
+      .hierarchy(data)
+      .sum((d) => d.data.n)
+      .sort((a, b) => b.data.n - a.data.n);
+    return d3.partition().size([2 * Math.PI, root.height + 1])(root);
+  };
 
   const middleArcLine = (d) => {
     const halfPi = Math.PI / 2;
-    const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
-    const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+    const angles = [d.x0 - halfPi, d.x1 - halfPi];
+    const r = Math.max(0, (d.y0 * radius + d.y1 * radius) / 2);
 
     const middleAngle = (angles[1] + angles[0]) / 2;
+
     const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
     if (invertDirection) {
       angles.reverse();
@@ -132,300 +137,158 @@ function draw(el, dataset, opts) {
     return path.toString();
   };
 
-  const textFits = (d) => {
+  const textFits = (d, currentTarget) => {
+    let p;
     const CHAR_SPACE = 6;
-
-    const deltaAngle = x(d.x1) - x(d.x0);
-    const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
+    if (currentTarget === "current") {
+      p = d.current;
+    } else {
+      p = d.target;
+    }
+    const deltaAngle = p.x1 - p.x0;
+    const r = Math.max(0, (radius * (p.y0 + p.y1)) / 2);
     const perimeter = r * deltaAngle;
 
     return d.data.data.label.length * CHAR_SPACE < perimeter;
   };
 
+  const root = partition(data);
+
+  root.each((d) => (d.current = d));
+
   const svg = d3
     .select(el)
     .append("svg")
     .style("width", width)
-    .style("height", height)
-    .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
-    .on("click", () => focusOn()); // Reset zoom on canvas click
+    .style("height", height);
 
-  const root = d3.hierarchy(data);
-  root.sum((d) => d.data.n);
-  root.each((d) => (d.value2 = transformValue(logScale, d.value)));
-
-  const slice = svg.selectAll("g.slice").data(partition(root).descendants());
-
-  slice.exit().remove();
-
-  const newSlice = slice
-    .enter()
+  const g = svg
     .append("g")
-    .attr("class", "slice")
-    .on("click", (e, d) => {
-      e.stopPropagation();
-      focusOn(e, d);
-    });
+    .attr("transform", `translate(${width / 2},${width / 2})`);
 
-  newSlice
-    .append("title")
-    .text((d) => d.data.data.label + "\n" + formatNumber(d.value));
+  const sliceGroup = g
+    .append("g")
+    .selectAll("g")
+    .data(root.descendants().slice(1))
+    .enter()
+    .append("g");
 
-  newSlice
+  const path = sliceGroup
+
     .append("path")
-    .attr("class", "main-arc")
-    .style("fill", (d) => color((d.children ? d : d.parent).data.data.label))
-    .attr("d", arc);
+    .attr("fill", (d) => {
+      while (d.depth > 1) {
+        d = d.parent;
+      }
+      return color(d.data.data.label);
+    })
+    .attr("fill-opacity", (d) =>
+      arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
+    )
+    .attr("d", (d) => arc(d.current));
 
-  //textPath
-  newSlice
+  path
+    .filter((d) => d.children)
+    .style("cursor", "pointer")
+    .on("click", clicked);
+
+  path.append("title").text(
+    (d) =>
+      `${d
+        .ancestors()
+        .map((d) => d.data.data.label)
+        .reverse()
+        .join("/")}\n${format(d.value)}`
+  );
+
+  // hidden arc
+  const hiddenArc = sliceGroup
     .append("path")
-    .attr("class", "hidden-arc")
+    .attr("fill", "none")
+    .attr("stroke", "none")
     .attr("id", (_, i) => `hiddenArc${i}`)
     .attr("d", middleArcLine);
 
-  const text = newSlice
-    .append("text")
-    .attr("display", (d) => (textFits(d) ? null : "none"));
-
-  // Add white contour
-  // text
-  //   .append("textPath")
-  //   .attr("startOffset", "50%")
-  //   .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
-  //   .text((d) => d.data.data.label)
-  //   .style("fill", "none")
-  //   .style("stroke", "#fff")
-  //   .style("stroke-width", 0.5)
-  //   .style("stroke-linejoin", "round");
-
-  text
+  const label = g
+    .append("g")
+    .attr("pointer-events", "none")
+    .attr("text-anchor", "middle")
+    .attr("user-select", "none")
+    .selectAll("text")
+    .data(root.descendants().slice(1))
+    .join("text")
+    .attr(
+      "fill-opacity",
+      (d) => +labelVisible(d.current) && +textFits(d, "current")
+    )
     .append("textPath")
     .attr("startOffset", "50%")
-    .attr("xlink:href", (_, i) => `#hiddenArc${i}`)
+    .attr("href", (_, i) => `#hiddenArc${i}`)
     .text((d) => d.data.data.label);
 
-  function focusOn(event, d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
-    // Reset to top-level if no data point specified
+  const parent = g
+    .append("circle")
+    .datum(root)
+    .attr("r", radius)
+    .attr("fill", "none")
+    .attr("pointer-events", "all")
+    .on("click", clicked);
 
-    const transition = svg
-      .transition()
-      .duration(750)
-      .tween("scale", () => {
-        const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
-          yd = d3.interpolate(y.domain(), [d.y0, 1]);
-        return (t) => {
-          x.domain(xd(t));
-          y.domain(yd(t));
-        };
-      });
+  function clicked(event, p) {
+    parent.datum(p.parent || root);
 
-    transition.selectAll("path.main-arc").attrTween("d", (d) => () => arc(d));
+    root.each(
+      (d) =>
+        (d.target = {
+          x0:
+            Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) *
+            2 *
+            Math.PI,
+          x1:
+            Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) *
+            2 *
+            Math.PI,
+          y0: Math.max(0, d.y0 - p.depth),
+          y1: Math.max(0, d.y1 - p.depth),
+        })
+    );
+    const t = g.transition().duration(750);
 
-    transition
-      .selectAll("path.hidden-arc")
-      .attrTween("d", (d) => () => middleArcLine(d));
+    path
+      .transition(t)
+      .tween("data", (d) => {
+        const i = d3.interpolate(d.current, d.target);
+        return (t) => (d.current = i(t));
+      })
+      .filter(function (d) {
+        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
+      })
+      .attr("fill-opacity", (d) =>
+        arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0
+      )
+      .attrTween("d", (d) => () => arc(d.current));
 
-    transition
-      .selectAll("text")
-      .attrTween("display", (d) => () => textFits(d) ? null : "none");
+    hiddenArc
+      .transition(t)
+      .tween("data", (d) => {
+        const i = d3.interpolate(d.current, d.target);
+        return (t) => (d.current = i(t));
+      })
+      .attrTween("d", (d) => () => middleArcLine(d.current));
 
-    moveStackToFront(d);
+    label
 
-    //
-
-    function moveStackToFront(elD) {
-      svg
-        .selectAll(".slice")
-        .filter((d) => d === elD)
-        .each(function (d) {
-          this.parentNode.appendChild(this);
-          if (d.parent) {
-            moveStackToFront(d.parent);
-          }
-        });
-    }
+      .transition(t)
+      .attr(
+        "fill-opacity",
+        (d) => +labelVisible(d.target) && +textFits(d, "target")
+      );
   }
-  // const svg = d3
-  //   .select(el)
-  //   .append("svg")
-  //   .attr("width", width)
-  //   .attr("height", height);
+  function arcVisible(d) {
+    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
+  }
 
-  // const defs = svg.append("defs");
-  // const g = svg
-  //   .append("g")
-  //   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-  // const colorScale = d3.scaleOrdinal(d3[customColorScale]);
-
-  // const rScale = d3.scaleLinear().domain([0, radius]).range([0, radius]);
-
-  // const root = d3.hierarchy(data);
-
-  // root.each((d) => (d.current = d));
-
-  // root
-  //   .sum(function (d) {
-  //     return d.data.n;
-  //     // return d?.children ? 0 : 1;
-  //   })
-  //   .sort(function (a, b) {
-  //     return b.value - a.value;
-  //   });
-
-  // const partition = d3.partition().size([2 * Math.PI, radius]);
-
-  // partition(root);
-
-  // const arc = d3
-  //   .arc()
-  //   .startAngle(function (d) {
-  //     return d.x0;
-  //   })
-  //   .endAngle(function (d) {
-  //     return d.x1;
-  //   })
-  //   .innerRadius(function (d) {
-  //     return rScale(d.y0);
-  //   })
-  //   .outerRadius(function (d) {
-  //     return rScale(d.y1);
-  //   });
-
-  // // div for tooltips
-  // const div = d3
-  //   .select("#chart")
-  //   .append("div")
-  //   .style("position", "absolute")
-  //   .style("visibility", "hidden")
-
-  //   .attr("class", "tooltip")
-  //   .style("opacity", 0);
-
-  // const innerG = g.selectAll("g").data(root.descendants()).enter().append("g");
-
-  // innerG
-  //   .append("path")
-  //   .attr("d", arc)
-  //   .attr("id", (d) => (d.leafUid = uid("leaf")).id)
-  //   .attr("stroke", "#fff")
-  //   .attr("fill", function (d) {
-  //     while (d.depth > 1) d = d.parent;
-  //     if (d.depth == 0) return "lightgray";
-  //     return colorScale(d.value);
-  //   })
-  //   .attr("opacity", 0.8)
-  //   .append("title")
-  //   .text(function (d) {
-  //     return d.data.data.label + "\n" + d.value;
-  //   });
-
-  // innerG
-  //   .append("clipPath")
-  //   .attr("id", (d) => (d.clipUid = uid("clip")).id)
-  //   .append("use")
-  //   .attr("href", (d) => d.leafUid.href);
-
-  // innerG
-  //   .append("path")
-  //   .attr("d", (d) => {
-  //     const context = d3.path();
-
-  //     let startAngle = d.x0 - Math.PI / 2,
-  //       endAngle = d.x1 - Math.PI / 2,
-  //       sweep = 0;
-
-  //     if (
-  //       (d.x1 + d.x0) / 2 > (90 * Math.PI) / 180 &&
-  //       (d.x1 + d.x0) / 2 < (270 * Math.PI) / 180
-  //     ) {
-  //       startAngle = d.x1 - Math.PI / 2;
-  //       endAngle = d.x0 - Math.PI / 2;
-  //       sweep = 1;
-  //     }
-
-  //     context.arc(0, 0, (d.y1 + d.y0) / 2, startAngle, endAngle, sweep);
-
-  //     return context.toString();
-  //   })
-  //   .attr("id", (d) => (d.guideId = uid("guide")).id)
-  //   .style("display", "none");
-  // // .style("fill", "none")
-  // // .style("stroke", "#000")
-  // // .style("stroke-width", "1px");
-
-  // const labels = g
-  //   .selectAll("text")
-  //   .data(root.descendants())
-  //   .enter()
-  //   .append("text")
-  //   .append("textPath")
-  //   .attr("clip-path", (d) => d.clipUid)
-  //   .attr("href", (d) => {
-  //     return d.guideId.href;
-  //   })
-  //   .attr("fill", "black")
-  //   .attr("dy", "5px")
-  //   .style("font-size", "6px")
-  //   .attr("text-anchor", "middle")
-  //   .attr("startOffset", "50%")
-
-  //   .text(function (d) {
-  //     return d.data.data.label;
-  //   });
-
-  // labels.each(wrap);
-
-  // // function labelTransform(d) {
-  // //   const x = (((d.x0 + d.x1) / 2) * 180) / Math.PI;
-  // //   const y = (d.y0 + d.y1) / 2;
-
-  // //   return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
-  // // }
-
-  // function wrap(d, i, nodes) {
-  //   const maxWidthTangential = ((d.x1 - d.x0) * (d.y0 + d.y1)) / 2;
-
-  //   const text = d3.select(nodes[i]);
-  //   let words = d.data.data.label.split(/\s+/).reverse(),
-  //     word,
-  //     line = [],
-  //     lineNumber = 0,
-  //     lineHeight = 0.9, // ems
-  //     x = text.attr("x") || 0,
-  //     y = text.attr("y") || 0,
-  //     dy = 0,
-  //     tspan = text
-  //       .text(null)
-  //       .append("tspan")
-  //       .attr("x", x)
-  //       .attr("y", y)
-  //       .attr("dy", dy + "em");
-
-  //   while ((word = words.pop())) {
-  //     line.push(word);
-  //     tspan.text(line.join(" "));
-
-  //     if (tspan.node().getComputedTextLength() > maxWidthTangential - 5) {
-  //       if (line.length === 1) {
-  //         // if there is only one word in line and its not fitting then hide it all
-  //         tspan.attr("display", "none");
-  //         text.attr("display", "none");
-  //         break;
-  //       }
-
-  //       line.pop();
-  //       tspan.text(line.join(" "));
-  //       line = [word];
-  //       tspan = text
-  //         .append("tspan")
-  //         .attr("x", x)
-  //         .attr("y", y)
-  //         .attr("dy", ++lineNumber * lineHeight + dy + "em")
-  //         .text(word);
-  //     }
-  //   }
-  //   console.log("text length:", text.node().getComputedTextLength());
-  // }
+  function labelVisible(d) {
+    return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+  }
 }
