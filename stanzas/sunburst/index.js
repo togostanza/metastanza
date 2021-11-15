@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "@/lib/load-data";
-
+import partitionLog from "./partitionLog";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -25,6 +25,7 @@ export default class Sunburst extends Stanza {
     const colorScale = [];
     const logScale = this.params["log-scale"];
     const borderWidth = this.params["gap-width"];
+    const showNumbers = this.params["show-numbers"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -67,12 +68,13 @@ export default class Sunburst extends Stanza {
       colorScale,
       logScale,
       borderWidth,
+      showNumbers,
     };
 
     draw(sunburstElement, filteredData, opts);
   }
 }
-function transformValue(logScale, value) {
+function transformValue(value, logScale) {
   if (logScale) {
     return Math.log10(value);
   }
@@ -80,7 +82,8 @@ function transformValue(logScale, value) {
 }
 
 function draw(el, dataset, opts) {
-  const { width, height, colorScale, logScale, borderWidth } = opts;
+  const { width, height, colorScale, logScale, borderWidth, showNumbers } =
+    opts;
 
   const data = d3
     .stratify()
@@ -91,42 +94,38 @@ function draw(el, dataset, opts) {
       return d.parent;
     })(dataset);
 
-  const maxRadius = Math.min(width, height) / 2 - 5;
-
   const radius = width / 6;
 
-  const arc = d3
-    .arc()
-    .startAngle((d) => d.x0)
-    .endAngle((d) => d.x1)
-    .padAngle((d) => 0.009)
-    .padRadius(radius * 1.5)
-    .innerRadius((d) => d.y0 * radius)
-    .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 1));
+  const maxRadius = Math.min(width, height) / 2 - 5;
 
-  const format = d3.format(",d");
+  const formatNumber = d3.format(",d");
 
-  // const color = d3.scaleOrdinal(
-  //   d3.quantize(d3.interpolateRainbow, data.children.length + 1)
-  // );
+  const x = d3
+    .scaleLinear()
+    .range([0, 2 * Math.PI])
+    .clamp(true);
+
+  const y = d3.scaleSqrt().range([maxRadius * 0.1, maxRadius]);
 
   const color = d3.scaleOrdinal(colorScale);
 
-  const partition = (data) => {
-    const root = d3
-      .hierarchy(data)
-      .sum((d) => d.data.n)
-      .sort((a, b) => b.data.n - a.data.n);
-    return d3.partition().size([2 * Math.PI, root.height + 1])(root);
-  };
+  const partition = partitionLog();
+
+  const arc = d3
+    .arc()
+    .startAngle((d) => x(d.x0))
+    .endAngle((d) => x(d.x1))
+    .padAngle((d) => Math.min((x(d.x1) - x(d.x0)) / 2, 0.01))
+    .padRadius(radius * 1.5)
+    .innerRadius((d) => Math.max(0, y(d.y0)))
+    .outerRadius((d) => Math.max(y(d.y0), y(d.y1)) - 2);
 
   const middleArcLine = (d) => {
     const halfPi = Math.PI / 2;
-    const angles = [d.x0 - halfPi, d.x1 - halfPi];
-    const r = Math.max(0, (d.y0 * radius + d.y1 * radius) / 2);
+    const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
+    const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
 
     const middleAngle = (angles[1] + angles[0]) / 2;
-
     const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
     if (invertDirection) {
       angles.reverse();
@@ -137,158 +136,114 @@ function draw(el, dataset, opts) {
     return path.toString();
   };
 
-  const textFits = (d, currentTarget) => {
-    let p;
+  //@TODO: check if text fits
+  const textFits = (d, i, nodes) => {
     const CHAR_SPACE = 6;
-    if (currentTarget === "current") {
-      p = d.current;
-    } else {
-      p = d.target;
-    }
-    const deltaAngle = p.x1 - p.x0;
-    const r = Math.max(0, (radius * (p.y0 + p.y1)) / 2);
+
+    const deltaAngle = x(d.x1) - x(d.x0);
+    const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
     const perimeter = r * deltaAngle;
 
     return d.data.data.label.length * CHAR_SPACE < perimeter;
   };
 
-  const root = partition(data);
-
-  root.each((d) => (d.current = d));
-
   const svg = d3
     .select(el)
     .append("svg")
     .style("width", width)
-    .style("height", height);
+    .style("height", height)
+    .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
+    .on("click", () => focusOn()); // Reset zoom on canvas click
 
-  const g = svg
-    .append("g")
-    .attr("transform", `translate(${width / 2},${width / 2})`);
+  const root = d3.hierarchy(data);
 
-  const sliceGroup = g
-    .append("g")
-    .selectAll("g")
-    .data(root.descendants().slice(1))
-    .enter()
-    .append("g");
+  root.sum((d) => d.data.n);
 
-  const path = sliceGroup
+  root.each((d) => (d.value2 = transformValue(d.value, logScale)));
 
+  const slice = svg.selectAll("g.slice").data(partition(root).descendants());
+
+  slice.exit().remove();
+
+  const newSlice = slice.enter().append("g").attr("class", "slice");
+
+  newSlice
+    .append("title")
+    .text((d) => d.data.data.label + "\n" + formatNumber(d.value));
+
+  newSlice
     .append("path")
-    .attr("fill", (d) => {
-      while (d.depth > 1) {
-        d = d.parent;
-      }
-      return color(d.data.data.label);
-    })
-    .attr("fill-opacity", (d) =>
-      arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
-    )
-    .attr("d", (d) => arc(d.current));
+    .attr("class", "main-arc")
+    .style("fill", (d) => color((d.children ? d : d.parent).data.data.label))
+    .style("fill-opacity", (d) => (d.children ? 1 : 0.6))
+    .attr("d", arc);
 
-  path
-    .filter((d) => d.children)
-    .style("cursor", "pointer")
-    .on("click", clicked);
-
-  path.append("title").text(
-    (d) =>
-      `${d
-        .ancestors()
-        .map((d) => d.data.data.label)
-        .reverse()
-        .join("/")}\n${format(d.value)}`
-  );
-
-  // hidden arc
-  const hiddenArc = sliceGroup
+  newSlice
     .append("path")
-    .attr("fill", "none")
-    .attr("stroke", "none")
+    .attr("class", "hidden-arc")
     .attr("id", (_, i) => `hiddenArc${i}`)
     .attr("d", middleArcLine);
 
-  const label = g
-    .append("g")
-    .attr("pointer-events", "none")
-    .attr("text-anchor", "middle")
-    .attr("user-select", "none")
-    .selectAll("text")
-    .data(root.descendants().slice(1))
-    .join("text")
-    .attr(
-      "fill-opacity",
-      (d) => +labelVisible(d.current) && +textFits(d, "current")
-    )
+  newSlice
+    .filter((d) => d.children)
+    .attr("cursor", "pointer")
+    .on("click", (e, d) => {
+      e.stopPropagation();
+      focusOn(d);
+    });
+
+  const text = newSlice
+    .append("text")
+    .attr("display", (d, i, nodes) => (textFits(d, i, nodes) ? null : "none"));
+
+  text
     .append("textPath")
     .attr("startOffset", "50%")
     .attr("href", (_, i) => `#hiddenArc${i}`)
     .text((d) => d.data.data.label);
 
-  const parent = g
-    .append("circle")
-    .datum(root)
-    .attr("r", radius)
-    .attr("fill", "none")
-    .attr("pointer-events", "all")
-    .on("click", clicked);
+  function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
+    // Reset to top-level if no data point specified
 
-  function clicked(event, p) {
-    parent.datum(p.parent || root);
+    const transition = svg
+      .transition()
+      .duration(750)
+      .tween("scale", () => {
+        const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
+          yd = d3.interpolate(y.domain(), [d.y0, 1]);
+        return (t) => {
+          x.domain(xd(t));
+          y.domain(yd(t));
+        };
+      });
 
-    root.each(
-      (d) =>
-        (d.target = {
-          x0:
-            Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) *
-            2 *
-            Math.PI,
-          x1:
-            Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) *
-            2 *
-            Math.PI,
-          y0: Math.max(0, d.y0 - p.depth),
-          y1: Math.max(0, d.y1 - p.depth),
-        })
-    );
-    const t = g.transition().duration(750);
+    transition.selectAll("path.main-arc").attrTween("d", (d) => () => arc(d));
 
-    path
-      .transition(t)
-      .tween("data", (d) => {
-        const i = d3.interpolate(d.current, d.target);
-        return (t) => (d.current = i(t));
-      })
-      .filter(function (d) {
-        return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-      })
-      .attr("fill-opacity", (d) =>
-        arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0
-      )
-      .attrTween("d", (d) => () => arc(d.current));
+    transition
+      .selectAll("path.hidden-arc")
+      .attrTween("d", (d) => () => middleArcLine(d));
 
-    hiddenArc
-      .transition(t)
-      .tween("data", (d) => {
-        const i = d3.interpolate(d.current, d.target);
-        return (t) => (d.current = i(t));
-      })
-      .attrTween("d", (d) => () => middleArcLine(d.current));
-
-    label
-
-      .transition(t)
-      .attr(
-        "fill-opacity",
-        (d) => +labelVisible(d.target) && +textFits(d, "target")
+    transition
+      .selectAll("text")
+      .attrTween(
+        "display",
+        (d, nodes, i) => (d, i, nodes) => textFits(d, i, d) ? null : "none"
       );
-  }
-  function arcVisible(d) {
-    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
-  }
 
-  function labelVisible(d) {
-    return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+    moveStackToFront(d);
+
+    //
+
+    function moveStackToFront(elD) {
+      svg
+        .selectAll(".slice")
+        .filter((d) => d === elD)
+        .each(function (d) {
+          this.parentNode.appendChild(this);
+          if (d.parent) {
+            moveStackToFront(d.parent);
+          }
+        });
+    }
   }
 }

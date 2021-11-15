@@ -37,6 +37,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "show-numbers",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show numbers under labels",
+      "stanza:required": true
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
