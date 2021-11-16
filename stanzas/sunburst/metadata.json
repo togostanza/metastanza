@@ -37,6 +37,14 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "max-depth",
+      "stanza:type": "number",
+      "stanza:example": 3,
+      "stanza:description": "Maximum depth to show",
+      "stanza:required": true
+    },
+
+    {
       "stanza:key": "show-numbers",
       "stanza:type": "boolean",
       "stanza:example": true,
