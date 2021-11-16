@@ -26,7 +26,7 @@ export default class Sunburst extends Stanza {
     const logScale = this.params["log-scale"];
     const borderWidth = this.params["gap-width"];
     const showNumbers = this.params["show-numbers"];
-
+    const depthLim = this.params["max-depth"];
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -69,6 +69,7 @@ export default class Sunburst extends Stanza {
       logScale,
       borderWidth,
       showNumbers,
+      depthLim,
     };
 
     draw(sunburstElement, filteredData, opts);
@@ -82,8 +83,15 @@ function transformValue(value, logScale) {
 }
 
 function draw(el, dataset, opts) {
-  const { width, height, colorScale, logScale, borderWidth, showNumbers } =
-    opts;
+  const {
+    width,
+    height,
+    colorScale,
+    logScale,
+    borderWidth,
+    showNumbers,
+    depthLim,
+  } = opts;
 
   const data = d3
     .stratify()
@@ -120,7 +128,7 @@ function draw(el, dataset, opts) {
     .innerRadius((d) => Math.max(0, y(d.y0)))
     .outerRadius((d) => Math.max(y(d.y0), y(d.y1)) - 2);
 
-  const middleArcLine = (d) => {
+  const middleArcLabelLine = (d) => {
     const halfPi = Math.PI / 2;
     const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
     const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
@@ -128,6 +136,22 @@ function draw(el, dataset, opts) {
     const middleAngle = (angles[1] + angles[0]) / 2;
     const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
     if (invertDirection) {
+      angles.reverse();
+    }
+
+    const path = d3.path();
+    path.arc(0, 0, r, angles[0], angles[1], invertDirection);
+    return path.toString();
+  };
+  const middleArcNumberLine = (d) => {
+    const halfPi = Math.PI / 2;
+    const angles = [x(d.x0) - halfPi, x(d.x1) - halfPi];
+    let r = Math.max(0, y(d.y0) + (y(d.y1) - y(d.y0)) / 5);
+
+    const middleAngle = (angles[1] + angles[0]) / 2;
+    const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
+    if (invertDirection) {
+      r = Math.max(0, y(d.y1) - (y(d.y1) - y(d.y0)) / 5);
       angles.reverse();
     }
 
@@ -170,49 +194,79 @@ function draw(el, dataset, opts) {
 
   root.each((d) => (d.value2 = transformValue(d.value, logScale)));
 
-  const slice = svg.selectAll("g.slice").data(partition(root).descendants());
+  let currentDepth = 0;
 
-  slice.exit().remove();
+  update(root, currentDepth, depthLim);
 
-  const newSlice = slice.enter().append("g").attr("class", "slice");
+  function update(root, currentDepth, depthLim) {
+    const slice = svg.selectAll("g.slice").data(
+      partition(root)
+        .descendants()
+        .filter((d) =>
+          depthLim !== 0 ? d.depth <= currentDepth + depthLim : true
+        )
+    );
 
-  newSlice
-    .append("title")
-    .text((d) => d.data.data.label + "\n" + formatNumber(d.value));
+    console.log(currentDepth);
+    console.log(root);
 
-  newSlice
-    .append("path")
-    .attr("class", "main-arc")
-    .style("fill", (d) => color((d.children ? d : d.parent).data.data.label))
-    .style("fill-opacity", (d) => (d.children ? 1 : 0.6))
-    .attr("d", arc);
+    slice.exit().remove();
 
-  newSlice
-    .append("path")
-    .attr("class", "hidden-arc")
-    .attr("id", (_, i) => `hiddenArc${i}`)
-    .attr("d", middleArcLine);
+    const newSlice = slice.enter().append("g").attr("class", "slice");
 
-  newSlice
-    .filter((d) => d.children)
-    .attr("cursor", "pointer")
-    .on("click", (e, d) => {
-      e.stopPropagation();
-      focusOn(d);
-    });
+    newSlice
+      .append("title")
+      .text((d) => d.data.data.label + "\n" + formatNumber(d.value));
 
-  const text = newSlice
-    .append("text")
-    .attr("display", (d) => (textFits(d) ? null : "none"));
+    newSlice
+      .append("path")
+      .attr("class", "main-arc")
+      .style("fill", (d) => color((d.children ? d : d.parent).data.data.label))
+      .style("fill-opacity", (d) => (d.children ? 1 : 0.6))
+      .attr("d", arc);
 
-  text
-    .append("textPath")
-    .attr("startOffset", "50%")
-    .attr("href", (_, i) => `#hiddenArc${i}`)
-    .text((d) => d.data.data.label);
+    newSlice
+      .append("path")
+      .attr("class", "hidden-arc label")
+      .attr("id", (_, i) => `hiddenLabelArc${i}`)
 
+      .attr("d", middleArcLabelLine);
+
+    newSlice
+      .append("path")
+      .attr("class", "hidden-arc number")
+      .attr("id", (_, i) => `hiddenNumberArc${i}`)
+      .attr("d", middleArcNumberLine);
+
+    newSlice
+      .filter((d) => d.children)
+      .attr("cursor", "pointer")
+      .on("click", (e, d) => {
+        e.stopPropagation();
+        focusOn(d);
+      });
+
+    const text = newSlice
+      .append("text")
+      .attr("display", (d) => (textFits(d) ? null : "none"));
+
+    text
+      .append("textPath")
+      .attr("startOffset", "50%")
+      .attr("href", (_, i) => `#hiddenLabelArc${i}`)
+      .text((d) => d.data.data.label);
+
+    text
+      .append("textPath")
+      .attr("startOffset", "50%")
+      .attr("href", (_, i) => `#hiddenNumberArc${i}`)
+      .text((d) => formatNumber(d.value));
+  }
   function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
     // Reset to top-level if no data point specified
+
+    console.log(d.depth);
+    update(root, d.depth || 0, depthLim);
 
     const transition = svg
       .transition()
@@ -229,8 +283,12 @@ function draw(el, dataset, opts) {
     transition.selectAll("path.main-arc").attrTween("d", (d) => () => arc(d));
 
     transition
-      .selectAll("path.hidden-arc")
-      .attrTween("d", (d) => () => middleArcLine(d));
+      .selectAll("path.hidden-arc:first-of-type")
+      .attrTween("d", (d) => () => middleArcLabelLine(d));
+
+    transition
+      .selectAll("path.hidden-arc:last-of-type")
+      .attrTween("d", (d) => () => middleArcNumberLine(d));
 
     transition
       .selectAll("text")

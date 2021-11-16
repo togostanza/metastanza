@@ -12,16 +12,25 @@ main {
   stroke-width: var(--togostanza-border-width);
 }
 
-#sunburst .slice text {
-  font-family: var(--togostanza-label-font-family);
-  font-size: var(--togostanza-label-font-size);
-  font-weight: var(--togostanza-label-font-weight);
-  fill: var(--togostanza-label-font-color);
-
+#sunburst .slice textPath {
   pointer-events: none;
   dominant-baseline: middle;
   text-anchor: middle;
 }
+
+#sunburst .slice textPath:first-of-type {
+  font-family: var(--togostanza-label-font-family);
+  font-size: var(--togostanza-label-font-size);
+  font-weight: var(--togostanza-label-font-weight);
+  fill: var(--togostanza-label-font-color);
+}
+#sunburst .slice textPath:last-of-type {
+  font-family: var(--togostanza-number-label-font-family);
+  font-size: var(--togostanza-number-label-font-size);
+  font-weight: var(--togostanza--number-label-font-weight);
+  fill: var(--togostanza-number-label-font-color);
+}
+
 #sunburst .slice .hidden-arc {
   fill: none;
   stroke: none;
