@@ -137,15 +137,15 @@ function draw(el, dataset, opts) {
   };
 
   //@TODO: check if text fits
-  const textFits = (d, i, nodes) => {
-    const CHAR_SPACE = 6;
+  function textFits(d) {
+    //const CHAR_SPACE = 6;
 
     const deltaAngle = x(d.x1) - x(d.x0);
     const r = Math.max(0, (y(d.y0) + y(d.y1)) / 2);
     const perimeter = r * deltaAngle;
 
     return d.data.data.label.length * CHAR_SPACE < perimeter;
-  };
+  }
 
   const svg = d3
     .select(el)
@@ -154,6 +154,15 @@ function draw(el, dataset, opts) {
     .style("height", height)
     .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`)
     .on("click", () => focusOn()); // Reset zoom on canvas click
+
+  //Get character width
+  const testText = svg
+    .append("g")
+    .attr("class", "slice")
+    .append("text")
+    .text("a");
+  const CHAR_SPACE = testText.node().getComputedTextLength();
+  testText.remove();
 
   const root = d3.hierarchy(data);
 
@@ -194,7 +203,7 @@ function draw(el, dataset, opts) {
 
   const text = newSlice
     .append("text")
-    .attr("display", (d, i, nodes) => (textFits(d, i, nodes) ? null : "none"));
+    .attr("display", (d) => (textFits(d) ? null : "none"));
 
   text
     .append("textPath")
@@ -225,10 +234,7 @@ function draw(el, dataset, opts) {
 
     transition
       .selectAll("text")
-      .attrTween(
-        "display",
-        (d, nodes, i) => (d, i, nodes) => textFits(d, i, d) ? null : "none"
-      );
+      .attrTween("display", (d) => () => textFits(d) ? null : "none");
 
     moveStackToFront(d);
 
