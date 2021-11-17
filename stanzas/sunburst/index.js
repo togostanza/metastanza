@@ -196,19 +196,32 @@ function draw(el, dataset, opts) {
 
   let currentDepth = 0;
 
-  update(root, currentDepth, depthLim);
+  update(currentDepth, depthLim);
 
-  function update(root, currentDepth, depthLim) {
+  function update(cd, depthLim) {
     const slice = svg.selectAll("g.slice").data(
       partition(root)
         .descendants()
-        .filter((d) =>
-          depthLim !== 0 ? d.depth <= currentDepth + depthLim : true
-        )
+        .filter((d) => (depthLim !== 0 ? d.depth < cd + depthLim : true))
     );
 
-    console.log(currentDepth);
-    console.log(root);
+    const t = d3
+      .transition()
+      .duration(750)
+      .tween("scale", () => {
+        const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
+          yd = d3.interpolate(y.domain(), [d.y0, 1]);
+        return (t) => {
+          x.domain(xd(t));
+          y.domain(yd(t));
+        };
+      });
+
+    console.log(
+      partition(root)
+        .descendants()
+        .filter((d) => (depthLim !== 0 ? d.depth < cd + depthLim : true))
+    );
 
     slice.exit().remove();
 
@@ -265,8 +278,10 @@ function draw(el, dataset, opts) {
   function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
     // Reset to top-level if no data point specified
 
-    console.log(d.depth);
-    update(root, d.depth || 0, depthLim);
+    console.log("d.depth: ", d.depth);
+    console.log(d);
+
+    update(d.depth || 0, depthLim);
 
     const transition = svg
       .transition()
@@ -295,8 +310,6 @@ function draw(el, dataset, opts) {
       .attrTween("display", (d) => () => textFits(d) ? null : "none");
 
     moveStackToFront(d);
-
-    //
 
     function moveStackToFront(elD) {
       svg
