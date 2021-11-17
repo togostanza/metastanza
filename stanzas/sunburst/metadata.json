@@ -121,12 +121,21 @@
       "stanza:default": "#eeeeee",
       "stanza:description": "Background color"
     },
+
+    {
+      "stanza:key": "--togostanza-label-text-outline",
+      "stanza:type": "color",
+      "stanza:default": "rgba(0,0,0,0)",
+      "stanza:description": "Label text outline"
+    },
+
     {
       "stanza:key": "--togostanza-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Label font family"
     },
+
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
