@@ -115,10 +115,7 @@ export default function (params) {
         entering.on("click", (e, d) => d.click(e, d.datum));
 
         //arrow polygons
-        entering.append("svg:polygon").style("fill", (d, i) => {
-          if (d.fill) return d.fill;
-          return defaultColors[i % defaultColors.length];
-        });
+        entering.append("svg:polygon");
 
         //arrow texts
         var enteredText = entering
@@ -127,11 +124,6 @@ export default function (params) {
           .attr("y", attrs.height / 2)
           .attr("dy", "0.4em")
           .attr("text-anchor", "start")
-          .attr("fill", (d) => (d.color ? d.color : "black"))
-          .attr("font-weight", 100)
-          .attr("font-size", (d) => {
-            return d.fontSize ? d.fontSize : attrs.fontSize;
-          })
           .text(function (d) {
             return d.text;
           });
@@ -269,27 +261,27 @@ export default function (params) {
 
       //#########################################  UTIL FUNCS ##################################
 
-      function debug() {
-        if (attrs.isDebug) {
-          //stringify func
-          var stringified = scope + "";
+      //   function debug() {
+      //     if (attrs.isDebug) {
+      //       //stringify func
+      //       var stringified = scope + "";
 
-          // parse variable names
-          var groupVariables = stringified
-            //match var x-xx= {};
-            .match(/var\s+([\w])+\s*=\s*{\s*}/gi)
-            //match xxx
-            .map((d) => d.match(/\s+\w*/gi).filter((s) => s.trim()))
-            //get xxx
-            .map((v) => v[0].trim());
+      //       // parse variable names
+      //       var groupVariables = stringified
+      //         //match var x-xx= {};
+      //         .match(/var\s+([\w])+\s*=\s*{\s*}/gi)
+      //         //match xxx
+      //         .map((d) => d.match(/\s+\w*/gi).filter((s) => s.trim()))
+      //         //get xxx
+      //         .map((v) => v[0].trim());
 
-          //assign local variables to the scope
-          groupVariables.forEach((v) => {
-            main["P_" + v] = eval(v);
-          });
-        }
-      }
-      debug();
+      //       //assign local variables to the scope
+      //       groupVariables.forEach((v) => {
+      //         main["P_" + v] = eval(v);
+      //       });
+      //     }
+      //   }
+      //debug();
     });
   };
 
@@ -314,9 +306,11 @@ export default function (params) {
     return (main[key] = function (_) {
       var string = `attrs['${key}'] = _`;
       if (!arguments.length) {
-        return eval(` attrs['${key}'];`);
+        //return eval(` attrs['${key}'];`);
+        return attrs[key];
       }
-      eval(string);
+      attrs[key] = _;
+      //eval(string);
       return main;
     });
   });

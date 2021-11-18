@@ -3,7 +3,6 @@ import * as d3 from "d3";
 import loadData from "@/lib/load-data";
 import partitionLog from "./partitionLog";
 import breadcrumb from "./breadcrumb";
-import data1 from "./data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -20,7 +19,7 @@ export default class Sunburst extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    //const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
@@ -31,6 +30,7 @@ export default class Sunburst extends Stanza {
     const cornerRadius = this.params["nodes-corner-radius"] || 0;
     const showNumbers = this.params["show-numbers"] || true;
     const depthLim = +this.params["max-depth"] || 0;
+    const breadcrumbHeight = +this.params["breadcrumb-height"] || 30;
 
     const data = await loadData(
       this.params["data-url"],
@@ -77,6 +77,7 @@ export default class Sunburst extends Stanza {
       cornerRadius,
       showNumbers,
       depthLim,
+      breadcrumbHeight,
     };
 
     draw(sunburstElement, filteredData, opts);
@@ -100,6 +101,7 @@ function draw(el, dataset, opts) {
     cornerRadius,
     showNumbers,
     depthLim,
+    breadcrumbHeight,
   } = opts;
 
   const data = d3
@@ -125,6 +127,7 @@ function draw(el, dataset, opts) {
   };
 
   const root = partition(data);
+
   root.each((d) => (d.current = d));
 
   // if depthLim 0 of negative, show all levels
@@ -192,7 +195,6 @@ function draw(el, dataset, opts) {
     return path.toString();
   };
 
-  //@TODO: check if text fits
   function textFits(d, charWidth, text) {
     //const CHAR_SPACE = 6;
 
@@ -206,8 +208,8 @@ function draw(el, dataset, opts) {
   const breadcrumbs = d3
     .select(el)
     .append("svg")
-    .style("width", width)
-    .style("height", "30");
+    .attr("width", width)
+    .attr("height", breadcrumbHeight);
 
   const svg = d3
     .select(el)
@@ -215,7 +217,6 @@ function draw(el, dataset, opts) {
     .style("width", width)
     .style("height", height)
     .attr("viewBox", `${-width / 2} ${-height / 2} ${width} ${height}`);
-  //.on("click", () => focusOn()); // Reset zoom on canvas click
 
   //Get character width
   const testText = svg
@@ -227,7 +228,6 @@ function draw(el, dataset, opts) {
   testText.remove();
 
   const g = svg.append("g");
-  //.attr("transform", `translate(${width / 2},${width / 2})`);
 
   const path = g
     .append("g")
@@ -266,6 +266,7 @@ function draw(el, dataset, opts) {
     .attr("class", "hidden-arc")
     .attr("id", (_, i) => `hiddenLabelArc${i}`)
     .attr("d", middleArcLabelLine);
+
   //For numbers
   const numArcs = g
     .append("g")
@@ -296,9 +297,6 @@ function draw(el, dataset, opts) {
       "fill-opacity",
       (d) => +(labelVisible(d) && textFits(d, CHAR_SPACE, d.data.data.label))
     )
-    // .attr("display", (d) => {
-    //   return textFits(d, CHAR_SPACE, d.data.data.label) ? null : "none";
-    // })
     .append("textPath")
     .attr("startOffset", "50%")
     .attr("href", (_, i) => `#hiddenLabelArc${i}`)
@@ -328,8 +326,8 @@ function draw(el, dataset, opts) {
 
   const breadcrumbVar = breadcrumb()
     .container(breadcrumbs)
-    .height(30)
-    .fontSize(12);
+    .height(breadcrumbHeight);
+  //.fontSize(css("--togostanza-breadcrumb-label-font-size"));
 
   breadcrumbVar.show([
     { text: "/", fill: "#eee", datum: root, click: clicked, title: "/" },
