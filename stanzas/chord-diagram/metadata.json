@@ -1,0 +1,44 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "chord-diagram",
+  "stanza:label": "Chord diagram",
+  "stanza:definition": "",
+  "stanza:license": "MIT",
+  "stanza:author": "永野 朗夫",
+  "stanza:contributor": [],
+  "stanza:created": "2021-11-12",
+  "stanza:updated": "2021-11-12",
+  "stanza:parameter": [
+    {
+      "stanza:key": "say-to",
+      "stanza:type": "string",
+      "stanza:example": "world",
+      "stanza:description": "who to say hello to",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--greeting-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "text color of greeting"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
