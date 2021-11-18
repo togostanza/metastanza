@@ -7,7 +7,7 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils"; //"@/lib/metastanza_utils.js"; //
 
 export default class Sunburst extends Stanza {
   menu() {
@@ -19,7 +19,6 @@ export default class Sunburst extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
@@ -208,8 +207,8 @@ function draw(el, dataset, opts) {
   const breadcrumbs = d3
     .select(el)
     .append("svg")
-    .attr("width", width)
-    .attr("height", breadcrumbHeight);
+    .attr("height", breadcrumbHeight)
+    .attr("width", width);
 
   const svg = d3
     .select(el)
@@ -326,8 +325,8 @@ function draw(el, dataset, opts) {
 
   const breadcrumbVar = breadcrumb()
     .container(breadcrumbs)
-    .height(breadcrumbHeight);
-  //.fontSize(css("--togostanza-breadcrumb-label-font-size"));
+    .height(breadcrumbHeight)
+    .width(width);
 
   breadcrumbVar.show([
     { text: "/", fill: "#eee", datum: root, click: clicked, title: "/" },
