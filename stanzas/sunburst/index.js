@@ -2,6 +2,8 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "@/lib/load-data";
 import partitionLog from "./partitionLog";
+import breadcrumb from "./breadcrumb";
+import data1 from "./data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -23,10 +25,13 @@ export default class Sunburst extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const colorScale = [];
-    const logScale = this.params["log-scale"];
-    const borderWidth = this.params["gap-width"];
-    const showNumbers = this.params["show-numbers"];
-    const depthLim = this.params["max-depth"];
+    const logScale = this.params["log-scale"] || false;
+    const borderWidth = this.params["gap-width"] || 2;
+    const nodesGapWidth = this.params["nodes-gap-width"] || 8;
+    const cornerRadius = this.params["nodes-corner-radius"] || 0;
+    const showNumbers = this.params["show-numbers"] || true;
+    const depthLim = +this.params["max-depth"] || 0;
+
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -68,6 +73,8 @@ export default class Sunburst extends Stanza {
       colorScale,
       logScale,
       borderWidth,
+      nodesGapWidth,
+      cornerRadius,
       showNumbers,
       depthLim,
     };
@@ -89,6 +96,8 @@ function draw(el, dataset, opts) {
     colorScale,
     logScale,
     borderWidth,
+    nodesGapWidth,
+    cornerRadius,
     showNumbers,
     depthLim,
   } = opts;
@@ -123,26 +132,37 @@ function draw(el, dataset, opts) {
     depthLim = d3.max(root, (d) => d.depth);
   }
 
-  const radius = width / (depthLim * 2);
+  const radius = width / ((depthLim + 1) * 2);
 
   const arc = d3
     .arc()
     .startAngle((d) => d.x0)
     .endAngle((d) => d.x1)
-    .padAngle((d) => Math.min((d.x1 - d.x0) / 2, 0.005))
+    .padAngle((d) => Math.min((d.x1 - d.x0) / 2, nodesGapWidth / 500))
     .padRadius(radius * 1.5)
     .innerRadius((d) => d.y0 * radius)
-    .outerRadius((d) => Math.max(d.y0 * radius, d.y1 * radius - 2));
+    .outerRadius((d) =>
+      Math.max(d.y0 * radius, d.y1 * radius - borderWidth / 2)
+    )
+    .cornerRadius(cornerRadius);
 
   const middleArcLabelLine = (d) => {
     const halfPi = Math.PI / 2;
-    const angles = [d.x0 - halfPi, d.x1 - halfPi];
-    const r = Math.max(0, ((d.y0 + d.y1) * radius) / 2);
+    let angles = [d.x0 - halfPi, d.x1 - halfPi];
+    let r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 2.5) * radius);
 
     const middleAngle = (angles[1] + angles[0]) / 2;
     const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
     if (invertDirection) {
+      r = Math.max(0, (d.y0 + (d.y1 - d.y0) / 2.5) * radius);
       angles.reverse();
+    }
+
+    if (Math.abs(angles[1] - angles[0]) > Math.PI && d.y0 < 1) {
+      angles[0] = middleAngle + Math.PI / 2;
+      angles[1] = middleAngle - Math.PI / 2;
+
+      r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 5) * radius);
     }
 
     const path = d3.path();
@@ -153,13 +173,18 @@ function draw(el, dataset, opts) {
   const middleArcNumberLine = (d) => {
     const halfPi = Math.PI / 2;
     const angles = [d.x0 - halfPi, d.x1 - halfPi];
-    let r = Math.max(0, (d.y0 + (d.y1 - d.y0) / 5) * radius);
+    let r = Math.max(0, (d.y0 + (d.y1 - d.y0) / 2.5) * radius);
 
     const middleAngle = (angles[1] + angles[0]) / 2;
     const invertDirection = middleAngle > 0 && middleAngle < Math.PI; // On lower quadrants write text ccw
     if (invertDirection) {
-      r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 5) * radius);
+      r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 2.5) * radius);
+
       angles.reverse();
+    }
+
+    if (Math.abs(angles[1] - angles[0]) > Math.PI && d.y0 < 1) {
+      r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 2.5) * radius);
     }
 
     const path = d3.path();
@@ -177,6 +202,12 @@ function draw(el, dataset, opts) {
 
     return text.length * charWidth < perimeter;
   }
+
+  const breadcrumbs = d3
+    .select(el)
+    .append("svg")
+    .style("width", width)
+    .style("height", "30");
 
   const svg = d3
     .select(el)
@@ -245,6 +276,15 @@ function draw(el, dataset, opts) {
     .attr("id", (_, i) => `hiddenNumberArc${i}`)
     .attr("d", middleArcNumberLine);
 
+  // Center circle
+  const parent = g
+    .append("circle")
+    .datum(root)
+    .attr("r", radius - borderWidth / 2)
+    .attr("fill", "none")
+    .attr("pointer-events", "all")
+    .on("click", clicked);
+
   //Text labels
   const textLabels = g
     .append("g")
@@ -271,28 +311,81 @@ function draw(el, dataset, opts) {
     .selectAll("text")
     .data(root.descendants().slice(1))
     .join("text")
+    //Show only if label is supposed to be shown, label text fits into node and showNumbers =true
     .attr(
       "fill-opacity",
-      (d) => +(labelVisible(d) && textFits(d, CHAR_SPACE, d.data.data.label))
+      (d) =>
+        +(
+          labelVisible(d) &&
+          textFits(d, CHAR_SPACE, d.data.data.label) &&
+          showNumbers
+        )
     )
-    // .attr("display", (d) => {
-    //   return textFits(d, NUM_CHAR_SPACE, formatNumber(d.value)) ? null : "none";
-    // })
     .append("textPath")
     .attr("startOffset", "50%")
     .attr("href", (_, i) => `#hiddenNumberArc${i}`)
     .text((d) => formatNumber(d.value));
 
-  const parent = g
-    .append("circle")
-    .datum(root)
-    .attr("r", radius)
-    .attr("fill", "none")
-    .attr("pointer-events", "all")
-    .on("click", clicked);
+  const breadcrumbVar = breadcrumb()
+    .container(breadcrumbs)
+    .height(30)
+    .fontSize(12);
+
+  breadcrumbVar.show([
+    { text: "/", fill: "#eee", datum: root, click: clicked, title: "/" },
+  ]);
 
   function clicked(event, p) {
+    if (!arcVisible(p.current) && p.current.y1 > 1) {
+      return;
+    }
+
+    let currentPath = p
+      .ancestors()
+      .map((d) => ({
+        text: d === root ? "/" : d.data.data.label,
+        fill: "#eee",
+        click: clicked,
+        datum: d,
+        title: d === root ? "/" : d.data.data.label,
+      }))
+      .reverse();
+
+    //Add path to breadcrumbs
+    breadcrumbVar.show(currentPath);
+
+    //Get breadcrumbs group width
+    let breadcrumbsWidth = breadcrumbs
+      .select("g")
+      .node()
+      .getBoundingClientRect().width;
+
+    let ii = 0;
+    while (breadcrumbsWidth > width) {
+      //if it wants to replace with ... the previous node text, dont do that, instead delete root+1 node
+
+      if (ii >= currentPath.length - 1 - 1) {
+        currentPath = currentPath.slice(1);
+        ii--;
+      } else {
+        ii++;
+        currentPath[ii] = {
+          ...currentPath[ii],
+          text: "...",
+        };
+      }
+
+      breadcrumbVar.show(currentPath);
+
+      breadcrumbsWidth = breadcrumbs
+        .select("g")
+        .node()
+        .getBoundingClientRect().width;
+    }
+
     parent.datum(p.parent || root);
+
+    parent.attr("cursor", (d) => (d === root ? "auto" : "pointer"));
 
     root.each(
       (d) =>
@@ -327,18 +420,24 @@ function draw(el, dataset, opts) {
       .attr("fill-opacity", (d) =>
         arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0
       )
+      .attr("cursor", (d) =>
+        d.children && arcVisible(d.target) ? "pointer" : "auto"
+      )
+
       .attrTween("d", (d) => () => arc(d.current));
+
+    parent.transition(t).attr("fill", (d) => {
+      let b = p;
+      while (b.depth > 1) b = b.parent;
+
+      return b.data?.data?.label ? color(b.data.data.label) : "rgba(0,0,0,0)";
+    });
 
     textLabels
       .filter(function (d) {
         return +this.getAttribute("fill-opacity") || +labelVisible(d.target);
       })
       .transition(t)
-      // .attr("display", (d) => {
-      //   return textFits(d.current, CHAR_SPACE, d.data.data.label)
-      //     ? null
-      //     : "none";
-      // })
       .attr(
         "fill-opacity",
         (d) =>
@@ -357,17 +456,13 @@ function draw(el, dataset, opts) {
         return +this.getAttribute("fill-opacity") || labelVisible(d.target);
       })
       .transition(t)
-      // .attr("display", (d) =>
-      //   textFits(d.target, NUM_CHAR_SPACE, formatNumber(d.value))
-      //     ? null
-      //     : "none"
-      // )
       .attr(
         "fill-opacity",
         (d) =>
           +(
             labelVisible(d.target) &&
-            textFits(d.target, CHAR_SPACE, d.data.data.label)
+            textFits(d.target, CHAR_SPACE, d.data.data.label) &&
+            showNumbers
           )
       );
 
@@ -377,128 +472,10 @@ function draw(el, dataset, opts) {
   }
 
   function arcVisible(d) {
-    return d.y1 <= depthLim && d.y0 >= 1 && d.x1 > d.x0;
+    return d.y1 <= depthLim + 1 && d.y0 >= 1 && d.x1 > d.x0;
   }
 
   function labelVisible(d) {
-    return d.y1 <= depthLim && d.y0 >= 1; //&& (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
+    return d.y1 <= depthLim + 1 && d.y0 >= 0;
   }
-
-  // function update(cd, depthLim) {
-  //   const slice = svg.selectAll("g.slice").data(
-  //     partition(root)
-  //       .descendants()
-  //       .filter((d) => (depthLim !== 0 ? d.depth < cd + depthLim : true))
-  //   );
-
-  //   const t = d3
-  //     .transition()
-  //     .duration(750)
-  //     .tween("scale", () => {
-  //       //name of the tween might be anything. its not used anywhere
-  //       const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
-  //         yd = d3.interpolate(y.domain(), [d.y0, 1]);
-  //       return (t) => {
-  //         x.domain(xd(t));
-  //         y.domain(yd(t));
-  //       };
-  //     });
-
-  //   slice.exit().remove();
-
-  //   const newSlice = slice.enter().append("g").attr("class", "slice");
-
-  //   newSlice
-  //     .append("title")
-  //     .text((d) => d.data.data.label + "\n" + formatNumber(d.value));
-
-  //   newSlice
-  //     .append("path")
-  //     .attr("class", "main-arc")
-  //     .style("fill", (d) => color((d.children ? d : d.parent).data.data.label))
-  //     .style("fill-opacity", (d) => (d.children ? 1 : 0.6))
-  //     .attr("d", arc);
-
-  //   newSlice
-  //     .append("path")
-  //     .attr("class", "hidden-arc label")
-  //     .attr("id", (_, i) => `hiddenLabelArc${i}`)
-
-  //     .attr("d", middleArcLabelLine);
-
-  //   newSlice
-  //     .append("path")
-  //     .attr("class", "hidden-arc number")
-  //     .attr("id", (_, i) => `hiddenNumberArc${i}`)
-  //     .attr("d", middleArcNumberLine);
-
-  //   newSlice
-  //     .filter((d) => d.children)
-  //     .attr("cursor", "pointer")
-  //     .on("click", (e, d) => {
-  //       e.stopPropagation();
-  //       focusOn(d);
-  //     });
-
-  //   const text = newSlice
-  //     .append("text")
-  //     .attr("display", (d) => (textFits(d) ? null : "none"));
-
-  //   text
-  //     .append("textPath")
-  //     .attr("startOffset", "50%")
-  //     .attr("href", (_, i) => `#hiddenLabelArc${i}`)
-  //     .text((d) => d.data.data.label);
-
-  //   text
-  //     .append("textPath")
-  //     .attr("startOffset", "50%")
-  //     .attr("href", (_, i) => `#hiddenNumberArc${i}`)
-  //     .text((d) => formatNumber(d.value));
-  // }
-  // function focusOn(d = { x0: 0, x1: 1, y0: 0, y1: 1 }) {
-  //   // Reset to top-level if no data point specified
-
-  //   update(d.depth || 0, depthLim);
-
-  //   const transition = svg
-  //     .transition()
-  //     .duration(750)
-  //     .tween("scale", () => {
-  //       const xd = d3.interpolate(x.domain(), [d.x0, d.x1]),
-  //         yd = d3.interpolate(y.domain(), [d.y0, 1]);
-  //       return (t) => {
-  //         x.domain(xd(t));
-  //         y.domain(yd(t));
-  //       };
-  //     });
-
-  //   transition.selectAll("path.main-arc").attrTween("d", (d) => () => arc(d));
-
-  //   transition
-  //     .selectAll("path.hidden-arc:first-of-type")
-  //     .attrTween("d", (d) => () => middleArcLabelLine(d));
-
-  //   transition
-  //     .selectAll("path.hidden-arc:last-of-type")
-  //     .attrTween("d", (d) => () => middleArcNumberLine(d));
-
-  //   transition
-  //     .selectAll("text")
-  //     .attrTween("display", (d) => () => textFits(d) ? null : "none");
-
-  //   moveStackToFront(d);
-
-  //   function moveStackToFront(elD) {
-  //     svg
-  //       .selectAll(".slice")
-  //       .filter((d) => d === elD)
-  //       .each(function (d) {
-  //         this.parentNode.appendChild(this);
-  //         if (d.parent) {
-  //           moveStackToFront(d.parent);
-  //         }
-  //       });
-  //   }
-  // }
 }
