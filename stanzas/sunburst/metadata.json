@@ -79,6 +79,13 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "breadcrumb-height",
+      "stanza:type": "number",
+      "stanza:example": 20,
+      "stanza:description": "Breadcrumb height",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 400,
@@ -192,6 +199,36 @@
       "stanza:type": "string",
       "stanza:default": "normal",
       "stanza:description": "Number label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-breadcrumb-fill-color",
+      "stanza:type": "color",
+      "stanza:default": "#EEEEEE",
+      "stanza:description": "Breadcrumb fill color"
+    },
+    {
+      "stanza:key": "--togostanza-breadcrumb-label-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Breadcrumb label font family"
+    },
+    {
+      "stanza:key": "--togostanza-breadcrumb-label-font-size",
+      "stanza:type": "string",
+      "stanza:default": "7px",
+      "stanza:description": "Breadcrumb label font size"
+    },
+    {
+      "stanza:key": "--togostanza-breadcrumblabel-font-weight",
+      "stanza:type": "string",
+      "stanza:default": "normal",
+      "stanza:description": "Breadcrumb label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-breadcrumb-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Breadcrumb label font color"
     }
   ],
   "stanza:incomingEvent": [],

@@ -7,11 +7,6 @@ main {
   padding: 1rem 2rem;
 }
 
-#sunburst .slice .main-arc {
-  stroke: "none";
-  stroke-width: var(--togostanza-border-width);
-}
-
 #sunburst textPath {
   pointer-events: none;
   dominant-baseline: middle;
@@ -39,4 +34,15 @@ main {
 #sunburst g .hidden-arc {
   fill: none;
   stroke: none;
+}
+
+svg g.breadcrumbs polygon {
+  fill: var(--togostanza-breadcrumb-fill-color) !important;
+}
+
+svg g.breadcrumbs text {
+  font-family: var(--togostanza-breadcrumb-label-font-family);
+  font-size: var(--togostanza-breadcrumb-label-font-size);
+  font-weight: var(--togostanza-breadcrumb-label-font-weight);
+  fill: var(--togostanza-breadcrumb-label-font-color);
 }
