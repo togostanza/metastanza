@@ -1,6 +1,5 @@
 {
-  "@context": {
-  },
+  "@context": {},
   "@id": "heatmap-geographic-map",
   "stanza:label": "Heatmap geographic map",
   "stanza:definition": "Heatmap geographic map MetaStanza",

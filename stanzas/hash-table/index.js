@@ -1,6 +1,6 @@
 import Stanza from "togostanza/stanza";
-import loadData from "@/lib/load-data";
-import { appendCustomCss } from "@/lib/metastanza_utils.js";
+import loadData from "togostanza-utils/load-data";
+import { appendCustomCss } from "togostanza-utils";
 
 export default class HashTable extends Stanza {
   async render() {

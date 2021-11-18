@@ -18,14 +18,14 @@
     {
       "stanza:key": "chart-type",
       "stanza:type": "single-choice",
-      "stanza:choice": ["original", "rings", "mono"],
-      "stanza:example": "original",
-      "stanza:description": "Type of benn diagram",
+      "stanza:choice": ["Venn diagram", "Euler diagram"],
+      "stanza:example": "Venn diagram",
+      "stanza:description": "Type of venn diagram",
       "stanza:required": true
     },
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://c-nakashima.github.io/metastanza-dev-test/venn-3orgs-sparql.json",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -33,44 +33,9 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "sparql-results-json",
+      "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
-    },
-    {
-      "stanza:key": "label-0",
-      "stanza:type": "string",
-      "stanza:example": "10090",
-      "stanza:description": "Label name",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "label-1",
-      "stanza:type": "string",
-      "stanza:example": "7955",
-      "stanza:description": "Label name",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "label-2",
-      "stanza:type": "string",
-      "stanza:example": "9606",
-      "stanza:description": "Label name",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "label-3",
-      "stanza:type": "string",
-      "stanza:example": "9601",
-      "stanza:description": "Label name",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "label-4",
-      "stanza:type": "string",
-      "stanza:example": "9606",
-      "stanza:description": "Label name",
-      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",
@@ -89,6 +54,14 @@
       "stanza:type": "number",
       "stanza:example": 380,
       "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "blend-mode",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["normal", "multiply", "screen"],
+      "stanza:example": "screen",
+      "stanza:description": "How to mix colors in overlapping areas",
+      "stanza:required": true
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -138,32 +111,14 @@
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#FFFFFF",
+      "stanza:default": "#000000",
       "stanza:description": "Label font color"
     },
     {
       "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
-      "stanza:default": 20,
+      "stanza:default": 12,
       "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 2,
-      "stanza:description": "Border width"
-    },
-    {
-      "stanza:key": "--togostanza-border-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border opacity"
-    },
-    {
-      "stanza:key": "--togostanza-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Fill opacity"
     }
   ],
   "stanza:incomingEvent": [],

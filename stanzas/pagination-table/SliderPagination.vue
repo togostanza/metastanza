@@ -131,9 +131,9 @@ export default defineComponent({
         canvas.value.width = paginationWrapper.value.clientWidth;
         canvas.value.height = 50;
 
-        const sliderY = paginationWrapper.value.getElementsByClassName(
-          "pageSlider"
-        )[0].offsetTop;
+        const sliderY =
+          paginationWrapper.value.getElementsByClassName("pageSlider")[0]
+            .offsetTop;
         const tablePaginationOrder =
           paginationNumList.value.offsetTop < sliderY
             ? "column"
@@ -142,9 +142,8 @@ export default defineComponent({
         const paginationNumListX = paginationNumList.value.offsetLeft;
         const paginationNumListY = tablePaginationOrder === "column" ? 0 : 50;
 
-        const knob = paginationWrapper.value.getElementsByClassName(
-          "slider-origin"
-        )[0];
+        const knob =
+          paginationWrapper.value.getElementsByClassName("slider-origin")[0];
         const knobTranslate = knob.style.transform
           .match(/translate\((.+)%,(.+)\)/)[1]
           .split(",")[0];

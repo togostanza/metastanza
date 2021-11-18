@@ -34,11 +34,7 @@
     {
       "stanza:key": "--greeting-align",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "center",
-        "right"
-      ],
+      "stanza:choice": ["left", "center", "right"],
       "stanza:default": "center",
       "stanza:description": "text align of greeting"
     }

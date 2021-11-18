@@ -5,19 +5,15 @@
   "@id": "scroll-table",
   "stanza:label": "Scroll table",
   "stanza:definition": "Scroll table MetaStanza",
-  "stanza:type": "Stanza",
-  "stanza:display": "Table",
-  "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
+  "stanza:author": "DBCLS",
   "stanza:contributor": [],
   "stanza:created": "2020-12-09",
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606",
+      "stanza:example": "https://togovar-dev.biosciencedbc.jp/sparqlist/api/gene_gwas?ep=https%3A%2F%2Ftogovar-dev.biosciencedbc.jp%2Fsparql&hgnc_id=404",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -36,11 +32,23 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:description": "Width"
+    },
+    {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 400,
       "stanza:description": "Height",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "fixed-columns",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "amount of fixed columns",
+      "stanza:required": false
     },
     {
       "stanza:key": "padding",
@@ -58,7 +66,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\",\"escape\": false},{\"id\":\"mass\",\"label\":\"Mass\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\"}]",
+      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\"},{\"id\":\"raf\",\"label\":\"RAF\"},{\"id\":\"p_value\",\"label\":\"P-Value\",\"type\":\"number\"},{\"id\":\"odds_ratio\",\"label\":\"OR\"},{\"id\":\"ci_text\",\"label\":\"CI\"},{\"id\":\"beta\",\"label\":\"Beta\"},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\"},{\"id\":\"study_detail\",\"label\":\"Study details\",\"link\":\"study\"},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\"},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\": 3}]",
       "stanza:description": "Columns' options"
     }
   ],
@@ -97,7 +105,7 @@
     {
       "stanza:key": "--togostanza-thead-font-color",
       "stanza:type": "color",
-      "stanza:default": "#256D80",
+      "stanza:default": "#ffffff",
       "stanza:description": "Font color of table header"
     },
     {
@@ -109,7 +117,7 @@
     {
       "stanza:key": "--togostanza-thead-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:default": "#256D80",
       "stanza:description": "Background color of table header"
     },
     {
@@ -151,7 +159,7 @@
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:default": "#F8F9FA",
       "stanza:description": "Background color"
     }
   ]
