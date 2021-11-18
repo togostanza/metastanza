@@ -34,14 +34,14 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Log scale for values",
-      "stanza:required": true
+      "stanza:required": false
     },
     {
       "stanza:key": "max-depth",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Maximum depth to show",
-      "stanza:required": true
+      "stanza:required": false
     },
 
     {
@@ -49,7 +49,28 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Show numbers under labels",
-      "stanza:required": true
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "gap-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Gap between chart nodes levels, in px",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "nodes-gap-width",
+      "stanza:type": "number",
+      "stanza:example": 8,
+      "stanza:description": "Gap between chart nodes that are on same level, unitless coefficient",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "nodes-corner-radius",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Corner radius of nodes",
+      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",
@@ -110,12 +131,6 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 2,
-      "stanza:description": "Border width"
-    },
-    {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
       "stanza:default": "#eeeeee",
@@ -126,7 +141,7 @@
       "stanza:key": "--togostanza-label-text-outline",
       "stanza:type": "color",
       "stanza:default": "rgba(0,0,0,0)",
-      "stanza:description": "Label text outline"
+      "stanza:description": "Label text outline. 'rgba(0,0,0,0)' for no outline"
     },
 
     {
