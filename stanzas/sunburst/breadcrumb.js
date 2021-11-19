@@ -24,62 +24,62 @@ export default function (params) {
   };
 
   //this colors are taken from metronic's color library
-  var defaultColors = [
-    "#c5bf66",
-    "#BF55EC",
-    "#f36a5a",
-    "#EF4836",
-    "#9A12B3",
-    "#c8d046",
-    "#E26A6A",
-    "#32c5d2",
-    "#8877a9",
-    "#ACB5C3",
-    "#e35b5a",
-    "#2f353b",
-    "#e43a45",
-    "#f2784b",
-    "#796799",
-    "#26C281",
-    "#555555",
-    "#525e64",
-    "#8E44AD",
-    "#4c87b9",
-    "#bfcad1",
-    "#67809F",
-    "#578ebe",
-    "#c5b96b",
-    "#4DB3A2",
-    "#e7505a",
-    "#D91E18",
-    "#1BBC9B",
-    "#3faba4",
-    "#d05454",
-    "#8775a7",
-    "#8775a7",
-    "#8E44AD",
-    "#f3c200",
-    "#4B77BE",
-    "#c49f47",
-    "#44b6ae",
-    "#36D7B7",
-    "#94A0B2",
-    "#9B59B6",
-    "#E08283",
-    "#3598dc",
-    "#F4D03F",
-    "#F7CA18",
-    "#22313F",
-    "#2ab4c0",
-    "#5e738b",
-    "#BFBFBF",
-    "#2C3E50",
-    "#5C9BD1",
-    "#95A5A6",
-    "#E87E04",
-    "#29b4b6",
-    "#1BA39C",
-  ];
+  //   var defaultColors = [
+  //     "#c5bf66",
+  //     "#BF55EC",
+  //     "#f36a5a",
+  //     "#EF4836",
+  //     "#9A12B3",
+  //     "#c8d046",
+  //     "#E26A6A",
+  //     "#32c5d2",
+  //     "#8877a9",
+  //     "#ACB5C3",
+  //     "#e35b5a",
+  //     "#2f353b",
+  //     "#e43a45",
+  //     "#f2784b",
+  //     "#796799",
+  //     "#26C281",
+  //     "#555555",
+  //     "#525e64",
+  //     "#8E44AD",
+  //     "#4c87b9",
+  //     "#bfcad1",
+  //     "#67809F",
+  //     "#578ebe",
+  //     "#c5b96b",
+  //     "#4DB3A2",
+  //     "#e7505a",
+  //     "#D91E18",
+  //     "#1BBC9B",
+  //     "#3faba4",
+  //     "#d05454",
+  //     "#8775a7",
+  //     "#8775a7",
+  //     "#8E44AD",
+  //     "#f3c200",
+  //     "#4B77BE",
+  //     "#c49f47",
+  //     "#44b6ae",
+  //     "#36D7B7",
+  //     "#94A0B2",
+  //     "#9B59B6",
+  //     "#E08283",
+  //     "#3598dc",
+  //     "#F4D03F",
+  //     "#F7CA18",
+  //     "#22313F",
+  //     "#2ab4c0",
+  //     "#5e738b",
+  //     "#BFBFBF",
+  //     "#2C3E50",
+  //     "#5C9BD1",
+  //     "#95A5A6",
+  //     "#E87E04",
+  //     "#29b4b6",
+  //     "#1BA39C",
+  //   ];
 
   /*############### IF EXISTS OVERWRITE ATTRIBUTES FROM PASSED PARAM  #######  */
   var attrKeys = Object.keys(attrs);
@@ -99,7 +99,7 @@ export default function (params) {
     selection.each(function scope() {
       var breadcrumbTrail;
       // #################################   BREADCRUMB SHOW   ##############################
-      function breadcrumbShow(array, d) {
+      function breadcrumbShow() {
         //our sequences
         var sequenceArray = attrs.data;
 
@@ -137,7 +137,7 @@ export default function (params) {
         var all = entering
           .merge(g)
           .attr("class", "breadcrumbs")
-          .attr("transform", function (d, i) {
+          .attr("transform", function () {
             return "translate(0,0)";
           });
 
@@ -151,7 +151,7 @@ export default function (params) {
           var yDiv;
 
           // wrap or not wrap, that is the question
-          if (attrs.wrapWidth == 0) {
+          if (attrs.wrapWidth === 0) {
             yDiv = 0;
           } else {
             yDiv = Math.floor(startX / attrs.wrapWidth);
@@ -304,7 +304,7 @@ export default function (params) {
   Object.keys(attrs).forEach((key) => {
     // Attach variables to main function
     return (main[key] = function (_) {
-      var string = `attrs['${key}'] = _`;
+      //var string = `attrs['${key}'] = _`;
       if (!arguments.length) {
         //return eval(` attrs['${key}'];`);
         return attrs[key];
@@ -322,7 +322,9 @@ export default function (params) {
   main.debug = function (isDebug) {
     attrs.isDebug = isDebug;
     if (isDebug) {
-      if (!window.charts) window.charts = [];
+      if (!window.charts) {
+        window.charts = [];
+      }
       window.charts.push(main);
     }
     return main;
@@ -330,7 +332,9 @@ export default function (params) {
 
   //exposed update functions
   main.data = function (value) {
-    if (!arguments.length) return attrs.data;
+    if (!arguments.length) {
+      return attrs.data;
+    }
     attrs.data = value;
     if (typeof updateData === "function") {
       updateData();
