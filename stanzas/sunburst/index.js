@@ -1,6 +1,6 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import partitionLog from "./partitionLog";
 import breadcrumb from "./breadcrumb";
 import {
