@@ -13,7 +13,9 @@ export default function () {
     root.x1 = dx;
     root.y1 = dy / n;
     root.eachBefore(positionNode(dy, n));
-    if (round) root.eachBefore(roundNode);
+    if (round) {
+      root.eachBefore(roundNode);
+    }
     return root;
   }
 
@@ -32,8 +34,12 @@ export default function () {
         y0 = node.y0,
         x1 = node.x1 - padding,
         y1 = node.y1 - padding;
-      if (x1 < x0) x0 = x1 = (x0 + x1) / 2;
-      if (y1 < y0) y0 = y1 = (y0 + y1) / 2;
+      if (x1 < x0) {
+        x0 = x1 = (x0 + x1) / 2;
+      }
+      if (y1 < y0) {
+        y0 = y1 = (y0 + y1) / 2;
+      }
       node.x0 = x0;
       node.y0 = y0;
       node.x1 = x1;
