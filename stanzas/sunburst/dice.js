@@ -10,7 +10,7 @@ export default function (parent, x0, y0, x1, y1) {
   }
   i = -1;
 
-  let k = parent.value && (x1 - x0) / nodeSum;
+  const k = parent.value && (x1 - x0) / nodeSum;
 
   while (++i < n) {
     (node = nodes[i]), (node.y0 = y0), (node.y1 = y1);

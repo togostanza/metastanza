@@ -90,7 +90,9 @@ function transformValue(value, logScale) {
 }
 
 function draw(el, dataset, opts) {
-  let {
+  let { depthLim } = opts;
+
+  const {
     width,
     height,
     colorScale,
@@ -99,7 +101,6 @@ function draw(el, dataset, opts) {
     nodesGapWidth,
     cornerRadius,
     showNumbers,
-    depthLim,
     breadcrumbHeight,
   } = opts;
 
@@ -150,7 +151,7 @@ function draw(el, dataset, opts) {
 
   const middleArcLabelLine = (d) => {
     const halfPi = Math.PI / 2;
-    let angles = [d.x0 - halfPi, d.x1 - halfPi];
+    const angles = [d.x0 - halfPi, d.x1 - halfPi];
     let r = Math.max(0, (d.y1 - (d.y1 - d.y0) / 2.5) * radius);
 
     const middleAngle = (angles[1] + angles[0]) / 2;
@@ -234,7 +235,9 @@ function draw(el, dataset, opts) {
     .data(root.descendants().slice(1))
     .join("path")
     .attr("fill", (d) => {
-      while (d.depth > 1) d = d.parent;
+      while (d.depth > 1) {
+        d = d.parent;
+      }
       return color(d.data.data.label);
     })
     .attr("fill-opacity", (d) =>
@@ -423,9 +426,11 @@ function draw(el, dataset, opts) {
 
       .attrTween("d", (d) => () => arc(d.current));
 
-    parent.transition(t).attr("fill", (d) => {
+    parent.transition(t).attr("fill", () => {
       let b = p;
-      while (b.depth > 1) b = b.parent;
+      while (b.depth > 1) {
+        b = b.parent;
+      }
 
       return b.data?.data?.label ? color(b.data.data.label) : "rgba(0,0,0,0)";
     });
