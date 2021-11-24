@@ -27,7 +27,7 @@ export default class Sunburst extends Stanza {
     const borderWidth = this.params["gap-width"] || 2;
     const nodesGapWidth = this.params["nodes-gap-width"] || 8;
     const cornerRadius = this.params["nodes-corner-radius"] || 0;
-    const showNumbers = this.params["show-numbers"] || true;
+    const showNumbers = this.params["show-numbers"];
     const depthLim = +this.params["max-depth"] || 0;
     const breadcrumbHeight = +this.params["breadcrumb-height"] || 30;
 
