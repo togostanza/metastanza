@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 
 export default class ChordDiagram extends Stanza {
   async render() {
-    console.log( d3.chord() )
     this.renderTemplate(
       {
         template: 'stanza.html.hbs',
@@ -13,26 +12,32 @@ export default class ChordDiagram extends Stanza {
       }
     );
 
-    const _svg_ = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    console.log(_svg_)
-    this.root.querySelector('main').append(_svg_)
+    const prefix = `ChordDiagram${new Date().getTime()}_`;
+    console.log(prefix);
 
+    const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    this.root.querySelector('main').append(_svg)
+    const svg = d3.select(_svg);
+
+    // geometry
     const [width, height] = [200, 200];
     const innerRadius = Math.min(width, height) * 0.5 - 20
     const outerRadius = innerRadius + 6
     const formatValue = x => `${x.toFixed(0)}B`
-    console.log(formatValue)
 
-    const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data, i) => data);
+    // data
+    const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data) => data);
     const names = Array.from(new Set(data.flatMap(d => [d.source, d.target])))
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
-      for (const {source, target, value} of data) matrix[index.get(source)][index.get(target)] += value;
+      for (const {source, target, value} of data) {
+        matrix[index.get(source)][index.get(target)] += value;
+      }
       return matrix;
     })();
-    console.log(names)
 
+    // prepare some D3 objects
     const color = d3.scaleOrdinal(names, d3.schemeCategory10)
     const ribbon = d3.ribbonArrow()
       .radius(innerRadius - 0.5)
@@ -44,33 +49,28 @@ export default class ChordDiagram extends Stanza {
       .padAngle(12 / innerRadius)
       .sortSubgroups(d3.descending)
       .sortChords(d3.descending)
-
     const chords = chord(matrix);
-    console.log(chords)
-  
 
 
-
-    const svg = d3.select(_svg_);
 
     svg.attr('viewBox', [-width / 2, -height / 2, width, height]);
 
     svg.append('path')
-      .attr('fill', 'none')
+      .classed('fullsircle', true)
       .attr('d', d3.arc()({outerRadius, startAngle: 0, endAngle: 2 * Math.PI}));
 
     svg.append('g')
-        .attr('fill-opacity', 0.75)
+        .classed('ribbons', true)
       .selectAll('g')
       .data(chords)
       .join('path')
         .attr('d', ribbon)
         .attr('fill', d => color(names[d.target.index]))
-        .style('mix-blend-mode', 'multiply')
       .append('title')
       .text(d => `${names[d.source.index]} owes ${names[d.target.index]} ${formatValue(d.source.value)}`);
 
     svg.append('g')
+        .classed('arcs', true)
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)
       .selectAll('g')
@@ -79,11 +79,14 @@ export default class ChordDiagram extends Stanza {
         .call(g => g.append('path')
           .attr('d', arc)
           .attr('fill', d => color(names[d.index]))
+          .attr('hoge', d => {console.log(d, arguments)})
+          .attr('id', d => `${prefix}${d.index}`)
           .attr('stroke', '#fff'))
         .call(g => g.append('text')
           .attr('dy', -3)
         .append('textPath')
           // .attr('xlink:href', textId.href)
+          .attr('xlink:href', d => `#${prefix}${d.index}`)
           .attr('startOffset', d => d.startAngle * outerRadius)
           .text(d => names[d.index]))
         .call(g => g.append('title')

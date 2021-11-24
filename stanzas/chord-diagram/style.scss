@@ -7,9 +7,24 @@ main {
   padding: 1rem 2rem;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+.fullsircle {
+  fill: none;
+}
+
+.ribbons {
+  fill-opacity: .8;
+  > path {
+    mix-blend-mode: multiply;
+  }
+}
+
+.arcs {
+  > g {
+    > text {
+      > textPath {
+        font-size: 1rem;
+        // stroke: red;
+      }
+    }
+  }
 }
