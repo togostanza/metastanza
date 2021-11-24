@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="wrapper" :style="`width: ${width};`">
     <div class="tableOptionWrapper">
@@ -233,12 +234,12 @@
       :is-slider-on="state.pagination.isSliderOn"
       @updateCurrentPage="updateCurrentPage"
     />
+    <div
+      v-if="isPopupOrModalShowing"
+      class="modalBackground"
+      @click="closeModal()"
+    ></div>
   </div>
-  <div
-    v-if="isPopupOrModalShowing"
-    class="modalBackground"
-    @click="closeModal()"
-  ></div>
 </template>
 
 <script>
@@ -259,8 +260,11 @@ import LineClampCell from "./LineClampCell.vue";
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
-import loadData from "togostanza-utils/load-data";
+import { sprintf } from "sprintf-js";
 
+// import loadData from "togostanza-utils/load-data";
+
+import testData from "./assets/test.json";
 import metadata from "./metadata.json";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -321,18 +325,6 @@ export default defineComponent({
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
-        // TODO: refactoring
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = Number.parseFloat(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
-
         filtered = orderBy(
           filtered,
           (cells) => {
@@ -341,17 +333,6 @@ export default defineComponent({
           },
           [state.sorting.direction]
         );
-
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = cell.column.parseValue(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
         return filtered;
       } else {
         return filtered;
@@ -466,7 +447,8 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+      // const data = await loadData(params.dataUrl, params.dataType);
+      const data = testData;
 
       state.responseJSON = data;
       let columns;
@@ -573,8 +555,7 @@ function createColumnState(columnDef, values) {
     fixed: columnDef.fixed,
     target: columnDef.target,
     lineClamp: columnDef["line-clamp"],
-    significantDigits: columnDef["significant-digits"],
-    exponentDigits: columnDef["exponent-digits"],
+    sprintf: columnDef["sprintf"],
   };
 
   if (columnDef.type === "number") {
@@ -611,28 +592,8 @@ function createColumnState(columnDef, values) {
       inputtingRangeMax,
       isSearchModalShowing: false,
       parseValue(val) {
-        val = Number(val);
-        if (columnDef["significant-digits"]) {
-          val = Number.parseFloat(val).toExponential(
-            Number(columnDef["significant-digits"]) - 1
-          );
-        }
-        if (columnDef["exponent-digits"]) {
-          const decimalPoint = Number(val).toExponential(1);
-          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/);
-          index = index ? index[1] : null;
-          const exponentDigits = columnDef["exponent-digits"];
-          const significantDigits = columnDef["significant-digits"];
-          if (exponentDigits <= +index) {
-            val = Number.parseFloat(val).toExponential(
-              Number(significantDigits) - 1
-            );
-          } else if (Number.parseFloat(val) !== 0) {
-            val = Number.parseFloat(val).toFixed(exponentDigits);
-            val = val.toString().slice(0, +index - exponentDigits);
-          } else {
-            val = Number.parseFloat(val).toString();
-          }
+        if (columnDef["sprintf"]) {
+          val = sprintf(columnDef["sprintf"], val);
         }
         return val;
       },
