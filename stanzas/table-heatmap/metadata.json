@@ -24,12 +24,7 @@
     {
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "json",
-        "tsv",
-        "csv",
-        "sparql-results-json"
-      ],
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
       "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
@@ -91,60 +86,42 @@
     {
       "stanza:key": "xaxis-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top",
-        "bottom"
-      ],
+      "stanza:choice": ["top", "bottom"],
       "stanza:example": "bottom",
       "stanza:description": "X axis placement"
     },
     {
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "left",
-        "right"
-      ],
+      "stanza:choice": ["left", "right"],
       "stanza:example": "left",
       "stanza:description": "Y axis placement"
     },
     {
       "stanza:key": "xgrid",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "true",
-        "false"
-      ],
+      "stanza:choice": ["true", "false"],
       "stanza:example": false,
       "stanza:description": "Show X grid"
     },
     {
       "stanza:key": "ygrid",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "true",
-        "false"
-      ],
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y grid"
     },
     {
       "stanza:key": "xtick",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "true",
-        "false"
-      ],
+      "stanza:choice": ["true", "false"],
       "stanza:example": false,
       "stanza:description": "Show X tick"
     },
     {
       "stanza:key": "ytick",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "true",
-        "false"
-      ],
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y tick"
     },
@@ -185,10 +162,7 @@
     {
       "stanza:key": "legend",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "true",
-        "false"
-      ],
+      "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show legend"
     },

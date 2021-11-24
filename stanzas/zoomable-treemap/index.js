@@ -4,8 +4,6 @@
 // console.log('dataset', dataset)
 // export default async function zoomableTreemap(stanza, params) {
 
-
-
 //   stanza.render({
 //     template: 'stanza.html.hbs',
 //     parameters: {
