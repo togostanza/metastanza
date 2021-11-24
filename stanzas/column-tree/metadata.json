@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/tree-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -62,6 +62,12 @@
       "stanza:type": "text",
       "stanza:default": "1px solid rgba(0, 0, 0, 0.1)",
       "stanza:description": "Border for single column"
+    },
+    {
+      "stanza:key": "--togostanza-column-gap",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "Gap between columns"
     },
     {
       "stanza:key": "--togostanza-font-family",

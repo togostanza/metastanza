@@ -27,15 +27,13 @@
 import {
   defineComponent,
   reactive,
-  onMounted,
   toRefs,
   computed,
+  watchEffect,
   ref,
 } from "vue";
-
-// import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import metadata from "./metadata.json";
-import data from "./assets/tree_sample.json";
 import NodeColumn from "./NodeColumn.vue";
 
 export default defineComponent({
@@ -56,16 +54,25 @@ export default defineComponent({
       checkedNodes: new Map(),
     });
 
-    //TODO: set so that data is not null when being executed
     const rootParents = computed(() => {
-      return data.filter((obj) => !obj.parent);
+      return state.responseJSON.filter((obj) => !obj.parent);
     });
 
-    async function fetchData() {
-      //   const data = await loadData(params.dataUrl, params.dataType);
-      state.responseJSON = data;
-      state.columnData.push(data.filter((obj) => !obj.parent));
-    }
+    watchEffect(
+      async () => {
+        state.responseJSON = null;
+        state.responseJSON = await loadData(params.dataUrl.value, params.dataType.value);
+        state.checkedNodes = new Map();
+      },
+      { immediate: true }
+    );
+    
+    watchEffect(
+      () => {
+        const data = state.responseJSON || [];
+        state.columnData.push(data.filter((obj) => !obj.parent));
+      }
+    )
 
     function updateCheckedNodes(node) {
       const { id, ...obj } = node;
@@ -85,7 +92,7 @@ export default defineComponent({
     }
 
     function getChildNodes([layer, parentId]) {
-      const children = data.filter((node) => node.parent === parentId);
+      const children = state.responseJSON.filter((node) => node.parent === parentId);
       const indexesToRemove = state.columnData.length - layer;
       state.columnData.splice(layer, indexesToRemove, children);
 
@@ -94,7 +101,6 @@ export default defineComponent({
       return children;
     }
 
-    onMounted(fetchData);
     return {
       state,
       rootParents,
