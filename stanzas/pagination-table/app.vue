@@ -274,11 +274,11 @@ import LineClampCell from "./LineClampCell.vue";
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
-import { sprintf } from 'sprintf-js'
+import { sprintf } from "sprintf-js";
 
 // import loadData from "togostanza-utils/load-data";
 
-import testData from "./assets/test.json"
+import testData from "./assets/test.json";
 import metadata from "./metadata.json";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -493,7 +493,7 @@ export default defineComponent({
 
     async function fetchData() {
       // const data = await loadData(params.dataUrl, params.dataType);
-       const data = testData;
+      const data = testData;
 
       state.responseJSON = data;
       let columns;
@@ -612,7 +612,7 @@ function createColumnState(columnDef, values) {
       inputtingRangeMax,
       isSearchModalShowing: false,
       parseValue(val) {
-        if(columnDef["sprintf"]) {
+        if (columnDef["sprintf"]) {
           val = sprintf(columnDef["sprintf"], val);
         }
         return val;
