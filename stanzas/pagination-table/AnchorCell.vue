@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <a v-if="unescape && lineClamp" :href="href" :target="target">
     <LineClampCell
