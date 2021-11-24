@@ -1,12 +1,12 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import uid from "./uid";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data"; //"@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js"; //from "togostanza-utils";
+} from "togostanza-utils"; // from "@/lib/metastanza_utils.js"; //
 import shadeColor from "./shadeColor";
 
 export default class TreeMapStanza extends Stanza {
