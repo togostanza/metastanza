@@ -15,7 +15,7 @@ section {
 #wrapper {
   > .container {
     background-color: var(--togostanza-column-background-color);
-    margin-right: 0.5rem;
+    margin-right: var(--togostanza-column-gap);
     > .column {
       display: grid;
       min-width: max-content;
