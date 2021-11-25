@@ -593,7 +593,7 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
       parseValue(val) {
         if (columnDef["sprintf"]) {
-          val = sprintf(columnDef["sprintf"], val);
+          val = sprintf(columnDef["sprintf"], Number.parseFloat(val));
         }
         return val;
       },
