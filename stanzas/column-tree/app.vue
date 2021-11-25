@@ -28,13 +28,16 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  computed,
   watchEffect,
   ref,
 } from "vue";
 import loadData from "togostanza-utils/load-data";
 import metadata from "./metadata.json";
 import NodeColumn from "./NodeColumn.vue";
+
+function isRootNode(parent) {
+  return !parent || isNaN(parent);
+}
 
 export default defineComponent({
   components: { NodeColumn },
@@ -54,10 +57,6 @@ export default defineComponent({
       checkedNodes: new Map(),
     });
 
-    const rootParents = computed(() => {
-      return state.responseJSON.filter((obj) => !obj.parent);
-    });
-
     watchEffect(
       async () => {
         state.responseJSON = null;
@@ -70,7 +69,7 @@ export default defineComponent({
     watchEffect(
       () => {
         const data = state.responseJSON || [];
-        state.columnData.push(data.filter((obj) => !obj.parent));
+        state.columnData.push(data.filter((obj) => isRootNode(obj.parent)));
       }
     )
 
@@ -80,7 +79,7 @@ export default defineComponent({
         ? state.checkedNodes.delete(id)
         : state.checkedNodes.set(id, { id, ...obj });
       // TODO: add event handler
-      console.log([...state.checkedNodes.values()]);
+      // console.log([...state.checkedNodes.values()]);
     }
 
     function resetHighlightedNodes() {
@@ -103,7 +102,6 @@ export default defineComponent({
 
     return {
       state,
-      rootParents,
       layerRefs,
       updateCheckedNodes,
       getChildNodes,

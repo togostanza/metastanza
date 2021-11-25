@@ -11,10 +11,10 @@
         :checked="checkedNodes.get(node.id)"
         @input="setCheckedNode(node)"
       />
-      <span class="content" @click="node.children ? setParent(node.id) : null">
+      <span class="content" @click="hasChildren(node.children) ? setParent(node.id) : null">
         <span>{{ node.label }}</span>
         <font-awesome-icon
-          v-if="node.children"
+          v-if="hasChildren(node.children)"
           icon="chevron-right"
           class="icon"
         />
@@ -59,6 +59,12 @@ export default defineComponent({
     const state = reactive({
       highlightedNode: null,
     });
+    function hasChildren(childrenProp) {
+      if(typeof childrenProp === 'string') {
+        childrenProp = childrenProp.split(/,/).map(parseFloat).filter(prop => !isNaN(prop));
+      }
+      return childrenProp && childrenProp.length > 0;
+    }
     function resetHighlightedNode() {
       state.highlightedNode = null;
     }
@@ -76,6 +82,7 @@ export default defineComponent({
       setParent,
       setCheckedNode,
       resetHighlightedNode,
+      hasChildren,
       state,
       selectionClass,
     };
