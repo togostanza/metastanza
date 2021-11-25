@@ -8,6 +8,7 @@ main {
   > svg {
     width: calc(var(--width) * 1px);
     height: calc(var(--height) * 1px);
+    font-size: calc(var(--font-size) * 1px);
   }
 }
 
@@ -26,7 +27,7 @@ main {
   > g {
     > text {
       > textPath {
-        font-size: 1rem;
+        // font-size: 1rem;
         // stroke: red;
       }
     }

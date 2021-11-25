@@ -13,17 +13,20 @@ export default class ChordDiagram extends Stanza {
     );
 
     const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    this.root.querySelector('main').append(_svg)
+    this.root.querySelector('main').append(_svg);
     const svg = d3.select(_svg);
 
     // geometry
     const [width, height] = [+window.getComputedStyle(this.element).getPropertyValue('--width'), +window.getComputedStyle(this.element).getPropertyValue('--height')];
-    const innerRadius = Math.min(width, height) * 0.5 - 20
-    const outerRadius = innerRadius + 6
-    const formatValue = x => `${x.toFixed(0)}B`
+    const innerRadius = Math.min(width, height) * 0.5 - 20;
+    const outerRadius = innerRadius + 6;
+    const formatValue = x => `${x.toFixed(0)}B`;
 
     // data
-    const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data) => data);
+    // const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data) => data);
+    console.log(this.params['data-url'])
+    const data = await d3.tsv(this.params['data-url'], (data) => data);
+    console.log(data)
     const names = Array.from(new Set(data.flatMap(d => [d.source, d.target])))
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
