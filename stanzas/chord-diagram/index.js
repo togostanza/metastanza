@@ -12,15 +12,12 @@ export default class ChordDiagram extends Stanza {
       }
     );
 
-    // const prefix = `ChordDiagram${new Date().getTime()}_`;
-    // console.log(prefix);
-
     const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     this.root.querySelector('main').append(_svg)
     const svg = d3.select(_svg);
 
     // geometry
-    const [width, height] = [840, 840];
+    const [width, height] = [+window.getComputedStyle(this.element).getPropertyValue('--width'), +window.getComputedStyle(this.element).getPropertyValue('--height')];
     const innerRadius = Math.min(width, height) * 0.5 - 20
     const outerRadius = innerRadius + 6
     const formatValue = x => `${x.toFixed(0)}B`
@@ -52,16 +49,16 @@ export default class ChordDiagram extends Stanza {
     const chords = chord(matrix);
 
     const fullsircleId = `fullsircle${new Date().getTime()}`;
-    console.log(fullsircleId)
 
-    svg.attr('viewBox', [-width / 2, -height / 2, width, height]);
+    const rootGroup = svg.append('g')
+      .attr('transform', `translate(${[width * .5, height * .5]})`);
 
-    svg.append('path')
+    rootGroup.append('path')
       .classed('fullsircle', true)
       .attr('id', fullsircleId)
       .attr('d', d3.arc()({outerRadius, startAngle: 0, endAngle: 2 * Math.PI}));
 
-    svg.append('g')
+    rootGroup.append('g')
         .classed('ribbons', true)
       .selectAll('g')
       .data(chords)
@@ -71,7 +68,7 @@ export default class ChordDiagram extends Stanza {
       .append('title')
       .text(d => `${names[d.source.index]} owes ${names[d.target.index]} ${formatValue(d.source.value)}`);
 
-    svg.append('g')
+    rootGroup.append('g')
         .classed('arcs', true)
         .attr('font-family', 'sans-serif')
         .attr('font-size', 10)

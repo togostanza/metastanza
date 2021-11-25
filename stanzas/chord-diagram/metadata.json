@@ -22,10 +22,24 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--greeting-color",
-      "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "--width",
+      "stanza:type": "number",
+      "stanza:default": 400,
+      "stanza:example": 400,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "--height",
+      "stanza:type": "number",
+      "stanza:default": 400,
+      "stanza:example": 400,
+      "stanza:description": "Height"
     },
     {
       "stanza:key": "--greeting-align",
