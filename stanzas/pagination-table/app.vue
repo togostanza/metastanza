@@ -559,6 +559,30 @@ export default defineComponent({
       }, 0);
     });
 
+    const downloadBlob = (blob, fileName) => {
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+
+    const downloadJSON = () => {
+      const blob = new Blob([JSON.stringify(state.responseJSON, null, "  ")], {
+        type: "application/json",
+      });
+      downloadBlob(blob, "table.json");
+    };
+
+    const downloadCSV = () => {
+      const csv = json2csv(state.responseJSON);
+      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+      const blob = new Blob([bom, csv], { type: "text/csv" });
+      downloadBlob(blob, "table.csv");
+    };
+
     return {
       width: params.width ? params.width + "px" : "100%",
       sliderPagination,
@@ -576,6 +600,8 @@ export default defineComponent({
       closeModal,
       updateCurrentPage,
       thead,
+      downloadJSON,
+      downloadCSV,
     };
   },
 });
