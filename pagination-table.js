@@ -5914,8 +5914,6 @@ var script = defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
-
-      isMenuOn: false,
     });
 
     const filteredRows = computed(() => {
@@ -5994,32 +5992,6 @@ var script = defineComponent({
       return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
-    const blobUrls = computed(() => {
-      const json = state.responseJSON;
-      if (!json) {
-        return null;
-      }
-
-      const csv = json2csv(json);
-
-      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
-        type: "application/json",
-      });
-      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
-
-      return [
-        {
-          type: "JSON",
-          url: URL.createObjectURL(jsonBlob),
-        },
-        {
-          type: "CSV",
-          url: URL.createObjectURL(csvBlob),
-        },
-      ];
-    });
-
     const isModalShowing = computed(() => {
       return state.columns.some(
         ({ isSearchModalShowing }) => isSearchModalShowing
@@ -6030,9 +6002,7 @@ var script = defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) ||
-        isModalShowing.value ||
-        state.isMenuOn
+        ) || isModalShowing.value
       );
     });
 
@@ -6095,7 +6065,6 @@ var script = defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
-      state.isMenuOn = false;
     }
 
     function updateCurrentPage(currentPage) {
@@ -6151,6 +6120,30 @@ var script = defineComponent({
       }, 0);
     });
 
+    const downloadBlob = (blob, fileName) => {
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+
+    const downloadJSON = () => {
+      const blob = new Blob([JSON.stringify(state.responseJSON, null, "  ")], {
+        type: "application/json",
+      });
+      downloadBlob(blob, "table.json");
+    };
+
+    const downloadCSV = () => {
+      const csv = json2csv(state.responseJSON);
+      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+      const blob = new Blob([bom, csv], { type: "text/csv" });
+      downloadBlob(blob, "table.csv");
+    };
+
     return {
       width: params.width ? params.width + "px" : "100%",
       sliderPagination,
@@ -6158,7 +6151,6 @@ var script = defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
@@ -6168,6 +6160,8 @@ var script = defineComponent({
       closeModal,
       updateCurrentPage,
       thead,
+      downloadJSON,
+      downloadCSV,
     };
   },
 });
@@ -6333,36 +6327,30 @@ const _hoisted_3 = { class: "entries" };
 const _hoisted_4 = /*#__PURE__*/createTextVNode(" Show ");
 const _hoisted_5 = ["value"];
 const _hoisted_6 = /*#__PURE__*/createTextVNode(" entries ");
-const _hoisted_7 = { class: "menuWrapper" };
-const _hoisted_8 = {
-  key: 0,
-  class: "menu"
-};
-const _hoisted_9 = ["href"];
-const _hoisted_10 = { key: 0 };
-const _hoisted_11 = { ref: "thead" };
-const _hoisted_12 = { class: "filterWindow" };
-const _hoisted_13 = { class: "filterWindowTitle" };
-const _hoisted_14 = { class: "filters" };
-const _hoisted_15 = ["for"];
-const _hoisted_16 = ["id", "onUpdate:modelValue"];
-const _hoisted_17 = { class: "toggleAllButton" };
-const _hoisted_18 = ["onClick"];
-const _hoisted_19 = ["onClick"];
-const _hoisted_20 = { class: "title" };
-const _hoisted_21 = { key: 0 };
-const _hoisted_22 = { class: "rangeInput" };
-const _hoisted_23 = /*#__PURE__*/createBaseVNode("span", { class: "rangeInputLabel" }, " From ", -1 /* HOISTED */);
+const _hoisted_7 = { key: 0 };
+const _hoisted_8 = { ref: "thead" };
+const _hoisted_9 = { class: "filterWindow" };
+const _hoisted_10 = { class: "filterWindowTitle" };
+const _hoisted_11 = { class: "filters" };
+const _hoisted_12 = ["for"];
+const _hoisted_13 = ["id", "onUpdate:modelValue"];
+const _hoisted_14 = { class: "toggleAllButton" };
+const _hoisted_15 = ["onClick"];
+const _hoisted_16 = ["onClick"];
+const _hoisted_17 = { class: "title" };
+const _hoisted_18 = { key: 0 };
+const _hoisted_19 = { class: "rangeInput" };
+const _hoisted_20 = /*#__PURE__*/createBaseVNode("span", { class: "rangeInputLabel" }, " From ", -1 /* HOISTED */);
+const _hoisted_21 = ["onUpdate:modelValue", "onInput"];
+const _hoisted_22 = /*#__PURE__*/createBaseVNode("span", { class: "dash" }, null, -1 /* HOISTED */);
+const _hoisted_23 = /*#__PURE__*/createBaseVNode("span", { class: "rangeInputLabel" }, " To ", -1 /* HOISTED */);
 const _hoisted_24 = ["onUpdate:modelValue", "onInput"];
-const _hoisted_25 = /*#__PURE__*/createBaseVNode("span", { class: "dash" }, null, -1 /* HOISTED */);
-const _hoisted_26 = /*#__PURE__*/createBaseVNode("span", { class: "rangeInputLabel" }, " To ", -1 /* HOISTED */);
-const _hoisted_27 = ["onUpdate:modelValue", "onInput"];
-const _hoisted_28 = ["onUpdate:modelValue"];
-const _hoisted_29 = ["rowspan"];
-const _hoisted_30 = { key: 0 };
-const _hoisted_31 = { key: 1 };
-const _hoisted_32 = ["innerHTML"];
-const _hoisted_33 = { key: 3 };
+const _hoisted_25 = ["onUpdate:modelValue"];
+const _hoisted_26 = ["rowspan"];
+const _hoisted_27 = { key: 0 };
+const _hoisted_28 = { key: 1 };
+const _hoisted_29 = ["innerHTML"];
+const _hoisted_30 = { key: 3 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
@@ -6401,28 +6389,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               [vModelSelect, _ctx.state.pagination.perPage]
             ]),
             _hoisted_6
-          ]),
-          createBaseVNode("div", _hoisted_7, [
-            createVNode(_component_font_awesome_icon, {
-              icon: "ellipsis-h",
-              class: "menuIcon",
-              onClick: _cache[2] || (_cache[2] = $event => (_ctx.state.isMenuOn = true))
-            }),
-            (_ctx.state.isMenuOn)
-              ? (openBlock(), createElementBlock("ul", _hoisted_8, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.blobUrls, (url) => {
-                    return (openBlock(), createElementBlock("li", {
-                      key: url.type
-                    }, [
-                      createBaseVNode("a", {
-                        class: "downloadBtn",
-                        href: url.url,
-                        download: "tableData"
-                      }, toDisplayString(`Download ${url.type}`), 9 /* TEXT, PROPS */, _hoisted_9)
-                    ]))
-                  }), 128 /* KEYED_FRAGMENT */))
-                ]))
-              : createCommentVNode("v-if", true)
           ])
         ]),
         createBaseVNode("div", {
@@ -6430,8 +6396,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           style: normalizeStyle(`width: ${_ctx.width};`)
         }, [
           (_ctx.state.allRows)
-            ? (openBlock(), createElementBlock("table", _hoisted_10, [
-                createBaseVNode("thead", _hoisted_11, [
+            ? (openBlock(), createElementBlock("table", _hoisted_7, [
+                createBaseVNode("thead", _hoisted_8, [
                   createBaseVNode("tr", null, [
                     (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.columns, (column, i) => {
                       return (openBlock(), createElementBlock("th", {
@@ -6496,9 +6462,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       { lastCol: _ctx.state.columns.length - 1 === i },
                     ])
                                 }, [
-                                  createBaseVNode("div", _hoisted_12, [
-                                    createBaseVNode("p", _hoisted_13, toDisplayString(column.label), 1 /* TEXT */),
-                                    createBaseVNode("ul", _hoisted_14, [
+                                  createBaseVNode("div", _hoisted_9, [
+                                    createBaseVNode("p", _hoisted_10, toDisplayString(column.label), 1 /* TEXT */),
+                                    createBaseVNode("ul", _hoisted_11, [
                                       (openBlock(true), createElementBlock(Fragment, null, renderList(column.filters, (filter) => {
                                         return (openBlock(), createElementBlock("li", {
                                           key: filter.value
@@ -6511,23 +6477,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                               "onUpdate:modelValue": $event => (filter.checked = $event),
                                               type: "checkbox",
                                               name: "items"
-                                            }, null, 8 /* PROPS */, _hoisted_16), [
+                                            }, null, 8 /* PROPS */, _hoisted_13), [
                                               [vModelCheckbox, filter.checked]
                                             ]),
                                             createTextVNode(" " + toDisplayString(filter.value), 1 /* TEXT */)
-                                          ], 8 /* PROPS */, _hoisted_15)
+                                          ], 8 /* PROPS */, _hoisted_12)
                                         ]))
                                       }), 128 /* KEYED_FRAGMENT */))
                                     ]),
-                                    createBaseVNode("div", _hoisted_17, [
+                                    createBaseVNode("div", _hoisted_14, [
                                       createBaseVNode("button", {
                                         class: "selectAll",
                                         onClick: $event => (_ctx.setFilters(column, true))
-                                      }, " Select All ", 8 /* PROPS */, _hoisted_18),
+                                      }, " Select All ", 8 /* PROPS */, _hoisted_15),
                                       createBaseVNode("button", {
                                         class: "clear",
                                         onClick: $event => (_ctx.setFilters(column, false))
-                                      }, " Clear ", 8 /* PROPS */, _hoisted_19)
+                                      }, " Clear ", 8 /* PROPS */, _hoisted_16)
                                     ])
                                   ])
                                 ], 2 /* CLASS */))
@@ -6546,7 +6512,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       { lastCol: _ctx.state.columns.length - 1 === i },
                     ])
                                 }, [
-                                  createBaseVNode("p", _hoisted_20, [
+                                  createBaseVNode("p", _hoisted_17, [
                                     (column.searchType === 'number')
                                       ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
                                           createTextVNode(toDisplayString(column.label) + " range ", 1 /* TEXT */)
@@ -6556,7 +6522,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
                                   ]),
                                   (column.searchType === 'number')
-                                    ? (openBlock(), createElementBlock("div", _hoisted_21, [
+                                    ? (openBlock(), createElementBlock("div", _hoisted_18, [
                                         createVNode(_component_Slider, {
                                           "model-value": column.range,
                                           min: column.minValue,
@@ -6564,15 +6530,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                           tooltips: false,
                                           onUpdate: column.setRange
                                         }, null, 8 /* PROPS */, ["model-value", "min", "max", "onUpdate"]),
-                                        createBaseVNode("div", _hoisted_22, [
+                                        createBaseVNode("div", _hoisted_19, [
                                           createBaseVNode("div", null, [
-                                            _hoisted_23,
+                                            _hoisted_20,
                                             withDirectives(createBaseVNode("input", {
                                               "onUpdate:modelValue": $event => (column.inputtingRangeMin = $event),
                                               type: "text",
                                               class: "min",
                                               onInput: $event => (_ctx.setRangeFilters(column))
-                                            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_24), [
+                                            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_21), [
                                               [
                                                 vModelText,
                                                 column.inputtingRangeMin,
@@ -6581,15 +6547,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                               ]
                                             ])
                                           ]),
-                                          _hoisted_25,
+                                          _hoisted_22,
                                           createBaseVNode("div", null, [
-                                            _hoisted_26,
+                                            _hoisted_23,
                                             withDirectives(createBaseVNode("input", {
                                               "onUpdate:modelValue": $event => (column.inputtingRangeMax = $event),
                                               type: "text",
                                               class: "max",
                                               onInput: $event => (_ctx.setRangeFilters(column))
-                                            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_27), [
+                                            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_24), [
                                               [
                                                 vModelText,
                                                 column.inputtingRangeMax,
@@ -6607,7 +6573,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                         placeholder: "Search for keywords...",
                                         name: "queryInputByColumn",
                                         class: "textSearchInput"
-                                      }, null, 8 /* PROPS */, _hoisted_28)), [
+                                      }, null, 8 /* PROPS */, _hoisted_25)), [
                                         [vModelText, column.query]
                                       ])
                                 ], 2 /* CLASS */))
@@ -6641,7 +6607,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 )
                         }, [
                           (cell.href)
-                            ? (openBlock(), createElementBlock("span", _hoisted_30, [
+                            ? (openBlock(), createElementBlock("span", _hoisted_27, [
                                 createVNode(_component_AnchorCell, {
                                   id: `${cell.column.id}_${row_index}`,
                                   href: cell.href,
@@ -6654,7 +6620,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 }, null, 8 /* PROPS */, ["id", "href", "value", "target", "unescape", "line-clamp"])
                               ]))
                             : (cell.column.lineClamp)
-                              ? (openBlock(), createElementBlock("span", _hoisted_31, [
+                              ? (openBlock(), createElementBlock("span", _hoisted_28, [
                                   createVNode(_component_LineClampCell, {
                                     id: `${cell.column.id}_${row_index}`,
                                     "line-clamp": cell.column.lineClamp,
@@ -6666,9 +6632,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 ? (openBlock(), createElementBlock("span", {
                                     key: 2,
                                     innerHTML: cell.value
-                                  }, null, 8 /* PROPS */, _hoisted_32))
-                                : (openBlock(), createElementBlock("span", _hoisted_33, toDisplayString(cell.value), 1 /* TEXT */))
-                        ], 14 /* CLASS, STYLE, PROPS */, _hoisted_29))
+                                  }, null, 8 /* PROPS */, _hoisted_29))
+                                : (openBlock(), createElementBlock("span", _hoisted_30, toDisplayString(cell.value), 1 /* TEXT */))
+                        ], 14 /* CLASS, STYLE, PROPS */, _hoisted_26))
                       }), 128 /* KEYED_FRAGMENT */))
                     ]))
                   }), 128 /* KEYED_FRAGMENT */))
@@ -6689,7 +6655,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       ? (openBlock(), createElementBlock("div", {
           key: 0,
           class: "modalBackground",
-          onClick: _cache[3] || (_cache[3] = $event => (_ctx.closeModal()))
+          onClick: _cache[2] || (_cache[2] = $event => (_ctx.closeModal()))
         }))
       : createCommentVNode("v-if", true)
   ], 64 /* STABLE_FRAGMENT */))
@@ -6699,6 +6665,25 @@ script.render = render;
 script.__file = "stanzas/pagination-table/app.vue";
 
 class PaginationTable extends Stanza {
+  menu() {
+    return [
+      {
+        type: "item",
+        label: "Download JSON",
+        handler: () => {
+          this._component?.downloadJSON();
+        },
+      },
+      {
+        type: "item",
+        label: "Download CSV",
+        handler: () => {
+          this._component?.downloadCSV();
+        },
+      },
+    ];
+  }
+
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 
@@ -6709,7 +6694,7 @@ class PaginationTable extends Stanza {
 
     this._app?.unmount();
     this._app = createApp(script, this.params);
-    this._app.mount(main);
+    this._component = this._app.mount(main);
   }
 }
 
