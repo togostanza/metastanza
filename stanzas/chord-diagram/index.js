@@ -12,15 +12,15 @@ export default class ChordDiagram extends Stanza {
       }
     );
 
-    const prefix = `ChordDiagram${new Date().getTime()}_`;
-    console.log(prefix);
+    // const prefix = `ChordDiagram${new Date().getTime()}_`;
+    // console.log(prefix);
 
     const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     this.root.querySelector('main').append(_svg)
     const svg = d3.select(_svg);
 
     // geometry
-    const [width, height] = [200, 200];
+    const [width, height] = [840, 840];
     const innerRadius = Math.min(width, height) * 0.5 - 20
     const outerRadius = innerRadius + 6
     const formatValue = x => `${x.toFixed(0)}B`
@@ -51,12 +51,14 @@ export default class ChordDiagram extends Stanza {
       .sortChords(d3.descending)
     const chords = chord(matrix);
 
-
+    const fullsircleId = `fullsircle${new Date().getTime()}`;
+    console.log(fullsircleId)
 
     svg.attr('viewBox', [-width / 2, -height / 2, width, height]);
 
     svg.append('path')
       .classed('fullsircle', true)
+      .attr('id', fullsircleId)
       .attr('d', d3.arc()({outerRadius, startAngle: 0, endAngle: 2 * Math.PI}));
 
     svg.append('g')
@@ -80,13 +82,13 @@ export default class ChordDiagram extends Stanza {
           .attr('d', arc)
           .attr('fill', d => color(names[d.index]))
           .attr('hoge', d => {console.log(d, arguments)})
-          .attr('id', d => `${prefix}${d.index}`)
+          // .attr('id', d => `${prefix}${d.index}`)
           .attr('stroke', '#fff'))
         .call(g => g.append('text')
           .attr('dy', -3)
         .append('textPath')
           // .attr('xlink:href', textId.href)
-          .attr('xlink:href', d => `#${prefix}${d.index}`)
+          .attr('xlink:href', d => `#${fullsircleId}`)
           .attr('startOffset', d => d.startAngle * outerRadius)
           .text(d => names[d.index]))
         .call(g => g.append('title')
