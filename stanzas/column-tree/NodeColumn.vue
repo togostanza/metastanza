@@ -11,7 +11,10 @@
         :checked="checkedNodes.get(node.id)"
         @input="setCheckedNode(node)"
       />
-      <span class="content" @click="hasChildren(node.children) ? setParent(node.id) : null">
+      <span
+        class="content"
+        @click="hasChildren(node.children) ? setParent(node.id) : null"
+      >
         <span>{{ node.label }}</span>
         <font-awesome-icon
           v-if="hasChildren(node.children)"
@@ -60,8 +63,11 @@ export default defineComponent({
       highlightedNode: null,
     });
     function hasChildren(childrenProp) {
-      if(typeof childrenProp === 'string') {
-        childrenProp = childrenProp.split(/,/).map(parseFloat).filter(prop => !isNaN(prop));
+      if (typeof childrenProp === "string") {
+        childrenProp = childrenProp
+          .split(/,/)
+          .map(parseFloat)
+          .filter((prop) => !isNaN(prop));
       }
       return childrenProp && childrenProp.length > 0;
     }

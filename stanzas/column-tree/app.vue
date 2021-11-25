@@ -24,13 +24,7 @@
 </template>
 
 <script>
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  watchEffect,
-  ref,
-} from "vue";
+import { defineComponent, reactive, toRefs, watchEffect, ref } from "vue";
 import loadData from "togostanza-utils/load-data";
 import metadata from "./metadata.json";
 import NodeColumn from "./NodeColumn.vue";
@@ -45,13 +39,9 @@ export default defineComponent({
   emits: ["resetHighlightedNode"],
 
   setup(params) {
-    const { testBool } = toRefs(params);
     params = toRefs(params);
-
     const layerRefs = ref([]);
-
     const state = reactive({
-      testBoolFromParam: testBool,
       responseJSON: null,
       columnData: [],
       checkedNodes: new Map(),
@@ -60,18 +50,19 @@ export default defineComponent({
     watchEffect(
       async () => {
         state.responseJSON = null;
-        state.responseJSON = await loadData(params.dataUrl.value, params.dataType.value);
+        state.responseJSON = await loadData(
+          params.dataUrl.value,
+          params.dataType.value
+        );
         state.checkedNodes = new Map();
       },
       { immediate: true }
     );
-    
-    watchEffect(
-      () => {
-        const data = state.responseJSON || [];
-        state.columnData.push(data.filter((obj) => isRootNode(obj.parent)));
-      }
-    )
+
+    watchEffect(() => {
+      const data = state.responseJSON || [];
+      state.columnData.push(data.filter((obj) => isRootNode(obj.parent)));
+    });
 
     function updateCheckedNodes(node) {
       const { id, ...obj } = node;
@@ -91,7 +82,9 @@ export default defineComponent({
     }
 
     function getChildNodes([layer, parentId]) {
-      const children = state.responseJSON.filter((node) => node.parent === parentId);
+      const children = state.responseJSON.filter(
+        (node) => node.parent === parentId
+      );
       const indexesToRemove = state.columnData.length - layer;
       state.columnData.splice(layer, indexesToRemove, children);
 

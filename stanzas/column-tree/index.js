@@ -1,9 +1,7 @@
 import Stanza from "togostanza/stanza";
 import { createApp } from "vue";
 import App from "./app.vue";
-import {
-  appendCustomCss,
-} from "togostanza-utils";
+import { appendCustomCss } from "togostanza-utils";
 
 export default class ColumnTree extends Stanza {
   async render() {
@@ -16,6 +14,5 @@ export default class ColumnTree extends Stanza {
     this._app?.unmount();
     this._app = createApp(App, this.params);
     this._app.mount(main);
-
   }
 }
