@@ -1,8 +1,6 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-import partitionLog from "./partitionLog";
-import breadcrumb from "./breadcrumb";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -29,7 +27,7 @@ export default class Sunburst extends Stanza {
     const cornerRadius = this.params["nodes-corner-radius"] || 0;
     const showNumbers = this.params["show-numbers"];
     const depthLim = +this.params["max-depth"] || 0;
-    const breadcrumbHeight = +this.params["breadcrumb-height"] || 30;
+    const divideEqually = this.params["no-scale"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -76,17 +74,11 @@ export default class Sunburst extends Stanza {
       cornerRadius,
       showNumbers,
       depthLim,
-      breadcrumbHeight,
+      divideEqually,
     };
 
     draw(sunburstElement, filteredData, opts);
   }
-}
-function transformValue(value, logScale) {
-  if (logScale) {
-    return Math.log10(value);
-  }
-  return value;
 }
 
 function draw(el, dataset, opts) {
@@ -96,12 +88,11 @@ function draw(el, dataset, opts) {
     width,
     height,
     colorScale,
-    logScale,
     borderWidth,
     nodesGapWidth,
     cornerRadius,
     showNumbers,
-    breadcrumbHeight,
+    divideEqually,
   } = opts;
 
   const data = d3
@@ -120,10 +111,10 @@ function draw(el, dataset, opts) {
   const partition = (data) => {
     const root = d3
       .hierarchy(data)
-      .sum((d) => d.data.n)
+      .sum((d) => (divideEqually ? (d.children ? 0 : 1) : d.data.n))
       .sort((a, b) => b.value - a.value)
-      .each((d) => (d.value2 = transformValue(d.value, logScale)));
-    return partitionLog().size([2 * Math.PI, root.height + 1])(root);
+      .each((d) => (d.value2 = d3.sum(d, (dd) => dd.data.data.n)));
+    return d3.partition().size([2 * Math.PI, root.height + 1])(root);
   };
 
   const root = partition(data);
@@ -196,20 +187,12 @@ function draw(el, dataset, opts) {
   };
 
   function textFits(d, charWidth, text) {
-    //const CHAR_SPACE = 6;
-
     const deltaAngle = d.x1 - d.x0;
     const r = Math.max(0, ((d.y0 + d.y1) * radius) / 2);
     const perimeter = r * deltaAngle;
 
     return text.length * charWidth < perimeter;
   }
-
-  const breadcrumbs = d3
-    .select(el)
-    .append("svg")
-    .attr("height", breadcrumbHeight)
-    .attr("width", width);
 
   const svg = d3
     .select(el)
@@ -256,7 +239,7 @@ function draw(el, dataset, opts) {
         .ancestors()
         .map((d) => d.data.data.label)
         .reverse()
-        .join("/")}\n${formatNumber(d.value)}`
+        .join("/")}\n${formatNumber(d.value2)}`
   );
 
   //add hidden arcs for text
@@ -324,63 +307,11 @@ function draw(el, dataset, opts) {
     .append("textPath")
     .attr("startOffset", "50%")
     .attr("href", (_, i) => `#hiddenNumberArc${i}`)
-    .text((d) => formatNumber(d.value));
-
-  const breadcrumbVar = breadcrumb()
-    .container(breadcrumbs)
-    .height(breadcrumbHeight)
-    .width(width);
-
-  breadcrumbVar.show([
-    { text: "/", fill: "#eee", datum: root, click: clicked, title: "/" },
-  ]);
+    .text((d) => formatNumber(d.value2));
 
   function clicked(event, p) {
     if (!arcVisible(p.current) && p.current.y1 > 1) {
       return;
-    }
-
-    let currentPath = p
-      .ancestors()
-      .map((d) => ({
-        text: d === root ? "/" : d.data.data.label,
-        fill: "#eee",
-        click: clicked,
-        datum: d,
-        title: d === root ? "/" : d.data.data.label,
-      }))
-      .reverse();
-
-    //Add path to breadcrumbs
-    breadcrumbVar.show(currentPath);
-
-    //Get breadcrumbs group width
-    let breadcrumbsWidth = breadcrumbs
-      .select("g")
-      .node()
-      .getBoundingClientRect().width;
-
-    let ii = 0;
-    while (breadcrumbsWidth > width) {
-      //if it wants to replace with ... the previous node text, dont do that, instead delete root+1 node
-
-      if (ii >= currentPath.length - 1 - 1) {
-        currentPath = currentPath.slice(1);
-        ii--;
-      } else {
-        ii++;
-        currentPath[ii] = {
-          ...currentPath[ii],
-          text: "...",
-        };
-      }
-
-      breadcrumbVar.show(currentPath);
-
-      breadcrumbsWidth = breadcrumbs
-        .select("g")
-        .node()
-        .getBoundingClientRect().width;
     }
 
     parent.datum(p.parent || root);
