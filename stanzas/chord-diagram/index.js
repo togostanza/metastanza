@@ -12,19 +12,21 @@ export default class ChordDiagram extends Stanza {
       }
     );
 
-    const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    this.root.querySelector('main').append(_svg);
-    const svg = d3.select(_svg);
-
     // geometry
-    const [width, height] = [+window.getComputedStyle(this.element).getPropertyValue('--width'), +window.getComputedStyle(this.element).getPropertyValue('--height')];
+    // window.getComputedStyle(this.element).getPropertyValue('--width')
+    const [width, height] = [this.params['width'], this.params['height']];
     const innerRadius = Math.min(width, height) * 0.5 - 20;
     const outerRadius = innerRadius + 6;
     const formatValue = x => `${x.toFixed(0)}B`;
 
+    const _svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    this.root.querySelector('main').append(_svg);
+    const svg = d3.select(_svg);
+    svg
+      .attr('width', width)
+      .attr('height', height);
+
     // data
-    // const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data) => data);
-    console.log(this.params['data-url'])
     const data = await (() => {
       switch (this.params['data-type']) {
         case 'json':
@@ -32,9 +34,7 @@ export default class ChordDiagram extends Stanza {
         case 'tsv':
           return d3.tsv(this.params['data-url'], (data) => data);
       }
-      // d3.tsv(this.params['data-url'], (data) => data);
     })();
-    console.log(data)
     const names = Array.from(new Set(data.flatMap(d => [d.source, d.target])))
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
@@ -48,15 +48,15 @@ export default class ChordDiagram extends Stanza {
     // prepare some D3 objects
     const color = d3.scaleOrdinal(names, d3.schemeCategory10)
     const ribbon = d3.ribbonArrow()
-      .radius(innerRadius - 0.5)
-      .padAngle(1 / innerRadius)
+      .radius(innerRadius - this.params['edge-offset'])
+      .padAngle(1 / innerRadius);
     const arc = d3.arc()
       .innerRadius(innerRadius)
-      .outerRadius(outerRadius)
+      .outerRadius(outerRadius);
     const chord = d3.chordDirected()
-      .padAngle(12 / innerRadius)
+      .padAngle(this.params['arcs-gap'] / innerRadius)
       .sortSubgroups(d3.descending)
-      .sortChords(d3.descending)
+      .sortChords(d3.descending);
     const chords = chord(matrix);
 
     const fullsircleId = `fullsircle${new Date().getTime()}`;
@@ -81,22 +81,20 @@ export default class ChordDiagram extends Stanza {
 
     rootGroup.append('g')
         .classed('arcs', true)
-        .attr('font-family', 'sans-serif')
-        .attr('font-size', 10)
+        // .attr('font-family', 'sans-serif')
+        // .attr('font-size', 10)
       .selectAll('g')
       .data(chords.groups)
       .join('g')
         .call(g => g.append('path')
           .attr('d', arc)
           .attr('fill', d => color(names[d.index]))
-          .attr('hoge', d => {console.log(d, arguments)})
-          // .attr('id', d => `${prefix}${d.index}`)
           .attr('stroke', '#fff'))
         .call(g => g.append('text')
           .attr('dy', -3)
         .append('textPath')
           // .attr('xlink:href', textId.href)
-          .attr('xlink:href', d => `#${fullsircleId}`)
+          .attr('xlink:href', () => `#${fullsircleId}`)
           .attr('startOffset', d => d.startAngle * outerRadius)
           .text(d => names[d.index]))
         .call(g => g.append('title')
