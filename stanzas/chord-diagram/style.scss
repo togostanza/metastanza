@@ -5,8 +5,6 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 main {
   font: calc(var(--font-size) * 1px) var(--togostanza-font-family);
-  > svg {
-  }
 }
 
 .fullsircle {
@@ -14,19 +12,8 @@ main {
 }
 
 .ribbons {
-  fill-opacity: .8;
+  fill-opacity: 0.8;
   > path {
     mix-blend-mode: multiply;
-  }
-}
-
-.arcs {
-  > g {
-    > text {
-      > textPath {
-        // font-size: 1rem;
-        // stroke: red;
-      }
-    }
   }
 }
