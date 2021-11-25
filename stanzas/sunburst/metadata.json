@@ -30,10 +30,10 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "log-scale",
+      "stanza:key": "no-scale",
       "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "Log scale for values",
+      "stanza:description": "Divide equally",
       "stanza:required": false
     },
     {
