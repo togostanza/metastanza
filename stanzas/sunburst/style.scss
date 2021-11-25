@@ -1,5 +1,5 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+@use "@/common.scss";
 
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
@@ -36,13 +36,14 @@ main {
   stroke: none;
 }
 
-svg g.breadcrumbs polygon {
-  fill: var(--togostanza-breadcrumb-fill-color) !important;
+#sunburst {
+  @for $n from 1 to 7 {
+    & .color-#{$n} {
+      fill: var(--togostanza-colorscheme-color#{$n});
+    }
+  }
 }
 
-svg g.breadcrumbs text {
-  font-family: var(--togostanza-breadcrumb-label-font-family);
-  font-size: var(--togostanza-breadcrumb-label-font-size);
-  font-weight: var(--togostanza-breadcrumb-label-font-weight);
-  fill: var(--togostanza-breadcrumb-label-font-color);
+#sunburst .no-fill {
+  fill: none;
 }

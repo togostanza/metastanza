@@ -17,6 +17,8 @@ export default class Sunburst extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
+    // get value of css vars
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     const width = this.params["width"];
     const height = this.params["height"];
@@ -35,7 +37,7 @@ export default class Sunburst extends Stanza {
     );
 
     for (let i = 1; i <= 6; i++) {
-      colorScale.push(this.params["color-" + i]);
+      colorScale.push("--togostanza-colorscheme-color" + i);
     }
 
     this.renderTemplate({
@@ -65,6 +67,7 @@ export default class Sunburst extends Stanza {
     const sunburstElement = this.root.querySelector("#sunburst");
 
     const opts = {
+      css: css,
       width,
       height,
       colorScale,
@@ -85,6 +88,7 @@ function draw(el, dataset, opts) {
   let { depthLim } = opts;
 
   const {
+    css,
     width,
     height,
     colorScale,
@@ -221,7 +225,7 @@ function draw(el, dataset, opts) {
       while (d.depth > 1) {
         d = d.parent;
       }
-      return color(d.data.data.label);
+      return css(color(d.data.data.label));
     })
     .attr("fill-opacity", (d) =>
       arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
@@ -363,7 +367,9 @@ function draw(el, dataset, opts) {
         b = b.parent;
       }
 
-      return b.data?.data?.label ? color(b.data.data.label) : "rgba(0,0,0,0)";
+      return b.data?.data?.label
+        ? css(color(b.data.data.label))
+        : "rgba(0,0,0,0)";
     });
 
     textLabels
