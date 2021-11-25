@@ -25,7 +25,15 @@ export default class ChordDiagram extends Stanza {
     // data
     // const data = await d3.csv('http://localhost:8080/chord-diagram/assets/debt.csv', (data) => data);
     console.log(this.params['data-url'])
-    const data = await d3.tsv(this.params['data-url'], (data) => data);
+    const data = await (() => {
+      switch (this.params['data-type']) {
+        case 'json':
+          return d3.json(this.params['data-url'], (data) => data);
+        case 'tsv':
+          return d3.tsv(this.params['data-url'], (data) => data);
+      }
+      // d3.tsv(this.params['data-url'], (data) => data);
+    })();
     console.log(data)
     const names = Array.from(new Set(data.flatMap(d => [d.source, d.target])))
     const matrix = (() => {
