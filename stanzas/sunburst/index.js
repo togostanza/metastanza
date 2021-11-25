@@ -44,7 +44,6 @@ export default class Sunburst extends Stanza {
       template: "stanza.html.hbs",
     });
 
-    // filter out all elements with n=0
     const filteredData = data.filter(
       (item) => (item.children && !item.n) || (item.n && item.n > 0)
     );
@@ -67,7 +66,7 @@ export default class Sunburst extends Stanza {
     const sunburstElement = this.root.querySelector("#sunburst");
 
     const opts = {
-      css: css,
+      css,
       width,
       height,
       colorScale,
@@ -126,8 +125,9 @@ function draw(el, dataset, opts) {
   root.each((d) => (d.current = d));
 
   // if depthLim 0 of negative, show all levels
-  if (depthLim <= 0) {
-    depthLim = d3.max(root, (d) => d.depth);
+  const maxDepth = d3.max(root, (d) => d.depth);
+  if (depthLim <= 0 || depthLim > maxDepth) {
+    depthLim = maxDepth;
   }
 
   const radius = width / ((depthLim + 1) * 2);
