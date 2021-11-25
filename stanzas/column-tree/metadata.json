@@ -4,7 +4,7 @@
   },
   "@id": "column-tree",
   "stanza:label": "Column tree",
-  "stanza:definition": "",
+  "stanza:definition": "Column tree MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Tree",
   "stanza:provider": "",
@@ -34,13 +34,6 @@
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
-    },
-    {
-      "stanza:key": "test-bool",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show page slider"
     }
   ],
   "stanza:menu-placement": "bottom-right",
