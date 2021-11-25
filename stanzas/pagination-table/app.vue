@@ -17,20 +17,6 @@
           </select>
           entries
         </p>
-        <div class="menuWrapper">
-          <font-awesome-icon
-            icon="ellipsis-h"
-            class="menuIcon"
-            @click="state.isMenuOn = true"
-          />
-          <ul v-if="state.isMenuOn" class="menu">
-            <li v-for="url in blobUrls" :key="url.type">
-              <a class="downloadBtn" :href="url.url" download="tableData">
-                {{ `Download ${url.type}` }}
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
       <div class="tableWrapper" :style="`width: ${width};`">
         <table v-if="state.allRows">
@@ -322,8 +308,6 @@ export default defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
-
-      isMenuOn: false,
     });
 
     const filteredRows = computed(() => {
@@ -402,32 +386,6 @@ export default defineComponent({
       return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
-    const blobUrls = computed(() => {
-      const json = state.responseJSON;
-      if (!json) {
-        return null;
-      }
-
-      const csv = json2csv(json);
-
-      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
-        type: "application/json",
-      });
-      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
-
-      return [
-        {
-          type: "JSON",
-          url: URL.createObjectURL(jsonBlob),
-        },
-        {
-          type: "CSV",
-          url: URL.createObjectURL(csvBlob),
-        },
-      ];
-    });
-
     const isModalShowing = computed(() => {
       return state.columns.some(
         ({ isSearchModalShowing }) => isSearchModalShowing
@@ -438,9 +396,7 @@ export default defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) ||
-        isModalShowing.value ||
-        state.isMenuOn
+        ) || isModalShowing.value
       );
     });
 
@@ -503,7 +459,6 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
-      state.isMenuOn = false;
     }
 
     function updateCurrentPage(currentPage) {
@@ -559,6 +514,30 @@ export default defineComponent({
       }, 0);
     });
 
+    const downloadBlob = (blob, fileName) => {
+      const link = document.createElement("a");
+      link.download = fileName;
+      link.href = URL.createObjectURL(blob);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    };
+
+    const downloadJSON = () => {
+      const blob = new Blob([JSON.stringify(state.responseJSON, null, "  ")], {
+        type: "application/json",
+      });
+      downloadBlob(blob, "table.json");
+    };
+
+    const downloadCSV = () => {
+      const csv = json2csv(state.responseJSON);
+      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+      const blob = new Blob([bom, csv], { type: "text/csv" });
+      downloadBlob(blob, "table.csv");
+    };
+
     return {
       width: params.width ? params.width + "px" : "100%",
       sliderPagination,
@@ -566,7 +545,6 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
@@ -576,6 +554,8 @@ export default defineComponent({
       closeModal,
       updateCurrentPage,
       thead,
+      downloadJSON,
+      downloadCSV,
     };
   },
 });
