@@ -545,7 +545,6 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
