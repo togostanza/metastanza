@@ -30,11 +30,12 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "no-scale",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Divide equally",
-      "stanza:required": false
+      "stanza:key": "scaling",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["Natural", "Equal children", "Equal parents"],
+      "stanza:example": "Natural",
+      "stanza:description": "Scaling of nodes",
+      "stanza:required": true
     },
     {
       "stanza:key": "max-depth",

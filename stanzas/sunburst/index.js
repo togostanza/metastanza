@@ -23,13 +23,13 @@ export default class Sunburst extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const colorScale = [];
-    const logScale = this.params["log-scale"] || false;
+
     const borderWidth = this.params["gap-width"] || 2;
     const nodesGapWidth = this.params["nodes-gap-width"] || 8;
     const cornerRadius = this.params["nodes-corner-radius"] || 0;
     const showNumbers = this.params["show-numbers"];
     const depthLim = +this.params["max-depth"] || 0;
-    const divideEqually = this.params["no-scale"];
+    const scalingMethod = this.params["scaling"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -70,13 +70,12 @@ export default class Sunburst extends Stanza {
       width,
       height,
       colorScale,
-      logScale,
       borderWidth,
       nodesGapWidth,
       cornerRadius,
       showNumbers,
       depthLim,
-      divideEqually,
+      scalingMethod,
     };
 
     draw(sunburstElement, filteredData, opts);
@@ -95,7 +94,7 @@ function draw(el, dataset, opts) {
     nodesGapWidth,
     cornerRadius,
     showNumbers,
-    divideEqually,
+    scalingMethod,
   } = opts;
 
   const data = d3
@@ -112,10 +111,25 @@ function draw(el, dataset, opts) {
   const color = d3.scaleOrdinal(colorScale);
 
   const partition = (data) => {
-    const root = d3
-      .hierarchy(data)
-      .sum((d) => (divideEqually ? (d.children ? 0 : 1) : d.data.n))
+    const root = d3.hierarchy(data);
+    switch (scalingMethod) {
+      case "Natural":
+        root.sum((d) => d.data.n);
+        break;
+      case "Equal children":
+        root.sum((d) => (d.children ? 0 : 1));
+        break;
+      case "Equal parents":
+        root.each(
+          (d) =>
+            (d.value = d.parent ? d.parent.value / d.parent.children.length : 1)
+        );
+        break;
+    }
+
+    root
       .sort((a, b) => b.value - a.value)
+      // store real values for number labels in d.value2
       .each((d) => (d.value2 = d3.sum(d, (dd) => dd.data.data.n)));
     return d3.partition().size([2 * Math.PI, root.height + 1])(root);
   };
