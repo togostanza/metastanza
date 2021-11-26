@@ -1,0 +1,75 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+// The following is just an example. Feel free to modify it.
+// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
+main {
+  padding: 1rem 2rem;
+}
+
+p.greeting {
+  margin: 0;
+  font-size: 24px;
+  color: var(--greeting-color);
+  text-align: var(--greeting-align);
+}
+
+.breadcrumb-node {
+  display: inline-block;
+  margin-right: 5px;
+  background-color: #a7a7a7;
+  padding: 0 5px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+  .node-label {
+    display: inline-block;
+    font-size: 10px;
+    margin-right: 1rem;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  .node-dropdown {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 1rem;
+    border-right: black solid;
+    border-bottom: black solid;
+    cursor: pointer;
+    transform-origin: center;
+    transform: rotate(45deg);
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  .node-forward {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: black solid;
+    border-bottom: black solid;
+    transform-origin: center;
+    transform: rotate(-45deg);
+  }
+}
+.node-drop-down-menu {
+  background-color: rgb(161, 161, 161);
+  padding: 5px;
+  .node-dropdown-menu-item {
+    display: block;
+    text-align: left;
+
+    .node-dropdown-menu-item-label {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
