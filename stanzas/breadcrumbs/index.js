@@ -61,6 +61,8 @@ export default class Breadcrumbs extends Stanza {
   }
 }
 
+let showingD;
+
 function renderElement(el, data, opts) {
   const nestedData = d3
     .stratify()
@@ -74,47 +76,99 @@ function renderElement(el, data, opts) {
 
   const hierarchyData = d3.hierarchy(nestedData);
 
-  let currenNodeId = 6;
+  let currenData = hierarchyData.find((item) => {
+    return item.data.data.id === 6;
+  });
 
-  const breadcrumbNode = container
-    .selectAll("div")
-    .data(
-      hierarchyData
-        .find((item) => {
-          return item.data.data.id === currenNodeId;
-        })
-        .ancestors()
-        .reverse()
-    )
-    .join("div")
-    //.attr("style", "display:inline-block; background-color:red;")
-    .classed("breadcrumb-node", true);
+  const getCurrentData = (d) => {
+    return hierarchyData
+      .find((item) => {
+        return item === d;
+      })
+      .ancestors()
+      .reverse();
+  };
 
-  breadcrumbNode
-    .append("div")
-    .classed("node-label", true)
-    .text((d) => d.data.data.label);
+  function showDropdown(e, datum) {
+    //get all opened dropdowns and close them
+    if (showingD === datum) {
+      d3.select(this.parentNode.parentNode)
+        .selectAll(".node-dropdown-menu")
+        .remove();
+      showingD = null;
+      return;
+    }
 
-  breadcrumbNode
-    .append("div")
-    .classed("node-dropdown", true)
-    .attr("style", (d) => (d.parent?.children ? null : "display:none"));
+    showingD = datum;
 
-  breadcrumbNode
-    .append("div")
-    .classed("node-forward", true)
-    .attr("style", (d) => (d.children ? null : "display:none"));
-}
+    d3.select(this.parentNode.parentNode)
+      .selectAll(".node-dropdown-menu")
+      .remove();
 
-function genDropDownMenu(el, datum) {
-  const menuBack = d3.create("div").classed("node-drop-down-menu", true);
-  const rows = menuBack
-    .selectAll("div")
-    .data(datum.parent.children)
-    .filter((d) => d !== datum)
-    .join("div")
-    .classed("node-dropdown-menu-item", true);
-  rows.append("span").text((d) => d.data.data.label);
+    const menuBack = d3
+      .select(this.parentNode.parentNode)
+      .append("div")
+      .classed("node-dropdown-menu", true);
 
-  return menuBack;
+    const rows = menuBack
+      .selectAll("div")
+      .data(datum.parent.children.filter((d) => d !== datum))
+      // .filter((d) => d !== datum)
+      .join("div")
+      .classed("node-dropdown-menu-item", true)
+      .on("click", (e, d) => {
+        // console.log("clicked: ", d);
+        d3.select(this.parentNode.parentNode)
+          .selectAll(".node-dropdown-menu")
+          .remove();
+        showingD = null;
+        return update(getCurrentData(d));
+      });
+    rows.append("span").text((d) => d.data.data.label);
+  }
+
+  function update(data) {
+    // console.log("update:", data);
+    const breadcrumbNodes = container
+      .selectAll("div.breadcrumb-node")
+      .data(data, (d) => d.data.data.id);
+
+    // REMOVE
+    breadcrumbNodes.exit().remove();
+
+    // ADD
+    const breadcrumbNode = breadcrumbNodes
+      .enter()
+      .append("div")
+      //.attr("style", "display:inline-block; background-color:red;")
+      .classed("breadcrumb-node", true);
+
+    breadcrumbNode
+      .append("div")
+      .classed("node-label", true)
+      .on("click", (e, d) => {
+        return update(getCurrentData(d));
+      })
+      .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
+
+    breadcrumbNode
+      .append("div")
+      .classed("node-dropdown", true)
+      .attr("style", (d) => (d.parent?.children ? null : "display:none"))
+      .filter((d) => d.parent?.children)
+      .on("click", showDropdown);
+
+    breadcrumbNode
+      .append("div")
+      .classed("node-forward", true)
+      .attr("style", (d) => (d.children ? null : "display:none"));
+
+    // UPDATE
+
+    breadcrumbNodes
+      .selectAll("div.node-label")
+      .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
+  }
+
+  update(getCurrentData(currenData));
 }
