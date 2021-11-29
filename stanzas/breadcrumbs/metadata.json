@@ -34,6 +34,13 @@
       "stanza:example": 400,
       "stanza:description": "Width",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 20,
+      "stanza:description": "Height",
+      "stanza:required": true
     }
   ],
   "stanza:menu-placement": "bottom-right",

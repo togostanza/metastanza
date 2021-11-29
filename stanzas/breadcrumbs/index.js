@@ -23,6 +23,7 @@ export default class Breadcrumbs extends Stanza {
 
     //width
     const width = this.params["width"];
+    const height = this.params["height"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -56,6 +57,7 @@ export default class Breadcrumbs extends Stanza {
 
     const opts = {
       width,
+      height,
     };
     renderElement(el, filteredData, opts);
   }
@@ -72,7 +74,10 @@ function renderElement(el, data, opts) {
   const container = d3
     .select(el)
     .append("div")
-    .attr("style", "width:" + opts.width + "px");
+    .attr("style", `width:${opts.width}px;height:${opts.height}px;`)
+
+    .append("div")
+    .classed("container", true);
 
   const hierarchyData = d3.hierarchy(nestedData);
 
@@ -113,11 +118,9 @@ function renderElement(el, data, opts) {
     const rows = menuBack
       .selectAll("div")
       .data(datum.parent.children.filter((d) => d !== datum))
-      // .filter((d) => d !== datum)
       .join("div")
       .classed("node-dropdown-menu-item", true)
       .on("click", (e, d) => {
-        // console.log("clicked: ", d);
         d3.select(this.parentNode.parentNode)
           .selectAll(".node-dropdown-menu")
           .remove();
@@ -128,8 +131,8 @@ function renderElement(el, data, opts) {
   }
 
   function update(data) {
-    // console.log("update:", data);
     const breadcrumbNodes = container
+
       .selectAll("div.breadcrumb-node")
       .data(data, (d) => d.data.data.id);
 
@@ -140,7 +143,6 @@ function renderElement(el, data, opts) {
     const breadcrumbNode = breadcrumbNodes
       .enter()
       .append("div")
-      //.attr("style", "display:inline-block; background-color:red;")
       .classed("breadcrumb-node", true);
 
     breadcrumbNode
@@ -168,6 +170,29 @@ function renderElement(el, data, opts) {
     breadcrumbNodes
       .selectAll("div.node-label")
       .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
+
+    let currentHeight = container.node().getBoundingClientRect().height;
+    console.log("currentHeight", currentHeight);
+
+    const minI = 1;
+    let maxI = data.length - 1 - 2;
+    if (maxI < minI) {
+      maxI = minI;
+    }
+
+    let i = minI;
+    while (currentHeight > opts.height) {
+      if (i > maxI) {
+      }
+
+      container
+        .selectAll("div.breadcrumb-node")
+        .filter((d) => d.depth === i)
+        .select("div.node-label")
+        .text("...");
+      currentHeight = container.node().getBoundingClientRect().height;
+      i++;
+    }
   }
 
   update(getCurrentData(currenData));
