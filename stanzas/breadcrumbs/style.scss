@@ -7,6 +7,10 @@ main {
   padding: 1rem 2rem;
 }
 
+.container {
+  display: inline;
+}
+
 .breadcrumb-node {
   display: inline-flex;
   align-items: center;
@@ -31,13 +35,12 @@ main {
     display: inline-block;
     width: 0;
     height: 0;
-
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid black;
     cursor: pointer;
     transform: scaleX(0.7);
-    margin-right: 0.5em;
+    margin-right: 1.5em;
     &:hover {
       opacity: 0.7;
     }
