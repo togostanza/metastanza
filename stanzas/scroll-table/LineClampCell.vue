@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <input :id="id" type="checkbox" :name="id" />
   <label
@@ -6,11 +7,7 @@
     :style="`-webkit-line-clamp: ${lineClamp}`"
     v-html="value"
   ></label>
-  <label
-    v-else
-    :for="id"
-    :style="`-webkit-line-clamp: ${lineClamp}`"
-  >
+  <label v-else :for="id" :style="`-webkit-line-clamp: ${lineClamp}`">
     {{ value }}
   </label>
 </template>

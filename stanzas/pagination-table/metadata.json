@@ -64,7 +64,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"class\": \"mnemonic\",\"label\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\"},{\"id\": \"mass\",\"label\": \"Mass\",\"type\": \"number\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\",\"type\": \"category\",\"rowspan\": true}]",
+      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"variant_and_risk_allele\"},{\"id\":\"raf\",\"label\":\"raf\"},{\"id\":\"p_value\",\"label\":\"p_value\",\"type\": \"number\",\"sprintf\": \"%.2e\"},{\"id\":\"odds_ratio\",\"label\":\"odds_ratio\"},{\"id\":\"ci_text\",\"label\":\"ci_text\"},{\"id\":\"beta\",\"label\":\"beta\"},{\"id\":\"mapped_trait\",\"label\":\"mapped_trait\",\"escape\": false},{\"id\":\"pubmed_id\",\"label\":\"pubmed_id\"},{\"id\":\"pubmed_uri\",\"label\":\"pubmed_uri\"},{\"id\":\"study_detail\",\"label\":\"study_detail\"},{\"id\":\"study\",\"label\":\"study\"},{\"id\":\"initial_sample_size\",\"label\":\"initial_sample_size\"},{\"id\":\"replication_sample_size\",\"label\":\"replication_sample_size\"}]",
       "stanza:description": "Columns' options"
     }
   ],
