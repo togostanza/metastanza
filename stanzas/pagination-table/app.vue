@@ -141,6 +141,7 @@
                         :min="column.minValue"
                         :max="column.maxValue"
                         :tooltips="false"
+                        :step="-1"
                         @update="column.setRange"
                       ></Slider>
                       <div class="rangeInput">
@@ -561,7 +562,7 @@ function createColumnState(columnDef, values) {
   if (columnDef.type === "number") {
     const nums = values.map(Number);
     const minValue = Math.min(...nums);
-    const maxValue = Math.max(...nums);
+    const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
