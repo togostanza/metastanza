@@ -15,8 +15,13 @@ export default class Breadcrumbs extends Stanza {
       downloadPngMenuItem(this, "tree"),
     ];
   }
+  handleEvent(event) {
+    console.log(event);
+  }
 
   async render() {
+    const dispatcher = this.element.dispatchEvent;
+
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -24,11 +29,14 @@ export default class Breadcrumbs extends Stanza {
     //width
     const width = this.params["width"];
     const height = this.params["height"];
+    const isCoupledStanza = this.params["is-coupled"];
 
-    const data = await loadData(
-      this.params["data-url"],
-      this.params["data-type"]
-    );
+    let data;
+    if (!isCoupledStanza) {
+      data = await loadData(this.params["data-url"], this.params["data-type"]);
+    } else {
+      data = this.params["data"];
+    }
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -59,13 +67,13 @@ export default class Breadcrumbs extends Stanza {
       width,
       height,
     };
-    renderElement(el, filteredData, opts);
+    renderElement(el, filteredData, opts, dispatcher);
   }
 }
 
 let showingD;
 
-function renderElement(el, data, opts) {
+function renderElement(el, data, opts, dispatcher = null) {
   const nestedData = d3
     .stratify()
     .id((d) => d.id)
@@ -73,9 +81,7 @@ function renderElement(el, data, opts) {
 
   const container = d3
     .select(el)
-    .append("div")
     .attr("style", `width:${opts.width}px;height:${opts.height}px;`)
-
     .append("div")
     .classed("container", true);
 
@@ -95,25 +101,20 @@ function renderElement(el, data, opts) {
   };
 
   function showDropdown(e, datum) {
-    //get all opened dropdowns and close them
     if (showingD === datum) {
-      d3.select(this.parentNode.parentNode)
-        .selectAll(".node-dropdown-menu")
-        .remove();
+      container.selectAll(".node-dropdown-menu").remove();
       showingD = null;
       return;
     }
 
     showingD = datum;
 
-    d3.select(this.parentNode.parentNode)
-      .selectAll(".node-dropdown-menu")
-      .remove();
+    container.selectAll(".node-dropdown-menu").remove();
 
-    const menuBack = d3
-      .select(this.parentNode.parentNode)
+    const menuBack = container
       .append("div")
-      .classed("node-dropdown-menu", true);
+      .classed("node-dropdown-menu", true)
+      .style("left", this.parentNode.offsetLeft + "px");
 
     const rows = menuBack
       .selectAll("div")
@@ -121,10 +122,9 @@ function renderElement(el, data, opts) {
       .join("div")
       .classed("node-dropdown-menu-item", true)
       .on("click", (e, d) => {
-        d3.select(this.parentNode.parentNode)
-          .selectAll(".node-dropdown-menu")
-          .remove();
+        container.selectAll(".node-dropdown-menu").remove();
         showingD = null;
+        dispatcher(new CustomEvent("selectedDatumChanged", { detail: { d } }));
         return update(getCurrentData(d));
       });
     rows.append("span").text((d) => d.data.data.label);
@@ -132,7 +132,6 @@ function renderElement(el, data, opts) {
 
   function update(data) {
     const breadcrumbNodes = container
-
       .selectAll("div.breadcrumb-node")
       .data(data, (d) => d.data.data.id);
 
@@ -146,6 +145,7 @@ function renderElement(el, data, opts) {
       .classed("breadcrumb-node", true);
 
     breadcrumbNode
+
       .append("div")
       .classed("node-label", true)
       .on("click", (e, d) => {
@@ -153,13 +153,17 @@ function renderElement(el, data, opts) {
       })
       .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
 
+    // node dropdown icon
     breadcrumbNode
       .append("div")
-      .classed("node-dropdown", true)
+      .classed("node-dropdown-container", true)
       .attr("style", (d) => (d.parent?.children ? null : "display:none"))
       .filter((d) => d.parent?.children)
-      .on("click", showDropdown);
+      .on("click", showDropdown)
+      .append("div")
+      .classed("node-dropdown", true);
 
+    // node forward icon
     breadcrumbNode
       .append("div")
       .classed("node-forward", true)
@@ -181,18 +185,19 @@ function renderElement(el, data, opts) {
     }
 
     let i = minI;
-    while (currentHeight > opts.height) {
-      if (i > maxI) {
-      }
 
-      container
-        .selectAll("div.breadcrumb-node")
-        .filter((d) => d.depth === i)
-        .select("div.node-label")
-        .text("...");
-      currentHeight = container.node().getBoundingClientRect().height;
-      i++;
-    }
+    // while (currentHeight > opts.height) {
+    //   if (i > maxI) {
+    //   }
+
+    //   container
+    //     .selectAll("div.breadcrumb-node")
+    //     .filter((d) => d.depth === i)
+    //     .select("div.node-label")
+    //     .text("...");
+    //   currentHeight = container.node().getBoundingClientRect().height;
+    //   i++;
+    // }
   }
 
   update(getCurrentData(currenData));
