@@ -1,6 +1,6 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-e0b42b46.js';
-import { e as embed } from './vega-embed.module-b05919cd.js';
-import { l as loadData } from './load-data-0c021b7f.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-1d78ec98.js';
+import { e as embed } from './vega-embed.module-1dc076c1.js';
+import { l as loadData } from './load-data-07527fcb.js';
 
 class Barchart extends Stanza {
   menu() {
