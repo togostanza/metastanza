@@ -38,13 +38,23 @@
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 20,
+      "stanza:example": 400,
       "stanza:description": "Height",
       "stanza:required": true
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [],
-  "stanza:incomingEvent": [],
-  "stanza:outgoingEvent": []
+  "incomingEvents": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "event, wich dispatches when user selects some node in other stanza"
+    }
+  ],
+  "stanza:outgoingEvent": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "event, wich dispatches when user selects some node"
+    }
+  ]
 }
