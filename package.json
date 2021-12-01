@@ -21,10 +21,13 @@
     "@rollup/plugin-replace": "^3.0.0",
     "@vue/compiler-sfc": "^3.2.11",
     "@vueform/slider": "^1.0.3",
+    "color": "^4.0.1",
     "commonmark": "^0.30.0",
     "d3": "^7.0.1",
     "highlight.js": "^11.2.0",
     "katex": "^0.13.18",
+    "lit-element": "^3.0.1",
+    "lit-html": "^2.0.1",
     "lodash.mapvalues": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "lodash.orderby": "^4.6.0",
@@ -36,8 +39,8 @@
     "vega": "^5.19.1",
     "vega-embed": "^6.15.0",
     "vega-lite": "^5.1.1",
-    "vue": "^3.2.11",
-    "venn.js": "^0.2.20"
+    "venn.js": "^0.2.20",
+    "vue": "^3.2.11"
   },
   "devDependencies": {
     "editorconfig-checker": "^4.0.2",
