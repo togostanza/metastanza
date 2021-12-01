@@ -154,37 +154,37 @@
       "stanza:description": "Number label font weight"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color1",
+      "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Color 1"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color2",
+      "stanza:key": "--togostanza-series-1-color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
       "stanza:description": "Color 2"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color3",
+      "stanza:key": "--togostanza-series-2-color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
       "stanza:description": "Color 3"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color4",
+      "stanza:key": "--togostanza-series-3-color",
       "stanza:type": "color",
       "stanza:default": "#F5DA64",
       "stanza:description": "Color 4"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color5",
+      "stanza:key": "--togostanza-series-4-color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Color 5"
     },
     {
-      "stanza:key": "--togostanza-colorscheme-color6",
+      "stanza:key": "--togostanza-series-5-color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Color 6"

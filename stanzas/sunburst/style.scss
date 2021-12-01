@@ -36,14 +36,6 @@ main {
   stroke: none;
 }
 
-#sunburst {
-  @for $n from 1 to 7 {
-    & .color-#{$n} {
-      fill: var(--togostanza-colorscheme-color#{$n});
-    }
-  }
-}
-
 #sunburst .no-fill {
   fill: none;
 }
