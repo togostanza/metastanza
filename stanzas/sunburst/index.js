@@ -36,8 +36,8 @@ export default class Sunburst extends Stanza {
       this.params["data-type"]
     );
 
-    for (let i = 1; i <= 6; i++) {
-      colorScale.push("--togostanza-colorscheme-color" + i);
+    for (let i = 0; i < 6; i++) {
+      colorScale.push(`--togostanza-series-${i}-color`);
     }
 
     this.renderTemplate({
