@@ -1,6 +1,6 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-1d78ec98.js';
-import { e as embed } from './vega-embed.module-1dc076c1.js';
-import { l as loadData } from './load-data-07527fcb.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-277eca45.js';
+import { e as embed } from './vega-embed.module-a93467e6.js';
+import { l as loadData } from './load-data-8e78efda.js';
 
 class Linechart extends Stanza {
   menu() {
