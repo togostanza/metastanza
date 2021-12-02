@@ -8,6 +8,7 @@ import {
   appendCustomCss,
 } from "togostanza-utils"; // from "@/lib/metastanza_utils.js"; //
 import shadeColor from "./shadeColor";
+import treemapBinaryLog from "./treemapBinaryLog";
 
 export default class TreeMapStanza extends Stanza {
   menu() {
@@ -29,7 +30,7 @@ export default class TreeMapStanza extends Stanza {
 
     const colorScale = [];
 
-    // in metadata.json there is 6 hard-coded colors for color scheme
+    // in metadata.json there is 6 colors for color scheme
     for (let i = 0; i < 6; i++) {
       colorScale.push(css(`--togostanza-series-${i}-color`));
     }
@@ -64,7 +65,6 @@ export default class TreeMapStanza extends Stanza {
     const treeMapElement = this.root.querySelector("#treemap");
 
     const opts = {
-      css,
       width,
       height,
       colorScale,
@@ -88,9 +88,8 @@ function transformValue(logScale, value) {
 }
 
 function draw(el, dataset, opts) {
-  const { css, width, height, logScale, colorScale, borderWidth } = opts;
+  const { width, height, logScale, colorScale, borderWidth } = opts;
 
-  // create nested structure by item.parent
   const nested = d3
     .stratify()
     .id(function (d) {
@@ -141,67 +140,6 @@ function draw(el, dataset, opts) {
       child.x1 = x0 + (child.x1 / width) * (x1 - x0);
       child.y0 = y0 + (child.y0 / adjustedHeight) * (y1 - y0);
       child.y1 = y0 + (child.y1 / adjustedHeight) * (y1 - y0);
-    }
-  }
-
-  //tiling function with log scale support
-  function treemapBinaryLog(parent, x0, y0, x1, y1) {
-    var nodes = parent.children,
-      i,
-      n = nodes.length,
-      sum,
-      sums = new Array(n + 1);
-
-    for (sums[0] = sum = i = 0; i < n; ++i) {
-      sums[i + 1] = sum += nodes[i].value2;
-    }
-    let nodeSum = 0;
-    let kkk = -1;
-    while (++kkk < n) {
-      nodeSum += nodes[kkk].value2;
-    }
-    kkk = -1;
-
-    partition(0, n, nodeSum, x0, y0, x1, y1);
-
-    function partition(i, j, value, x0, y0, x1, y1) {
-      if (i >= j - 1) {
-        var node = nodes[i];
-        (node.x0 = x0), (node.y0 = y0);
-        (node.x1 = x1), (node.y1 = y1);
-        return;
-      }
-
-      var valueOffset = sums[i],
-        valueTarget = value / 2 + valueOffset,
-        k = i + 1,
-        hi = j - 1;
-
-      while (k < hi) {
-        var mid = (k + hi) >>> 1;
-        if (sums[mid] < valueTarget) {
-          k = mid + 1;
-        } else {
-          hi = mid;
-        }
-      }
-
-      if (valueTarget - sums[k - 1] < sums[k] - valueTarget && i + 1 < k) {
-        --k;
-      }
-
-      var valueLeft = sums[k] - valueOffset,
-        valueRight = value - valueLeft;
-
-      if (x1 - x0 > y1 - y0) {
-        var xk = value ? (x0 * valueRight + x1 * valueLeft) / value : x1;
-        partition(i, k, valueLeft, x0, y0, xk, y1);
-        partition(k, j, valueRight, xk, y0, x1, y1);
-      } else {
-        var yk = value ? (y0 * valueRight + y1 * valueLeft) / value : y1;
-        partition(i, k, valueLeft, x0, y0, x1, yk);
-        partition(k, j, valueRight, x0, yk, x1, y1);
-      }
     }
   }
 
@@ -290,11 +228,7 @@ function draw(el, dataset, opts) {
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
       .attr("fill", "none")
       .attr("stroke-width", 1)
-      .attr("stroke", function (d, i, nodes) {
-        // getComputedStyle(nodes[i]);
-
-        return shadeColor(color(d.parent.data.data.label), -15);
-      });
+      .attr("stroke", (d) => shadeColor(color(d.parent.data.data.label), -15));
 
     innerNode
       .append("clipPath")
