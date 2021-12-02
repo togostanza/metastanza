@@ -126,10 +126,8 @@ function draw(el, dataset, opts) {
       .join("/");
   };
 
-  //format number to abc,def,ghj
   const format = d3.format(",d");
 
-  //define color scheme
   const color = d3.scaleOrdinal(colorScale);
 
   //move and scale children nodes to fit into parent nodes
@@ -163,7 +161,6 @@ function draw(el, dataset, opts) {
     .append("svg")
     .attr("viewBox", [0, 0, width, height]);
 
-  //create g insige svg and generate all contents inside
   let group = svg.append("g").call(render, treemap(nested), null);
 
   function render(group, root, zoomInOut) {
@@ -175,7 +172,6 @@ function draw(el, dataset, opts) {
       .attr("height", `${height}px`)
       .attr("style", "fill: var(--togostanza-background-color)");
 
-    //add g's for every node
     const node = group
       .selectAll("g")
       .data(root.children.concat(root))
@@ -188,7 +184,6 @@ function draw(el, dataset, opts) {
       .attr("cursor", "pointer")
       .on("click", (event, d) => (d === root ? zoomout(root) : zoomin(d)));
 
-    //add popup description
     node
       .append("title")
       .text((d) =>
@@ -201,7 +196,6 @@ function draw(el, dataset, opts) {
             }`
       );
 
-    //add rectangle for every node
     node
       .append("rect")
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
