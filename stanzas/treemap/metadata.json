@@ -59,42 +59,6 @@
       "stanza:type": "number",
       "stanza:example": 2,
       "stanza:description": "Gap width"
-    },
-    {
-      "stanza:key": "color-1",
-      "stanza:type": "color",
-      "stanza:example": "#6590e6",
-      "stanza:description": "Color 1"
-    },
-    {
-      "stanza:key": "color-2",
-      "stanza:type": "color",
-      "stanza:example": "#3ac9b6",
-      "stanza:description": "Color 2"
-    },
-    {
-      "stanza:key": "color-3",
-      "stanza:type": "color",
-      "stanza:example": "#9ede2f",
-      "stanza:description": "Color 3"
-    },
-    {
-      "stanza:key": "color-4",
-      "stanza:type": "color",
-      "stanza:example": "#F5DA64",
-      "stanza:description": "Color 4"
-    },
-    {
-      "stanza:key": "color-5",
-      "stanza:type": "color",
-      "stanza:example": "#F57F5B",
-      "stanza:description": "Color 5"
-    },
-    {
-      "stanza:key": "color-6",
-      "stanza:type": "color",
-      "stanza:example": "#F75976",
-      "stanza:description": "Color 6"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -152,6 +116,42 @@
       "stanza:type": "string",
       "stanza:default": "normal",
       "stanza:description": "Number label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Color 5"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Color 6"
     }
   ],
   "stanza:incomingEvent": [],

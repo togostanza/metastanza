@@ -9,7 +9,6 @@ import {
 } from "togostanza-utils"; // from "@/lib/metastanza_utils.js"; //
 import shadeColor from "./shadeColor";
 
-
 export default class TreeMapStanza extends Stanza {
   menu() {
     return [
@@ -19,6 +18,8 @@ export default class TreeMapStanza extends Stanza {
   }
 
   async render() {
+    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const width = this.params["width"];
@@ -29,9 +30,8 @@ export default class TreeMapStanza extends Stanza {
     const colorScale = [];
 
     // in metadata.json there is 6 hard-coded colors for color scheme
-    const colorNum = 6;
-    for (let i = 1; i <= colorNum; i++) {
-      colorScale.push(this.params["color-" + i]);
+    for (let i = 0; i < 6; i++) {
+      colorScale.push(css(`--togostanza-series-${i}-color`));
     }
 
     const data = await loadData(
@@ -64,6 +64,7 @@ export default class TreeMapStanza extends Stanza {
     const treeMapElement = this.root.querySelector("#treemap");
 
     const opts = {
+      css,
       width,
       height,
       colorScale,
@@ -87,7 +88,7 @@ function transformValue(logScale, value) {
 }
 
 function draw(el, dataset, opts) {
-  const { width, height, logScale, colorScale, borderWidth } = opts;
+  const { css, width, height, logScale, colorScale, borderWidth } = opts;
 
   // create nested structure by item.parent
   const nested = d3
@@ -289,7 +290,9 @@ function draw(el, dataset, opts) {
       .attr("id", (d) => (d.leafUid = uid("leaf")).id)
       .attr("fill", "none")
       .attr("stroke-width", 1)
-      .attr("stroke", (d) => {
+      .attr("stroke", function (d, i, nodes) {
+        // getComputedStyle(nodes[i]);
+
         return shadeColor(color(d.parent.data.data.label), -15);
       });
 
