@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import uid from "./uid";
-import loadData from "@/lib/load-data";
+// import loadData from "togostanza-utils";
 
 import {
   downloadSvgMenuItem,
