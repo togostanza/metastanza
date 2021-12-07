@@ -1,12 +1,18 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
-// import loadData from "togostanza-utils/load-data";
+import homeIcon from "./assets/home.svg";
+import loadData from "togostanza-utils/load-data";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
-import loadData from "togostanza-utils/load-data";
+
+import copyToClipbard from "./clipboard";
+
+let currentDataId;
+let currentDropdownMenu;
 
 export default class Breadcrumbs extends Stanza {
   menu() {
@@ -15,27 +21,33 @@ export default class Breadcrumbs extends Stanza {
       downloadPngMenuItem(this, "tree"),
     ];
   }
+
   handleEvent(event) {
-    console.log(event);
+    event.stopPropagation();
+    if (event.target !== this.element) {
+      currentDataId = event.detail.id;
+      this.render();
+    }
   }
 
   async render() {
-    const dispatcher = this.element.dispatchEvent;
+    const dispatcher = this.element;
 
     appendCustomCss(this, this.params["custom-css-url"]);
 
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    // const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //width
     const width = this.params["width"];
     const height = this.params["height"];
-    const isCoupledStanza = this.params["is-coupled"];
 
-    let data;
-    if (!isCoupledStanza) {
-      data = await loadData(this.params["data-url"], this.params["data-type"]);
-    } else {
-      data = this.params["data"];
+    const data = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+
+    if (!currentDataId) {
+      currentDataId = this.params["initinal-data-id"];
     }
 
     this.renderTemplate({
@@ -67,13 +79,13 @@ export default class Breadcrumbs extends Stanza {
       width,
       height,
     };
-    renderElement(el, filteredData, opts, dispatcher);
+    renderElement(el, filteredData, opts, dispatcher, currentDataId);
   }
 }
 
 let showingD;
 
-function renderElement(el, data, opts, dispatcher = null) {
+function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
   const nestedData = d3
     .stratify()
     .id((d) => d.id)
@@ -85,16 +97,74 @@ function renderElement(el, data, opts, dispatcher = null) {
     .append("div")
     .classed("container", true);
 
-  const hierarchyData = d3.hierarchy(nestedData);
-
-  let currenData = hierarchyData.find((item) => {
-    return item.data.data.id === 6;
+  // Hide dropdown menu no scroll
+  d3.select(el).on("scroll", function () {
+    if (currentDropdownMenu) {
+      d3.select(currentDropdownMenu).remove();
+    }
   });
 
-  const getCurrentData = (d) => {
+  //Context menu substrate to capture left click without dispatching unnecessary events
+  const subDiv = container
+    .append("div")
+    .classed("context-menu-substrate", true)
+    .style("height", container);
+
+  const contextMenu = subDiv.append("div");
+
+  contextMenu
+    .classed("right-click-menu", true)
+    .append("ul")
+    .append("li")
+    .text("Copy path");
+
+  subDiv.on("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    subDiv.style("display", "none");
+    contextMenu.style("display", "none");
+  });
+
+  container.on("contextmenu", function (e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const rect = this.getBoundingClientRect();
+
+    subDiv.style("display", "block");
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    contextMenu
+      .style("display", "block")
+      .style("left", `${x}px`)
+      .style("top", `${y}px`);
+  });
+
+  contextMenu.on("click", function (e) {
+    e.stopPropagation();
+    const textarea = container
+      .append("textarea")
+      .classed("path-selection", true);
+
+    const currentPath = getCurrentData(currentDataId)
+      .map((item) => item.data.data.label)
+      .join("/");
+
+    textarea.text(currentPath);
+
+    copyToClipbard(textarea.node(), "copy");
+
+    textarea.remove();
+    subDiv.style("display", "none");
+    contextMenu.style("display", "none");
+  });
+
+  const hierarchyData = d3.hierarchy(nestedData);
+
+  const getCurrentData = (id) => {
     return hierarchyData
       .find((item) => {
-        return item === d;
+        return item.data.data.id === id;
       })
       .ancestors()
       .reverse();
@@ -104,6 +174,7 @@ function renderElement(el, data, opts, dispatcher = null) {
     if (showingD === datum) {
       container.selectAll(".node-dropdown-menu").remove();
       showingD = null;
+      currentDropdownMenu = null;
       return;
     }
 
@@ -114,20 +185,44 @@ function renderElement(el, data, opts, dispatcher = null) {
     const menuBack = container
       .append("div")
       .classed("node-dropdown-menu", true)
-      .style("left", this.parentNode.offsetLeft + "px");
+      .style("left", this.parentNode.getBoundingClientRect().left + "px");
+
+    currentDropdownMenu = menuBack.node();
 
     const rows = menuBack
       .selectAll("div")
-      .data(datum.parent.children.filter((d) => d !== datum))
+      .data(datum.parent.children.filter((d) => d !== datum));
+
+    const rowContainer = rows
       .join("div")
-      .classed("node-dropdown-menu-item", true)
+      .classed("node-dropdown-menu-item-container", true);
+
+    const row = rowContainer
+      .append("div")
+      .classed("node-dropdown-menu-item", true);
+
+    row
+      .filter((d) => d.children)
       .on("click", (e, d) => {
         container.selectAll(".node-dropdown-menu").remove();
         showingD = null;
-        dispatcher(new CustomEvent("selectedDatumChanged", { detail: { d } }));
-        return update(getCurrentData(d));
+        currentDropdownMenu = null;
+        dispatcher.dispatchEvent(
+          new CustomEvent("selectedDatumChanged", {
+            detail: { id: d.data.data.id },
+          })
+        );
+        currentDataId = d.data.data.id;
+        return update(getCurrentData(d.data.data.id));
       });
-    rows.append("span").text((d) => d.data.data.label);
+
+    row
+      .append("span")
+      .text((d) => d.data.data.label)
+      .classed("disabled", (d) => !d.children);
+
+    //Separator
+    rowContainer.filter((d, i, nodes) => i < nodes.length - 1).append("hr");
   }
 
   function update(data) {
@@ -144,21 +239,37 @@ function renderElement(el, data, opts, dispatcher = null) {
       .append("div")
       .classed("breadcrumb-node", true);
 
-    breadcrumbNode
-
+    const label = breadcrumbNode
       .append("div")
       .classed("node-label", true)
       .on("click", (e, d) => {
-        return update(getCurrentData(d));
-      })
-      .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
+        dispatcher.dispatchEvent(
+          new CustomEvent("selectedDatumChanged", {
+            detail: { id: d.data.data.id },
+          })
+        );
+        currentDataId = d.data.data.id;
+        return update(getCurrentData(currentDataId));
+      });
+
+    label.filter((d) => d.parent).text((d) => d.data.data.label);
+
+    label
+      .filter((d) => !d.parent)
+      .append("img")
+      .attr("src", homeIcon);
 
     // node dropdown icon
     breadcrumbNode
       .append("div")
       .classed("node-dropdown-container", true)
-      .attr("style", (d) => (d.parent?.children ? null : "display:none"))
-      .filter((d) => d.parent?.children)
+      .attr("style", (d) => {
+        if (d.parent && d.parent.children.length > 1) {
+          return null;
+        }
+        return "display:none";
+      })
+      .filter((d) => d.parent && d.parent.children.length > 1)
       .on("click", showDropdown)
       .append("div")
       .classed("node-dropdown", true);
@@ -172,33 +283,10 @@ function renderElement(el, data, opts, dispatcher = null) {
     // UPDATE
 
     breadcrumbNodes
+      .filter((d) => d.depth > 0)
       .selectAll("div.node-label")
-      .text((d) => (d.data.data.label === "" ? "/" : d.data.data.label));
-
-    let currentHeight = container.node().getBoundingClientRect().height;
-    console.log("currentHeight", currentHeight);
-
-    const minI = 1;
-    let maxI = data.length - 1 - 2;
-    if (maxI < minI) {
-      maxI = minI;
-    }
-
-    let i = minI;
-
-    // while (currentHeight > opts.height) {
-    //   if (i > maxI) {
-    //   }
-
-    //   container
-    //     .selectAll("div.breadcrumb-node")
-    //     .filter((d) => d.depth === i)
-    //     .select("div.node-label")
-    //     .text("...");
-    //   currentHeight = container.node().getBoundingClientRect().height;
-    //   i++;
-    // }
+      .text((d) => d.data.data.label);
   }
 
-  update(getCurrentData(currenData));
+  update(getCurrentData(currentDataId));
 }
