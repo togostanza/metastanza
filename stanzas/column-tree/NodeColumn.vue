@@ -27,13 +27,10 @@
 </template>
 <script>
 import { defineComponent, reactive } from "vue";
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-
 library.add(faChevronRight);
-
 export default defineComponent({
   components: {
     FontAwesomeIcon,
@@ -57,7 +54,6 @@ export default defineComponent({
     },
   },
   emits: ["setParent", "setCheckedNode"],
-
   setup(props, context) {
     const state = reactive({
       highlightedNode: null,
