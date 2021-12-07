@@ -2,9 +2,20 @@ import Stanza from "togostanza/stanza";
 import { createApp } from "vue";
 import App from "./app.vue";
 
-import { appendCustomCss } from "togostanza-utils";
+import {
+  appendCustomCss,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+} from "togostanza-utils";
 
 export default class PaginationTable extends Stanza {
+  menu() {
+    return [
+      downloadJSONMenuItem(this, "table.json", this._component?.json()),
+      downloadCSVMenuItem(this, "table.csv", this._component?.json()),
+    ];
+  }
+
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 
@@ -15,6 +26,6 @@ export default class PaginationTable extends Stanza {
 
     this._app?.unmount();
     this._app = createApp(App, this.params);
-    this._app.mount(main);
+    this._component = this._app.mount(main);
   }
 }

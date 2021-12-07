@@ -1,0 +1,122 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "column-tree",
+  "stanza:label": "Column tree",
+  "stanza:definition": "Column tree MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Tree",
+  "stanza:provider": "",
+  "stanza:license": "MIT",
+  "stanza:author": "MarleenEliza",
+  "stanza:address": "marleen@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2021-08-13",
+  "stanza:updated": "2021-08-13",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/tree-data.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-column-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#F8F9FA",
+      "stanza:description": "Background color for single column"
+    },
+    {
+      "stanza:key": "--togostanza-column-border",
+      "stanza:type": "text",
+      "stanza:default": "1px solid rgba(0, 0, 0, 0.1)",
+      "stanza:description": "Border for single column"
+    },
+    {
+      "stanza:key": "--togostanza-column-gap",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "Gap between columns"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-font-size",
+      "stanza:type": "text",
+      "stanza:default": "14px",
+      "stanza:description": "Font size of Nodes"
+    },
+    {
+      "stanza:key": "--togostanza-hover-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFFDD1",
+      "stanza:description": "Hover color for background when hovering over Node"
+    },
+    {
+      "stanza:key": "--togostanza-hover-text-color",
+      "stanza:type": "color",
+      "stanza:default": "#221727",
+      "stanza:description": "Hover color for text when hovering over Node"
+    },
+    {
+      "stanza:key": "--togostanza-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#3c3744",
+      "stanza:description": "Text color"
+    },
+    {
+      "stanza:key": "--togostanza-selected-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#256D80",
+      "stanza:description": "Text color"
+    },
+    {
+      "stanza:key": "--togostanza-selected-text-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFFFFF",
+      "stanza:description": "Text color"
+    },
+    {
+      "stanza:key": "--togostanza-node-border-radius",
+      "stanza:type": "text",
+      "stanza:default": "3px",
+      "stanza:description": "Border radius of highlighted/selected nodes"
+    },
+    {
+      "stanza:key": "--togostanza-column-border-radius",
+      "stanza:type": "text",
+      "stanza:default": "3px",
+      "stanza:description": "Border radius of highlighted/selected nodes"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}

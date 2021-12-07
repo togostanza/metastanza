@@ -2,18 +2,18 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "treemap",
-  "stanza:label": "Treemap",
-  "stanza:definition": "Treemap MetaStanza",
+  "@id": "sunburst",
+  "stanza:label": "Sunburst",
+  "stanza:definition": "Sunburst MetaStanza",
   "stanza:type": "Stanza",
-  "stanza:display": "Tree",
-  "stanza:provider": "TogoStanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "anton",
+  "stanza:author": "Anton Zhuravlev",
   "stanza:address": "anton@penqe.com",
   "stanza:contributor": [],
-  "stanza:created": "2021-10-25",
-  "stanza:updated": "2021-10-25",
+  "stanza:created": "2021-10-28",
+  "stanza:updated": "2021-10-28",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -30,14 +30,49 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "log-scale",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Log scale for values",
+      "stanza:key": "scaling",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["Natural", "Equal children", "Equal parents"],
+      "stanza:example": "Natural",
+      "stanza:description": "Scaling of nodes",
       "stanza:required": true
     },
     {
-
+      "stanza:key": "max-depth",
+      "stanza:type": "number",
+      "stanza:example": 3,
+      "stanza:description": "Maximum depth to show",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "show-numbers",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show numbers under labels",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "gap-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Gap between chart nodes levels, in px",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "nodes-gap-width",
+      "stanza:type": "number",
+      "stanza:example": 8,
+      "stanza:description": "Gap between chart nodes that are on same level, unitless coefficient",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "nodes-corner-radius",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Corner radius of nodes",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -52,15 +87,8 @@
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 300,
+      "stanza:example": 400,
       "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "gap-width",
-      "stanza:type": "number",
-      "stanza:example": 2,
-      "stanza:description": "Gap width"
-
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -72,17 +100,21 @@
       "stanza:description": "Background color"
     },
     {
+      "stanza:key": "--togostanza-label-text-outline",
+      "stanza:type": "color",
+      "stanza:default": "rgba(0,0,0,0)",
+      "stanza:description": "Label text outline. 'rgba(0,0,0,0)' for no outline"
+    },
+    {
       "stanza:key": "--togostanza-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Label font family"
-
     },
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-
       "stanza:description": "Label font color"
     },
     {
@@ -156,7 +188,6 @@
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Color 6"
-
     }
   ],
   "stanza:incomingEvent": [],

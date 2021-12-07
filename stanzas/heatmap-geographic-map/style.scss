@@ -1,15 +1,63 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
 
-// The following is just an example. Feel free to modify it.
-// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 main {
   padding: 1rem 2rem;
+  font-family: var(--togostanza-font-family);
+  font-size: var(--togostanza-font-size);
+  color: var(--togostanza-font-color);
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+section {
+  display: flex;
+}
+
+#wrapper {
+  > .container {
+    background-color: var(--togostanza-column-background-color);
+    margin-right: var(--togostanza-column-gap);
+    > .column {
+      display: grid;
+      min-width: max-content;
+      height: fit-content;
+      border: var(--togostanza-column-border);
+      border-radius: var(--togostanza-column-border-radius);
+      > .node {
+        display: flex;
+        justify-content: space-between;
+        border-radius: var(--togostanza-node-border-radius);
+        padding: 0 0.2rem;
+        &.-highlighted {
+          background-color: var(--togostanza-selected-background-color);
+          color: var(--togostanza-selected-text-color);
+          > svg > path {
+            color: var(--togostanza-selected-text-color);
+          }
+        }
+        &:hover {
+          background-color: var(--togostanza-hover-background-color) !important;
+          color: var(--togostanza-hover-text-color) !important;
+          cursor: pointer;
+          > svg > path {
+            color: var(--togostanza-hover-text-color);
+          }
+        }
+        > input[type="checkbox"] {
+          margin-right: 1rem;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+        > .content {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          > .icon {
+            width: calc(var(--togostanza-font-size) * 0.6);
+            padding-left: 2rem;
+          }
+        }
+      }
+    }
+  }
 }
