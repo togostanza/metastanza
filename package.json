@@ -26,8 +26,6 @@
     "d3": "^7.0.1",
     "d3-collection": "^1.0.7",
     "highlight.js": "^11.2.0",
-    "lit-element": "^3.0.1",
-    "lit-html": "^2.0.1",
     "katex": "^0.13.18",
     "lit-element": "^3.0.1",
     "lit-html": "^2.0.1",
