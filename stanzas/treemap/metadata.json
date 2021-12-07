@@ -37,7 +37,6 @@
       "stanza:required": true
     },
     {
-
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -60,7 +59,6 @@
       "stanza:type": "number",
       "stanza:example": 2,
       "stanza:description": "Gap width"
-
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -76,7 +74,6 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Label font family"
-
     },
     {
       "stanza:key": "--togostanza-label-font-color",
@@ -156,7 +153,6 @@
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Color 6"
-
     }
   ],
   "stanza:incomingEvent": [],
