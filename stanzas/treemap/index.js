@@ -11,7 +11,6 @@ import {
 import shadeColor from "./shadeColor";
 import treemapBinaryLog from "./treemapBinaryLog";
 
-
 export default class TreeMapStanza extends Stanza {
   menu() {
     return [
@@ -36,7 +35,6 @@ export default class TreeMapStanza extends Stanza {
     for (let i = 0; i < 6; i++) {
       colorScale.push(css(`--togostanza-series-${i}-color`));
     }
-
 
     const data = await loadData(
       this.params["data-url"],
@@ -93,7 +91,6 @@ function transformValue(logScale, value) {
 function draw(el, dataset, opts) {
   const { width, height, logScale, colorScale, borderWidth } = opts;
 
-
   const nested = d3
     .stratify()
     .id(function (d) {
@@ -115,7 +112,6 @@ function draw(el, dataset, opts) {
 
   const x = d3.scaleLinear().rangeRound([0, width]);
   const y = d3.scaleLinear().rangeRound([0, adjustedHeight]);
-
 
   // make path-like string for node
   const name = (d) => {
@@ -143,7 +139,6 @@ function draw(el, dataset, opts) {
       child.x1 = x0 + (child.x1 / width) * (x1 - x0);
       child.y0 = y0 + (child.y0 / adjustedHeight) * (y1 - y0);
       child.y1 = y0 + (child.y1 / adjustedHeight) * (y1 - y0);
-
     }
   }
 
@@ -177,7 +172,6 @@ function draw(el, dataset, opts) {
       .attr("width", `${width}px`)
       .attr("height", `${height}px`)
       .attr("style", "fill: var(--togostanza-background-color)");
-
 
     const node = group
       .selectAll("g")
@@ -236,7 +230,6 @@ function draw(el, dataset, opts) {
       .attr("id", (d) => (d.clipUid = uid("clip")).id)
       .append("use")
       .attr("href", (d) => d.leafUid.href);
-
 
     //add clip paths to nodes to trim text
     node
@@ -424,7 +417,6 @@ function draw(el, dataset, opts) {
         }
       })
       .each(wrap.bind(this, root, isFirstRender, zoomInOut));
-
   }
 
   // When zooming in, draw the new nodes on top, and fade them in.
@@ -450,7 +442,6 @@ function draw(el, dataset, opts) {
           .attrTween("opacity", () => d3.interpolate(0, 1))
           .call(position, d, false)
       );
-
   }
 
   // When zooming out, draw the old nodes on top, and fade them out.
@@ -459,7 +450,6 @@ function draw(el, dataset, opts) {
     const group1 = (group = svg
       .insert("g", "*")
       .call(render, d.parent, "zoomout"));
-
 
     x.domain([d.parent.x0, d.parent.x1]);
     y.domain([d.parent.y0, d.parent.y1]);
