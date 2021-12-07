@@ -30,6 +30,14 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "log-scale",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Log scale for values",
+      "stanza:required": true
+    },
+    {
+
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -48,66 +56,107 @@
       "stanza:description": "Height"
     },
     {
-      "stanza:key": "color-scale",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "schemeCategory10",
-        "schemeAccent",
-        "schemeDark2",
-        "schemePastel2",
-        "schemeSet2",
-        "schemeSet1",
-        "schemePastel1",
-        "schemeSet3",
-        "schemePaired"
-      ],
-      "stanza:example": "schemePastel1",
-      "stanza:description": "Color scale to display"
+      "stanza:key": "gap-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Gap width"
+
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#eeeeee",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family"
+      "stanza:description": "Label font family"
+
     },
     {
       "stanza:key": "--togostanza-label-font-color",
       "stanza:type": "color",
-      "stanza:default": "#333333",
+      "stanza:default": "#4E5059",
+
       "stanza:description": "Label font color"
     },
     {
       "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 11,
+      "stanza:type": "string",
+      "stanza:default": "11px",
       "stanza:description": "Label font size"
     },
     {
-      "stanza:key": "--togostanza-border-color",
+      "stanza:key": "--togostanza-label-font-weight",
+      "stanza:type": "string",
+      "stanza:default": "normal",
+      "stanza:description": "Label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Number label font family"
+    },
+    {
+      "stanza:key": "--togostanza-number-label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Number label font color"
     },
     {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
+      "stanza:key": "--togostanza-number-label-font-size",
+      "stanza:type": "string",
+      "stanza:default": "7px",
+      "stanza:description": "Number label font size"
     },
     {
-      "stanza:key": "--togostanza-edge-color",
+      "stanza:key": "--togostanza-number-label-font-weight",
+      "stanza:type": "string",
+      "stanza:default": "normal",
+      "stanza:description": "Number label font weight"
+    },
+    {
+      "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#AEB3BF",
-      "stanza:description": "Edge color"
+      "stanza:default": "#6590e6",
+      "stanza:description": "Color 1"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-series-1-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Color 5"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Color 6"
+
     }
   ],
   "stanza:incomingEvent": [],
