@@ -38,7 +38,6 @@
       "stanza:required": true
     },
     {
-
       "stanza:key": "label-0",
       "stanza:type": "string",
       "stanza:example": "10090",
@@ -74,7 +73,6 @@
       "stanza:required": false
     },
     {
-
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
