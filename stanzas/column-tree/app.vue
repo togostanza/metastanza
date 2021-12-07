@@ -28,16 +28,13 @@ import { defineComponent, reactive, toRefs, watchEffect, ref } from "vue";
 import loadData from "togostanza-utils/load-data";
 import metadata from "./metadata.json";
 import NodeColumn from "./NodeColumn.vue";
-
 function isRootNode(parent) {
   return !parent || isNaN(parent);
 }
-
 export default defineComponent({
   components: { NodeColumn },
   props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
   emits: ["resetHighlightedNode"],
-
   setup(params) {
     params = toRefs(params);
     const layerRefs = ref([]);
@@ -46,7 +43,6 @@ export default defineComponent({
       columnData: [],
       checkedNodes: new Map(),
     });
-
     watchEffect(
       async () => {
         state.responseJSON = null;
@@ -58,12 +54,10 @@ export default defineComponent({
       },
       { immediate: true }
     );
-
     watchEffect(() => {
       const data = state.responseJSON || [];
       state.columnData.push(data.filter((obj) => isRootNode(obj.parent)));
     });
-
     function updateCheckedNodes(node) {
       const { id, ...obj } = node;
       state.checkedNodes.has(id)
@@ -72,7 +66,6 @@ export default defineComponent({
       // TODO: add event handler
       // console.log([...state.checkedNodes.values()]);
     }
-
     function resetHighlightedNodes() {
       for (const [index, layer] of layerRefs.value.entries()) {
         if (layer && index >= state.columnData.length - 1) {
@@ -80,19 +73,15 @@ export default defineComponent({
         }
       }
     }
-
     function getChildNodes([layer, parentId]) {
       const children = state.responseJSON.filter(
         (node) => node.parent === parentId
       );
       const indexesToRemove = state.columnData.length - layer;
       state.columnData.splice(layer, indexesToRemove, children);
-
       resetHighlightedNodes();
-
       return children;
     }
-
     return {
       state,
       layerRefs,
