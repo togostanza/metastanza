@@ -190,6 +190,16 @@
       "stanza:description": "Color 6"
     }
   ],
-  "stanza:incomingEvent": [],
-  "stanza:outgoingEvent": []
+  "stanza:incomingEvent": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "Event, wich dispatches when user selects some node in other stanza"
+    }
+  ],
+  "stanza:outgoingEvent": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "Event, wich dispatches when user selects some node"
+    }
+  ]
 }
