@@ -7,6 +7,9 @@ import {
   appendCustomCss,
 } from "togostanza-utils"; //"@/lib/metastanza_utils.js"; //
 
+let currentDataId = 0;
+let path;
+
 export default class Sunburst extends Stanza {
   menu() {
     return [
@@ -15,7 +18,23 @@ export default class Sunburst extends Stanza {
     ];
   }
 
+  handleEvent(event) {
+    event.stopPropagation();
+    if (event.target !== this.element) {
+      currentDataId = event.detail.id;
+      const clickEvent = new MouseEvent("click");
+      if (path) {
+        path
+          .filter((d) => d.data.data.id === currentDataId)
+          .node()
+          .dispatchEvent(clickEvent);
+      }
+    }
+  }
+
   async render() {
+    const dispatcher = this.element;
+
     appendCustomCss(this, this.params["custom-css-url"]);
     // get value of css vars
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -36,7 +55,7 @@ export default class Sunburst extends Stanza {
       this.params["data-type"]
     );
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i <= 5; i++) {
       colorScale.push(`--togostanza-series-${i}-color`);
     }
 
@@ -78,11 +97,11 @@ export default class Sunburst extends Stanza {
       scalingMethod,
     };
 
-    draw(sunburstElement, filteredData, opts);
+    draw(sunburstElement, filteredData, opts, dispatcher, currentDataId);
   }
 }
 
-function draw(el, dataset, opts) {
+function draw(el, dataset, opts, dispatcher = null) {
   let { depthLim } = opts;
 
   const {
@@ -230,15 +249,19 @@ function draw(el, dataset, opts) {
 
   const g = svg.append("g");
 
-  const path = g
+  path = g
     .append("g")
     .selectAll("path")
-    .data(root.descendants().slice(1))
+    .data(root.descendants())
     .join("path")
     .attr("fill", (d) => {
       while (d.depth > 1) {
         d = d.parent;
       }
+      if (d.data.data.id === -1) {
+        return "none";
+      }
+
       return css(color(d.data.data.label));
     })
     .attr("fill-opacity", (d) =>
@@ -251,14 +274,13 @@ function draw(el, dataset, opts) {
     .style("cursor", "pointer")
     .on("click", clicked);
 
-  path.append("title").text(
-    (d) =>
-      `${d
-        .ancestors()
-        .map((d) => d.data.data.label)
-        .reverse()
-        .join("/")}\n${formatNumber(d.value2)}`
-  );
+  path.append("title").text((d) => {
+    return `${d
+      .ancestors()
+      .map((d) => d.data.data.label)
+      .reverse()
+      .join("/")}\n${formatNumber(d.value2)}`;
+  });
 
   //add hidden arcs for text
   const textArcs = g
@@ -331,6 +353,12 @@ function draw(el, dataset, opts) {
     if (!arcVisible(p.current) && p.current.y1 > 1) {
       return;
     }
+
+    dispatcher.dispatchEvent(
+      new CustomEvent("selectedDatumChanged", {
+        detail: { id: p.data?.data.id },
+      })
+    );
 
     parent.datum(p.parent || root);
 
