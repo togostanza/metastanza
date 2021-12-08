@@ -55,7 +55,7 @@ export default class Sunburst extends Stanza {
       this.params["data-type"]
     );
 
-    for (let i = 1; i <= 6; i++) {
+    for (let i = 0; i <= 5; i++) {
       colorScale.push(`--togostanza-series-${i}-color`);
     }
 
@@ -261,6 +261,7 @@ function draw(el, dataset, opts, dispatcher = null) {
       if (d.data.data.id === -1) {
         return "none";
       }
+
       return css(color(d.data.data.label));
     })
     .attr("fill-opacity", (d) =>
