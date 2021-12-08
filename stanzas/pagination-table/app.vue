@@ -18,20 +18,6 @@
           </select>
           entries
         </p>
-        <div class="menuWrapper">
-          <font-awesome-icon
-            icon="ellipsis-h"
-            class="menuIcon"
-            @click="state.isMenuOn = true"
-          />
-          <ul v-if="state.isMenuOn" class="menu">
-            <li v-for="url in blobUrls" :key="url.type">
-              <a class="downloadBtn" :href="url.url" download="tableData">
-                {{ `Download ${url.type}` }}
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
       <div class="tableWrapper" :style="`width: ${width};`">
         <table v-if="state.allRows">
@@ -155,6 +141,7 @@
                         :min="column.minValue"
                         :max="column.maxValue"
                         :tooltips="false"
+                        :step="-1"
                         @update="column.setRange"
                       ></Slider>
                       <div class="rangeInput">
@@ -248,12 +235,12 @@
       :is-slider-on="state.pagination.isSliderOn"
       @updateCurrentPage="updateCurrentPage"
     />
+    <div
+      v-if="isPopupOrModalShowing"
+      class="modalBackground"
+      @click="closeModal()"
+    ></div>
   </div>
-  <div
-    v-if="isPopupOrModalShowing"
-    class="modalBackground"
-    @click="closeModal()"
-  ></div>
 </template>
 
 <script>
@@ -274,8 +261,11 @@ import LineClampCell from "./LineClampCell.vue";
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
+import { sprintf } from "sprintf-js";
+
 import loadData from "togostanza-utils/load-data";
 
+// import testData from "./assets/test.json";
 import metadata from "./metadata.json";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -323,8 +313,6 @@ export default defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
-
-      isMenuOn: false,
     });
 
     const filteredRows = computed(() => {
@@ -338,18 +326,6 @@ export default defineComponent({
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
-        // TODO: refactoring
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = Number.parseFloat(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
-
         filtered = orderBy(
           filtered,
           (cells) => {
@@ -358,17 +334,6 @@ export default defineComponent({
           },
           [state.sorting.direction]
         );
-
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = cell.column.parseValue(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
         return filtered;
       } else {
         return filtered;
@@ -403,32 +368,6 @@ export default defineComponent({
       return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
-    const blobUrls = computed(() => {
-      const json = state.responseJSON;
-      if (!json) {
-        return null;
-      }
-
-      const csv = json2csv(json);
-
-      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
-        type: "application/json",
-      });
-      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
-
-      return [
-        {
-          type: "JSON",
-          url: URL.createObjectURL(jsonBlob),
-        },
-        {
-          type: "CSV",
-          url: URL.createObjectURL(csvBlob),
-        },
-      ];
-    });
-
     const isModalShowing = computed(() => {
       return state.columns.some(
         ({ isSearchModalShowing }) => isSearchModalShowing
@@ -439,9 +378,7 @@ export default defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) ||
-        isModalShowing.value ||
-        state.isMenuOn
+        ) || isModalShowing.value
       );
     });
 
@@ -504,7 +441,6 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
-      state.isMenuOn = false;
     }
 
     function updateCurrentPage(currentPage) {
@@ -513,6 +449,7 @@ export default defineComponent({
 
     async function fetchData() {
       const data = await loadData(params.dataUrl, params.dataType);
+      // const data = testData;
 
       state.responseJSON = data;
       let columns;
@@ -560,6 +497,10 @@ export default defineComponent({
       }, 0);
     });
 
+    const json = () => {
+      return state.responseJSON;
+    };
+
     return {
       width: params.width ? params.width + "px" : "100%",
       sliderPagination,
@@ -567,7 +508,6 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
@@ -577,6 +517,7 @@ export default defineComponent({
       closeModal,
       updateCurrentPage,
       thead,
+      json,
     };
   },
 });
@@ -594,14 +535,13 @@ function createColumnState(columnDef, values) {
     fixed: columnDef.fixed,
     target: columnDef.target,
     lineClamp: columnDef["line-clamp"],
-    significantDigits: columnDef["significant-digits"],
-    exponentDigits: columnDef["exponent-digits"],
+    sprintf: columnDef["sprintf"],
   };
 
   if (columnDef.type === "number") {
     const nums = values.map(Number);
     const minValue = Math.min(...nums);
-    const maxValue = Math.max(...nums);
+    const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
@@ -632,28 +572,8 @@ function createColumnState(columnDef, values) {
       inputtingRangeMax,
       isSearchModalShowing: false,
       parseValue(val) {
-        val = Number(val);
-        if (columnDef["significant-digits"]) {
-          val = Number.parseFloat(val).toExponential(
-            Number(columnDef["significant-digits"]) - 1
-          );
-        }
-        if (columnDef["exponent-digits"]) {
-          const decimalPoint = Number(val).toExponential(1);
-          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/);
-          index = index ? index[1] : null;
-          const exponentDigits = columnDef["exponent-digits"];
-          const significantDigits = columnDef["significant-digits"];
-          if (exponentDigits <= +index) {
-            val = Number.parseFloat(val).toExponential(
-              Number(significantDigits) - 1
-            );
-          } else if (Number.parseFloat(val) !== 0) {
-            val = Number.parseFloat(val).toFixed(exponentDigits);
-            val = val.toString().slice(0, +index - exponentDigits);
-          } else {
-            val = Number.parseFloat(val).toString();
-          }
+        if (columnDef["sprintf"]) {
+          val = sprintf(columnDef["sprintf"], Number.parseFloat(val));
         }
         return val;
       },
@@ -718,21 +638,5 @@ function searchByEachColumn(row) {
   return row.every((cell) => {
     return cell.column.isMatch(cell.value);
   });
-}
-
-function json2csv(json) {
-  var header = Object.keys(json[0]).join(",") + "\n";
-
-  var body = json
-    .map(function (d) {
-      return Object.keys(d)
-        .map(function (key) {
-          return d[key];
-        })
-        .join(",");
-    })
-    .join("\n");
-
-  return header + body;
 }
 </script>
