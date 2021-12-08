@@ -1,0 +1,212 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "breadcrumbs",
+  "stanza:label": "Breadcrumbs",
+  "stanza:definition": "Breadcrumbs MetaStanza ",
+  "stanza:type": "Stanza",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "Anton Zhuravlev",
+  "stanza:address": "anton@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2021-11-26",
+  "stanza:updated": "2021-11-26",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/tree-data.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "initinal-data-id",
+      "stanza:type": "number",
+      "stanza:example": 6,
+      "stanza:description": "Initial node id",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Width",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 40,
+      "stanza:description": "Height",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "show-dropdown",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show dropdown menu for sibling nodes",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-label-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Label font family"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 11,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#c5c5c5",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-label-background-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#fdfdfd",
+      "stanza:description": "Color the labels on mouseover"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#2c2c2c",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-triangle-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Color of dropdown menu triangle"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-triangle-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#e2e2e2",
+      "stanza:description": "Color of dropdown menu triangle on mouseover"
+    },
+
+    {
+      "stanza:key": "--togostanza-forward-triangle-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Color of path delimiter triangle"
+    },
+
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-font-family",
+      "stanza:type": "string",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Dropdown menu item font family"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Dropdown menu item font color"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-font-size",
+      "stanza:type": "number",
+      "stanza:default": 8,
+      "stanza:description": "Dropdown menu item font size"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-font-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Font color of dropdown menu item"
+    },
+
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#c5c5c5",
+      "stanza:description": "Color of dropdown menu background"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-menu-item-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#e6e6e6",
+      "stanza:description": "Color of highlighted dropdown menu item"
+    },
+    {
+      "stanza:key": "--togostanza-dropdown-menu-separator-color",
+      "stanza:type": "color",
+      "stanza:default": "#555555",
+      "stanza:description": "Color of highlighted dropdown menu item"
+    },
+
+    {
+      "stanza:key": "--togostanza-context-menu-background-color",
+      "stanza:type": "color",
+      "stanza:default": "#f5f5f5",
+      "stanza:description": "Context menu background color"
+    },
+    {
+      "stanza:key": "--togostanza-context-menu-background-color-hover",
+      "stanza:type": "color",
+      "stanza:default": "#ffffff",
+      "stanza:description": "Context menu background color on mousever"
+    },
+    {
+      "stanza:key": "--togostanza-context-menu-item-font-family",
+      "stanza:type": "string",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Context menu item font family"
+    },
+    {
+      "stanza:key": "--togostanza-context-menu-item-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Context menu item font color"
+    },
+    {
+      "stanza:key": "--togostanza-context-menu-item-font-size",
+      "stanza:type": "number",
+      "stanza:default": 8,
+      "stanza:description": "Context menu item font size"
+    }
+  ],
+
+  "stanza:incomingEvent": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "An event, wich dispatches when user selects some node in other stanza"
+    }
+  ],
+  "stanza:outgoingEvent": [
+    {
+      "stanza:key": "selectedDatumChanged",
+      "stanza:description": "An event, wich dispatches when user selects some node in this stanza"
+    }
+  ]
+}
