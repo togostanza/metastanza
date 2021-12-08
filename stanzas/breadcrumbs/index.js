@@ -40,7 +40,7 @@ export default class Breadcrumbs extends Stanza {
     //width
     const width = this.params["width"];
     const height = this.params["height"];
-
+    const showDropdown = this.params["show-dropdown"];
     const data = await loadData(
       this.params["data-url"],
       this.params["data-type"]
@@ -75,9 +75,17 @@ export default class Breadcrumbs extends Stanza {
 
     const el = this.root.querySelector("#breadcrumbs");
 
+    // Hide dropdown menu on scroll if any
+    window.document.addEventListener("scroll", () => {
+      if (currentDropdownMenu) {
+        d3.select(currentDropdownMenu).remove();
+      }
+    });
+
     const opts = {
       width,
       height,
+      showDropdown,
     };
     renderElement(el, filteredData, opts, dispatcher, currentDataId);
   }
@@ -85,7 +93,7 @@ export default class Breadcrumbs extends Stanza {
 
 let showingD;
 
-function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
+function renderElement(el, data, opts, dispatcher = null) {
   const nestedData = d3
     .stratify()
     .id((d) => d.id)
@@ -96,13 +104,6 @@ function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
     .attr("style", `width:${opts.width}px;height:${opts.height}px;`)
     .append("div")
     .classed("container", true);
-
-  // Hide dropdown menu no scroll
-  d3.select(el).on("scroll", function () {
-    if (currentDropdownMenu) {
-      d3.select(currentDropdownMenu).remove();
-    }
-  });
 
   //Context menu substrate to capture left click without dispatching unnecessary events
   const subDiv = container
@@ -159,11 +160,15 @@ function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
     contextMenu.style("display", "none");
   });
 
+  console.log(nestedData);
+
   const hierarchyData = d3.hierarchy(nestedData);
 
   const getCurrentData = (id) => {
+    console.log(typeof id);
     return hierarchyData
       .find((item) => {
+        console.log(typeof item.data.data.id);
         return item.data.data.id === id;
       })
       .ancestors()
@@ -185,7 +190,13 @@ function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
     const menuBack = container
       .append("div")
       .classed("node-dropdown-menu", true)
-      .style("left", this.parentNode.getBoundingClientRect().left + "px");
+      .style("left", this.parentNode.getBoundingClientRect().left + "px")
+      .style(
+        "top",
+        this.parentNode.getBoundingClientRect().top +
+          this.parentNode.getBoundingClientRect().height +
+          "px"
+      );
 
     currentDropdownMenu = menuBack.node();
 
@@ -259,26 +270,34 @@ function renderElement(el, data, opts, dispatcher = null, currentDataId = 0) {
       .append("img")
       .attr("src", homeIcon);
 
-    // node dropdown icon
-    breadcrumbNode
-      .append("div")
-      .classed("node-dropdown-container", true)
-      .attr("style", (d) => {
-        if (d.parent && d.parent.children.length > 1) {
-          return null;
-        }
-        return "display:none";
-      })
-      .filter((d) => d.parent && d.parent.children.length > 1)
-      .on("click", showDropdown)
-      .append("div")
-      .classed("node-dropdown", true);
+    if (opts.showDropdown) {
+      // node dropdown icon
+      breadcrumbNode
+        .append("div")
+        .classed("node-dropdown-container", true)
+        .attr("style", (d) => {
+          if (d.parent && d.parent.children.length > 1) {
+            return null;
+          }
+          return "display:none";
+        })
+        .filter((d) => d.parent && d.parent.children.length > 1)
+        .on("click", showDropdown)
+        .append("div")
+        .classed("node-dropdown", true);
+    }
 
     // node forward icon
     breadcrumbNode
       .append("div")
       .classed("node-forward", true)
-      .attr("style", (d) => (d.children ? null : "display:none"));
+      .attr("style", (d) =>
+        d.children
+          ? opts.showDropdown
+            ? none
+            : "margin-left:0.4em"
+          : "display:none"
+      );
 
     // UPDATE
 
