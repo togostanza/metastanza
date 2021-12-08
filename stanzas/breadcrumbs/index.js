@@ -294,7 +294,7 @@ function renderElement(el, data, opts, dispatcher = null) {
       .attr("style", (d) =>
         d.children
           ? opts.showDropdown
-            ? none
+            ? null
             : "margin-left:0.4em"
           : "display:none"
       );
