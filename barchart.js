@@ -1,12 +1,16 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as appendCustomCss, c as defineStanzaElement } from './index-3c218a66.js';
-import { e as embed } from './vega-embed.module-5b074a9d.js';
-import { l as loadData } from './load-data-98a3fbde.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboard, g as appendCustomCss, h as defineStanzaElement } from './index-ed77efe5.js';
+import { e as embed } from './vega-embed.module-4d260e3d.js';
+import { l as loadData } from './load-data-bb38a7d8.js';
 
 class Barchart extends Stanza {
   menu() {
     return [
       downloadSvgMenuItem(this, "barchart"),
       downloadPngMenuItem(this, "barchart"),
+      downloadJSONMenuItem(this, "barchart", this._data),
+      downloadCSVMenuItem(this, "barchart", this._data),
+      downloadTSVMenuItem(this, "barchart", this._data),
+      copyHTMLSnippetToClipboard(this),
     ];
   }
 
@@ -32,6 +36,7 @@ class Barchart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+    this._data = values;
 
     function constructData(chartType) {
       switch (chartType) {
