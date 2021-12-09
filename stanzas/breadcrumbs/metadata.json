@@ -31,9 +31,8 @@
     {
       "stanza:key": "initinal-data-id",
       "stanza:type": "number",
-      "stanza:example": 6,
       "stanza:description": "Initial node id",
-      "stanza:required": true
+      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",

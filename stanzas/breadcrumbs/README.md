@@ -44,9 +44,7 @@ Than could be done by using
 
 ```html
 <togostanza--data-source
-  url="{url"
-  to
-  data}
+  url="<url to data>"
   receiver="name_of_first_stanza, name_of_second_stanza"
   target-attribute="data-url"
 ></togostanza--data-source>
@@ -59,5 +57,7 @@ To change currently showing hierarchy node, Breadcrumbs stanza need to receive e
 ```
 
 as event payload.
+
+Initially showing path could be defined by passing `initial-data-id` parameter, referring to id of the node, path to which should be shown at first loading.
 
 Also, when clicking on the node inside the Breadcrumbs stanza, will dispatch same `selectedDatumChanged` event with payload containing the `id` of clicked node in same manner.
