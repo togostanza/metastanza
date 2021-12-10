@@ -1,4 +1,4 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
 import { e as embed } from './vega-embed.module-0d1b15ca.js';
 import { l as loadData } from './load-data-8921580f.js';
 
@@ -7,6 +7,10 @@ class ScatterPlot extends Stanza {
     return [
       downloadSvgMenuItem(this, "scatter-plot"),
       downloadPngMenuItem(this, "scatter-plot"),
+      downloadJSONMenuItem(this, "scatter-plot", this._data),
+      downloadCSVMenuItem(this, "scatter-plot", this._data),
+      downloadTSVMenuItem(this, "scatter-plot", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -27,6 +31,7 @@ class ScatterPlot extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+    this._data = values;
 
     const data = [
       {
