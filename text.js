@@ -80004,6 +80004,7 @@ class Text extends Stanza {
           link.download = "text.txt";
           link.click();
           document.body.removeChild(link);
+          URL.revokeObjectURL(textUrl);
         },
       },
     ];
