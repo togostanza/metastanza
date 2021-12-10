@@ -7,7 +7,7 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboard,
+  copyHTMLSnippetToClipboardMenuItem,
 } from "togostanza-utils";
 
 export default class PaginationTable extends Stanza {
@@ -16,7 +16,7 @@ export default class PaginationTable extends Stanza {
       downloadJSONMenuItem(this, "table", this._component?.json()),
       downloadCSVMenuItem(this, "table", this._component?.json()),
       downloadTSVMenuItem(this, "table", this._component?.json()),
-      copyHTMLSnippetToClipboard(this),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
