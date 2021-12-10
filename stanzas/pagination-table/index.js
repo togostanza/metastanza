@@ -6,6 +6,7 @@ import {
   appendCustomCss,
   downloadJSONMenuItem,
   downloadCSVMenuItem,
+  downloadTSVMenuItem,
 } from "togostanza-utils";
 
 export default class PaginationTable extends Stanza {
@@ -13,6 +14,7 @@ export default class PaginationTable extends Stanza {
     return [
       downloadJSONMenuItem(this, "table", this._component?.json()),
       downloadCSVMenuItem(this, "table", this._component?.json()),
+      downloadTSVMenuItem(this, "table", this._component?.json()),
     ];
   }
 
