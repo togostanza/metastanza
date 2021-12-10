@@ -1,6 +1,6 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboard, g as appendCustomCss, h as defineStanzaElement } from './index-ed77efe5.js';
-import { e as embed } from './vega-embed.module-4d260e3d.js';
-import { l as loadData } from './load-data-bb38a7d8.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
+import { e as embed } from './vega-embed.module-0d1b15ca.js';
+import { l as loadData } from './load-data-8921580f.js';
 
 class Barchart extends Stanza {
   menu() {
@@ -10,7 +10,7 @@ class Barchart extends Stanza {
       downloadJSONMenuItem(this, "barchart", this._data),
       downloadCSVMenuItem(this, "barchart", this._data),
       downloadTSVMenuItem(this, "barchart", this._data),
-      copyHTMLSnippetToClipboard(this),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

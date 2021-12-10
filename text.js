@@ -1,4 +1,4 @@
-import { G as commonjsGlobal, S as Stanza, g as appendCustomCss, h as defineStanzaElement } from './index-ed77efe5.js';
+import { G as commonjsGlobal, S as Stanza, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
 
 function isContainer(node) {
     switch (node._type) {
