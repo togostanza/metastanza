@@ -11,8 +11,8 @@ import {
 export default class PaginationTable extends Stanza {
   menu() {
     return [
-      downloadJSONMenuItem(this, "table.json", this._component?.json()),
-      downloadCSVMenuItem(this, "table.csv", this._component?.json()),
+      downloadJSONMenuItem(this, "table", this._component?.json()),
+      downloadCSVMenuItem(this, "table", this._component?.json()),
     ];
   }
 
