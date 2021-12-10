@@ -5,6 +5,10 @@ import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -13,6 +17,10 @@ export default class Linechart extends Stanza {
     return [
       downloadSvgMenuItem(this, "linechart"),
       downloadPngMenuItem(this, "linechart"),
+      downloadJSONMenuItem(this, "linechart", this._data),
+      downloadCSVMenuItem(this, "linechart", this._data),
+      downloadTSVMenuItem(this, "linechart", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -37,6 +45,7 @@ export default class Linechart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+    this._data = values;
 
     const signals = [
       {
