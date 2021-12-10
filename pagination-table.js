@@ -1,4 +1,4 @@
-import { G as commonjsGlobal$1, S as Stanza, b as downloadJSONMenuItem, c as downloadCSVMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-ed77efe5.js';
+import { G as commonjsGlobal$1, S as Stanza, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboard, g as appendCustomCss, h as defineStanzaElement } from './index-ed77efe5.js';
 import { t as toRefs, r as ref, c as computed, o as onMounted, a as onUnmounted, w as watch, b as createBlock, m as mergeProps, d as openBlock, e as defineComponent, h as h$1, f as onUpdated, g as createElementBlock, i as createBaseVNode, n as normalizeClass, j as createVNode, F as Fragment, k as renderList, l as createTextVNode, p as toDisplayString, q as createCommentVNode, s as resolveComponent, u as normalizeStyle, v as reactive, x as onRenderTriggered, y as withDirectives, z as vModelText, A as vModelSelect, B as withCtx, T as Transition, C as vModelCheckbox, D as createApp } from './runtime-dom.esm-bundler-bcdf4715.js';
 import { l as loadData } from './load-data-bb38a7d8.js';
 
@@ -6812,8 +6812,10 @@ script.__file = "stanzas/pagination-table/app.vue";
 class PaginationTable extends Stanza {
   menu() {
     return [
-      downloadJSONMenuItem(this, "table.json", this._component?.json()),
-      downloadCSVMenuItem(this, "table.csv", this._component?.json()),
+      downloadJSONMenuItem(this, "table", this._component?.json()),
+      downloadCSVMenuItem(this, "table", this._component?.json()),
+      downloadTSVMenuItem(this, "table", this._component?.json()),
+      copyHTMLSnippetToClipboard(this),
     ];
   }
 
