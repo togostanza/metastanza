@@ -1,4 +1,4 @@
-import { S as Stanza, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
+import { S as Stanza, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
 import { e as defineComponent, g as createElementBlock, i as createBaseVNode, u as normalizeStyle, p as toDisplayString, F as Fragment, d as openBlock, j as createVNode, q as createCommentVNode, b as createBlock, l as createTextVNode, s as resolveComponent, v as reactive, o as onMounted, r as ref, x as onRenderTriggered, k as renderList, n as normalizeClass, D as createApp } from './runtime-dom.esm-bundler-bcdf4715.js';
 import { l as loadData } from './load-data-8921580f.js';
 
@@ -519,6 +519,10 @@ script.render = render;
 script.__file = "stanzas/scroll-table/app.vue";
 
 class ScrollTable extends Stanza {
+  menu() {
+    return [copyHTMLSnippetToClipboardMenuItem(this)];
+  }
+
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 
