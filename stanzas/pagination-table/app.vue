@@ -207,14 +207,19 @@
                     "
                     :unescape="cell.column.unescape"
                     :line-clamp="cell.column.lineClamp"
+                    :char-clamp="cell.column.charClamp"
+                    :char-clamp-on="cell.column.charClampOn"
                   />
                 </span>
-                <span v-else-if="cell.column.lineClamp">
-                  <LineClampCell
+                <span v-else-if="cell.column.lineClamp || cell.column.charClamp">
+                  <ClampCell
                     :id="`${cell.column.id}_${row_index}`"
                     :line-clamp="cell.column.lineClamp"
+                    :char-clamp="cell.column.charClamp"
+                    :char-clamp-on="cell.charClampOn"
                     :unescape="cell.column.unescape"
                     :value="cell.value"
+                    @toggleCharClampOn="cell.charClampOn = !cell.charClampOn"
                   />
                 </span>
                 <span
@@ -256,7 +261,7 @@ import {
 
 import SliderPagination from "./SliderPagination.vue";
 import AnchorCell from "./AnchorCell.vue";
-import LineClampCell from "./LineClampCell.vue";
+import ClampCell from "./ClampCell.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -286,7 +291,7 @@ export default defineComponent({
     Slider,
     SliderPagination,
     AnchorCell,
-    LineClampCell,
+    ClampCell,
     FontAwesomeIcon,
   },
 
@@ -482,6 +487,7 @@ export default defineComponent({
             column,
             value: column.parseValue(row[column.id]),
             href: column.href ? row[column.href] : null,
+            charClampOn: true
           };
         });
       });
@@ -535,6 +541,7 @@ function createColumnState(columnDef, values) {
     fixed: columnDef.fixed,
     target: columnDef.target,
     lineClamp: columnDef["line-clamp"],
+    charClamp: columnDef["char-clamp"],
     sprintf: columnDef["sprintf"],
   };
 

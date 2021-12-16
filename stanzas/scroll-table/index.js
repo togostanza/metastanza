@@ -1,11 +1,18 @@
 import Stanza from "togostanza/stanza";
 
-import { appendCustomCss } from "togostanza-utils";
+import {
+  copyHTMLSnippetToClipboardMenuItem,
+  appendCustomCss,
+} from "togostanza-utils";
 
 import { createApp } from "vue";
 import App from "./app.vue";
 
 export default class ScrollTable extends Stanza {
+  menu() {
+    return [copyHTMLSnippetToClipboardMenuItem(this)];
+  }
+
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 

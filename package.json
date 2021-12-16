@@ -36,7 +36,7 @@
     "lodash.zip": "^4.2.0",
     "rollup-plugin-vue": "^6.0.0",
     "sprintf-js": "^1.1.2",
-    "togostanza": "^3.0.0-beta.33",
+    "togostanza": "^3.0.0-beta.35",
     "togostanza-utils": "git+https://github.com/togostanza/togostanza-utils.git",
     "vega": "^5.19.1",
     "vega-embed": "^6.15.0",
