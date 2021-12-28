@@ -327,7 +327,7 @@ export default defineComponent({
           searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
         );
       });
-
+      
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
@@ -480,7 +480,7 @@ export default defineComponent({
         const values = data.map((obj) => obj[column.id]);
         return createColumnState(column, values);
       });
-
+      
       state.allRows = data.map((row) => {
         return state.columns.map((column) => {
           return {
@@ -545,6 +545,10 @@ function createColumnState(columnDef, values) {
     sprintf: columnDef["sprintf"],
   };
 
+  if (columnDef.sprintf) {
+    columnDef.type = "number";
+  };
+
   if (columnDef.type === "number") {
     const nums = values.map(Number);
     const minValue = Math.min(...nums);
@@ -580,12 +584,23 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
       parseValue(val) {
         if (columnDef["sprintf"]) {
+          if (typeof val === 'string') {
+            const castedVal = Number(val);
+            if (Number.isNaN(castedVal)) {
+              return val;
+            } else {
+              val = castedVal;
+            }
+          }
           val = sprintf(columnDef["sprintf"], Number.parseFloat(val));
         }
         return val;
       },
 
       isMatch(val) {
+        if (Number.isNaN(rangeMin.value) || Number.isNaN(rangeMax.value)) {
+          return true;
+        }
         return val >= rangeMin.value && val <= rangeMax.value;
       },
     };
