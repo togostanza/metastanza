@@ -106,6 +106,18 @@
       "stanza:description": "Show Y grid"
     },
     {
+      "stanza:key": "adjust-x-range",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Adjust X axis range"
+    },
+    {
+      "stanza:key": "adjust-y-range",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Adjust Y axis range"
+    },
+    {
       "stanza:key": "xtick",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],

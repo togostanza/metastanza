@@ -35,12 +35,16 @@ export default class ScatterPlot extends Stanza {
 
     const xVariable = this.params["x"];
     const yVariable = this.params["y"];
-    const zVariable = this.params["z"] ? this.params["z"] : "none";
+    const zVariable = this.params["z"] || "none";
+
+    const adjustYBottom = this.params["adjust-y-range"];
+    const adjustXLeft = this.params["adjust-x-range"];
 
     const values = await loadData(
       this.params["data-url"],
       this.params["data-type"]
     );
+
     this._data = values;
 
     const data = [
@@ -65,7 +69,7 @@ export default class ScatterPlot extends Stanza {
         type: "linear",
         round: true,
         nice: true,
-        zero: true,
+        zero: !adjustXLeft,
         domain: { data: "source", field: xVariable },
         range: "width",
       },
@@ -74,7 +78,7 @@ export default class ScatterPlot extends Stanza {
         type: "linear",
         round: true,
         nice: true,
-        zero: true,
+        zero: !adjustYBottom,
         domain: { data: "source", field: yVariable },
         range: "height",
       },
@@ -238,6 +242,33 @@ export default class ScatterPlot extends Stanza {
           : legends,
       marks,
     };
+
+    // To enable zoomin-zoomout default behaviour:
+
+    // const spec = {
+    //   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    //   description: "",
+    //   data: {
+    //     values,
+    //   },
+    //   width: 500,
+    //   height: 400,
+    //   mark: "point",
+    //   params: [
+    //     {
+    //       name: "grid",
+    //       select: "interval",
+    //       bind: "scales",
+    //     },
+    //   ],
+
+    //   encoding: {
+    //     x: { field: "density", type: "quantitative" },
+    //     y: { field: "area", type: "quantitative" },
+    //     size: { field: "population", type: "quantitative" },
+    //     tooltip: { field: "pref" },
+    //   },
+    // };
 
     const el = this.root.querySelector("main");
     const opts = {
