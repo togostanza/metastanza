@@ -8,15 +8,13 @@ main {
   color: var(--togostanza-font-color);
 }
 
-section {
-  display: flex;
-}
-
 #wrapper {
-  > .container {
-    background-color: var(--togostanza-column-background-color);
-    margin-right: var(--togostanza-column-gap);
+  > .tree {
+    display: flex;
     > .column {
+      display: flex;
+      background-color: var(--togostanza-column-background-color);
+      margin-right: var(--togostanza-column-gap);
       display: grid;
       min-width: max-content;
       height: fit-content;

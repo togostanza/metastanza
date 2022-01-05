@@ -1,13 +1,17 @@
 /* eslint-disable vue/no-v-html */
 <template>
   <section id="wrapper">
-    <div
-      v-for="(column, index) of state.columnData"
-      :key="index"
-      class="container"
-    >
+    <input
+      type="text"
+      placeholder="Search for keywords..."
+      class="textSearchInput"
+    />
+    <div class="tree">
       <NodeColumn
-        v-if="column.length > 0"
+        v-for="(column, index) of state.columnData.filter(
+          (col) => col.length > 0
+        )"
+        :key="index"
         :ref="
           (el) => {
             layerRefs[index] = el;
@@ -56,7 +60,7 @@ export default defineComponent({
     );
     watchEffect(() => {
       const data = state.responseJSON || [];
-      state.columnData.push(data.filter((obj) => isRootNode(obj.parent)));
+      state.columnData[0] = data.filter((obj) => isRootNode(obj.parent));
     });
     function updateCheckedNodes(node) {
       const { id, ...obj } = node;
@@ -73,6 +77,11 @@ export default defineComponent({
         }
       }
     }
+    function test() {
+      console.log(state.columnData);
+      console.log("***");
+      console.log(state.columnData.filter((column) => column.length > 0));
+    }
     function getChildNodes([layer, parentId]) {
       const children = state.responseJSON.filter(
         (node) => node.parent === parentId
@@ -87,6 +96,7 @@ export default defineComponent({
       layerRefs,
       updateCheckedNodes,
       getChildNodes,
+      test,
     };
   },
 });
