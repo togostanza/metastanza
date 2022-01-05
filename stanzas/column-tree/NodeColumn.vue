@@ -70,9 +70,6 @@ export default defineComponent({
     function resetHighlightedNode() {
       state.highlightedNode = null;
     }
-    function selectionClass(id) {
-      return id === state.selecedNode ? "node -highlighted" : "";
-    }
     function setCheckedNode(node) {
       context.emit("setCheckedNode", node);
     }
@@ -86,7 +83,6 @@ export default defineComponent({
       resetHighlightedNode,
       hasChildren,
       state,
-      selectionClass,
     };
   },
 });
