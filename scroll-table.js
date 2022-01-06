@@ -1,6 +1,6 @@
-import { S as Stanza, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
+import { S as Stanza, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-39ae45f1.js';
 import { e as defineComponent, g as createElementBlock, i as createBaseVNode, u as normalizeStyle, p as toDisplayString, F as Fragment, d as openBlock, j as createVNode, q as createCommentVNode, b as createBlock, l as createTextVNode, s as resolveComponent, v as reactive, o as onMounted, r as ref, x as onRenderTriggered, k as renderList, n as normalizeClass, D as createApp } from './runtime-dom.esm-bundler-bcdf4715.js';
-import { l as loadData } from './load-data-8921580f.js';
+import { l as loadData } from './load-data-bf9d5410.js';
 
 var script$2 = defineComponent({
   props: {

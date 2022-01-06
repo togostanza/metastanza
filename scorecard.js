@@ -1,5 +1,5 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
-import { l as loadData } from './load-data-8921580f.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-39ae45f1.js';
+import { l as loadData } from './load-data-bf9d5410.js';
 
 class Scorecard extends Stanza {
   menu() {
@@ -17,7 +17,8 @@ class Scorecard extends Stanza {
 
     const dataset = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
     const width = this.params["width"];
     const height = this.params["height"];

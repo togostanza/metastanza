@@ -1,6 +1,6 @@
-import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-f66d4cf6.js';
-import { e as embed } from './vega-embed.module-0d1b15ca.js';
-import { l as loadData } from './load-data-8921580f.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-39ae45f1.js';
+import { e as embed } from './vega-embed.module-f7d23e78.js';
+import { l as loadData } from './load-data-bf9d5410.js';
 
 class Linechart extends Stanza {
   menu() {
@@ -33,7 +33,8 @@ class Linechart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
     this._data = values;
 
