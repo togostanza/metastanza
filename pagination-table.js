@@ -2226,7 +2226,7 @@ var script$1 = defineComponent({
       default: null,
     },
   },
-  emits: ['toggleCharClampOn']
+  emits: ["toggleCharClampOn"],
 });
 
 const _hoisted_1$1 = ["id", "name"];
@@ -2250,14 +2250,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               key: 0,
               for: _ctx.id,
               style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
-              class: normalizeClass(['label','lineClampOn']),
+              class: normalizeClass(['label', 'lineClampOn']),
               innerHTML: _ctx.value
             }, null, 12 /* STYLE, PROPS */, _hoisted_2$1))
           : (openBlock(), createElementBlock("label", {
               key: 1,
               for: _ctx.id,
               style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
-              class: normalizeClass(['label','lineClampOn'])
+              class: normalizeClass(['label', 'lineClampOn'])
             }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$1))
       ], 64 /* STABLE_FRAGMENT */))
     : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
@@ -2280,7 +2280,9 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               key: 1,
               for: _ctx.id,
               class: "label charClampOn"
-            }, toDisplayString(_ctx.charClampOn && _ctx.value.length > _ctx.charClamp ? `${_ctx.value.slice(0, _ctx.charClamp)}…` : _ctx.value), 9 /* TEXT, PROPS */, _hoisted_6$1))
+            }, toDisplayString(_ctx.charClampOn && _ctx.value.length > _ctx.charClamp
+          ? `${_ctx.value.slice(0, _ctx.charClamp)}…`
+          : _ctx.value), 9 /* TEXT, PROPS */, _hoisted_6$1))
       ], 64 /* STABLE_FRAGMENT */))
 }
 
@@ -6397,7 +6399,7 @@ var script = defineComponent({
             column,
             value: column.parseValue(row[column.id]),
             href: column.href ? row[column.href] : null,
-            charClampOn: true
+            charClampOn: true,
           };
         });
       });
