@@ -2,24 +2,19 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <template v-if="lineClamp">
-    <input
-      :id="id"
-      type="checkbox"
-      :name="id"
-      class="lineClampOn"
-    />
+    <input :id="id" type="checkbox" :name="id" class="lineClampOn" />
     <label
       v-if="unescape"
       :for="id"
       :style="lineClamp ? `-webkit-line-clamp: ${lineClamp}` : null"
-      :class="['label','lineClampOn']"
+      :class="['label', 'lineClampOn']"
       v-html="value"
     ></label>
     <label
       v-else
       :for="id"
       :style="lineClamp ? `-webkit-line-clamp: ${lineClamp}` : null"
-      :class="['label','lineClampOn']"
+      :class="['label', 'lineClampOn']"
     >
       {{ value }}
     </label>
@@ -39,12 +34,12 @@
       class="label charClampOn"
       v-html="value"
     ></label>
-    <label
-      v-else
-      :for="id"
-      class="label charClampOn"
-    >
-      {{ charClampOn && value.length > charClamp ? `${value.slice(0, charClamp)}…` : value }}
+    <label v-else :for="id" class="label charClampOn">
+      {{
+        charClampOn && value.length > charClamp
+          ? `${value.slice(0, charClamp)}…`
+          : value
+      }}
     </label>
   </template>
 </template>
@@ -79,6 +74,6 @@ export default defineComponent({
       default: null,
     },
   },
-  emits: ['toggleCharClampOn']
+  emits: ["toggleCharClampOn"],
 });
 </script>
