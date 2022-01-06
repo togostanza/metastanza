@@ -211,7 +211,9 @@
                     :char-clamp-on="cell.column.charClampOn"
                   />
                 </span>
-                <span v-else-if="cell.column.lineClamp || cell.column.charClamp">
+                <span
+                  v-else-if="cell.column.lineClamp || cell.column.charClamp"
+                >
                   <ClampCell
                     :id="`${cell.column.id}_${row_index}`"
                     :line-clamp="cell.column.lineClamp"
@@ -327,7 +329,7 @@ export default defineComponent({
           searchByAllColumns(row, queryForAllColumns) && searchByEachColumn(row)
         );
       });
-      
+
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
@@ -480,14 +482,14 @@ export default defineComponent({
         const values = data.map((obj) => obj[column.id]);
         return createColumnState(column, values);
       });
-      
+
       state.allRows = data.map((row) => {
         return state.columns.map((column) => {
           return {
             column,
             value: column.parseValue(row[column.id]),
             href: column.href ? row[column.href] : null,
-            charClampOn: true
+            charClampOn: true,
           };
         });
       });
@@ -547,7 +549,7 @@ function createColumnState(columnDef, values) {
 
   if (columnDef.sprintf) {
     columnDef.type = "number";
-  };
+  }
 
   if (columnDef.type === "number") {
     const nums = values.map(Number);
@@ -584,7 +586,7 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
       parseValue(val) {
         if (columnDef["sprintf"]) {
-          if (typeof val === 'string') {
+          if (typeof val === "string") {
             const castedVal = Number(val);
             if (Number.isNaN(castedVal)) {
               return val;
