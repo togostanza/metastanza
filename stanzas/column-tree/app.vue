@@ -3,7 +3,7 @@
   <section id="wrapper">
     <div class="search-container" @mouseleave="state.showSuggestions ? toggleSuggestions() : null">
       <input
-        v-model="state.searchTerm"
+        v-model="state.searchNode"
         type="text"
         placeholder="Search for keywords..."
         class="search"
@@ -12,17 +12,17 @@
       />
       <search-suggestions
         :show-suggestions="state.showSuggestions"
-        :search-input="state.searchTerm"
+        :search-input="state.searchNode"
         :data="suggestions"
         :keys="state.keys"
         :value-obj="valueObj" 
-        @selectTerm="selectTerm"   
+        @selectNode="selectNode"   
       />
     </div>
     <div class="tree">
       <NodeColumn
         v-for="(column, index) of state.columnData.filter(
-          (col) => col.length > 0
+          (col) => col?.length > 0
         )"
         :key="index"
         :ref="
@@ -34,8 +34,9 @@
         :layer="index"
         :checked-nodes="state.checkedNodes"
         :keys="state.keys"
+        :highlighted-node="state.highligthedNodes[index]"
         :value-obj="valueObj"
-        @setParent="getChildNodes"
+        @setParent="updatePartialColumnData"
         @setCheckedNode="updateCheckedNodes"
       />
     </div>
@@ -82,14 +83,16 @@ export default defineComponent({
       responseJSON: null,
       columnData: [],
       checkedNodes: new Map(),
-      searchTerm: "hi",
+      searchNode: "hi",
+      highligthedNodes: [],
     });
     watchEffect(
       async () => {
         state.responseJSON = await loadData(
           params.dataUrl.value,
           params.dataType.value
-        );
+        )
+        state.responseJSON = state.responseJSON.map(node => { return {...node, path: getPath(node)}});
         state.checkedNodes = new Map();
       },
       { immediate: true }
@@ -106,52 +109,48 @@ export default defineComponent({
       // TODO: add event handler
       // console.log([...state.checkedNodes.values()]);
     }
-    function resetHighlightedNodes() {
-      for (const [index, layer] of layerRefs.value.entries()) {
-        if (layer && index >= state.columnData.length - 1) {
-          layer.resetHighlightedNode();
-        }
-      }
-    }
     function getChildNodes([layer, parentId]) {
-      const children = state.responseJSON.filter(
-        (node) => node.parent === parentId
-      );
+      state.highligthedNodes[layer - 1] = parentId;
+      return state.responseJSON.filter((obj) => obj.parent === parentId);
+    }
+    function updatePartialColumnData([layer, parentId]) {
+      const children = getChildNodes([layer, parentId]);
       const indexesToRemove = state.columnData.length - layer;
       state.columnData.splice(layer, indexesToRemove, children);
-      resetHighlightedNodes();
       return children;
-    }
-    function test(obj) {
-      console.log(obj);
     }
     function isSearchHit(node) {
       return node[params.searchKey.value]
         ?.toLowerCase()
-        .includes(state.searchTerm.toLowerCase());
+        .includes(state.searchNode.toLowerCase());
     }
     const valueObj = computed(() => {
       return {show: state.showValue, fallback: state.fallbackInCaseOfNoValue};
     });
-    const isValidSearchTerm = computed(() => {
-      return state.searchTerm.length > 0;
+    const isValidSearchNode = computed(() => {
+      return state.searchNode.length > 0;
     })
-    function selectTerm(term) {
-      console.log(term);
-      console.log(getPath(term));
+    function selectNode(node) {
+      state.highligthedNodes = [];
+      state.columnData = [state.responseJSON.filter((obj) => isRootNode(obj.parent)) , ...[...node.path].map((node, index) => {
+        return getChildNodes([index + 1, node]);
+      })];
+      state.checkedNodes = new Map([ 
+        [node.id, node]
+      ]);
       toggleSuggestions();
     }
     function getPath(node) {
       const path = [];
-      let parent = node.parent;
+      let parent = node.id;
       while (parent) {
         path.push(parent);
-        parent = state.responseJSON.find((obj) => obj.id === parent).id;
+        parent = state.responseJSON.find((obj) => obj.id === parent).parent;
       }
       return path.reverse();
     }
     function toggleSuggestionsIfValid() {
-        if(!isValidSearchTerm.value || state.showSuggestions) {return;}
+        if(!isValidSearchNode.value || state.showSuggestions) {return;}
         toggleSuggestions();
     }
     function toggleSuggestions(){
@@ -159,24 +158,15 @@ export default defineComponent({
     } 
     const suggestions = computed(() => {
       return state.responseJSON.filter(isSearchHit);
-
-      // for columndata
-      //       const filteredData = (arr, index) => {
-      //   return arr.filter(isSearchHit)?.map((node) => {return {...node, layer: index}})
-      // }
-      // return state.columnData.reduce((a, b, index) => {
-      //   return [...filteredData(a, index), ...filteredData(b, index)]
-      // })
     });
     return {
       state,
       layerRefs,
       updateCheckedNodes,
-      getChildNodes,
+      updatePartialColumnData,
       suggestions,
-      test,
       valueObj,
-      selectTerm,
+      selectNode,
       toggleSuggestions,
       toggleSuggestionsIfValid
     };

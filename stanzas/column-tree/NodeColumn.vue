@@ -4,7 +4,7 @@
       v-for="node in nodes"
       :key="node.id"
       class="node"
-      :class="{ '-highlighted': node.id === state.highlightedNode }"
+      :class="{ '-highlighted': node.id === highlightedNode  && hasChildren(node.children)}"
     >
       <input
         type="checkbox"
@@ -17,6 +17,7 @@
       >
         <span class="label">
           {{ node[keys.label] }} 
+          {{ node.path }}
           <span v-if="valueObj.show" class="value"> {{node[keys.value] ?? valueObj.fallback}} </span>
         </span>
         <font-awesome-icon
@@ -29,7 +30,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
@@ -63,12 +64,13 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    highlightedNode: {
+      type: [Number, String, null],
+      default: null,
+    }
   },
   emits: ["setParent", "setCheckedNode"],
   setup(props, context) {
-    const state = reactive({
-      highlightedNode: null,
-    });
     function hasChildren(childrenProp) {
       if (typeof childrenProp === "string") {
         childrenProp = childrenProp
@@ -78,22 +80,16 @@ export default defineComponent({
       }
       return childrenProp && childrenProp.length > 0;
     }
-    function resetHighlightedNode() {
-      state.highlightedNode = null;
-    }
     function setCheckedNode(node) {
       context.emit("setCheckedNode", node);
     }
     function setParent(id) {
-      state.highlightedNode = id;
       context.emit("setParent", [props.layer + 1, id]);
     }
     return {
       setParent,
       setCheckedNode,
-      resetHighlightedNode,
       hasChildren,
-      state,
     };
   },
 });

@@ -1,27 +1,13 @@
 <template>
   <ul v-show="showSuggestions" class="suggestions">
-    <li v-for="(node, index) of data" :key="index" @click="$emit('selectTerm', node)">
-      {{ node[keys.label]}}
+    <li v-for="(node, index) of data" :key="index" @click="$emit('selectNode', node)">
+      <span class="label">{{ node[keys.label]}}</span>
       <span v-if="valueObj.show" class="value"> {{node[keys.value] ?? valueObj.fallback}} </span>
+      <span class="path"> Path : {{ node.path }}</span>
     </li>
     <li v-if="data.length < 1" class="no-results">
       {{ valueObj.fallback }}
     </li>
-    <!-- <li v-if="suggestions.length < 1" class="-disabled">
-      <SearchBarSuggestionItem :data-search-type="searchType" />
-    </li>
-    <li
-      v-for="(item, index) in suggestions"
-      v-else
-      :key="index"
-      @click="$emit('selectTerm', convertTagToCondition(item))"
-    >
-      <SearchBarSuggestionItem
-        :data-search-type="searchType"
-        v-bind="item.display"
-        :search-input="searchInput"
-      /> -->
-    <!-- </li> -->
   </ul>
 </template>
 
@@ -51,6 +37,6 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["selectTerm", "exit"],
+  emits: ["selectNode"],
 });
 </script>

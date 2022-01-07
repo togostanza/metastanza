@@ -34,6 +34,12 @@ main {
   //       &:hover
   //         background-color: transparent
 #wrapper {
+  .value {
+    margin-left: 1rem;
+    font-weight: normal;
+    font-style: italic;
+    opacity: 0.8;
+  }
   > .search-container{
     margin-bottom: 1rem;
     > input{
@@ -41,9 +47,25 @@ main {
     }
     > .suggestions {
       margin: 0;
+      padding: 0;
       position: absolute;
-      background-color: pink;
+      border: var(--togostanza-column-border);
+      border-radius: var(--togostanza-column-border-radius);
+      background-color: white;
       z-index: 1;
+      > li {
+        display: grid;
+        padding: 0.8rem 1rem;
+        list-style-type: none;
+        border-bottom: var(--togostanza-column-border);
+        > .label{
+          font-weight: bold;
+        }
+        &:hover{
+          background-color: var(--togostanza-hover-background-color);
+          cursor: pointer;
+        }
+      }
     }
   }
   > .tree {
@@ -90,12 +112,12 @@ main {
           > .label{
             display: grid;
             font-weight: bold;
-            > .value {
-              margin-left: 1rem;
-              font-weight: normal;
-              font-style: italic;
-              opacity: 0.8;
-            }
+            // > .value {
+            //   margin-left: 1rem;
+            //   font-weight: normal;
+            //   font-style: italic;
+            //   opacity: 0.8;
+            // }
           }
           > .icon {
             width: calc(var(--togostanza-font-size) * 0.6);
