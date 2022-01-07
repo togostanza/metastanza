@@ -34,6 +34,38 @@
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "search-key",
+      "stanza:example": "value",
+      "stanza:description": "search key of data",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-key",
+      "stanza:example": "label",
+      "stanza:description": "Label key of data",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "show-value",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Data type",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "value-key",
+      "stanza:example": "n",
+      "stanza:description": "Value key of data",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "value-fallback",
+      "stanza:example": "no data",
+      "stanza:description": "Message in case there is no data for value",
+      "stanza:required": false
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -61,6 +93,12 @@
       "stanza:type": "text",
       "stanza:default": "10px",
       "stanza:description": "Gap between columns"
+    },
+    {
+      "stanza:key": "--togostanza-node-padding",
+      "stanza:type": "text",
+      "stanza:default": "5px",
+      "stanza:description": "Padding for nodes"
     },
     {
       "stanza:key": "--togostanza-font-family",

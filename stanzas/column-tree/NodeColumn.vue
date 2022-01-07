@@ -15,7 +15,10 @@
         class="content"
         @click="hasChildren(node.children) ? setParent(node.id) : null"
       >
-        <span>{{ node.label }}</span>
+        <span class="label">
+          {{ node[keys.label] }} 
+          <span v-if="valueObj.show" class="value"> {{node[keys.value] ?? valueObj.fallback}} </span>
+        </span>
         <font-awesome-icon
           v-if="hasChildren(node.children)"
           icon="chevron-right"
@@ -50,6 +53,14 @@ export default defineComponent({
     },
     checkedNodes: {
       type: Map,
+      required: true,
+    },
+    keys: {
+      type: Object,
+      required: true,
+    },
+    valueObj: {
+      type: Object,
       required: true,
     },
   },
