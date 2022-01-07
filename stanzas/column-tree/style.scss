@@ -44,12 +44,20 @@ main {
     margin-bottom: 1rem;
     > input{
       position: relative;
+      margin-right: 3px;
+      width: 164px;
+      height: 20px;
+      border: solid 1px var(--togostanza-control-border-color);
+      border-radius: var(--togostanza-column-border-radius);
     }
     > .suggestions {
       margin: 0;
       padding: 0;
+      min-height: fit-content;
+      max-height: 80%;
+      overflow: auto;
       position: absolute;
-      border: var(--togostanza-column-border);
+      border: solid 1px var(--togostanza-control-border-color);
       border-radius: var(--togostanza-column-border-radius);
       background-color: white;
       z-index: 1;

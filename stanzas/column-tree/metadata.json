@@ -95,6 +95,12 @@
       "stanza:description": "Gap between columns"
     },
     {
+      "stanza:key": "--togostanza-control-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#256D80",
+      "stanza:description": "Border color"
+    },
+    {
       "stanza:key": "--togostanza-node-padding",
       "stanza:type": "text",
       "stanza:default": "5px",

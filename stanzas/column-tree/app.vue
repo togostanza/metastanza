@@ -7,8 +7,8 @@
         type="text"
         placeholder="Search for keywords..."
         class="search"
-        @mouseenter="toggleSuggestionsIfValid"
         @focus="toggleSuggestionsIfValid"
+        @change="toggleSuggestionsIfValid"
       />
       <search-suggestions
         :show-suggestions="state.showSuggestions"
@@ -25,11 +25,6 @@
           (col) => col?.length > 0
         )"
         :key="index"
-        :ref="
-          (el) => {
-            layerRefs[index] = el;
-          }
-        "
         :nodes="column"
         :layer="index"
         :checked-nodes="state.checkedNodes"
@@ -83,7 +78,7 @@ export default defineComponent({
       responseJSON: null,
       columnData: [],
       checkedNodes: new Map(),
-      searchNode: "hi",
+      searchNode: "",
       highligthedNodes: [],
     });
     watchEffect(
@@ -133,7 +128,7 @@ export default defineComponent({
     function selectNode(node) {
       state.highligthedNodes = [];
       state.columnData = [state.responseJSON.filter((obj) => isRootNode(obj.parent)) , ...[...node.path].map((node, index) => {
-        return getChildNodes([index + 1, node]);
+        return getChildNodes([index + 1, node.id]);
       })];
       state.checkedNodes = new Map([ 
         [node.id, node]
@@ -142,10 +137,11 @@ export default defineComponent({
     }
     function getPath(node) {
       const path = [];
-      let parent = node.id;
-      while (parent) {
+      let parent = {id: node.id, label: node.label};
+      while (parent.id) {
         path.push(parent);
-        parent = state.responseJSON.find((obj) => obj.id === parent).parent;
+        const obj = state.responseJSON.find((obj) => obj.id === parent.id);
+        parent = { id: obj?.parent, label: obj?.label };
       }
       return path.reverse();
     }
@@ -160,6 +156,7 @@ export default defineComponent({
       return state.responseJSON.filter(isSearchHit);
     });
     return {
+      isValidSearchNode,
       state,
       layerRefs,
       updateCheckedNodes,

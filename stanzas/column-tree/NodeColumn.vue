@@ -17,7 +17,6 @@
       >
         <span class="label">
           {{ node[keys.label] }} 
-          {{ node.path }}
           <span v-if="valueObj.show" class="value"> {{node[keys.value] ?? valueObj.fallback}} </span>
         </span>
         <font-awesome-icon
