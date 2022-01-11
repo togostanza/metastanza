@@ -4,13 +4,15 @@
       <input
         v-model="state.searchTerm"
         type="text"
-        placeholder="Search for keywords..."
+        placeholder="Search for keywords or path*"
         class="search"
         @focus="toggleSuggestionsIfValid"
         @input="toggleSuggestionsIfValid"
       />
+      <small>*When searching by path please use the <em>id</em> followed by a <em>/</em>. EG: 1/2/3</small>
       <search-suggestions
         :show-suggestions="state.showSuggestions"
+        :show-path="state.showPath"
         :search-input="state.searchTerm"
         :data="suggestions"
         :keys="state.keys"
@@ -30,6 +32,7 @@
         :keys="state.keys"
         :highlighted-node="state.highligthedNodes[index]"
         :value-obj="valueObj"
+        :has-path-copy="state.showPath"
         @setParent="updatePartialColumnData"
         @setCheckedNode="updateCheckedNodes"
       />
@@ -73,6 +76,7 @@ export default defineComponent({
       },
       fallbackInCaseOfNoValue: params.valueFallback.value,
       showValue: isTruthBool(params.showValue.value),
+      showPath: isTruthBool(params.showPath.value),
       showSuggestions: false,
       responseJSON: null,
       columnData: [],
@@ -113,10 +117,13 @@ export default defineComponent({
       state.columnData.splice(layer, indexesToRemove, children);
       return children;
     }
-    function isSearchHit(node) {
+    function isNormalSearchHit(node) {
       return node[params.searchKey.value]
         ?.toLowerCase()
         .includes(state.searchTerm.toLowerCase());
+    }
+    function isPathSearchHit(node) {
+      return node.path.map(node => node.id).join('/').toLowerCase().startsWith(state.searchTerm.toLowerCase());
     }
     const valueObj = computed(() => {
       return {show: state.showValue, fallback: state.fallbackInCaseOfNoValue};
@@ -152,7 +159,10 @@ export default defineComponent({
       state.showSuggestions = !state.showSuggestions;
     } 
     const suggestions = computed(() => {
-      return state.responseJSON.filter(isSearchHit);
+      if(state.searchTerm.includes('/') || !isNaN(parseInt(state.searchTerm))) {
+        return state.responseJSON.filter(isPathSearchHit);
+      }
+      return state.responseJSON.filter(isNormalSearchHit);
     });
     return {
       isValidSearchNode,

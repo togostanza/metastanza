@@ -48,11 +48,19 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "show-path",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show path in suggestions and add copy path button in tree",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "show-value",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
-      "stanza:description": "Data type",
+      "stanza:description": "Show value set by [value-key] in tree and suggestions",
       "stanza:required": false
     },
     {
