@@ -1,18 +1,17 @@
-/* eslint-disable vue/no-v-html */
 <template>
   <section id="wrapper">
     <div class="search-container" @mouseleave="state.showSuggestions ? toggleSuggestions() : null">
       <input
-        v-model="state.searchNode"
+        v-model="state.searchTerm"
         type="text"
         placeholder="Search for keywords..."
         class="search"
         @focus="toggleSuggestionsIfValid"
-        @change="toggleSuggestionsIfValid"
+        @input="toggleSuggestionsIfValid"
       />
       <search-suggestions
         :show-suggestions="state.showSuggestions"
-        :search-input="state.searchNode"
+        :search-input="state.searchTerm"
         :data="suggestions"
         :keys="state.keys"
         :value-obj="valueObj" 
@@ -78,7 +77,7 @@ export default defineComponent({
       responseJSON: null,
       columnData: [],
       checkedNodes: new Map(),
-      searchNode: "",
+      searchTerm: "",
       highligthedNodes: [],
     });
     watchEffect(
@@ -117,13 +116,13 @@ export default defineComponent({
     function isSearchHit(node) {
       return node[params.searchKey.value]
         ?.toLowerCase()
-        .includes(state.searchNode.toLowerCase());
+        .includes(state.searchTerm.toLowerCase());
     }
     const valueObj = computed(() => {
       return {show: state.showValue, fallback: state.fallbackInCaseOfNoValue};
     });
     const isValidSearchNode = computed(() => {
-      return state.searchNode.length > 0;
+      return state.searchTerm.length > 0;
     })
     function selectNode(node) {
       state.highligthedNodes = [];
