@@ -22,7 +22,11 @@ export default class HashTable extends Stanza {
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const dataset = (
-      await loadData(this.params["data-url"], this.params["data-type"])
+      await loadData(
+        this.params["data-url"],
+        this.params["data-type"],
+        this.root.querySelector("main")
+      )
     )[0];
     this._data = [dataset];
 

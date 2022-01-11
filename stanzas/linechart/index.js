@@ -43,7 +43,8 @@ export default class Linechart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
     this._data = values;
 
