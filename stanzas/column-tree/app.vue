@@ -1,6 +1,9 @@
 <template>
   <section id="wrapper">
-    <div class="search-container" @mouseleave="state.showSuggestions ? toggleSuggestions() : null">
+    <div
+      class="search-container"
+      @mouseleave="state.showSuggestions ? toggleSuggestions() : null"
+    >
       <input
         v-model="state.searchTerm"
         type="text"
@@ -9,15 +12,18 @@
         @focus="toggleSuggestionsIfValid"
         @input="toggleSuggestionsIfValid"
       />
-      <small>*When searching by path please use the <em>id</em> followed by a <em>/</em>. EG: 1/2/3</small>
+      <small
+        >*When searching by path please use the <em>id</em> followed by a
+        <em>/</em>. EG: 1/2/3</small
+      >
       <search-suggestions
         :show-suggestions="state.showSuggestions"
         :show-path="state.showPath"
         :search-input="state.searchTerm"
         :data="suggestions"
         :keys="state.keys"
-        :value-obj="valueObj" 
-        @selectNode="selectNode"   
+        :value-obj="valueObj"
+        @selectNode="selectNode"
       />
     </div>
     <div class="tree">
@@ -57,8 +63,8 @@ import SearchSuggestions from "./SearchSuggestions.vue";
 function isRootNode(parent) {
   return !parent || isNaN(parent);
 }
-function isTruthBool(str){
-  return str === 'true';
+function isTruthBool(str) {
+  return str === "true";
 }
 
 // TODO: set path for data objects
@@ -70,9 +76,9 @@ export default defineComponent({
     params = toRefs(params);
     const layerRefs = ref([]);
     const state = reactive({
-      keys:{
-      label: params.labelKey.value,
-      value: params.valueKey.value,
+      keys: {
+        label: params.labelKey.value,
+        value: params.valueKey.value,
       },
       fallbackInCaseOfNoValue: params.valueFallback.value,
       showValue: isTruthBool(params.showValue.value),
@@ -89,8 +95,10 @@ export default defineComponent({
         state.responseJSON = await loadData(
           params.dataUrl.value,
           params.dataType.value
-        )
-        state.responseJSON = state.responseJSON.map(node => { return {...node, path: getPath(node)}});
+        );
+        state.responseJSON = state.responseJSON.map((node) => {
+          return { ...node, path: getPath(node) };
+        });
         state.checkedNodes = new Map();
       },
       { immediate: true }
@@ -123,27 +131,32 @@ export default defineComponent({
         .includes(state.searchTerm.toLowerCase());
     }
     function isPathSearchHit(node) {
-      return node.path.map(node => node.id).join('/').toLowerCase().startsWith(state.searchTerm.toLowerCase());
+      return node.path
+        .map((node) => node.id)
+        .join("/")
+        .toLowerCase()
+        .startsWith(state.searchTerm.toLowerCase());
     }
     const valueObj = computed(() => {
-      return {show: state.showValue, fallback: state.fallbackInCaseOfNoValue};
+      return { show: state.showValue, fallback: state.fallbackInCaseOfNoValue };
     });
     const isValidSearchNode = computed(() => {
       return state.searchTerm.length > 0;
-    })
+    });
     function selectNode(node) {
       state.highligthedNodes = [];
-      state.columnData = [state.responseJSON.filter((obj) => isRootNode(obj.parent)) , ...[...node.path].map((node, index) => {
-        return getChildNodes([index + 1, node.id]);
-      })];
-      state.checkedNodes = new Map([ 
-        [node.id, node]
-      ]);
+      state.columnData = [
+        state.responseJSON.filter((obj) => isRootNode(obj.parent)),
+        ...[...node.path].map((node, index) => {
+          return getChildNodes([index + 1, node.id]);
+        }),
+      ];
+      state.checkedNodes = new Map([[node.id, node]]);
       toggleSuggestions();
     }
     function getPath(node) {
       const path = [];
-      let parent = {id: node.id, label: node.label};
+      let parent = { id: node.id, label: node.label };
       while (parent.id) {
         path.push(parent);
         const obj = state.responseJSON.find((obj) => obj.id === parent.id);
@@ -152,14 +165,19 @@ export default defineComponent({
       return path.reverse();
     }
     function toggleSuggestionsIfValid() {
-        if(!isValidSearchNode.value || state.showSuggestions) {return;}
-        toggleSuggestions();
+      if (!isValidSearchNode.value || state.showSuggestions) {
+        return;
+      }
+      toggleSuggestions();
     }
-    function toggleSuggestions(){
+    function toggleSuggestions() {
       state.showSuggestions = !state.showSuggestions;
-    } 
+    }
     const suggestions = computed(() => {
-      if(state.searchTerm.includes('/') || !isNaN(parseInt(state.searchTerm))) {
+      if (
+        state.searchTerm.includes("/") ||
+        !isNaN(parseInt(state.searchTerm))
+      ) {
         return state.responseJSON.filter(isPathSearchHit);
       }
       return state.responseJSON.filter(isNormalSearchHit);
@@ -174,7 +192,7 @@ export default defineComponent({
       valueObj,
       selectNode,
       toggleSuggestions,
-      toggleSuggestionsIfValid
+      toggleSuggestionsIfValid,
     };
   },
 });
