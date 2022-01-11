@@ -38,13 +38,13 @@
     {
       "stanza:key": "search-key",
       "stanza:example": "value",
-      "stanza:description": "search key of data",
+      "stanza:description": "key for data atrribute to search with suggestions",
       "stanza:required": false
     },
     {
       "stanza:key": "label-key",
       "stanza:example": "label",
-      "stanza:description": "Label key of data",
+      "stanza:description": "key for data attribute to display as label",
       "stanza:required": false
     },
     {
@@ -66,13 +66,13 @@
     {
       "stanza:key": "value-key",
       "stanza:example": "n",
-      "stanza:description": "Value key of data",
+      "stanza:description": "Key for data attribute to display as value",
       "stanza:required": false
     },
     {
       "stanza:key": "value-fallback",
       "stanza:example": "no data",
-      "stanza:description": "Message in case there is no data for value",
+      "stanza:description": "Message in case there is no data for data set by [value-key]",
       "stanza:required": false
     }
   ],
