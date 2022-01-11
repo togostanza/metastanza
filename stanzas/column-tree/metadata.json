@@ -127,6 +127,12 @@
       "stanza:description": "Font size of Nodes"
     },
     {
+      "stanza:key": "--togostanza-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#3c3744",
+      "stanza:description": "Default text color"
+    },
+    {
       "stanza:key": "--togostanza-hover-background-color",
       "stanza:type": "color",
       "stanza:default": "#FFFDD1",
@@ -137,12 +143,6 @@
       "stanza:type": "color",
       "stanza:default": "#221727",
       "stanza:description": "Hover color for text when hovering over Node"
-    },
-    {
-      "stanza:key": "--togostanza-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#3c3744",
-      "stanza:description": "Text color"
     },
     {
       "stanza:key": "--togostanza-selected-background-color",
