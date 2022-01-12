@@ -21,7 +21,7 @@ jobs:
           ssh://git@github.com/
       - run: npm ci
 
-      - uses: github/super-linter@v3
+      - uses: github/super-linter@v3.17.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: / # https://github.com/github/super-linter/issues/685#issuecomment-690939192
