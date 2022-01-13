@@ -1,7 +1,8 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-
+import ToolTip from "@/lib/ToolTip";
+import Legend from "@/lib/Legend";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -36,13 +37,15 @@ export default class Linechart extends Stanza {
     //data
     const labelVariable = this.params["category"];
     const valueVariable = this.params["value"];
-    const groupVariable = this.params["group-by"]
-      ? this.params["group-by"]
-      : "none";
+    const groupVariable = this.params["group-by"] || "none";
 
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
+    const root = this.root.querySelector(":scope > div");
+
+    this.legend = new Legend();
+    root.append(this.legend);
 
     const values = await loadData(
       this.params["data-url"],
@@ -134,8 +137,6 @@ export default class Linechart extends Stanza {
 
     const categorizedData = d3.group(values, (d) => d[groupVariable]);
 
-    console.log("categorizedData", categorizedData);
-
     linesArea
       .append("g")
       .attr("class", "data-lines")
@@ -160,12 +161,21 @@ export default class Linechart extends Stanza {
           })(d[1]);
       });
 
+    console.log("subgroups", subgroups);
+
     const legendItems = legendArea
       .selectAll("g")
       .data(subgroups)
       .join("g")
       .attr("class", "legend item");
 
+    this.legend.setup(
+      subgroups.map((item) => ({ label: item, color: color(item) })),
+      this.root.querySelector("main"),
+      {
+        position: ["top", "right"],
+      }
+    );
     legendItems
       .append("line")
       .attr("x1", 15)
