@@ -4,10 +4,10 @@
       v-for="node in nodes"
       :key="node.id"
       class="node"
-      :class="{
+      :class="[{
         '-highlighted':
           node.id === highlightedNode && hasChildren(node.children),
-      }"
+      },{'-with-border': showBorderNodes}]"
     >
       <input
         type="checkbox"
@@ -85,6 +85,10 @@ export default defineComponent({
     highlightedNode: {
       type: [Number, String, null],
       default: null,
+    },
+    showBorderNodes: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["setParent", "setCheckedNode"],

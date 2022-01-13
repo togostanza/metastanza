@@ -36,6 +36,14 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "show-border-nodes",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show border between nodes",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "search-key",
       "stanza:example": "value",
       "stanza:description": "key for data atrribute to search with suggestions",

@@ -67,33 +67,51 @@ main {
       height: fit-content;
       border: var(--togostanza-column-border);
       border-radius: var(--togostanza-column-border-radius);
-      > .content {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-        > .label {
-          display: grid;
-          font-weight: bold;
-          > strong {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-          }
-        }
-        > .icon {
-          padding-left: 2rem;
-        }
-      }
       > .node {
+        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-radius: var(--togostanza-node-border-radius);
         padding: var(--togostanza-node-padding);
+        > .content {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          > .label {
+            display: grid;
+            font-weight: bold;
+            margin-right: 2rem;
+            > strong {
+              display: flex;
+              align-items: center;
+              gap: 0.3rem;
+            }
+          }
+        }
+        > .icon {
+          padding-left: 2rem;
+        }
         > input[type="checkbox"] {
           margin-right: 1rem;
           &:hover {
             cursor: pointer;
+          }
+        }
+        &.-with-border {
+          &:after {
+            position: absolute;
+            content: "";
+            display: block;
+            width: 100%;
+            top: 0;
+            left: 0;
+            border-top: var(--togostanza-column-border);
+          }
+        }
+        &:first-child {
+          &.-with-border:after {
+            border-top: none;
           }
         }
         &.-highlighted {

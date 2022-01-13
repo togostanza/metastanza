@@ -39,6 +39,7 @@
         :highlighted-node="state.highligthedNodes[index]"
         :value-obj="valueObj"
         :has-path-copy="state.showPath"
+        :show-border-nodes="state.showBorderNodes"
         @setParent="updatePartialColumnData"
         @setCheckedNode="updateCheckedNodes"
       />
@@ -83,6 +84,7 @@ export default defineComponent({
       fallbackInCaseOfNoValue: params.valueFallback.value,
       showValue: isTruthBool(params.showValue.value),
       showPath: isTruthBool(params.showPath.value),
+      showBorderNodes: isTruthBool(params.showBorderNodes.value),
       showSuggestions: false,
       responseJSON: null,
       columnData: [],
