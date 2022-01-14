@@ -18,12 +18,12 @@
         class="content"
         @click="hasChildren(node.children) ? setParent(node.id) : null"
       >
-        <span class="label">
+        <span class="label" :class="`-${nodeContentAlignment}`">
           <strong class="title">
             {{ node[keys.label] }}
             <font-awesome-icon
               v-if="hasPathCopy"
-              icon="clone"
+              icon="clipboard"
               class="icon"
               title="copy path"
               @click="copyPath(node.path)"
@@ -47,8 +47,8 @@
 import { defineComponent } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faChevronRight, faClone } from "@fortawesome/free-solid-svg-icons";
-library.add(faChevronRight, faClone);
+import { faChevronRight, faClipboard } from "@fortawesome/free-solid-svg-icons";
+library.add(faChevronRight, faClipboard);
 export default defineComponent({
   components: {
     FontAwesomeIcon,
@@ -89,6 +89,10 @@ export default defineComponent({
     showBorderNodes: {
       type: Boolean,
       default: false,
+    },
+    nodeContentAlignment: {
+      type: String,
+      default: "horizontal",
     },
   },
   emits: ["setParent", "setCheckedNode"],

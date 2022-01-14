@@ -40,6 +40,7 @@
         :value-obj="valueObj"
         :has-path-copy="state.showPath"
         :show-border-nodes="state.showBorderNodes"
+        :node-content-alignment="state.nodeContentAlignment"
         @setParent="updatePartialColumnData"
         @setCheckedNode="updateCheckedNodes"
       />
@@ -85,6 +86,7 @@ export default defineComponent({
       showValue: isTruthBool(params.showValue.value),
       showPath: isTruthBool(params.showPath.value),
       showBorderNodes: isTruthBool(params.showBorderNodes.value),
+      nodeContentAlignment: params.nodeContentAlignment.value,
       showSuggestions: false,
       responseJSON: null,
       columnData: [],
