@@ -308,7 +308,7 @@ export default defineComponent({
 
       columns: [],
       allRows: [],
-
+      main: null,
       queryForAllColumns: "",
 
       sorting: {
@@ -455,7 +455,7 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+      const data = await loadData(params.dataUrl, params.dataType, params.main);
       // const data = testData;
 
       state.responseJSON = data;

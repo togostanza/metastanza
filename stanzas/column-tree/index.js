@@ -12,7 +12,7 @@ export default class ColumnTree extends Stanza {
       "var(--togostanza-background-color)";
 
     this._app?.unmount();
-    this._app = createApp(App, this.params);
+    this._app = createApp(App, { ...this.params, main });
     this._app.mount(main);
   }
 }

@@ -1,6 +1,14 @@
 import Stanza from "togostanza/stanza";
 import vegaEmbed from "vega-embed";
 import loadData from "togostanza-utils/load-data";
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
+} from "togostanza-utils";
 
 const areas = new Map([
   [
@@ -24,11 +32,25 @@ const areas = new Map([
   ],
 ]);
 export default class regionGeographicMap extends Stanza {
+  menu() {
+    return [
+      downloadSvgMenuItem(this, "region-geographis-map"),
+      downloadPngMenuItem(this, "region-geographis-map"),
+      downloadJSONMenuItem(this, "region-geographis-map", this._data),
+      downloadCSVMenuItem(this, "region-geographis-map", this._data),
+      downloadTSVMenuItem(this, "region-geographis-map", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
+    ];
+  }
+
   async render() {
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+
+    this._data = values;
 
     const valObj = {
       name: "userData",

@@ -6,6 +6,10 @@ import loadData from "togostanza-utils/load-data"; //"@/lib/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils"; // from "@/lib/metastanza_utils.js"; //
 import shadeColor from "./shadeColor";
@@ -14,8 +18,12 @@ import treemapBinaryLog from "./treemapBinaryLog";
 export default class TreeMapStanza extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "treeMapstanza"),
-      downloadPngMenuItem(this, "treeMapstanza"),
+      downloadSvgMenuItem(this, "treemap"),
+      downloadPngMenuItem(this, "treemap"),
+      downloadJSONMenuItem(this, "treemap", this._data),
+      downloadCSVMenuItem(this, "treemap", this._data),
+      downloadTSVMenuItem(this, "treemap", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -38,8 +46,10 @@ export default class TreeMapStanza extends Stanza {
 
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = data;
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
