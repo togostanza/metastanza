@@ -2,10 +2,13 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import homeIcon from "./assets/home.svg";
 import loadData from "togostanza-utils/load-data";
-
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -17,8 +20,12 @@ let currentDropdownMenu;
 export default class Breadcrumbs extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "tree"),
-      downloadPngMenuItem(this, "tree"),
+      downloadSvgMenuItem(this, "breadcrumbs"),
+      downloadPngMenuItem(this, "breadcrumbs"),
+      downloadJSONMenuItem(this, "breadcrumbs", this._data),
+      downloadCSVMenuItem(this, "breadcrumbs", this._data),
+      downloadTSVMenuItem(this, "breadcrumbs", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -42,12 +49,15 @@ export default class Breadcrumbs extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const showDropdown = this.params["show-dropdown"];
+
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = data;
 
-    if (!currentDataId && this.props["initinal-data-id"]) {
+    if (!currentDataId && this.params["initinal-data-id"]) {
       currentDataId = this.params["initinal-data-id"];
     }
 
