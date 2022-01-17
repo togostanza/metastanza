@@ -1,7 +1,5 @@
 import Stanza from 'togostanza/stanza';
 import loadData from '@/lib/load-data';
-import * as d3 from 'd3';
-import venn from 'venn.js';
 import Color from 'color';
 import {
   downloadSvgMenuItem,
