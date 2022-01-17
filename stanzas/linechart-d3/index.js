@@ -133,8 +133,6 @@ export default class Linechart extends Stanza {
       .attr("text-anchor", "middle")
       .attr("x", MARGIN.LEFT + WIDTH / 2);
 
-    console.log(yTitle.node().getBBox());
-
     const yAxisArea = graphArea
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`)
@@ -148,13 +146,26 @@ export default class Linechart extends Stanza {
 
     // Show/hide axes ticks
     if (showXTicks) {
+      let xdy = "0.5em";
+      let xx = "-0.7em";
+      let textAnchor = "end";
+      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+        xdy = "0.8em";
+        textAnchor = "end";
+      }
+      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+        xx = "0.7em";
+        xdy = "0.71em";
+        textAnchor = "start";
+      }
+
       xAxisArea
         .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
-        .attr("text-anchor", "end")
-        .attr("x", "-0.7em")
+        .attr("text-anchor", textAnchor)
+        .attr("x", xx)
         .attr("y", "0")
-        .attr("dy", "0.4em")
+        .attr("dy", xdy)
         .attr("transform", `rotate(${xLabelAngle})`);
     }
     if (showYTicks) {
@@ -164,8 +175,6 @@ export default class Linechart extends Stanza {
         .attr("text-anchor", "end")
         .attr("transform", `rotate(${yLabelAngle})`);
     }
-
-    // ====
 
     // ====
 
@@ -188,6 +197,8 @@ export default class Linechart extends Stanza {
         .data(categorizedData)
         .enter()
         .append("path")
+        .attr("id", (_, i) => "data-" + i)
+        .attr("class", "data-lines")
         .attr("fill", "none")
         .attr("stroke", function (d) {
           return color(d[0]);
@@ -208,17 +219,20 @@ export default class Linechart extends Stanza {
 
       this.legend.setup(
         groups.map((item, index) => ({
-          id: index,
+          id: "" + index,
           label: item,
           color: color(item),
+          node: this.root.querySelector(`svg #data-${index}`),
         })),
         this.root.querySelector("main"),
         {
+          fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
           position: ["top", "right"],
+          fadeProp: "stroke-opacity",
         }
       );
-      // ====
 
+      // ====
       // Show/hide grid lines
       if (showXGrid) {
         const xAxisGridGenerator = d3

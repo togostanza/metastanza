@@ -110,7 +110,7 @@
       "stanza:key": "xtick",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
-      "stanza:example": false,
+      "stanza:example": true,
       "stanza:description": "Show X tick"
     },
     {
