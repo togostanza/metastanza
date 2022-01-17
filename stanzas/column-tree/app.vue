@@ -48,7 +48,8 @@ export default defineComponent({
         state.responseJSON = null;
         state.responseJSON = await loadData(
           params.dataUrl.value,
-          params.dataType.value
+          params.dataType.value,
+          params.main
         );
         state.checkedNodes = new Map();
       },
