@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-import ToolTip from "@/lib/ToolTip";
+// import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
 import {
   downloadSvgMenuItem,
@@ -35,17 +35,42 @@ export default class Linechart extends Stanza {
     const padding = this.params["padding"];
 
     //data
-    const labelVariable = this.params["category"];
-    const valueVariable = this.params["value"];
-    const groupVariable = this.params["group-by"] || "none";
+    const xKeyName = this.params["category"];
+    const yKeyName = this.params["value"];
+    const xAxisTitle = this.params["category-title"];
+    const yAxisTitle = this.params["value-title"];
+    const showXTicks = this.params["xtick"] === "true" ? true : false;
+    const showYTicks = this.params["ytick"] === "true" ? true : false;
+    const showLegend = this.params["legend"] === "true" ? true : false;
+    const groupKeyName = this.params["group-by"];
+    const showXGrid = this.params["xgrid"] === "true" ? true : false;
+    const showYGrid = this.params["ygrid"] === "true" ? true : false;
+    const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
+    const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
+
     const root = this.root.querySelector(":scope > div");
 
-    this.legend = new Legend();
-    root.append(this.legend);
+    // On change params rerender - Check if legend and svg already existing and remove them -
+    const existingLegend = this.root.querySelector("togostanza--legend");
+    if (existingLegend) {
+      existingLegend.remove();
+    }
+    const existingSVG = this.root.querySelector("svg");
+    if (existingSVG) {
+      existingSVG.remove();
+    }
+    // ====
+
+    // Add legend
+
+    if (showLegend) {
+      this.legend = new Legend();
+      root.append(this.legend);
+    }
 
     const values = await loadData(
       this.params["data-url"],
@@ -55,12 +80,12 @@ export default class Linechart extends Stanza {
 
     // find most long legend caption
 
-    const dataMin = d3.min(values, (d) => +d.count);
-    const dataMax = d3.max(values, (d) => +d.count);
+    const dataMin = d3.min(values, (d) => +d[yKeyName]);
+    const dataMax = d3.max(values, (d) => +d[yKeyName]);
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    const MARGIN = { TOP: 10, BOTTOM: 60, LEFT: 50, RIGHT: 150 };
+    const MARGIN = { TOP: 10, BOTTOM: 60, LEFT: 50, RIGHT: 10 };
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
@@ -74,11 +99,6 @@ export default class Linechart extends Stanza {
 
     const graphArea = svg.append("g").attr("class", "chart");
 
-    const legendArea = svg
-      .append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(${width - MARGIN.RIGHT},0)`);
-
     const linesArea = graphArea
       .append("g")
       .attr("class", "lines")
@@ -89,115 +109,147 @@ export default class Linechart extends Stanza {
       .attr("class", "x axis")
       .attr("transform", `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`);
 
+    const yTitleArea = graphArea.append("g").attr("class", "y axis title");
+    const xTitleArea = graphArea
+      .append("g")
+      .attr("class", "x axis title")
+      .attr("dominant-baseline", "hanging")
+      .attr(
+        "transform",
+        `translate(0,${HEIGHT + MARGIN.TOP + MARGIN.BOTTOM / 2})`
+      );
+
+    const yTitle = yTitleArea
+      .append("text")
+      .text(yAxisTitle)
+      .attr("text-anchor", "middle")
+      .attr("transform", `rotate(-90)`)
+      .attr("x", -HEIGHT / 2 - MARGIN.TOP)
+      .attr("y", 10);
+
+    xTitleArea
+      .append("text")
+      .text(xAxisTitle)
+      .attr("text-anchor", "middle")
+      .attr("x", MARGIN.LEFT + WIDTH / 2);
+
+    console.log(yTitle.node().getBBox());
+
     const yAxisArea = graphArea
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`)
       .attr("class", "y axis");
 
-    const groups = [...new Set(values.map((d) => d.chromosome))];
+    /// Axes preparation
+    const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
 
-    const subgroups = [...new Set(values.map((d) => d[groupVariable]))];
-
-    const x = d3.scaleBand().domain(groups).range([0, WIDTH]);
-
-    xAxisArea
-      .call(d3.axisBottom(x).tickSizeOuter(0))
-      .selectAll("text")
-      .attr("text-anchor", "end")
-      .attr("x", "-0.7em")
-      .attr("y", "0")
-      .attr("dy", "0.4em")
-      //.attr("dominant-baseline", "middle")
-      .attr("transform", "rotate(-90)");
-
+    const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
     const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
 
-    yAxisArea.call(d3.axisLeft(y));
+    // Show/hide axes ticks
+    if (showXTicks) {
+      xAxisArea
+        .call(d3.axisBottom(x).tickSizeOuter(0))
+        .selectAll("text")
+        .attr("text-anchor", "end")
+        .attr("x", "-0.7em")
+        .attr("y", "0")
+        .attr("dy", "0.4em")
+        .attr("transform", `rotate(${xLabelAngle})`);
+    }
+    if (showYTicks) {
+      yAxisArea
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .attr("text-anchor", "end")
+        .attr("transform", `rotate(${yLabelAngle})`);
+    }
 
-    const xAxisGrid = d3
-      .axisBottom(x)
-      .tickSize(-HEIGHT)
-      .tickFormat("")
-      .ticks(10);
+    // ====
 
-    const yAxisGrid = d3.axisLeft(y).tickSize(-WIDTH).tickFormat("").ticks(10);
+    // ====
 
-    linesArea
-      .append("g")
-      .attr("class", "x gridlines")
-      .attr("transform", "translate(0," + HEIGHT + ")")
-      .call(xAxisGrid);
+    // If any grouping check
+    if (groupKeyName) {
+      const categorizedData = d3.group(values, (d) => d[groupKeyName]);
+      const groups = [...categorizedData.keys()];
 
-    linesArea.append("g").attr("class", "y gridlines").call(yAxisGrid);
+      const color = d3
+        .scaleOrdinal()
+        .domain(groups)
 
-    const color = d3
-      .scaleOrdinal()
-      .domain(subgroups)
-      .range(["#e41a1c", "#377eb8", "#4daf4a"]);
+        // TODO make colors from palette css
+        .range(["#e41a1c", "#377eb8", "#4daf4a"]);
 
-    const categorizedData = d3.group(values, (d) => d[groupVariable]);
+      linesArea
+        .append("g")
+        .attr("class", "data-lines")
+        .selectAll("g")
+        .data(categorizedData)
+        .enter()
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", function (d) {
+          return color(d[0]);
+        })
+        .attr("stroke-width", 1.5)
+        .attr("d", function (d) {
+          return d3
+            .line()
+            .x(function (d) {
+              return x(d[xKeyName]) + x.bandwidth() / 2;
+            })
+            .y(function (d) {
+              return y(+d[yKeyName]);
+            })(d[1]);
+        });
 
-    linesArea
-      .append("g")
-      .attr("class", "data-lines")
-      .selectAll("g")
-      .data(categorizedData)
-      .enter()
-      .append("path")
-      .attr("fill", "none")
-      .attr("stroke", function (d) {
-        return color(d[0]);
-      })
-      .attr("stroke-width", 1.5)
-      .attr("d", function (d) {
-        console.log("d", d);
-        return d3
-          .line()
-          .x(function (d) {
-            return x(d.chromosome) + x.bandwidth() / 2;
-          })
-          .y(function (d) {
-            return y(+d.count);
-          })(d[1]);
-      });
+      // Add legend
 
-    console.log("subgroups", subgroups);
+      this.legend.setup(
+        groups.map((item, index) => ({
+          id: index,
+          label: item,
+          color: color(item),
+        })),
+        this.root.querySelector("main"),
+        {
+          position: ["top", "right"],
+        }
+      );
+      // ====
 
-    const legendItems = legendArea
-      .selectAll("g")
-      .data(subgroups)
-      .join("g")
-      .attr("class", "legend item");
+      // Show/hide grid lines
+      if (showXGrid) {
+        const xAxisGridGenerator = d3
+          .axisBottom(x)
+          .tickSize(-HEIGHT)
+          .tickFormat("")
+          .ticks(10);
 
-    this.legend.setup(
-      subgroups.map((item) => ({ label: item, color: color(item) })),
-      this.root.querySelector("main"),
-      {
-        position: ["top", "right"],
+        const xAxisGrid = linesArea
+          .append("g")
+          .attr("class", "x gridlines")
+          .attr("transform", "translate(0," + HEIGHT + ")")
+          .call(xAxisGridGenerator);
       }
-    );
-    legendItems
-      .append("line")
-      .attr("x1", 15)
-      .attr("x2", "30")
-      .attr("y1", (_, i) => {
-        return MARGIN.TOP + i * 15;
-      })
-      .attr("y2", (_, i) => {
-        return MARGIN.TOP + i * 15;
-      })
-      .attr("stroke-width", 1.5)
-      .attr("stroke", (d) => color(d));
 
-    legendItems
-      .append("text")
-      .attr("x", 33)
-      .attr("y", (_, i) => {
-        return MARGIN.TOP + i * 15;
-      })
-      .attr("class", "legend label")
-      .attr("font-size", "0.6em")
-      .attr("alignment-baseline", "middle")
-      .text((d) => d);
+      if (showYGrid) {
+        const yAxisGridGenerator = d3
+          .axisLeft(y)
+          .tickSize(-WIDTH)
+          .tickFormat("")
+          .ticks(10);
+
+        const yAxisGrid = linesArea
+          .append("g")
+          .attr("class", "y gridlines")
+          .call(yAxisGridGenerator);
+      }
+    } else {
+      // else just draw line
+
+      return;
+    }
   }
 }

@@ -10,9 +10,11 @@ svg.marks {
   background-color: var(--togostanza-background-color);
 }
 
-.gridlines line {
+svg .gridlines > .tick > line {
   stroke-width: 0.5;
-  stroke: #333;
+  stroke: var(--togostanza-grid-color);
+  opacity: var(--togostanza-grid-opacity);
+  stroke-width: var(--togostanza-grid-width);
 }
 
 .legend .label text {
