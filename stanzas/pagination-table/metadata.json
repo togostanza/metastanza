@@ -5,12 +5,8 @@
   "@id": "pagination-table",
   "stanza:label": "Pagination table",
   "stanza:definition": "Pagination table MetaStanza",
-  "stanza:type": "Stanza",
-  "stanza:display": "Table",
-  "stanza:provider": "Togostanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
+  "stanza:author": "DBCLS",
   "stanza:contributor": [],
   "stanza:created": "2020-12-09",
   "stanza:updated": "2020-12-09",
@@ -36,6 +32,18 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "fixed-columns",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "amount of fixed columns",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "padding",
       "stanza:example": "0px",
       "stanza:description": "Padding",
@@ -56,7 +64,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"id\",\"label\":\"Accession\",\"link\":\"uniprot\"},{\"id\":\"mnemonic\",\"label\":\"Mnemonic\"},{\"id\":\"name\",\"label\":\"Proteinname\"},{\"id\":\"mass\",\"label\":\"Mass\",\"type\":\"number\"},{\"id\":\"location_name\",\"label\":\"Subcellularlocation\",\"link\":\"location_uniprot\",\"type\":\"category\",\"rowspan\": true}]",
+      "stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"class\": \"mnemonic\",\"label\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\"},{\"id\": \"mass\",\"label\": \"Mass\",\"type\": \"number\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\",\"type\": \"category\",\"rowspan\": true}]",
       "stanza:description": "Columns' options"
     }
   ],
@@ -259,7 +267,7 @@
     {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:default": "#F8F9FA",
       "stanza:description": "Background color"
     }
   ]

@@ -1,18 +1,26 @@
 import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils";
 
 export default class PieChart extends Stanza {
   menu() {
     return [
       downloadSvgMenuItem(this, "piechart"),
       downloadPngMenuItem(this, "piechart"),
+      downloadJSONMenuItem(this, "piechart", this._data),
+      downloadCSVMenuItem(this, "piechart", this._data),
+      downloadTSVMenuItem(this, "piechart", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -31,8 +39,10 @@ export default class PieChart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = values;
 
     const signals = [
       {

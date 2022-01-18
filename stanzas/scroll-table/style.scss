@@ -30,12 +30,15 @@
 
 .tableWrapper {
   overflow: auto;
+  background-color: var(--togostanza-background-color);
   > table {
     width: 100%;
     text-align: left;
     border-collapse: collapse;
     margin: 0;
     border: var(--togostanza-table-border);
+    border-left: 0px none;
+    border-right: 0px none;
     box-shadow: var(--togostanza-table-shadow);
     > thead {
       background-color: var(--togostanza-thead-background-color);
@@ -51,6 +54,10 @@
           padding: 10px;
           position: sticky;
           top: -1px;
+          &.fixed {
+            position: sticky;
+            z-index: 20;
+          }
           &:after {
             content: "";
             width: 100%;
@@ -84,6 +91,17 @@
           border-bottom: var(--togostanza-tbody-border-bottom);
           border-collapse: collapse;
           padding: 10px;
+          &.fixed {
+            position: sticky;
+            z-index: 10;
+            background-color: var(--togostanza-background-color);
+          }
+          &.center {
+            text-align: center;
+          }
+          &.right {
+            text-align: right;
+          }
           &:first-child {
             padding-left: 20px;
           }
@@ -95,6 +113,19 @@
           }
           > span > a {
             color: var(--togostanza-tbody-font-color);
+          }
+          label {
+            cursor: pointer;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            color: var(--togostanza-tbody-font-color);
+          }
+          input {
+            display: none;
+          }
+          input:checked ~ label {
+            display: block;
           }
         }
         &:last-of-type {
@@ -108,8 +139,8 @@
 }
 
 $dot-width: 4px;
-$dot-spacing: $dot-width + $dot-width/2 !default;
-$dot-color: var(--togostanza-thead-font-color);
+$dot-color: var(--togostanza-tbody-font-color);
+$dot-spacing: $dot-width * 1.5 !default;
 $dot-before-color: $dot-color !default;
 $dot-after-color: $dot-color !default;
 $left-pos: -9999px;

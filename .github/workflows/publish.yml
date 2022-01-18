@@ -24,6 +24,7 @@ jobs:
           git config --global url."https://github.com/".insteadOf
           ssh://git@github.com/
       - run: npm ci
+      - run: npm update togostanza-utils
       - run: npx togostanza build
 
       - uses: peaceiris/actions-gh-pages@v3

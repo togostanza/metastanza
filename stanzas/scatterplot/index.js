@@ -1,18 +1,26 @@
 import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils";
 
 export default class ScatterPlot extends Stanza {
   menu() {
     return [
       downloadSvgMenuItem(this, "scatter-plot"),
       downloadPngMenuItem(this, "scatter-plot"),
+      downloadJSONMenuItem(this, "scatter-plot", this._data),
+      downloadCSVMenuItem(this, "scatter-plot", this._data),
+      downloadTSVMenuItem(this, "scatter-plot", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -31,8 +39,10 @@ export default class ScatterPlot extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = values;
 
     const data = [
       {

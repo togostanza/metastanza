@@ -1,11 +1,13 @@
 import Stanza from "togostanza/stanza";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import Color from "color";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils";
+import ToolTip from "@/lib/ToolTip";
+import Legend from "@/lib/Legend";
 
 export default class VennStanza extends Stanza {
   // colorSeries;
@@ -14,6 +16,8 @@ export default class VennStanza extends Stanza {
   // dataLabels;
   // numberOfData;
   // venn;
+  // tooltip;
+  // legend;
 
   menu() {
     return [
@@ -28,7 +32,16 @@ export default class VennStanza extends Stanza {
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
-    //get data
+    // append tooltip, legend
+    const root = this.root.querySelector(":scope > div");
+    if (!this.tooltip) {
+      this.tooltip = new ToolTip();
+      root.append(this.tooltip);
+      this.legend = new Legend();
+      root.append(this.legend);
+    }
+
+    // get data
     this.data = await this.getData();
     console.log(this.data);
     this.totals = this.data.map((datum) => {
@@ -42,7 +55,6 @@ export default class VennStanza extends Stanza {
       total.size = matchedData.reduce((acc, datum) => acc + datum.size, 0);
       return total;
     });
-    console.log(this.totals);
     this.dataLabels = Array.from(
       new Set(this.data.map((datum) => datum.set).flat())
     );
@@ -117,35 +129,33 @@ export default class VennStanza extends Stanza {
       // tooltip
       group.dataset.tooltip = `<strong>${labels.join("∩")}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
-      this.setTooltip(group);
+      // this.setTooltip(group);
     });
+    this.tooltip.setup(selectedDiagram.querySelectorAll("[data-tooltip]"));
 
     // legend
-    this.makeLegend(
-      this.data.map((datum) => {
-        const id = datum.set
-          .map((item) => this.dataLabels.indexOf(item))
-          .sort()
-          .join(",");
-        const color = this.getBlendedColor(
-          datum.set.map((item) => this.dataLabels.indexOf(item))
-        );
-        return Object.fromEntries([
-          ["id", id],
-          ["label", datum.set.map((item) => item).join("∩")],
-          ["color", color.toString()],
-          ["value", datum.size],
-          [
-            "node",
-            selectedDiagram.querySelector(`:scope > g[data-targets="${id}"]`),
-          ],
-        ]);
-      }),
-      this.root.querySelector("main"),
-      {
-        fadeoutNodes: selectedDiagram.querySelectorAll(":scope > g"),
-      }
-    );
+    const items = this.data.map((datum) => {
+      const id = datum.set
+        .map((item) => this.dataLabels.indexOf(item))
+        .sort()
+        .join(",");
+      const color = this.getBlendedColor(
+        datum.set.map((item) => this.dataLabels.indexOf(item))
+      );
+      return Object.fromEntries([
+        ["id", id],
+        ["label", datum.set.map((item) => item).join("∩")],
+        ["color", color.toString()],
+        ["value", datum.size],
+        [
+          "node",
+          selectedDiagram.querySelector(`:scope > g[data-targets="${id}"]`),
+        ],
+      ]);
+    });
+    this.legend.setup(items, this.root.querySelector("main"), {
+      fadeoutNodes: selectedDiagram.querySelectorAll(":scope > g"),
+    });
   }
 
   getColorSeries() {
@@ -180,125 +190,6 @@ export default class VennStanza extends Stanza {
         break;
     }
     return blendedColor;
-  }
-
-  /**
-   *
-   * @param {*} data
-   * @param {Node} container
-   * @param {Object} opt
-   *  - direction 'vertical' or 'horizontal'
-   *  - position
-   *  - fadeoutNodes
-   */
-  makeLegend(data, container, opt) {
-    console.log(data);
-    const positions = opt.position || ["top", "right"];
-
-    // make legend
-    const legend = document.createElement("div");
-    legend.id = "MetaStanzaLegend";
-    legend.innerHTML = `
-    <table>
-      <tbody>
-      ${data
-        .map((datum) => {
-          return `
-        <tr data-id="${datum.id}">
-          <td><span class="marker" style="background-color: ${
-            datum.color
-          }"></span>${datum.label}</td>
-          ${
-            datum.value
-              ? `<td class="${(typeof datum.value).toLowerCase()}">${
-                  datum.value
-                }</td>`
-              : ""
-          }
-        </tr>`;
-        })
-        .join("")}
-      </tbody>
-    <table>`;
-    positions.forEach((position) => (legend.style[position] = 0));
-    container.append(legend);
-
-    if (!opt.fadeoutNodes) {
-      return;
-    }
-    // make leader
-    const leader = document.createElement("div");
-    leader.id = "MetaStanzaLegendLeader";
-    container.append(leader);
-
-    // event
-    container
-      .querySelectorAll(":scope > div > table > tbody > tr")
-      .forEach((tr) => {
-        tr.addEventListener("mouseover", () => {
-          const datum = data.find((datum) => datum.id === tr.dataset.id);
-          if (datum) {
-            opt.fadeoutNodes.forEach((node) => (node.style.opacity = 0.2));
-            datum.node.style.opacity = "";
-            leader.classList.add("-show");
-            const containerRect = this.root
-              .querySelector("main")
-              .getBoundingClientRect();
-            const legendRect = tr.getBoundingClientRect();
-            const targetRect = datum.node.getBoundingClientRect();
-            leader.style.left =
-              targetRect.left +
-              targetRect.width * 0.5 -
-              containerRect.left +
-              "px";
-            leader.style.width =
-              legendRect.left -
-              targetRect.right +
-              targetRect.width * 0.5 +
-              "px";
-            const legendMiddle = legendRect.top + legendRect.height * 0.5;
-            const targetMiddle = targetRect.top + targetRect.height * 0.5;
-            if (legendMiddle < targetMiddle) {
-              leader.dataset.direction = "top";
-              leader.style.top = legendMiddle - containerRect.top + "px";
-              leader.style.height = targetMiddle - legendMiddle + "px";
-            } else {
-              leader.dataset.direction = "bottom";
-              leader.style.top = targetMiddle - containerRect.top + "px";
-              leader.style.height = legendMiddle - targetMiddle + "px";
-            }
-          }
-        });
-        tr.addEventListener("mouseleave", () => {
-          opt.fadeoutNodes.forEach((node) => (node.style.opacity = ""));
-          leader.classList.remove("-show");
-        });
-      });
-  }
-
-  setTooltip(node) {
-    let tooltip = this.root.querySelector("#MetaStanzaToolTip");
-    if (!tooltip) {
-      tooltip = document.createElement("div");
-      tooltip.id = "MetaStanzaToolTip";
-      this.root.append(tooltip);
-    }
-    if (node.dataset.tooltip) {
-      node.addEventListener("mouseover", () => {
-        const rect = node.getBoundingClientRect();
-        if (node.dataset.tooltipHtml === "true") {
-          tooltip.innerHTML = node.dataset.tooltip;
-        } else {
-          tooltip.textContent = node.dataset.tooltip;
-        }
-        tooltip.style.left = rect.x + rect.width * 0.5 + "px";
-        tooltip.style.top = rect.y + "px";
-        tooltip.classList.add("-show");
-      });
-      node.addEventListener("mouseleave", () => {
-        tooltip.classList.remove("-show");
-      });
-    }
   }
 
   async getData() {

@@ -1,18 +1,26 @@
 import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
-import loadData from "@/lib/load-data";
+import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
-} from "@/lib/metastanza_utils.js";
+} from "togostanza-utils";
 
 export default class Linechart extends Stanza {
   menu() {
     return [
       downloadSvgMenuItem(this, "linechart"),
       downloadPngMenuItem(this, "linechart"),
+      downloadJSONMenuItem(this, "linechart", this._data),
+      downloadCSVMenuItem(this, "linechart", this._data),
+      downloadTSVMenuItem(this, "linechart", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -35,8 +43,10 @@ export default class Linechart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = values;
 
     const signals = [
       {
