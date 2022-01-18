@@ -51,14 +51,6 @@ export default class VennStanza extends Stanza {
 
     // draw
     this.drawVennDiagram();
-    // switch (this.params['chart-type']) {
-    //   case 'Venn diagram':
-    //     this.drawVennDiagram();
-    //     break;
-    //   case 'Euler diagram':
-    //     this.drawEulerDiagram();
-    //     break;
-    // }
   }
 
   drawVennDiagram() {
@@ -155,74 +147,6 @@ export default class VennStanza extends Stanza {
       }
     );
   }
-
-  // drawEulerDiagram() {
-
-  //   const container = this.root.querySelector('#euler-diagram');
-  //   container.style.width = this.params['width'] + 'px';
-  //   container.style.height = this.params['height'] + 'px';
-  //   container.dataset.blendMode = this.params['blend-mode'];
-  //   const d3Container = d3.select(container);
-  //   const convertedData = this.totals.map(datum => Object.fromEntries([
-  //     ['sets', datum.set],
-  //     ['size', datum.size]
-  //   ]));
-  //   const euler = venn.VennDiagram()
-  //     .width(this.params['width'])
-  //     .height(this.params['height']);
-  //   d3Container.datum(convertedData).call(euler);
-  //   const labelFontSize = +window.getComputedStyle(this.element).getPropertyValue('--togostanza-label-font-size').trim();
-
-  //   // path
-  //   // d3Container.selectAll('.venn-circle path')
-  //   //   .style('fill', (d, i) => this.colorSeries[i])
-  //   //   .style('stroke', (d, i) => this.colorSeries[i]);
-
-  //   const legendData = [];
-  //   container.querySelectorAll('.venn-area').forEach(group => {
-  //     const labels = group.dataset.vennSets.split('_');
-  //     const targets = labels.map(label => this.dataLabels.indexOf(label));
-  //     const count = this.totals.find(datum => {
-  //       return datum.set.length === labels.length && labels.every(label => datum.set.find(label2 => label === label2));
-  //     })?.size ?? '';
-  //     // set color
-  //     const color = this.getBlendedColor(targets);
-  //     const path = group.querySelector(':scope > path');
-  //     path.style.fill = color.toString();
-  //     path.style.fillOpacity = 1;
-  //     // set labels
-  //     const labelNode = group.querySelector(':scope > text > tspan');
-  //     labelNode.textContent = labels.join(',');
-  //     const countNode = labelNode.cloneNode();
-  //     const y = +countNode.getAttribute('y');
-  //     countNode.textContent = count;
-  //     group.querySelector(':scope > text').append(countNode);
-  //     labelNode.setAttribute('y', y - labelFontSize * .5);
-  //     countNode.setAttribute('y', y + labelFontSize * .5);
-  //     // tooltip
-  //     group.dataset.tooltip = `<strong>${labels.join('∩')}</strong>: ${count}`;
-  //     group.dataset.tooltipHtml = true;
-  //     this.setTooltip(group);
-  //     // legend
-  //     legendData.push({
-  //       id: group.dataset.vennSets,
-  //       label: labels.join('∩'),
-  //       color: color.toString(),
-  //       value: count,
-  //       node: group
-  //     });
-  //   });
-  //   console.log(legendData)
-
-  //   // legend
-  //   this.makeLegend(
-  //     legendData,
-  //     this.root.querySelector('main'),
-  //     {
-  //       fadeoutNodes: container.querySelectorAll('.venn-area')
-  //     }
-  //   );
-  // }
 
   getColorSeries() {
     const getPropertyValue = (key) =>
