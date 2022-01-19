@@ -12,8 +12,8 @@
         @focus="toggleSuggestionsIfValid"
         @input="toggleSuggestionsIfValid"
       />
-      <small
-        v-if="state.showPathExplanation">*When searching by path please use the <em>id</em> followed by a
+      <small v-if="state.showPathExplanation"
+        >*When searching by path please use the <em>id</em> followed by a
         <em>/</em>. E.G.: 1/2/3</small
       >
       <search-suggestions
@@ -182,9 +182,7 @@ export default defineComponent({
       state.showSuggestions = !state.showSuggestions;
     }
     const suggestions = computed(() => {
-      if (
-        state.searchTerm.includes("/")
-      ) {
+      if (state.searchTerm.includes("/")) {
         return state.responseJSON.filter(isPathSearchHit);
       }
       return state.responseJSON.filter(isNormalSearchHit);
