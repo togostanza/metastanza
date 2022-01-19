@@ -26,7 +26,7 @@
         @selectNode="selectNode"
       />
     </div>
-    <div class="tree">
+    <div id="tree">
       <NodeColumn
         v-for="(column, index) of state.columnData.filter(
           (col) => col?.length > 0
