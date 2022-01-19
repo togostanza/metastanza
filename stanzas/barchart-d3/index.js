@@ -41,6 +41,7 @@ export default class Barchart extends Stanza {
     const yAxisTitle = this.params["value-title"];
     const showXTicks = this.params["xtick"] === "true" ? true : false;
     const showYTicks = this.params["ytick"] === "true" ? true : false;
+    const yTicksNumber = this.params["yticks-number"] || 3;
     const showLegend = this.params["legend"] === "true" ? true : false;
     const groupKeyName = this.params["group-by"];
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
@@ -48,6 +49,8 @@ export default class Barchart extends Stanza {
     const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
     const barPlacement = this.params["bar-placement"];
+    const errorKeyName = this.params["error-key"] || "error";
+    const showErrorBars = errorKeyName ? this.params["error-bars"] : false;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -85,9 +88,20 @@ export default class Barchart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+
+    // TODO change data to include errors. For now, artificially add 5% error
+    values.forEach((item) => {
+      item.error = item.count * 0.2;
+    });
+
     this._data = values;
 
-    let dataMax = d3.max(values, (d) => +d[yKeyName]);
+    let dataMax;
+    if (showErrorBars) {
+      dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
+    } else {
+      dataMax = d3.max(values, (d) => +d[yKeyName]);
+    }
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
@@ -165,7 +179,7 @@ export default class Barchart extends Stanza {
         .scaleBand()
         .domain(xAxisLabels)
         .range([0, WIDTH])
-        .padding(0.2);
+        .padding(0.1);
       const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
 
       // Show/hide axes ticks
@@ -194,7 +208,7 @@ export default class Barchart extends Stanza {
       }
       if (showYTicks) {
         yAxisArea
-          .call(d3.axisLeft(y))
+          .call(d3.axisLeft(y).ticks(yTicksNumber))
           .selectAll("text")
           .attr("text-anchor", "end")
           .attr("transform", `rotate(${yLabelAngle})`);
@@ -251,7 +265,7 @@ export default class Barchart extends Stanza {
           })),
           this.root.querySelector("main"),
           {
-            fadeoutNodes: this.root.querySelectorAll("rect.bars"),
+            fadeoutNodes: null,
             position: ["top", "right"],
             fadeProp: "opacity",
           }
@@ -263,8 +277,7 @@ export default class Barchart extends Stanza {
           const xAxisGridGenerator = d3
             .axisBottom(x)
             .tickSize(-HEIGHT)
-            .tickFormat("")
-            .ticks(10);
+            .tickFormat("");
 
           const xAxisGrid = barsArea
             .append("g")
@@ -278,7 +291,7 @@ export default class Barchart extends Stanza {
             .axisLeft(y)
             .tickSize(-WIDTH)
             .tickFormat("")
-            .ticks(10);
+            .ticks(yTicksNumber);
 
           const yAxisGrid = barsArea
             .append("g")
@@ -302,15 +315,47 @@ export default class Barchart extends Stanza {
         .scaleBand()
         .domain(xAxisLabels)
         .range([0, WIDTH])
-        .padding(0.2);
+        .padding(0.1);
 
       const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
+
+      // Show/hide axes ticks
+      if (showXTicks) {
+        let xdy = "0.5em";
+        let xx = "-0.7em";
+        let textAnchor = "end";
+        if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+          xdy = "0.8em";
+          textAnchor = "end";
+        }
+        if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+          xx = "0.7em";
+          xdy = "0.71em";
+          textAnchor = "start";
+        }
+
+        xAxisArea
+          .call(d3.axisBottom(x).tickSizeOuter(0))
+          .selectAll("text")
+          .attr("text-anchor", textAnchor)
+          .attr("x", xx)
+          .attr("y", "0")
+          .attr("dy", xdy)
+          .attr("transform", `rotate(${xLabelAngle})`);
+      }
+      if (showYTicks) {
+        yAxisArea
+          .call(d3.axisLeft(y).ticks(yTicksNumber))
+          .selectAll("text")
+          .attr("text-anchor", "end")
+          .attr("transform", `rotate(${yLabelAngle})`);
+      }
 
       const subX = d3
         .scaleBand()
         .domain(subKeyNames)
         .range([0, x.bandwidth()])
-        .padding(0.2);
+        .padding(0.1);
 
       //For every group of bass - own g with
       const barsGroup = barsArea
@@ -326,29 +371,30 @@ export default class Barchart extends Stanza {
       barsGroup
         .selectAll("rect")
         .data((d) => {
-          console.log(d[1]);
           return d[1];
         })
         .enter()
         .append("rect")
-        .attr("x", (d) => subX(d["category"]))
-        .attr("y", (d) => y(+d.count))
+        .attr("x", (d) => subX(d[groupKeyName]))
+        .attr("y", (d) => y(+d[yKeyName]))
         .attr("width", subX.bandwidth())
-        .attr("height", (d) => y(0) - y(+d.count))
+        .attr("height", (d) => y(0) - y(+d[yKeyName]))
         .attr("fill", (d) => {
-          return color(d.category);
+          return color(d[groupKeyName]);
         });
 
-      // ====
+      if (showErrorBars) {
+        barsGroup.call(errorBars, errorKeyName, y, subX);
+      }
+
       // Show/hide grid lines
       if (showXGrid) {
         const xAxisGridGenerator = d3
           .axisBottom(x)
           .tickSize(-HEIGHT)
-          .tickFormat("")
-          .ticks(10);
+          .tickFormat("");
 
-        const xAxisGrid = barsArea
+        barsArea
           .append("g")
           .attr("class", "x gridlines")
           .attr("transform", "translate(0," + HEIGHT + ")")
@@ -360,13 +406,69 @@ export default class Barchart extends Stanza {
           .axisLeft(y)
           .tickSize(-WIDTH)
           .tickFormat("")
-          .ticks(10);
+          .ticks(yTicksNumber);
 
-        const yAxisGrid = barsArea
+        barsArea
           .append("g")
           .attr("class", "y gridlines")
           .call(yAxisGridGenerator);
       }
+
+      this.legend.setup(
+        subKeyNames.map((item, index) => ({
+          id: "" + index,
+          label: item,
+          color: color(item),
+          node: this.root.querySelector(`svg #data-${index}`),
+        })),
+        this.root.querySelector("main"),
+        {
+          fadeoutNodes: null,
+          position: ["top", "right"],
+          fadeProp: "opacity",
+        }
+      );
     }
   }
+}
+
+function errorBars(selection, errorKeyName, yAxis, subXAxis) {
+  selection.each(function (d) {
+    const selG = d3.select(this);
+
+    const errorBarGroup = selG
+      .selectAll("g")
+      .data(d[1])
+      .enter()
+      .append("g")
+      .attr("class", "error-bar");
+
+    errorBarGroup
+      .append("line")
+      .attr("stroke-width", 0.5)
+      .attr("stroke", "black")
+      .attr("x1", (d) => subXAxis(d.category) + subXAxis.bandwidth() / 2)
+      .attr("y1", (d) => yAxis(+d.count - d[errorKeyName] / 2))
+      .attr("x2", (d) => subXAxis(d.category) + subXAxis.bandwidth() / 2)
+      .attr("y2", (d) => yAxis(+d.count + d[errorKeyName] / 2));
+
+    // upper stroke
+    errorBarGroup
+      .append("line")
+      .attr("stroke-width", 0.5)
+      .attr("stroke", "black")
+      .attr("x1", (d) => subXAxis(d.category))
+      .attr("x2", (d) => subXAxis(d.category) + subXAxis.bandwidth())
+      .attr("y1", (d) => yAxis(+d.count - d[errorKeyName] / 2))
+      .attr("y2", (d) => yAxis(+d.count - d[errorKeyName] / 2));
+    // lower stroke
+    errorBarGroup
+      .append("line")
+      .attr("stroke-width", 0.5)
+      .attr("stroke", "black")
+      .attr("x1", (d) => subXAxis(d.category))
+      .attr("x2", (d) => subXAxis(d.category) + subXAxis.bandwidth())
+      .attr("y1", (d) => yAxis(+d.count + d[errorKeyName] / 2))
+      .attr("y2", (d) => yAxis(+d.count + d[errorKeyName] / 2));
+  });
 }

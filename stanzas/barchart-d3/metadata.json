@@ -53,6 +53,20 @@
     },
 
     {
+      "stanza:key": "error-bars",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show error bars",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "error-key",
+      "stanza:type": "string",
+      "stanza:example": "error",
+      "stanza:description": "Show error bars",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "category-title",
       "stanza:example": "chromosome",
       "stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
@@ -128,6 +142,13 @@
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y tick"
+    },
+
+    {
+      "stanza:key": "yticks-number",
+      "stanza:example": 3,
+      "stanza:description": "Y axis ticks number",
+      "stanza:required": true
     },
     {
       "stanza:key": "xlabel-angle",
