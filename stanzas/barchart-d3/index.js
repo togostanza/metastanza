@@ -1,7 +1,8 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
+import d3Tip from "d3-tip";
 import loadData from "togostanza-utils/load-data";
-// import ToolTip from "@/lib/ToolTip";
+import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
 import {
   downloadSvgMenuItem,
@@ -54,8 +55,16 @@ export default class Barchart extends Stanza {
 
     const root = this.root.querySelector(":scope > div");
 
+    const el = this.root.querySelector("#barchart-d3");
+
     // On change params rerender - Check if legend and svg already existing and remove them -
     const existingLegend = this.root.querySelector("togostanza--legend");
+
+    if (!this.tooltip) {
+      this.tooltip = new ToolTip();
+      root.append(this.tooltip);
+    }
+
     if (existingLegend) {
       existingLegend.remove();
     }
@@ -91,9 +100,11 @@ export default class Barchart extends Stanza {
       });
     }
 
-    const stackedData = stack(dataset);
+    console.log("dataset", dataset);
 
-    const dataMin = d3.min(values, (d) => +d[yKeyName]);
+    const stackedData = stack(dataset);
+    console.log("stackedData", stackedData);
+
     const dataMax = d3.max(stackedData[stackedData.length - 1], (d) => d[1]);
 
     const width = parseInt(this.params["width"]);
@@ -102,13 +113,22 @@ export default class Barchart extends Stanza {
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
-    const el = this.root.querySelector("#barchart-d3");
-
     const svg = d3
       .select(el)
       .append("svg")
       .attr("width", width)
       .attr("height", height);
+
+    // const tip = d3Tip()
+    //   .attr("class", "d3-tip")
+    //   .offset([-10, 0])
+    //   .html(function (e, d) {
+    //     return `<strong>Value:</strong> <span style='color:red'>
+    //       ${d[1] - d[0]}
+    //       </span>`;
+    //   });
+
+    // svg.call(tip);
 
     const graphArea = svg.append("g").attr("class", "chart");
 
@@ -216,23 +236,23 @@ export default class Barchart extends Stanza {
           return color(subKeyNames[i]);
         });
 
-      const tooltipGroup = svg.append("g").attr("class", "tooltip-group");
+      // const tooltipGroup = svg.append("g").attr("class", "tooltip-group");
 
-      const tooltip = tooltipGroup
-        .append("rect")
-        .attr("width", 50)
-        .attr("height", 15)
-        .attr("fill", "#ffffff")
-        .attr("class", "tooltip");
+      // const tooltip = tooltipGroup
+      //   .append("rect")
+      //   .attr("width", 50)
+      //   .attr("height", 15)
+      //   .attr("fill", "#ffffff")
+      //   .attr("class", "tooltip");
 
-      const toolTipText = tooltipGroup
-        .append("text")
-        .attr("x", tooltip.attr("width") / 2)
-        .attr("y", tooltip.attr("height"))
-        .attr("text-anchor", "middle")
-        .attr("class", "tooltip-label")
-        .attr("fill", "black")
-        .text("text");
+      // const toolTipText = tooltipGroup
+      //   .append("text")
+      //   .attr("x", tooltip.attr("width") / 2)
+      //   .attr("y", tooltip.attr("height"))
+      //   .attr("text-anchor", "middle")
+      //   .attr("class", "tooltip-label")
+      //   .attr("fill", "black")
+      // .text("text");
 
       const barGroups = stackGroups
         .selectAll("rect")
@@ -241,30 +261,9 @@ export default class Barchart extends Stanza {
         })
         .enter()
         .append("rect")
-        .on("mouseover", function (event, d) {
-          tooltipGroup.style("display", null);
-          tooltipGroup
-            .transition()
-            .duration(200)
-            .attr(
-              "transform",
-              `translate(${x(d.data.x) + MARGIN.LEFT + x.bandwidth()}, ${
-                (y(d[0]) + y(d[1])) / 2 + tooltip.attr("height") / 2
-              })`
-            );
-
-          toolTipText.text("" + (d[1] - d[0]));
-        })
-        .on("mouseout", function () {
-          tooltipGroup
-            .transition()
-            .duration(200)
-            .style("opacity", 0)
-            .end(() => {
-              tooltipGroup.style("display", "none");
-            });
-        })
         .attr("class", "bars")
+        .attr("data-tooltip", (d) => d[1] - d[0])
+        .attr("data-html", "true")
         .attr("x", (d) => x(d.data.x))
         .attr("y", (d) => {
           return y(d[1]);
@@ -277,7 +276,12 @@ export default class Barchart extends Stanza {
           return 0;
         });
 
-      barGroups;
+      this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
+
+      // this.root.querySelectorAll("svg rect.bars").forEach(bar =>
+      //   {
+
+      //   })
 
       // .attr("class", "data-bars")
       // .selectAll("g")
