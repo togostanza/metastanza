@@ -38,7 +38,6 @@
         :keys="state.keys"
         :highlighted-node="state.highligthedNodes[index]"
         :value-obj="valueObj"
-        :has-path-copy="state.showPath"
         :show-border-nodes="state.showBorderNodes"
         :node-content-alignment="state.nodeContentAlignment"
         @setParent="updatePartialColumnData"

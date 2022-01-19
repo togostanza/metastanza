@@ -29,13 +29,6 @@
             {{ node[keys.value] ?? valueObj.fallback }}
           </span>
         </span>
-        <font-awesome-icon
-          v-if="hasPathCopy"
-          icon="clipboard"
-          class="icon"
-          title="copy path"
-          @click="copyPath(node.path)"
-        />
       </span>
       <font-awesome-icon
         v-if="hasChildren(node.children)"
@@ -81,10 +74,6 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    hasPathCopy: {
-      type: Boolean,
-      default: false,
-    },
     highlightedNode: {
       type: [Number, String, null],
       default: null,
@@ -117,20 +106,9 @@ export default defineComponent({
     function setParent(id) {
       context.emit("setParent", [props.layer + 1, id]);
     }
-
-    function copyPath(path) {
-      path = path
-        .map((node) => node.id)
-        .join("/")
-        .toLowerCase();
-      navigator.clipboard.writeText(path).then(function () {
-        alert(`copied path: ${path}`);
-      });
-    }
     return {
       setParent,
       setCheckedNode,
-      copyPath,
       hasChildren,
     };
   },
