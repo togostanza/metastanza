@@ -1,6 +1,5 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
-import d3Tip from "d3-tip";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
@@ -48,6 +47,7 @@ export default class Barchart extends Stanza {
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
     const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
+    const barPlacement = this.params["bar-placement"];
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -87,25 +87,7 @@ export default class Barchart extends Stanza {
     );
     this._data = values;
 
-    const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
-    const stack = d3.stack().keys(subKeyNames);
-
-    const dataset = [];
-    for (const entry of d3.group(values, (d) => d[xKeyName]).entries()) {
-      dataset.push({
-        x: entry[0],
-        ...Object.fromEntries(
-          entry[1].map((d) => [d[groupKeyName], +d[yKeyName]])
-        ),
-      });
-    }
-
-    console.log("dataset", dataset);
-
-    const stackedData = stack(dataset);
-    console.log("stackedData", stackedData);
-
-    const dataMax = d3.max(stackedData[stackedData.length - 1], (d) => d[1]);
+    let dataMax = d3.max(values, (d) => +d[yKeyName]);
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
@@ -118,17 +100,6 @@ export default class Barchart extends Stanza {
       .append("svg")
       .attr("width", width)
       .attr("height", height);
-
-    // const tip = d3Tip()
-    //   .attr("class", "d3-tip")
-    //   .offset([-10, 0])
-    //   .html(function (e, d) {
-    //     return `<strong>Value:</strong> <span style='color:red'>
-    //       ${d[1] - d[0]}
-    //       </span>`;
-    //   });
-
-    // svg.call(tip);
 
     const graphArea = svg.append("g").attr("class", "chart");
 
@@ -173,155 +144,200 @@ export default class Barchart extends Stanza {
 
     /// Axes preparation
     const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+    const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
 
-    const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]).padding(0.2);
-    const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
+    if (barPlacement === "stacked") {
+      const stack = d3.stack().keys(subKeyNames);
 
-    // Show/hide axes ticks
-    if (showXTicks) {
-      let xdy = "0.5em";
-      let xx = "-0.7em";
-      let textAnchor = "end";
-      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-        xdy = "0.8em";
-        textAnchor = "end";
-      }
-      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-        xx = "0.7em";
-        xdy = "0.71em";
-        textAnchor = "start";
+      const dataset = [];
+      for (const entry of d3.group(values, (d) => d[xKeyName]).entries()) {
+        dataset.push({
+          x: entry[0],
+          ...Object.fromEntries(
+            entry[1].map((d) => [d[groupKeyName], +d[yKeyName]])
+          ),
+        });
       }
 
-      xAxisArea
-        .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("text-anchor", textAnchor)
-        .attr("x", xx)
-        .attr("y", "0")
-        .attr("dy", xdy)
-        .attr("transform", `rotate(${xLabelAngle})`);
-    }
-    if (showYTicks) {
-      yAxisArea
-        .call(d3.axisLeft(y))
-        .selectAll("text")
-        .attr("text-anchor", "end")
-        .attr("transform", `rotate(${yLabelAngle})`);
-    }
+      const stackedData = stack(dataset);
+      dataMax = d3.max(stackedData[stackedData.length - 1], (d) => d[1]);
+      const x = d3
+        .scaleBand()
+        .domain(xAxisLabels)
+        .range([0, WIDTH])
+        .padding(0.2);
+      const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
 
-    // ====
+      // Show/hide axes ticks
+      if (showXTicks) {
+        let xdy = "0.5em";
+        let xx = "-0.7em";
+        let textAnchor = "end";
+        if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+          xdy = "0.8em";
+          textAnchor = "end";
+        }
+        if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+          xx = "0.7em";
+          xdy = "0.71em";
+          textAnchor = "start";
+        }
 
-    if (groupKeyName) {
-      //   [...new Set(values.map((d) => d[groupKeyName]))].map((keyName) => {
-      //     return values.map((d) => ({ x: d[xKeyName], y: +d[yKeyName] }));
-      //   })
-      // );
+        xAxisArea
+          .call(d3.axisBottom(x).tickSizeOuter(0))
+          .selectAll("text")
+          .attr("text-anchor", textAnchor)
+          .attr("x", xx)
+          .attr("y", "0")
+          .attr("dy", xdy)
+          .attr("transform", `rotate(${xLabelAngle})`);
+      }
+      if (showYTicks) {
+        yAxisArea
+          .call(d3.axisLeft(y))
+          .selectAll("text")
+          .attr("text-anchor", "end")
+          .attr("transform", `rotate(${yLabelAngle})`);
+      }
+      if (groupKeyName) {
+        const color = d3
+          .scaleOrdinal()
+          .domain(subKeyNames)
 
-      //d3.group(values, (d) => d[groupKeyName]);
-      ///const groups = [...categorizedData.keys()];
+          // TODO make colors from palette css
+          .range(["#e41a1c", "#377eb8", "#4daf4a", "#c5c5c5", "375eb8"]);
+
+        const stackGroups = barsArea
+          .selectAll("g")
+          .data(stack(dataset))
+          .enter()
+          .append("g")
+          .style("fill", function (d, i) {
+            return color(subKeyNames[i]);
+          });
+
+        const barGroups = stackGroups
+          .selectAll("rect")
+          .data((d) => {
+            return d;
+          })
+          .enter()
+          .append("rect")
+          .attr("class", "bars")
+          .attr("data-tooltip", (d) => d[1] - d[0])
+          .attr("data-html", "true")
+          .attr("x", (d) => x(d.data.x))
+          .attr("y", (d) => {
+            return y(d[1]);
+          })
+          .attr("width", x.bandwidth())
+          .attr("height", (d) => {
+            if (d[1]) {
+              return y(d[0]) - y(d[1]);
+            }
+            return 0;
+          });
+
+        this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
+
+        // Add legend
+
+        this.legend.setup(
+          subKeyNames.map((item, index) => ({
+            id: "" + index,
+            label: item,
+            color: color(item),
+            node: this.root.querySelector(`svg #data-${index}`),
+          })),
+          this.root.querySelector("main"),
+          {
+            fadeoutNodes: this.root.querySelectorAll("rect.bars"),
+            position: ["top", "right"],
+            fadeProp: "opacity",
+          }
+        );
+
+        // ====
+        // Show/hide grid lines
+        if (showXGrid) {
+          const xAxisGridGenerator = d3
+            .axisBottom(x)
+            .tickSize(-HEIGHT)
+            .tickFormat("")
+            .ticks(10);
+
+          const xAxisGrid = barsArea
+            .append("g")
+            .attr("class", "x gridlines")
+            .attr("transform", "translate(0," + HEIGHT + ")")
+            .call(xAxisGridGenerator);
+        }
+
+        if (showYGrid) {
+          const yAxisGridGenerator = d3
+            .axisLeft(y)
+            .tickSize(-WIDTH)
+            .tickFormat("")
+            .ticks(10);
+
+          const yAxisGrid = barsArea
+            .append("g")
+            .attr("class", "y gridlines")
+            .call(yAxisGridGenerator);
+        }
+      } else {
+        // else just draw line
+
+        return;
+      }
+    } else {
+      const dataset = d3.group(values, (d) => d[xKeyName]);
 
       const color = d3
         .scaleOrdinal()
         .domain(subKeyNames)
-
-        // TODO make colors from palette css
         .range(["#e41a1c", "#377eb8", "#4daf4a", "#c5c5c5", "375eb8"]);
 
-      const stackGroups = barsArea
+      const x = d3
+        .scaleBand()
+        .domain(xAxisLabels)
+        .range([0, WIDTH])
+        .padding(0.2);
+
+      const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
+
+      const subX = d3
+        .scaleBand()
+        .domain(subKeyNames)
+        .range([0, x.bandwidth()])
+        .padding(0.2);
+
+      //For every group of bass - own g with
+      const barsGroup = barsArea
         .selectAll("g")
-        .data(stack(dataset))
+        .data(dataset)
         .enter()
         .append("g")
-        .style("fill", function (d, i) {
-          return color(subKeyNames[i]);
+        .attr("transform", (d) => {
+          return `translate(${x(d[0])},0)`;
         });
 
-      // const tooltipGroup = svg.append("g").attr("class", "tooltip-group");
-
-      // const tooltip = tooltipGroup
-      //   .append("rect")
-      //   .attr("width", 50)
-      //   .attr("height", 15)
-      //   .attr("fill", "#ffffff")
-      //   .attr("class", "tooltip");
-
-      // const toolTipText = tooltipGroup
-      //   .append("text")
-      //   .attr("x", tooltip.attr("width") / 2)
-      //   .attr("y", tooltip.attr("height"))
-      //   .attr("text-anchor", "middle")
-      //   .attr("class", "tooltip-label")
-      //   .attr("fill", "black")
-      // .text("text");
-
-      const barGroups = stackGroups
+      // inside every g insert bars on its own x genertor
+      barsGroup
         .selectAll("rect")
         .data((d) => {
-          return d;
+          console.log(d[1]);
+          return d[1];
         })
         .enter()
         .append("rect")
-        .attr("class", "bars")
-        .attr("data-tooltip", (d) => d[1] - d[0])
-        .attr("data-html", "true")
-        .attr("x", (d) => x(d.data.x))
-        .attr("y", (d) => {
-          return y(d[1]);
-        })
-        .attr("width", x.bandwidth())
-        .attr("height", (d) => {
-          if (d[1]) {
-            return y(d[0]) - y(d[1]);
-          }
-          return 0;
+        .attr("x", (d) => subX(d["category"]))
+        .attr("y", (d) => y(+d.count))
+        .attr("width", subX.bandwidth())
+        .attr("height", (d) => y(0) - y(+d.count))
+        .attr("fill", (d) => {
+          return color(d.category);
         });
-
-      this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
-
-      // this.root.querySelectorAll("svg rect.bars").forEach(bar =>
-      //   {
-
-      //   })
-
-      // .attr("class", "data-bars")
-      // .selectAll("g")
-      // .data(categorizedData)
-      // .enter()
-      // .append("path")
-      // .attr("id", (_, i) => "data-" + i)
-      // .attr("class", "data-lines")
-      // .attr("fill", "none")
-      // .attr("stroke", function (d) {
-      //   return color(d[0]);
-      // })
-      // .attr("stroke-width", 1.5)
-      // .attr("d", function (d) {
-      //   return d3
-      //     .line()
-      //     .x(function (d) {
-      //       return x(d[xKeyName]) + x.bandwidth() / 2;
-      //     })
-      //     .y(function (d) {
-      //       return y(+d[yKeyName]);
-      //     })(d[1]);
-      // });
-
-      // Add legend
-
-      this.legend.setup(
-        subKeyNames.map((item, index) => ({
-          id: "" + index,
-          label: item,
-          color: color(item),
-          node: this.root.querySelector(`svg #data-${index}`),
-        })),
-        this.root.querySelector("main"),
-        {
-          fadeoutNodes: this.root.querySelectorAll("rect.bars"),
-          position: ["top", "right"],
-          fadeProp: "opacity",
-        }
-      );
 
       // ====
       // Show/hide grid lines
@@ -351,10 +367,6 @@ export default class Barchart extends Stanza {
           .attr("class", "y gridlines")
           .call(yAxisGridGenerator);
       }
-    } else {
-      // else just draw line
-
-      return;
     }
   }
 }

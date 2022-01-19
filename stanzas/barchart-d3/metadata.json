@@ -44,6 +44,15 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "bar-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["stacked", "non-stacked"],
+      "stanza:example": "non-stacked",
+      "stanza:description": "bars placement",
+      "stanza:required": true
+    },
+
+    {
       "stanza:key": "category-title",
       "stanza:example": "chromosome",
       "stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
