@@ -4,6 +4,10 @@ import Color from "color";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 import ToolTip from "@/lib/ToolTip";
@@ -23,6 +27,10 @@ export default class VennStanza extends Stanza {
     return [
       downloadSvgMenuItem(this, "vennstanza"),
       downloadPngMenuItem(this, "vennstanza"),
+      downloadJSONMenuItem(this, "vennstanza", this.data),
+      downloadCSVMenuItem(this, "vennstanza", this.data),
+      downloadTSVMenuItem(this, "vennstanza", this.data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -195,7 +203,8 @@ export default class VennStanza extends Stanza {
   async getData() {
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
     // // processing
     // for (const datum of data) {
