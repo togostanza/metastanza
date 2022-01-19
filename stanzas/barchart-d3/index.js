@@ -154,7 +154,7 @@ export default class Barchart extends Stanza {
     /// Axes preparation
     const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
 
-    const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
+    const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]).padding(0.2);
     const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
 
     // Show/hide axes ticks
@@ -205,7 +205,7 @@ export default class Barchart extends Stanza {
         .domain(subKeyNames)
 
         // TODO make colors from palette css
-        .range(["#e41a1c", "#377eb8", "#4daf4a"]);
+        .range(["#e41a1c", "#377eb8", "#4daf4a", "#c5c5c5", "375eb8"]);
 
       const stackGroups = barsArea
         .selectAll("g")
@@ -216,6 +216,24 @@ export default class Barchart extends Stanza {
           return color(subKeyNames[i]);
         });
 
+      const tooltipGroup = svg.append("g").attr("class", "tooltip-group");
+
+      const tooltip = tooltipGroup
+        .append("rect")
+        .attr("width", 50)
+        .attr("height", 15)
+        .attr("fill", "#ffffff")
+        .attr("class", "tooltip");
+
+      const toolTipText = tooltipGroup
+        .append("text")
+        .attr("x", tooltip.attr("width") / 2)
+        .attr("y", tooltip.attr("height"))
+        .attr("text-anchor", "middle")
+        .attr("class", "tooltip-label")
+        .attr("fill", "black")
+        .text("text");
+
       const barGroups = stackGroups
         .selectAll("rect")
         .data((d) => {
@@ -223,6 +241,30 @@ export default class Barchart extends Stanza {
         })
         .enter()
         .append("rect")
+        .on("mouseover", function (event, d) {
+          tooltipGroup.style("display", null);
+          tooltipGroup
+            .transition()
+            .duration(200)
+            .attr(
+              "transform",
+              `translate(${x(d.data.x) + MARGIN.LEFT + x.bandwidth()}, ${
+                (y(d[0]) + y(d[1])) / 2 + tooltip.attr("height") / 2
+              })`
+            );
+
+          toolTipText.text("" + (d[1] - d[0]));
+        })
+        .on("mouseout", function () {
+          tooltipGroup
+            .transition()
+            .duration(200)
+            .style("opacity", 0)
+            .end(() => {
+              tooltipGroup.style("display", "none");
+            });
+        })
+        .attr("class", "bars")
         .attr("x", (d) => x(d.data.x))
         .attr("y", (d) => {
           return y(d[1]);
@@ -230,13 +272,12 @@ export default class Barchart extends Stanza {
         .attr("width", x.bandwidth())
         .attr("height", (d) => {
           if (d[1]) {
-            if (d.data.x === "1") {
-              console.log([d[0], d[1]]);
-            }
             return y(d[0]) - y(d[1]);
           }
           return 0;
         });
+
+      barGroups;
 
       // .attr("class", "data-bars")
       // .selectAll("g")
@@ -264,7 +305,7 @@ export default class Barchart extends Stanza {
       // Add legend
 
       this.legend.setup(
-        groups.map((item, index) => ({
+        subKeyNames.map((item, index) => ({
           id: "" + index,
           label: item,
           color: color(item),
@@ -272,9 +313,9 @@ export default class Barchart extends Stanza {
         })),
         this.root.querySelector("main"),
         {
-          fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+          fadeoutNodes: this.root.querySelectorAll("rect.bars"),
           position: ["top", "right"],
-          fadeProp: "stroke-opacity",
+          fadeProp: "opacity",
         }
       );
 
@@ -287,7 +328,7 @@ export default class Barchart extends Stanza {
           .tickFormat("")
           .ticks(10);
 
-        const xAxisGrid = linesArea
+        const xAxisGrid = barsArea
           .append("g")
           .attr("class", "x gridlines")
           .attr("transform", "translate(0," + HEIGHT + ")")
@@ -301,7 +342,7 @@ export default class Barchart extends Stanza {
           .tickFormat("")
           .ticks(10);
 
-        const yAxisGrid = linesArea
+        const yAxisGrid = barsArea
           .append("g")
           .attr("class", "y gridlines")
           .call(yAxisGridGenerator);

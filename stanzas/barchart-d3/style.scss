@@ -51,6 +51,16 @@ svg#dl_button {
     opacity: 1;
   }
 }
+svg .tooltip-group {
+  opacity: 0.9;
+}
+
+svg .tooltip-label {
+  font-size: 0.6em;
+}
+svg .tooltip-label {
+  opacity: 0.9em;
+}
 
 div#dl_list {
   width: fit-content;
