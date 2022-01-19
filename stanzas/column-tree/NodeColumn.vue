@@ -4,10 +4,13 @@
       v-for="node in nodes"
       :key="node.id"
       class="node"
-      :class="[{
-        '-highlighted':
-          node.id === highlightedNode && hasChildren(node.children),
-      },{'-with-border': showBorderNodes}]"
+      :class="[
+        {
+          '-highlighted':
+            node.id === highlightedNode && hasChildren(node.children),
+        },
+        { '-with-border': showBorderNodes },
+      ]"
     >
       <input
         type="checkbox"
@@ -21,24 +24,24 @@
         <span class="label" :class="`-${nodeContentAlignment}`">
           <strong class="title">
             {{ node[keys.label] }}
-            <font-awesome-icon
-              v-if="hasPathCopy"
-              icon="clipboard"
-              class="icon"
-              title="copy path"
-              @click="copyPath(node.path)"
-            />
           </strong>
           <span v-if="valueObj.show" class="value">
             {{ node[keys.value] ?? valueObj.fallback }}
           </span>
         </span>
         <font-awesome-icon
-          v-if="hasChildren(node.children)"
-          icon="chevron-right"
+          v-if="hasPathCopy"
+          icon="clipboard"
           class="icon"
+          title="copy path"
+          @click="copyPath(node.path)"
         />
       </span>
+      <font-awesome-icon
+        v-if="hasChildren(node.children)"
+        icon="chevron-right"
+        class="icon"
+      />
     </span>
   </div>
 </template>

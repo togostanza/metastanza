@@ -54,7 +54,7 @@
     {
       "stanza:key": "search-key",
       "stanza:example": "value",
-      "stanza:description": "key for data atrribute to search with suggestions",
+      "stanza:description": "key for data atrribute to search with suggestions. Besides this key, one can also search by path using the id followed by a / E.G.: 1/2/3",
       "stanza:required": false
     },
     {
@@ -68,7 +68,15 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": false,
-      "stanza:description": "Show path in suggestions and add copy path button in tree",
+      "stanza:description": "Show path in suggestions",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "show-path-explanation",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show explanation on how to use id path for searching",
       "stanza:required": false
     },
     {

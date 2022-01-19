@@ -13,8 +13,8 @@
         @input="toggleSuggestionsIfValid"
       />
       <small
-        >*When searching by path please use the <em>id</em> followed by a
-        <em>/</em>. EG: 1/2/3</small
+        v-if="state.showPathExplanation">*When searching by path please use the <em>id</em> followed by a
+        <em>/</em>. E.G.: 1/2/3</small
       >
       <search-suggestions
         :show-suggestions="state.showSuggestions"
@@ -85,6 +85,7 @@ export default defineComponent({
       fallbackInCaseOfNoValue: params.valueFallback.value,
       showValue: isTruthBool(params.showValue.value),
       showPath: isTruthBool(params.showPath.value),
+      showPathExplanation: isTruthBool(params.showPathExplanation.value),
       showBorderNodes: isTruthBool(params.showBorderNodes.value),
       nodeContentAlignment: params.nodeContentAlignment.value,
       showSuggestions: false,

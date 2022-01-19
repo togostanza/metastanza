@@ -10,7 +10,8 @@ main {
 
 #wrapper {
   .value {
-    margin-left: 1rem;
+    flex-grow: 1;
+    text-align: right;
     font-weight: normal;
     font-style: italic;
     opacity: 0.8;
@@ -59,34 +60,34 @@ main {
   }
   > .tree {
     display: flex;
+    gap: var(--togostanza-column-gap);
     > .column {
       background-color: var(--togostanza-column-background-color);
-      margin-right: var(--togostanza-column-gap);
-      display: grid;
       min-width: max-content;
       height: fit-content;
       border: var(--togostanza-column-border);
       border-radius: var(--togostanza-column-border-radius);
       > .node {
         position: relative;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1.5rem auto 1.5rem;
         align-items: center;
         border-radius: var(--togostanza-node-border-radius);
         padding: var(--togostanza-node-padding);
         > .content {
-          display: flex;
-          width: 100%;
-          justify-content: space-between;
           > .label {
             display: flex;
-            font-weight: bold;
-            margin-right: 2rem;
             &.-horizontal {
+              width: 100%;
               flex-direction: row;
+              gap: 1rem;
             }
             &.-vertical {
+              margin-left: 0.5rem;
               flex-direction: column;
+              > .value {
+                text-align: left;
+              }
             }
             > strong {
               display: flex;
@@ -96,10 +97,10 @@ main {
           }
         }
         > .icon {
-          padding-left: 2rem;
+          align-self: center;
+          justify-self: flex-end;
         }
         > input[type="checkbox"] {
-          margin-right: 1rem;
           &:hover {
             cursor: pointer;
           }
@@ -128,12 +129,12 @@ main {
           }
         }
         &:hover {
-          background-color: var(--togostanza-hover-background-color) !important;
-          color: var(--togostanza-hover-text-color) !important;
+          background-color: var(--togostanza-hover-background-color);
+          color: var(--togostanza-hover-text-color);
           cursor: pointer;
           > .content {
             > svg > path {
-              color: var(--togostanza-hover-text-color);
+              color: var(--togostanza-hover-text-color) !important;
             }
             > .label {
               > .title > svg > path:hover {
