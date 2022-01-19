@@ -134,7 +134,8 @@ export default defineComponent({
     }
     function isNormalSearchHit(node) {
       return node[params.searchKey.value]
-        ?.toLowerCase()
+        ?.toString()
+        .toLowerCase()
         .includes(state.searchTerm.toLowerCase());
     }
     function isPathSearchHit(node) {
@@ -182,8 +183,7 @@ export default defineComponent({
     }
     const suggestions = computed(() => {
       if (
-        state.searchTerm.includes("/") ||
-        !isNaN(parseInt(state.searchTerm))
+        state.searchTerm.includes("/")
       ) {
         return state.responseJSON.filter(isPathSearchHit);
       }
