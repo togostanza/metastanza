@@ -17,11 +17,8 @@
         :checked="checkedNodes.get(node.id)"
         @input="setCheckedNode(node)"
       />
-      <span
-        class="content"
-        @click="hasChildren(node.children) ? setParent(node.id) : null"
-      >
-        <span class="label" :class="`-${nodeContentAlignment}`">
+
+        <span class="label" :class="`-${nodeContentAlignment}`" @click="hasChildren(node.children) ? setParent(node.id) : null">
           <strong class="title">
             {{ node[keys.label] }}
           </strong>
@@ -29,7 +26,6 @@
             {{ node[keys.value] ?? valueObj.fallback }}
           </span>
         </span>
-      </span>
       <font-awesome-icon
         v-if="hasChildren(node.children)"
         icon="chevron-right"

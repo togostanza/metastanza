@@ -9,14 +9,48 @@ main {
 }
 
 #wrapper {
+  position: relative;
   .value {
     flex-grow: 1;
     font-weight: normal;
     font-style: italic;
     opacity: 0.8;
   }
+  .label {
+    display: flex;
+    > strong {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    &.-horizontal {
+      width: 100%;
+      flex-direction: row;
+      gap: 1rem;
+      > .value {
+        text-align: right;
+      }
+    }
+    &.-vertical {
+      flex-direction: column;
+      > .value {
+        text-align: left;
+      }
+    }
+  }
   .icon {
     width: calc(var(--togostanza-font-size) * 0.6 * 1px);
+  }
+  .-with-border {
+    &:after {
+      position: absolute;
+      content: "";
+      display: block;
+      width: 100%;
+      top: 0;
+      left: 0;
+      border-top: solid 1px var(--togostanza-column-border-color);
+    }
   }
   > .search-container {
     margin-bottom: 1rem;
@@ -28,31 +62,32 @@ main {
       border: solid 1px var(--togostanza-control-border-color);
       border-radius: calc( var(--togostanza-column-border-radius) * 1px);
     }
-    > .suggestions {
-      margin: 0;
-      padding: 0;
+    > .search-wrapper {
+      left: calc(var(--togostanza-column-border-radius) * 1px / 2 * -1);
       min-height: fit-content;
       max-height: 80%;
-      overflow: auto;
+      display: flex;
       position: absolute;
+      overflow: auto;
       border: solid 1px var(--togostanza-control-border-color);
-      border-radius: calc( var(--togostanza-column-border-radius) * 1px);
-      background-color: white;
-      z-index: 1;
-      > li {
-        display: grid;
-        padding: 0.8rem 1rem;
-        list-style-type: none;
-        border-bottom: var(--togostanza-column-border);
-        > .label {
-          > .title {
-            display: flex;
-            align-items: center;
+      border-radius: calc( var(--togostanza-column-border-radius) * 1px);  
+      z-index: 2;
+      > .suggestions {
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+        background-color: white;
+        z-index: 1;
+        > li {
+          display: grid;
+          padding: 0.8rem 1rem;
+          list-style-type: none;
+          position: relative;
+          border-bottom: var(--togostanza-column-border);
+          &:hover {
+            background-color: var(--togostanza-hover-background-color);
+            cursor: pointer;
           }
-        }
-        &:hover {
-          background-color: var(--togostanza-hover-background-color);
-          cursor: pointer;
         }
       }
     }
@@ -79,26 +114,9 @@ main {
         padding-bottom: calc(var(--togostanza-node-padding-vertical) * 1px);
         padding-left: calc(var(--togostanza-node-padding-horizontal) * 1px);
         padding-right: calc(var(--togostanza-node-padding-horizontal) * 1px);
-        > .content {
-          > .label {
-            display: flex;
-            &.-horizontal {
-              width: 100%;
-              flex-direction: row;
-              gap: 1rem;
-            }
-            &.-vertical {
-              margin-left: 0.5rem;
-              flex-direction: column;
-              > .value {
-                text-align: left;
-              }
-            }
-            > strong {
-              display: flex;
-              align-items: center;
-              gap: 0.3rem;
-            }
+        > .label{
+          &.-vertical {
+            margin-left: 0.5rem;
           }
         }
         > .icon {
@@ -110,21 +128,16 @@ main {
             cursor: pointer;
           }
         }
-        &.-with-border {
-          &:after {
-            position: absolute;
-            content: "";
-            display: block;
-            width: 100%;
-            top: 0;
-            left: 0;
-            border-top: solid 1px var(--togostanza-column-border-color);
-          }
-        }
         &:first-child {
+          border-top-left-radius: max(calc(var(--togostanza-column-border-radius) * 1px), calc(var(--togostanza-node-border-radius) * 1px));
+          border-top-right-radius: max(calc(var(--togostanza-column-border-radius) * 1px), calc(var(--togostanza-node-border-radius) * 1px));
           &.-with-border:after {
             border-top: none;
           }
+        }
+        &:last-child {
+          border-bottom-left-radius: max(calc(var(--togostanza-column-border-radius) * 1px), calc(var(--togostanza-node-border-radius) * 1px));
+          border-bottom-right-radius: max(calc(var(--togostanza-column-border-radius) * 1px), calc(var(--togostanza-node-border-radius) * 1px));
         }
         &.-highlighted {
           background-color: var(--togostanza-selected-background-color);

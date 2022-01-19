@@ -23,6 +23,8 @@
         :data="suggestions"
         :keys="state.keys"
         :value-obj="valueObj"
+        :show-border-nodes="state.showBorderNodes"
+        :node-content-alignment="state.nodeContentAlignment"
         @selectNode="selectNode"
       />
     </div>

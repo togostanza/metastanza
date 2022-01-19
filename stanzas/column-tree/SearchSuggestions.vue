@@ -1,13 +1,17 @@
 <template>
-  <ul v-show="showSuggestions" class="suggestions">
+<div v-show="showSuggestions" class="search-wrapper">
+  <ul class="suggestions">
     <li
       v-for="(node, index) of data"
       :key="index"
+      :class="{ '-with-border': showBorderNodes }"
       @click="$emit('selectNode', node)"
     >
-      <strong class="label">{{ node[keys.label] }}</strong>
-      <span v-if="valueObj.show" class="value">
-        {{ node[keys.value] ?? valueObj.fallback }}
+      <span class="label" :class="`-${nodeContentAlignment}`">
+        <strong class="title"  >{{ node[keys.label] }}</strong>
+        <span v-if="valueObj.show" class="value">
+          {{ node[keys.value] ?? valueObj.fallback }}
+        </span>
       </span>
       <span v-if="showPath" class="value">
         Path :
@@ -21,6 +25,7 @@
       {{ valueObj.fallback }}
     </li>
   </ul>
+</div>
 </template>
 
 <script>
@@ -51,6 +56,14 @@ export default defineComponent({
     valueObj: {
       type: Object,
       required: true,
+    },
+    showBorderNodes: {
+      type: Boolean,
+      default: false,
+    },
+    nodeContentAlignment: {
+      type: String,
+      default: "horizontal",
     },
   },
   emits: ["selectNode"],
