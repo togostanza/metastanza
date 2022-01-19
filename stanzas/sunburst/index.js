@@ -4,8 +4,12 @@ import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
-} from "togostanza-utils"; //"@/lib/metastanza_utils.js"; //
+} from "togostanza-utils";
 
 let currentDataId = 0;
 let path;
@@ -13,8 +17,12 @@ let path;
 export default class Sunburst extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "sunburstStanza"),
-      downloadPngMenuItem(this, "sunburstStanza"),
+      downloadSvgMenuItem(this, "sunburst"),
+      downloadPngMenuItem(this, "sunburst"),
+      downloadJSONMenuItem(this, "sunburst", this._data),
+      downloadCSVMenuItem(this, "sunburst", this._data),
+      downloadTSVMenuItem(this, "sunburst", this._data),
+      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -52,8 +60,11 @@ export default class Sunburst extends Stanza {
 
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+
+    this._data = data;
 
     for (let i = 0; i <= 5; i++) {
       colorScale.push(`--togostanza-series-${i}-color`);

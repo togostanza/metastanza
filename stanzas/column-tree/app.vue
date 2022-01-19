@@ -98,7 +98,8 @@ export default defineComponent({
       async () => {
         state.responseJSON = await loadData(
           params.dataUrl.value,
-          params.dataType.value
+          params.dataType.value,
+          params.main
         );
         state.responseJSON = state.responseJSON.map((node) => {
           return { ...node, path: getPath(node) };
