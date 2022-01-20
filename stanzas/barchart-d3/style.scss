@@ -23,6 +23,11 @@ svg .bars .error-bar > line {
   stroke: var(--togostanza-errorbar-line-color);
 }
 
+svg .bars rect {
+  stroke-width: var(--togostanza-border-width);
+  stroke: var(--togostanza-border-color);
+}
+
 svg .gridlines > path.domain {
   display: none;
 }
