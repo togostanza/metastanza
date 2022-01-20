@@ -161,7 +161,6 @@ export default class Linechart extends Stanza {
 
     /// Axes preparation
     const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-    // const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
 
     const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
     const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
@@ -253,8 +252,8 @@ export default class Linechart extends Stanza {
         fadeProp: "stroke-opacity",
       }
     );
-
     // ====
+
     // Show/hide grid lines
     if (showXGrid) {
       const xAxisGridGenerator = d3
@@ -282,6 +281,7 @@ export default class Linechart extends Stanza {
         .attr("class", "y gridlines")
         .call(yAxisGridGenerator);
 
+      console.log(showErrorBars);
       if (showErrorBars) {
         linesGroup.call(errorBars, y, x, errorBarWidth);
       }
@@ -290,6 +290,7 @@ export default class Linechart extends Stanza {
     function errorBars(selection, yAxis, xAxis, errorBarWidth) {
       selection.each(function (d) {
         const selG = d3.select(this.parentNode);
+        console.log("d[1]", d[1]);
 
         const errorBarGroup = selG
           .selectAll("g")
