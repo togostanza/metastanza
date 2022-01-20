@@ -11,10 +11,41 @@ svg.marks {
 }
 
 svg .gridlines > .tick > line {
-  stroke-width: 0.5;
+  stroke-width: var(--togostanza-tick-width);
   stroke: var(--togostanza-grid-color);
   opacity: var(--togostanza-grid-opacity);
   stroke-width: var(--togostanza-grid-width);
+  stroke-dasharray: var(--togostanza-grid-dash-length),
+    var(--togostanza-grid-dash-length);
+}
+
+svg .gridlines > path.domain {
+  display: none;
+}
+
+svg .axis > .tick > line {
+  stroke: var(--togostanza-tick-color);
+}
+
+svg .axis > path {
+  stroke: var(--togostanza-axis-color);
+  stroke-width: var(--togostanza-axis-width);
+}
+
+svg .axis.title text {
+  font-size: calc(var(--togostanza-title-font-size) * 1px);
+  font-weight: var(--togostanza-title-font-weight);
+  fill: var(--togostanza-title-font-color);
+}
+
+svg .axis > .tick > text {
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+svg .error-bar > line {
+  stroke-width: var(--togostanza-errorbar-line-width);
+  stroke: var(--togostanza-errorbar-line-color);
 }
 
 .legend .label text {

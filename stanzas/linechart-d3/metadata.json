@@ -44,6 +44,27 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "error-bars",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show error bars (only for non-stacked bars arrangement)",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "error-key",
+      "stanza:type": "string",
+      "stanza:example": "error",
+      "stanza:description": "Error data key name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "error-bar-width",
+      "stanza:type": "number",
+      "stanza:example": 0.4,
+      "stanza:description": "Error bar horizontal line width, relative to bar width",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "category-title",
       "stanza:example": "chromosome",
       "stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
@@ -119,6 +140,12 @@
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y tick"
+    },
+    {
+      "stanza:key": "yticks-number",
+      "stanza:example": 3,
+      "stanza:description": "Y axis ticks number",
+      "stanza:required": true
     },
     {
       "stanza:key": "xlabel-angle",
@@ -273,6 +300,18 @@
       "stanza:type": "number",
       "stanza:default": 1,
       "stanza:description": "Tick width (in pixel)"
+    },
+    {
+      "stanza:key": "--togostanza-errorbar-line-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Errorbar line width"
+    },
+    {
+      "stanza:key": "--togostanza-errorbar-line-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "Errorbar line color"
     },
     {
       "stanza:key": "--togostanza-title-font-color",

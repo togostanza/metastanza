@@ -41,12 +41,16 @@ export default class Linechart extends Stanza {
     const yAxisTitle = this.params["value-title"];
     const showXTicks = this.params["xtick"] === "true" ? true : false;
     const showYTicks = this.params["ytick"] === "true" ? true : false;
+    const yTicksNumber = this.params["yticks-number"] || 3;
     const showLegend = this.params["legend"] === "true" ? true : false;
     const groupKeyName = this.params["group-by"];
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
     const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
+    const errorKeyName = this.params["error-key"] || "error";
+    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
+    const errorBarWidth = this.params["error-bar-width"] || 1;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -76,12 +80,29 @@ export default class Linechart extends Stanza {
       this.params["data-url"],
       this.params["data-type"]
     );
+
+    // TODO change data to include errors. For now, artificially add 5% error
+    values.forEach((item) => {
+      item.error = item.count * 0.2;
+    });
+
     this._data = values;
 
-    // find most long legend caption
+    const togostanzaColors = [];
+    for (let i = 0; i < 6; i++) {
+      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+    }
 
-    const dataMin = d3.min(values, (d) => +d[yKeyName]);
-    const dataMax = d3.max(values, (d) => +d[yKeyName]);
+    let dataMax, dataMin;
+    if (showErrorBars) {
+      dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
+      dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
+    } else {
+      dataMax = d3.max(values, (d) => +d[yKeyName]);
+      dataMin = d3.min(values, (d) => +d[yKeyName]);
+    }
+
+    // find most long legend caption
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
@@ -140,130 +161,189 @@ export default class Linechart extends Stanza {
 
     /// Axes preparation
     const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+    // const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
 
     const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
     const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
 
-    // Show/hide axes ticks
-    if (showXTicks) {
-      let xdy = "0.5em";
-      let xx = "-0.7em";
-      let textAnchor = "end";
-      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-        xdy = "0.8em";
-        textAnchor = "end";
-      }
-      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-        xx = "0.7em";
-        xdy = "0.71em";
-        textAnchor = "start";
-      }
+    let xdy = "0.5em";
+    let xx = "-0.7em";
+    let textAnchor = "end";
+    if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+      xdy = "0.8em";
+      textAnchor = "end";
+    }
+    if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+      xx = "0.7em";
+      xdy = "0.71em";
+      textAnchor = "start";
+    }
 
-      xAxisArea
-        .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("text-anchor", textAnchor)
-        .attr("x", xx)
-        .attr("y", "0")
-        .attr("dy", xdy)
-        .attr("transform", `rotate(${xLabelAngle})`);
+    const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+
+    if (!showXTicks) {
+      xAxisGenerator.tickSize(0);
     }
-    if (showYTicks) {
-      yAxisArea
-        .call(d3.axisLeft(y))
-        .selectAll("text")
-        .attr("text-anchor", "end")
-        .attr("transform", `rotate(${yLabelAngle})`);
+
+    xAxisArea
+      .call(xAxisGenerator)
+      .selectAll("text")
+      .attr("text-anchor", textAnchor)
+      .attr("x", xx)
+      .attr("y", "0")
+      .attr("dy", xdy)
+      .attr("transform", `rotate(${xLabelAngle})`);
+
+    const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
+
+    if (!showYTicks) {
+      yAxisGenerator.tickSize(0);
     }
+
+    yAxisArea
+      .call(yAxisGenerator)
+      .selectAll("text")
+      .attr("text-anchor", "end")
+      .attr("transform", `rotate(${yLabelAngle})`);
+
+    const categorizedData = d3.group(values, (d) => d[groupKeyName]);
+
+    const groups = [...categorizedData.keys()];
+
+    const color = d3.scaleOrdinal().domain(groups).range(togostanzaColors);
+
+    const linesGroup = linesArea
+      .append("g")
+      .attr("class", "data-lines")
+      .selectAll("g")
+      .data(categorizedData)
+      .enter()
+      .append("path")
+      .attr("id", (_, i) => "data-" + i)
+      .attr("class", "data-lines")
+      .attr("fill", "none")
+      .attr("stroke", function (d) {
+        return color(d[0]);
+      })
+      .attr("stroke-width", 1.5)
+      .attr("d", function (d) {
+        return d3
+          .line()
+          .x(function (d) {
+            return x(d[xKeyName]) + x.bandwidth() / 2;
+          })
+          .y(function (d) {
+            return y(+d[yKeyName]);
+          })(d[1]);
+      });
+
+    // Add legend
+
+    this.legend.setup(
+      groups.map((item, index) => ({
+        id: "" + index,
+        label: item,
+        color: color(item),
+        node: this.root.querySelector(`svg #data-${index}`),
+      })),
+      this.root.querySelector("main"),
+      {
+        fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+        position: ["top", "right"],
+        fadeProp: "stroke-opacity",
+      }
+    );
 
     // ====
+    // Show/hide grid lines
+    if (showXGrid) {
+      const xAxisGridGenerator = d3
+        .axisBottom(x)
+        .tickSize(-HEIGHT)
+        .tickFormat("")
+        .ticks(10);
 
-    // If any grouping check
-    if (groupKeyName) {
-      const categorizedData = d3.group(values, (d) => d[groupKeyName]);
-      const groups = [...categorizedData.keys()];
-
-      const color = d3
-        .scaleOrdinal()
-        .domain(groups)
-
-        // TODO make colors from palette css
-        .range(["#e41a1c", "#377eb8", "#4daf4a"]);
-
-      linesArea
+      const xAxisGrid = linesArea
         .append("g")
-        .attr("class", "data-lines")
-        .selectAll("g")
-        .data(categorizedData)
-        .enter()
-        .append("path")
-        .attr("id", (_, i) => "data-" + i)
-        .attr("class", "data-lines")
-        .attr("fill", "none")
-        .attr("stroke", function (d) {
-          return color(d[0]);
-        })
-        .attr("stroke-width", 1.5)
-        .attr("d", function (d) {
-          return d3
-            .line()
-            .x(function (d) {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            })
-            .y(function (d) {
-              return y(+d[yKeyName]);
-            })(d[1]);
-        });
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(0," + HEIGHT + ")")
+        .call(xAxisGridGenerator);
+    }
 
-      // Add legend
+    if (showYGrid) {
+      const yAxisGridGenerator = d3
+        .axisLeft(y)
+        .tickSize(-WIDTH)
+        .tickFormat("")
+        .ticks(10);
 
-      this.legend.setup(
-        groups.map((item, index) => ({
-          id: "" + index,
-          label: item,
-          color: color(item),
-          node: this.root.querySelector(`svg #data-${index}`),
-        })),
-        this.root.querySelector("main"),
-        {
-          fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-          position: ["top", "right"],
-          fadeProp: "stroke-opacity",
-        }
-      );
+      const yAxisGrid = linesArea
+        .append("g")
+        .attr("class", "y gridlines")
+        .call(yAxisGridGenerator);
 
-      // ====
-      // Show/hide grid lines
-      if (showXGrid) {
-        const xAxisGridGenerator = d3
-          .axisBottom(x)
-          .tickSize(-HEIGHT)
-          .tickFormat("")
-          .ticks(10);
-
-        const xAxisGrid = linesArea
-          .append("g")
-          .attr("class", "x gridlines")
-          .attr("transform", "translate(0," + HEIGHT + ")")
-          .call(xAxisGridGenerator);
+      if (showErrorBars) {
+        linesGroup.call(errorBars, y, x, errorBarWidth);
       }
+    }
 
-      if (showYGrid) {
-        const yAxisGridGenerator = d3
-          .axisLeft(y)
-          .tickSize(-WIDTH)
-          .tickFormat("")
-          .ticks(10);
+    function errorBars(selection, yAxis, xAxis, errorBarWidth) {
+      selection.each(function (d) {
+        const selG = d3.select(this.parentNode);
 
-        const yAxisGrid = linesArea
+        const errorBarGroup = selG
+          .selectAll("g")
+          .data(d[1], (d) => d[groupKeyName])
+          .enter()
           .append("g")
-          .attr("class", "y gridlines")
-          .call(yAxisGridGenerator);
-      }
-    } else {
-      // else just draw line
+          .attr("class", "error-bar");
 
-      return;
+        errorBarGroup
+          .append("line")
+          .attr("x1", (d) => xAxis(d[xKeyName]) + xAxis.bandwidth() / 2)
+          .attr("y1", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2))
+          .attr("x2", (d) => xAxis(d[xKeyName]) + xAxis.bandwidth() / 2)
+          .attr("y2", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2));
+
+        // upper stroke
+        errorBarGroup
+          .append("line")
+          .attr(
+            "x1",
+            (d) =>
+              xAxis(d[xKeyName]) +
+              xAxis.bandwidth() / 2 -
+              (xAxis.bandwidth() * errorBarWidth) / 2
+          )
+          .attr(
+            "x2",
+            (d) =>
+              xAxis(d[xKeyName]) +
+              xAxis.bandwidth() / 2 +
+              (xAxis.bandwidth() * errorBarWidth) / 2
+          )
+          .attr("y1", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2))
+          .attr("y2", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2));
+        // lower stroke
+        errorBarGroup
+          .append("line")
+          .attr(
+            "x1",
+            (d) =>
+              xAxis(d[xKeyName]) +
+              xAxis.bandwidth() / 2 -
+              (xAxis.bandwidth() * errorBarWidth) / 2
+          )
+          .attr(
+            "x2",
+            (d) =>
+              xAxis(d[xKeyName]) +
+              xAxis.bandwidth() / 2 +
+              (xAxis.bandwidth() * errorBarWidth) / 2
+          )
+          .attr("y1", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2))
+          .attr("y2", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2));
+      });
     }
   }
 }
