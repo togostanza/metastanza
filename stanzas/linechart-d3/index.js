@@ -50,7 +50,10 @@ export default class Linechart extends Stanza {
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
     const errorKeyName = this.params["error-key"] || "error";
     const showErrorBars = this.params["error-bars"] === "true" ? true : false;
-    const errorBarWidth = this.params["error-bar-width"] || 1;
+    const errorBarWidth =
+      typeof this.params["error-bar-width"] !== "undefined"
+        ? this.params["error-bar-width"]
+        : 0.4;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -281,7 +284,6 @@ export default class Linechart extends Stanza {
         .attr("class", "y gridlines")
         .call(yAxisGridGenerator);
 
-      console.log(showErrorBars);
       if (showErrorBars) {
         linesGroup.call(errorBars, y, x, errorBarWidth);
       }
@@ -290,7 +292,6 @@ export default class Linechart extends Stanza {
     function errorBars(selection, yAxis, xAxis, errorBarWidth) {
       selection.each(function (d) {
         const selG = d3.select(this.parentNode);
-        console.log("d[1]", d[1]);
 
         const errorBarGroup = selG
           .selectAll("g")
