@@ -9,39 +9,36 @@ svg.marks {
   background-color: var(--togostanza-background-color);
 }
 
-svg .gridlines > .tick > line {
-  stroke-width: var(--togostanza-tick-width);
-  stroke: var(--togostanza-grid-color);
-  opacity: var(--togostanza-grid-opacity);
-  stroke-width: var(--togostanza-grid-width);
-  stroke-dasharray: var(--togostanza-grid-dash-length),
-    var(--togostanza-grid-dash-length);
-}
+svg {
+  .gridlines > .tick > line {
+    stroke: var(--togostanza-grid-color);
+    opacity: var(--togostanza-grid-opacity);
+    stroke-width: var(--togostanza-grid-width);
+    stroke-dasharray: var(--togostanza-grid-dash-length),
+      var(--togostanza-grid-dash-length);
+  }
 
-svg .bars .error-bar > line {
-  stroke-width: var(--togostanza-errorbar-line-width);
-  stroke: var(--togostanza-errorbar-line-color);
-}
+  .bars .error-bar > line {
+    stroke-width: var(--togostanza-errorbar-line-width);
+    stroke: var(--togostanza-errorbar-line-color);
+  }
+  .bars rect {
+    stroke-width: var(--togostanza-border-width);
+    stroke: var(--togostanza-border-color);
+  }
 
-svg .bars rect {
-  stroke-width: var(--togostanza-border-width);
-  stroke: var(--togostanza-border-color);
-}
+  .gridlines > path.domain {
+    display: none;
+  }
 
-svg .gridlines > path.domain {
-  display: none;
-}
-
-svg .axis > .tick > line {
-  stroke: var(--togostanza-tick-color);
-}
-svg .axis > path {
-  stroke: var(--togostanza-axis-color);
-  stroke-width: var(--togostanza-axis-width);
-}
-
-svg .errorbar > line {
-  stroke-width: var(--togostanza-errorbar-line-width);
+  .axis > .tick > line {
+    stroke: var(--togostanza-tick-color);
+    stroke-width: var(--togostanza-tick-width);
+  }
+  .axis > path {
+    stroke: var(--togostanza-axis-color);
+    stroke-width: var(--togostanza-axis-width);
+  }
 }
 
 .legend .label text {

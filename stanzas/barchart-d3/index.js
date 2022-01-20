@@ -32,7 +32,7 @@ export default class Barchart extends Stanza {
 
     //width、height、padding
 
-    const padding = this.params["padding"];
+    // const padding = this.params["padding"];
 
     //data
     const xKeyName = this.params["category"];
@@ -50,7 +50,7 @@ export default class Barchart extends Stanza {
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
     const barPlacement = this.params["bar-placement"];
     const errorKeyName = this.params["error-key"] || "error";
-    const showErrorBars = errorKeyName ? this.params["error-bars"] : false;
+    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
     const errorBarWidth = this.params["error-bar-width"] || 0;
     const barPaddings =
       typeof this.params["bar-paddings"] === "undefined"
@@ -154,7 +154,7 @@ export default class Barchart extends Stanza {
         `translate(0,${HEIGHT + MARGIN.TOP + MARGIN.BOTTOM / 2})`
       );
 
-    const yTitle = yTitleArea
+    yTitleArea
       .append("text")
       .text(yAxisTitle)
       .attr("text-anchor", "middle")
@@ -301,7 +301,7 @@ export default class Barchart extends Stanza {
           return color(subKeyNames[i]);
         });
 
-      const barGroups = stackGroups
+      stackGroups
         .selectAll("rect")
         .data((d) => {
           return d;

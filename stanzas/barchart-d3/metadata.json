@@ -17,6 +17,7 @@
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
+
     {
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
@@ -53,9 +54,10 @@
     },
     {
       "stanza:key": "error-bars",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Show error bars (only for non-stacked bars arrangement)",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": false,
+      "stanza:description": "Show error bars",
       "stanza:required": false
     },
     {
