@@ -16,9 +16,28 @@ svg .gridlines > .tick > line {
   stroke-width: var(--togostanza-grid-width);
 }
 
+svg .gridlines > path.domain {
+  display: none;
+}
+
+svg .errorbar > line {
+  stroke-width: var(--togostanza-errorbar-line-width);
+}
+
 .legend .label text {
   color: black;
   font-size: 0.5em;
+}
+
+svg .axis.title text {
+  font-size: calc(var(--togostanza-title-font-size) * 1px);
+  font-weight: var(--togostanza-title-font-weight);
+  fill: var(--togostanza-title-font-color);
+}
+
+svg .axis > .tick > text {
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
 }
 
 //dl button style

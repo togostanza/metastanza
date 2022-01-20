@@ -51,6 +51,9 @@ export default class Barchart extends Stanza {
     const barPlacement = this.params["bar-placement"];
     const errorKeyName = this.params["error-key"] || "error";
     const showErrorBars = errorKeyName ? this.params["error-bars"] : false;
+    const errorBarWidth = this.params["error-bar-width"] || 0;
+    const barPaddings = this.params["bar-paddings"] || 0.1;
+    const barSubPaddings = this.params["bar-sub-paddings"] || 0.1;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -95,6 +98,11 @@ export default class Barchart extends Stanza {
     });
 
     this._data = values;
+
+    const togostanzaColors = [];
+    for (let i = 0; i < 6; i++) {
+      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+    }
 
     let dataMax;
     if (showErrorBars) {
@@ -179,47 +187,54 @@ export default class Barchart extends Stanza {
         .scaleBand()
         .domain(xAxisLabels)
         .range([0, WIDTH])
-        .padding(0.1);
+        .padding(barPaddings);
       const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
 
       // Show/hide axes ticks
-      if (showXTicks) {
-        let xdy = "0.5em";
-        let xx = "-0.7em";
-        let textAnchor = "end";
-        if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-          xdy = "0.8em";
-          textAnchor = "end";
-        }
-        if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-          xx = "0.7em";
-          xdy = "0.71em";
-          textAnchor = "start";
-        }
 
-        xAxisArea
-          .call(d3.axisBottom(x).tickSizeOuter(0))
-          .selectAll("text")
-          .attr("text-anchor", textAnchor)
-          .attr("x", xx)
-          .attr("y", "0")
-          .attr("dy", xdy)
-          .attr("transform", `rotate(${xLabelAngle})`);
+      let xdy = "0.5em";
+      let xx = "-0.7em";
+      let textAnchor = "end";
+      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+        xdy = "0.8em";
+        textAnchor = "end";
       }
-      if (showYTicks) {
-        yAxisArea
-          .call(d3.axisLeft(y).ticks(yTicksNumber))
-          .selectAll("text")
-          .attr("text-anchor", "end")
-          .attr("transform", `rotate(${yLabelAngle})`);
+      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+        xx = "0.7em";
+        xdy = "0.71em";
+        textAnchor = "start";
       }
+
+      const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+      if (!showXTicks) {
+        xAxisGenerator.tickSize(0);
+      }
+
+      const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
+      if (!showYTicks) {
+        yAxisGenerator.tickSize(0);
+      }
+
+      xAxisArea
+        .call(xAxisGenerator)
+        .selectAll("text")
+        .attr("text-anchor", textAnchor)
+        .attr("x", xx)
+        .attr("y", "0")
+        .attr("dy", xdy)
+        .attr("transform", `rotate(${xLabelAngle})`);
+
+      yAxisArea
+        .call(yAxisGenerator)
+        .selectAll("text")
+        .attr("text-anchor", "end")
+        .attr("transform", `rotate(${yLabelAngle})`);
+
       if (groupKeyName) {
         const color = d3
           .scaleOrdinal()
           .domain(subKeyNames)
-
-          // TODO make colors from palette css
-          .range(["#e41a1c", "#377eb8", "#4daf4a", "#c5c5c5", "375eb8"]);
+          .range(togostanzaColors);
 
         const stackGroups = barsArea
           .selectAll("g")
@@ -309,53 +324,59 @@ export default class Barchart extends Stanza {
       const color = d3
         .scaleOrdinal()
         .domain(subKeyNames)
-        .range(["#e41a1c", "#377eb8", "#4daf4a", "#c5c5c5", "375eb8"]);
+        .range(togostanzaColors);
 
       const x = d3
         .scaleBand()
         .domain(xAxisLabels)
         .range([0, WIDTH])
-        .padding(0.1);
+        .padding(barPaddings);
 
       const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
 
-      // Show/hide axes ticks
-      if (showXTicks) {
-        let xdy = "0.5em";
-        let xx = "-0.7em";
-        let textAnchor = "end";
-        if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-          xdy = "0.8em";
-          textAnchor = "end";
-        }
-        if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-          xx = "0.7em";
-          xdy = "0.71em";
-          textAnchor = "start";
-        }
+      const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+      if (!showXTicks) {
+        xAxisGenerator.tickSize(0);
+      }
 
-        xAxisArea
-          .call(d3.axisBottom(x).tickSizeOuter(0))
-          .selectAll("text")
-          .attr("text-anchor", textAnchor)
-          .attr("x", xx)
-          .attr("y", "0")
-          .attr("dy", xdy)
-          .attr("transform", `rotate(${xLabelAngle})`);
+      const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
+      if (!showYTicks) {
+        yAxisGenerator.tickSize(0);
       }
-      if (showYTicks) {
-        yAxisArea
-          .call(d3.axisLeft(y).ticks(yTicksNumber))
-          .selectAll("text")
-          .attr("text-anchor", "end")
-          .attr("transform", `rotate(${yLabelAngle})`);
+
+      let xdy = "0.5em";
+      let xx = "-0.7em";
+      let textAnchor = "end";
+      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
+        xdy = "0.8em";
+        textAnchor = "end";
       }
+      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
+        xx = "0.7em";
+        xdy = "0.71em";
+        textAnchor = "start";
+      }
+
+      xAxisArea
+        .call(xAxisGenerator)
+        .selectAll("text")
+        .attr("text-anchor", textAnchor)
+        .attr("x", xx)
+        .attr("y", "0")
+        .attr("dy", xdy)
+        .attr("transform", `rotate(${xLabelAngle})`);
+
+      yAxisArea
+        .call(yAxisGenerator)
+        .selectAll("text")
+        .attr("text-anchor", "end")
+        .attr("transform", `rotate(${yLabelAngle})`);
 
       const subX = d3
         .scaleBand()
         .domain(subKeyNames)
         .range([0, x.bandwidth()])
-        .padding(0.1);
+        .padding(barSubPaddings);
 
       //For every group of bass - own g with
       const barsGroup = barsArea
@@ -384,7 +405,7 @@ export default class Barchart extends Stanza {
         });
 
       if (showErrorBars) {
-        barsGroup.call(errorBars, errorKeyName, y, subX);
+        barsGroup.call(errorBars, errorKeyName, y, subX, errorBarWidth);
       }
 
       // Show/hide grid lines
@@ -432,7 +453,7 @@ export default class Barchart extends Stanza {
   }
 }
 
-function errorBars(selection, errorKeyName, yAxis, subXAxis) {
+function errorBars(selection, errorKeyName, yAxis, subXAxis, errorBarWidth) {
   selection.each(function (d) {
     const selG = d3.select(this);
 
@@ -457,8 +478,20 @@ function errorBars(selection, errorKeyName, yAxis, subXAxis) {
       .append("line")
       .attr("stroke-width", 0.5)
       .attr("stroke", "black")
-      .attr("x1", (d) => subXAxis(d.category))
-      .attr("x2", (d) => subXAxis(d.category) + subXAxis.bandwidth())
+      .attr(
+        "x1",
+        (d) =>
+          subXAxis(d.category) +
+          subXAxis.bandwidth() / 2 -
+          (subXAxis.bandwidth() * errorBarWidth) / 2
+      )
+      .attr(
+        "x2",
+        (d) =>
+          subXAxis(d.category) +
+          subXAxis.bandwidth() / 2 +
+          (subXAxis.bandwidth() * errorBarWidth) / 2
+      )
       .attr("y1", (d) => yAxis(+d.count - d[errorKeyName] / 2))
       .attr("y2", (d) => yAxis(+d.count - d[errorKeyName] / 2));
     // lower stroke
@@ -466,8 +499,20 @@ function errorBars(selection, errorKeyName, yAxis, subXAxis) {
       .append("line")
       .attr("stroke-width", 0.5)
       .attr("stroke", "black")
-      .attr("x1", (d) => subXAxis(d.category))
-      .attr("x2", (d) => subXAxis(d.category) + subXAxis.bandwidth())
+      .attr(
+        "x1",
+        (d) =>
+          subXAxis(d.category) +
+          subXAxis.bandwidth() / 2 -
+          (subXAxis.bandwidth() * errorBarWidth) / 2
+      )
+      .attr(
+        "x2",
+        (d) =>
+          subXAxis(d.category) +
+          subXAxis.bandwidth() / 2 +
+          (subXAxis.bandwidth() * errorBarWidth) / 2
+      )
       .attr("y1", (d) => yAxis(+d.count + d[errorKeyName] / 2))
       .attr("y2", (d) => yAxis(+d.count + d[errorKeyName] / 2));
   });
