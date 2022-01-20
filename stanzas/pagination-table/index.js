@@ -29,7 +29,7 @@ export default class PaginationTable extends Stanza {
     main.parentNode.style.padding = this.params["padding"];
 
     this._app?.unmount();
-    this._app = createApp(App, this.params);
+    this._app = createApp(App, { ...this.params, main });
     this._component = this._app.mount(main);
   }
 }

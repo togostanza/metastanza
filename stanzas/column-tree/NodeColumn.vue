@@ -4,33 +4,47 @@
       v-for="node in nodes"
       :key="node.id"
       class="node"
-      :class="{ '-highlighted': node.id === state.highlightedNode }"
+      :class="[
+        {
+          '-highlighted':
+            node.id === highlightedNode && hasChildren(node.children),
+        },
+        { '-with-border': showBorderNodes },
+      ]"
     >
       <input
         type="checkbox"
         :checked="checkedNodes.get(node.id)"
         @input="setCheckedNode(node)"
       />
+
       <span
-        class="content"
+        class="label"
+        :class="`-${nodeContentAlignment}`"
         @click="hasChildren(node.children) ? setParent(node.id) : null"
       >
-        <span>{{ node.label }}</span>
-        <font-awesome-icon
-          v-if="hasChildren(node.children)"
-          icon="chevron-right"
-          class="icon"
-        />
+        <strong class="title">
+          {{ node[keys.label] }}
+        </strong>
+        <span v-if="valueObj.show" class="value">
+          {{ node[keys.value] ?? valueObj.fallback }}
+        </span>
       </span>
+      <font-awesome-icon
+        v-if="hasChildren(node.children)"
+        icon="chevron-right"
+        class="icon"
+      />
     </span>
   </div>
 </template>
+
 <script>
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-library.add(faChevronRight);
+import { faChevronRight, faClipboard } from "@fortawesome/free-solid-svg-icons";
+library.add(faChevronRight, faClipboard);
 export default defineComponent({
   components: {
     FontAwesomeIcon,
@@ -52,12 +66,29 @@ export default defineComponent({
       type: Map,
       required: true,
     },
+    keys: {
+      type: Object,
+      required: true,
+    },
+    valueObj: {
+      type: Object,
+      required: true,
+    },
+    highlightedNode: {
+      type: [Number, String, null],
+      default: null,
+    },
+    showBorderNodes: {
+      type: Boolean,
+      default: false,
+    },
+    nodeContentAlignment: {
+      type: String,
+      default: "horizontal",
+    },
   },
   emits: ["setParent", "setCheckedNode"],
   setup(props, context) {
-    const state = reactive({
-      highlightedNode: null,
-    });
     function hasChildren(childrenProp) {
       if (typeof childrenProp === "string") {
         childrenProp = childrenProp
@@ -67,26 +98,18 @@ export default defineComponent({
       }
       return childrenProp && childrenProp.length > 0;
     }
-    function resetHighlightedNode() {
-      state.highlightedNode = null;
-    }
-    function selectionClass(id) {
-      return id === state.selecedNode ? "node -highlighted" : "";
-    }
+
     function setCheckedNode(node) {
       context.emit("setCheckedNode", node);
     }
+
     function setParent(id) {
-      state.highlightedNode = id;
       context.emit("setParent", [props.layer + 1, id]);
     }
     return {
       setParent,
       setCheckedNode,
-      resetHighlightedNode,
       hasChildren,
-      state,
-      selectionClass,
     };
   },
 });
