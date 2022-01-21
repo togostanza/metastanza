@@ -1,0 +1,68 @@
+<html>
+  <body>
+    <script
+      type="module"
+      src="http://localhost:8080/barchart.js"
+      async
+    ></script>
+    <script
+      type="module"
+      src="https://enishitech.github.io/stanza-repo/baz.js?"
+      async
+    ></script>
+    <script
+      type="module"
+      src="https://enishitech.github.io/stanza-repo/axis-selector.js?"
+      async
+    ></script>
+
+    <togostanza--container>
+      <togostanza--event-map
+        on="hover"
+        value-path="category"
+        receiver="togostanza-baz"
+        target-attribute="say-to"
+      ></togostanza--event-map>
+
+      <togostanza-barchart
+        chart-type="stacked"
+        data-url="https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart"
+        data-type="json"
+        category="chromosome"
+        value="count"
+        group-by="category"
+        category-title=""
+        value-title=""
+        legend-title=""
+        custom-css-url=""
+        width="400"
+        height="300"
+        padding="50"
+        padding-inner="0.1"
+        padding-outer="0.4"
+        xaxis-placement="bottom"
+        yaxis-placement="left"
+        xgrid="false"
+        ygrid="true"
+        xtick="false"
+        ytick="true"
+        xlabel-max-width="200"
+        ylabel-max-width="200"
+        xlabel-angle="0"
+        ylabel-angle="0"
+        ylabel-angle="0"
+        xlabel-padding="5"
+        ylabel-padding="5"
+        xlabel-alignment="left"
+        ylabel-alignment="right"
+        xtitle-padding="10"
+        ytitle-padding="10"
+        bar-width="0.8"
+        legend="true"
+        legend-padding="18"
+      ></togostanza-barchart>
+
+      <togostanza-baz say-to=""></togostanza-baz>
+    </togostanza--container>
+  </body>
+</html>

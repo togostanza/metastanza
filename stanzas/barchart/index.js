@@ -307,6 +307,9 @@ export default class Barchart extends Stanza {
                       stroke: { value: "var(--togostanza-border-color)" },
                       strokeWidth: { value: css("--togostanza-border-width") },
                     },
+                    hover: {
+                      fill: { value: "red" },
+                    },
                   },
                 },
               ],
@@ -327,11 +330,28 @@ export default class Barchart extends Stanza {
                   stroke: { value: "var(--togostanza-border-color)" },
                   strokeWidth: { value: css("--togostanza-border-width") },
                 },
+                hover: {
+                  fill: { value: "red" },
+                },
+                update: {
+                  fill: { scale: "color", field: groupVariable },
+                },
               },
             },
           ];
       }
     };
+
+    const signals = [
+      {
+        name: "hover",
+        value: {},
+        on: [
+          { events: "group:mouseover", update: "datum" },
+          { events: "group:mouseout", update: "{}" },
+        ],
+      },
+    ];
 
     const spec = {
       $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -339,6 +359,7 @@ export default class Barchart extends Stanza {
       height,
       padding,
       data: constructData(chartType),
+      signals,
       scales: constructScale(chartType),
       axes,
       legends:
@@ -352,6 +373,12 @@ export default class Barchart extends Stanza {
     const opts = {
       renderer: "svg",
     };
-    await vegaEmbed(el, spec, opts);
+    const result = await vegaEmbed(el, spec, opts);
+
+    result.view.addSignalListener("hover", (name, value) => {
+      const ev = new CustomEvent("hover", { detail: value });
+      console.log(ev);
+      this.element.dispatchEvent(ev);
+    });
   }
 }
