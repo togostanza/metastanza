@@ -16,14 +16,6 @@
   "stanza:updated": "2021-08-03",
   "stanza:parameter": [
     {
-      "stanza:key": "chart-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["Venn diagram", "Euler diagram"],
-      "stanza:example": "Venn diagram",
-      "stanza:description": "Type of venn diagram",
-      "stanza:required": true
-    },
-    {
       "stanza:key": "data-url",
       "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
       "stanza:description": "Data source URL",
