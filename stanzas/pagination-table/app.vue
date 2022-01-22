@@ -547,12 +547,8 @@ function createColumnState(columnDef, values) {
     sprintf: columnDef["sprintf"],
   };
 
-  if (columnDef.sprintf) {
-    columnDef.type = "number";
-  }
-
   if (columnDef.type === "number") {
-    const nums = values.map(Number);
+    const nums = values.map(Number).filter(value => !Number.isNaN(value));
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -586,17 +582,10 @@ function createColumnState(columnDef, values) {
       isSearchModalShowing: false,
       parseValue(val) {
         if (columnDef["sprintf"]) {
-          if (typeof val === "string") {
-            const castedVal = Number(val);
-            if (Number.isNaN(castedVal)) {
-              return val;
-            } else {
-              val = castedVal;
-            }
-          }
-          val = sprintf(columnDef["sprintf"], Number.parseFloat(val));
+          return formattedValue(columnDef["sprintf"], val);
+        } else {
+          return val;
         }
-        return val;
       },
 
       isMatch(val) {
@@ -634,7 +623,13 @@ function createColumnState(columnDef, values) {
 
     return {
       ...baseProps,
-      parseValue: String,
+      parseValue(val) {
+        if (columnDef["sprintf"]) {
+          return formattedValue(columnDef["sprintf"], val);
+        } else {
+          return String(val);
+        }
+      },
       query,
       isSearchConditionGiven,
       filters,
@@ -663,4 +658,14 @@ function searchByEachColumn(row) {
     return cell.column.isMatch(cell.value);
   });
 }
+
+function formattedValue(format, val) {
+  try {
+    return sprintf(format, val);
+  } catch(e) {
+    console.error(e);
+    return val;
+  }
+}
+
 </script>
