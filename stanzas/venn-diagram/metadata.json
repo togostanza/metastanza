@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "venn-stanza",
-  "stanza:label": "Venn stanza",
-  "stanza:definition": "Venn stanza MetaStanza",
+  "@id": "venn-diagram",
+  "stanza:label": "Venn diagram",
+  "stanza:definition": "Venn diagram MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Image",
   "stanza:provider": "TogoStanza",
@@ -13,7 +13,7 @@
   "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
   "stanza:created": "2021-08-03",
-  "stanza:updated": "2021-08-03",
+  "stanza:updated": "2022-01-23",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
