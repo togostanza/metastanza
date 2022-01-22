@@ -13,7 +13,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://togovar-dev.biosciencedbc.jp/sparqlist/api/disease_gwas?ep=https%3A%2F%2Ftogovar-dev.biosciencedbc.jp%2Fsparql&medgen_cid=C0011860",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/pagination-table.disease-gwas.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
