@@ -35,12 +35,13 @@ export default class Linechart extends Stanza {
     const padding = this.params["padding"];
 
     //data
-    const xKeyName = this.params["category"];
-    const yKeyName = this.params["value"];
-    const xAxisTitle = this.params["category-title"];
-    const yAxisTitle = this.params["value-title"];
+    const xKeyName = this.params["x-axis-key"];
+    const yKeyName = this.params["y-axis-key"];
+    const xAxisTitle = this.params["x-axis-title"] || "";
+    const yAxisTitle = this.params["y-axis-title"] || "";
     const showXTicks = this.params["xtick"] === "true" ? true : false;
     const showYTicks = this.params["ytick"] === "true" ? true : false;
+    const xTicksNumber = this.params["xticks-number"] || 5;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const showLegend = this.params["legend"] === "true" ? true : false;
     const groupKeyName = this.params["group-by"];
@@ -48,6 +49,7 @@ export default class Linechart extends Stanza {
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
     const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
     const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
+    const xDataType = this.params["x-axis-data-type"] || "string";
     const errorKeyName = this.params["error-key"] || "error";
     const showErrorBars = this.params["error-bars"] === "true" ? true : false;
     const errorBarWidth =
@@ -79,7 +81,7 @@ export default class Linechart extends Stanza {
       root.append(this.legend);
     }
 
-    const values = await loadData(
+    let values = await loadData(
       this.params["data-url"],
       this.params["data-type"]
     );
@@ -88,6 +90,16 @@ export default class Linechart extends Stanza {
     values.forEach((item) => {
       item.error = item.count * 0.2;
     });
+
+    //Filter out all non-numeric y-axis values from data
+    values = values.filter((item) => !isNaN(item[yKeyName]));
+    // ===
+
+    //Filter out all non-numeric x-axis values from data
+    if (xDataType === "number") {
+      values = values.filter((item) => !isNaN(item[xKeyName]));
+    }
+    // ===
 
     this._data = values;
 
@@ -162,10 +174,17 @@ export default class Linechart extends Stanza {
       .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`)
       .attr("class", "y axis");
 
-    /// Axes preparation
-    const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+    // Axes preparation
+    let x;
+    if (xDataType === "number") {
+      const xAxisData = values.map((d) => +d[xKeyName]);
+      const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
+      x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
+    } else {
+      const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+      x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
+    }
 
-    const x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
     const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
 
     let xdy = "0.5em";
@@ -182,6 +201,10 @@ export default class Linechart extends Stanza {
     }
 
     const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+
+    if (xDataType === "number") {
+      xAxisGenerator.ticks(xTicksNumber);
+    }
 
     if (!showXTicks) {
       xAxisGenerator.tickSize(0);
@@ -232,7 +255,11 @@ export default class Linechart extends Stanza {
         return d3
           .line()
           .x(function (d) {
-            return x(d[xKeyName]) + x.bandwidth() / 2;
+            if (xDataType === "number") {
+              return x(d[xKeyName]);
+            } else {
+              return x(d[xKeyName]) + x.bandwidth() / 2;
+            }
           })
           .y(function (d) {
             return y(+d[yKeyName]);
@@ -285,11 +312,11 @@ export default class Linechart extends Stanza {
         .call(yAxisGridGenerator);
 
       if (showErrorBars) {
-        linesGroup.call(errorBars, y, x, errorBarWidth);
+        linesGroup.call(errorBars, y, x, xDataType, errorBarWidth);
       }
     }
 
-    function errorBars(selection, yAxis, xAxis, errorBarWidth) {
+    function errorBars(selection, yAxis, xAxis, xDataType, errorBarWidth) {
       selection.each(function (d) {
         const selG = d3.select(this.parentNode);
 
@@ -302,47 +329,76 @@ export default class Linechart extends Stanza {
 
         errorBarGroup
           .append("line")
-          .attr("x1", (d) => xAxis(d[xKeyName]) + xAxis.bandwidth() / 2)
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]);
+            } else {
+              return xAxis(d[xKeyName]) + xAxis.bandwidth() / 2;
+            }
+          })
+
           .attr("y1", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => xAxis(d[xKeyName]) + xAxis.bandwidth() / 2)
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]);
+            } else {
+              return xAxis(d[xKeyName]) + xAxis.bandwidth() / 2;
+            }
+          })
           .attr("y2", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2));
 
         // upper stroke
         errorBarGroup
           .append("line")
-          .attr(
-            "x1",
-            (d) =>
-              xAxis(d[xKeyName]) +
-              xAxis.bandwidth() / 2 -
-              (xAxis.bandwidth() * errorBarWidth) / 2
-          )
-          .attr(
-            "x2",
-            (d) =>
-              xAxis(d[xKeyName]) +
-              xAxis.bandwidth() / 2 +
-              (xAxis.bandwidth() * errorBarWidth) / 2
-          )
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]) - errorBarWidth / 2;
+            } else {
+              return (
+                xAxis(d[xKeyName]) +
+                xAxis.bandwidth() / 2 -
+                (xAxis.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]) + errorBarWidth / 2;
+            } else {
+              return (
+                xAxis(d[xKeyName]) +
+                xAxis.bandwidth() / 2 +
+                (xAxis.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
           .attr("y1", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2))
           .attr("y2", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2));
         // lower stroke
         errorBarGroup
           .append("line")
-          .attr(
-            "x1",
-            (d) =>
-              xAxis(d[xKeyName]) +
-              xAxis.bandwidth() / 2 -
-              (xAxis.bandwidth() * errorBarWidth) / 2
-          )
-          .attr(
-            "x2",
-            (d) =>
-              xAxis(d[xKeyName]) +
-              xAxis.bandwidth() / 2 +
-              (xAxis.bandwidth() * errorBarWidth) / 2
-          )
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]) - errorBarWidth / 2;
+            } else {
+              return (
+                xAxis(d[xKeyName]) +
+                xAxis.bandwidth() / 2 -
+                (xAxis.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return xAxis(d[xKeyName]) + errorBarWidth / 2;
+            } else {
+              return (
+                xAxis(d[xKeyName]) +
+                xAxis.bandwidth() / 2 +
+                (xAxis.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
           .attr("y1", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2))
           .attr("y2", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2));
       });

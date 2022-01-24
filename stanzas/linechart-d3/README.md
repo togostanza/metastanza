@@ -1,3 +1,9 @@
-# Vega linechart
+# D3 Linechart
 
-Stanza description goes here. Edit `stanzas/vega_linechart/README.md` to update.
+### Data type
+
+#### x-axis-data-type
+
+Type of data for x axis.
+
+If `x-axis-data-type` is set to `number`, Linechart Stanza will ignore all non-numeric values, and show only those, which could be represented as a numbers. (Even is numbers is in string format (`"123.456"`))
