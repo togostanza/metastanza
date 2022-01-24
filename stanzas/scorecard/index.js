@@ -25,7 +25,8 @@ export default class Scorecard extends Stanza {
 
     const dataset = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
     const width = this.params["width"];
     const height = this.params["height"];

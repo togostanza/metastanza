@@ -26,6 +26,7 @@
     "d3": "^7.0.1",
     "d3-collection": "^1.0.7",
     "highlight.js": "^11.2.0",
+    "immutable-ext": "^1.1.5",
     "katex": "^0.13.18",
     "lit-element": "^3.0.1",
     "lit-html": "^2.0.1",
@@ -41,7 +42,6 @@
     "vega": "^5.19.1",
     "vega-embed": "^6.15.0",
     "vega-lite": "^5.1.1",
-    "venn.js": "^0.2.20",
     "vue": "^3.2.11"
   },
   "devDependencies": {
