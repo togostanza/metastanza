@@ -2,6 +2,8 @@
 
 ### Data type
 
+Data specified by `y-axis-key` should be numbers or string numerical values (`"123.456"`). All other data will be converted to numbers, and any non-numerical values will be ignored.
+
 #### x-axis-data-type
 
 Type of data for x axis.

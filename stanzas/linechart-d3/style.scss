@@ -10,8 +10,12 @@ svg.marks {
   background-color: var(--togostanza-background-color);
 }
 
+svg .error-bar > line {
+  stroke-width: var(--togostanza-errorbar-line-width);
+  stroke: var(--togostanza-errorbar-line-color);
+}
+
 svg .gridlines > .tick > line {
-  stroke-width: var(--togostanza-tick-width);
   stroke: var(--togostanza-grid-color);
   opacity: var(--togostanza-grid-opacity);
   stroke-width: var(--togostanza-grid-width);
@@ -43,12 +47,7 @@ svg .axis > .tick > text {
   fill: var(--togostanza-label-font-color);
 }
 
-svg .error-bar > line {
-  stroke-width: var(--togostanza-errorbar-line-width);
-  stroke: var(--togostanza-errorbar-line-color);
-}
-
-.legend .label text {
+:scope .legend .label text {
   color: black;
   font-size: 0.5em;
 }

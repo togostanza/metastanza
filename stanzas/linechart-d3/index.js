@@ -30,10 +30,6 @@ export default class Linechart extends Stanza {
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    //width、height、padding
-
-    const padding = this.params["padding"];
-
     //data
     const xKeyName = this.params["x-axis-key"];
     const yKeyName = this.params["y-axis-key"];
@@ -155,7 +151,7 @@ export default class Linechart extends Stanza {
         `translate(0,${HEIGHT + MARGIN.TOP + MARGIN.BOTTOM / 2})`
       );
 
-    const yTitle = yTitleArea
+    yTitleArea
       .append("text")
       .text(yAxisTitle)
       .attr("text-anchor", "middle")
@@ -292,7 +288,7 @@ export default class Linechart extends Stanza {
         .tickFormat("")
         .ticks(10);
 
-      const xAxisGrid = linesArea
+      linesArea
         .append("g")
         .attr("class", "x gridlines")
         .attr("transform", "translate(0," + HEIGHT + ")")
@@ -306,7 +302,7 @@ export default class Linechart extends Stanza {
         .tickFormat("")
         .ticks(10);
 
-      const yAxisGrid = linesArea
+      linesArea
         .append("g")
         .attr("class", "y gridlines")
         .call(yAxisGridGenerator);
