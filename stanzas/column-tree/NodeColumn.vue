@@ -1,5 +1,5 @@
 <template>
-  <div class="column" :class="{ '-fixed':  fixedWidthColumns }">
+  <div class="column" :class="{ '-fixed': fixedWidthColumns }">
     <span
       v-for="node in nodes"
       :key="node.id"

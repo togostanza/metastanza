@@ -17,7 +17,6 @@
         <em>/</em>. E.G.: 1/2/3</small
       >
       <search-suggestions
-        
         :show-suggestions="state.showSuggestions"
         :show-path="state.showPath"
         :search-input="state.searchTerm"
