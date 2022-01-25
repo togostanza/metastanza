@@ -105,13 +105,14 @@ main {
     display: flex;
     width: fit-content;
     gap: calc(var(--togostanza-column-gap) * 1px);
+    padding: 1px;
     > .column {
       overflow: auto;
       background-color: var(--togostanza-column-background-color);
       padding: calc(var(--togostanza-column-padding) * 1px);
       width: max-content;
-      border: 1px solid;
-      border-color: var(--togostanza-column-border-color);
+      outline: 1px solid;
+      outline-color: var(--togostanza-column-border-color);
       border-radius: calc(var(--togostanza-column-border-radius) * 1px);
       &.-fixed {
         width: calc(var(--togostanza-column-width) * 1px);
