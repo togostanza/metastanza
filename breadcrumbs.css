@@ -1,0 +1,155 @@
+main {
+  padding: 1rem 2rem;
+}
+
+#breadcrumbs {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.container {
+  white-space: nowrap;
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  position: relative;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top !important;
+}
+.container .context-menu-substrate {
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+.container .context-menu-substrate .right-click-menu {
+  z-index: 100;
+  position: absolute;
+  background-color: var(--togostanza-context-menu-background-color);
+  display: none;
+  transition: all 200ms ease;
+}
+.container .context-menu-substrate .right-click-menu ul {
+  margin-block-end: 0;
+  margin-block-start: 0;
+  list-style-type: none;
+  cursor: pointer;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+  font-family: var(--togostanza-context-menu-item-font-family);
+  font-size: calc(var(--togostanza-context-menu-item-font-size) * 1px);
+  color: var(--togostanza-context-menu-item-font-color);
+}
+.container .context-menu-substrate .right-click-menu ul:hover {
+  background-color: var(--togostanza-context-menu-background-color-hover);
+}
+
+.breadcrumb-node {
+  display: inline-flex;
+  vertical-align: top !important;
+  align-items: center;
+  background-color: var(--togostanza-background-color);
+  padding: 0 0.3em 0 0.3em;
+  height: 1.45em;
+}
+.breadcrumb-node:last-child {
+  margin-right: 0;
+}
+.breadcrumb-node .node-dropdown-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45em;
+  height: 1.45em;
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+.breadcrumb-node .node-dropdown-container:hover {
+  background-color: var(--togostanza-dropdown-triangle-color-hover);
+}
+.breadcrumb-node .node-dropdown-container .node-dropdown {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 3px solid var(--togostanza-dropdown-triangle-color);
+  cursor: pointer;
+  transform: scaleX(0.7);
+}
+.breadcrumb-node .node-forward {
+  display: inline-block;
+  vertical-align: top;
+  width: 0;
+  height: 0;
+  border-top: 0.55em solid transparent;
+  border-bottom: 0.55em solid transparent;
+  border-left: 0.5em solid var(--togostanza-forward-triangle-color);
+}
+
+.node-label {
+  vertical-align: top;
+  font-family: var(--togostanza-label-font-family);
+  font-size: 1em;
+  color: var(--togostanza-label-font-color);
+  margin-right: 0.1em;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+.node-label:hover {
+  background-color: var(--togostanza-label-background-color-hover);
+  color: var(--togostanza-label-font-color-hover);
+}
+.node-label img {
+  height: 1em;
+  vertical-align: middle;
+}
+
+.node-dropdown-menu {
+  position: fixed;
+  display: block;
+  width: 7em;
+  background-color: #c5c5c5;
+}
+.node-dropdown-menu-item-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.node-dropdown-menu-item-container:first-child {
+  margin-top: 0.2em;
+}
+.node-dropdown-menu-item-container .node-dropdown-menu-item {
+  text-align: left;
+  transition: all 200ms ease;
+  position: relative;
+  width: 7em;
+  white-space: normal;
+}
+.node-dropdown-menu-item-container .node-dropdown-menu-item:hover {
+  background-color: var(--togostanza-dropdown-menu-item-color-hover);
+  cursor: pointer;
+}
+.node-dropdown-menu-item-container .node-dropdown-menu-item span {
+  display: block;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+  font-size: calc(var(--togostanza-dropdown-menu-item-font-size) * 1px);
+  color: var(--togostanza-dropdown-menu-item-font-color);
+}
+.node-dropdown-menu-item-container .node-dropdown-menu-item span:hover {
+  color: var(--togostanza-dropdown-menu-item-font-color-hover);
+}
+.node-dropdown-menu-item-container hr {
+  width: 100%;
+  border: none;
+  height: 1px;
+  background-color: var(--togostanza-dropdown-menu-separator-color);
+  margin-block-end: 0.1em;
+  margin-block-start: 0.1em;
+}
+
+.disabled {
+  opacity: 0.5;
+}

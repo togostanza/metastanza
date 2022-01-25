@@ -1,6 +1,8 @@
-import { S as Stanza, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, h as defineStanzaElement } from './index-39ae45f1.js';
-import { e as defineComponent, g as createElementBlock, i as createBaseVNode, u as normalizeStyle, p as toDisplayString, F as Fragment, d as openBlock, j as createVNode, q as createCommentVNode, b as createBlock, l as createTextVNode, s as resolveComponent, v as reactive, o as onMounted, r as ref, x as onRenderTriggered, k as renderList, n as normalizeClass, D as createApp } from './runtime-dom.esm-bundler-bcdf4715.js';
-import { l as loadData } from './load-data-bf9d5410.js';
+import { d as defineStanzaElement } from './stanza-element-40ac9902.js';
+import { S as Stanza } from './stanza-7a5318fa.js';
+import { f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss } from './index-1e0b4ea1.js';
+import { d as defineComponent, c as createElementBlock, b as createBaseVNode, B as normalizeStyle, t as toDisplayString, F as Fragment, o as openBlock, p as createVNode, e as createCommentVNode, f as createBlock, g as createTextVNode, a as resolveComponent, j as reactive, x as onMounted, i as ref, C as onRenderTriggered, r as renderList, n as normalizeClass, q as createApp } from './runtime-dom.esm-bundler-c0b37019.js';
+import { l as loadData } from './load-data-0be92417.js';
 
 var script$2 = defineComponent({
   props: {
@@ -106,6 +108,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8 /* PROPS */, ["id", "line-clamp", "unescape", "value"])
         ], 8 /* PROPS */, _hoisted_1$1))
       : createCommentVNode("v-if", true),
+    createCommentVNode(" eslint-disable-next-line vue/no-v-html "),
     (_ctx.unescape && !_ctx.lineClamp)
       ? (openBlock(), createElementBlock("a", {
           key: 1,
@@ -318,7 +321,7 @@ var script = defineComponent({
     const state = reactive({
       columns: [],
       allRows: [],
-
+      main: null,
       offset: 0,
 
       isFetching: false,
@@ -335,9 +338,11 @@ var script = defineComponent({
       urlParams = new URLSearchParams(urlParams);
       const { dataUrl } = params;
       const connectCharacter = new URL(dataUrl) ? "&" : "?";
+
       const data = await loadData(
         `${dataUrl}${connectCharacter}${urlParams}`,
-        params.dataType
+        params.dataType,
+        params.main
       );
 
       if (params.columns) {
@@ -492,10 +497,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             }, null, 8 /* PROPS */, ["id", "value", "unescape", "line-clamp"])
                           ]))
                         : (cell.unescape)
-                          ? (openBlock(), createElementBlock("span", {
-                              key: 2,
-                              innerHTML: cell.value
-                            }, null, 8 /* PROPS */, _hoisted_6))
+                          ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+                              createCommentVNode(" eslint-disable-next-line vue/no-v-html "),
+                              createBaseVNode("span", {
+                                innerHTML: cell.value
+                              }, null, 8 /* PROPS */, _hoisted_6)
+                            ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
                           : (openBlock(), createElementBlock("span", _hoisted_7, toDisplayString(cell.value), 1 /* TEXT */))
                   ], 6 /* CLASS, STYLE */))
                 }), 128 /* KEYED_FRAGMENT */))
@@ -532,7 +539,7 @@ class ScrollTable extends Stanza {
     main.parentNode.style.padding = this.params["padding"];
 
     this._app?.unmount();
-    this._app = createApp(script, this.params);
+    this._app = createApp(script, { ...this.params, main });
     this._app.mount(main);
   }
 }

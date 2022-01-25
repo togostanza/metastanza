@@ -1,0 +1,33 @@
+main {
+  padding: 1rem 2rem;
+}
+
+#sunburst textPath {
+  pointer-events: none;
+  dominant-baseline: middle;
+  text-anchor: middle;
+}
+
+#sunburst .labels {
+  font-family: var(--togostanza-label-font-family);
+  font-size: var(--togostanza-label-font-size);
+  font-weight: var(--togostanza-label-font-weight);
+  fill: var(--togostanza-label-font-color);
+  text-shadow: -1px -1px 0 var(--togostanza-label-text-outline), 1px -1px 0 var(--togostanza-label-text-outline), -1px 1px 0 var(--togostanza-label-text-outline), 1px 1px 0 var(--togostanza-label-text-outline);
+}
+
+#sunburst .numbers {
+  font-family: var(--togostanza-number-label-font-family);
+  font-size: var(--togostanza-number-label-font-size);
+  font-weight: var(--togostanza--number-label-font-weight);
+  fill: var(--togostanza-number-label-font-color);
+}
+
+#sunburst g .hidden-arc {
+  fill: none;
+  stroke: none;
+}
+
+#sunburst .no-fill {
+  fill: none;
+}

@@ -1,4 +1,4 @@
-import { d as defineComponent, h as computed, a as createElementBlock, e as createBaseVNode, f as createCommentVNode, i as createTextVNode, t as toDisplayString, F as Fragment, b as renderList, n as normalizeClass, o as openBlock, j as ref, k as octicons, m as mergeProps, l as watch, p as createVNode, c as createBlock, q as normalizeProps, u as guardReactiveProps, v as resolveDynamicComponent, r as resolveComponent, s as script$4, x as pushScopeId, y as popScopeId, w as withCtx, z as n, g as createApp } from './Layout-6e020032.js';
+import { d as defineComponent, h as computed, a as createElementBlock, e as createBaseVNode, f as createCommentVNode, i as createTextVNode, t as toDisplayString, F as Fragment, b as renderList, n as normalizeClass, o as openBlock, j as ref, k as octicons, m as mergeProps, l as watch, p as createVNode, c as createBlock, q as normalizeProps, u as guardReactiveProps, v as resolveDynamicComponent, r as resolveComponent, s as script$4, w as withCtx, x as pushScopeId, y as popScopeId, z as n, g as createApp } from './Layout-fddb2b58.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -7,7 +7,7 @@ var tab = {exports: {}};
 var eventHandler = {exports: {}};
 
 /*!
-  * Bootstrap event-handler.js v5.1.1 (https://getbootstrap.com/)
+  * Bootstrap event-handler.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -15,10 +15,10 @@ var eventHandler = {exports: {}};
 (function (module, exports) {
 (function (global, factory) {
   module.exports = factory() ;
-}(commonjsGlobal, (function () {
+})(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -37,7 +37,7 @@ var eventHandler = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): dom/event-handler.js
+   * Bootstrap (v5.1.3): dom/event-handler.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -325,14 +325,14 @@ var eventHandler = {exports: {}};
 
   return EventHandler;
 
-})));
+}));
 
 }(eventHandler));
 
 var selectorEngine = {exports: {}};
 
 /*!
-  * Bootstrap selector-engine.js v5.1.1 (https://getbootstrap.com/)
+  * Bootstrap selector-engine.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -340,10 +340,10 @@ var selectorEngine = {exports: {}};
 (function (module, exports) {
 (function (global, factory) {
   module.exports = factory() ;
-}(commonjsGlobal, (function () {
+})(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -386,7 +386,7 @@ var selectorEngine = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): dom/selector-engine.js
+   * Bootstrap (v5.1.3): dom/selector-engine.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -456,7 +456,7 @@ var selectorEngine = {exports: {}};
 
   return SelectorEngine;
 
-})));
+}));
 
 }(selectorEngine));
 
@@ -465,7 +465,7 @@ var baseComponent = {exports: {}};
 var data = {exports: {}};
 
 /*!
-  * Bootstrap data.js v5.1.1 (https://getbootstrap.com/)
+  * Bootstrap data.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -473,10 +473,10 @@ var data = {exports: {}};
 (function (module, exports) {
 (function (global, factory) {
   module.exports = factory() ;
-}(commonjsGlobal, (function () {
+})(commonjsGlobal, (function () {
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): dom/data.js
+   * Bootstrap (v5.1.3): dom/data.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -487,7 +487,7 @@ var data = {exports: {}};
    * ------------------------------------------------------------------------
    */
   const elementMap = new Map();
-  var data = {
+  const data = {
     set(element, key, instance) {
       if (!elementMap.has(element)) {
         elementMap.set(element, new Map());
@@ -530,12 +530,12 @@ var data = {exports: {}};
 
   return data;
 
-})));
+}));
 
 }(data));
 
 /*!
-  * Bootstrap base-component.js v5.1.1 (https://getbootstrap.com/)
+  * Bootstrap base-component.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -543,15 +543,15 @@ var data = {exports: {}};
 (function (module, exports) {
 (function (global, factory) {
   module.exports = factory(data.exports, eventHandler.exports) ;
-}(commonjsGlobal, (function (Data, EventHandler) {
-  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+})(commonjsGlobal, (function (Data, EventHandler) {
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
-  var Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
-  var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -648,7 +648,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): base-component.js
+   * Bootstrap (v5.1.3): base-component.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -658,7 +658,7 @@ var data = {exports: {}};
    * ------------------------------------------------------------------------
    */
 
-  const VERSION = '5.1.1';
+  const VERSION = '5.1.3';
 
   class BaseComponent {
     constructor(element) {
@@ -669,12 +669,12 @@ var data = {exports: {}};
       }
 
       this._element = element;
-      Data__default['default'].set(this._element, this.constructor.DATA_KEY, this);
+      Data__default.default.set(this._element, this.constructor.DATA_KEY, this);
     }
 
     dispose() {
-      Data__default['default'].remove(this._element, this.constructor.DATA_KEY);
-      EventHandler__default['default'].off(this._element, this.constructor.EVENT_KEY);
+      Data__default.default.remove(this._element, this.constructor.DATA_KEY);
+      EventHandler__default.default.off(this._element, this.constructor.EVENT_KEY);
       Object.getOwnPropertyNames(this).forEach(propertyName => {
         this[propertyName] = null;
       });
@@ -687,7 +687,7 @@ var data = {exports: {}};
 
 
     static getInstance(element) {
-      return Data__default['default'].get(getElement(element), this.DATA_KEY);
+      return Data__default.default.get(getElement(element), this.DATA_KEY);
     }
 
     static getOrCreateInstance(element, config = {}) {
@@ -714,12 +714,12 @@ var data = {exports: {}};
 
   return BaseComponent;
 
-})));
+}));
 
 }(baseComponent));
 
 /*!
-  * Bootstrap tab.js v5.1.1 (https://getbootstrap.com/)
+  * Bootstrap tab.js v5.1.3 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -727,16 +727,16 @@ var data = {exports: {}};
 (function (module, exports) {
 (function (global, factory) {
   module.exports = factory(eventHandler.exports, selectorEngine.exports, baseComponent.exports) ;
-}(commonjsGlobal, (function (EventHandler, SelectorEngine, BaseComponent) {
-  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+})(commonjsGlobal, (function (EventHandler, SelectorEngine, BaseComponent) {
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
 
-  var EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
-  var SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
-  var BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): util/index.js
+   * Bootstrap (v5.1.3): util/index.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -850,7 +850,7 @@ var data = {exports: {}};
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.1): tab.js
+   * Bootstrap (v5.1.3): tab.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -886,7 +886,7 @@ var data = {exports: {}};
    * ------------------------------------------------------------------------
    */
 
-  class Tab extends BaseComponent__default['default'] {
+  class Tab extends BaseComponent__default.default {
     // Getters
     static get NAME() {
       return NAME;
@@ -905,14 +905,14 @@ var data = {exports: {}};
 
       if (listElement) {
         const itemSelector = listElement.nodeName === 'UL' || listElement.nodeName === 'OL' ? SELECTOR_ACTIVE_UL : SELECTOR_ACTIVE;
-        previous = SelectorEngine__default['default'].find(itemSelector, listElement);
+        previous = SelectorEngine__default.default.find(itemSelector, listElement);
         previous = previous[previous.length - 1];
       }
 
-      const hideEvent = previous ? EventHandler__default['default'].trigger(previous, EVENT_HIDE, {
+      const hideEvent = previous ? EventHandler__default.default.trigger(previous, EVENT_HIDE, {
         relatedTarget: this._element
       }) : null;
-      const showEvent = EventHandler__default['default'].trigger(this._element, EVENT_SHOW, {
+      const showEvent = EventHandler__default.default.trigger(this._element, EVENT_SHOW, {
         relatedTarget: previous
       });
 
@@ -923,10 +923,10 @@ var data = {exports: {}};
       this._activate(this._element, listElement);
 
       const complete = () => {
-        EventHandler__default['default'].trigger(previous, EVENT_HIDDEN, {
+        EventHandler__default.default.trigger(previous, EVENT_HIDDEN, {
           relatedTarget: this._element
         });
-        EventHandler__default['default'].trigger(this._element, EVENT_SHOWN, {
+        EventHandler__default.default.trigger(this._element, EVENT_SHOWN, {
           relatedTarget: previous
         });
       };
@@ -940,7 +940,7 @@ var data = {exports: {}};
 
 
     _activate(element, container, callback) {
-      const activeElements = container && (container.nodeName === 'UL' || container.nodeName === 'OL') ? SelectorEngine__default['default'].find(SELECTOR_ACTIVE_UL, container) : SelectorEngine__default['default'].children(container, SELECTOR_ACTIVE);
+      const activeElements = container && (container.nodeName === 'UL' || container.nodeName === 'OL') ? SelectorEngine__default.default.find(SELECTOR_ACTIVE_UL, container) : SelectorEngine__default.default.children(container, SELECTOR_ACTIVE);
       const active = activeElements[0];
       const isTransitioning = callback && active && active.classList.contains(CLASS_NAME_FADE);
 
@@ -958,7 +958,7 @@ var data = {exports: {}};
     _transitionComplete(element, active, callback) {
       if (active) {
         active.classList.remove(CLASS_NAME_ACTIVE);
-        const dropdownChild = SelectorEngine__default['default'].findOne(SELECTOR_DROPDOWN_ACTIVE_CHILD, active.parentNode);
+        const dropdownChild = SelectorEngine__default.default.findOne(SELECTOR_DROPDOWN_ACTIVE_CHILD, active.parentNode);
 
         if (dropdownChild) {
           dropdownChild.classList.remove(CLASS_NAME_ACTIVE);
@@ -991,7 +991,7 @@ var data = {exports: {}};
         const dropdownElement = element.closest(SELECTOR_DROPDOWN);
 
         if (dropdownElement) {
-          SelectorEngine__default['default'].find(SELECTOR_DROPDOWN_TOGGLE, dropdownElement).forEach(dropdown => dropdown.classList.add(CLASS_NAME_ACTIVE));
+          SelectorEngine__default.default.find(SELECTOR_DROPDOWN_TOGGLE, dropdownElement).forEach(dropdown => dropdown.classList.add(CLASS_NAME_ACTIVE));
         }
 
         element.setAttribute('aria-expanded', true);
@@ -1025,7 +1025,7 @@ var data = {exports: {}};
    */
 
 
-  EventHandler__default['default'].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  EventHandler__default.default.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
     if (['A', 'AREA'].includes(this.tagName)) {
       event.preventDefault();
     }
@@ -1048,7 +1048,7 @@ var data = {exports: {}};
 
   return Tab;
 
-})));
+}));
 
 }(tab));
 
@@ -3391,12 +3391,12 @@ function parse(valueStr, type) {
   }
 }
 
-pushScopeId("data-v-0732abc2");
+const _withScopeId = n => (pushScopeId("data-v-0732abc2"),n=n(),popScopeId(),n);
 const _hoisted_1 = { class: "display-4" };
 const _hoisted_2 = { class: "lead" };
 const _hoisted_3 = { class: "row" };
 const _hoisted_4 = { class: "col-lg-6" };
-const _hoisted_5 = /*#__PURE__*/createBaseVNode("nav", {
+const _hoisted_5 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("nav", {
   class: "nav nav-tabs",
   role: "tablist"
 }, [
@@ -3418,7 +3418,7 @@ const _hoisted_5 = /*#__PURE__*/createBaseVNode("nav", {
     "data-bs-toggle": "tab",
     role: "tab"
   }, "Event")
-], -1 /* HOISTED */);
+], -1 /* HOISTED */));
 const _hoisted_6 = { class: "tab-content mt-3" };
 const _hoisted_7 = {
   class: "tab-pane active px-lg-5",
@@ -3426,17 +3426,17 @@ const _hoisted_7 = {
   role: "tabpanel"
 };
 const _hoisted_8 = { class: "table table-borderless border mb-1" };
-const _hoisted_9 = /*#__PURE__*/createBaseVNode("th", null, "Author", -1 /* HOISTED */);
+const _hoisted_9 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Author", -1 /* HOISTED */));
 const _hoisted_10 = { class: "mb-0" };
-const _hoisted_11 = /*#__PURE__*/createBaseVNode("th", null, "Contributors", -1 /* HOISTED */);
+const _hoisted_11 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Contributors", -1 /* HOISTED */));
 const _hoisted_12 = {
   key: 0,
   class: "list-unstyled mb-0"
 };
 const _hoisted_13 = /*#__PURE__*/createTextVNode(" - ");
-const _hoisted_14 = /*#__PURE__*/createBaseVNode("th", null, "License", -1 /* HOISTED */);
-const _hoisted_15 = /*#__PURE__*/createBaseVNode("th", null, "Created", -1 /* HOISTED */);
-const _hoisted_16 = /*#__PURE__*/createBaseVNode("th", null, "Updated", -1 /* HOISTED */);
+const _hoisted_14 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "License", -1 /* HOISTED */));
+const _hoisted_15 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Created", -1 /* HOISTED */));
+const _hoisted_16 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Updated", -1 /* HOISTED */));
 const _hoisted_17 = { class: "text-end" };
 const _hoisted_18 = ["href"];
 const _hoisted_19 = ["innerHTML"];
@@ -3445,11 +3445,11 @@ const _hoisted_20 = {
   id: "customize",
   role: "tabpanel"
 };
-const _hoisted_21 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */);
+const _hoisted_21 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */));
 const _hoisted_22 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
 const _hoisted_23 = { class: "col" };
-const _hoisted_24 = /*#__PURE__*/createBaseVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */);
-const _hoisted_25 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */);
+const _hoisted_24 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */));
+const _hoisted_25 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */));
 const _hoisted_26 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
 const _hoisted_27 = {
   key: 0,
@@ -3460,14 +3460,14 @@ const _hoisted_28 = {
   id: "event",
   role: "tabpanel"
 };
-const _hoisted_29 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */);
+const _hoisted_29 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */));
 const _hoisted_30 = { class: "row row-cols-2" };
 const _hoisted_31 = { class: "text-muted" };
 const _hoisted_32 = {
   key: 0,
   class: "fst-italic"
 };
-const _hoisted_33 = /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */);
+const _hoisted_33 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */));
 const _hoisted_34 = { class: "row row-cols-2" };
 const _hoisted_35 = { class: "text-muted" };
 const _hoisted_36 = {
@@ -3475,8 +3475,7 @@ const _hoisted_36 = {
   class: "fst-italic"
 };
 const _hoisted_37 = { class: "col-lg-6" };
-const _hoisted_38 = /*#__PURE__*/createBaseVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */);
-popScopeId();
+const _hoisted_38 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */));
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FormField = resolveComponent("FormField");

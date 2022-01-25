@@ -1,0 +1,58 @@
+main {
+  padding: 1rem 2rem;
+  font-family: var(--togostanza-font-family);
+  font-size: var(--togostanza-font-size);
+  color: var(--togostanza-font-color);
+}
+
+section {
+  display: flex;
+}
+
+#wrapper > .container {
+  background-color: var(--togostanza-column-background-color);
+  margin-right: var(--togostanza-column-gap);
+}
+#wrapper > .container > .column {
+  display: grid;
+  min-width: max-content;
+  height: fit-content;
+  border: var(--togostanza-column-border);
+  border-radius: var(--togostanza-column-border-radius);
+}
+#wrapper > .container > .column > .node {
+  display: flex;
+  justify-content: space-between;
+  border-radius: var(--togostanza-node-border-radius);
+  padding: 0 0.2rem;
+}
+#wrapper > .container > .column > .node.-highlighted {
+  background-color: var(--togostanza-selected-background-color);
+  color: var(--togostanza-selected-text-color);
+}
+#wrapper > .container > .column > .node.-highlighted > svg > path {
+  color: var(--togostanza-selected-text-color);
+}
+#wrapper > .container > .column > .node:hover {
+  background-color: var(--togostanza-hover-background-color) !important;
+  color: var(--togostanza-hover-text-color) !important;
+  cursor: pointer;
+}
+#wrapper > .container > .column > .node:hover > svg > path {
+  color: var(--togostanza-hover-text-color);
+}
+#wrapper > .container > .column > .node > input[type=checkbox] {
+  margin-right: 1rem;
+}
+#wrapper > .container > .column > .node > input[type=checkbox]:hover {
+  cursor: pointer;
+}
+#wrapper > .container > .column > .node > .content {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+#wrapper > .container > .column > .node > .content > .icon {
+  width: calc(var(--togostanza-font-size) * 0.6);
+  padding-left: 2rem;
+}

@@ -1,0 +1,72 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "quantile-dot-plot",
+  "stanza:label": "Quantile dot plot",
+  "stanza:definition": "Quantile dot plot MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Graph",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "MarleenEliza",
+  "stanza:address": "https://github.com/MarleenEliza",
+  "stanza:contributor": [],
+  "stanza:created": "2021-04-27",
+  "stanza:updated": "2021-04-27",
+  "stanza:parameter": [
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 500,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 180,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Padding"
+    },
+    {
+      "stanza:key": "x-domain-start",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "start of x axes"
+    },
+    {
+      "stanza:key": "x-domain-end",
+      "stanza:type": "number",
+      "stanza:example": 20,
+      "stanza:description": "end of x axes"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-stroke-signal",
+      "stanza:type": "color",
+      "stanza:default": "#C2E3F2",
+      "stanza:description": "Color of Stroke Signal"
+    },
+    {
+      "stanza:key": "--togostanza-fill-selected",
+      "stanza:type": "color",
+      "stanza:default": "#ED707E",
+      "stanza:description": "Color of Stroke Signal"
+    },
+    {
+      "stanza:key": "--togostanza-fill-unselected",
+      "stanza:type": "color",
+      "stanza:default": "#3D6589",
+      "stanza:description": "Color of Stroke Signal"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}

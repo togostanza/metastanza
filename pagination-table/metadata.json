@@ -13,7 +13,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_table_body?taxonomy=9606&limit=1000&offset=0&count=",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/pagination-table.disease-gwas.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -64,7 +64,7 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\": \"id\",\"label\": \"Accession\",\"link\": \"uniprot\",\"target\": \"self\"},{\"id\": \"mnemonic\",\"class\": \"mnemonic\",\"label\": \"Mnemonic\"},{\"id\": \"name\",\"label\": \"Proteinname\"},{\"id\": \"mass\",\"label\": \"Mass\",\"type\": \"number\",\"align\": \"right\"},{\"id\": \"location_name\",\"label\": \"Subcellularlocation\",\"link\": \"location_uniprot\",\"type\": \"category\",\"rowspan\": true}]",
+      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
       "stanza:description": "Columns' options"
     }
   ],

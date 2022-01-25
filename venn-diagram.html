@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Venn diagram</title>
+
+    <script type="module" src="./venn-diagram.js" async></script>
+
+    <script type="module">
+      import createHelpApp from './-togostanza/help-app.js';
+
+      const metadata = {"@context":{"stanza":"http://togostanza.org/resource/stanza#"},"@id":"venn-diagram","stanza:label":"Venn diagram","stanza:definition":"Venn diagram MetaStanza","stanza:type":"Stanza","stanza:display":"Image","stanza:provider":"TogoStanza","stanza:license":"MIT","stanza:author":"c-nakashima","stanza:address":"nakashima@penqe.com","stanza:contributor":[],"stanza:created":"2021-08-03","stanza:updated":"2022-01-23","stanza:parameter":[{"stanza:key":"data-url","stanza:example":"https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json","stanza:description":"Data source URL","stanza:required":true},{"stanza:key":"data-type","stanza:type":"single-choice","stanza:choice":["json","tsv","csv","sparql-results-json"],"stanza:example":"json","stanza:description":"Data type","stanza:required":true},{"stanza:key":"label-0","stanza:type":"string","stanza:example":"10090","stanza:description":"Label name","stanza:required":true},{"stanza:key":"label-1","stanza:type":"string","stanza:example":"7955","stanza:description":"Label name","stanza:required":false},{"stanza:key":"label-2","stanza:type":"string","stanza:example":"9606","stanza:description":"Label name","stanza:required":false},{"stanza:key":"label-3","stanza:type":"string","stanza:example":"9601","stanza:description":"Label name","stanza:required":false},{"stanza:key":"label-4","stanza:type":"string","stanza:example":"9606","stanza:description":"Label name","stanza:required":false},{"stanza:key":"custom-css-url","stanza:example":"","stanza:description":"Stylesheet(css file) URL to override current style","stanza:required":false},{"stanza:key":"width","stanza:type":"number","stanza:example":800,"stanza:description":"Width"},{"stanza:key":"height","stanza:type":"number","stanza:example":380,"stanza:description":"Height"},{"stanza:key":"blend-mode","stanza:type":"single-choice","stanza:choice":["normal","multiply","screen"],"stanza:example":"screen","stanza:description":"How to mix colors in overlapping areas","stanza:required":true}],"stanza:menu-placement":"bottom-right","stanza:style":[{"stanza:key":"--togostanza-series-0-color","stanza:type":"color","stanza:default":"#6590e6","stanza:description":"Group color 0"},{"stanza:key":"--togostanza-series-1-color","stanza:type":"color","stanza:default":"#3ac9b6","stanza:description":"Group color 1"},{"stanza:key":"--togostanza-series-2-color","stanza:type":"color","stanza:default":"#9ede2f","stanza:description":"Group color 2"},{"stanza:key":"--togostanza-series-3-color","stanza:type":"color","stanza:default":"#F5DA64","stanza:description":"Group color 3"},{"stanza:key":"--togostanza-series-4-color","stanza:type":"color","stanza:default":"#F57F5B","stanza:description":"Group color 4"},{"stanza:key":"--togostanza-series-5-color","stanza:type":"color","stanza:default":"#F75976","stanza:description":"Group color 5"},{"stanza:key":"--togostanza-font-family","stanza:type":"text","stanza:default":"Helvetica Neue","stanza:description":"Font family"},{"stanza:key":"--togostanza-label-font-color","stanza:type":"color","stanza:default":"#000000","stanza:description":"Label font color"},{"stanza:key":"--togostanza-label-font-size","stanza:type":"number","stanza:default":12,"stanza:description":"Label font size"}],"stanza:incomingEvent":[],"stanza:outgoingEvent":[]};
+      const readme   = "<h1>Venn diagram</h1>\n<p>Stanza description goes here. Edit <code>stanzas/venn-diagram/README.md</code> to update.</p>\n";
+
+      createHelpApp({metadata, readme}).mount('body');
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>

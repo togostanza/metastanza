@@ -1,0 +1,151 @@
+main {
+  padding: 1rem 2rem;
+  font-family: var(--togostanza-font-family);
+  font-size: calc(var(--togostanza-font-size) * 1px);
+  color: var(--togostanza-font-color);
+}
+
+#wrapper {
+  position: relative;
+}
+#wrapper .value {
+  flex-grow: 1;
+  font-weight: normal;
+  font-style: italic;
+  opacity: 0.8;
+}
+#wrapper .label {
+  display: flex;
+}
+#wrapper .label > strong {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+#wrapper .label.-horizontal {
+  width: 100%;
+  flex-direction: row;
+  gap: 1rem;
+}
+#wrapper .label.-horizontal > .value {
+  text-align: right;
+}
+#wrapper .label.-vertical {
+  flex-direction: column;
+}
+#wrapper .label.-vertical > .value {
+  text-align: left;
+}
+#wrapper .icon {
+  width: calc(var(--togostanza-font-size) * 0.6 * 1px);
+}
+#wrapper .-with-border:after {
+  position: absolute;
+  content: "";
+  display: block;
+  width: 100%;
+  top: 0;
+  left: 0;
+  border-top: solid 1px var(--togostanza-column-border-color);
+}
+#wrapper > .search-container {
+  margin-bottom: 1rem;
+}
+#wrapper > .search-container > input {
+  position: relative;
+  margin-right: 1rem;
+  width: 190px;
+  height: 20px;
+  border: solid 1px var(--togostanza-control-border-color);
+  border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+}
+#wrapper > .search-container > .search-wrapper {
+  left: calc(var(--togostanza-column-border-radius) * 1px / 2 * -1);
+  min-height: fit-content;
+  max-height: 80%;
+  display: flex;
+  position: absolute;
+  overflow: auto;
+  border: solid 1px var(--togostanza-control-border-color);
+  border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+  z-index: 2;
+}
+#wrapper > .search-container > .search-wrapper > .suggestions {
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  background-color: white;
+  z-index: 1;
+}
+#wrapper > .search-container > .search-wrapper > .suggestions > li {
+  display: grid;
+  padding: 0.8rem 1rem;
+  list-style-type: none;
+  position: relative;
+  border-bottom: var(--togostanza-column-border);
+}
+#wrapper > .search-container > .search-wrapper > .suggestions > li:hover {
+  background-color: var(--togostanza-hover-background-color);
+  cursor: pointer;
+}
+#wrapper > #tree {
+  display: flex;
+  gap: calc(var(--togostanza-column-gap) * 1px);
+}
+#wrapper > #tree > .column {
+  overflow: auto;
+  background-color: var(--togostanza-column-background-color);
+  padding: calc(var(--togostanza-column-padding) * 1px);
+  min-width: max-content;
+  height: fit-content;
+  border: 1px solid;
+  border-color: var(--togostanza-column-border-color);
+  border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+}
+#wrapper > #tree > .column > .node {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.5rem auto 1.5rem;
+  align-items: center;
+  border-radius: calc(var(--togostanza-node-border-radius) * 1px);
+  padding-top: calc(var(--togostanza-node-padding-vertical) * 1px);
+  padding-bottom: calc(var(--togostanza-node-padding-vertical) * 1px);
+  padding-left: calc(var(--togostanza-node-padding-horizontal) * 1px);
+  padding-right: calc(var(--togostanza-node-padding-horizontal) * 1px);
+}
+#wrapper > #tree > .column > .node > .label.-vertical {
+  margin-left: 0.5rem;
+}
+#wrapper > #tree > .column > .node > .icon {
+  align-self: center;
+  justify-self: flex-end;
+}
+#wrapper > #tree > .column > .node > input[type=checkbox]:hover {
+  cursor: pointer;
+}
+#wrapper > #tree > .column > .node:first-child {
+  border-top-left-radius: max(var(--togostanza-column-border-radius) * 1px, var(--togostanza-node-border-radius) * 1px);
+  border-top-right-radius: max(var(--togostanza-column-border-radius) * 1px, var(--togostanza-node-border-radius) * 1px);
+}
+#wrapper > #tree > .column > .node:first-child.-with-border:after {
+  border-top: none;
+}
+#wrapper > #tree > .column > .node:last-child {
+  border-bottom-left-radius: max(var(--togostanza-column-border-radius) * 1px, var(--togostanza-node-border-radius) * 1px);
+  border-bottom-right-radius: max(var(--togostanza-column-border-radius) * 1px, var(--togostanza-node-border-radius) * 1px);
+}
+#wrapper > #tree > .column > .node.-highlighted {
+  background-color: var(--togostanza-selected-background-color);
+  color: var(--togostanza-selected-text-color);
+}
+#wrapper > #tree > .column > .node.-highlighted > svg > path {
+  color: var(--togostanza-selected-text-color);
+}
+#wrapper > #tree > .column > .node:hover {
+  background-color: var(--togostanza-hover-background-color);
+  color: var(--togostanza-hover-text-color);
+  cursor: pointer;
+}
+#wrapper > #tree > .column > .node:hover > svg > path {
+  color: var(--togostanza-hover-text-color);
+}
