@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-40ac9902.js';
-import { S as Stanza } from './stanza-7a5318fa.js';
+import { d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
+import { S as Stanza } from './stanza-98e711e0.js';
 import { i as interpolateNumber, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, s as select } from './index-1e0b4ea1.js';
 import { l as loadData } from './load-data-0be92417.js';
 import { e as exponent, t as treemapDice, r as roundNode, i as interpolate, a as formatSpecifier, b as formatPrefix, f as format, c as initRange, o as ordinal, s as sum } from './ordinal-648f1411.js';
