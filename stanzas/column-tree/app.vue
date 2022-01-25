@@ -17,6 +17,7 @@
         <em>/</em>. E.G.: 1/2/3</small
       >
       <search-suggestions
+        
         :show-suggestions="state.showSuggestions"
         :show-path="state.showPath"
         :search-input="state.searchTerm"
@@ -42,6 +43,7 @@
         :value-obj="valueObj"
         :show-border-nodes="state.showBorderNodes"
         :node-content-alignment="state.nodeContentAlignment"
+        :fixed-width-columns="state.fixedWidthColumns"
         @setParent="updatePartialColumnData"
         @setCheckedNode="updateCheckedNodes"
       />
@@ -89,6 +91,7 @@ export default defineComponent({
       showPathExplanation: isTruthBool(params.showPathExplanation.value),
       showBorderNodes: isTruthBool(params.showBorderNodes.value),
       nodeContentAlignment: params.nodeContentAlignment.value,
+      fixedWidthColumns: isTruthBool(params.fixedWidthColumns.value),
       showSuggestions: false,
       responseJSON: null,
       columnData: [],

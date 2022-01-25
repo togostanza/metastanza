@@ -1,5 +1,5 @@
 <template>
-  <div class="column">
+  <div class="column" :class="{ '-fixed':  fixedWidthColumns }">
     <span
       v-for="node in nodes"
       :key="node.id"
@@ -85,6 +85,10 @@ export default defineComponent({
     nodeContentAlignment: {
       type: String,
       default: "horizontal",
+    },
+    fixedWidthColumns: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ["setParent", "setCheckedNode"],
