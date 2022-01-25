@@ -82,16 +82,16 @@ export default defineComponent({
     const layerRefs = ref([]);
     const state = reactive({
       keys: {
-        label: params.labelKey.value,
-        value: params.valueKey.value,
+        label: params?.labelKey?.value,
+        value: params?.valueKey?.value,
       },
-      fallbackInCaseOfNoValue: params.valueFallback.value,
-      showValue: isTruthBool(params.showValue.value),
-      showPath: isTruthBool(params.showPath.value),
-      showPathExplanation: isTruthBool(params.showPathExplanation.value),
-      showBorderNodes: isTruthBool(params.showBorderNodes.value),
-      nodeContentAlignment: params.nodeContentAlignment.value,
-      fixedWidthColumns: isTruthBool(params.fixedWidthColumns.value),
+      fallbackInCaseOfNoValue: params?.valueFallback.value,
+      fixedWidthColumns: isTruthBool(params?.fixedWidthColumns?.value),
+      showValue: isTruthBool(params?.showValue?.value),
+      showPath: isTruthBool(params?.showPath?.value),
+      showPathExplanation: isTruthBool(params?.showPathExplanation?.value),
+      showBorderNodes: isTruthBool(params?.showBorderNodes?.value),
+      nodeContentAlignment: params?.nodeContentAlignment?.value,
       showSuggestions: false,
       responseJSON: null,
       columnData: [],
@@ -102,9 +102,9 @@ export default defineComponent({
     watchEffect(
       async () => {
         state.responseJSON = await loadData(
-          params.dataUrl.value,
-          params.dataType.value,
-          params.main
+          params?.dataUrl?.value,
+          params?.dataType?.value,
+          params?.main
         );
         state.responseJSON = state.responseJSON.map((node) => {
           return { ...node, path: getPath(node) };
@@ -136,7 +136,7 @@ export default defineComponent({
       return children;
     }
     function isNormalSearchHit(node) {
-      return node[params.searchKey.value]
+      return node[params?.searchKey?.value]
         ?.toString()
         .toLowerCase()
         .includes(state.searchTerm.toLowerCase());
