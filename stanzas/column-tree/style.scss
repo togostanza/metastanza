@@ -101,7 +101,7 @@ main {
     }
   }
   > #tree {
-    height: calc(var(--togostanza-height) * 1px);
+    height: calc(var(--togostanza-column-height) * 1px);
     display: flex;
     width: fit-content;
     gap: calc(var(--togostanza-column-gap) * 1px);
