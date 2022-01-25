@@ -57,6 +57,7 @@
                 :line-clamp="cell.lineClamp"
               />
             </span>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-else-if="cell.unescape" v-html="cell.value"></span>
             <span v-else>{{ cell.value }}</span>
           </td>
@@ -96,7 +97,7 @@ export default defineComponent({
     const state = reactive({
       columns: [],
       allRows: [],
-
+      main: null,
       offset: 0,
 
       isFetching: false,
@@ -113,9 +114,11 @@ export default defineComponent({
       urlParams = new URLSearchParams(urlParams);
       const { dataUrl } = params;
       const connectCharacter = new URL(dataUrl) ? "&" : "?";
+
       const data = await loadData(
         `${dataUrl}${connectCharacter}${urlParams}`,
-        params.dataType
+        params.dataType,
+        params.main
       );
 
       if (params.columns) {
