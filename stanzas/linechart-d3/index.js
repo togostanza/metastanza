@@ -209,15 +209,49 @@ export default class Linechart extends Stanza {
 
     // Axes preparation
 
+    let dataMax, dataMin;
+    if (showErrorBars) {
+      dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
+      dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
+    } else {
+      dataMax = d3.max(values, (d) => +d[yKeyName]);
+      dataMin = d3.min(values, (d) => +d[yKeyName]);
+    }
+
+    let x;
+    if (xDataType === "number") {
+      const xAxisData = values.map((d) => +d[xKeyName]);
+      const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
+      x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
+    } else {
+      const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+      x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
+    }
+
+    const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
+
+    const xAxisGridGenerator = d3
+      .axisBottom(x)
+      .tickSize(-HEIGHT)
+      .tickFormat("")
+      .ticks(xTicksNumber);
+
+    const yAxisGridGenerator = d3
+      .axisLeft(y)
+      .tickSize(-WIDTH)
+      .tickFormat("")
+      .ticks(yTicksNumber);
+
+    const xGridLines = linesArea
+      .append("g")
+      .attr("class", "x gridlines")
+      .attr("transform", "translate(0," + HEIGHT + ")");
+
+    const yGridLines = linesArea.append("g").attr("class", "y gridlines");
+
     function update(values) {
       const categorizedData = d3.group(values, (d) => d[groupKeyName]);
 
-      // const categorizedData = [];
-      // for (const entry of d3categorizedData.entries()) {
-      //   categorizedData.push(entry);
-      // }
-
-      let dataMax, dataMin;
       if (showErrorBars) {
         dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
         dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
@@ -226,17 +260,16 @@ export default class Linechart extends Stanza {
         dataMin = d3.min(values, (d) => +d[yKeyName]);
       }
 
-      let x;
       if (xDataType === "number") {
         const xAxisData = values.map((d) => +d[xKeyName]);
         const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
-        x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
+        x.domain(xDataMinMax);
       } else {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-        x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
+        x.domain(xAxisLabels);
       }
 
-      const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
+      y.domain([dataMin, dataMax]);
 
       let xdy = "0.5em";
       let xx = "-0.7em";
@@ -262,6 +295,8 @@ export default class Linechart extends Stanza {
       }
 
       xAxisArea
+        .transition()
+        .duration(200)
         .call(xAxisGenerator)
         .selectAll("text")
         .attr("text-anchor", textAnchor)
@@ -277,6 +312,8 @@ export default class Linechart extends Stanza {
       }
 
       yAxisArea
+        .transition()
+        .duration(200)
         .call(yAxisGenerator)
         .selectAll("text")
         .attr("text-anchor", "end")
@@ -333,33 +370,17 @@ export default class Linechart extends Stanza {
 
       // Show/hide grid lines
       if (showXGrid) {
-        const xAxisGridGenerator = d3
-          .axisBottom(x)
-          .tickSize(-HEIGHT)
-          .tickFormat("")
-          .ticks(10);
-
-        linesArea
-          .append("g")
-          .attr("class", "x gridlines")
-          .attr("transform", "translate(0," + HEIGHT + ")")
-          .call(xAxisGridGenerator);
+        xGridLines.transition().duration(200).call(xAxisGridGenerator);
       }
 
       if (showYGrid) {
-        const yAxisGridGenerator = d3
-          .axisLeft(y)
-          .tickSize(-WIDTH)
-          .tickFormat("")
-          .ticks(10);
-
-        linesArea
-          .append("g")
-          .attr("class", "y gridlines")
-          .call(yAxisGridGenerator);
+        yGridLines.transition().duration(200).call(yAxisGridGenerator);
 
         if (showErrorBars) {
-          linesGroup.call(errorBars, y, x, xDataType, errorBarWidth);
+          linesGroup
+            .transition()
+            .duration(200)
+            .call(errorBars, y, x, xDataType, errorBarWidth);
         }
       }
 
