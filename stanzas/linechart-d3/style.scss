@@ -52,6 +52,10 @@ svg .axis > .tick > text {
   font-size: 0.5em;
 }
 
+.-off {
+  opacity: 0.5;
+}
+
 //dl button style
 svg#dl_button {
   position: absolute;
