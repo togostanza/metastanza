@@ -21,7 +21,8 @@ main {
   .label {
     display: flex;
     overflow: hidden;
-    > strong, .value {
+    > strong,
+    .value {
       word-break: break-all;
       text-overflow: ellipsis;
       overflow: hidden;

@@ -3,23 +3,25 @@
 ## Search settings
 
 One can search for a node via the below 2 methods:
+
 1. **keyword search**
-</br>
-To search by keyword, please set the data property used for searching at the `search-key` parameter.
+   </br>
+   To search by keyword, please set the data property used for searching at the `search-key` parameter.
 
 2. **path search**
-</br>
-To search by path, please use the `id` of the path followed by a `/`. (see example below)
-<br/>
-This explanation on how to search by path is shown to the user by default next to the search box, but can be turned off by setting the `show-path-explanation` parameter to `false`.
-Furthermore, with the `show-path` parameter set to `true`, the path for each search hit will be shown in the suggestion box like the following: **<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/**
+   </br>
+   To search by path, please use the `id` of the path followed by a `/`. (see example below)
+   <br/>
+   This explanation on how to search by path is shown to the user by default next to the search box, but can be turned off by setting the `show-path-explanation` parameter to `false`.
+   Furthermore, with the `show-path` parameter set to `true`, the path for each search hit will be shown in the suggestion box like the following: **<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/**
 
 <details>
 <summary>example path search</summary>
 <p>
 
 To get the node from below example data with `3` as an `id`, one can search by `1/2/3`. In this case the path will be shown like the following if the `show-path` parameter is set to `true` and the `label-key` is set to `label`:
- **<ruby>Transcript variant<rp>(</rp><rt>1</rt><rp>)</rp></ruby>/<ruby>Coding variant<rp>(</rp><rt>2</rt><rp>)</rp></ruby>/<ruby>Coding sequence variant<rp>(</rp><rt>3</rt><rp>)</rp></ruby>/**
+**<ruby>Transcript variant<rp>(</rp><rt>1</rt><rp>)</rp></ruby>/<ruby>Coding variant<rp>(</rp><rt>2</rt><rp>)</rp></ruby>/<ruby>Coding sequence variant<rp>(</rp><rt>3</rt><rp>)</rp></ruby>/**
+
 ```
   {
     "id": 1,
@@ -49,6 +51,7 @@ To get the node from below example data with `3` as an `id`, one can search by `
 <br/>
 
 ## Value settings
+
 With the `show-value` parameter set to `true`, one can show a value next to or under the label. (depending on the content alignment of the stanza set at the parameter `node-content-alignment`)
 <br/>
 Please set the data property for the value at the `value-key` parameter.
