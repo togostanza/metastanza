@@ -5,15 +5,15 @@
 One can search for a node via the below 2 methods:
 
 1. **keyword search**
-   </br>
-   To search by keyword, please set the data property used for searching at the `search-key` parameter.
+    </br>
+    To search by keyword, please set the data property used for searching at the `search-key` parameter.
 
 2. **path search**
-   </br>
-   To search by path, please use the `id` of the path followed by a `/`. (see example below)
-   <br/>
-   This explanation on how to search by path is shown to the user by default next to the search box, but can be turned off by setting the `show-path-explanation` parameter to `false`.
-   Furthermore, with the `show-path` parameter set to `true`, the path for each search hit will be shown in the suggestion box like the following: **<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/**
+    </br>
+    To search by path, please use the `id` of the path followed by a `/`. (see example below)
+    <br/>
+    This explanation on how to search by path is shown to the user by default next to the search box, but can be turned off by setting the `show-path-explanation` parameter to `false`.
+    Furthermore, with the `show-path` parameter set to `true`, the path for each search hit will be shown in the suggestion box like the following: **<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/<ruby>label<rp>(</rp><rt>id</rt><rp>)</rp></ruby>/**
 
 <details>
 <summary>example path search</summary>
