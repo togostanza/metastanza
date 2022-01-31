@@ -191,7 +191,7 @@
     {
       "stanza:key": "--togostanza-column-border-radius",
       "stanza:type": "number",
-      "stanza:default": 3,
+      "stanza:default": 0,
       "stanza:description": "Border radius for single column"
     },
     {

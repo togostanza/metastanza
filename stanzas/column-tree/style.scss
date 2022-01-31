@@ -21,11 +21,14 @@ main {
   .label {
     display: flex;
     overflow: hidden;
-    > strong {
+    > strong, .value {
       word-break: break-all;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+    }
+    > strong {
+      min-width: 50%;
     }
     &.-horizontal {
       width: 100%;
@@ -34,7 +37,6 @@ main {
       flex-direction: row;
       gap: 1rem;
       > .value {
-        min-width: fit-content;
         text-align: right;
         padding-right: 1px;
       }
