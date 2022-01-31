@@ -371,17 +371,13 @@ export default class Linechart extends Stanza {
         });
 
       if (showErrorBars) {
-        const errorBar = errorBarsGroup
+        const eb = errorBarsGroup
           .selectAll("line")
-          .data(
-            values,
-            (d) => `${d[groupKeyName]}-${d[xKeyName]}-${d[yKeyName]}`
-          );
+          .data(values, (d) => `${d[groupKeyName]}-${d[xKeyName]}`);
 
-        errorBar.exit().remove();
+        eb.exit().remove();
 
-        errorBar
-          .enter()
+        eb.enter()
           .append("line")
           .attr("x1", (d) => {
             if (xDataType === "number") {
@@ -401,9 +397,8 @@ export default class Linechart extends Stanza {
           .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
           .attr("stroke", "black")
           .attr("stroke-width", 1)
-          .merge(errorBar)
-          .transition()
-          .duration(200)
+          .merge(eb)
+          .transition(200)
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]);
@@ -420,8 +415,6 @@ export default class Linechart extends Stanza {
             }
           })
           .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        // g.call(errorBars, xDataType, errorBarWidth);
       }
 
       // Show/hide grid lines
