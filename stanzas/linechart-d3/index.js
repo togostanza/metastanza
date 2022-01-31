@@ -43,8 +43,11 @@ export default class Linechart extends Stanza {
     const groupKeyName = this.params["group-by"];
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
-    const xLabelAngle = parseInt(this.params["xlabel-angle"]) || -90;
-    const yLabelAngle = parseInt(this.params["ylabel-angle"]) || 0;
+    const xLabelAngle =
+      parseInt(this.params["xlabel-angle"]) === 0
+        ? 0
+        : parseInt(this.params["xlabel-angle"]) || -90;
+
     const xDataType = this.params["x-axis-data-type"] || "string";
     const errorKeyName = this.params["error-key"] || "error";
     const showErrorBars = this.params["error-bars"] === "true" ? true : false;
@@ -52,6 +55,16 @@ export default class Linechart extends Stanza {
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
         : 0.4;
+    const xLabelPadding =
+      parseInt(this.params["xlabel-padding"]) === 0
+        ? 0
+        : parseInt(this.params["xlabel-padding"]) || 7;
+    const yLabelPadding =
+      parseInt(this.params["ylabel-padding"]) === 0
+        ? 0
+        : parseInt(this.params["ylabel-padding"]) || 10;
+
+    const ylabelFormat = this.params["ylabel-format"] || null;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -111,44 +124,6 @@ export default class Linechart extends Stanza {
     }
 
     const color = d3.scaleOrdinal().domain(groups).range(togostanzaColors);
-
-    // Add legend
-
-    this.legend.setup(
-      groups.map((item, index) => ({
-        id: "" + index,
-        label: item,
-        color: color(item),
-        node: this.root.querySelector(`svg #data-${index}`),
-      })),
-      this.root.querySelector("main"),
-      {
-        fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-        position: ["top", "right"],
-        fadeProp: "stroke-opacity",
-      }
-    );
-
-    const legend = this.root
-      .querySelector("togostanza--legend")
-      .shadowRoot.querySelector(".legend > table > tbody");
-
-    // Set toggle behaviour
-    legend.addEventListener("click", (e) => {
-      const parentNode = e.target.parentNode;
-      if (parentNode.nodeName === "TR") {
-        const id = parentNode.dataset.id;
-        parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-        toggleState.set("" + id, !toggleState.get("" + id));
-
-        // filter ot data wich was clicked
-        const newData = values.filter(
-          (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
-        );
-
-        update(newData);
-      }
-    });
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
@@ -210,6 +185,8 @@ export default class Linechart extends Stanza {
     const errorBarsGroup = linesArea
       .append("g")
       .attr("class", "error-bars-group");
+
+    const xAxisLabelsProps = getXTextLabelProps(xLabelAngle, xLabelPadding);
 
     // Axes preparation
 
@@ -275,19 +252,6 @@ export default class Linechart extends Stanza {
 
       y.domain([dataMin, dataMax]);
 
-      let xdy = "0.5em";
-      let xx = "-0.7em";
-      let textAnchor = "end";
-      if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-        xdy = "0.8em";
-        textAnchor = "end";
-      }
-      if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-        xx = "0.7em";
-        xdy = "0.71em";
-        textAnchor = "start";
-      }
-
       const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
 
       if (xDataType === "number") {
@@ -303,13 +267,17 @@ export default class Linechart extends Stanza {
         .duration(200)
         .call(xAxisGenerator)
         .selectAll("text")
-        .attr("text-anchor", textAnchor)
-        .attr("x", xx)
-        .attr("y", "0")
-        .attr("dy", xdy)
+        .attr("text-anchor", xAxisLabelsProps.textAnchor)
+        .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
+        .attr("y", xAxisLabelsProps.y)
+        .attr("x", xAxisLabelsProps.x)
+        .attr("dy", null)
         .attr("transform", `rotate(${xLabelAngle})`);
 
-      const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
+      const yAxisGenerator = d3
+        .axisLeft(y)
+        .ticks(yTicksNumber)
+        .tickFormat(ylabelFormat);
 
       if (!showYTicks) {
         yAxisGenerator.tickSize(0);
@@ -321,7 +289,10 @@ export default class Linechart extends Stanza {
         .call(yAxisGenerator)
         .selectAll("text")
         .attr("text-anchor", "end")
-        .attr("transform", `rotate(${yLabelAngle})`);
+        .attr("alignment-baseline", "middle")
+        .attr("dy", null)
+        .attr("x", -yLabelPadding);
+      // .attr("transform", `rotate(${yLabelAngle})`);
 
       const g = dataGroup.selectAll("path").data(categorizedData, (d) => d[0]);
 
@@ -371,6 +342,7 @@ export default class Linechart extends Stanza {
         });
 
       if (showErrorBars) {
+        //Draw error bars
         const barGroups = errorBarsGroup
           .selectAll("g")
           .data(
@@ -409,28 +381,19 @@ export default class Linechart extends Stanza {
 
         barGroups
           .merge(barGroupsEnter)
-
           .select("line.errorbar.bl")
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 -
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
             }
           })
           .attr("x2", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) + errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 +
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
             }
           })
           .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
@@ -438,28 +401,19 @@ export default class Linechart extends Stanza {
 
         barGroups
           .merge(barGroupsEnter)
-
           .select("line.errorbar.tl")
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 -
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
             }
           })
           .attr("x2", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) + errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 +
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
             }
           })
           .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
@@ -492,22 +446,14 @@ export default class Linechart extends Stanza {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 -
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
             }
           })
           .attr("x2", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) + errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 +
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
             }
           })
           .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
@@ -519,22 +465,14 @@ export default class Linechart extends Stanza {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 -
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
             }
           })
           .attr("x2", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) + errorBarWidth / 2;
             } else {
-              return (
-                x(d[xKeyName]) +
-                x.bandwidth() / 2 +
-                (x.bandwidth() * errorBarWidth) / 2
-              );
+              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
             }
           })
           .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
@@ -552,5 +490,85 @@ export default class Linechart extends Stanza {
     }
 
     update(values);
+
+    // Add legend
+
+    this.legend.setup(
+      groups.map((item, index) => ({
+        id: "" + index,
+        label: item,
+        color: color(item),
+        node: this.root.querySelector(`svg #data-${index}`),
+      })),
+      this.root.querySelector("main"),
+      {
+        fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+        position: ["top", "right"],
+        fadeProp: "stroke-opacity",
+      }
+    );
+
+    const legend = this.root
+      .querySelector("togostanza--legend")
+      .shadowRoot.querySelector(".legend > table > tbody");
+
+    // Set toggle behaviour
+    legend.addEventListener("click", (e) => {
+      const parentNode = e.target.parentNode;
+      if (parentNode.nodeName === "TR") {
+        const id = parentNode.dataset.id;
+        parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
+        toggleState.set("" + id, !toggleState.get("" + id));
+
+        // filter ot data wich was clicked
+        const newData = values.filter(
+          (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
+        );
+
+        update(newData);
+      }
+    });
   }
+}
+
+function getXTextLabelProps(angle, xLabelsMarginUp) {
+  let textAnchor, dominantBaseline, x, y;
+  angle = parseInt(angle);
+  xLabelsMarginUp = parseInt(xLabelsMarginUp);
+
+  dominantBaseline = "hanging";
+  x = xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
+  y = xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
+
+  switch (true) {
+    case angle < 0 && angle % 180 !== 0:
+      textAnchor = "end";
+      if (angle === -90) {
+        dominantBaseline = "central";
+      }
+      break;
+
+    case angle > 0 && angle % 180 !== 0:
+      textAnchor = "start";
+      if (angle === 90) {
+        dominantBaseline = "central";
+      }
+      break;
+    case angle === 0:
+      textAnchor = "middle";
+      break;
+    case angle % 180 === 0:
+      textAnchor = "middle";
+      dominantBaseline = "bottom";
+      break;
+    default:
+      break;
+  }
+
+  return {
+    x,
+    y,
+    textAnchor,
+    dominantBaseline,
+  };
 }

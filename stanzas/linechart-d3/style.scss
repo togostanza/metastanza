@@ -53,11 +53,6 @@ svg line.errorbar {
   opacity: var(--togostanza-errorbar-line-opacity);
 }
 
-:scope .legend .label text {
-  color: black;
-  font-size: 0.5em;
-}
-
 .-off {
   opacity: 0.5;
 }

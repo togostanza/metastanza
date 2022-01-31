@@ -69,7 +69,7 @@
     {
       "stanza:key": "error-bar-width",
       "stanza:type": "number",
-      "stanza:example": 0.4,
+      "stanza:example": 10,
       "stanza:description": "Error bar horizontal line width",
       "stanza:required": false
     },
@@ -164,7 +164,7 @@
     },
     {
       "stanza:key": "xlabel-angle",
-      "stanza:example": 0,
+      "stanza:example": -90,
       "stanza:description": "X label angle (in degree)"
     },
     {
@@ -177,12 +177,12 @@
       "stanza:key": "xlabel-padding",
       "stanza:type": "number",
       "stanza:example": 5,
-      "stanza:description": "Padding between X label and tick"
+      "stanza:description": "Padding between X label and axis"
     },
     {
       "stanza:key": "ylabel-padding",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 10,
       "stanza:description": "Padding between Y label and tick"
     },
     {
@@ -208,6 +208,12 @@
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
+      "stanza:example": "left",
+      "stanza:description": "Y axis placement"
+    },
+    {
+      "stanza:key": "ylabel-format",
+      "stanza:type": "string",
       "stanza:example": "left",
       "stanza:description": "Y axis placement"
     }
