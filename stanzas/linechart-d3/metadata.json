@@ -70,7 +70,7 @@
       "stanza:key": "error-bar-width",
       "stanza:type": "number",
       "stanza:example": 0.4,
-      "stanza:description": "Error bar horizontal line width, relative to bar width",
+      "stanza:description": "Error bar horizontal line width",
       "stanza:required": false
     },
     {
@@ -327,6 +327,12 @@
       "stanza:type": "color",
       "stanza:default": "#333333",
       "stanza:description": "Errorbar line color"
+    },
+    {
+      "stanza:key": "--togostanza-errorbar-line-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.4,
+      "stanza:description": "Errorbar line opacity"
     },
     {
       "stanza:key": "--togostanza-title-font-color",

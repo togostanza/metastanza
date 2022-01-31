@@ -47,6 +47,12 @@ svg .axis > .tick > text {
   fill: var(--togostanza-label-font-color);
 }
 
+svg line.errorbar {
+  stroke: var(--togostanza-errorbar-line-color);
+  stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
+  opacity: var(--togostanza-errorbar-line-opacity);
+}
+
 :scope .legend .label text {
   color: black;
   font-size: 0.5em;

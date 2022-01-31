@@ -371,86 +371,25 @@ export default class Linechart extends Stanza {
         });
 
       if (showErrorBars) {
-        const eb = errorBarsGroup
-          .selectAll("line")
-          .data(values, (d) => `${d[groupKeyName]}-${d[xKeyName]}`);
-
-        eb.exit().remove();
-
-        eb.enter()
-          .append("line")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-          .attr("stroke", "black")
-          .attr("stroke-width", 1)
-          .merge(eb)
-          .transition(200)
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-      }
-
-      // Show/hide grid lines
-      if (showXGrid) {
-        xGridLines.transition().duration(200).call(xAxisGridGenerator);
-      }
-
-      if (showYGrid) {
-        yGridLines.transition().duration(200).call(yAxisGridGenerator);
-      }
-
-      function errorBars(selection, xDataType, errorBarWidth) {
-        console.log("selection.datum", selection);
-
-        const errorGroup = linesArea.append("g").attr("class", "error-group");
-
-        const lineGroup = selection
-          .enter()
+        const barGroups = errorBarsGroup
           .selectAll("g")
           .data(
-            (d) => d,
-            (d) => d[0]
+            values,
+            (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
           );
 
-        lineGroup.exit().remove();
+        const barGroupsEnter = barGroups
+          .enter()
+          .append("g")
+          .attr("class", "errorbar-group");
 
-        lineGroup.enter().append("g").attr("class", "error-line-group");
+        barGroupsEnter.append("line").attr("class", "errorbar vl");
+        barGroupsEnter.append("line").attr("class", "errorbar bl");
+        barGroupsEnter.append("line").attr("class", "errorbar tl");
 
-        const pointGroup = lineGroup.selectAll("g").data((d) => d[1]);
-
-        pointGroup.exit().remove();
-
-        const line = pointGroup.enter().append("g").attr("error-point-group");
-        // vertical line
-        line
-          .append("line")
+        barGroups
+          .merge(barGroupsEnter)
+          .select("line.errorbar.vl")
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]);
@@ -468,9 +407,10 @@ export default class Linechart extends Stanza {
           })
           .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
 
-        // upper stroke
-        line
-          .append("line")
+        barGroups
+          .merge(barGroupsEnter)
+
+          .select("line.errorbar.bl")
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
@@ -496,9 +436,10 @@ export default class Linechart extends Stanza {
           .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
           .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
 
-        //bottom stroke
-        line
-          .append("line")
+        barGroups
+          .merge(barGroupsEnter)
+
+          .select("line.errorbar.tl")
           .attr("x1", (d) => {
             if (xDataType === "number") {
               return x(d[xKeyName]) - errorBarWidth / 2;
@@ -523,6 +464,90 @@ export default class Linechart extends Stanza {
           })
           .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
           .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+        barGroups.exit().remove();
+
+        barGroupsEnter
+          .select("line.errorbar-vl")
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]);
+            } else {
+              return x(d[xKeyName]) + x.bandwidth() / 2;
+            }
+          })
+          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]);
+            } else {
+              return x(d[xKeyName]) + x.bandwidth() / 2;
+            }
+          })
+          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+        barGroupsEnter
+          .select("line.errorbar-bl")
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]) - errorBarWidth / 2;
+            } else {
+              return (
+                x(d[xKeyName]) +
+                x.bandwidth() / 2 -
+                (x.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]) + errorBarWidth / 2;
+            } else {
+              return (
+                x(d[xKeyName]) +
+                x.bandwidth() / 2 +
+                (x.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+          .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
+
+        barGroupsEnter
+          .select("line.errorbar-tl")
+          .attr("x1", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]) - errorBarWidth / 2;
+            } else {
+              return (
+                x(d[xKeyName]) +
+                x.bandwidth() / 2 -
+                (x.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("x2", (d) => {
+            if (xDataType === "number") {
+              return x(d[xKeyName]) + errorBarWidth / 2;
+            } else {
+              return (
+                x(d[xKeyName]) +
+                x.bandwidth() / 2 +
+                (x.bandwidth() * errorBarWidth) / 2
+              );
+            }
+          })
+          .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
+          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+      }
+
+      // Show/hide grid lines
+      if (showXGrid) {
+        xGridLines.transition().duration(200).call(xAxisGridGenerator);
+      }
+
+      if (showYGrid) {
+        yGridLines.transition().duration(200).call(yAxisGridGenerator);
       }
     }
 
