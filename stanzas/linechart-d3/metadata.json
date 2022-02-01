@@ -214,8 +214,8 @@
     {
       "stanza:key": "ylabel-format",
       "stanza:type": "string",
-      "stanza:example": "left",
-      "stanza:description": "Y axis placement"
+      "stanza:example": ",.2r",
+      "stanza:description": "Y axis tick labels number format. See more format strings in d3.format() documentation"
     }
   ],
   "stanza:menu-placement": "bottom-right",

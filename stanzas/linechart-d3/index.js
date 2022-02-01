@@ -277,7 +277,7 @@ export default class Linechart extends Stanza {
       const yAxisGenerator = d3
         .axisLeft(y)
         .ticks(yTicksNumber)
-        .tickFormat(ylabelFormat);
+        .tickFormat((d) => d3.format(ylabelFormat)(d));
 
       if (!showYTicks) {
         yAxisGenerator.tickSize(0);
