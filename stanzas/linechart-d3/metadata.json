@@ -104,12 +104,6 @@
       "stanza:description": "Height"
     },
     {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Padding"
-    },
-    {
       "stanza:key": "legend",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
@@ -170,25 +164,25 @@
     {
       "stanza:key": "xlabel-padding",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 7,
       "stanza:description": "Padding between X label and axis"
     },
     {
       "stanza:key": "ylabel-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 7,
       "stanza:description": "Padding between Y label and tick"
     },
     {
       "stanza:key": "xtitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 25,
       "stanza:description": "Padding between X title and label"
     },
     {
       "stanza:key": "ytitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 40,
       "stanza:description": "Padding between Y title and label"
     },
     {
