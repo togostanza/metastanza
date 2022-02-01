@@ -1,7 +1,6 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-// import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
 import {
   downloadSvgMenuItem,
@@ -47,6 +46,10 @@ export default class Linechart extends Stanza {
       parseInt(this.params["xlabel-angle"]) === 0
         ? 0
         : parseInt(this.params["xlabel-angle"]) || -90;
+    const yLabelAngle =
+      parseInt(this.params["ylabel-angle"]) === 0
+        ? 0
+        : parseInt(this.params["ylabel-angle"]) || 0;
 
     const xDataType = this.params["x-axis-data-type"] || "string";
     const errorKeyName = this.params["error-key"] || "error";
@@ -187,6 +190,7 @@ export default class Linechart extends Stanza {
       .attr("class", "error-bars-group");
 
     const xAxisLabelsProps = getXTextLabelProps(xLabelAngle, xLabelPadding);
+    const yAxisLabelsProps = getYTextLabelProps(yLabelAngle, yLabelPadding);
 
     // Axes preparation
 
@@ -288,11 +292,12 @@ export default class Linechart extends Stanza {
         .duration(200)
         .call(yAxisGenerator)
         .selectAll("text")
-        .attr("text-anchor", "end")
-        .attr("alignment-baseline", "middle")
+        .attr("text-anchor", yAxisLabelsProps.textAnchor)
+        .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
         .attr("dy", null)
-        .attr("x", -yLabelPadding);
-      // .attr("transform", `rotate(${yLabelAngle})`);
+        .attr("x", yAxisLabelsProps.x)
+        .attr("y", yAxisLabelsProps.y)
+        .attr("transform", `rotate(${yLabelAngle})`);
 
       const g = dataGroup.selectAll("path").data(categorizedData, (d) => d[0]);
 
@@ -319,7 +324,7 @@ export default class Linechart extends Stanza {
       // enter
       g.enter()
         .append("path")
-        .attr("id", (_, i) => "data-" + i)
+        .attr("id", (d) => "data-" + groups.findIndex((item) => item === d[0]))
         .attr("class", "data-lines")
         .attr("fill", "none")
         .attr("stroke", function (d) {
@@ -340,6 +345,8 @@ export default class Linechart extends Stanza {
               return y(+d[yKeyName]);
             })(d[1]);
         });
+
+      console.log("gs", dataGroup.selectAll("path").nodes());
 
       if (showErrorBars) {
         //Draw error bars
@@ -532,13 +539,13 @@ export default class Linechart extends Stanza {
 }
 
 function getXTextLabelProps(angle, xLabelsMarginUp) {
-  let textAnchor, dominantBaseline, x, y;
+  let textAnchor, dominantBaseline;
   angle = parseInt(angle);
   xLabelsMarginUp = parseInt(xLabelsMarginUp);
 
   dominantBaseline = "hanging";
-  x = xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
-  y = xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
+  const x = xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
+  const y = xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
 
   switch (true) {
     case angle < 0 && angle % 180 !== 0:
@@ -560,6 +567,47 @@ function getXTextLabelProps(angle, xLabelsMarginUp) {
     case angle % 180 === 0:
       textAnchor = "middle";
       dominantBaseline = "bottom";
+      break;
+    default:
+      break;
+  }
+
+  return {
+    x,
+    y,
+    textAnchor,
+    dominantBaseline,
+  };
+}
+function getYTextLabelProps(angle, yLabelsMarginRight) {
+  let textAnchor, dominantBaseline;
+  angle = parseInt(angle);
+  yLabelsMarginRight = parseInt(yLabelsMarginRight);
+
+  dominantBaseline = "bottom";
+  textAnchor = "end";
+  const x = -yLabelsMarginRight * Math.cos((angle * Math.PI) / 180);
+  const y = yLabelsMarginRight * Math.sin((angle * Math.PI) / 180);
+
+  switch (true) {
+    case angle < 0 && angle % 180 !== 0:
+      if (angle === -90) {
+        textAnchor = "middle";
+      }
+      break;
+
+    case angle > 0 && angle % 180 !== 0:
+      dominantBaseline = "hanging";
+      if (angle === 90) {
+        textAnchor = "middle";
+      }
+      break;
+
+    case angle % 180 === 0:
+      if (angle > 0) {
+        textAnchor = "start";
+      }
+      dominantBaseline = "central";
       break;
     default:
       break;
