@@ -230,7 +230,7 @@ export default class Linechart extends Stanza {
 
     const yGridLines = linesArea.append("g").attr("class", "y gridlines");
 
-    function update(values) {
+    const update = (values) => {
       const categorizedData = d3.group(values, (d) => d[groupKeyName]);
 
       if (showErrorBars) {
@@ -487,26 +487,26 @@ export default class Linechart extends Stanza {
       if (showYGrid) {
         yGridLines.transition().duration(200).call(yAxisGridGenerator);
       }
-    }
+
+      // update legend
+
+      this.legend.setup(
+        groups.map((item, index) => ({
+          id: "" + index,
+          label: item,
+          color: color(item),
+          node: this.root.querySelector(`svg #data-${index}`) || null,
+        })),
+        this.root.querySelector("main"),
+        {
+          fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+          position: ["top", "right"],
+          fadeProp: "stroke-opacity",
+        }
+      );
+    };
 
     update(values);
-
-    // Add legend
-
-    this.legend.setup(
-      groups.map((item, index) => ({
-        id: "" + index,
-        label: item,
-        color: color(item),
-        node: this.root.querySelector(`svg #data-${index}`),
-      })),
-      this.root.querySelector("main"),
-      {
-        fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-        position: ["top", "right"],
-        fadeProp: "stroke-opacity",
-      }
-    );
 
     const legend = this.root
       .querySelector("togostanza--legend")
@@ -520,7 +520,7 @@ export default class Linechart extends Stanza {
         parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
         toggleState.set("" + id, !toggleState.get("" + id));
 
-        // filter ot data wich was clicked
+        // filter out data wich was clicked
         const newData = values.filter(
           (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
         );
