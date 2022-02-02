@@ -70,11 +70,13 @@ export default class Linechart extends Stanza {
     const ylabelFormat = this.params["ylabel-format"] || null;
 
     const xAxisPlacement = this.params["xaxis-placement"] || "bottom";
+    const yAxisPlacement = this.params["yaxis-placement"] || "left";
 
     const xTitlePadding = this.params["xtitle-padding"] || 15;
+    const yTitlePadding = this.params["ytitle-padding"] || 15;
+
     const xTickSize = this.params["xtick-size"] || 5;
     const yTickSize = this.params["ytick-size"] || 5;
-
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
 
@@ -139,26 +141,26 @@ export default class Linechart extends Stanza {
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    let MARGIN;
 
-    if (xAxisPlacement === "top") {
-      MARGIN = {
-        TOP: Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize),
-        BOTTOM: 10,
-        LEFT: 50,
-        RIGHT: 10,
-      };
-    } else {
-      MARGIN = {
-        TOP: 10,
-        BOTTOM: Math.max(
-          60,
-          xTitlePadding + xTickSize + 10 + axisTitleFontSize
-        ),
-        LEFT: 50,
-        RIGHT: 10,
-      };
-    }
+    const MARGIN = {
+      TOP:
+        xAxisPlacement === "top"
+          ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
+          : 10,
+      BOTTOM:
+        xAxisPlacement === "top"
+          ? 10
+          : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
+      LEFT:
+        yAxisPlacement === "left"
+          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+          : 10,
+      RIGHT:
+        yAxisPlacement === "right"
+          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+          : 10,
+    };
+
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
@@ -180,6 +182,8 @@ export default class Linechart extends Stanza {
     const dataGroup = linesArea.append("g").attr("class", "data-lines");
 
     const xAxisArea = graphArea.append("g").attr("class", "x axis");
+
+    const yAxisArea = graphArea.append("g").attr("class", "y axis");
 
     const yTitleArea = graphArea.append("g").attr("class", "y axis title");
 
@@ -207,24 +211,35 @@ export default class Linechart extends Stanza {
         .attr("dominant-baseline", "hanging");
     }
 
+    if (yAxisPlacement === "right") {
+      yAxisArea.attr(
+        "transform",
+        `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
+      );
+      yTitleArea.attr(
+        "transform",
+        `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
+      );
+    } else {
+      yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+      yTitleArea.attr(
+        "transform",
+        `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
+      );
+    }
+
     yTitleArea
       .append("text")
       .text(yAxisTitle)
       .attr("text-anchor", "middle")
       .attr("transform", `rotate(-90)`)
-      .attr("x", -HEIGHT / 2 - MARGIN.TOP)
-      .attr("y", 10);
+      .attr("x", -HEIGHT / 2 - MARGIN.TOP);
 
     xTitleArea
       .append("text")
       .text(xAxisTitle)
       .attr("text-anchor", "middle")
       .attr("x", MARGIN.LEFT + WIDTH / 2);
-
-    const yAxisArea = graphArea
-      .append("g")
-      .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`)
-      .attr("class", "y axis");
 
     const errorBarsGroup = linesArea
       .append("g")
@@ -237,7 +252,8 @@ export default class Linechart extends Stanza {
     );
     const yAxisLabelsProps = getYTextLabelProps(
       yLabelAngle,
-      yLabelPadding + yTickSize
+      yLabelPadding + yTickSize,
+      yAxisPlacement
     );
 
     // Axes preparation
@@ -333,11 +349,18 @@ export default class Linechart extends Stanza {
         .attr("dy", null)
         .attr("transform", `rotate(${xLabelAngle})`);
 
-      const yAxisGenerator = d3
-        .axisLeft(y)
+      let yAxisGenerator;
+
+      if (yAxisPlacement === "right") {
+        yAxisGenerator = d3.axisRight(y).tickSizeOuter(0);
+      } else {
+        yAxisGenerator = d3.axisLeft(y).tickSizeOuter(0);
+      }
+
+      yAxisGenerator
         .ticks(yTicksNumber)
         .tickFormat((d) => d3.format(ylabelFormat)(d))
-        .tickSize(yTickSize);
+        .tickSizeInner(yTickSize);
 
       if (!showYTicks) {
         yAxisGenerator.tickSize(0);
@@ -650,25 +673,43 @@ function getXTextLabelProps(angle, xLabelsMarginUp, axisPlacement = "bottom") {
     dominantBaseline,
   };
 }
-function getYTextLabelProps(angle, yLabelsMarginRight) {
+function getYTextLabelProps(angle, yLabelsMarginRight, axisPlacement = "left") {
   let textAnchor, dominantBaseline;
   angle = parseInt(angle);
   yLabelsMarginRight = parseInt(yLabelsMarginRight);
 
-  dominantBaseline = "bottom";
-  textAnchor = "end";
-  const x = -yLabelsMarginRight * Math.cos((angle * Math.PI) / 180);
-  const y = yLabelsMarginRight * Math.sin((angle * Math.PI) / 180);
+  let sign = 1;
+
+  if (axisPlacement === "right") {
+    sign = -1;
+    dominantBaseline = "hanging";
+    textAnchor = "start";
+  } else {
+    dominantBaseline = "bottom";
+    textAnchor = "end";
+  }
+
+  const x = -sign * yLabelsMarginRight * Math.cos((angle * Math.PI) / 180);
+  const y = sign * yLabelsMarginRight * Math.sin((angle * Math.PI) / 180);
 
   switch (true) {
     case angle < 0 && angle % 180 !== 0:
+      if (axisPlacement === "right") {
+        dominantBaseline = "hanging";
+      } else {
+        dominantBaseline = "bottom";
+      }
       if (angle === -90) {
         textAnchor = "middle";
       }
       break;
 
     case angle > 0 && angle % 180 !== 0:
-      dominantBaseline = "hanging";
+      if (axisPlacement === "right") {
+        dominantBaseline = "bottom";
+      } else {
+        dominantBaseline = "hanging";
+      }
       if (angle === 90) {
         textAnchor = "middle";
       }

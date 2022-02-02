@@ -209,7 +209,7 @@
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
+      "stanza:example": "right",
       "stanza:description": "Y axis placement"
     },
     {
