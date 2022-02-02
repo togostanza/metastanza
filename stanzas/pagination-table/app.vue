@@ -179,11 +179,7 @@
 
                 <font-awesome-icon
                   v-if="showAxisSelector"
-                  :class="[
-                    'icon',
-                    'search',
-                    { active: column.isSearchConditionGiven },
-                  ]"
+                  :class="['icon', 'search']"
                   icon="chart-bar"
                   @click="handleAxisSelectorButton(column)"
                 />
