@@ -187,25 +187,11 @@
                   icon="chart-bar"
                   @click="handleAxisSelectorButton(column)"
                 />
-                <transition name="modal">
-                  <div
-                    v-if="state.axisSelectorActiveColumn === column"
-                    class="modal"
-                    :class="['filterWrapper', 'modal']"
-                  >
-                    <div class="filterWindow">
-                      <p class="filterWindowTitle">{{ column.label }}</p>
-                      <form>
-                        <select @change="handleAxisSelected">
-                          <option value="">None</option>
-                          <option value="xaxis">X Axis</option>
-                          <option value="yaxis">Y Axis</option>
-                          <option value="zaxis">Z Axis</option>
-                        </select>
-                      </form>
-                    </div>
-                  </div>
-                </transition>
+                <AxisSelectorModal
+                  :active="state.axisSelectorActiveColumn === column"
+                  :label="column.label"
+                  @axisSelected="handleAxisSelected"
+                />
               </th>
             </tr>
           </thead>
@@ -294,6 +280,7 @@ import {
 import SliderPagination from "./SliderPagination.vue";
 import AnchorCell from "./AnchorCell.vue";
 import ClampCell from "./ClampCell.vue";
+import AxisSelectorModal from "./AxisSelectorModal.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -334,6 +321,7 @@ export default defineComponent({
     AnchorCell,
     ClampCell,
     FontAwesomeIcon,
+    AxisSelectorModal,
   },
 
   props: [
@@ -504,9 +492,7 @@ export default defineComponent({
       state.axisSelectorActiveColumn = column;
     }
 
-    function handleAxisSelected(e) {
-      const axis = e.target.value;
-
+    function handleAxisSelected(axis) {
       const event = new CustomEvent(axis, {
         detail: state.axisSelectorActiveColumn.id,
       });
