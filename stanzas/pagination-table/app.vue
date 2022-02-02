@@ -269,6 +269,7 @@ import {
   ref,
   computed,
   watch,
+  watchEffect,
   onMounted,
   onRenderTriggered,
 } from "vue";
@@ -417,6 +418,43 @@ export default defineComponent({
           ({ isFilterPopupShowing }) => isFilterPopupShowing
         ) || isModalShowing.value
       );
+    });
+
+    watchEffect(() => {
+      const conds = [];
+
+      if (state.queryForAllColumns !== "") {
+        conds.push({
+          type: "substring",
+          value: state.queryForAllColumns,
+        });
+      }
+
+      for (const column of state.columns) {
+        if (column.query !== "") {
+          conds.push({
+            type: "substring",
+            target: column.id,
+            value: column.query,
+          });
+        }
+        if (column.rangeMin !== undefined) {
+          conds.push({
+            type: "gte",
+            target: column.id,
+            value: column.rangeMin,
+          });
+        }
+        if (column.rangeMax !== undefined) {
+          conds.push({
+            type: "lte",
+            target: column.id,
+            value: column.rangeMax,
+          });
+        }
+      }
+
+      console.log(JSON.stringify(conds));
     });
 
     function setRowspanState(rows) {
