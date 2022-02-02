@@ -131,12 +131,25 @@
       "stanza:example": true,
       "stanza:description": "Show X tick"
     },
+
     {
       "stanza:key": "ytick",
       "stanza:type": "single-choice",
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y tick"
+    },
+    {
+      "stanza:key": "xtick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "X axis tick size"
+    },
+    {
+      "stanza:key": "ytick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Y axis tick size"
     },
     {
       "stanza:key": "xticks-number",
@@ -189,7 +202,7 @@
       "stanza:key": "xaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
+      "stanza:example": "top",
       "stanza:description": "X axis placement"
     },
     {
@@ -297,12 +310,6 @@
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Tick color"
-    },
-    {
-      "stanza:key": "--togostanza-tick-length",
-      "stanza:type": "number",
-      "stanza:default": 1.5,
-      "stanza:description": "Tick length (in pixel)"
     },
     {
       "stanza:key": "--togostanza-tick-width",

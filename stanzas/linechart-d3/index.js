@@ -69,6 +69,15 @@ export default class Linechart extends Stanza {
 
     const ylabelFormat = this.params["ylabel-format"] || null;
 
+    const xAxisPlacement = this.params["xaxis-placement"] || "bottom";
+
+    const xTitlePadding = this.params["xtitle-padding"] || 15;
+    const xTickSize = this.params["xtick-size"] || 5;
+    const yTickSize = this.params["ytick-size"] || 5;
+
+    const axisTitleFontSize =
+      parseInt(css("--togostanza-title-font-size")) || 10;
+
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
@@ -130,7 +139,26 @@ export default class Linechart extends Stanza {
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    const MARGIN = { TOP: 10, BOTTOM: 60, LEFT: 50, RIGHT: 10 };
+    let MARGIN;
+
+    if (xAxisPlacement === "top") {
+      MARGIN = {
+        TOP: Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize),
+        BOTTOM: 10,
+        LEFT: 50,
+        RIGHT: 10,
+      };
+    } else {
+      MARGIN = {
+        TOP: 10,
+        BOTTOM: Math.max(
+          60,
+          xTitlePadding + xTickSize + 10 + axisTitleFontSize
+        ),
+        LEFT: 50,
+        RIGHT: 10,
+      };
+    }
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
@@ -151,20 +179,33 @@ export default class Linechart extends Stanza {
 
     const dataGroup = linesArea.append("g").attr("class", "data-lines");
 
-    const xAxisArea = graphArea
-      .append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`);
+    const xAxisArea = graphArea.append("g").attr("class", "x axis");
 
     const yTitleArea = graphArea.append("g").attr("class", "y axis title");
-    const xTitleArea = graphArea
-      .append("g")
-      .attr("class", "x axis title")
-      .attr("dominant-baseline", "hanging")
-      .attr(
+
+    const xTitleArea = graphArea.append("g").attr("class", "x axis title");
+
+    if (xAxisPlacement === "top") {
+      xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+
+      xTitleArea
+        .attr(
+          "transform",
+          `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
+        )
+        .attr("dominant-baseline", "bottom");
+    } else {
+      xAxisArea.attr(
         "transform",
-        `translate(0,${HEIGHT + MARGIN.TOP + MARGIN.BOTTOM / 2})`
+        `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
       );
+      xTitleArea
+        .attr(
+          "transform",
+          `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
+        )
+        .attr("dominant-baseline", "hanging");
+    }
 
     yTitleArea
       .append("text")
@@ -189,8 +230,15 @@ export default class Linechart extends Stanza {
       .append("g")
       .attr("class", "error-bars-group");
 
-    const xAxisLabelsProps = getXTextLabelProps(xLabelAngle, xLabelPadding);
-    const yAxisLabelsProps = getYTextLabelProps(yLabelAngle, yLabelPadding);
+    const xAxisLabelsProps = getXTextLabelProps(
+      xLabelAngle,
+      xLabelPadding + xTickSize,
+      xAxisPlacement
+    );
+    const yAxisLabelsProps = getYTextLabelProps(
+      yLabelAngle,
+      yLabelPadding + yTickSize
+    );
 
     // Axes preparation
 
@@ -256,7 +304,14 @@ export default class Linechart extends Stanza {
 
       y.domain([dataMin, dataMax]);
 
-      const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+      let xAxisGenerator;
+
+      if (xAxisPlacement === "top") {
+        xAxisGenerator = d3.axisTop(x);
+      } else {
+        xAxisGenerator = d3.axisBottom(x);
+      }
+      xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
 
       if (xDataType === "number") {
         xAxisGenerator.ticks(xTicksNumber);
@@ -281,7 +336,8 @@ export default class Linechart extends Stanza {
       const yAxisGenerator = d3
         .axisLeft(y)
         .ticks(yTicksNumber)
-        .tickFormat((d) => d3.format(ylabelFormat)(d));
+        .tickFormat((d) => d3.format(ylabelFormat)(d))
+        .tickSize(yTickSize);
 
       if (!showYTicks) {
         yAxisGenerator.tickSize(0);
@@ -538,25 +594,40 @@ export default class Linechart extends Stanza {
   }
 }
 
-function getXTextLabelProps(angle, xLabelsMarginUp) {
+function getXTextLabelProps(angle, xLabelsMarginUp, axisPlacement = "bottom") {
   let textAnchor, dominantBaseline;
   angle = parseInt(angle);
   xLabelsMarginUp = parseInt(xLabelsMarginUp);
 
-  dominantBaseline = "hanging";
-  const x = xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
-  const y = xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
+  let sign = 1;
+  if (axisPlacement === "top") {
+    dominantBaseline = "bottom";
+    sign = -1;
+  } else {
+    dominantBaseline = "hanging";
+  }
+
+  const x = sign * xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
+  const y = sign * xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
 
   switch (true) {
     case angle < 0 && angle % 180 !== 0:
-      textAnchor = "end";
+      if (axisPlacement === "top") {
+        textAnchor = "start";
+      } else {
+        textAnchor = "end";
+      }
       if (angle === -90) {
         dominantBaseline = "central";
       }
       break;
 
     case angle > 0 && angle % 180 !== 0:
-      textAnchor = "start";
+      if (axisPlacement === "top") {
+        textAnchor = "end";
+      } else {
+        textAnchor = "start";
+      }
       if (angle === 90) {
         dominantBaseline = "central";
       }
