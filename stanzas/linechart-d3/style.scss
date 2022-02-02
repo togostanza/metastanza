@@ -1,5 +1,5 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+@use "@/common.scss";
 
 //delete vega mark
 summary {
@@ -7,6 +7,11 @@ summary {
 }
 
 svg.marks {
+  background-color: var(--togostanza-background-color);
+}
+
+svg {
+  font-family: var(--togostanza-font-family);
   background-color: var(--togostanza-background-color);
 }
 
@@ -29,6 +34,7 @@ svg .gridlines > path.domain {
 
 svg .axis > .tick > line {
   stroke: var(--togostanza-tick-color);
+  stroke-width: var(--togostanza-tick-width);
 }
 
 svg .axis > path {
@@ -39,14 +45,20 @@ svg .axis > path {
 svg .axis.title text {
   font-size: calc(var(--togostanza-title-font-size) * 1px);
   font-weight: var(--togostanza-title-font-weight);
+  font-family: var(--togostanza-font-family) !important;
   fill: var(--togostanza-title-font-color);
 }
 
 svg .axis > .tick > text {
+  font-family: var(--togostanza-font-family);
   font-size: calc(var(--togostanza-label-font-size) * 1px);
   fill: var(--togostanza-label-font-color);
 }
 
+svg path.data-lines {
+  stroke-width: var(--togostanza-line-width);
+  opacity: var(--togostanza-line-opacity);
+}
 svg line.errorbar {
   stroke: var(--togostanza-errorbar-line-color);
   stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
