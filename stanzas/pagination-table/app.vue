@@ -176,6 +176,36 @@
                     />
                   </div>
                 </transition>
+
+                <font-awesome-icon
+                  v-if="showAxisSelector"
+                  :class="[
+                    'icon',
+                    'search',
+                    { active: column.isSearchConditionGiven },
+                  ]"
+                  icon="chart-bar"
+                  @click="handleAxisSelectorButton(column)"
+                />
+                <transition name="modal">
+                  <div
+                    v-if="state.axisSelectorActiveColumn === column"
+                    class="modal"
+                    :class="['filterWrapper', 'modal']"
+                  >
+                    <div class="filterWindow">
+                      <p class="filterWindowTitle">{{ column.label }}</p>
+                      <form>
+                        <select @change="handleAxisSelected">
+                          <option value="">None</option>
+                          <option value="xaxis">X Axis</option>
+                          <option value="yaxis">Y Axis</option>
+                          <option value="zaxis">Z Axis</option>
+                        </select>
+                      </form>
+                    </div>
+                  </div>
+                </transition>
               </th>
             </tr>
           </thead>
@@ -283,10 +313,19 @@ import {
   faSort,
   faSortUp,
   faSortDown,
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faEllipsisH, faFilter, faSearch, faSort, faSortUp, faSortDown);
+library.add(
+  faEllipsisH,
+  faFilter,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faChartBar
+);
 
 export default defineComponent({
   components: {
@@ -297,7 +336,12 @@ export default defineComponent({
     FontAwesomeIcon,
   },
 
-  props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+  props: [
+    // eslint-disable-next-line vue/require-prop-types
+    ...metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+    // eslint-disable-next-line vue/require-prop-types
+    "stanzaElement",
+  ],
 
   setup(params) {
     const sliderPagination = ref();
@@ -320,6 +364,8 @@ export default defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
+
+      axisSelectorActiveColumn: null,
     });
 
     const filteredRows = computed(() => {
@@ -450,6 +496,24 @@ export default defineComponent({
       }
     }
 
+    function handleAxisSelectorButton(column) {
+      if (column === state.axisSelectorActiveColumn) {
+        state.axisSelectorActiveColumn = null;
+        return;
+      }
+      state.axisSelectorActiveColumn = column;
+    }
+
+    function handleAxisSelected(e) {
+      const axis = e.target.value;
+
+      const event = new CustomEvent(axis, {
+        detail: state.axisSelectorActiveColumn.id,
+      });
+      params.stanzaElement.dispatchEvent(event);
+      state.axisSelectorActiveColumn = null;
+    }
+
     function updateCurrentPage(currentPage) {
       state.pagination.currentPage = currentPage;
     }
@@ -526,6 +590,9 @@ export default defineComponent({
       updateCurrentPage,
       thead,
       json,
+      handleAxisSelectorButton,
+      handleAxisSelected,
+      showAxisSelector: params.showAxisSelector,
     };
   },
 });
@@ -548,7 +615,7 @@ function createColumnState(columnDef, values) {
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number).filter(value => !Number.isNaN(value));
+    const nums = values.map(Number).filter((value) => !Number.isNaN(value));
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -662,10 +729,9 @@ function searchByEachColumn(row) {
 function formattedValue(format, val) {
   try {
     return sprintf(format, val);
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return val;
   }
 }
-
 </script>
