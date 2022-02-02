@@ -208,14 +208,14 @@
       "stanza:key": "xaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
-      "stanza:example": "top",
+      "stanza:example": "bottom",
       "stanza:description": "X axis placement"
     },
     {
       "stanza:key": "yaxis-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["left", "right"],
-      "stanza:example": "right",
+      "stanza:example": "left",
       "stanza:description": "Y axis placement"
     },
     {
