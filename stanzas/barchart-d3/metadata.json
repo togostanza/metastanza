@@ -48,7 +48,7 @@
       "stanza:key": "bar-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["stacked", "grouped"],
-      "stanza:example": "grouped",
+      "stanza:example": "stacked",
       "stanza:description": "Bars arrangement",
       "stanza:required": true
     },
