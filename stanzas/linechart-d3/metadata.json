@@ -106,9 +106,15 @@
     {
       "stanza:key": "legend",
       "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show legend"
+      "stanza:choice": [
+        "none",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Where to show the legend. 'none' for no legend"
     },
     {
       "stanza:key": "xgrid",

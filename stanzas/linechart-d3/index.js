@@ -38,7 +38,6 @@ export default class Linechart extends Stanza {
     const showYTicks = this.params["ytick"] === "true" ? true : false;
     const xTicksNumber = this.params["xticks-number"] || 5;
     const yTicksNumber = this.params["yticks-number"] || 3;
-    const showLegend = this.params["legend"] === "true" ? true : false;
     const groupKeyName = this.params["group-by"];
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
@@ -84,6 +83,8 @@ export default class Linechart extends Stanza {
       template: "stanza.html.hbs",
     });
 
+    const legendShow = this.params["legend"] || "none";
+
     const root = this.root.querySelector(":scope > div");
 
     // On change params rerender - Check if legend and svg already existing and remove them -
@@ -99,7 +100,7 @@ export default class Linechart extends Stanza {
 
     // Add legend
 
-    if (showLegend) {
+    if (legendShow !== "none") {
       this.legend = new Legend();
       root.append(this.legend);
     }
@@ -109,20 +110,15 @@ export default class Linechart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO change data to include errors. For now, artificially add 5% error
+    // TODO change data to include errors. For now, artificially add 20% error
     values.forEach((item) => {
       item.error = item.count * 0.2;
     });
-
-    //Filter out all non-numeric y-axis values from data
-    values = values.filter((item) => !isNaN(item[yKeyName]));
-    // ===
 
     //Filter out all non-numeric x-axis values from data
     if (xDataType === "number") {
       values = values.filter((item) => !isNaN(item[xKeyName]));
     }
-    // ===
 
     this._data = values;
 
@@ -257,7 +253,6 @@ export default class Linechart extends Stanza {
     );
 
     // Axes preparation
-
     let dataMax, dataMin;
     if (showErrorBars) {
       dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
@@ -425,8 +420,6 @@ export default class Linechart extends Stanza {
             })(d[1]);
         });
 
-      console.log("gs", dataGroup.selectAll("path").nodes());
-
       if (showErrorBars) {
         //Draw error bars
         const barGroups = errorBarsGroup
@@ -575,45 +568,48 @@ export default class Linechart extends Stanza {
       }
 
       // update legend
-
-      this.legend.setup(
-        groups.map((item, index) => ({
-          id: "" + index,
-          label: item,
-          color: color(item),
-          node: this.root.querySelector(`svg #data-${index}`) || null,
-        })),
-        this.root.querySelector("main"),
-        {
-          fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-          position: ["top", "right"],
-          fadeProp: "stroke-opacity",
-        }
-      );
+      if (legendShow !== "none") {
+        this.legend.setup(
+          groups.map((item, index) => ({
+            id: "" + index,
+            label: item,
+            color: color(item),
+            node: this.root.querySelector(`svg #data-${index}`) || null,
+          })),
+          this.root.querySelector("main"),
+          {
+            fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+            position: legendShow.split("-"),
+            fadeProp: "stroke-opacity",
+          }
+        );
+      }
     };
 
     update(values);
 
-    const legend = this.root
-      .querySelector("togostanza--legend")
-      .shadowRoot.querySelector(".legend > table > tbody");
+    if (legendShow !== "none") {
+      const legend = this.root
+        .querySelector("togostanza--legend")
+        .shadowRoot.querySelector(".legend > table > tbody");
 
-    // Set toggle behaviour
-    legend.addEventListener("click", (e) => {
-      const parentNode = e.target.parentNode;
-      if (parentNode.nodeName === "TR") {
-        const id = parentNode.dataset.id;
-        parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-        toggleState.set("" + id, !toggleState.get("" + id));
+      // Set toggle behaviour
+      legend.addEventListener("click", (e) => {
+        const parentNode = e.target.parentNode;
+        if (parentNode.nodeName === "TR") {
+          const id = parentNode.dataset.id;
+          parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
+          toggleState.set("" + id, !toggleState.get("" + id));
 
-        // filter out data wich was clicked
-        const newData = values.filter(
-          (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
-        );
+          // filter out data wich was clicked
+          const newData = values.filter(
+            (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
+          );
 
-        update(newData);
-      }
-    });
+          update(newData);
+        }
+      });
+    }
   }
 }
 
