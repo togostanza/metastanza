@@ -5106,14 +5106,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       (_ctx.showAxisSelector)
                         ? (openBlock(), createBlock(_component_font_awesome_icon, {
                             key: 3,
-                            class: normalizeClass([
-                    'icon',
-                    'search',
-                    { active: column.isSearchConditionGiven },
-                  ]),
+                            class: normalizeClass(['icon', 'search']),
                             icon: "chart-bar",
                             onClick: $event => (_ctx.handleAxisSelectorButton(column))
-                          }, null, 8 /* PROPS */, ["class", "onClick"]))
+                          }, null, 8 /* PROPS */, ["onClick"]))
                         : createCommentVNode("v-if", true),
                       createVNode(_component_AxisSelectorModal, {
                         active: _ctx.state.axisSelectorActiveColumn === column,
