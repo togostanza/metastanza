@@ -1,4 +1,4 @@
-import { d as defineComponent, l as computed, s as h, u as watch } from './runtime-dom.esm-bundler-c0b37019.js';
+import { d as defineComponent, l as computed, s as h, u as watch } from './runtime-dom.esm-bundler-f4938fe2.js';
 
 /*!
  * Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com
@@ -1820,6 +1820,11 @@ var faAngleRight = {
   iconName: 'angle-right',
   icon: [256, 512, [], "f105", "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"]
 };
+var faChartBar = {
+  prefix: 'fas',
+  iconName: 'chart-bar',
+  icon: [512, 512, [], "f080", "M332.8 320h38.4c6.4 0 12.8-6.4 12.8-12.8V172.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v134.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V76.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v230.4c0 6.4 6.4 12.8 12.8 12.8zm-288 0h38.4c6.4 0 12.8-6.4 12.8-12.8v-70.4c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v70.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V108.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v198.4c0 6.4 6.4 12.8 12.8 12.8zM496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"]
+};
 var faChevronRight = {
   prefix: 'fas',
   iconName: 'chevron-right',
@@ -1861,5 +1866,5 @@ var faSortUp = {
   icon: [320, 512, [], "f0de", "M279 224H41c-21.4 0-32.1-25.9-17-41L143 64c9.4-9.4 24.6-9.4 33.9 0l119 119c15.2 15.1 4.5 41-16.9 41z"]
 };
 
-export { FontAwesomeIcon as F, faClipboard as a, faAngleRight as b, faAngleDoubleRight as c, faAngleLeft as d, faAngleDoubleLeft as e, faChevronRight as f, faEllipsisH as g, faFilter as h, faSearch as i, faSort as j, faSortUp as k, library as l, faSortDown as m };
-//# sourceMappingURL=index.es-83d2dcd4.js.map
+export { FontAwesomeIcon as F, faClipboard as a, faAngleRight as b, faAngleDoubleRight as c, faAngleLeft as d, faAngleDoubleLeft as e, faChevronRight as f, faEllipsisH as g, faFilter as h, faSearch as i, faSort as j, faSortUp as k, library as l, faSortDown as m, faChartBar as n };
+//# sourceMappingURL=index.es-fab29479.js.map

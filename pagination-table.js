@@ -1,7 +1,7 @@
 import { c as commonjsGlobal, d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
 import { S as Stanza } from './stanza-98e711e0.js';
-import { h as toRefs, i as ref, l as computed, x as onMounted, y as onUnmounted, u as watch, f as createBlock, z as mergeProps, o as openBlock, d as defineComponent, A as onUpdated, c as createElementBlock, b as createBaseVNode, n as normalizeClass, p as createVNode, F as Fragment, r as renderList, g as createTextVNode, t as toDisplayString, e as createCommentVNode, a as resolveComponent, B as normalizeStyle, j as reactive, C as onRenderTriggered, w as withDirectives, m as vModelText, D as vModelSelect, E as withCtx, T as Transition, G as vModelCheckbox, q as createApp } from './runtime-dom.esm-bundler-c0b37019.js';
-import { l as library, b as faAngleRight, c as faAngleDoubleRight, d as faAngleLeft, e as faAngleDoubleLeft, F as FontAwesomeIcon, g as faEllipsisH, h as faFilter, i as faSearch, j as faSort, k as faSortUp, m as faSortDown } from './index.es-83d2dcd4.js';
+import { h as toRefs, i as ref, l as computed, x as onMounted, y as onUnmounted, u as watch, f as createBlock, z as mergeProps, o as openBlock, d as defineComponent, A as onUpdated, c as createElementBlock, b as createBaseVNode, n as normalizeClass, p as createVNode, F as Fragment, r as renderList, g as createTextVNode, t as toDisplayString, e as createCommentVNode, a as resolveComponent, B as normalizeStyle, C as withCtx, T as Transition, j as reactive, D as onRenderTriggered, w as withDirectives, m as vModelText, E as vModelSelect, G as vModelCheckbox, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
+import { l as library, b as faAngleRight, c as faAngleDoubleRight, d as faAngleLeft, e as faAngleDoubleLeft, F as FontAwesomeIcon, g as faEllipsisH, h as faFilter, i as faSearch, j as faSort, k as faSortUp, m as faSortDown, n as faChartBar } from './index.es-fab29479.js';
 import { l as loadData } from './load-data-0be92417.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss } from './index-1e0b4ea1.js';
 
@@ -9,7 +9,7 @@ function l(t){return -1!==[null,void 0,!1].indexOf(t)}function c(t){var e={expor
 
 library.add(faAngleRight, faAngleDoubleRight, faAngleLeft, faAngleDoubleLeft);
 
-var script$4 = defineComponent({
+var script$5 = defineComponent({
   components: {
     Slider: m,
     FontAwesomeIcon,
@@ -122,32 +122,32 @@ var script$4 = defineComponent({
   },
 });
 
-const _hoisted_1$4 = {
+const _hoisted_1$5 = {
   key: 0,
   ref: "paginationWrapper",
   class: "paginationWrapper"
 };
-const _hoisted_2$4 = { class: "serialPagination" };
-const _hoisted_3$4 = {
+const _hoisted_2$5 = { class: "serialPagination" };
+const _hoisted_3$5 = {
   ref: "paginationNumList",
   class: "paginationNumList"
 };
-const _hoisted_4$2 = ["onClick"];
-const _hoisted_5$2 = { class: "pageNumber" };
-const _hoisted_6$2 = /*#__PURE__*/createTextVNode(" Page ");
-const _hoisted_7$1 = ["value"];
+const _hoisted_4$3 = ["onClick"];
+const _hoisted_5$3 = { class: "pageNumber" };
+const _hoisted_6$3 = /*#__PURE__*/createTextVNode(" Page ");
+const _hoisted_7$2 = ["value"];
 const _hoisted_8$1 = {
   ref: "canvas",
   class: "canvas"
 };
 
-function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
   const _component_Slider = resolveComponent("Slider");
 
   return (_ctx.totalPages > 1)
-    ? (openBlock(), createElementBlock("div", _hoisted_1$4, [
-        createBaseVNode("div", _hoisted_2$4, [
+    ? (openBlock(), createElementBlock("div", _hoisted_1$5, [
+        createBaseVNode("div", _hoisted_2$5, [
           createBaseVNode("div", {
             class: normalizeClass(['arrowWrapper', { show: _ctx.currentPage !== 1 }])
           }, [
@@ -162,13 +162,13 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: _cache[1] || (_cache[1] = $event => (_ctx.updateCurrentPage(_ctx.currentPage - 1)))
             })
           ], 2 /* CLASS */),
-          createBaseVNode("ul", _hoisted_3$4, [
+          createBaseVNode("ul", _hoisted_3$5, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.surroundingPages, (page) => {
               return (openBlock(), createElementBlock("li", {
                 key: page,
                 class: normalizeClass(['pagination', { currentBtn: _ctx.currentPage === page }]),
                 onClick: $event => (_ctx.updateCurrentPage(page))
-              }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, _hoisted_4$2))
+              }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, _hoisted_4$3))
             }), 128 /* KEYED_FRAGMENT */))
           ], 512 /* NEED_PATCH */),
           createBaseVNode("div", {
@@ -185,14 +185,14 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: _cache[3] || (_cache[3] = $event => (_ctx.updateCurrentPage(_ctx.totalPages)))
             })
           ], 2 /* CLASS */),
-          createBaseVNode("div", _hoisted_5$2, [
-            _hoisted_6$2,
+          createBaseVNode("div", _hoisted_5$3, [
+            _hoisted_6$3,
             createBaseVNode("input", {
               value: _ctx.currentPage,
               type: "text",
               class: "jumpToNumberInput",
               onInput: _cache[4] || (_cache[4] = $event => (_ctx.updateCurrentPage(Number($event.target.value))))
-            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_7$1),
+            }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_7$2),
             createTextVNode(" of " + toDisplayString(_ctx.totalPages), 1 /* TEXT */)
           ])
         ]),
@@ -213,10 +213,10 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
     : createCommentVNode("v-if", true)
 }
 
-script$4.render = render$4;
-script$4.__file = "stanzas/pagination-table/SliderPagination.vue";
+script$5.render = render$5;
+script$5.__file = "stanzas/pagination-table/SliderPagination.vue";
 
-var script$3 = defineComponent({
+var script$4 = defineComponent({
   props: {
     id: {
       type: String,
@@ -237,17 +237,17 @@ var script$3 = defineComponent({
   },
 });
 
-const _hoisted_1$3 = ["id", "name"];
-const _hoisted_2$3 = ["for", "innerHTML"];
-const _hoisted_3$3 = ["for"];
+const _hoisted_1$4 = ["id", "name"];
+const _hoisted_2$4 = ["for", "innerHTML"];
+const _hoisted_3$4 = ["for"];
 
-function render$3(_ctx, _cache, $props, $setup, $data, $options) {
+function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("input", {
       id: _ctx.id,
       type: "checkbox",
       name: _ctx.id
-    }, null, 8 /* PROPS */, _hoisted_1$3),
+    }, null, 8 /* PROPS */, _hoisted_1$4),
     (_ctx.unescape)
       ? (openBlock(), createElementBlock("label", {
           key: 0,
@@ -255,22 +255,22 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
           style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`),
           class: "label",
           innerHTML: _ctx.value
-        }, null, 12 /* STYLE, PROPS */, _hoisted_2$3))
+        }, null, 12 /* STYLE, PROPS */, _hoisted_2$4))
       : (openBlock(), createElementBlock("label", {
           key: 1,
           for: _ctx.id,
           style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`),
           class: "label"
-        }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$3))
+        }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$4))
   ], 64 /* STABLE_FRAGMENT */))
 }
 
-script$3.render = render$3;
-script$3.__file = "stanzas/pagination-table/LineClampCell.vue";
+script$4.render = render$4;
+script$4.__file = "stanzas/pagination-table/LineClampCell.vue";
 
-var script$2 = defineComponent({
+var script$3 = defineComponent({
   components: {
-    LineClampCell: script$3,
+    LineClampCell: script$4,
   },
   props: {
     id: {
@@ -300,11 +300,11 @@ var script$2 = defineComponent({
   },
 });
 
-const _hoisted_1$2 = ["href", "target"];
-const _hoisted_2$2 = ["href", "target", "innerHTML"];
-const _hoisted_3$2 = ["href", "target"];
+const _hoisted_1$3 = ["href", "target"];
+const _hoisted_2$3 = ["href", "target", "innerHTML"];
+const _hoisted_3$3 = ["href", "target"];
 
-function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_LineClampCell = resolveComponent("LineClampCell");
 
   return (openBlock(), createElementBlock(Fragment, null, [
@@ -320,7 +320,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
             unescape: _ctx.unescape,
             value: _ctx.value
           }, null, 8 /* PROPS */, ["id", "line-clamp", "unescape", "value"])
-        ], 8 /* PROPS */, _hoisted_1$2))
+        ], 8 /* PROPS */, _hoisted_1$3))
       : createCommentVNode("v-if", true),
     createCommentVNode(" eslint-disable-next-line vue/no-v-html "),
     (_ctx.unescape && !_ctx.lineClamp)
@@ -329,7 +329,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           href: _ctx.href,
           target: _ctx.target,
           innerHTML: _ctx.value
-        }, null, 8 /* PROPS */, _hoisted_2$2))
+        }, null, 8 /* PROPS */, _hoisted_2$3))
       : (openBlock(), createElementBlock("a", {
           key: 2,
           href: _ctx.href,
@@ -345,14 +345,14 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
             : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
                 createTextVNode(toDisplayString(_ctx.value), 1 /* TEXT */)
               ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
-        ], 8 /* PROPS */, _hoisted_3$2))
+        ], 8 /* PROPS */, _hoisted_3$3))
   ], 64 /* STABLE_FRAGMENT */))
 }
 
-script$2.render = render$2;
-script$2.__file = "stanzas/pagination-table/AnchorCell.vue";
+script$3.render = render$3;
+script$3.__file = "stanzas/pagination-table/AnchorCell.vue";
 
-var script$1 = defineComponent({
+var script$2 = defineComponent({
   props: {
     id: {
       type: String,
@@ -382,14 +382,14 @@ var script$1 = defineComponent({
   emits: ["toggleCharClampOn"],
 });
 
-const _hoisted_1$1 = ["id", "name"];
-const _hoisted_2$1 = ["for", "innerHTML"];
-const _hoisted_3$1 = ["for"];
-const _hoisted_4$1 = ["id", "value", "name"];
-const _hoisted_5$1 = ["for", "innerHTML"];
-const _hoisted_6$1 = ["for"];
+const _hoisted_1$2 = ["id", "name"];
+const _hoisted_2$2 = ["for", "innerHTML"];
+const _hoisted_3$2 = ["for"];
+const _hoisted_4$2 = ["id", "value", "name"];
+const _hoisted_5$2 = ["for", "innerHTML"];
+const _hoisted_6$2 = ["for"];
 
-function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   return (_ctx.lineClamp)
     ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
         createBaseVNode("input", {
@@ -397,7 +397,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           type: "checkbox",
           name: _ctx.id,
           class: "lineClampOn"
-        }, null, 8 /* PROPS */, _hoisted_1$1),
+        }, null, 8 /* PROPS */, _hoisted_1$2),
         (_ctx.unescape)
           ? (openBlock(), createElementBlock("label", {
               key: 0,
@@ -405,13 +405,13 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
               class: normalizeClass(['label', 'lineClampOn']),
               innerHTML: _ctx.value
-            }, null, 12 /* STYLE, PROPS */, _hoisted_2$1))
+            }, null, 12 /* STYLE, PROPS */, _hoisted_2$2))
           : (openBlock(), createElementBlock("label", {
               key: 1,
               for: _ctx.id,
               style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
               class: normalizeClass(['label', 'lineClampOn'])
-            }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$1))
+            }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$2))
       ], 64 /* STABLE_FRAGMENT */))
     : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
         createBaseVNode("input", {
@@ -421,26 +421,80 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           name: _ctx.id,
           class: "charClampOn",
           onChange: _cache[0] || (_cache[0] = $event => (_ctx.$emit('toggleCharClampOn')))
-        }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_4$1),
+        }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_4$2),
         (_ctx.unescape)
           ? (openBlock(), createElementBlock("label", {
               key: 0,
               for: _ctx.id,
               class: "label charClampOn",
               innerHTML: _ctx.value
-            }, null, 8 /* PROPS */, _hoisted_5$1))
+            }, null, 8 /* PROPS */, _hoisted_5$2))
           : (openBlock(), createElementBlock("label", {
               key: 1,
               for: _ctx.id,
               class: "label charClampOn"
             }, toDisplayString(_ctx.charClampOn && _ctx.value.length > _ctx.charClamp
           ? `${_ctx.value.slice(0, _ctx.charClamp)}…`
-          : _ctx.value), 9 /* TEXT, PROPS */, _hoisted_6$1))
+          : _ctx.value), 9 /* TEXT, PROPS */, _hoisted_6$2))
       ], 64 /* STABLE_FRAGMENT */))
 }
 
+script$2.render = render$2;
+script$2.__file = "stanzas/pagination-table/ClampCell.vue";
+
+var script$1 = defineComponent({
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+    label: {
+      type: String,
+      default: "",
+    },
+  },
+
+  emits: ["axisSelected"],
+});
+
+const _hoisted_1$1 = { class: "filterWindow" };
+const _hoisted_2$1 = { class: "filterWindowTitle" };
+const _hoisted_3$1 = /*#__PURE__*/createBaseVNode("option", { value: "" }, "None", -1 /* HOISTED */);
+const _hoisted_4$1 = /*#__PURE__*/createBaseVNode("option", { value: "xaxis" }, "X Axis", -1 /* HOISTED */);
+const _hoisted_5$1 = /*#__PURE__*/createBaseVNode("option", { value: "yaxis" }, "Y Axis", -1 /* HOISTED */);
+const _hoisted_6$1 = /*#__PURE__*/createBaseVNode("option", { value: "zaxis" }, "Z Axis", -1 /* HOISTED */);
+const _hoisted_7$1 = [
+  _hoisted_3$1,
+  _hoisted_4$1,
+  _hoisted_5$1,
+  _hoisted_6$1
+];
+
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  return (openBlock(), createBlock(Transition, { name: "modal" }, {
+    default: withCtx(() => [
+      (_ctx.active)
+        ? (openBlock(), createElementBlock("div", {
+            key: 0,
+            class: normalizeClass(["modal", ['filterWrapper', 'modal']])
+          }, [
+            createBaseVNode("div", _hoisted_1$1, [
+              createBaseVNode("p", _hoisted_2$1, toDisplayString(_ctx.label), 1 /* TEXT */),
+              createBaseVNode("form", null, [
+                createBaseVNode("select", {
+                  onChange: _cache[0] || (_cache[0] = $event => (_ctx.$emit('axisSelected', $event.target.value)))
+                }, _hoisted_7$1, 32 /* HYDRATE_EVENTS */)
+              ])
+            ])
+          ]))
+        : createCommentVNode("v-if", true)
+    ]),
+    _: 1 /* STABLE */
+  }))
+}
+
 script$1.render = render$1;
-script$1.__file = "stanzas/pagination-table/ClampCell.vue";
+script$1.__file = "stanzas/pagination-table/AxisSelectorModal.vue";
 
 var lodash_orderby = {exports: {}};
 
@@ -4135,6 +4189,12 @@ var metadata = {
 		"stanza:key": "columns",
 		"stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
 		"stanza:description": "Columns' options"
+	},
+	{
+		"stanza:key": "show-axis-selector",
+		"stanza:type": "boolean",
+		"stanza:example": false,
+		"stanza:description": "Show axis selector button"
 	}
 ],
 	"stanza:menu-placement": "bottom-right",
@@ -4346,21 +4406,51 @@ var metadata = {
 		"stanza:default": "#F8F9FA",
 		"stanza:description": "Background color"
 	}
+],
+	"stanza:incomingEvent": [
+],
+	"stanza:outgoingEvent": [
+	{
+		"stanza:key": "xaxis",
+		"stanza:description": "xaxis changed event"
+	},
+	{
+		"stanza:key": "yaxis",
+		"stanza:description": "yaxis changed event"
+	},
+	{
+		"stanza:key": "zaxis",
+		"stanza:description": "zaxis changed event"
+	}
 ]
 };
 
-library.add(faEllipsisH, faFilter, faSearch, faSort, faSortUp, faSortDown);
+library.add(
+  faEllipsisH,
+  faFilter,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faChartBar
+);
 
 var script = defineComponent({
   components: {
     Slider: m,
-    SliderPagination: script$4,
-    AnchorCell: script$2,
-    ClampCell: script$1,
+    SliderPagination: script$5,
+    AnchorCell: script$3,
+    ClampCell: script$2,
     FontAwesomeIcon,
+    AxisSelectorModal: script$1,
   },
 
-  props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+  props: [
+    // eslint-disable-next-line vue/require-prop-types
+    ...metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+    // eslint-disable-next-line vue/require-prop-types
+    "stanzaElement",
+  ],
 
   setup(params) {
     const sliderPagination = ref();
@@ -4383,6 +4473,8 @@ var script = defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
+
+      axisSelectorActiveColumn: null,
     });
 
     const filteredRows = computed(() => {
@@ -4513,6 +4605,22 @@ var script = defineComponent({
       }
     }
 
+    function handleAxisSelectorButton(column) {
+      if (column === state.axisSelectorActiveColumn) {
+        state.axisSelectorActiveColumn = null;
+        return;
+      }
+      state.axisSelectorActiveColumn = column;
+    }
+
+    function handleAxisSelected(axis) {
+      const event = new CustomEvent(axis, {
+        detail: state.axisSelectorActiveColumn.id,
+      });
+      params.stanzaElement.dispatchEvent(event);
+      state.axisSelectorActiveColumn = null;
+    }
+
     function updateCurrentPage(currentPage) {
       state.pagination.currentPage = currentPage;
     }
@@ -4589,6 +4697,9 @@ var script = defineComponent({
       updateCurrentPage,
       thead,
       json,
+      handleAxisSelectorButton,
+      handleAxisSelected,
+      showAxisSelector: params.showAxisSelector,
     };
   },
 });
@@ -4611,7 +4722,7 @@ function createColumnState(columnDef, values) {
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number).filter(value => !Number.isNaN(value));
+    const nums = values.map(Number).filter((value) => !Number.isNaN(value));
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -4725,7 +4836,7 @@ function searchByEachColumn(row) {
 function formattedValue(format, val) {
   try {
     return sprintf.sprintf(format, val);
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return val;
   }
@@ -4765,6 +4876,7 @@ const _hoisted_30 = { key: 3 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
   const _component_Slider = resolveComponent("Slider");
+  const _component_AxisSelectorModal = resolveComponent("AxisSelectorModal");
   const _component_AnchorCell = resolveComponent("AnchorCell");
   const _component_ClampCell = resolveComponent("ClampCell");
   const _component_SliderPagination = resolveComponent("SliderPagination");
@@ -4990,7 +5102,24 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             : createCommentVNode("v-if", true)
                         ]),
                         _: 2 /* DYNAMIC */
-                      }, 1024 /* DYNAMIC_SLOTS */)
+                      }, 1024 /* DYNAMIC_SLOTS */),
+                      (_ctx.showAxisSelector)
+                        ? (openBlock(), createBlock(_component_font_awesome_icon, {
+                            key: 3,
+                            class: normalizeClass([
+                    'icon',
+                    'search',
+                    { active: column.isSearchConditionGiven },
+                  ]),
+                            icon: "chart-bar",
+                            onClick: $event => (_ctx.handleAxisSelectorButton(column))
+                          }, null, 8 /* PROPS */, ["class", "onClick"]))
+                        : createCommentVNode("v-if", true),
+                      createVNode(_component_AxisSelectorModal, {
+                        active: _ctx.state.axisSelectorActiveColumn === column,
+                        label: column.label,
+                        onAxisSelected: _ctx.handleAxisSelected
+                      }, null, 8 /* PROPS */, ["active", "label", "onAxisSelected"])
                     ], 6 /* CLASS, STYLE */))
                   }), 128 /* KEYED_FRAGMENT */))
                 ])
@@ -5097,7 +5226,11 @@ class PaginationTable extends Stanza {
     main.parentNode.style.padding = this.params["padding"];
 
     this._app?.unmount();
-    this._app = createApp(script, { ...this.params, main });
+    this._app = createApp(script, {
+      ...this.params,
+      main,
+      stanzaElement: this.element,
+    });
     this._component = this._app.mount(main);
   }
 }
