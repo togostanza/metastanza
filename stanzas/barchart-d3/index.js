@@ -234,6 +234,8 @@ export default class Barchart extends Stanza {
       .range([0, WIDTH])
       .padding(barPaddings);
 
+    const stackGroups = barsArea.append("g").attr("class", "bars-group");
+
     const update = (values) => {
       const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
       const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
@@ -324,26 +326,47 @@ export default class Barchart extends Stanza {
           item.forEach((d) => (d.key = item.key));
         });
 
-        const stackGroups = barsArea.append("g");
-
         console.log("stackedData", stackedData);
-        const groups = svg
-          .append("g")
-          .selectAll("text")
+
+        const gs = stackGroups
+          .selectAll("g.bars")
           .data(stackedData, (d) => d.key);
 
-        groups.exit().remove();
-        groups
-          .enter()
-          .append("text")
-          .attr(
-            "id",
-            (d) =>
-              `stacked-group-${gSubKeyNames.findIndex(
-                (item) => item === d.key
-              )}`
+        gs.join(
+          (enter) => {
+            return enter.append("g").attr("class", "bars");
+          },
+          (update) => update,
+          (exit) => {
+            exit.remove();
+          }
+        )
+          .selectAll("rect")
+          .data(
+            (d) => d,
+            (d) => d.key
           )
-          .text("hi");
+          .join(
+            (enter) => {
+              return enter.append("rect");
+            },
+            (update) => update,
+            (exit) => {
+              exit.remove();
+            }
+          )
+          .attr("fill", (d) => color(d.key))
+          .attr("x", (d) => x(d.data.x))
+          .attr("y", (d) => {
+            return y(d[1]);
+          })
+          .attr("width", x.bandwidth())
+          .attr("height", (d) => {
+            if (d[1]) {
+              return y(d[0]) - y(d[1]);
+            }
+            return 0;
+          });
 
         // stackGroups.exit().remove();
 
