@@ -1,6 +1,6 @@
 import { c as commonjsGlobal, d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
 import { S as Stanza } from './stanza-98e711e0.js';
-import { h as toRefs, i as ref, l as computed, x as onMounted, y as onUnmounted, u as watch, f as createBlock, z as mergeProps, o as openBlock, d as defineComponent, A as onUpdated, c as createElementBlock, b as createBaseVNode, n as normalizeClass, p as createVNode, F as Fragment, r as renderList, g as createTextVNode, t as toDisplayString, e as createCommentVNode, a as resolveComponent, B as normalizeStyle, C as withCtx, T as Transition, j as reactive, D as onRenderTriggered, w as withDirectives, m as vModelText, E as vModelSelect, G as vModelCheckbox, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
+import { h as toRefs, i as ref, l as computed, x as onMounted, y as onUnmounted, u as watch, f as createBlock, z as mergeProps, o as openBlock, d as defineComponent, A as onUpdated, c as createElementBlock, b as createBaseVNode, n as normalizeClass, p as createVNode, F as Fragment, r as renderList, g as createTextVNode, t as toDisplayString, e as createCommentVNode, a as resolveComponent, B as normalizeStyle, C as withCtx, T as Transition, j as reactive, k as watchEffect, D as onRenderTriggered, w as withDirectives, m as vModelText, E as vModelSelect, G as vModelCheckbox, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
 import { l as library, b as faAngleRight, c as faAngleDoubleRight, d as faAngleLeft, e as faAngleDoubleLeft, F as FontAwesomeIcon, g as faEllipsisH, h as faFilter, i as faSearch, j as faSort, k as faSortUp, m as faSortDown, n as faChartBar } from './index.es-fab29479.js';
 import { l as loadData } from './load-data-0be92417.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss } from './index-1e0b4ea1.js';
@@ -4187,7 +4187,7 @@ var metadata = {
 	},
 	{
 		"stanza:key": "columns",
-		"stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
+		"stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3, \"type\":\"number\"},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
 		"stanza:description": "Columns' options"
 	},
 	{
@@ -4421,6 +4421,10 @@ var metadata = {
 	{
 		"stanza:key": "zaxis",
 		"stanza:description": "zaxis changed event"
+	},
+	{
+		"stanza:key": "filter",
+		"stanza:description": "filter conditions changed event"
 	}
 ]
 };
@@ -4541,6 +4545,53 @@ var script = defineComponent({
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
         ) || isModalShowing.value
+      );
+    });
+
+    watchEffect(() => {
+      const conditions = [];
+
+      if (state.queryForAllColumns !== "") {
+        conditions.push({
+          type: "substring",
+          target: null,
+          value: state.queryForAllColumns,
+        });
+      }
+
+      for (const column of state.columns) {
+        if (column.query !== "" && column.query !== undefined) {
+          conditions.push({
+            type: "substring",
+            target: column.id,
+            value: column.query,
+          });
+        }
+        if (
+          column.rangeMin !== undefined &&
+          column.rangeMin !== column.minValue
+        ) {
+          conditions.push({
+            type: "gte",
+            target: column.id,
+            value: column.rangeMin,
+          });
+        }
+        if (
+          column.rangeMax !== undefined &&
+          column.rangeMax !== column.maxValue
+        ) {
+          conditions.push({
+            type: "lte",
+            target: column.id,
+            value: column.rangeMax,
+          });
+        }
+      }
+      console.log("emit filter conditions", conditions);
+
+      params.stanzaElement.dispatchEvent(
+        new CustomEvent("filter", { detail: conditions })
       );
     });
 
