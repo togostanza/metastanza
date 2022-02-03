@@ -1,0 +1,136 @@
+summary {
+  display: none;
+}
+
+svg.marks {
+  background-color: var(--togostanza-background-color);
+}
+
+svg {
+  font-family: var(--togostanza-font-family);
+  background-color: var(--togostanza-background-color);
+}
+
+svg .error-bar > line {
+  stroke-width: var(--togostanza-errorbar-line-width);
+  stroke: var(--togostanza-errorbar-line-color);
+}
+
+svg .gridlines > .tick > line {
+  stroke: var(--togostanza-grid-color);
+  opacity: var(--togostanza-grid-opacity);
+  stroke-width: var(--togostanza-grid-width);
+  stroke-dasharray: var(--togostanza-grid-dash-length), var(--togostanza-grid-dash-length);
+}
+
+svg .gridlines > path.domain {
+  display: none;
+}
+
+svg .axis > .tick > line {
+  stroke: var(--togostanza-tick-color);
+  stroke-width: var(--togostanza-tick-width);
+}
+
+svg .axis > path {
+  stroke: var(--togostanza-axis-color);
+  stroke-width: var(--togostanza-axis-width);
+}
+
+svg .axis.title text {
+  font-size: calc(var(--togostanza-title-font-size) * 1px);
+  font-weight: var(--togostanza-title-font-weight);
+  font-family: var(--togostanza-font-family) !important;
+  fill: var(--togostanza-title-font-color);
+}
+
+svg .axis > .tick > text {
+  font-family: var(--togostanza-font-family);
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+svg path.data-lines {
+  stroke-width: var(--togostanza-line-width);
+  opacity: var(--togostanza-line-opacity);
+}
+
+svg line.errorbar {
+  stroke: var(--togostanza-errorbar-line-color);
+  stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
+  opacity: var(--togostanza-errorbar-line-opacity);
+}
+
+.-off {
+  opacity: 0.5;
+}
+
+svg#dl_button {
+  position: absolute;
+}
+svg#dl_button.dl-top-left {
+  top: 20px;
+  left: 40px;
+}
+svg#dl_button.dl-top-right {
+  top: 20px;
+  right: 40px;
+}
+svg#dl_button.dl-bottom-left {
+  bottom: 20px;
+  left: 40px;
+}
+svg#dl_button.dl-bottom-right {
+  bottom: 20px;
+  right: 40px;
+}
+svg#dl_button.dl-none {
+  display: none;
+}
+svg#dl_button .circle_g {
+  cursor: pointer;
+  opacity: 0.5;
+}
+svg#dl_button .hover {
+  opacity: 1;
+}
+
+div#dl_list {
+  width: fit-content;
+  position: absolute;
+  border: solid 1px #444444;
+  background-color: #ffffff;
+  font-size: 12px;
+  font-family: var(--togostanza-font-family);
+}
+div#dl_list.dl-top-left {
+  top: 40px;
+  left: 50px;
+}
+div#dl_list.dl-top-right {
+  top: 40px;
+  right: 50px;
+}
+div#dl_list.dl-bottom-left {
+  bottom: 40px;
+  left: 50px;
+}
+div#dl_list.dl-bottom-right {
+  bottom: 40px;
+  right: 50px;
+}
+div#dl_list.dl-none {
+  display: none;
+}
+div#dl_list ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+div#dl_list ul li {
+  cursor: pointer;
+  padding: 0px 10px 0px 10px;
+}
+div#dl_list ul li.hover {
+  background-color: #dddddd;
+}
