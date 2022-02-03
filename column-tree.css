@@ -7,6 +7,8 @@ main {
 
 #wrapper {
   position: relative;
+  overflow: auto;
+  width: calc(var(--togostanza-width) * 1px);
 }
 #wrapper .value {
   flex-grow: 1;
@@ -16,19 +18,28 @@ main {
 }
 #wrapper .label {
   display: flex;
+  overflow: hidden;
+}
+#wrapper .label > strong,
+#wrapper .label .value {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 #wrapper .label > strong {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
+  min-width: 50%;
 }
 #wrapper .label.-horizontal {
   width: 100%;
+  line-height: 1;
+  height: calc(var(--togostanza-font-size) * 1px + 1px);
   flex-direction: row;
   gap: 1rem;
 }
 #wrapper .label.-horizontal > .value {
   text-align: right;
+  padding-right: 1px;
 }
 #wrapper .label.-vertical {
   flex-direction: column;
@@ -50,6 +61,7 @@ main {
 }
 #wrapper > .search-container {
   margin-bottom: 1rem;
+  margin-left: 5px;
 }
 #wrapper > .search-container > input {
   position: relative;
@@ -60,14 +72,13 @@ main {
   border-radius: calc(var(--togostanza-column-border-radius) * 1px);
 }
 #wrapper > .search-container > .search-wrapper {
-  left: calc(var(--togostanza-column-border-radius) * 1px / 2 * -1);
   min-height: fit-content;
   max-height: 80%;
   display: flex;
   position: absolute;
   overflow: auto;
   border: solid 1px var(--togostanza-control-border-color);
-  border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+  border-radius: 3px;
   z-index: 2;
 }
 #wrapper > .search-container > .search-wrapper > .suggestions {
@@ -89,18 +100,23 @@ main {
   cursor: pointer;
 }
 #wrapper > #tree {
+  height: calc(var(--togostanza-column-height) * 1px);
   display: flex;
+  width: fit-content;
   gap: calc(var(--togostanza-column-gap) * 1px);
+  padding: 1px;
 }
 #wrapper > #tree > .column {
   overflow: auto;
   background-color: var(--togostanza-column-background-color);
   padding: calc(var(--togostanza-column-padding) * 1px);
-  min-width: max-content;
-  height: fit-content;
-  border: 1px solid;
-  border-color: var(--togostanza-column-border-color);
+  width: max-content;
+  outline: 1px solid;
+  outline-color: var(--togostanza-column-border-color);
   border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+}
+#wrapper > #tree > .column.-fixed {
+  width: calc(var(--togostanza-column-width) * 1px);
 }
 #wrapper > #tree > .column > .node {
   position: relative;

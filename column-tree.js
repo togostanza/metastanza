@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
 import { S as Stanza } from './stanza-98e711e0.js';
-import { d as defineComponent, c as createElementBlock, F as Fragment, r as renderList, a as resolveComponent, o as openBlock, n as normalizeClass, b as createBaseVNode, t as toDisplayString, e as createCommentVNode, f as createBlock, w as withDirectives, v as vShow, g as createTextVNode, h as toRefs, i as ref, j as reactive, k as watchEffect, l as computed, m as vModelText, p as createVNode, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
+import { d as defineComponent, c as createElementBlock, F as Fragment, r as renderList, n as normalizeClass, a as resolveComponent, o as openBlock, b as createBaseVNode, t as toDisplayString, e as createCommentVNode, f as createBlock, w as withDirectives, v as vShow, g as createTextVNode, h as toRefs, i as ref, j as reactive, k as watchEffect, l as computed, m as vModelText, p as createVNode, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
 import { l as loadData } from './load-data-0be92417.js';
 import { l as library, f as faChevronRight, a as faClipboard, F as FontAwesomeIcon } from './index.es-fab29479.js';
 import { g as appendCustomCss } from './index-1e0b4ea1.js';
@@ -55,8 +55,19 @@ var metadata = {
 			"true",
 			"false"
 		],
-		"stanza:example": true,
+		"stanza:example": false,
 		"stanza:description": "Show border between nodes",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "fixed-width-columns",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Make all columns a fixed width set by [--togostanza-column-width] at the styles section",
 		"stanza:required": false
 	},
 	{
@@ -131,6 +142,12 @@ var metadata = {
 	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
+		"stanza:key": "--togostanza-width",
+		"stanza:type": "number",
+		"stanza:default": 600,
+		"stanza:description": "Width for entire stanza"
+	},
+	{
 		"stanza:key": "--togostanza-background-color",
 		"stanza:type": "color",
 		"stanza:default": "rgba(255,255,255,0)",
@@ -179,6 +196,18 @@ var metadata = {
 		"stanza:description": "Text color for selected items"
 	},
 	{
+		"stanza:key": "--togostanza-column-height",
+		"stanza:type": "number",
+		"stanza:default": 400,
+		"stanza:description": "Height for single column"
+	},
+	{
+		"stanza:key": "--togostanza-column-width",
+		"stanza:type": "number",
+		"stanza:default": 250,
+		"stanza:description": "Width for single column"
+	},
+	{
 		"stanza:key": "--togostanza-column-background-color",
 		"stanza:type": "color",
 		"stanza:default": "#F8F9FA",
@@ -193,37 +222,37 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-column-border-radius",
 		"stanza:type": "number",
-		"stanza:default": 3,
+		"stanza:default": 0,
 		"stanza:description": "Border radius for single column"
 	},
 	{
 		"stanza:key": "--togostanza-column-gap",
 		"stanza:type": "number",
-		"stanza:default": 10,
+		"stanza:default": 0,
 		"stanza:description": "Gap between columns"
 	},
 	{
 		"stanza:key": "--togostanza-column-padding",
 		"stanza:type": "number",
-		"stanza:default": 0,
+		"stanza:default": 6,
 		"stanza:description": "Padding for single column"
 	},
 	{
 		"stanza:key": "--togostanza-node-padding-vertical",
 		"stanza:type": "number",
-		"stanza:default": 15,
+		"stanza:default": 6,
 		"stanza:description": "Vertical padding for nodes"
 	},
 	{
 		"stanza:key": "--togostanza-node-padding-horizontal",
 		"stanza:type": "number",
-		"stanza:default": 5,
+		"stanza:default": 6,
 		"stanza:description": "Horizontal padding for nodes"
 	},
 	{
 		"stanza:key": "--togostanza-node-border-radius",
 		"stanza:type": "number",
-		"stanza:default": 3,
+		"stanza:default": 9,
 		"stanza:description": "Border radius of highlighted/selected nodes"
 	},
 	{
@@ -281,6 +310,10 @@ var script$2 = defineComponent({
       type: String,
       default: "horizontal",
     },
+    fixedWidthColumns: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ["setParent", "setCheckedNode"],
   setup(props, context) {
@@ -309,11 +342,10 @@ var script$2 = defineComponent({
   },
 });
 
-const _hoisted_1$2 = { class: "column" };
-const _hoisted_2$2 = ["checked", "onInput"];
-const _hoisted_3$2 = ["onClick"];
-const _hoisted_4$2 = { class: "title" };
-const _hoisted_5$2 = {
+const _hoisted_1$2 = ["checked", "onInput"];
+const _hoisted_2$2 = ["onClick"];
+const _hoisted_3$2 = { class: "title" };
+const _hoisted_4$2 = {
   key: 0,
   class: "value"
 };
@@ -321,7 +353,9 @@ const _hoisted_5$2 = {
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
 
-  return (openBlock(), createElementBlock("div", _hoisted_1$2, [
+  return (openBlock(), createElementBlock("div", {
+    class: normalizeClass(["column", { '-fixed': _ctx.fixedWidthColumns }])
+  }, [
     (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.nodes, (node) => {
       return (openBlock(), createElementBlock("span", {
         key: node.id,
@@ -337,16 +371,16 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           type: "checkbox",
           checked: _ctx.checkedNodes.get(node.id),
           onInput: $event => (_ctx.setCheckedNode(node))
-        }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_2$2),
+        }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_1$2),
         createBaseVNode("span", {
           class: normalizeClass(["label", `-${_ctx.nodeContentAlignment}`]),
           onClick: $event => (_ctx.hasChildren(node.children) ? _ctx.setParent(node.id) : null)
         }, [
-          createBaseVNode("strong", _hoisted_4$2, toDisplayString(node[_ctx.keys.label]), 1 /* TEXT */),
+          createBaseVNode("strong", _hoisted_3$2, toDisplayString(node[_ctx.keys.label]), 1 /* TEXT */),
           (_ctx.valueObj.show)
-            ? (openBlock(), createElementBlock("span", _hoisted_5$2, toDisplayString(node[_ctx.keys.value] ?? _ctx.valueObj.fallback), 1 /* TEXT */))
+            ? (openBlock(), createElementBlock("span", _hoisted_4$2, toDisplayString(node[_ctx.keys.value] ?? _ctx.valueObj.fallback), 1 /* TEXT */))
             : createCommentVNode("v-if", true)
-        ], 10 /* CLASS, PROPS */, _hoisted_3$2),
+        ], 10 /* CLASS, PROPS */, _hoisted_2$2),
         (_ctx.hasChildren(node.children))
           ? (openBlock(), createBlock(_component_font_awesome_icon, {
               key: 0,
@@ -356,7 +390,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           : createCommentVNode("v-if", true)
       ], 2 /* CLASS */))
     }), 128 /* KEYED_FRAGMENT */))
-  ]))
+  ], 2 /* CLASS */))
 }
 
 script$2.render = render$2;
@@ -481,15 +515,16 @@ var script = defineComponent({
     const layerRefs = ref([]);
     const state = reactive({
       keys: {
-        label: params.labelKey.value,
-        value: params.valueKey.value,
+        label: params?.labelKey?.value,
+        value: params?.valueKey?.value,
       },
-      fallbackInCaseOfNoValue: params.valueFallback.value,
-      showValue: isTruthBool(params.showValue.value),
-      showPath: isTruthBool(params.showPath.value),
-      showPathExplanation: isTruthBool(params.showPathExplanation.value),
-      showBorderNodes: isTruthBool(params.showBorderNodes.value),
-      nodeContentAlignment: params.nodeContentAlignment.value,
+      fallbackInCaseOfNoValue: params?.valueFallback.value,
+      fixedWidthColumns: isTruthBool(params?.fixedWidthColumns?.value),
+      showValue: isTruthBool(params?.showValue?.value),
+      showPath: isTruthBool(params?.showPath?.value),
+      showPathExplanation: isTruthBool(params?.showPathExplanation?.value),
+      showBorderNodes: isTruthBool(params?.showBorderNodes?.value),
+      nodeContentAlignment: params?.nodeContentAlignment?.value,
       showSuggestions: false,
       responseJSON: null,
       columnData: [],
@@ -500,9 +535,9 @@ var script = defineComponent({
     watchEffect(
       async () => {
         state.responseJSON = await loadData(
-          params.dataUrl.value,
-          params.dataType.value,
-          params.main
+          params?.dataUrl?.value,
+          params?.dataType?.value,
+          params?.main
         );
         state.responseJSON = state.responseJSON.map((node) => {
           return { ...node, path: getPath(node) };
@@ -534,7 +569,7 @@ var script = defineComponent({
       return children;
     }
     function isNormalSearchHit(node) {
-      return node[params.searchKey.value]
+      return node[params?.searchKey?.value]
         ?.toString()
         .toLowerCase()
         .includes(state.searchTerm.toLowerCase());
@@ -667,9 +702,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           "value-obj": _ctx.valueObj,
           "show-border-nodes": _ctx.state.showBorderNodes,
           "node-content-alignment": _ctx.state.nodeContentAlignment,
+          "fixed-width-columns": _ctx.state.fixedWidthColumns,
           onSetParent: _ctx.updatePartialColumnData,
           onSetCheckedNode: _ctx.updateCheckedNodes
-        }, null, 8 /* PROPS */, ["nodes", "layer", "checked-nodes", "keys", "highlighted-node", "value-obj", "show-border-nodes", "node-content-alignment", "onSetParent", "onSetCheckedNode"]))
+        }, null, 8 /* PROPS */, ["nodes", "layer", "checked-nodes", "keys", "highlighted-node", "value-obj", "show-border-nodes", "node-content-alignment", "fixed-width-columns", "onSetParent", "onSetCheckedNode"]))
       }), 128 /* KEYED_FRAGMENT */))
     ])
   ]))
