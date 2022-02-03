@@ -1,5 +1,5 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+@use "@/common.scss";
 
 main {
   padding: 1rem 2rem;
@@ -10,6 +10,8 @@ main {
 
 #wrapper {
   position: relative;
+  overflow: auto;
+  width: calc(var(--togostanza-width) * 1px);
   .value {
     flex-grow: 1;
     font-weight: normal;
@@ -18,17 +20,26 @@ main {
   }
   .label {
     display: flex;
+    overflow: hidden;
+    > strong,
+    .value {
+      word-break: break-all;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
     > strong {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      min-width: 50%;
     }
     &.-horizontal {
       width: 100%;
+      line-height: 1;
+      height: calc(var(--togostanza-font-size) * 1px + 1px);
       flex-direction: row;
       gap: 1rem;
       > .value {
         text-align: right;
+        padding-right: 1px;
       }
     }
     &.-vertical {
@@ -54,6 +65,7 @@ main {
   }
   > .search-container {
     margin-bottom: 1rem;
+    margin-left: 5px;
     > input {
       position: relative;
       margin-right: 1rem;
@@ -63,14 +75,13 @@ main {
       border-radius: calc(var(--togostanza-column-border-radius) * 1px);
     }
     > .search-wrapper {
-      left: calc(var(--togostanza-column-border-radius) * 1px / 2 * -1);
       min-height: fit-content;
       max-height: 80%;
       display: flex;
       position: absolute;
       overflow: auto;
       border: solid 1px var(--togostanza-control-border-color);
-      border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+      border-radius: 3px;
       z-index: 2;
       > .suggestions {
         margin: 0;
@@ -93,17 +104,22 @@ main {
     }
   }
   > #tree {
+    height: calc(var(--togostanza-column-height) * 1px);
     display: flex;
+    width: fit-content;
     gap: calc(var(--togostanza-column-gap) * 1px);
+    padding: 1px;
     > .column {
       overflow: auto;
       background-color: var(--togostanza-column-background-color);
       padding: calc(var(--togostanza-column-padding) * 1px);
-      min-width: max-content;
-      height: fit-content;
-      border: 1px solid;
-      border-color: var(--togostanza-column-border-color);
+      width: max-content;
+      outline: 1px solid;
+      outline-color: var(--togostanza-column-border-color);
       border-radius: calc(var(--togostanza-column-border-radius) * 1px);
+      &.-fixed {
+        width: calc(var(--togostanza-column-width) * 1px);
+      }
       > .node {
         position: relative;
         display: grid;
