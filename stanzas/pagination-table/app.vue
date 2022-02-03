@@ -421,40 +421,50 @@ export default defineComponent({
     });
 
     watchEffect(() => {
-      const conds = [];
+      const conditions = [];
 
       if (state.queryForAllColumns !== "") {
-        conds.push({
+        conditions.push({
           type: "substring",
+          target: null,
           value: state.queryForAllColumns,
         });
       }
 
       for (const column of state.columns) {
-        if (column.query !== "") {
-          conds.push({
+        if (column.query !== "" && column.query !== undefined) {
+          conditions.push({
             type: "substring",
             target: column.id,
             value: column.query,
           });
         }
-        if (column.rangeMin !== undefined) {
-          conds.push({
+        if (
+          column.rangeMin !== undefined &&
+          column.rangeMin !== column.minValue
+        ) {
+          conditions.push({
             type: "gte",
             target: column.id,
             value: column.rangeMin,
           });
         }
-        if (column.rangeMax !== undefined) {
-          conds.push({
+        if (
+          column.rangeMax !== undefined &&
+          column.rangeMax !== column.maxValue
+        ) {
+          conditions.push({
             type: "lte",
             target: column.id,
             value: column.rangeMax,
           });
         }
       }
+      console.log("emit filter conditions", conditions);
 
-      console.log(JSON.stringify(conds));
+      params.stanzaElement.dispatchEvent(
+        new CustomEvent("filter", { detail: conditions })
+      );
     });
 
     function setRowspanState(rows) {

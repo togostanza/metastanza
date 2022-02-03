@@ -290,6 +290,10 @@
     {
       "stanza:key": "zaxis",
       "stanza:description": "zaxis changed event"
+    },
+    {
+      "stanza:key": "filter",
+      "stanza:description": "filter conditions changed event"
     }
   ]
 }
