@@ -228,26 +228,51 @@ export default class Barchart extends Stanza {
     const toggleState = new Map(
       gSubKeyNames.map((_, index) => ["" + index, false])
     );
+
     const x = d3
       .scaleBand()
       .domain(xAxisLabels)
       .range([0, WIDTH])
       .padding(barPaddings);
 
+    const y = d3.scaleLinear().range([HEIGHT, 0]);
+
+    const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
+
+    const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
+
+    const xAxisGridGenerator = d3
+      .axisBottom(x)
+      .tickSize(-HEIGHT)
+      .tickFormat("");
+
+    const yAxisGridGenerator = d3
+      .axisLeft(y)
+      .tickSize(-WIDTH)
+      .tickFormat("")
+      .ticks(yTicksNumber);
+
+    const yGridLines = barsArea.append("g").attr("class", "y gridlines");
+
     const stackGroups = barsArea.append("g").attr("class", "bars-group");
+
+    if (!showXTicks) {
+      xAxisGenerator.tickSize(0);
+    }
+
+    if (!showYTicks) {
+      yAxisGenerator.tickSize(0);
+    }
+
+    if (showBarTooltips) {
+      this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
+    }
 
     const update = (values) => {
       const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
       const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
 
-      console.log("subKeyNames", subKeyNames);
-
       x.domain(xAxisLabels);
-
-      const xAxisGenerator = d3.axisBottom(x).tickSizeOuter(0);
-      if (!showXTicks) {
-        xAxisGenerator.tickSize(0);
-      }
 
       xAxisArea
         .call(xAxisGenerator)
@@ -267,11 +292,6 @@ export default class Barchart extends Stanza {
 
       // Show/hide grid lines
       if (showXGrid) {
-        const xAxisGridGenerator = d3
-          .axisBottom(x)
-          .tickSize(-HEIGHT)
-          .tickFormat("");
-
         barsArea
           .append("g")
           .attr("class", "x gridlines")
@@ -296,128 +316,92 @@ export default class Barchart extends Stanza {
 
         dataMax = d3.max(stackedData[stackedData.length - 1], (d) => d[1]);
 
-        const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
-
-        const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
-        if (!showYTicks) {
-          yAxisGenerator.tickSize(0);
-        }
+        y.domain([0, dataMax * 1.05]);
 
         yAxisArea
+          .transition()
+          .duration(200)
           .call(yAxisGenerator)
           .selectAll("text")
           .attr("text-anchor", "end")
           .attr("transform", `rotate(${yLabelAngle})`);
 
         if (showYGrid) {
-          const yAxisGridGenerator = d3
-            .axisLeft(y)
-            .tickSize(-WIDTH)
-            .tickFormat("")
-            .ticks(yTicksNumber);
-
-          barsArea
-            .append("g")
-            .attr("class", "y gridlines")
-            .call(yAxisGridGenerator);
+          yGridLines.transition().duration(200).call(yAxisGridGenerator);
         }
 
         stackedData.forEach((item) => {
           item.forEach((d) => (d.key = item.key));
         });
 
-        console.log("stackedData", stackedData);
-
         const gs = stackGroups
-          .selectAll("g.bars")
-          .data(stackedData, (d) => d.key);
+          .selectAll("rect")
+          .data(stackedData.flat(), (d) => `${d.key}-${d[0][xKeyName]}`);
 
         gs.join(
           (enter) => {
-            return enter.append("g").attr("class", "bars");
+            return enter
+              .append("rect")
+              .attr("fill", (d) => color(d.key))
+              .attr("x", (d) => {
+                return x(d.data.x);
+              })
+              .attr("y", (d) => {
+                return y(d[1]);
+              })
+              .attr("height", 0)
+              .attr("width", x.bandwidth())
+              .transition()
+              .duration(200)
+              .attr("y", (d) => {
+                return y(d[1]);
+              })
+              .attr("height", (d) => {
+                if (d[1]) {
+                  return y(d[0]) - y(d[1]);
+                }
+                return 0;
+              });
           },
-          (update) => update,
+          (update) => {
+            return update
+              .transition()
+              .duration(200)
+              .attr("x", (d) => x(d.data.x))
+              .attr("y", (d) => {
+                return y(d[1]);
+              })
+              .attr("width", x.bandwidth())
+              .attr("height", (d) => {
+                if (d[1]) {
+                  return y(d[0]) - y(d[1]);
+                }
+                return 0;
+              });
+          },
           (exit) => {
-            exit.remove();
+            exit
+              .transition()
+              .duration(200)
+              .attr("opacity", 0)
+              .on("end", () => {
+                exit.remove();
+              });
           }
         )
-          .selectAll("rect")
-          .data(
-            (d) => d,
-            (d) => d.key
-          )
-          .join(
-            (enter) => {
-              return enter.append("rect");
-            },
-            (update) => update,
-            (exit) => {
-              exit.remove();
-            }
-          )
-          .attr("fill", (d) => color(d.key))
-          .attr("x", (d) => x(d.data.x))
-          .attr("y", (d) => {
-            return y(d[1]);
-          })
-          .attr("width", x.bandwidth())
-          .attr("height", (d) => {
-            if (d[1]) {
-              return y(d[0]) - y(d[1]);
-            }
-            return 0;
+          .attr("data-tooltip", (d) => `${d.key}: ${d[1] - d[0]}`)
+          .attr("data-html", "true")
+          .attr("class", (d) => {
+            return `data-${gSubKeyNames.findIndex((item) => item === d.key)}`;
           });
-
-        // stackGroups.exit().remove();
-
-        // stackGroups
-        //   .enter()
-        //   .append("g")
-        //   .attr("class", "stack-group")
-        //   .style("fill", function (d, i) {
-        //     return color(subKeyNames[i]);
-        //   });
-
-        // const rects = stackGroups.selectAll("rect").data((d) => {
-        //   return d;
-        // });
-
-        // rects.exit().remove();
-
-        // rects
-        //   .enter()
-        //   .append("rect")
-        //   .attr("class", "bars")
-        //   .attr("data-tooltip", (d) => d[1] - d[0])
-        //   .attr("data-html", "true")
-        //   .attr("x", (d) => x(d.data.x))
-        //   .attr("y", (d) => {
-        //     return y(d[1]);
-        //   })
-        //   .attr("width", x.bandwidth())
-        //   .attr("height", (d) => {
-        //     if (d[1]) {
-        //       return y(d[0]) - y(d[1]);
-        //     }
-        //     return 0;
-        //   })
-        //   .attr("class", (d) => {
-        //     console.log(d);
-        //     return `data-${gSubKeyNames.findIndex((item) => item === d.key)}`;
-        //   });
-
-        if (showBarTooltips) {
-          this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
-        }
       } else {
         const dataset = d3.group(values, (d) => d[xKeyName]);
 
-        const y = d3.scaleLinear().domain([0, dataMax]).range([HEIGHT, 0]);
-
         const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
-        if (!showYTicks) {
-          yAxisGenerator.tickSize(0);
-        }
+
+        const yMinMax = d3.extent(values, (d) => Number(d[yKeyName]));
+
+        y.domain([0, yMinMax[1] * 1.05]);
 
         yAxisArea
           .call(yAxisGenerator)
@@ -426,12 +410,6 @@ export default class Barchart extends Stanza {
           .attr("transform", `rotate(${yLabelAngle})`);
 
         if (showYGrid) {
-          const yAxisGridGenerator = d3
-            .axisLeft(y)
-            .tickSize(-WIDTH)
-            .tickFormat("")
-            .ticks(yTicksNumber);
-
           barsArea
             .append("g")
             .attr("class", "y gridlines")
@@ -494,7 +472,7 @@ export default class Barchart extends Stanza {
         {
           fadeoutNodes: this.root.querySelectorAll("svg rect"),
           position: ["top", "right"],
-          fadeProp: "fill-opacity",
+          fadeProp: "opacity",
         }
       );
     };
