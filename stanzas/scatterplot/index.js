@@ -108,7 +108,6 @@ export default class ScatterPlot extends Stanza {
         gridOpacity: css("--togostanza-grid-opacity"),
         gridWidth: css("--togostanza-grid-width"),
         ticks: this.params["xtick"] === "true",
-        // tickCount: params["xtick-count"],
         tickColor: "var(--togostanza-tick-color)",
         tickSize: css("--togostanza-tick-length"),
         tickWidth: css("--togostanza-tick-width"),
@@ -149,7 +148,6 @@ export default class ScatterPlot extends Stanza {
         gridOpacity: css("--togostanza-grid-opacity"),
         gridWidth: css("--togostanza-grid-width"),
         ticks: this.params["ytick"] === "true",
-        // tickCount: params["ytick-count"],
         tickColor: "var(--togostanza-tick-color)",
         tickSize: css("--togostanza-tick-length"),
         tickWidth: css("--togostanza-tick-width"),
@@ -243,33 +241,6 @@ export default class ScatterPlot extends Stanza {
           : legends,
       marks,
     };
-
-    // To enable zoomin-zoomout default behaviour:
-
-    // const spec = {
-    //   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    //   description: "",
-    //   data: {
-    //     values,
-    //   },
-    //   width: 500,
-    //   height: 400,
-    //   mark: "point",
-    //   params: [
-    //     {
-    //       name: "grid",
-    //       select: "interval",
-    //       bind: "scales",
-    //     },
-    //   ],
-
-    //   encoding: {
-    //     x: { field: "density", type: "quantitative" },
-    //     y: { field: "area", type: "quantitative" },
-    //     size: { field: "population", type: "quantitative" },
-    //     tooltip: { field: "pref" },
-    //   },
-    // };
 
     const el = this.root.querySelector("main");
     const opts = {
