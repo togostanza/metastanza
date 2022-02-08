@@ -4,7 +4,37 @@ import { e as embed } from './vega-embed.module-1b9800b1.js';
 import { l as loadData } from './load-data-0be92417.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss } from './index-1e0b4ea1.js';
 
+function applyFilter(data, filter) {
+  return data.filter((record) =>
+    filter.every((filter) => {
+      switch (filter.type) {
+        case "substring":
+          if (filter.target === null) {
+            return Object.values(record).some((value) =>
+              value.toString().includes(filter.value)
+            );
+          } else {
+            return record[filter.target].toString().includes(filter.value);
+          }
+        case "lte":
+          return record[filter.target] <= filter.value;
+        case "gte":
+          return record[filter.target] >= filter.value;
+        default:
+          throw new Error(`unsupported filter type ${filter.type}`);
+      }
+    })
+  );
+}
+
 class ScatterPlot extends Stanza {
+  constructor() {
+    super(...arguments);
+
+    this._filter = [];
+    this._data = null;
+  }
+
   menu() {
     return [
       downloadSvgMenuItem(this, "scatter-plot"),
@@ -29,12 +59,13 @@ class ScatterPlot extends Stanza {
     const yVariable = this.params["y"];
     const zVariable = this.params["z"] ? this.params["z"] : "none";
 
-    const values = await loadData(
+    this._data ||= await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
-    this._data = values;
+
+    const values = applyFilter(this._data, this._filter);
 
     const data = [
       {
@@ -237,6 +268,13 @@ class ScatterPlot extends Stanza {
       renderer: "svg",
     };
     await embed(el, spec, opts);
+  }
+
+  handleEvent(event) {
+    if (event.type === "filter") {
+      this._filter = event.detail;
+      this.render();
+    }
   }
 }
 
@@ -570,6 +608,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "rgba(255,255,255,0)",
 		"stanza:description": "Background color"
+	}
+],
+	"stanza:incomingEvent": [
+	{
+		"stanza:key": "filter",
+		"stanza:description": "filter conditions changed event"
 	}
 ]
 };

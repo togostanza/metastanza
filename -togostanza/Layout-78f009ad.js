@@ -9555,7 +9555,7 @@ var dependencies = {
 	"rollup-plugin-vue": "^6.0.0",
 	"sprintf-js": "^1.1.2",
 	togostanza: "^3.0.0-beta.37",
-	"togostanza-utils": "git+https://github.com/togostanza/togostanza-utils.git",
+	"togostanza-utils": "github:togostanza/togostanza-utils",
 	vega: "^5.19.1",
 	"vega-embed": "^6.15.0",
 	"vega-lite": "^5.1.1",
@@ -9649,4 +9649,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, createElementBlock as a, renderList as b, createBlock as c, defineComponent as d, createBaseVNode as e, createCommentVNode as f, createApp as g, computed as h, createTextVNode as i, ref as j, octicons as k, watch as l, mergeProps as m, normalizeClass as n, openBlock as o, createVNode as p, normalizeProps as q, resolveComponent as r, script as s, toDisplayString as t, guardReactiveProps as u, resolveDynamicComponent as v, withCtx as w, pushScopeId as x, popScopeId as y, n as z };
-//# sourceMappingURL=Layout-076ba946.js.map
+//# sourceMappingURL=Layout-78f009ad.js.map
