@@ -38,7 +38,7 @@
     "rollup-plugin-vue": "^6.0.0",
     "sprintf-js": "^1.1.2",
     "togostanza": "^3.0.0-beta.37",
-    "togostanza-utils": "git+https://github.com/togostanza/togostanza-utils.git",
+    "togostanza-utils": "github:togostanza/togostanza-utils",
     "vega": "^5.19.1",
     "vega-embed": "^6.15.0",
     "vega-lite": "^5.1.1",

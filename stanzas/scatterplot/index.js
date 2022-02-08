@@ -2,6 +2,8 @@ import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
 import loadData from "togostanza-utils/load-data";
+import applyFilter from "togostanza-utils/apply-filter";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -13,6 +15,13 @@ import {
 } from "togostanza-utils";
 
 export default class ScatterPlot extends Stanza {
+  constructor() {
+    super(...arguments);
+
+    this._filter = [];
+    this._data = null;
+  }
+
   menu() {
     return [
       downloadSvgMenuItem(this, "scatter-plot"),
@@ -37,12 +46,13 @@ export default class ScatterPlot extends Stanza {
     const yVariable = this.params["y"];
     const zVariable = this.params["z"] ? this.params["z"] : "none";
 
-    const values = await loadData(
+    this._data ||= await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
-    this._data = values;
+
+    const values = applyFilter(this._data, this._filter);
 
     const data = [
       {
@@ -245,5 +255,12 @@ export default class ScatterPlot extends Stanza {
       renderer: "svg",
     };
     await vegaEmbed(el, spec, opts);
+  }
+
+  handleEvent(event) {
+    if (event.type === "filter") {
+      this._filter = event.detail;
+      this.render();
+    }
   }
 }
