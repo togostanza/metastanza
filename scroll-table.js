@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
-import { S as Stanza } from './stanza-98e711e0.js';
+import { d as defineStanzaElement } from './stanza-element-584d026e.js';
+import { S as Stanza } from './stanza-ba96e4fa.js';
 import { f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss } from './index-1e0b4ea1.js';
 import { d as defineComponent, c as createElementBlock, b as createBaseVNode, B as normalizeStyle, t as toDisplayString, F as Fragment, o as openBlock, p as createVNode, e as createCommentVNode, f as createBlock, g as createTextVNode, a as resolveComponent, j as reactive, x as onMounted, i as ref, D as onRenderTriggered, r as renderList, n as normalizeClass, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
 import { l as loadData } from './load-data-0be92417.js';

@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-bd3f75c5.js';
-import { S as Stanza } from './stanza-98e711e0.js';
+import { d as defineStanzaElement } from './stanza-element-584d026e.js';
+import { S as Stanza } from './stanza-ba96e4fa.js';
 import { e as embed } from './vega-embed.module-1b9800b1.js';
 
 class tableHeatmap extends Stanza {
