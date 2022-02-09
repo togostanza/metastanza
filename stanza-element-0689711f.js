@@ -9132,6 +9132,20 @@ class MenuElement extends LitElement {
     };
   }
 
+  async _copyHTMLSnippetToClipboard() {
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = this.stanzaInstance.url;
+    script.async = true;
+    const html = [script.outerHTML, this.stanzaInstance.element.outerHTML].join(
+      ' '
+    );
+
+    await navigator.clipboard.writeText(html);
+
+    this._hideMenu();
+  }
+
   _renderMenuItem(item) {
     switch (item.type) {
       case 'item':
@@ -9160,6 +9174,14 @@ class MenuElement extends LitElement {
       <ul class="menu">
         ${menuDefinition.map((item) => this._renderMenuItem(item))}
         ${menuDefinition.length > 0 ? html`<li class="divider"></li>` : ''}
+        <li>
+          <a
+            class="menu-item"
+            href="#"
+            @click="${this._copyHTMLSnippetToClipboard}"
+            >Copy HTML snippet to clipboard</a
+          >
+        </li>
         <li>
           <a
             class="menu-item"
@@ -10387,4 +10409,4 @@ function ensureBuiltinElementsDefined() {
 }
 
 export { commonjsGlobal as c, defineStanzaElement as d, getDefaultExportFromCjs as g };
-//# sourceMappingURL=stanza-element-584d026e.js.map
+//# sourceMappingURL=stanza-element-0689711f.js.map

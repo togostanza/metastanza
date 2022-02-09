@@ -1,5 +1,5 @@
-import { i as interpolateNumber } from './index-1e0b4ea1.js';
-import { e as exponent, a as interpolate, b as formatSpecifier, c as formatPrefix, f as format, i as initRange } from './ordinal-3e2e45be.js';
+import { i as interpolateNumber } from './index-c3245d93.js';
+import { e as exponent, a as interpolate, b as formatSpecifier, c as formatPrefix, f as format, i as initRange } from './ordinal-538ccecd.js';
 
 function ascending(a, b) {
   return a == null || b == null ? NaN : a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
@@ -356,4 +356,4 @@ function linear() {
 }
 
 export { linear as l };
-//# sourceMappingURL=linear-207b889f.js.map
+//# sourceMappingURL=linear-c2a699dc.js.map

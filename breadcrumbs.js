@@ -1,7 +1,7 @@
-import { d as defineStanzaElement } from './stanza-element-584d026e.js';
-import { S as Stanza } from './stanza-ba96e4fa.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, s as select } from './index-1e0b4ea1.js';
-import { l as loadData } from './load-data-0be92417.js';
+import { d as defineStanzaElement } from './stanza-element-0689711f.js';
+import { S as Stanza } from './stanza-b69644f8.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, s as select } from './index-c3245d93.js';
+import { l as loadData } from './load-data-162104b1.js';
 import { s as stratify, h as hierarchy } from './stratify-8f602319.js';
 
 var homeIcon = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20494.59%20375.12%22%3E%3Cg%20id%3D%22%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC_2%22%20data-name%3D%22%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%202%22%3E%3Cg%20id%3D%22%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC_1-2%22%20data-name%3D%22%E3%83%AC%E3%82%A4%E3%83%A4%E3%83%BC%201%22%3E%3Cpath%20d%3D%22M244.37%2C103.9l-142.57%2C103V360.12a15%2C15%2C0%2C0%2C0%2C15%2C15h77a15%2C15%2C0%2C0%2C0%2C15-15v-92a15%2C15%2C0%2C0%2C1%2C15-15h48a15%2C15%2C0%2C0%2C1%2C15%2C15v92a15%2C15%2C0%2C0%2C0%2C15%2C15h76a15%2C15%2C0%2C0%2C0%2C15-15V206.87l-142.58-103A5%2C5%2C0%2C0%2C0%2C244.37%2C103.9Z%22%2F%3E%3Cpath%20d%3D%22M488%2C162.13%2C392.8%2C93.38V15.12a15%2C15%2C0%2C0%2C0-15-15h-24a15%2C15%2C0%2C0%2C0-15%2C15V54.38L276.63%2C9.48a50.13%2C50.13%2C0%2C0%2C0-58.67%2C0L6.61%2C162.13A15.94%2C15.94%2C0%2C0%2C0%2C3%2C184.39l20.55%2C28.46a16%2C16%2C0%2C0%2C0%2C22.27%2C3.59L238%2C77.69a15.93%2C15.93%2C0%2C0%2C1%2C18.67%2C0L448.75%2C216.44A16%2C16%2C0%2C0%2C0%2C471%2C212.85l20.55-28.46A15.94%2C15.94%2C0%2C0%2C0%2C488%2C162.13Z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E";
@@ -46,7 +46,6 @@ class Breadcrumbs extends Stanza {
       downloadJSONMenuItem(this, "breadcrumbs", this._data),
       downloadCSVMenuItem(this, "breadcrumbs", this._data),
       downloadTSVMenuItem(this, "breadcrumbs", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

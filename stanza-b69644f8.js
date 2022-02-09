@@ -1,4 +1,4 @@
-import { c as commonjsGlobal, g as getDefaultExportFromCjs } from './stanza-element-584d026e.js';
+import { c as commonjsGlobal, g as getDefaultExportFromCjs } from './stanza-element-0689711f.js';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -1790,6 +1790,7 @@ class Stanza {
         this.menuElement = document.createElement('togostanza--menu');
         this.menuElement.setAttribute('href', url.replace(/\.js$/, '.html'));
         this.menuElement.menuDefinition = this.menu.bind(this);
+        this.menuElement.stanzaInstance = this;
         bbox.appendChild(this.menuElement);
         element.shadowRoot?.appendChild(bbox);
         this.url = url;
@@ -1874,4 +1875,4 @@ class Stanza {
 }
 
 export { Stanza as S };
-//# sourceMappingURL=stanza-ba96e4fa.js.map
+//# sourceMappingURL=stanza-b69644f8.js.map

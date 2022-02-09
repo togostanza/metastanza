@@ -1,9 +1,9 @@
-import { d as defineStanzaElement } from './stanza-element-584d026e.js';
-import { S as Stanza } from './stanza-ba96e4fa.js';
+import { d as defineStanzaElement } from './stanza-element-0689711f.js';
+import { S as Stanza } from './stanza-b69644f8.js';
 import { d as defineComponent, c as createElementBlock, F as Fragment, r as renderList, n as normalizeClass, a as resolveComponent, o as openBlock, b as createBaseVNode, t as toDisplayString, e as createCommentVNode, f as createBlock, w as withDirectives, v as vShow, g as createTextVNode, h as toRefs, i as ref, j as reactive, k as watchEffect, l as computed, m as vModelText, p as createVNode, q as createApp } from './runtime-dom.esm-bundler-f4938fe2.js';
-import { l as loadData } from './load-data-0be92417.js';
+import { l as loadData } from './load-data-162104b1.js';
 import { l as library, f as faChevronRight, a as faClipboard, F as FontAwesomeIcon } from './index.es-fab29479.js';
-import { g as appendCustomCss } from './index-1e0b4ea1.js';
+import { f as appendCustomCss } from './index-c3245d93.js';
 
 var metadata = {
 	"@context": {

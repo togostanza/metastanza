@@ -1,8 +1,8 @@
-import { d as defineStanzaElement } from './stanza-element-584d026e.js';
-import { S as Stanza } from './stanza-ba96e4fa.js';
+import { d as defineStanzaElement } from './stanza-element-0689711f.js';
+import { S as Stanza } from './stanza-b69644f8.js';
 import { e as embed } from './vega-embed.module-1b9800b1.js';
-import { l as loadData } from './load-data-0be92417.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem } from './index-1e0b4ea1.js';
+import { l as loadData } from './load-data-162104b1.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem } from './index-c3245d93.js';
 
 const areas = new Map([
   [
@@ -33,7 +33,6 @@ class regionGeographicMap extends Stanza {
       downloadJSONMenuItem(this, "region-geographis-map", this._data),
       downloadCSVMenuItem(this, "region-geographis-map", this._data),
       downloadTSVMenuItem(this, "region-geographis-map", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

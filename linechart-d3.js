@@ -1,11 +1,11 @@
-import { d as defineStanzaElement } from './stanza-element-584d026e.js';
-import { S as Stanza } from './stanza-ba96e4fa.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as copyHTMLSnippetToClipboardMenuItem, g as appendCustomCss, s as select } from './index-1e0b4ea1.js';
-import { l as loadData } from './load-data-0be92417.js';
+import { d as defineStanzaElement } from './stanza-element-0689711f.js';
+import { S as Stanza } from './stanza-b69644f8.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, s as select } from './index-c3245d93.js';
+import { l as loadData } from './load-data-162104b1.js';
 import { L as Legend } from './Legend-f6030191.js';
-import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-3e2e45be.js';
+import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-538ccecd.js';
 import { c as constant, p as path, m as max } from './constant-abe3b5f1.js';
-import { l as linear } from './linear-207b889f.js';
+import { l as linear } from './linear-c2a699dc.js';
 
 function identity$1(x) {
   return x;
@@ -432,7 +432,6 @@ class Linechart extends Stanza {
       downloadJSONMenuItem(this, "linechart", this._data),
       downloadCSVMenuItem(this, "linechart", this._data),
       downloadTSVMenuItem(this, "linechart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

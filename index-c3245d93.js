@@ -10722,21 +10722,6 @@ function downloadTSVMenuItem(stanza, filenamePrefix, data) {
   };
 }
 
-function copyHTMLSnippetToClipboardMenuItem(stanza) {
-  return {
-    type: "item",
-    label: "Copy HTML snippet to clipboard",
-    handler: async () => {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = stanza.url;
-      const html = [script.outerHTML, stanza.element.outerHTML].join(" ");
-
-      await navigator.clipboard.writeText(html);
-    },
-  };
-}
-
 function appendCustomCss(stanza, customCssUrl) {
   const links = stanza.root.querySelectorAll(
     "link[data-togostanza-custom-css]"
@@ -10755,5 +10740,5 @@ function appendCustomCss(stanza, customCssUrl) {
   }
 }
 
-export { downloadPngMenuItem as a, downloadJSONMenuItem as b, downloadCSVMenuItem as c, downloadSvgMenuItem as d, downloadTSVMenuItem as e, copyHTMLSnippetToClipboardMenuItem as f, appendCustomCss as g, constant as h, interpolateNumber as i, color as j, interpolateRgb as k, interpolateString as l, select as s };
-//# sourceMappingURL=index-1e0b4ea1.js.map
+export { downloadPngMenuItem as a, downloadJSONMenuItem as b, downloadCSVMenuItem as c, downloadSvgMenuItem as d, downloadTSVMenuItem as e, appendCustomCss as f, constant as g, color as h, interpolateNumber as i, interpolateRgb as j, interpolateString as k, select as s };
+//# sourceMappingURL=index-c3245d93.js.map
