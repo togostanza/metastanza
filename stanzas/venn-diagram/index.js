@@ -7,7 +7,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 import ToolTip from "@/lib/ToolTip";
@@ -30,7 +29,6 @@ export default class VennStanza extends Stanza {
       downloadJSONMenuItem(this, "vennstanza", this.data),
       downloadCSVMenuItem(this, "vennstanza", this.data),
       downloadTSVMenuItem(this, "vennstanza", this.data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

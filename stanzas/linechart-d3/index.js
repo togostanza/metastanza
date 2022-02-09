@@ -8,7 +8,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -20,7 +19,6 @@ export default class Linechart extends Stanza {
       downloadJSONMenuItem(this, "linechart", this._data),
       downloadCSVMenuItem(this, "linechart", this._data),
       downloadTSVMenuItem(this, "linechart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

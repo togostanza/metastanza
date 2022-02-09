@@ -10,7 +10,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -29,7 +28,6 @@ export default class ScatterPlot extends Stanza {
       downloadJSONMenuItem(this, "scatter-plot", this._data),
       downloadCSVMenuItem(this, "scatter-plot", this._data),
       downloadTSVMenuItem(this, "scatter-plot", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

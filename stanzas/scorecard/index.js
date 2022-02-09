@@ -5,7 +5,6 @@ import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   downloadJSONMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -15,7 +14,6 @@ export default class Scorecard extends Stanza {
       downloadSvgMenuItem(this, "scorecard"),
       downloadPngMenuItem(this, "scorecard"),
       downloadJSONMenuItem(this, "scorecard", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
