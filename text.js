@@ -83573,7 +83573,7 @@ class Text extends Stanza {
           const link = document.createElement("a");
           document.body.appendChild(link);
           link.href = textUrl;
-          link.download = "text.txt";
+          link.download = this._downloadFileName();
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(textUrl);
@@ -83582,13 +83582,25 @@ class Text extends Stanza {
     ];
   }
 
+  _isMarkdownMode() {
+    return this.params["mode"] === "markdown";
+  }
+
+  _downloadFileName() {
+    if (this._isMarkdownMode()) {
+      return "text.md";
+    } else {
+      return "text.txt";
+    }
+  }
+
   async render() {
     this._dataset = await this._loadText(this.params["data-url"]);
 
     const main = this.root.querySelector("main");
 
     const value = this._dataset;
-    if (this.params["mode"] === "markdown") {
+    if (this._isMarkdownMode()) {
       const parser = new Parser$1();
       const renderer = new HtmlRenderer();
       const html = renderer.render(parser.parse(value));
