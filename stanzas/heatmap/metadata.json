@@ -1,0 +1,134 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "heatmap",
+  "stanza:label": "Heatmap",
+  "stanza:definition": "Heatmap stanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "",
+  "stanza:contributor": [],
+  "stanza:created": "2021-08-26",
+  "stanza:updated": "2022-02-14",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "csv",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "top",
+      "stanza:type": "number",
+      "stanza:example": 30,
+      "stanza:description": "top"
+    },
+    {
+      "stanza:key": "right",
+      "stanza:type": "number",
+      "stanza:example": 30,
+      "stanza:description": "right"
+    },
+    {
+      "stanza:key": "left",
+      "stanza:type": "number",
+      "stanza:example": 30,
+      "stanza:description": "left"
+    },
+    {
+      "stanza:key": "bottom",
+      "stanza:type": "number",
+      "stanza:example": 30,
+      "stanza:description": "bottom"
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 450,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 450,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "metastanza-menu-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Menu button placement"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#ffffff",
+      "stanza:description": "Depth color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590E6",
+      "stanza:description": "Depth color 2"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-font-size",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Font size"
+    },
+    {
+      "stanza:key": "--togostanza-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Title font color"
+    },
+    {
+      "stanza:key": "--togostanza-font-weight",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "normal",
+        "bold",
+        "ligther"
+      ],
+      "stanza:default": "normal",
+      "stanza:description": "Title font weight"
+    },
+    {
+      "stanza:key": "--togostanza-hover-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Title font color"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
