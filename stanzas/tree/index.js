@@ -8,7 +8,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -20,7 +19,6 @@ export default class Tree extends Stanza {
       downloadJSONMenuItem(this, "tree", this._data),
       downloadCSVMenuItem(this, "tree", this._data),
       downloadTSVMenuItem(this, "tree", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

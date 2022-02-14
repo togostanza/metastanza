@@ -4,7 +4,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -14,7 +13,6 @@ export default class HashTable extends Stanza {
       downloadJSONMenuItem(this, "hashtable", this._data),
       downloadCSVMenuItem(this, "hashtable", this._data),
       downloadTSVMenuItem(this, "hashtable", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

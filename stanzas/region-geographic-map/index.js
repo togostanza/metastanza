@@ -7,7 +7,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
 } from "togostanza-utils";
 
 const areas = new Map([
@@ -39,7 +38,6 @@ export default class regionGeographicMap extends Stanza {
       downloadJSONMenuItem(this, "region-geographis-map", this._data),
       downloadCSVMenuItem(this, "region-geographis-map", this._data),
       downloadTSVMenuItem(this, "region-geographis-map", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

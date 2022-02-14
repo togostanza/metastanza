@@ -2,17 +2,25 @@ import Stanza from "togostanza/stanza";
 
 import vegaEmbed from "vega-embed";
 import loadData from "togostanza-utils/load-data";
+import applyFilter from "togostanza-utils/apply-filter";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
 export default class ScatterPlot extends Stanza {
+  constructor() {
+    super(...arguments);
+
+    this._filter = [];
+    this._data = null;
+  }
+
   menu() {
     return [
       downloadSvgMenuItem(this, "scatter-plot"),
@@ -20,7 +28,6 @@ export default class ScatterPlot extends Stanza {
       downloadJSONMenuItem(this, "scatter-plot", this._data),
       downloadCSVMenuItem(this, "scatter-plot", this._data),
       downloadTSVMenuItem(this, "scatter-plot", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -40,13 +47,18 @@ export default class ScatterPlot extends Stanza {
     const adjustYBottom = this.params["adjust-y-range"];
     const adjustXLeft = this.params["adjust-x-range"];
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"],
-      this.root.querySelector("main")
-    );
 
-    this._data = values;
+    const cacheKey = `${this.params["data-url"]}\x1f${this.params["data-type"]}`;
+    if (this._cacheKey !== cacheKey) {
+      this._data = await loadData(
+        this.params["data-url"],
+        this.params["data-type"],
+        this.root.querySelector("main")
+      );
+      this._cacheKey = cacheKey;
+    }
+
+    const values = applyFilter(this._data, this._filter);
 
     const data = [
       {
@@ -247,5 +259,12 @@ export default class ScatterPlot extends Stanza {
       renderer: "svg",
     };
     await vegaEmbed(el, spec, opts);
+  }
+
+  handleEvent(event) {
+    if (event.type === "filter") {
+      this._filter = event.detail;
+      this.render();
+    }
   }
 }

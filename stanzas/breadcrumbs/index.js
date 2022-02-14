@@ -8,7 +8,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -25,7 +24,6 @@ export default class Breadcrumbs extends Stanza {
       downloadJSONMenuItem(this, "breadcrumbs", this._data),
       downloadCSVMenuItem(this, "breadcrumbs", this._data),
       downloadTSVMenuItem(this, "breadcrumbs", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
