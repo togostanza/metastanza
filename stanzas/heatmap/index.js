@@ -26,11 +26,11 @@ export default class Heatmap extends Stanza {
 async function draw(el, css, params, dataset) {
   // set the dimensions and margins of the graph
   const margin = {
-      top: params["top"],
-      right: params["right"],
-      bottom: params["bottom"],
-      left: params["left"],
-    },
+    top: params["top"],
+    right: params["right"],
+    bottom: params["bottom"],
+    left: params["left"],
+  },
     width = params["width"] - margin.left - margin.right,
     height = params["height"] - margin.top - margin.bottom;
 
@@ -44,16 +44,19 @@ async function draw(el, css, params, dataset) {
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+    .attr("transform", `translate(${margin.left},${margin.top})`)
+
 
   // Labels of row and columns
-  const myGroups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-  const myVars = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10"];
+  const myGroups = [...new Set(dataset.map((d) => d.group))];
+  const myVars = [...new Set(dataset.map((d) => d.variable))];
 
   // Build X scales and axis:
-  const x = d3.scaleBand().range([0, width]).domain(myGroups).padding(0.01);
-  svg
-    .append("g")
+  const x = d3.scaleBand()
+    .range([0, width])
+    .domain(myGroups)
+    .padding(0.01);
+  svg.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(d3.axisBottom(x));
 
@@ -78,12 +81,45 @@ async function draw(el, css, params, dataset) {
     ])
     .domain([1, 100]);
 
+  const tooltip = d3.select(el)
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+  var mouseover = function (d) {
+    tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  function mousemove(d) {
+    console.log(d);
+    tooltip
+      .html("The exact value of<br>this cell is: " + d.value)
+      .style("left", (d3.mouse(this)[0] + 70) + "px")
+      .style("top", (d3.mouse(this)[1]) + "px")
+  }
+  var mouseleave = function (d) {
+    tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+
   svg
     .selectAll()
     .data(dataset, function (d) {
       return d.group + ":" + d.variable;
     })
-    .join("rect")
+    .enter()
+    .append("rect")
     .attr("x", function (d) {
       return x(d.group);
     })
@@ -94,5 +130,8 @@ async function draw(el, css, params, dataset) {
     .attr("height", y.bandwidth())
     .style("fill", function (d) {
       return myColor(d.value);
-    });
+    })
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
 }
