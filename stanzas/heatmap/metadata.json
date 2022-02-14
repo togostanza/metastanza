@@ -10,8 +10,8 @@
   "stanza:provider": "",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
-  "stanza:address": "",
-  "stanza:contributor": [],
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
   "stanza:created": "2021-08-26",
   "stanza:updated": "2022-02-14",
   "stanza:parameter": [
@@ -114,11 +114,7 @@
     {
       "stanza:key": "--togostanza-font-weight",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "normal",
-        "bold",
-        "ligther"
-      ],
+      "stanza:choice": ["normal", "bold", "ligther"],
       "stanza:default": "normal",
       "stanza:description": "Title font weight"
     },
