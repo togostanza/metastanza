@@ -8,9 +8,9 @@
   "stanza:type": "Stanza",
   "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "Anton Zhuravlev",
-  "stanza:address": "anton@penqe.com",
-  "stanza:contributor": [],
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
   "stanza:created": "2021-11-26",
   "stanza:updated": "2021-11-26",
   "stanza:parameter": [
