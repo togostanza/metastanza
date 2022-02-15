@@ -2,7 +2,7 @@ import { d as defineStanzaElement } from './stanza-element-0689711f.js';
 import { S as Stanza } from './stanza-b69644f8.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, s as select } from './index-c3245d93.js';
 import { l as loadData } from './load-data-162104b1.js';
-import { L as Legend } from './Legend-f6030191.js';
+import { L as Legend } from './Legend-18770e04.js';
 import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-538ccecd.js';
 import { c as constant, p as path, m as max } from './constant-abe3b5f1.js';
 import { l as linear } from './linear-c2a699dc.js';
