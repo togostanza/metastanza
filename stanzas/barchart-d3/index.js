@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
+import { getXTextLabelProps, getYTextLabelProps } from "@/lib/SetLabelsAngle";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -203,18 +204,14 @@ export default class Barchart extends Stanza {
       .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`)
       .attr("class", "y axis");
 
-    let xdy = "0.5em";
-    let xx = "-0.7em";
-    let textAnchor = "end";
-    if ((xLabelAngle < 0) & (xLabelAngle !== -90)) {
-      xdy = "0.8em";
-      textAnchor = "end";
-    }
-    if ((xLabelAngle > 0) & (xLabelAngle !== 90)) {
-      xx = "0.7em";
-      xdy = "0.71em";
-      textAnchor = "start";
-    }
+    const xAxisLabelsProps = getXTextLabelProps(
+      xLabelAngle,
+      xLabelPadding + xTickSize
+    );
+    const yAxisLabelsProps = getYTextLabelProps(
+      yLabelAngle,
+      yLabelPadding + yTickSize
+    );
 
     /// Axes preparation
     const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
@@ -275,10 +272,11 @@ export default class Barchart extends Stanza {
         .duration(200)
         .call(xAxisGenerator)
         .selectAll("text")
-        .attr("text-anchor", textAnchor)
-        .attr("x", xx)
-        .attr("y", "0")
-        .attr("dy", xdy)
+        .attr("text-anchor", xAxisLabelsProps.textAnchor)
+        .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
+        .attr("y", xAxisLabelsProps.y)
+        .attr("x", xAxisLabelsProps.x)
+        .attr("dy", null)
         .attr("transform", `rotate(${xLabelAngle})`);
 
       if (xTickPlacement === "in-between") {
@@ -296,8 +294,6 @@ export default class Barchart extends Stanza {
           .attr("transform", "translate(0," + HEIGHT + ")")
           .call(xAxisGridGenerator);
       }
-
-      let rects;
 
       if (barPlacement === "stacked") {
         updateStackedBars(values);
@@ -353,7 +349,11 @@ export default class Barchart extends Stanza {
           .duration(200)
           .call(yAxisGenerator)
           .selectAll("text")
-          .attr("text-anchor", "end")
+          .attr("text-anchor", yAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+          .attr("dy", null)
+          .attr("x", yAxisLabelsProps.x)
+          .attr("y", yAxisLabelsProps.y)
           .attr("transform", `rotate(${yLabelAngle})`);
 
         if (showYGrid) {
@@ -446,7 +446,11 @@ export default class Barchart extends Stanza {
         yAxisArea
           .call(yAxisGenerator)
           .selectAll("text")
-          .attr("text-anchor", "end")
+          .attr("text-anchor", yAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+          .attr("dy", null)
+          .attr("x", yAxisLabelsProps.x)
+          .attr("y", yAxisLabelsProps.y)
           .attr("transform", `rotate(${yLabelAngle})`);
 
         if (showYGrid) {
@@ -510,11 +514,6 @@ export default class Barchart extends Stanza {
           .attr("fill", (d) => {
             return color(d[groupKeyName]);
           });
-
-        rects = [];
-        subKeyNames.forEach((item, index) => {
-          rects.push;
-        });
 
         if (showErrorBars) {
           barsGroup.call(errorBars, y, subX, errorBarWidth);
