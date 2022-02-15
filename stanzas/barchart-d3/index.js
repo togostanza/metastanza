@@ -254,7 +254,7 @@ export default class Barchart extends Stanza {
 
     const yGridLines = barsArea.append("g").attr("class", "y gridlines");
 
-    const stackGroups = barsArea.append("g").attr("class", "bars-group");
+    const barsGroups = barsArea.append("g").attr("class", "bars-group");
 
     if (!showXTicks) {
       xAxisGenerator.tickSize(0);
@@ -264,10 +264,6 @@ export default class Barchart extends Stanza {
       yAxisGenerator.tickSize(0);
     }
 
-    if (showBarTooltips) {
-      this.tooltip.setup(this.root.querySelectorAll("[data-tooltip]"));
-    }
-
     const update = (values) => {
       const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
       const subKeyNames = [...new Set(values.map((d) => d[groupKeyName]))];
@@ -275,6 +271,8 @@ export default class Barchart extends Stanza {
       x.domain(xAxisLabels);
 
       xAxisArea
+        .transition()
+        .duration(200)
         .call(xAxisGenerator)
         .selectAll("text")
         .attr("text-anchor", textAnchor)
@@ -299,7 +297,39 @@ export default class Barchart extends Stanza {
           .call(xAxisGridGenerator);
       }
 
+      let rects;
+
       if (barPlacement === "stacked") {
+        updateStackedBars(values);
+      } else {
+        updateGroupedBars(values);
+      }
+
+      this.legend.setup(
+        gSubKeyNames.map((item, index) => {
+          return {
+            id: "" + index,
+            label: item,
+            color: color(item),
+            node: this.root.querySelectorAll(
+              `#barchart-d3 svg rect.data-${index}`
+            ),
+          };
+        }),
+        this.root.querySelector("main"),
+        {
+          fadeoutNodes: this.root.querySelectorAll("svg rect"),
+          position: ["top", "right"],
+          fadeProp: "opacity",
+        }
+      );
+
+      if (showBarTooltips) {
+        const arr = this.root.querySelectorAll("svg rect");
+        this.tooltip.setup(arr);
+      }
+
+      function updateStackedBars(values) {
         const stack = d3.stack().keys(subKeyNames);
 
         const dataset = [];
@@ -334,7 +364,7 @@ export default class Barchart extends Stanza {
           item.forEach((d) => (d.key = item.key));
         });
 
-        const gs = stackGroups
+        const gs = barsGroups
           .selectAll("rect")
           .data(stackedData.flat(), (d) => `${d.key}-${d[0][xKeyName]}`);
 
@@ -394,12 +424,22 @@ export default class Barchart extends Stanza {
           .attr("class", (d) => {
             return `data-${gSubKeyNames.findIndex((item) => item === d.key)}`;
           });
-      } else {
+      }
+
+      function updateGroupedBars(values) {
         const dataset = d3.group(values, (d) => d[xKeyName]);
 
         const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
 
-        const yMinMax = d3.extent(values, (d) => Number(d[yKeyName]));
+        let yMinMax;
+        if (showErrorBars) {
+          yMinMax = d3.extent(
+            values,
+            (d) => Number(d[yKeyName]) + d[errorKeyName] / 2
+          );
+        } else {
+          yMinMax = d3.extent(values, (d) => Number(d[yKeyName]));
+        }
 
         y.domain([0, yMinMax[1] * 1.05]);
 
@@ -410,10 +450,7 @@ export default class Barchart extends Stanza {
           .attr("transform", `rotate(${yLabelAngle})`);
 
         if (showYGrid) {
-          barsArea
-            .append("g")
-            .attr("class", "y gridlines")
-            .call(yAxisGridGenerator);
+          yGridLines.transition().duration(200).call(yAxisGridGenerator);
         }
 
         const subX = d3
@@ -422,13 +459,19 @@ export default class Barchart extends Stanza {
           .range([0, x.bandwidth()])
           .padding(barSubPaddings);
 
-        //For every group of bass - own g with
-        const barsGroup = barsArea
-          .append("g")
+        //For every group of bars - own g with
+        const barsGroup = barsGroups
           .selectAll("g")
-          .data(dataset)
-          .enter()
-          .append("g")
+          .data(dataset, (d) => d[0])
+          .join(
+            (enter) => {
+              return enter.append("g");
+            },
+            (update) => update,
+            (exit) => {
+              exit.remove();
+            }
+          )
           .attr("transform", (d) => {
             return `translate(${x(d[0])},0)`;
           });
@@ -436,11 +479,23 @@ export default class Barchart extends Stanza {
         // inside every g insert bars on its own x genertor
         barsGroup
           .selectAll("rect")
-          .data((d) => {
-            return d[1];
-          })
-          .enter()
-          .append("rect")
+          .data(
+            (d) => {
+              return d[1];
+            },
+            (d) => `${d[xKeyName]}-${d[groupKeyName]}`
+          )
+          .join(
+            (enter) => {
+              return enter.append("rect").transition(300);
+            },
+            (update) => update,
+            (exit) => {
+              exit.remove();
+            }
+          )
+          .transition(300)
+          .attr("data-tooltip", (d) => `${d[groupKeyName]}: ${d[yKeyName]}`)
           .attr("x", (d) => subX(d[groupKeyName]))
           .attr("y", (d) => y(+d[yKeyName]))
           .attr("width", subX.bandwidth())
@@ -456,28 +511,41 @@ export default class Barchart extends Stanza {
             return color(d[groupKeyName]);
           });
 
+        rects = [];
+        subKeyNames.forEach((item, index) => {
+          rects.push;
+        });
+
         if (showErrorBars) {
           barsGroup.call(errorBars, y, subX, errorBarWidth);
         }
       }
-
-      this.legend.setup(
-        gSubKeyNames.map((item, index) => ({
-          id: "" + index,
-          label: item,
-          color: color(item),
-          node: this.root.querySelectorAll(`svg rect.data-${index}`),
-        })),
-        this.root.querySelector("main"),
-        {
-          fadeoutNodes: this.root.querySelectorAll("svg rect"),
-          position: ["top", "right"],
-          fadeProp: "opacity",
-        }
-      );
     };
 
     update(values);
+
+    this.legend.setup(
+      gSubKeyNames.map((item, index) => {
+        return {
+          id: "" + index,
+          label: item,
+          color: color(item),
+          node: barsArea
+            .selectAll("g.bars-group>g>rect")
+            .filter((d) => {
+              return d[groupKeyName] === item;
+            })
+            .nodes(),
+        };
+      }),
+      this.root.querySelector("main"),
+      {
+        fadeoutNodes: this.root.querySelectorAll("svg rect"),
+        position: ["top", "right"],
+        fadeProp: "opacity",
+        showLeaders: false,
+      }
+    );
 
     const legend = this.root
       .querySelector("togostanza--legend")
