@@ -809,9 +809,10 @@ var metadata = {
 	"stanza:display": "Chart",
 	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "Anton Zhuravlev",
-	"stanza:address": "anton@penqe.com",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE"
 ],
 	"stanza:created": "2021-10-28",
 	"stanza:updated": "2021-10-28",

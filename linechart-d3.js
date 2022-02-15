@@ -1144,8 +1144,10 @@ var metadata = {
 	"stanza:label": "Linechart-D3",
 	"stanza:definition": "Linechart-D3 MetaStanza",
 	"stanza:license": "MIT",
-	"stanza:author": "Anton Zhuravlev",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE"
 ],
 	"stanza:created": "2021-01-06",
 	"stanza:updated": "2021-01-06",

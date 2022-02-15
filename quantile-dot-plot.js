@@ -185,9 +185,10 @@ var metadata = {
 	"stanza:display": "Graph",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",
-	"stanza:author": "MarleenEliza",
-	"stanza:address": "https://github.com/MarleenEliza",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE"
 ],
 	"stanza:created": "2021-04-27",
 	"stanza:updated": "2021-04-27",

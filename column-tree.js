@@ -16,9 +16,10 @@ var metadata = {
 	"stanza:display": "Tree",
 	"stanza:provider": "",
 	"stanza:license": "MIT",
-	"stanza:author": "MarleenEliza",
-	"stanza:address": "marleen@penqe.com",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE"
 ],
 	"stanza:created": "2021-08-13",
 	"stanza:updated": "2021-08-13",

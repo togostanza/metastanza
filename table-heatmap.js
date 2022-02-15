@@ -174,9 +174,11 @@ var metadata = {
 	"stanza:display": "Graph",
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",
-	"stanza:author": "",
-	"stanza:address": "",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE",
+	"Enishi Tech"
 ],
 	"stanza:created": "2021-05-11",
 	"stanza:updated": "2021-05-11",

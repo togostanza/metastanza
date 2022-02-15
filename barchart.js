@@ -364,7 +364,9 @@ var metadata = {
 	"stanza:provider": "TogoStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE"
 ],
 	"stanza:created": "2020-11-06",
 	"stanza:updated": "2020-11-06",

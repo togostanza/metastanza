@@ -129,9 +129,11 @@ var metadata = {
 	"stanza:display": "Map",
 	"stanza:provider": "",
 	"stanza:license": "MIT",
-	"stanza:author": "c-nakashima",
-	"stanza:address": "nakashima@penqe.com",
+	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE",
+	"Enishi Tech"
 ],
 	"stanza:created": "2021-04-23",
 	"stanza:updated": "2021-04-23",

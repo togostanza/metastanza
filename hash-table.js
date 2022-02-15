@@ -75,7 +75,10 @@ var metadata = {
 	"stanza:definition": "Hash table MetaStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"PENQE",
+	"Enishi Tech"
 ],
 	"stanza:created": "2021-03-18",
 	"stanza:updated": "2021-03-18",

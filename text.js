@@ -83654,7 +83654,9 @@ var metadata = {
 	"stanza:definition": "Text MetaStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
+	"stanza:address": "https://github.com/togostanza/metastanza",
 	"stanza:contributor": [
+	"Enishi Tech"
 ],
 	"stanza:created": "2020-12-02",
 	"stanza:updated": "2020-12-02",
