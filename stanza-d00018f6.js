@@ -1,4 +1,4 @@
-import { c as commonjsGlobal, g as getDefaultExportFromCjs } from './stanza-element-0689711f.js';
+import { c as commonjsGlobal, g as getDefaultExportFromCjs } from './stanza-element-6c3c8ad1.js';
 
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -1875,4 +1875,4 @@ class Stanza {
 }
 
 export { Stanza as S };
-//# sourceMappingURL=stanza-b69644f8.js.map
+//# sourceMappingURL=stanza-d00018f6.js.map

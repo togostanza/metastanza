@@ -1,8 +1,8 @@
-import { d as defineStanzaElement } from './stanza-element-0689711f.js';
-import { S as Stanza } from './stanza-b69644f8.js';
+import { s, $, d as defineStanzaElement } from './stanza-element-6c3c8ad1.js';
+import { S as Stanza } from './stanza-d00018f6.js';
 import { l as loadData } from './load-data-162104b1.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-c3245d93.js';
-import { s, $, L as Legend } from './Legend-18770e04.js';
+import { L as Legend } from './Legend-e5f079ed.js';
 
 var colorString$1 = {exports: {}};
 

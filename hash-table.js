@@ -1,5 +1,5 @@
-import { d as defineStanzaElement } from './stanza-element-0689711f.js';
-import { S as Stanza } from './stanza-b69644f8.js';
+import { d as defineStanzaElement } from './stanza-element-6c3c8ad1.js';
+import { S as Stanza } from './stanza-d00018f6.js';
 import { l as loadData } from './load-data-162104b1.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-c3245d93.js';
 
