@@ -1975,7 +1975,6 @@ class ToolTip extends s {
         .tooltip {
           padding: 2px 12px;
           position: absolute;
-          transition: all 0.2s;
           z-index: 10000;
           background-color: white;
           filter: drop-shadow(0 0.5px 1px black);
@@ -1984,6 +1983,9 @@ class ToolTip extends s {
           transform: translate(-50%, -100%);
           border-radius: 10px;
           opacity: 0;
+          height: 0;
+          visibility: hidden;
+          transition: height 0ms 250ms linear, opacity 200ms 0ms linear;
         }
         .tooltip::before {
           content: "";
@@ -2000,6 +2002,10 @@ class ToolTip extends s {
         }
         .tooltip.-show {
           opacity: 1;
+          visibility: visible;
+          height: 1.5em;
+          transition: height 0ms 0ms linear, opacity 200ms 0ms linear,
+            left 200ms, top 200ms;
         }
       </style>
       <div class="origin"></div>
@@ -2021,7 +2027,7 @@ class ToolTip extends s {
           tooltip.textContent = node.dataset.tooltip;
         }
         tooltip.style.left = rect.x + rect.width * 0.5 - originRect.x + "px";
-        tooltip.style.top = rect.y - originRect.y + "px";
+        tooltip.style.top = rect.y - originRect.y - 5 + "px";
         tooltip.classList.add("-show");
       });
       node.addEventListener("mouseleave", () => {
