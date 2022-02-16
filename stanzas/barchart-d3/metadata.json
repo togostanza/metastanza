@@ -6,10 +6,11 @@
   "stanza:label": "Barchart-D3",
   "stanza:definition": "Barchart-D3 MetaStanza",
   "stanza:license": "MIT",
-  "stanza:author": "Anton Zhuravlev",
-  "stanza:contributor": [],
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
   "stanza:created": "2021-01-18",
-  "stanza:updated": "2021-01-18",
+  "stanza:updated": "2021-02-16",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -17,7 +18,6 @@
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
-
     {
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
@@ -70,8 +70,8 @@
     {
       "stanza:key": "error-bar-width",
       "stanza:type": "number",
-      "stanza:example": 1,
-      "stanza:description": "Error bar horizontal line width, relative to bar width",
+      "stanza:example": 15,
+      "stanza:description": "Error bar horizontal line width in px",
       "stanza:required": false
     },
     {
@@ -110,12 +110,6 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "legend-title",
-      "stanza:example": "",
-      "stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -142,9 +136,15 @@
     {
       "stanza:key": "legend",
       "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show legend"
+      "stanza:choice": [
+        "none",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Where to show the legend. 'none' for no legend"
     },
     {
       "stanza:key": "xgrid",
@@ -191,7 +191,7 @@
     },
     {
       "stanza:key": "xlabel-angle",
-      "stanza:example": 0,
+      "stanza:example": -90,
       "stanza:description": "X label angle (in degree)"
     },
     {
@@ -227,22 +227,22 @@
     {
       "stanza:key": "ytitle-padding",
       "stanza:type": "number",
-      "stanza:example": 25,
+      "stanza:example": 40,
       "stanza:description": "Padding between Y title and label"
     },
     {
-      "stanza:key": "xaxis-placement",
+      "stanza:key": "show-x-axis",
       "stanza:type": "single-choice",
-      "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
-      "stanza:description": "X axis placement"
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show X Axis"
     },
     {
-      "stanza:key": "yaxis-placement",
+      "stanza:key": "show-y-axis",
       "stanza:type": "single-choice",
-      "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
-      "stanza:description": "Y axis placement"
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show Y Axis"
     }
   ],
   "stanza:menu-placement": "bottom-right",

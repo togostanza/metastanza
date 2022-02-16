@@ -41,7 +41,7 @@ export default class Barchart extends Stanza {
     const showXTicks = this.params["xtick"] === "true" ? true : false;
     const showYTicks = this.params["ytick"] === "true" ? true : false;
     const yTicksNumber = this.params["yticks-number"] || 3;
-    const showLegend = this.params["legend"] === "true" ? true : false;
+    const showLegend = this.params["legend"] || "top-right";
     const groupKeyName = this.params["group-by"];
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
     const showYGrid = this.params["ygrid"] === "true" ? true : false;
@@ -53,7 +53,6 @@ export default class Barchart extends Stanza {
       parseInt(this.params["ylabel-angle"]) === 0
         ? 0
         : parseInt(this.params["ylabel-angle"]) || 0;
-
     const barPlacement = this.params["bar-placement"];
     const errorKeyName = this.params["error-key"] || "error";
     const showErrorBars = this.params["error-bars"] === "true" ? true : false;
@@ -69,17 +68,13 @@ export default class Barchart extends Stanza {
       parseInt(this.params["ylabel-padding"]) === 0
         ? 0
         : parseInt(this.params["ylabel-padding"]) || 10;
-
     const ylabelFormat = this.params["ylabel-format"] || null;
-
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 25;
-
     const xTickSize = this.params["xtick-size"] || 5;
     const yTickSize = this.params["ytick-size"] || 5;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
-
     const barPaddings =
       typeof this.params["bar-paddings"] === "undefined"
         ? 0.1
@@ -89,9 +84,11 @@ export default class Barchart extends Stanza {
         ? 0.1
         : this.params["bar-sub-paddings"];
     const xTickPlacement = this.params["xtick-placement"] || "in-between";
-
     const showBarTooltips =
       this.params["bar-tooltips"] === "true" ? true : false;
+
+    const showXAxis = this.params["show-x-axis"] === "false" ? false : true;
+    const showYAxis = this.params["show-x-axis"] === "false" ? false : true;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -120,7 +117,7 @@ export default class Barchart extends Stanza {
 
     // Add legend
 
-    if (showLegend) {
+    if (showLegend !== "none") {
       this.legend = new Legend();
       root.append(this.legend);
     }
@@ -299,22 +296,24 @@ export default class Barchart extends Stanza {
 
         x.domain(xAxisLabels);
 
-        xAxisArea
-          .transition()
-          .duration(200)
-          .call(xAxisGenerator)
-          .selectAll("text")
-          .attr("text-anchor", xAxisLabelsProps.textAnchor)
-          .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
-          .attr("y", xAxisLabelsProps.y)
-          .attr("x", xAxisLabelsProps.x)
-          .attr("dy", null)
-          .attr("transform", `rotate(${xLabelAngle})`)
-          .on("end", function (_, i, nodes) {
-            if (i === nodes.length - 1) {
-              check(xAxisArea.node().getBoundingClientRect());
-            }
-          });
+        if (showXAxis) {
+          xAxisArea
+            .transition()
+            .duration(200)
+            .call(xAxisGenerator)
+            .selectAll("text")
+            .attr("text-anchor", xAxisLabelsProps.textAnchor)
+            .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
+            .attr("y", xAxisLabelsProps.y)
+            .attr("x", xAxisLabelsProps.x)
+            .attr("dy", null)
+            .attr("transform", `rotate(${xLabelAngle})`)
+            .on("end", function (_, i, nodes) {
+              if (i === nodes.length - 1) {
+                check(xAxisArea.node().getBoundingClientRect());
+              }
+            });
+        }
 
         // Check if X axis labels gets beyond the svg borders and adjust margins if necessary:
 
@@ -373,24 +372,26 @@ export default class Barchart extends Stanza {
           updateGroupedBars(values);
         }
 
-        this.legend.setup(
-          gSubKeyNames.map((item, index) => {
-            return {
-              id: "" + index,
-              label: item,
-              color: color(item),
-              node: this.root.querySelectorAll(
-                `#barchart-d3 svg rect.data-${index}`
-              ),
-            };
-          }),
-          this.root.querySelector("main"),
-          {
-            fadeoutNodes: this.root.querySelectorAll("svg rect"),
-            position: ["top", "right"],
-            fadeProp: "opacity",
-          }
-        );
+        if (showLegend !== "none") {
+          this.legend.setup(
+            gSubKeyNames.map((item, index) => {
+              return {
+                id: "" + index,
+                label: item,
+                color: color(item),
+                node: this.root.querySelectorAll(
+                  `#barchart-d3 svg rect.data-${index}`
+                ),
+              };
+            }),
+            this.root.querySelector("main"),
+            {
+              fadeoutNodes: this.root.querySelectorAll("svg rect"),
+              position: showLegend.split("-"),
+              fadeProp: "opacity",
+            }
+          );
+        }
 
         if (showBarTooltips) {
           const arr = this.root.querySelectorAll("svg rect");
@@ -416,17 +417,19 @@ export default class Barchart extends Stanza {
 
           y.domain([0, dataMax * 1.05]);
 
-          yAxisArea
-            .transition()
-            .duration(200)
-            .call(yAxisGenerator)
-            .selectAll("text")
-            .attr("text-anchor", yAxisLabelsProps.textAnchor)
-            .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
-            .attr("dy", null)
-            .attr("x", yAxisLabelsProps.x)
-            .attr("y", yAxisLabelsProps.y)
-            .attr("transform", `rotate(${yLabelAngle})`);
+          if (showYAxis) {
+            yAxisArea
+              .transition()
+              .duration(200)
+              .call(yAxisGenerator)
+              .selectAll("text")
+              .attr("text-anchor", yAxisLabelsProps.textAnchor)
+              .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+              .attr("dy", null)
+              .attr("x", yAxisLabelsProps.x)
+              .attr("y", yAxisLabelsProps.y)
+              .attr("transform", `rotate(${yLabelAngle})`);
+          }
 
           if (showYGrid) {
             yGridLines.transition().duration(200).call(yAxisGridGenerator);
@@ -512,18 +515,19 @@ export default class Barchart extends Stanza {
           }
 
           y.domain([0, yMinMax[1] * 1.05]);
-
-          yAxisArea
-            .transition()
-            .duration(200)
-            .call(yAxisGenerator)
-            .selectAll("text")
-            .attr("text-anchor", yAxisLabelsProps.textAnchor)
-            .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
-            .attr("dy", null)
-            .attr("x", yAxisLabelsProps.x)
-            .attr("y", yAxisLabelsProps.y)
-            .attr("transform", `rotate(${yLabelAngle})`);
+          if (showYAxis) {
+            yAxisArea
+              .transition()
+              .duration(200)
+              .call(yAxisGenerator)
+              .selectAll("text")
+              .attr("text-anchor", yAxisLabelsProps.textAnchor)
+              .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+              .attr("dy", null)
+              .attr("x", yAxisLabelsProps.x)
+              .attr("y", yAxisLabelsProps.y)
+              .attr("transform", `rotate(${yLabelAngle})`);
+          }
 
           if (showYGrid) {
             yGridLines.transition().duration(200).call(yAxisGridGenerator);
@@ -669,14 +673,14 @@ export default class Barchart extends Stanza {
               (d) =>
                 subXAxis(d[groupKeyName]) +
                 subXAxis.bandwidth() / 2 -
-                (subXAxis.bandwidth() * errorBarWidth) / 2
+                errorBarWidth / 2
             )
             .attr(
               "x2",
               (d) =>
                 subXAxis(d[groupKeyName]) +
                 subXAxis.bandwidth() / 2 +
-                (subXAxis.bandwidth() * errorBarWidth) / 2
+                errorBarWidth / 2
             )
             .attr("y1", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2))
             .attr("y2", (d) => yAxis(+d[yKeyName] - d[errorKeyName] / 2));
@@ -688,14 +692,14 @@ export default class Barchart extends Stanza {
               (d) =>
                 subXAxis(d[groupKeyName]) +
                 subXAxis.bandwidth() / 2 -
-                (subXAxis.bandwidth() * errorBarWidth) / 2
+                errorBarWidth / 2
             )
             .attr(
               "x2",
               (d) =>
                 subXAxis(d[groupKeyName]) +
                 subXAxis.bandwidth() / 2 +
-                (subXAxis.bandwidth() * errorBarWidth) / 2
+                errorBarWidth / 2
             )
             .attr("y1", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2))
             .attr("y2", (d) => yAxis(+d[yKeyName] + d[errorKeyName] / 2));
