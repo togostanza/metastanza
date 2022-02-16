@@ -635,6 +635,7 @@ export default class Barchart extends Stanza {
 
           errorBarGroup
             .append("line")
+            .attr("class", "errorbar")
             .attr(
               "x1",
               (d) => subXAxis(d[groupKeyName]) + subXAxis.bandwidth() / 2
@@ -649,6 +650,7 @@ export default class Barchart extends Stanza {
           // upper stroke
           errorBarGroup
             .append("line")
+            .attr("class", "errorbar")
             .attr(
               "x1",
               (d) =>
@@ -668,6 +670,7 @@ export default class Barchart extends Stanza {
           // lower stroke
           errorBarGroup
             .append("line")
+            .attr("class", "errorbar")
             .attr(
               "x1",
               (d) =>

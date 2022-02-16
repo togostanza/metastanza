@@ -1,5 +1,5 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+@use "@/common.scss";
 
 summary {
   display: none;
@@ -38,6 +38,12 @@ svg {
   .axis > path {
     stroke: var(--togostanza-axis-color);
     stroke-width: var(--togostanza-axis-width);
+  }
+
+  line.errorbar {
+    stroke: var(--togostanza-errorbar-line-color);
+    stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
+    opacity: var(--togostanza-errorbar-line-opacity);
   }
 }
 
