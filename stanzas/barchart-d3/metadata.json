@@ -201,6 +201,12 @@
       "stanza:description": "Y label angle (in degree)"
     },
     {
+      "stanza:key": "ylabel-format",
+      "stanza:type": "string",
+      "stanza:example": ",.2r",
+      "stanza:description": "Y axis tick labels number format. See more format strings in d3.format() documentation"
+    },
+    {
       "stanza:key": "xlabel-padding",
       "stanza:type": "number",
       "stanza:example": 5,
@@ -215,13 +221,13 @@
     {
       "stanza:key": "xtitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 20,
       "stanza:description": "Padding between X title and label"
     },
     {
       "stanza:key": "ytitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 25,
       "stanza:description": "Padding between Y title and label"
     },
     {
