@@ -315,41 +315,6 @@ export default class Barchart extends Stanza {
             });
         }
 
-        // Check if X axis labels gets beyond the svg borders and adjust margins if necessary:
-
-        function check(axisBBox) {
-          const svgBBox = svg.node().getBoundingClientRect();
-
-          const deltaLeftWidth = svgBBox.left - axisBBox.left;
-          const deltaRightWidth = axisBBox.right - svgBBox.right;
-          const deltaBottomHeight = axisBBox.bottom - svgBBox.bottom;
-          const deltaTopHeight = svgBBox.top - axisBBox.top;
-
-          if (
-            deltaLeftWidth > 0 ||
-            deltaRightWidth > 0 ||
-            deltaBottomHeight > 0 ||
-            deltaTopHeight > 0
-          ) {
-            MARGIN.LEFT =
-              deltaLeftWidth > 0
-                ? MARGIN.LEFT + deltaLeftWidth + 5
-                : MARGIN.LEFT;
-            MARGIN.RIGHT =
-              deltaRightWidth > 0
-                ? MARGIN.RIGHT + deltaRightWidth + 5
-                : MARGIN.RIGHT;
-            MARGIN.BOTTOM =
-              deltaBottomHeight > 0
-                ? MARGIN.BOTTOM + deltaBottomHeight + 5
-                : MARGIN.BOTTOM;
-            MARGIN.TOP =
-              deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
-
-            redrawSVG(MARGIN);
-          }
-        }
-
         if (xTickPlacement === "in-between") {
           xAxisArea
             .selectAll("g.tick>line")
@@ -375,6 +340,34 @@ export default class Barchart extends Stanza {
         if (showBarTooltips) {
           const arr = this.root.querySelectorAll("svg rect");
           this.tooltip.setup(arr);
+        }
+
+        if (showLegend !== "none") {
+          this.legend.setup(
+            gSubKeyNames.map((item, index) => {
+              return {
+                id: "" + index,
+                label: item,
+                color: color(item),
+                node: svg
+                  .selectAll("g.bars-group rect")
+                  .filter((d) => {
+                    if (barPlacement === "stacked") {
+                      return d.key === item;
+                    }
+                    return d[groupKeyName] === item;
+                  })
+                  .nodes(),
+              };
+            }),
+            this.root.querySelector("main"),
+            {
+              fadeoutNodes: svg.selectAll("g.bars-group rect").nodes(),
+              position: showLegend.split("-"),
+              fadeProp: "opacity",
+              showLeaders: false,
+            }
+          );
         }
 
         function updateStackedBars(values) {
@@ -572,34 +565,45 @@ export default class Barchart extends Stanza {
             barsGroup.call(errorBars, y, subX, errorBarWidth);
           }
         }
+        // Check if X axis labels gets beyond the svg borders and adjust margins if necessary:
+
+        function check(axisBBox) {
+          const svgBBox = svg.node().getBoundingClientRect();
+
+          const deltaLeftWidth = svgBBox.left - axisBBox.left;
+          const deltaRightWidth = axisBBox.right - svgBBox.right;
+          const deltaBottomHeight = axisBBox.bottom - svgBBox.bottom;
+          const deltaTopHeight = svgBBox.top - axisBBox.top;
+
+          if (
+            deltaLeftWidth > 0 ||
+            deltaRightWidth > 0 ||
+            deltaBottomHeight > 0 ||
+            deltaTopHeight > 0
+          ) {
+            MARGIN.LEFT =
+              deltaLeftWidth > 0
+                ? MARGIN.LEFT + deltaLeftWidth + 5
+                : MARGIN.LEFT;
+            MARGIN.RIGHT =
+              deltaRightWidth > 0
+                ? MARGIN.RIGHT + deltaRightWidth + 5
+                : MARGIN.RIGHT;
+            MARGIN.BOTTOM =
+              deltaBottomHeight > 0
+                ? MARGIN.BOTTOM + deltaBottomHeight + 5
+                : MARGIN.BOTTOM;
+            MARGIN.TOP =
+              deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
+
+            redrawSVG(MARGIN);
+          }
+        }
       };
 
       update(values);
 
       if (showLegend !== "none") {
-        this.legend.setup(
-          gSubKeyNames.map((item, index) => {
-            return {
-              id: "" + index,
-              label: item,
-              color: color(item),
-              node: barsArea
-                .selectAll("g.bars-group>g>rect")
-                .filter((d) => {
-                  return d[groupKeyName] === item;
-                })
-                .nodes(),
-            };
-          }),
-          this.root.querySelector("main"),
-          {
-            fadeoutNodes: this.root.querySelectorAll("svg rect"),
-            position: ["top", "right"],
-            fadeProp: "opacity",
-            showLeaders: false,
-          }
-        );
-
         const legend = this.root
           .querySelector("togostanza--legend")
           .shadowRoot.querySelector(".legend > table > tbody");
