@@ -316,6 +316,8 @@ export default class Barchart extends Stanza {
             }
           });
 
+        // Check if X axis labels gets beyond the svg borders and adjust margins if necessary:
+
         function check(axisBBox) {
           const svgBBox = svg.node().getBoundingClientRect();
 
@@ -345,19 +347,9 @@ export default class Barchart extends Stanza {
             MARGIN.TOP =
               deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
 
-            console.log({
-              deltaLeftWidth,
-              deltaRightWidth,
-              deltaBottomHeight,
-              deltaTopHeight,
-            });
-
-            //need to add +1 because it end up with some strange turncation errors
             redrawSVG(MARGIN);
           }
         }
-
-        // find max x axis label
 
         if (xTickPlacement === "in-between") {
           xAxisArea
@@ -508,8 +500,6 @@ export default class Barchart extends Stanza {
 
         function updateGroupedBars(values) {
           const dataset = d3.group(values, (d) => d[xKeyName]);
-
-          // const yAxisGenerator = d3.axisLeft(y).ticks(yTicksNumber);
 
           let yMinMax;
           if (showErrorBars) {
