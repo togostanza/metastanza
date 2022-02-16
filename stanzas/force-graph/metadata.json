@@ -1,0 +1,200 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "force-graph",
+  "stanza:label": "Force Graph",
+  "stanza:definition": "Force Graph MetaStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
+  "stanza:created": "2021-02-16",
+  "stanza:updated": "2021-02-16",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 600,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 50,
+      "stanza:description": "Padding"
+    },
+    {
+      "stanza:key": "legend",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "none",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Where to show the legend. 'none' for no legend"
+    },
+    {
+      "stanza:key": "xgrid",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": false,
+      "stanza:description": "Show X grid"
+    },
+    {
+      "stanza:key": "ygrid",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show Y grid"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-line-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Line width"
+    },
+
+    {
+      "stanza:key": "--togostanza-grid-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "Grid color"
+    },
+    {
+      "stanza:key": "--togostanza-grid-dash-length",
+      "stanza:type": "number",
+      "stanza:default": "",
+      "stanza:description": "Grid dash length (Blank for solid lines)"
+    },
+    {
+      "stanza:key": "--togostanza-grid-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.1,
+      "stanza:description": "Grid opacity (0-1)"
+    },
+    {
+      "stanza:key": "--togostanza-grid-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Grid width"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Title font color"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-size",
+      "stanza:type": "number",
+      "stanza:default": 10,
+      "stanza:description": "Title font size"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-weight",
+      "stanza:type": "number",
+      "stanza:default": 400,
+      "stanza:description": "Title font weight"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 10,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Border width"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    }
+  ]
+}
