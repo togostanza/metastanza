@@ -372,27 +372,6 @@ export default class Barchart extends Stanza {
           updateGroupedBars(values);
         }
 
-        if (showLegend !== "none") {
-          this.legend.setup(
-            gSubKeyNames.map((item, index) => {
-              return {
-                id: "" + index,
-                label: item,
-                color: color(item),
-                node: this.root.querySelectorAll(
-                  `#barchart-d3 svg rect.data-${index}`
-                ),
-              };
-            }),
-            this.root.querySelector("main"),
-            {
-              fadeoutNodes: this.root.querySelectorAll("svg rect"),
-              position: showLegend.split("-"),
-              fadeProp: "opacity",
-            }
-          );
-        }
-
         if (showBarTooltips) {
           const arr = this.root.querySelectorAll("svg rect");
           this.tooltip.setup(arr);
@@ -597,49 +576,51 @@ export default class Barchart extends Stanza {
 
       update(values);
 
-      this.legend.setup(
-        gSubKeyNames.map((item, index) => {
-          return {
-            id: "" + index,
-            label: item,
-            color: color(item),
-            node: barsArea
-              .selectAll("g.bars-group>g>rect")
-              .filter((d) => {
-                return d[groupKeyName] === item;
-              })
-              .nodes(),
-          };
-        }),
-        this.root.querySelector("main"),
-        {
-          fadeoutNodes: this.root.querySelectorAll("svg rect"),
-          position: ["top", "right"],
-          fadeProp: "opacity",
-          showLeaders: false,
-        }
-      );
+      if (showLegend !== "none") {
+        this.legend.setup(
+          gSubKeyNames.map((item, index) => {
+            return {
+              id: "" + index,
+              label: item,
+              color: color(item),
+              node: barsArea
+                .selectAll("g.bars-group>g>rect")
+                .filter((d) => {
+                  return d[groupKeyName] === item;
+                })
+                .nodes(),
+            };
+          }),
+          this.root.querySelector("main"),
+          {
+            fadeoutNodes: this.root.querySelectorAll("svg rect"),
+            position: ["top", "right"],
+            fadeProp: "opacity",
+            showLeaders: false,
+          }
+        );
 
-      const legend = this.root
-        .querySelector("togostanza--legend")
-        .shadowRoot.querySelector(".legend > table > tbody");
+        const legend = this.root
+          .querySelector("togostanza--legend")
+          .shadowRoot.querySelector(".legend > table > tbody");
 
-      legend.addEventListener("click", (e) => {
-        const parentNode = e.target.parentNode;
-        if (parentNode.nodeName === "TR") {
-          const id = parentNode.dataset.id;
-          parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-          toggleState.set("" + id, !toggleState.get("" + id));
+        legend.addEventListener("click", (e) => {
+          const parentNode = e.target.parentNode;
+          if (parentNode.nodeName === "TR") {
+            const id = parentNode.dataset.id;
+            parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
+            toggleState.set("" + id, !toggleState.get("" + id));
 
-          // filter out data wich was clicked
-          const newData = values.filter(
-            (item) =>
-              !toggleState.get("" + gSubKeyNames.indexOf(item[groupKeyName]))
-          );
+            // filter out data wich was clicked
+            const newData = values.filter(
+              (item) =>
+                !toggleState.get("" + gSubKeyNames.indexOf(item[groupKeyName]))
+            );
 
-          update(newData);
-        }
-      });
+            update(newData);
+          }
+        });
+      }
 
       function errorBars(selection, yAxis, subXAxis, errorBarWidth) {
         selection.each(function (d) {
