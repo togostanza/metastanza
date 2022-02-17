@@ -4591,7 +4591,6 @@ var script = defineComponent({
           });
         }
       }
-      console.log("emit filter conditions", conditions);
 
       params.stanzaElement.dispatchEvent(
         new CustomEvent("filter", { detail: conditions })
