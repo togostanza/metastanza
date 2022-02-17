@@ -101,6 +101,7 @@ class Legend extends s {
     this.items = items;
 
     this.render();
+
     const positions = opt.position || ["top", "right"];
 
     //  name of style property to fadeout. for fill - "opacity", for path's stroke - "stroke-opacity" etc.
@@ -110,7 +111,14 @@ class Legend extends s {
     const showLeaders = opt.showLeaders;
     // placement
     const legend = this.shadowRoot.querySelector(".legend");
-    positions.forEach((position) => (legend.style[position] = 0));
+
+    ["top", "bottom", "left", "right"].forEach((pos) => {
+      legend.style[pos] = "";
+    });
+
+    positions.forEach((position) => {
+      legend.style[position] = 0;
+    });
 
     if (!opt.fadeoutNodes) {
       return;
@@ -133,9 +141,9 @@ class Legend extends s {
                 node.style[fadeProp] = 0.2;
               });
 
-              if (Array.isArray([...datum.node]) && datum.node.length !== 0) {
+              if (Array.isArray(datum.node) && datum.node.length !== 0) {
                 datum.node.forEach((item) => (item.style[fadeProp] = ""));
-              } else if (!Array.isArray([...datum.node])) {
+              } else if (!Array.isArray(datum.node)) {
                 datum.node.style[fadeProp] = "";
               } else {
                 return;
@@ -183,4 +191,4 @@ class Legend extends s {
 customElements.define("togostanza--legend", Legend);
 
 export { Legend as L };
-//# sourceMappingURL=Legend-fa206145.js.map
+//# sourceMappingURL=Legend-a429f577.js.map
