@@ -385,7 +385,7 @@ export default class Barchart extends Stanza {
 
           const stackedData = stack(dataset);
 
-          dataMax = d3.max(stackedData[stackedData.length - 1], (d) => d[1]);
+          dataMax = d3.max(stackedData.flat(), (d) => d[1]);
 
           y.domain([0, dataMax * 1.05]);
 
