@@ -18,7 +18,6 @@ export default class ScatterPlot extends Stanza {
     super(...arguments);
 
     this._filter = [];
-    this._data = null;
   }
 
   menu() {
@@ -44,17 +43,12 @@ export default class ScatterPlot extends Stanza {
     const yVariable = this.params["y"];
     const zVariable = this.params["z"] ? this.params["z"] : "none";
 
-    const cacheKey = `${this.params["data-url"]}\x1f${this.params["data-type"]}`;
-    if (this._cacheKey !== cacheKey) {
-      this._data = await loadData(
-        this.params["data-url"],
-        this.params["data-type"],
-        this.root.querySelector("main")
-      );
-      this._cacheKey = cacheKey;
-    }
-
-    const values = applyFilter(this._data, this._filter);
+    const _data = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+    const values = applyFilter(_data, this._filter);
 
     const data = [
       {
