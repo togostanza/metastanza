@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
 import { e as embed } from './vega-embed.module-cc3a6c83.js';
-import { l as loadData } from './load-data-162104b1.js';
+import { l as loadData } from './load-data-c76aeef6.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-c3245d93.js';
 
 function applyFilter(data, filter) {
@@ -32,7 +32,6 @@ class ScatterPlot extends Stanza {
     super(...arguments);
 
     this._filter = [];
-    this._data = null;
   }
 
   menu() {
@@ -58,17 +57,12 @@ class ScatterPlot extends Stanza {
     const yVariable = this.params["y"];
     const zVariable = this.params["z"] ? this.params["z"] : "none";
 
-    const cacheKey = `${this.params["data-url"]}\x1f${this.params["data-type"]}`;
-    if (this._cacheKey !== cacheKey) {
-      this._data = await loadData(
-        this.params["data-url"],
-        this.params["data-type"],
-        this.root.querySelector("main")
-      );
-      this._cacheKey = cacheKey;
-    }
-
-    const values = applyFilter(this._data, this._filter);
+    const _data = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+    const values = applyFilter(_data, this._filter);
 
     const data = [
       {

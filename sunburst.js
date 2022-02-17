@@ -1,7 +1,7 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, s as select } from './index-c3245d93.js';
-import { l as loadData } from './load-data-162104b1.js';
+import { l as loadData } from './load-data-c76aeef6.js';
 import { c as constant, p as path$1, m as max$1 } from './constant-abe3b5f1.js';
 import { s as stratify, h as hierarchy } from './stratify-8f602319.js';
 import { f as format, o as ordinal, a as interpolate } from './ordinal-538ccecd.js';
