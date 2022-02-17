@@ -1,0 +1,604 @@
+{
+    "nodes": [
+        {
+            "id": "0",
+            "label": "M. Yu"
+        },
+        {
+            "id": "1",
+            "label": "JCM_32025"
+        },
+        {
+            "id": "2",
+            "label": "Coll. of Mar. Life Sci. Ocean Univ. of China China"
+        },
+        {
+            "id": "3",
+            "label": "OUC007."
+        },
+        {
+            "id": "4",
+            "label": "DSM 6139"
+        },
+        {
+            "id": "5",
+            "label": "JCM_19730"
+        },
+        {
+            "id": "6",
+            "label": "K. Tanaka PeC1."
+        },
+        {
+            "id": "7",
+            "label": "NRIC 0475"
+        },
+        {
+            "id": "8",
+            "label": "JCM_25077"
+        },
+        {
+            "id": "9",
+            "label": "TUA 845B"
+        },
+        {
+            "id": "10",
+            "label": "IFO 13755"
+        },
+        {
+            "id": "11",
+            "label": "J. De Ley"
+        },
+        {
+            "id": "12",
+            "label": "NCIB 8618"
+        },
+        {
+            "id": "13",
+            "label": "W. Verhoeven L1374."
+        },
+        {
+            "id": "14",
+            "label": "NBRC_00013755"
+        },
+        {
+            "id": "15",
+            "label": "W. Verhoeven, L 1374"
+        },
+        {
+            "id": "16",
+            "label": "NITE (K. Mori, Mic2c01)"
+        },
+        {
+            "id": "17",
+            "label": "NBRC_00105801"
+        },
+        {
+            "id": "18",
+            "label": "NITE (K. Mori, Mic7c08)"
+        },
+        {
+            "id": "19",
+            "label": "NBRC_00105803"
+        },
+        {
+            "id": "20",
+            "label": "NITE (K. Mori, Mic2c03)"
+        },
+        {
+            "id": "21",
+            "label": "NBRC_00105802"
+        },
+        {
+            "id": "22",
+            "label": "NITE (K. Mori, Mic7c05)"
+        },
+        {
+            "id": "23",
+            "label": "NBRC_00105809"
+        },
+        {
+            "id": "24",
+            "label": "NITE (K. Mori, Mic10c02)"
+        },
+        {
+            "id": "25",
+            "label": "NBRC_00105804"
+        },
+        {
+            "id": "26",
+            "label": "IAM 12568"
+        },
+        {
+            "id": "27",
+            "label": "NBRC_00102400"
+        },
+        {
+            "id": "28",
+            "label": "NCMB 1501"
+        },
+        {
+            "id": "29",
+            "label": "ATCC 15918"
+        },
+        {
+            "id": "30",
+            "label": "H.S. Shieh."
+        },
+        {
+            "id": "31",
+            "label": "IAM 12556"
+        },
+        {
+            "id": "32",
+            "label": "JCM_20635"
+        },
+        {
+            "id": "33",
+            "label": "NCIB 9387 (Alcaligenes faecalis)"
+        },
+        {
+            "id": "34",
+            "label": "T. Beppu AIC-1."
+        },
+        {
+            "id": "35",
+            "label": "DSM 1651"
+        },
+        {
+            "id": "36",
+            "label": "NBRC_00015269"
+        },
+        {
+            "id": "37",
+            "label": "W. Zillig & K.O. Stetter"
+        },
+        {
+            "id": "38",
+            "label": "C.L. Brierley"
+        },
+        {
+            "id": "39",
+            "label": "E. Watkin"
+        },
+        {
+            "id": "40",
+            "label": "JCM_32254"
+        },
+        {
+            "id": "41",
+            "label": "Curtin Univ. Australia"
+        },
+        {
+            "id": "42",
+            "label": "DSM 14175"
+        },
+        {
+            "id": "43",
+            "label": "P. R. Norris"
+        },
+        {
+            "id": "44",
+            "label": "Univ. Warwick UK"
+        },
+        {
+            "id": "45",
+            "label": "V8."
+        },
+        {
+            "id": "46",
+            "label": "JCM_32253"
+        },
+        {
+            "id": "47",
+            "label": "DSM 14174"
+        },
+        {
+            "id": "48",
+            "label": "V6."
+        },
+        {
+            "id": "49",
+            "label": "DSM 16705"
+        },
+        {
+            "id": "50",
+            "label": "JCM_18335"
+        },
+        {
+            "id": "51",
+            "label": "M. Prokofeva 345-15."
+        },
+        {
+            "id": "52",
+            "label": "IFO 14242"
+        },
+        {
+            "id": "53",
+            "label": "NBRC_00014242"
+        },
+        {
+            "id": "54",
+            "label": "A.P. Harrison, Jr., Lhet2 (isolated from culture of Thiobacillus ferrooxidans)"
+        },
+        {
+            "id": "55",
+            "label": "P.R. Dugan"
+        },
+        {
+            "id": "56",
+            "label": "D.G. Lundgren"
+        },
+        {
+            "id": "57",
+            "label": "W.W. Leathen"
+        },
+        {
+            "id": "58",
+            "label": "IFO 14243"
+        },
+        {
+            "id": "59",
+            "label": "NBRC_00014243"
+        },
+        {
+            "id": "60",
+            "label": "A.P. Harrison, Jr., 44het (isolated from culture of Thiobacillus ferrooxidans)"
+        },
+        {
+            "id": "61",
+            "label": "T. Sugio, AP-44 (derived from culture of Thiobacillus ferrooxidans, SPP)"
+        },
+        {
+            "id": "62",
+            "label": "A. Hiraishi HS-AP3."
+        },
+        {
+            "id": "63",
+            "label": "JCM_10600"
+        },
+        {
+            "id": "64",
+            "label": "Okayama Univ. (K. Kamimura, SH)"
+        },
+        {
+            "id": "65",
+            "label": "NBRC_00101132"
+        },
+        {
+            "id": "66",
+            "label": "D. B. Johnson"
+        },
+        {
+            "id": "67",
+            "label": "JCM_19728"
+        },
+        {
+            "id": "68",
+            "label": "Bangor Univ. UK"
+        },
+        {
+            "id": "69",
+            "label": "PY-F3."
+        }
+    ],
+    "links": [
+        {
+            "source": "0",
+            "target": "1",
+            "value": 1
+        },
+        {
+            "source": "2",
+            "target": "0",
+            "value": 1
+        },
+        {
+            "source": "3",
+            "target": "2",
+            "value": 1
+        },
+        {
+            "source": "4",
+            "target": "5",
+            "value": 1
+        },
+        {
+            "source": "6",
+            "target": "4",
+            "value": 1
+        },
+        {
+            "source": "7",
+            "target": "8",
+            "value": 1
+        },
+        {
+            "source": "9",
+            "target": "7",
+            "value": 1
+        },
+        {
+            "source": "10",
+            "target": "9",
+            "value": 1
+        },
+        {
+            "source": "13",
+            "target": "12",
+            "value": 1
+        },
+        {
+            "source": "10",
+            "target": "14",
+            "value": 1
+        },
+        {
+            "source": "11",
+            "target": "10",
+            "value": 2
+        },
+        {
+            "source": "12",
+            "target": "11",
+            "value": 2
+        },
+        {
+            "source": "15",
+            "target": "12",
+            "value": 1
+        },
+        {
+            "source": "16",
+            "target": "17",
+            "value": 1
+        },
+        {
+            "source": "18",
+            "target": "19",
+            "value": 1
+        },
+        {
+            "source": "20",
+            "target": "21",
+            "value": 1
+        },
+        {
+            "source": "22",
+            "target": "23",
+            "value": 1
+        },
+        {
+            "source": "24",
+            "target": "25",
+            "value": 1
+        },
+        {
+            "source": "26",
+            "target": "27",
+            "value": 1
+        },
+        {
+            "source": "28",
+            "target": "26",
+            "value": 1
+        },
+        {
+            "source": "29",
+            "target": "28",
+            "value": 1
+        },
+        {
+            "source": "30",
+            "target": "29",
+            "value": 1
+        },
+        {
+            "source": "31",
+            "target": "32",
+            "value": 1
+        },
+        {
+            "source": "33",
+            "target": "31",
+            "value": 1
+        },
+        {
+            "source": "34",
+            "target": "33",
+            "value": 1
+        },
+        {
+            "source": "35",
+            "target": "36",
+            "value": 1
+        },
+        {
+            "source": "37",
+            "target": "35",
+            "value": 1
+        },
+        {
+            "source": "38",
+            "target": "37",
+            "value": 1
+        },
+        {
+            "source": "39",
+            "target": "40",
+            "value": 0.5
+        },
+        {
+            "source": "41",
+            "target": "39",
+            "value": 1
+        },
+        {
+            "source": "42",
+            "target": "41",
+            "value": 0.5
+        },
+        {
+            "source": "43",
+            "target": "42",
+            "value": 0.5
+        },
+        {
+            "source": "44",
+            "target": "43",
+            "value": 1
+        },
+        {
+            "source": "45",
+            "target": "44",
+            "value": 0.5
+        },
+        {
+            "source": "39",
+            "target": "46",
+            "value": 0.5
+        },
+        {
+            "source": "47",
+            "target": "41",
+            "value": 0.5
+        },
+        {
+            "source": "43",
+            "target": "47",
+            "value": 0.5
+        },
+        {
+            "source": "48",
+            "target": "44",
+            "value": 0.5
+        },
+        {
+            "source": "49",
+            "target": "50",
+            "value": 1
+        },
+        {
+            "source": "51",
+            "target": "49",
+            "value": 1
+        },
+        {
+            "source": "52",
+            "target": "53",
+            "value": 1
+        },
+        {
+            "source": "54",
+            "target": "52",
+            "value": 1
+        },
+        {
+            "source": "55",
+            "target": "54",
+            "value": 1
+        },
+        {
+            "source": "56",
+            "target": "55",
+            "value": 1
+        },
+        {
+            "source": "57",
+            "target": "56",
+            "value": 1
+        },
+        {
+            "source": "58",
+            "target": "59",
+            "value": 1
+        },
+        {
+            "source": "60",
+            "target": "58",
+            "value": 1
+        },
+        {
+            "source": "61",
+            "target": "60",
+            "value": 1
+        },
+        {
+            "source": "62",
+            "target": "63",
+            "value": 1
+        },
+        {
+            "source": "64",
+            "target": "65",
+            "value": 1
+        },
+        {
+            "source": "66",
+            "target": "67",
+            "value": 1
+        },
+        {
+            "source": "68",
+            "target": "66",
+            "value": 1
+        },
+        {
+            "source": "69",
+            "target": "68",
+            "value": 1
+        }
+    ],
+    "rankSets": [
+        {
+            "type": "same",
+            "nodes": [
+                "1",
+                "5",
+                "8",
+                "14",
+                "17",
+                "19",
+                "21",
+                "23",
+                "25",
+                "27",
+                "32",
+                "36",
+                "40",
+                "46",
+                "50",
+                "53",
+                "59",
+                "63",
+                "65",
+                "67"
+            ]
+        },
+        {
+            "type": "same",
+            "nodes": [
+                "3",
+                "6",
+                "13",
+                "15",
+                "16",
+                "18",
+                "20",
+                "22",
+                "24",
+                "30",
+                "34",
+                "38",
+                "45",
+                "48",
+                "51",
+                "57",
+                "61",
+                "62",
+                "64",
+                "69"
+            ]
+        }
+    ],
+    "alignLinkTypes": true
+}
