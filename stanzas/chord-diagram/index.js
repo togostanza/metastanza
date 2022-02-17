@@ -3,14 +3,6 @@ import * as d3 from "d3";
 
 export default class ChordDiagram extends Stanza {
   async render() {
-    // this.renderTemplate(
-    //   {
-    //     template: 'stanza.html.hbs',
-    //     parameters: {
-    //       greeting: `Hello, ${this.params['say-to']}!`
-    //     }
-    //   }
-    // );
 
     // geometry
     // window.getComputedStyle(this.element).getPropertyValue('--width')
@@ -26,16 +18,24 @@ export default class ChordDiagram extends Stanza {
 
     // data
     const data = await (() => {
+      console.log(this.params["data-url"])
       switch (this.params["data-type"]) {
         case "json":
-          return d3.json(this.params["data-url"], (data) => data);
+          return d3.json('./chord-diagram/assets/directed-graph-data.json', (data) => data);
         case "tsv":
           return d3.tsv(this.params["data-url"], (data) => data);
       }
+      // switch (this.params["data-type"]) {
+      //   case "json":
+      //     return d3.json(this.params["data-url"], (data) => data);
+      //   case "tsv":
+      //     return d3.tsv(this.params["data-url"], (data) => data);
+      // }
     })();
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
+    console.log(names)
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
@@ -44,6 +44,7 @@ export default class ChordDiagram extends Stanza {
       }
       return matrix;
     })();
+    console.log(matrix)
 
     // prepare some D3 objects
     const color = {
