@@ -2,8 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import Legend from "@/lib/Legend";
-import { drag } from "https://cdn.skypack.dev/d3-drag@3";
-const handler = drag();
+import ToolTip from "@/lib/ToolTip";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -35,48 +34,58 @@ export default class ForceGraph extends Stanza {
       template: "stanza.html.hbs",
     });
 
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"]
+    );
+
+    this._data = values;
+
+    const nodes = d3.map(values.nodes, (d) => ({ id: d.id }));
+    const links = d3.map(values.links, (d) => ({
+      source: d.source,
+      target: d.target,
+    }));
+
+    const togostanzaColors = [];
+    for (let i = 0; i < 6; i++) {
+      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+    }
+
+    const color = d3.scaleOrdinal().range(togostanzaColors);
+
+    const width = parseInt(this.params["width"]) || 300;
+    const height = parseInt(this.params["height"]) || 200;
+
     const root = this.root.querySelector(":scope > div");
 
-    const svg = d3.select(root).append("svg");
+    if (!this.tooltip) {
+      this.tooltip = new ToolTip();
+      root.append(this.tooltip);
+    }
+
+    const svg = d3
+      .select(root)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
     const gLinks = svg.append("g").attr("class", "links");
     const gNodes = svg.append("g").attr("class", "nodes");
 
-    function draw() {
-      const width = 400,
-        height = 400;
-      const nodes = [
-        { name: "A" },
-        { name: "B" },
-        { name: "C" },
-        { name: "D" },
-        { name: "E" },
-        { name: "F" },
-        { name: "G" },
-        { name: "H" },
-      ];
-
-      const links = [
-        { source: 0, target: 1 },
-        { source: 0, target: 2 },
-        { source: 0, target: 3 },
-        { source: 1, target: 6 },
-        { source: 3, target: 4 },
-        { source: 3, target: 7 },
-        { source: 4, target: 5 },
-        { source: 4, target: 7 },
-      ];
-
-      svg.attr("width", width).attr("height", height);
-
-      const color = d3
-        .scaleOrdinal(d3.schemeCategory10)
-        .domain(nodes.map((item) => item.name));
-
+    const draw = () => {
       const simulation = d3
         .forceSimulation(nodes)
-        .force("charge", d3.forceManyBody().strength(-100))
+        .force("charge", d3.forceManyBody().strength(-40))
         .force("center", d3.forceCenter(width / 2, height / 2))
-        .force("link", d3.forceLink().links(links).distance(20))
+        .force(
+          "link",
+          d3
+            .forceLink()
+            .links(links)
+            .id((d) => d.id)
+            .distance(20)
+        )
         .on("tick", ticked);
 
       const joinedLinks = gLinks
@@ -102,28 +111,27 @@ export default class ForceGraph extends Stanza {
       }
 
       const joinedNodes = gNodes
-        .selectAll("g")
+        .selectAll("circle")
         .data(nodes)
         .join(
           (enter) => {
-            const g = enter.append("g").attr("class", "node");
-            g.append("circle")
-              .attr("r", 10)
+            //const g = enter.append("g").attr("class", "node");
+            return enter
+              .append("circle")
+              .attr("r", 7)
               .attr("cx", 0)
               .attr("cy", 0)
-              .attr("fill", (d) => color(d.name));
-            g.append("text")
-              .text((d) => d.name)
-              .attr("dy", 5)
+              .attr("fill", (d) => color(d.id))
+              .attr("data-tooltip", (d) => d.id);
 
-              .attr("text-anchor", "middle");
-            return g;
+            // return g;
           },
           (update) => update,
           (exit) => {
             exit.remove();
           }
         )
+
         .call(drag(simulation));
 
       function drag(simulation) {
@@ -154,8 +162,10 @@ export default class ForceGraph extends Stanza {
           .on("drag", dragged)
           .on("end", dragended);
       }
-    }
+    };
 
     draw();
+
+    this.tooltip.setup(this.root.querySelectorAll("circle[data-tooltip]"));
   }
 }
