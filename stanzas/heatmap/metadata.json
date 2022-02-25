@@ -125,6 +125,12 @@
       "stanza:description": "Title font weight"
     },
     {
+      "stanza:key": "--togostanza-border-radius",
+      "stanza:type": "number",
+      "stanza:default": 5,
+      "stanza:description": "Border radius"
+    },
+    {
       "stanza:key": "--togostanza-hover-border-color",
       "stanza:type": "color",
       "stanza:default": "#FFEC1A",

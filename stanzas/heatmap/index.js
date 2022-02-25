@@ -117,6 +117,8 @@ export default class Heatmap extends Stanza {
       .attr("data-tooltip", (d) => tooltipHTML(d))
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
+      .attr("rx", css("--togostanza-border-radius"))
+      .attr("ry", css("--togostanza-border-radius"))
       .style("fill", (d) => myColor(d.value))
       .on("mouseover", mouseover)
       .on("mouseleave", mouseleave)
@@ -134,7 +136,8 @@ export default class Heatmap extends Stanza {
       });
     }
     this.tooltip.setup([...svg.selectAll("[data-tooltip]")]);
-    this.legend.setup(intervals());
+    // TODO: fix legend positioning
+    this.legend.setup(intervals(), this.root.querySelector("main"));
   }
 }
 
