@@ -1,20 +1,23 @@
 import Stanza from "togostanza/stanza";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-// import Legend from "@/lib/Legend";
+import Legend from "@/lib/Legend";
 
 import * as d3 from "d3";
 
-const tooltipHTML = ({group, variable, value}) =>  (`<span>${group},${variable}: <strong>${value}</strong></span>`)
+const tooltipHTML = ({ group, variable, value }) => (`<span>${group},${variable}: <strong>${value}</strong></span>`)
 
 export default class Heatmap extends Stanza {
   async render() {
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
     const chartElement = this.root.querySelector("main");
-    
+
+    const root = this.root.querySelector(":scope > div");
     if (!this.tooltip) {
       this.tooltip = new ToolTip();
-      chartElement.append(this.tooltip);
+      root.append(this.tooltip);
+      this.legend = new Legend();
+      root.append(this.legend);
     }
 
     const params = {
@@ -24,6 +27,7 @@ export default class Heatmap extends Stanza {
       left: this.params["left"],
       width: this.params["width"],
       height: this.params["height"],
+      legendGroups: this.params["legend-groups"],
     };
     const data = await loadData(
       this.params["data-url"],
@@ -90,16 +94,14 @@ export default class Heatmap extends Stanza {
         css("--togostanza-series-1-color"),
       ])
       .domain([1, 100]);
-  
+
     function mouseover() {
       d3.select(this)
         .style("stroke", css("--togostanza-hover-border-color"))
-        .style("opacity", 1)
     }
     function mouseleave() {
       d3.select(this)
         .style("stroke", "none")
-        .style("opacity", 0.8)
     }
 
     svg
@@ -109,19 +111,32 @@ export default class Heatmap extends Stanza {
       })
       .enter()
       .append("rect")
-      .attr("x", (d) =>  x(d.group))
-      .attr("y", (d) =>  y(d.variable))
+      .attr("x", (d) => x(d.group))
+      .attr("y", (d) => y(d.variable))
       .attr("data-tooltipHtml", true)
       .attr("data-tooltip", (d) => tooltipHTML(d))
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
-      .style("fill",(d) => myColor(d.value))
+      .style("fill", (d) => myColor(d.value))
       .on("mouseover", mouseover)
       .on("mouseleave", mouseleave)
 
+    // create legend objects based on min and max data values with number of steps as set by user in params 
+    const values = [...new Set(dataset.map((d) => d.value))];
+    const intervals = (steps = params["legendGroups"]) => {
+      const [min, max] = [Math.min(...values), Math.max(...values)];
+      return [...Array(steps + 1).keys()].map((i) => {
+        const n = Math.round(min + (i) * ((max - min) / steps))
+        return {
+          label: n,
+          color: myColor(n)
+        }
+      });
+    }
     this.tooltip.setup([...svg.selectAll("[data-tooltip]")]);
-
+    this.legend.setup(intervals());
   }
 }
+
 
 

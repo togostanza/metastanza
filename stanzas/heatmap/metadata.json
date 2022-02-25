@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/heatmap-data.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -25,7 +25,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "csv",
+      "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
     },
@@ -77,6 +77,12 @@
       ],
       "stanza:example": "top-right",
       "stanza:description": "Menu button placement"
+    },
+    {
+      "stanza:key": "legend-groups",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "amount of groups for legend"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -84,13 +90,13 @@
     {
       "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#ffffff",
+      "stanza:default": "#EDEDED",
       "stanza:description": "Depth color 1"
     },
     {
       "stanza:key": "--togostanza-series-1-color",
       "stanza:type": "color",
-      "stanza:default": "#6590E6",
+      "stanza:default": "#256D80",
       "stanza:description": "Depth color 2"
     },
     {
@@ -114,14 +120,14 @@
     {
       "stanza:key": "--togostanza-font-weight",
       "stanza:type": "single-choice",
-      "stanza:choice": ["normal", "bold", "ligther"],
+      "stanza:choice": ["normal", "bold", "lighter"],
       "stanza:default": "normal",
       "stanza:description": "Title font weight"
     },
     {
       "stanza:key": "--togostanza-hover-border-color",
       "stanza:type": "color",
-      "stanza:default": "#000000",
+      "stanza:default": "#FFEC1A",
       "stanza:description": "Hover border color"
     }
   ],
