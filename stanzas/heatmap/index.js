@@ -28,6 +28,7 @@ export default class Heatmap extends Stanza {
       width: this.params["width"],
       height: this.params["height"],
       legendGroups: this.params["legend-groups"],
+      showDomains: this.params["show-domains"],
     };
     const data = await loadData(
       this.params["data-url"],
@@ -72,11 +73,13 @@ export default class Heatmap extends Stanza {
       .padding(0.01);
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
 
     // Build X scales and axis:
     const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.01);
     svg.append("g").call(d3.axisLeft(y));
+    
+    if (!params["showDomains"]) { svg.selectAll(".domain").remove() };
 
     // Set font
     svg
