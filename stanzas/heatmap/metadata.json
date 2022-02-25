@@ -66,6 +66,12 @@
       "stanza:description": "Height"
     },
     {
+      "stanza:key": "show-domains",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show domains"
+    },
+    {
       "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
