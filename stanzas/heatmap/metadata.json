@@ -147,6 +147,18 @@
       "stanza:type": "color",
       "stanza:default": "#FFEC1A",
       "stanza:description": "Hover border color"
+    },
+    {
+      "stanza:key": "--togostanza-domain-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Domain color"
+    },
+    {
+      "stanza:key": "--togostanza-tick-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Tick color"
     }
   ],
   "stanza:incomingEvent": [],
