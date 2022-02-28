@@ -72,6 +72,12 @@
       "stanza:description": "Show domains"
     },
     {
+      "stanza:key": "show-tick-lines",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show tick lines"
+    },
+    {
       "stanza:key": "metastanza-menu-placement",
       "stanza:type": "single-choice",
       "stanza:choice": [
