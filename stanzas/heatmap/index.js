@@ -29,6 +29,7 @@ export default class Heatmap extends Stanza {
       height: this.params["height"],
       legendGroups: this.params["legend-groups"],
       showDomains: this.params["show-domains"],
+      showTickLines: this.params["show-tick-lines"],
     };
     const data = await loadData(
       this.params["data-url"],
@@ -63,25 +64,27 @@ export default class Heatmap extends Stanza {
 
 
     // Labels of row and columns
-    const myGroups = [...new Set(dataset.map((d) => d.group))];
-    const myVars = [...new Set(dataset.map((d) => d.variable))];
+    const rows = [...new Set(dataset.map((d) => d.group))];
+    const columns = [...new Set(dataset.map((d) => d.variable))];
 
-    // Build X scales and axis:
     const x = d3.scaleBand()
       .range([0, width])
-      .domain(myGroups)
+      .domain(rows)
       .padding(0.01);
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(x))
 
-    // Build X scales and axis:
-    const y = d3.scaleBand().range([height, 0]).domain(myVars).padding(0.01);
-    svg.append("g").call(d3.axisLeft(y));
-    
-    if (!params["showDomains"]) { svg.selectAll(".domain").remove() };
+    const y = d3.scaleBand()
+      .range([height, 0])
+      .domain(columns)
+      .padding(0.01);
+    svg.append("g")
+      .call(d3.axisLeft(y));
 
-    // Set font
+    if (!params["showDomains"]) {svg.selectAll(".domain").remove();}
+    if (!params["showTickLines"]) {svg.selectAll(".tick line").remove();}
+
     svg
       .selectAll("text")
       .attr("font-family", css("--togostanza-font-family"))
@@ -128,7 +131,7 @@ export default class Heatmap extends Stanza {
 
     // create legend objects based on min and max data values with number of steps as set by user in params 
     const values = [...new Set(dataset.map((d) => d.value))];
-    const intervals = (steps = params["legendGroups"]) => {
+    const intervals = (steps = params["legendGroups"] ?? 5) => {
       const [min, max] = [Math.min(...values), Math.max(...values)];
       return [...Array(steps + 1).keys()].map((i) => {
         const n = Math.round(min + (i) * ((max - min) / steps))
@@ -140,7 +143,7 @@ export default class Heatmap extends Stanza {
     }
     this.tooltip.setup([...svg.selectAll("[data-tooltip]")]);
     // TODO: fix legend positioning
-    this.legend.setup(intervals(), this.root.querySelector("main"));
+    this.legend.setup(intervals(), {}, this.root.querySelector("main"));
   }
 }
 
