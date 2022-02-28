@@ -87,15 +87,18 @@ class Legend extends s {
       <div class="leader"></div>
     `;
   }
-
   /**
    *
-   * @param {*} data
+   * @param {Object[]} items
+   * @param {string?} items[].id
+   * @param {label} items[].label
+   * @param {string} items[].color
+   * @param {number?} items[].value
+   * @param {HTMLElement?} items[].node
    * @param {Node} container
    * @param {Object} opt
-   *  - direction 'vertical' or 'horizontal'
-   *  - position
-   *  - fadeoutNodes
+   * @param {NodeList?} opt.fadeoutNodes
+   * @param {string?} opt.fadeProp
    */
   setup(items, container, opt) {
     this.items = items;
@@ -191,4 +194,4 @@ class Legend extends s {
 customElements.define("togostanza--legend", Legend);
 
 export { Legend as L };
-//# sourceMappingURL=Legend-a429f577.js.map
+//# sourceMappingURL=Legend-19eab368.js.map
