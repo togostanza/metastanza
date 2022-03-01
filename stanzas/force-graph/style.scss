@@ -1,9 +1,6 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
-
-
-
 //dl button style
 svg#dl_button {
   position: absolute;
@@ -72,5 +69,36 @@ div#dl_list {
         background-color: #dddddd;
       }
     }
+  }
+}
+
+#force-graph {
+  position: relative;
+}
+
+.popper {
+  &-container {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.5));
+  }
+
+  &-div {
+    background-color: rgb(230, 230, 230);
+    color: rgb(0, 0, 0);
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 5px 9px;
+  }
+
+  &-arrow {
+    width: 10px;
+    height: 5px;
+    background-color: rgb(230, 230, 230);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
   }
 }

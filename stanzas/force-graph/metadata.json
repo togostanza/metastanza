@@ -40,37 +40,52 @@
       "stanza:description": "Height"
     },
     {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Where to show the legend. 'none' for no legend"
-    },
-    {
-      "stanza:key": "xgrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X grid"
-    },
-    {
-      "stanza:key": "ygrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
+      "stanza:key": "show-node-labels",
+      "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "Show Y grid"
+      "stanza:description": "Show node labels"
+    },
+    {
+      "stanza:key": "node-label-key",
+      "stanza:type": "string",
+      "stanza:example": "id",
+      "stanza:description": "Data key for node labels"
+    },
+    {
+      "stanza:key": "node-color-key",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Data key for node background color"
+    },
+    {
+      "stanza:key": "show-node-tooltips",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show node tooltips"
+    },
+    {
+      "stanza:key": "node-tooltip-key",
+      "stanza:type": "string",
+      "stanza:example": "id",
+      "stanza:description": "Node tooltip data key"
+    },
+    {
+      "stanza:key": "show-edge-labels",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show edge tooltips"
+    },
+    {
+      "stanza:key": "show-edge-tooltips",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show edge tooltips"
+    },
+    {
+      "stanza:key": "edge-tooltip-key",
+      "stanza:type": "string",
+      "stanza:example": "label",
+      "stanza:description": "Edge tooltip data key"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -112,89 +127,76 @@
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-node-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Line width"
-    },
-
-    {
-      "stanza:key": "--togostanza-grid-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Grid color"
-    },
-    {
-      "stanza:key": "--togostanza-grid-dash-length",
-      "stanza:type": "number",
-      "stanza:default": "",
-      "stanza:description": "Grid dash length (Blank for solid lines)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.1,
-      "stanza:description": "Grid opacity (0-1)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Grid width"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Title font color"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-size",
-      "stanza:type": "number",
-      "stanza:default": 10,
-      "stanza:description": "Title font size"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-weight",
-      "stanza:type": "number",
-      "stanza:default": 400,
-      "stanza:description": "Title font weight"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-size",
+      "stanza:key": "--togostanza-node-label-font-size",
       "stanza:type": "number",
       "stanza:default": 10,
       "stanza:description": "Label font size"
     },
     {
-      "stanza:key": "--togostanza-border-color",
+      "stanza:key": "--togostanza-node-label-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Label font Color"
     },
     {
-      "stanza:key": "--togostanza-border-width",
+      "stanza:key": "--togostanza-node-label-outline-width",
       "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
+      "stanza:default": 1,
+      "stanza:description": "Line width"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-node-label-outline-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.6,
+      "stanza:description": "Outline opacity"
+    },
+    {
+      "stanza:key": "--togostanza-node-label-margin-y",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Outline opacity"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-background-color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
+      "stanza:default": "#e6e6e6",
+      "stanza:description": "Edge label rotation angle in degrees"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-background-opacity",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Edge label rotation angle in degrees"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-rotation",
+      "stanza:type": "number",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Edge label rotation angle in degrees"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Edge label font family"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 10,
+      "stanza:description": "Edge label font size"
+    },
+    {
+      "stanza:key": "--togostanza-edge-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Edge label font Color"
     }
   ]
 }
