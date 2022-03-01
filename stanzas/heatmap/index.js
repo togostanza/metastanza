@@ -5,7 +5,8 @@ import Legend from "@/lib/Legend";
 
 import * as d3 from "d3";
 
-const tooltipHTML = ({ group, variable, value }) => (`<span><strong>${group},${variable}: </strong>${value}</span>`)
+const tooltipHTML = ({ group, variable, value }) =>
+  `<span><strong>${group},${variable}: </strong>${value}</span>`;
 
 export default class Heatmap extends Stanza {
   css(key) {
@@ -27,19 +28,18 @@ export default class Heatmap extends Stanza {
       this.params["data-type"]
     );
 
-
     this.draw(chartElement, data);
   }
   async draw(el, dataset) {
     // set the dimensions and margins of the graph
     const margin = {
-      top:this.params["top"],
-      right:this.params["right"],
-      bottom:this.params["bottom"],
-      left:this.params["left"],
-    },
-      width =this.params["width"] - margin.left - margin.right,
-      height =this.params["height"] - margin.top - margin.bottom;
+        top: this.params["top"],
+        right: this.params["right"],
+        bottom: this.params["bottom"],
+        left: this.params["left"],
+      },
+      width = this.params["width"] - margin.left - margin.right,
+      height = this.params["height"] - margin.top - margin.bottom;
 
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
@@ -50,28 +50,26 @@ export default class Heatmap extends Stanza {
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`)
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
     const rows = [...new Set(dataset.map((d) => d.group))];
     const columns = [...new Set(dataset.map((d) => d.variable))];
 
-    const x = d3.scaleBand()
-      .range([0, width])
-      .domain(rows)
-      .padding(0.01);
-    svg.append("g")
+    const x = d3.scaleBand().range([0, width]).domain(rows).padding(0.01);
+    svg
+      .append("g")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(x))
+      .call(d3.axisBottom(x));
 
-    const y = d3.scaleBand()
-      .range([height, 0])
-      .domain(columns)
-      .padding(0.01);
-    svg.append("g")
-      .call(d3.axisLeft(y));
+    const y = d3.scaleBand().range([height, 0]).domain(columns).padding(0.01);
+    svg.append("g").call(d3.axisLeft(y));
 
-    if (!this.params["show-domains"]) { svg.selectAll(".domain").remove(); }
-    if (!this.params["show-tick-lines"]) { svg.selectAll(".tick line").remove(); }
+    if (!this.params["show-domains"]) {
+      svg.selectAll(".domain").remove();
+    }
+    if (!this.params["show-tick-lines"]) {
+      svg.selectAll(".tick line").remove();
+    }
 
     svg
       .selectAll("text")
@@ -105,32 +103,38 @@ export default class Heatmap extends Stanza {
       .attr("ry", this.css("--togostanza-border-radius"))
       .style("fill", (d) => myColor(d.value))
       .on("mouseover", this.mouseover.bind(this))
-      .on("mouseleave", this.mouseleave)
+      .on("mouseleave", this.mouseleave);
 
     const values = [...new Set(dataset.map((d) => d.value))];
     this.tooltip.setup([...svg.selectAll("[data-tooltip]")]);
-    this.legend.setup(this.intervals(values, myColor), {}, this.root.querySelector("main"));
+    this.legend.setup(
+      this.intervals(values, myColor),
+      {},
+      this.root.querySelector("main")
+    );
   }
-  // create legend objects based on min and max data values with number of steps as set by user inthis.params 
-  intervals(values, color, steps = this.params["legend-groups"] ?? 5) {
+  // create legend objects based on min and max data values with number of steps as set by user in this.params
+  intervals(
+    values,
+    color,
+    steps = this.params["legend-groups"] > 2 ? this.params["legend-groups"] : 2
+  ) {
     const [min, max] = [Math.min(...values), Math.max(...values)];
     return [...Array(steps + 1).keys()].map((i) => {
-      const n = Math.round(min + (i) * ((max - min) / steps))
+      const n = Math.round(min + i * ((max - min) / steps));
       return {
         label: n,
-        color: color(n)
-      }
+        color: color(n),
+      };
     });
   }
   mouseover(e) {
-    d3.select(e.path[0])
-      .style("stroke", this.css("--togostanza-hover-border-color"))
+    d3.select(e.path[0]).style(
+      "stroke",
+      this.css("--togostanza-hover-border-color")
+    );
   }
   mouseleave() {
-    d3.select(this)
-      .style("stroke", "none")
+    d3.select(this).style("stroke", "none");
   }
 }
-
-
-
