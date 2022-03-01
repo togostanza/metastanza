@@ -145,7 +145,7 @@
     {
       "stanza:key": "--togostanza-hover-border-color",
       "stanza:type": "color",
-      "stanza:default": "#FFEC1A",
+      "stanza:default": "#FFDF3D",
       "stanza:description": "Hover border color"
     },
     {
