@@ -8,9 +8,9 @@
   "stanza:type": "Stanza",
   "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "DBCLS",
-  "stanza:address": "https://github.com/togostanza/metastanza",
-  "stanza:contributor": ["PENQE"],
+  "stanza:author": "Anton Zhuravlev",
+  "stanza:address": "anton@penqe.com",
+  "stanza:contributor": [],
   "stanza:created": "2021-11-26",
   "stanza:updated": "2021-11-26",
   "stanza:parameter": [
@@ -35,6 +35,22 @@
       "stanza:example": 6,
       "stanza:required": true
     },
+    {
+      "stanza:key": "home-icon",
+      "stanza:type": "string",
+      "stanza:description": "Root icon",
+      "stanza:example": "Home",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "showing-style",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["simple", "arrows"],
+      "stanza:description": "Style of the breadcrumbs nodes",
+      "stanza:example": "arrows",
+      "stanza:required": true
+    },
+
     {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
@@ -66,6 +82,12 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
+      "stanza:key": "--togostanza-home-icon-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Home icon color"
+    },
+    {
       "stanza:key": "--togostanza-label-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
@@ -88,6 +110,12 @@
       "stanza:type": "color",
       "stanza:default": "#c5c5c5",
       "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-background-color-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Background color opacity"
     },
     {
       "stanza:key": "--togostanza-label-background-color-hover",

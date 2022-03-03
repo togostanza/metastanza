@@ -1,7 +1,11 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
-import homeIcon from "./assets/home.svg";
 import loadData from "togostanza-utils/load-data";
+import * as FAIcons from "@fortawesome/free-solid-svg-icons";
+
+//convert kebab-case into camelCase
+const camelize = (s) => s.replace(/-./g, (x) => x[1].toUpperCase());
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -41,12 +45,11 @@ export default class Breadcrumbs extends Stanza {
 
     appendCustomCss(this, this.params["custom-css-url"]);
 
-    // const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
-
-    //width
     const width = this.params["width"];
     const height = this.params["height"];
     const showDropdown = this.params["show-dropdown"];
+    const homeIcon = this.params["home-icon"] || "Home";
+    const showingStyle = this.params["showing-style"];
 
     const data = await loadData(
       this.params["data-url"],
@@ -95,6 +98,8 @@ export default class Breadcrumbs extends Stanza {
       width,
       height,
       showDropdown,
+      homeIcon,
+      showingStyle,
     };
     renderElement(el, filteredData, opts, dispatcher, currentDataId);
   }
@@ -103,6 +108,7 @@ export default class Breadcrumbs extends Stanza {
 let showingD;
 
 function renderElement(el, data, opts, dispatcher = null) {
+  const showingStyle = opts.showingStyle;
   const nestedData = d3
     .stratify()
     .id((d) => d.id)
@@ -114,7 +120,7 @@ function renderElement(el, data, opts, dispatcher = null) {
     .append("div")
     .classed("container", true);
 
-  //Context menu substrate to capture left click without dispatching unnecessary events
+  //Context menu "copy path" substrate to capture left click without dispatching unnecessary events
   const subDiv = container
     .append("div")
     .classed("context-menu-substrate", true)
@@ -169,6 +175,8 @@ function renderElement(el, data, opts, dispatcher = null) {
     contextMenu.style("display", "none");
   });
 
+  // ====
+
   const hierarchyData = d3.hierarchy(nestedData);
 
   const getCurrentData = (id) => {
@@ -182,7 +190,7 @@ function renderElement(el, data, opts, dispatcher = null) {
 
   function showDropdown(e, datum) {
     if (showingD === datum) {
-      container.selectAll(".node-dropdown-menu").remove();
+      // container.selectAll(".node-dropdown-menu").remove();
       showingD = null;
       currentDropdownMenu = null;
       return;
@@ -195,7 +203,22 @@ function renderElement(el, data, opts, dispatcher = null) {
     const menuBack = container
       .append("div")
       .classed("node-dropdown-menu", true)
-      .style("left", this.parentNode.getBoundingClientRect().left + "px")
+      .style(
+        "left",
+        () => {
+          return (
+            this.parentNode.getBoundingClientRect().left +
+            (this.parentNode.getBoundingClientRect().right -
+              parseFloat(getComputedStyle(this.parentNode).marginRight) -
+              this.parentNode.getBoundingClientRect().left -
+              (this.getBoundingClientRect().right -
+                parseFloat(getComputedStyle(this.parentNode).marginRight) -
+                this.getBoundingClientRect().left)) /
+              2 +
+            "px"
+          );
+        } // center
+      )
       .style(
         "top",
         this.parentNode.getBoundingClientRect().top +
@@ -238,7 +261,7 @@ function renderElement(el, data, opts, dispatcher = null) {
       .classed("disabled", (d) => !d.children);
 
     //Separator
-    rowContainer.filter((d, i, nodes) => i < nodes.length - 1).append("hr");
+    rowContainer.filter((_, i, nodes) => i < nodes.length - 1).append("hr");
   }
 
   function update(data) {
@@ -253,11 +276,12 @@ function renderElement(el, data, opts, dispatcher = null) {
     const breadcrumbNode = breadcrumbNodes
       .enter()
       .append("div")
-      .classed("breadcrumb-node", true);
+      .classed("breadcrumb-node", true)
+      .classed("graphical", showingStyle === "arrows");
 
-    const label = breadcrumbNode
+    const labelContainer = breadcrumbNode
       .append("div")
-      .classed("node-label", true)
+      .attr("class", "label-container")
       .on("click", (e, d) => {
         dispatcher.dispatchEvent(
           new CustomEvent("selectedDatumChanged", {
@@ -268,41 +292,54 @@ function renderElement(el, data, opts, dispatcher = null) {
         return update(getCurrentData(currentDataId));
       });
 
+    const label = labelContainer.append("div").classed("node-label", true);
+
+    if (opts.showDropdown) {
+      labelContainer.on("mouseover", showDropdown);
+      // label.on("mouseout", showDropdown);
+    }
+
     label.filter((d) => d.parent).text((d) => d.data.data.label);
+
+    // Add icon from fontawesome as inline SVG
+
+    const camelizedIconName =
+      camelize(`fa-${opts.homeIcon}`) in FAIcons
+        ? camelize(`fa-${opts.homeIcon}`)
+        : "faHome";
 
     label
       .filter((d) => !d.parent)
-      .append("img")
-      .attr("src", homeIcon);
+      .append("svg")
+      .attr(
+        "viewBox",
+        `0 0 ${FAIcons[camelizedIconName].icon[0]} ${FAIcons[camelizedIconName].icon[1]}`
+      )
+      .attr("width", "0.8rem")
+      .append("path")
+      .attr("d", FAIcons[camelizedIconName].icon[4])
+      .attr("class", "home-icon");
 
-    if (opts.showDropdown) {
-      // node dropdown icon
-      breadcrumbNode
-        .append("div")
-        .classed("node-dropdown-container", true)
-        .attr("style", (d) => {
-          if (d.parent && d.parent.children.length > 1) {
-            return null;
-          }
-          return "display:none";
-        })
-        .filter((d) => d.parent && d.parent.children.length > 1)
-        .on("click", showDropdown)
-        .append("div")
-        .classed("node-dropdown", true);
-    }
+    // if (opts.showDropdown) {
+    //   // node dropdown icon
+    //   breadcrumbNode
+    //     .append("div")
+    //     .classed("node-dropdown-container", true)
+    //     .attr("style", (d) => {
+    //       if (d.parent && d.parent.children.length > 1) {
+    //         return null;
+    //       }
+    //       return "display:none";
+    //     })
+    //     .filter((d) => d.parent && d.parent.children.length > 1)
+    //     .on("click", showDropdown)
+    //     .append("div")
+    //     .classed("node-dropdown", true);
+    // }
 
     // node forward icon
-    breadcrumbNode
-      .append("div")
-      .classed("node-forward", true)
-      .attr("style", (d) =>
-        d.children
-          ? opts.showDropdown
-            ? null
-            : "margin-left:0.4em"
-          : "display:none"
-      );
+    breadcrumbNode.append("div").classed("node-forward", true);
+    //.attr("style", "margin: 0 0.4em");
 
     // UPDATE
 
