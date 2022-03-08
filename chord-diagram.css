@@ -1,0 +1,14 @@
+main {
+  font: calc(var(--font-size) * 1px) var(--togostanza-font-family);
+}
+
+.fullsircle {
+  fill: none;
+}
+
+.ribbons {
+  fill-opacity: 0.5;
+}
+.ribbons > path {
+  mix-blend-mode: multiply;
+}

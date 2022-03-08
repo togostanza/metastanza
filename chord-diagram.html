@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Chord diagram</title>
+
+    <script type="module" src="./chord-diagram.js" async></script>
+
+    <script type="module">
+      import createHelpApp from './-togostanza/help-app.js';
+
+      const metadata = {"@context":{"stanza":"http://togostanza.org/resource/stanza#"},"@id":"chord-diagram","stanza:label":"Chord diagram","stanza:definition":"","stanza:license":"MIT","stanza:author":"永野 朗夫","stanza:contributor":[],"stanza:created":"2021-11-12","stanza:updated":"2021-11-12","stanza:parameter":[{"stanza:key":"data-url","stanza:example":"https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/directed-graph-data.json","stanza:description":"Data source URL","stanza:required":true},{"stanza:key":"custom-css-url","stanza:example":"","stanza:description":"Stylesheet(css file) URL to override current style","stanza:required":false},{"stanza:key":"data-type","stanza:type":"single-choice","stanza:choice":["json","tsv","csv","sparql-results-json"],"stanza:example":"json","stanza:description":"Data type","stanza:required":true},{"stanza:key":"width","stanza:type":"number","stanza:example":400,"stanza:description":"Width","stanza:required":true},{"stanza:key":"height","stanza:type":"number","stanza:example":400,"stanza:description":"Height","stanza:required":true},{"stanza:key":"arcs-gap","stanza:type":"number","stanza:example":10,"stanza:description":"Gap between arcs","stanza:required":true},{"stanza:key":"edge-offset","stanza:type":"number","stanza:example":0.5,"stanza:description":"Gap between arc and edge","stanza:required":true}],"stanza:menu-placement":"bottom-right","stanza:style":[{"stanza:key":"--font-size","stanza:type":"number","stanza:default":12,"stanza:description":"Font size"},{"stanza:key":"--togostanza-series-0-color","stanza:type":"color","stanza:default":"#6590e6","stanza:description":"Group color 0"},{"stanza:key":"--togostanza-series-1-color","stanza:type":"color","stanza:default":"#3ac9b6","stanza:description":"Group color 1"},{"stanza:key":"--togostanza-series-2-color","stanza:type":"color","stanza:default":"#9ede2f","stanza:description":"Group color 2"},{"stanza:key":"--togostanza-series-3-color","stanza:type":"color","stanza:default":"#F5DA64","stanza:description":"Group color 3"},{"stanza:key":"--togostanza-series-4-color","stanza:type":"color","stanza:default":"#F57F5B","stanza:description":"Group color 4"},{"stanza:key":"--togostanza-series-5-color","stanza:type":"color","stanza:default":"#F75976","stanza:description":"Group color 5"},{"stanza:key":"--togostanza-font-family","stanza:type":"text","stanza:default":"Helvetica Neue","stanza:description":"Font family"}],"stanza:incomingEvent":[],"stanza:outgoingEvent":[]};
+      const readme   = "<h1>Chord diagram</h1>\n<p>Stanza description goes here. Edit <code>stanzas/chord-diagram/README.md</code> to update.</p>\n";
+
+      createHelpApp({metadata, readme}).mount('body');
+    </script>
+  </head>
+
+  <body>
+  </body>
+</html>

@@ -1,24 +1,3 @@
-function max(values, valueof) {
-  let max;
-  if (valueof === undefined) {
-    for (const value of values) {
-      if (value != null
-          && (max < value || (max === undefined && value >= value))) {
-        max = value;
-      }
-    }
-  } else {
-    let index = -1;
-    for (let value of values) {
-      if ((value = valueof(value, ++index, values)) != null
-          && (max < value || (max === undefined && value >= value))) {
-        max = value;
-      }
-    }
-  }
-  return max;
-}
-
 const pi = Math.PI,
     tau = 2 * pi,
     epsilon = 1e-6,
@@ -154,5 +133,5 @@ function constant(x) {
   };
 }
 
-export { constant as c, max as m, path as p };
-//# sourceMappingURL=constant-abe3b5f1.js.map
+export { constant as c, path as p };
+//# sourceMappingURL=constant-131b8143.js.map

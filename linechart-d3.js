@@ -1,11 +1,14 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, s as select } from './index-c3245d93.js';
-import { l as loadData } from './load-data-c76aeef6.js';
+import { s as select } from './index-2dcff241.js';
+import { l as loadData } from './load-data-5664e120.js';
 import { L as Legend } from './Legend-19eab368.js';
-import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-538ccecd.js';
-import { c as constant, p as path, m as max } from './constant-abe3b5f1.js';
-import { l as linear } from './linear-c2a699dc.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
+import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-0780ae77.js';
+import { m as max } from './max-2c042256.js';
+import { l as linear } from './linear-b6a8628a.js';
+import { c as constant, p as path } from './constant-131b8143.js';
+import './dsv-8e18f33d.js';
 
 function identity$1(x) {
   return x;

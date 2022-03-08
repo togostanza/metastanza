@@ -1,22 +1,3 @@
-function sum(values, valueof) {
-  let sum = 0;
-  if (valueof === undefined) {
-    for (let value of values) {
-      if (value = +value) {
-        sum += value;
-      }
-    }
-  } else {
-    let index = -1;
-    for (let value of values) {
-      if (value = +valueof(value, ++index, values)) {
-        sum += value;
-      }
-    }
-  }
-  return sum;
-}
-
 function roundNode(node) {
   node.x0 = Math.round(node.x0);
   node.y0 = Math.round(node.y0);
@@ -37,5 +18,5 @@ function treemapDice(parent, x0, y0, x1, y1) {
   }
 }
 
-export { roundNode as r, sum as s, treemapDice as t };
-//# sourceMappingURL=dice-61bc62cc.js.map
+export { roundNode as r, treemapDice as t };
+//# sourceMappingURL=dice-7bdb0652.js.map

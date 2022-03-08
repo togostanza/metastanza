@@ -1,8 +1,10 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
 import { e as embed } from './vega-embed.module-cc3a6c83.js';
-import { l as loadData } from './load-data-c76aeef6.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-c3245d93.js';
+import { l as loadData } from './load-data-5664e120.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
+import './index-2dcff241.js';
+import './dsv-8e18f33d.js';
 
 function applyFilter(data, filter) {
   return data.filter((record) =>
