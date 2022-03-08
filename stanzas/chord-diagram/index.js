@@ -18,10 +18,11 @@ export default class ChordDiagram extends Stanza {
 
     // data
     const data = await (() => {
-      console.log(this.params["data-url"])
+      // console.log(this.params["data-url"])
       switch (this.params["data-type"]) {
         case "json":
-          return d3.json('./chord-diagram/assets/directed-graph-data.json', (data) => data);
+          // return d3.json('./chord-diagram/assets/directed-graph-data.json', (data) => data);
+          return d3.json(this.params["data-url"], (data) => data);
         case "tsv":
           return d3.tsv(this.params["data-url"], (data) => data);
       }
@@ -35,7 +36,7 @@ export default class ChordDiagram extends Stanza {
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
-    console.log(names)
+    // console.log(names)
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
@@ -44,7 +45,7 @@ export default class ChordDiagram extends Stanza {
       }
       return matrix;
     })();
-    console.log(matrix)
+    // console.log(matrix)
 
     // prepare some D3 objects
     const color = {
@@ -53,7 +54,7 @@ export default class ChordDiagram extends Stanza {
         return (1 / this.count) * index;
       },
       hsl(index) {
-        return `hsl(${this.hue(index)}turn, 50%, 50%)`;
+        return `hsl(${this.hue(index)}turn, 70%, 60%)`;
       },
     };
 
