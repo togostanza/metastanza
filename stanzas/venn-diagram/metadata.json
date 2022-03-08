@@ -9,9 +9,9 @@
   "stanza:display": "Image",
   "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
-  "stanza:contributor": [],
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
   "stanza:created": "2021-08-03",
   "stanza:updated": "2022-01-23",
   "stanza:parameter": [

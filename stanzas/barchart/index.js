@@ -8,7 +8,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -20,7 +19,6 @@ export default class Barchart extends Stanza {
       downloadJSONMenuItem(this, "barchart", this._data),
       downloadCSVMenuItem(this, "barchart", this._data),
       downloadTSVMenuItem(this, "barchart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

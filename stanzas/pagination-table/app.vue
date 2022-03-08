@@ -176,6 +176,18 @@
                     />
                   </div>
                 </transition>
+
+                <font-awesome-icon
+                  v-if="showAxisSelector"
+                  :class="['icon', 'search']"
+                  icon="chart-bar"
+                  @click="handleAxisSelectorButton(column)"
+                />
+                <AxisSelectorModal
+                  :active="state.axisSelectorActiveColumn === column"
+                  :label="column.label"
+                  @axisSelected="handleAxisSelected"
+                />
               </th>
             </tr>
           </thead>
@@ -257,6 +269,7 @@ import {
   ref,
   computed,
   watch,
+  watchEffect,
   onMounted,
   onRenderTriggered,
 } from "vue";
@@ -264,6 +277,7 @@ import {
 import SliderPagination from "./SliderPagination.vue";
 import AnchorCell from "./AnchorCell.vue";
 import ClampCell from "./ClampCell.vue";
+import AxisSelectorModal from "./AxisSelectorModal.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
@@ -283,10 +297,19 @@ import {
   faSort,
   faSortUp,
   faSortDown,
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faEllipsisH, faFilter, faSearch, faSort, faSortUp, faSortDown);
+library.add(
+  faEllipsisH,
+  faFilter,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faChartBar
+);
 
 export default defineComponent({
   components: {
@@ -295,9 +318,15 @@ export default defineComponent({
     AnchorCell,
     ClampCell,
     FontAwesomeIcon,
+    AxisSelectorModal,
   },
 
-  props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+  props: [
+    // eslint-disable-next-line vue/require-prop-types
+    ...metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+    // eslint-disable-next-line vue/require-prop-types
+    "stanzaElement",
+  ],
 
   setup(params) {
     const sliderPagination = ref();
@@ -320,6 +349,8 @@ export default defineComponent({
         perPage: pageSizeOption[0],
         isSliderOn: params.pageSlider,
       },
+
+      axisSelectorActiveColumn: null,
     });
 
     const filteredRows = computed(() => {
@@ -389,6 +420,52 @@ export default defineComponent({
       );
     });
 
+    watchEffect(() => {
+      const conditions = [];
+
+      if (state.queryForAllColumns !== "") {
+        conditions.push({
+          type: "substring",
+          target: null,
+          value: state.queryForAllColumns,
+        });
+      }
+
+      for (const column of state.columns) {
+        if (column.query !== "" && column.query !== undefined) {
+          conditions.push({
+            type: "substring",
+            target: column.id,
+            value: column.query,
+          });
+        }
+        if (
+          column.rangeMin !== undefined &&
+          column.rangeMin !== column.minValue
+        ) {
+          conditions.push({
+            type: "gte",
+            target: column.id,
+            value: column.rangeMin,
+          });
+        }
+        if (
+          column.rangeMax !== undefined &&
+          column.rangeMax !== column.maxValue
+        ) {
+          conditions.push({
+            type: "lte",
+            target: column.id,
+            value: column.rangeMax,
+          });
+        }
+      }
+
+      params.stanzaElement.dispatchEvent(
+        new CustomEvent("filter", { detail: conditions })
+      );
+    });
+
     function setRowspanState(rows) {
       const rowspanCount = {};
       const reversedRows = rows.reverse().map((row, rowIndex) => {
@@ -448,6 +525,22 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
+    }
+
+    function handleAxisSelectorButton(column) {
+      if (column === state.axisSelectorActiveColumn) {
+        state.axisSelectorActiveColumn = null;
+        return;
+      }
+      state.axisSelectorActiveColumn = column;
+    }
+
+    function handleAxisSelected(axis) {
+      const event = new CustomEvent(axis, {
+        detail: state.axisSelectorActiveColumn.id,
+      });
+      params.stanzaElement.dispatchEvent(event);
+      state.axisSelectorActiveColumn = null;
     }
 
     function updateCurrentPage(currentPage) {
@@ -526,6 +619,9 @@ export default defineComponent({
       updateCurrentPage,
       thead,
       json,
+      handleAxisSelectorButton,
+      handleAxisSelected,
+      showAxisSelector: params.showAxisSelector,
     };
   },
 });
@@ -548,7 +644,7 @@ function createColumnState(columnDef, values) {
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number).filter(value => !Number.isNaN(value));
+    const nums = values.map(Number).filter((value) => !Number.isNaN(value));
     const minValue = Math.min(...nums);
     const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
@@ -662,10 +758,9 @@ function searchByEachColumn(row) {
 function formattedValue(format, val) {
   try {
     return sprintf(format, val);
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return val;
   }
 }
-
 </script>

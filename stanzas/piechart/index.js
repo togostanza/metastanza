@@ -8,7 +8,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -20,7 +19,6 @@ export default class PieChart extends Stanza {
       downloadJSONMenuItem(this, "piechart", this._data),
       downloadCSVMenuItem(this, "piechart", this._data),
       downloadTSVMenuItem(this, "piechart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

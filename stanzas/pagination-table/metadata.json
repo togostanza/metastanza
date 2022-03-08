@@ -7,7 +7,8 @@
   "stanza:definition": "Pagination table MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
-  "stanza:contributor": [],
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Enishi Tech"],
   "stanza:created": "2020-12-09",
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
@@ -64,8 +65,14 @@
     },
     {
       "stanza:key": "columns",
-      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
+      "stanza:example": "[{\"id\":\"variant_and_risk_allele\",\"label\":\"rs# and risk allele\",\"escape\":false,\"line-clamp\":3},{\"id\":\"raf\",\"label\":\"RAF\",\"line-clamp\":3},{\"id\":\"p_value\",\"label\":\"P-value\",\"line-clamp\":3, \"type\":\"number\"},{\"id\":\"odds_ratio\",\"label\":\"OR\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"ci_text\",\"label\":\"CI\",\"line-clamp\":3},{\"id\":\"beta\",\"label\":\"Beta\",\"sprintf\":\"%-9.3e\",\"line-clamp\":3},{\"id\":\"beta_unit\",\"label\":\"Beta unit\",\"line-clamp\":3},{\"id\":\"mapped_trait\",\"label\":\"Trait(s)\",\"escape\":false,\"line-clamp\":3},{\"id\":\"pubmed_id\",\"label\":\"PubMed ID\",\"link\":\"pubmed_uri\",\"line-clamp\":3},{\"id\":\"study_detail\",\"label\":\"Study accession\",\"link\":\"study\",\"line-clamp\":3},{\"id\":\"initial_sample_size\",\"label\":\"Discovery sample description\",\"line-clamp\":3},{\"id\":\"replication_sample_size\",\"label\":\"Replication sample description\",\"line-clamp\":3}]",
       "stanza:description": "Columns' options"
+    },
+    {
+      "stanza:key": "show-axis-selector",
+      "stanza:type": "boolean",
+      "stanza:example": false,
+      "stanza:description": "Show axis selector button"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -269,6 +276,25 @@
       "stanza:type": "color",
       "stanza:default": "#F8F9FA",
       "stanza:description": "Background color"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": [
+    {
+      "stanza:key": "xaxis",
+      "stanza:description": "xaxis changed event"
+    },
+    {
+      "stanza:key": "yaxis",
+      "stanza:description": "yaxis changed event"
+    },
+    {
+      "stanza:key": "zaxis",
+      "stanza:description": "zaxis changed event"
+    },
+    {
+      "stanza:key": "filter",
+      "stanza:description": "filter conditions changed event"
     }
   ]
 }

@@ -9,7 +9,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils"; // from "@/lib/metastanza_utils.js"; //
 import shadeColor from "./shadeColor";
@@ -23,7 +22,6 @@ export default class TreeMapStanza extends Stanza {
       downloadJSONMenuItem(this, "treemap", this._data),
       downloadCSVMenuItem(this, "treemap", this._data),
       downloadTSVMenuItem(this, "treemap", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 

@@ -7,7 +7,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -22,7 +21,6 @@ export default class Sunburst extends Stanza {
       downloadJSONMenuItem(this, "sunburst", this._data),
       downloadCSVMenuItem(this, "sunburst", this._data),
       downloadTSVMenuItem(this, "sunburst", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
