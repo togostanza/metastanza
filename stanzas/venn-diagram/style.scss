@@ -6,9 +6,8 @@ text {
 }
 
 #drawArea {
-  font-family: var(--togostanza-font-family)
+  font-family: var(--togostanza-font-family);
 }
-
 
 #venn-diagrams {
   width: 0;
@@ -28,19 +27,6 @@ text {
   }
 }
 
-#euler-diagram {
-  .venn-circle {
-    > path {
-      // stroke-width: 1px;
-      // fill-opacity: .1 !important;
-    }
-    > text {
-      fill: var(--togostanza-label-font-color) !important;
-    }
-  }
-
-}
-
 #MetaStanzaLegend {
   padding: 3px 9px;
   position: absolute;
@@ -49,8 +35,8 @@ text {
   max-height: 100%;
   overflow-y: auto;
   color: var(--togostanza-label-font-color);
-  background-color: rgba(255, 255, 255, .8);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   > table {
     > tbody {
       > tr {
@@ -61,7 +47,7 @@ text {
             height: 1em;
             border-radius: 100%;
             vertical-align: middle;
-            margin-right: .3em;
+            margin-right: 0.3em;
           }
           &.number {
             text-align: right;
@@ -77,7 +63,7 @@ text {
   z-index: 10000;
   opacity: 0;
   pointer-events: none;
-  transition: all .2s;
+  transition: all 0.2s;
   &[data-direction="top"] {
     border-top: dotted 1px black;
   }
@@ -85,6 +71,6 @@ text {
     border-bottom: dotted 1px black;
   }
   &.-show {
-    opacity: .5;
+    opacity: 0.5;
   }
 }

@@ -5,6 +5,9 @@ import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -13,6 +16,9 @@ export default class Barchart extends Stanza {
     return [
       downloadSvgMenuItem(this, "barchart"),
       downloadPngMenuItem(this, "barchart"),
+      downloadJSONMenuItem(this, "barchart", this._data),
+      downloadCSVMenuItem(this, "barchart", this._data),
+      downloadTSVMenuItem(this, "barchart", this._data),
     ];
   }
 
@@ -36,8 +42,10 @@ export default class Barchart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = values;
 
     function constructData(chartType) {
       switch (chartType) {

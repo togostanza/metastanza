@@ -1,15 +1,24 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use '@/common.scss';
 
-// The following is just an example. Feel free to modify it.
-// --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 main {
   padding: 1rem 2rem;
 }
 
-p.greeting {
-  margin: 0;
-  font-size: 24px;
-  color: var(--greeting-color);
-  text-align: var(--greeting-align);
+svg rect .background-color {
+  fill: var(--togostanza-background-color);
+}
+
+svg text {
+  font-family: var(--togostanza-label-font-family);
+  font-size: var(--togostanza-label-font-size);
+  font-weight: var(--togostanza-label-font-weight);
+  fill: var(--togostanza-label-font-color);
+}
+
+svg text .number-label {
+  font-family: var(--togostanza-number-label-font-family);
+  font-size: var(--togostanza-number-label-font-size);
+  font-weight: var(--togostanza-number-label-font-weight);
+  fill: var(--togostanza-number-label-font-color);
 }

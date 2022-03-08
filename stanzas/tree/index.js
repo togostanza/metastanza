@@ -5,6 +5,9 @@ import loadData from "togostanza-utils/load-data";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -13,6 +16,9 @@ export default class Tree extends Stanza {
     return [
       downloadSvgMenuItem(this, "tree"),
       downloadPngMenuItem(this, "tree"),
+      downloadJSONMenuItem(this, "tree", this._data),
+      downloadCSVMenuItem(this, "tree", this._data),
+      downloadTSVMenuItem(this, "tree", this._data),
     ];
   }
 
@@ -33,8 +39,10 @@ export default class Tree extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
+    this._data = values;
 
     const signals = [
       {

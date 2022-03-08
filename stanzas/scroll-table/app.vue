@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div
     class="tableWrapper"
@@ -96,7 +97,7 @@ export default defineComponent({
     const state = reactive({
       columns: [],
       allRows: [],
-
+      main: null,
       offset: 0,
 
       isFetching: false,
@@ -113,9 +114,11 @@ export default defineComponent({
       urlParams = new URLSearchParams(urlParams);
       const { dataUrl } = params;
       const connectCharacter = new URL(dataUrl) ? "&" : "?";
+
       const data = await loadData(
         `${dataUrl}${connectCharacter}${urlParams}`,
-        params.dataType
+        params.dataType,
+        params.main
       );
 
       if (params.columns) {

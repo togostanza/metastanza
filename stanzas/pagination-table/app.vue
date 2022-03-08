@@ -18,20 +18,6 @@
           </select>
           entries
         </p>
-        <div class="menuWrapper">
-          <font-awesome-icon
-            icon="ellipsis-h"
-            class="menuIcon"
-            @click="state.isMenuOn = true"
-          />
-          <ul v-if="state.isMenuOn" class="menu">
-            <li v-for="url in blobUrls" :key="url.type">
-              <a class="downloadBtn" :href="url.url" download="tableData">
-                {{ `Download ${url.type}` }}
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
       <div class="tableWrapper" :style="`width: ${width};`">
         <table v-if="state.allRows">
@@ -155,6 +141,7 @@
                         :min="column.minValue"
                         :max="column.maxValue"
                         :tooltips="false"
+                        :step="-1"
                         @update="column.setRange"
                       ></Slider>
                       <div class="rangeInput">
@@ -189,6 +176,18 @@
                     />
                   </div>
                 </transition>
+
+                <font-awesome-icon
+                  v-if="showAxisSelector"
+                  :class="['icon', 'search']"
+                  icon="chart-bar"
+                  @click="handleAxisSelectorButton(column)"
+                />
+                <AxisSelectorModal
+                  :active="state.axisSelectorActiveColumn === column"
+                  :label="column.label"
+                  @axisSelected="handleAxisSelected"
+                />
               </th>
             </tr>
           </thead>
@@ -220,14 +219,21 @@
                     "
                     :unescape="cell.column.unescape"
                     :line-clamp="cell.column.lineClamp"
+                    :char-clamp="cell.column.charClamp"
+                    :char-clamp-on="cell.column.charClampOn"
                   />
                 </span>
-                <span v-else-if="cell.column.lineClamp">
-                  <LineClampCell
+                <span
+                  v-else-if="cell.column.lineClamp || cell.column.charClamp"
+                >
+                  <ClampCell
                     :id="`${cell.column.id}_${row_index}`"
                     :line-clamp="cell.column.lineClamp"
+                    :char-clamp="cell.column.charClamp"
+                    :char-clamp-on="cell.charClampOn"
                     :unescape="cell.column.unescape"
                     :value="cell.value"
+                    @toggleCharClampOn="cell.charClampOn = !cell.charClampOn"
                   />
                 </span>
                 <span
@@ -248,12 +254,12 @@
       :is-slider-on="state.pagination.isSliderOn"
       @updateCurrentPage="updateCurrentPage"
     />
+    <div
+      v-if="isPopupOrModalShowing"
+      class="modalBackground"
+      @click="closeModal()"
+    ></div>
   </div>
-  <div
-    v-if="isPopupOrModalShowing"
-    class="modalBackground"
-    @click="closeModal()"
-  ></div>
 </template>
 
 <script>
@@ -263,19 +269,24 @@ import {
   ref,
   computed,
   watch,
+  watchEffect,
   onMounted,
   onRenderTriggered,
 } from "vue";
 
 import SliderPagination from "./SliderPagination.vue";
 import AnchorCell from "./AnchorCell.vue";
-import LineClampCell from "./LineClampCell.vue";
+import ClampCell from "./ClampCell.vue";
+import AxisSelectorModal from "./AxisSelectorModal.vue";
 
 import orderBy from "lodash.orderby";
 import uniq from "lodash.uniq";
 import Slider from "@vueform/slider";
+import { sprintf } from "sprintf-js";
+
 import loadData from "togostanza-utils/load-data";
 
+// import testData from "./assets/test.json";
 import metadata from "./metadata.json";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -286,21 +297,36 @@ import {
   faSort,
   faSortUp,
   faSortDown,
+  faChartBar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faEllipsisH, faFilter, faSearch, faSort, faSortUp, faSortDown);
+library.add(
+  faEllipsisH,
+  faFilter,
+  faSearch,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faChartBar
+);
 
 export default defineComponent({
   components: {
     Slider,
     SliderPagination,
     AnchorCell,
-    LineClampCell,
+    ClampCell,
     FontAwesomeIcon,
+    AxisSelectorModal,
   },
 
-  props: metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+  props: [
+    // eslint-disable-next-line vue/require-prop-types
+    ...metadata["stanza:parameter"].map((p) => p["stanza:key"]),
+    // eslint-disable-next-line vue/require-prop-types
+    "stanzaElement",
+  ],
 
   setup(params) {
     const sliderPagination = ref();
@@ -311,7 +337,7 @@ export default defineComponent({
 
       columns: [],
       allRows: [],
-
+      main: null,
       queryForAllColumns: "",
 
       sorting: {
@@ -324,7 +350,7 @@ export default defineComponent({
         isSliderOn: params.pageSlider,
       },
 
-      isMenuOn: false,
+      axisSelectorActiveColumn: null,
     });
 
     const filteredRows = computed(() => {
@@ -338,18 +364,6 @@ export default defineComponent({
       const sortColumn = state.sorting.column;
 
       if (sortColumn) {
-        // TODO: refactoring
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = Number.parseFloat(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
-
         filtered = orderBy(
           filtered,
           (cells) => {
@@ -358,17 +372,6 @@ export default defineComponent({
           },
           [state.sorting.direction]
         );
-
-        if (sortColumn.significantDigits || sortColumn.exponentDigits) {
-          filtered = filtered.map((row) =>
-            row.map((cell) => {
-              if (cell.column.significantDigits || cell.column.exponentDigits) {
-                cell.value = cell.column.parseValue(cell.value);
-              }
-              return cell;
-            })
-          );
-        }
         return filtered;
       } else {
         return filtered;
@@ -403,32 +406,6 @@ export default defineComponent({
       return setRowspanState(filteredRows.value.slice(startIndex, endIndex));
     });
 
-    const blobUrls = computed(() => {
-      const json = state.responseJSON;
-      if (!json) {
-        return null;
-      }
-
-      const csv = json2csv(json);
-
-      const jsonBlob = new Blob([JSON.stringify(json, null, "  ")], {
-        type: "application/json",
-      });
-      const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
-      const csvBlob = new Blob([bom, csv], { type: "text/csv" });
-
-      return [
-        {
-          type: "JSON",
-          url: URL.createObjectURL(jsonBlob),
-        },
-        {
-          type: "CSV",
-          url: URL.createObjectURL(csvBlob),
-        },
-      ];
-    });
-
     const isModalShowing = computed(() => {
       return state.columns.some(
         ({ isSearchModalShowing }) => isSearchModalShowing
@@ -439,9 +416,53 @@ export default defineComponent({
       return (
         state.columns.some(
           ({ isFilterPopupShowing }) => isFilterPopupShowing
-        ) ||
-        isModalShowing.value ||
-        state.isMenuOn
+        ) || isModalShowing.value
+      );
+    });
+
+    watchEffect(() => {
+      const conditions = [];
+
+      if (state.queryForAllColumns !== "") {
+        conditions.push({
+          type: "substring",
+          target: null,
+          value: state.queryForAllColumns,
+        });
+      }
+
+      for (const column of state.columns) {
+        if (column.query !== "" && column.query !== undefined) {
+          conditions.push({
+            type: "substring",
+            target: column.id,
+            value: column.query,
+          });
+        }
+        if (
+          column.rangeMin !== undefined &&
+          column.rangeMin !== column.minValue
+        ) {
+          conditions.push({
+            type: "gte",
+            target: column.id,
+            value: column.rangeMin,
+          });
+        }
+        if (
+          column.rangeMax !== undefined &&
+          column.rangeMax !== column.maxValue
+        ) {
+          conditions.push({
+            type: "lte",
+            target: column.id,
+            value: column.rangeMax,
+          });
+        }
+      }
+
+      params.stanzaElement.dispatchEvent(
+        new CustomEvent("filter", { detail: conditions })
       );
     });
 
@@ -504,7 +525,22 @@ export default defineComponent({
         column.isFilterPopupShowing = null;
         column.isSearchModalShowing = null;
       }
-      state.isMenuOn = false;
+    }
+
+    function handleAxisSelectorButton(column) {
+      if (column === state.axisSelectorActiveColumn) {
+        state.axisSelectorActiveColumn = null;
+        return;
+      }
+      state.axisSelectorActiveColumn = column;
+    }
+
+    function handleAxisSelected(axis) {
+      const event = new CustomEvent(axis, {
+        detail: state.axisSelectorActiveColumn.id,
+      });
+      params.stanzaElement.dispatchEvent(event);
+      state.axisSelectorActiveColumn = null;
     }
 
     function updateCurrentPage(currentPage) {
@@ -512,7 +548,8 @@ export default defineComponent({
     }
 
     async function fetchData() {
-      const data = await loadData(params.dataUrl, params.dataType);
+      const data = await loadData(params.dataUrl, params.dataType, params.main);
+      // const data = testData;
 
       state.responseJSON = data;
       let columns;
@@ -545,6 +582,7 @@ export default defineComponent({
             column,
             value: column.parseValue(row[column.id]),
             href: column.href ? row[column.href] : null,
+            charClampOn: true,
           };
         });
       });
@@ -560,6 +598,10 @@ export default defineComponent({
       }, 0);
     });
 
+    const json = () => {
+      return state.responseJSON;
+    };
+
     return {
       width: params.width ? params.width + "px" : "100%",
       sliderPagination,
@@ -567,7 +609,6 @@ export default defineComponent({
       state,
       totalPages,
       rowsInCurrentPage,
-      blobUrls,
       isModalShowing,
       isPopupOrModalShowing,
       setSorting,
@@ -577,6 +618,10 @@ export default defineComponent({
       closeModal,
       updateCurrentPage,
       thead,
+      json,
+      handleAxisSelectorButton,
+      handleAxisSelected,
+      showAxisSelector: params.showAxisSelector,
     };
   },
 });
@@ -594,14 +639,14 @@ function createColumnState(columnDef, values) {
     fixed: columnDef.fixed,
     target: columnDef.target,
     lineClamp: columnDef["line-clamp"],
-    significantDigits: columnDef["significant-digits"],
-    exponentDigits: columnDef["exponent-digits"],
+    charClamp: columnDef["char-clamp"],
+    sprintf: columnDef["sprintf"],
   };
 
   if (columnDef.type === "number") {
-    const nums = values.map(Number);
+    const nums = values.map(Number).filter((value) => !Number.isNaN(value));
     const minValue = Math.min(...nums);
-    const maxValue = Math.max(...nums);
+    const maxValue = Math.max(...nums) < 1 ? 1 : Math.max(...nums);
     const rangeMin = ref(minValue);
     const rangeMax = ref(maxValue);
     const range = computed(() => [rangeMin.value, rangeMax.value]);
@@ -632,33 +677,17 @@ function createColumnState(columnDef, values) {
       inputtingRangeMax,
       isSearchModalShowing: false,
       parseValue(val) {
-        val = Number(val);
-        if (columnDef["significant-digits"]) {
-          val = Number.parseFloat(val).toExponential(
-            Number(columnDef["significant-digits"]) - 1
-          );
+        if (columnDef["sprintf"]) {
+          return formattedValue(columnDef["sprintf"], val);
+        } else {
+          return val;
         }
-        if (columnDef["exponent-digits"]) {
-          const decimalPoint = Number(val).toExponential(1);
-          let index = decimalPoint.toString().match(/[\d\\.]+e-(\d+)/);
-          index = index ? index[1] : null;
-          const exponentDigits = columnDef["exponent-digits"];
-          const significantDigits = columnDef["significant-digits"];
-          if (exponentDigits <= +index) {
-            val = Number.parseFloat(val).toExponential(
-              Number(significantDigits) - 1
-            );
-          } else if (Number.parseFloat(val) !== 0) {
-            val = Number.parseFloat(val).toFixed(exponentDigits);
-            val = val.toString().slice(0, +index - exponentDigits);
-          } else {
-            val = Number.parseFloat(val).toString();
-          }
-        }
-        return val;
       },
 
       isMatch(val) {
+        if (Number.isNaN(rangeMin.value) || Number.isNaN(rangeMax.value)) {
+          return true;
+        }
         return val >= rangeMin.value && val <= rangeMax.value;
       },
     };
@@ -690,7 +719,13 @@ function createColumnState(columnDef, values) {
 
     return {
       ...baseProps,
-      parseValue: String,
+      parseValue(val) {
+        if (columnDef["sprintf"]) {
+          return formattedValue(columnDef["sprintf"], val);
+        } else {
+          return String(val);
+        }
+      },
       query,
       isSearchConditionGiven,
       filters,
@@ -720,19 +755,12 @@ function searchByEachColumn(row) {
   });
 }
 
-function json2csv(json) {
-  var header = Object.keys(json[0]).join(",") + "\n";
-
-  var body = json
-    .map(function (d) {
-      return Object.keys(d)
-        .map(function (key) {
-          return d[key];
-        })
-        .join(",");
-    })
-    .join("\n");
-
-  return header + body;
+function formattedValue(format, val) {
+  try {
+    return sprintf(format, val);
+  } catch (e) {
+    console.error(e);
+    return val;
+  }
 }
 </script>

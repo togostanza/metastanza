@@ -2,27 +2,19 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "venn-stanza",
-  "stanza:label": "Venn stanza",
-  "stanza:definition": "Venn stanza MetaStanza",
+  "@id": "venn-diagram",
+  "stanza:label": "Venn diagram",
+  "stanza:definition": "Venn diagram MetaStanza",
   "stanza:type": "Stanza",
   "stanza:display": "Image",
   "stanza:provider": "TogoStanza",
   "stanza:license": "MIT",
-  "stanza:author": "c-nakashima",
-  "stanza:address": "nakashima@penqe.com",
-  "stanza:contributor": [],
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
   "stanza:created": "2021-08-03",
-  "stanza:updated": "2021-08-03",
+  "stanza:updated": "2022-01-23",
   "stanza:parameter": [
-    {
-      "stanza:key": "chart-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["Venn diagram", "Euler diagram"],
-      "stanza:example": "Venn diagram",
-      "stanza:description": "Type of venn diagram",
-      "stanza:required": true
-    },
     {
       "stanza:key": "data-url",
       "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
@@ -36,6 +28,41 @@
       "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "label-0",
+      "stanza:type": "string",
+      "stanza:example": "10090",
+      "stanza:description": "Label name",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "label-1",
+      "stanza:type": "string",
+      "stanza:example": "7955",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-2",
+      "stanza:type": "string",
+      "stanza:example": "9606",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-3",
+      "stanza:type": "string",
+      "stanza:example": "9601",
+      "stanza:description": "Label name",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "label-4",
+      "stanza:type": "string",
+      "stanza:example": "9606",
+      "stanza:description": "Label name",
+      "stanza:required": false
     },
     {
       "stanza:key": "custom-css-url",
