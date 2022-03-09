@@ -54,8 +54,9 @@ export default class Barchart extends Stanza {
         ? 0
         : parseInt(this.params["ylabel-angle"]) || 0;
     const barPlacement = this.params["bar-placement"];
-    const errorKeyName = this.params["error-key"] || "error";
-    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
+    const errorKeyName = this.params["error-key"];
+    const showErrorBars =
+      this.params["error-key"] === "" || this.params["error-key"] === undefined;
     const errorBarWidth =
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
@@ -127,10 +128,19 @@ export default class Barchart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO change data to include errors. For now, artificially add 5% error
+    // TODO For now, artificially add 5% error and randomly add or not add it
+
+    function getRandomTrueFalse() {
+      return Math.random() >= 0.5;
+    }
+
     values.forEach((item) => {
-      item.error = item.count * 0.2;
+      if (getRandomTrueFalse()) {
+        item[errorKeyName] = item[yKeyName] * 0.2;
+      }
     });
+
+    //=========
 
     this._data = values;
 
@@ -634,6 +644,12 @@ export default class Barchart extends Stanza {
             .selectAll("g")
             .data(d[1])
             .enter()
+            .filter((d) => {
+              return (
+                d[errorKeyName] !== undefined &&
+                !isNaN(parseFloat(d[errorKeyName]))
+              );
+            })
             .append("g")
             .attr("class", "error-bar");
 
