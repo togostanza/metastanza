@@ -129,7 +129,7 @@ export default class Barchart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO For now, artificially add 5% error and randomly add or not add it
+    // TODO For now, artificially add 20% error and randomly add or not add it
 
     function getRandomTrueFalse() {
       return Math.random() >= 0.5;
@@ -137,7 +137,7 @@ export default class Barchart extends Stanza {
 
     values.forEach((item) => {
       if (getRandomTrueFalse()) {
-        item[errorKeyName] = item[yKeyName] * 0.2;
+        item.error = item[yKeyName] * 0.2;
       }
     });
 
