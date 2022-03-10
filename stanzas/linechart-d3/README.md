@@ -21,3 +21,10 @@ Angle of x labels, in range [-90, +90] degrees
 #### ylabel-angle
 
 Angle of y labels, in range [-90, +90] degrees
+
+### Error bars
+
+If `error-key` is empty or undefined, no error bars would be rendered.
+If there is `error-bar` specified, error bars will be drawn.
+For data points where there is a data in key specified by `error-key`.
+If that key is non-existent, or the data stored there cannot be parsed as a float number, no error bar will be drawn for such data point.

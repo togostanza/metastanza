@@ -51,8 +51,10 @@ export default class Linechart extends Stanza {
         : parseInt(this.params["ylabel-angle"]) || 0;
 
     const xDataType = this.params["x-axis-data-type"] || "string";
-    const errorKeyName = this.params["error-key"] || "error";
-    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
+    const errorKeyName = this.params["error-key"];
+    const showErrorBars =
+      this.params["error-key"] !== "" || this.params["error-key"] !== undefined;
+
     const errorBarWidth =
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
@@ -266,13 +268,15 @@ export default class Linechart extends Stanza {
 
       // Axes preparation
       let dataMax, dataMin;
-      if (showErrorBars) {
-        dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-        dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-      } else {
-        dataMax = d3.max(values, (d) => +d[yKeyName]);
-        dataMin = d3.min(values, (d) => +d[yKeyName]);
-      }
+
+      dataMax = d3.max(
+        values,
+        (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
+      );
+      dataMin = d3.min(
+        values,
+        (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+      );
 
       let x;
       if (xDataType === "number") {
@@ -308,13 +312,14 @@ export default class Linechart extends Stanza {
       const update = (values) => {
         const categorizedData = d3.group(values, (d) => d[groupKeyName]);
 
-        if (showErrorBars) {
-          dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-          dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-        } else {
-          dataMax = d3.max(values, (d) => +d[yKeyName]);
-          dataMin = d3.min(values, (d) => +d[yKeyName]);
-        }
+        dataMax = d3.max(
+          values,
+          (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
+        );
+        dataMin = d3.min(
+          values,
+          (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+        );
 
         if (xDataType === "number") {
           const xAxisData = values.map((d) => +d[xKeyName]);
@@ -486,6 +491,12 @@ export default class Linechart extends Stanza {
 
           const barGroupsEnter = barGroups
             .enter()
+            .filter((d) => {
+              return (
+                d[errorKeyName] !== undefined &&
+                !isNaN(parseFloat(d[errorKeyName]))
+              );
+            })
             .append("g")
             .attr("class", "errorbar-group");
 

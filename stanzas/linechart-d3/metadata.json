@@ -52,14 +52,6 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "error-bars",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show error bars",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "error-key",
       "stanza:type": "string",
       "stanza:example": "error",
