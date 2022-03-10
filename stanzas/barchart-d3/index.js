@@ -56,7 +56,8 @@ export default class Barchart extends Stanza {
     const barPlacement = this.params["bar-placement"];
     const errorKeyName = this.params["error-key"];
     const showErrorBars =
-      this.params["error-key"] === "" || this.params["error-key"] === undefined;
+      this.params["error-key"] !== "" || this.params["error-key"] !== undefined;
+
     const errorBarWidth =
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
@@ -655,7 +656,7 @@ export default class Barchart extends Stanza {
 
           errorBarGroup
             .append("line")
-            .attr("class", "errorbar")
+            .attr("class", "error-bar-line")
             .attr(
               "x1",
               (d) => subXAxis(d[groupKeyName]) + subXAxis.bandwidth() / 2
@@ -670,7 +671,7 @@ export default class Barchart extends Stanza {
           // upper stroke
           errorBarGroup
             .append("line")
-            .attr("class", "errorbar")
+            .attr("class", "error-bar-line")
             .attr(
               "x1",
               (d) =>
@@ -690,7 +691,7 @@ export default class Barchart extends Stanza {
           // lower stroke
           errorBarGroup
             .append("line")
-            .attr("class", "errorbar")
+            .attr("class", "error-bar-line")
             .attr(
               "x1",
               (d) =>

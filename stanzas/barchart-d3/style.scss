@@ -1,135 +1,61 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
-summary {
-  display: none;
-}
-
-svg.marks {
-  background-color: var(--togostanza-background-color);
-}
-
 svg {
-  .gridlines > .tick > line {
-    stroke: var(--togostanza-grid-color);
-    opacity: var(--togostanza-grid-opacity);
-    stroke-width: var(--togostanza-grid-width);
-    stroke-dasharray: var(--togostanza-grid-dash-length),
-      var(--togostanza-grid-dash-length);
+  .gridlines {
+    & > .tick > line {
+      stroke: var(--togostanza-grid-color);
+      opacity: var(--togostanza-grid-opacity);
+      stroke-width: var(--togostanza-grid-width);
+      stroke-dasharray: var(--togostanza-grid-dash-length),
+        var(--togostanza-grid-dash-length);
+    }
+    & > path.domain {
+      display: none;
+    }
   }
 
-  .bars .error-bar > line {
-    stroke-width: var(--togostanza-errorbar-line-width);
-    stroke: var(--togostanza-errorbar-line-color);
-  }
   .bars rect {
     stroke-width: var(--togostanza-border-width);
     stroke: var(--togostanza-border-color);
   }
 
-  .gridlines > path.domain {
-    display: none;
+  .axis {
+    & > .tick > line {
+      stroke: var(--togostanza-tick-color);
+      stroke-width: var(--togostanza-tick-width);
+    }
+
+    & > .tick > text {
+      font-size: calc(var(--togostanza-label-font-size) * 1px);
+      fill: var(--togostanza-label-font-color);
+    }
+
+    & > path {
+      stroke: var(--togostanza-axis-color);
+      stroke-width: var(--togostanza-axis-width);
+    }
+
+    &.title text {
+      font-size: calc(var(--togostanza-title-font-size) * 1px);
+      font-weight: var(--togostanza-title-font-weight);
+      fill: var(--togostanza-title-font-color);
+    }
   }
 
-  .axis > .tick > line {
-    stroke: var(--togostanza-tick-color);
-    stroke-width: var(--togostanza-tick-width);
-  }
-  .axis > path {
-    stroke: var(--togostanza-axis-color);
-    stroke-width: var(--togostanza-axis-width);
-  }
-
-  line.errorbar {
+  line.error-bar-line {
     stroke: var(--togostanza-errorbar-line-color);
     stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
     opacity: var(--togostanza-errorbar-line-opacity);
   }
 }
 
+main {
+  background-color: var(--togostanza-background-color);
+  border: var(--togostanza-border-width) solid var(--togostanza-border-color);
+}
+
 .legend .label text {
   color: black;
   font-size: 0.5em;
-}
-
-svg .axis.title text {
-  font-size: calc(var(--togostanza-title-font-size) * 1px);
-  font-weight: var(--togostanza-title-font-weight);
-  fill: var(--togostanza-title-font-color);
-}
-
-svg .axis > .tick > text {
-  font-size: calc(var(--togostanza-label-font-size) * 1px);
-  fill: var(--togostanza-label-font-color);
-}
-
-//dl button style
-svg#dl_button {
-  position: absolute;
-  &.dl-top-left {
-    top: 20px;
-    left: 40px;
-  }
-  &.dl-top-right {
-    top: 20px;
-    right: 40px;
-  }
-  &.dl-bottom-left {
-    bottom: 20px;
-    left: 40px;
-  }
-  &.dl-bottom-right {
-    bottom: 20px;
-    right: 40px;
-  }
-  &.dl-none {
-    display: none;
-  }
-  .circle_g {
-    cursor: pointer;
-    opacity: 0.5;
-  }
-  .hover {
-    opacity: 1;
-  }
-}
-
-div#dl_list {
-  width: fit-content;
-  position: absolute;
-  border: solid 1px #444444;
-  background-color: #ffffff;
-  font-size: 12px;
-  font-family: var(--togostanza-font-family);
-  &.dl-top-left {
-    top: 40px;
-    left: 50px;
-  }
-  &.dl-top-right {
-    top: 40px;
-    right: 50px;
-  }
-  &.dl-bottom-left {
-    bottom: 40px;
-    left: 50px;
-  }
-  &.dl-bottom-right {
-    bottom: 40px;
-    right: 50px;
-  }
-  &.dl-none {
-    display: none;
-  }
-  ul {
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-    li {
-      cursor: pointer;
-      padding: 0px 10px 0px 10px;
-      &.hover {
-        background-color: #dddddd;
-      }
-    }
-  }
 }
