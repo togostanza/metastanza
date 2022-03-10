@@ -53,14 +53,6 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "error-bars",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show error bars",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "error-key",
       "stanza:type": "string",
       "stanza:example": "error",
@@ -130,21 +122,6 @@
       "stanza:choice": ["true", "false"],
       "stanza:example": true,
       "stanza:description": "Show Y grid"
-    },
-    {
-      "stanza:key": "xtick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show X tick"
-    },
-
-    {
-      "stanza:key": "ytick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y tick"
     },
     {
       "stanza:key": "xtick-size",
@@ -270,19 +247,6 @@
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
-
-    {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Chart lines width"
-    },
-    {
-      "stanza:key": "--togostanza-line-opacity",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Chart lines opacity"
-    },
     {
       "stanza:key": "--togostanza-axis-color",
       "stanza:type": "color",
@@ -295,6 +259,19 @@
       "stanza:default": 1,
       "stanza:description": "Axis width"
     },
+    {
+      "stanza:key": "--togostanza-line-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Chart lines width"
+    },
+    {
+      "stanza:key": "--togostanza-line-opacity",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Chart lines opacity"
+    },
+
     {
       "stanza:key": "--togostanza-grid-color",
       "stanza:type": "color",
@@ -324,6 +301,12 @@
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Tick color"
+    },
+    {
+      "stanza:key": "--togostanza-tick-length",
+      "stanza:type": "number",
+      "stanza:default": 1.5,
+      "stanza:description": "Tick length (in pixel)"
     },
     {
       "stanza:key": "--togostanza-tick-width",
@@ -378,6 +361,18 @@
       "stanza:type": "number",
       "stanza:default": 10,
       "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0,
+      "stanza:description": "Border width"
     },
     {
       "stanza:key": "--togostanza-background-color",
