@@ -130,6 +130,27 @@ export default class Linechart extends Stanza {
       values = values.filter((item) => !isNaN(item[xKeyName]));
     }
 
+    // Check data
+    {
+      let error;
+      if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No y-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+      if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No x-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+    }
+
+    //=========
+
     this._data = values;
 
     const categorizedData = d3.group(values, (d) => d[groupKeyName]);
