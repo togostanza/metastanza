@@ -4,57 +4,67 @@
 svg {
   font-family: var(--togostanza-font-family);
   background-color: var(--togostanza-background-color);
-}
 
-svg .error-bar > line {
-  stroke-width: var(--togostanza-errorbar-line-width);
-  stroke: var(--togostanza-errorbar-line-color);
-}
+  .error-bar > line {
+    stroke-width: var(--togostanza-errorbar-line-width);
+    stroke: var(--togostanza-errorbar-line-color);
+  }
+  
+  .gridlines {
+    & > .tick > line {
+      stroke: var(--togostanza-grid-color);
+      opacity: var(--togostanza-grid-opacity);
+      stroke-width: var(--togostanza-grid-width);
+      stroke-dasharray: var(--togostanza-grid-dash-length),
+        var(--togostanza-grid-dash-length);
+    }
+    & > path.domain {
+      display: none;
+    }
 
-svg .gridlines > .tick > line {
-  stroke: var(--togostanza-grid-color);
-  opacity: var(--togostanza-grid-opacity);
-  stroke-width: var(--togostanza-grid-width);
-  stroke-dasharray: var(--togostanza-grid-dash-length),
-    var(--togostanza-grid-dash-length);
-}
+  }
 
-svg .gridlines > path.domain {
-  display: none;
-}
+  .axis  {
+    & > .tick > line {
+      stroke: var(--togostanza-tick-color);
+      stroke-width: var(--togostanza-tick-width);
+    }
 
-svg .axis > .tick > line {
-  stroke: var(--togostanza-tick-color);
-  stroke-width: var(--togostanza-tick-width);
-}
+    & > path {
+      stroke: var(--togostanza-axis-color);
+      stroke-width: var(--togostanza-axis-width);
+    }
+    
+    &.title text {
+      font-size: calc(var(--togostanza-title-font-size) * 1px);
+      font-weight: var(--togostanza-title-font-weight);
+      font-family: var(--togostanza-font-family) !important;
+      fill: var(--togostanza-title-font-color);
+    }
 
-svg .axis > path {
-  stroke: var(--togostanza-axis-color);
-  stroke-width: var(--togostanza-axis-width);
-}
+    & > .tick > text {
+      font-family: var(--togostanza-font-family);
+      font-size: calc(var(--togostanza-label-font-size) * 1px);
+      fill: var(--togostanza-label-font-color);
+    }
 
-svg .axis.title text {
-  font-size: calc(var(--togostanza-title-font-size) * 1px);
-  font-weight: var(--togostanza-title-font-weight);
-  font-family: var(--togostanza-font-family) !important;
-  fill: var(--togostanza-title-font-color);
-}
+  }
 
-svg .axis > .tick > text {
-  font-family: var(--togostanza-font-family);
-  font-size: calc(var(--togostanza-label-font-size) * 1px);
-  fill: var(--togostanza-label-font-color);
-}
+  path.data-lines {
+    stroke-width: var(--togostanza-line-width);
+    opacity: var(--togostanza-line-opacity);
+  }
 
-svg path.data-lines {
-  stroke-width: var(--togostanza-line-width);
-  opacity: var(--togostanza-line-opacity);
-}
-
-svg line.errorbar {
-  stroke: var(--togostanza-errorbar-line-color);
-  stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
-  opacity: var(--togostanza-errorbar-line-opacity);
+  line.errorbar {
+    stroke: var(--togostanza-errorbar-line-color);
+    stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
+    opacity: var(--togostanza-errorbar-line-opacity);
+  }
+  
+} 
+main {
+  background-color: var(--togostanza-background-color);
+  border: var(--togostanza-border-width) solid var(--togostanza-border-color);
 }
 
 .-off {
