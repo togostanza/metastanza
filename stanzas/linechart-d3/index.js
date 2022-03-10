@@ -112,9 +112,15 @@ export default class Linechart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO change data to include errors. For now, artificially add 20% error
+    function getRandomTrueFalse() {
+      return Math.random() >= 0.5;
+    }
+
+    // TODO change data to include errors. For now, artificially add 20% error  and randomly add or not add it.
     values.forEach((item) => {
-      item.error = item.count * 0.2;
+      if (getRandomTrueFalse()) {
+        item.error = item[yKeyName] * 0.2;
+      }
     });
 
     //Filter out all non-numeric x-axis values from data
