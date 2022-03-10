@@ -155,7 +155,7 @@ export default class Barchart extends Stanza {
       values,
       (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
     );
- 
+
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
@@ -294,10 +294,14 @@ export default class Barchart extends Stanza {
 
       if (!showXTicks) {
         xAxisGenerator.tickSize(0);
+      } else {
+        xAxisGenerator.tickSize(xTickSize);
       }
 
       if (!showYTicks) {
         yAxisGenerator.tickSize(0);
+      } else {
+        yAxisGenerator.tickSize(yTickSize);
       }
 
       const update = (values) => {
@@ -486,13 +490,10 @@ export default class Barchart extends Stanza {
         function updateGroupedBars(values) {
           const dataset = d3.group(values, (d) => d[xKeyName]);
 
-          let yMinMax;
-          
-            yMinMax = d3.extent(
-              values,
-              (d) => +d[yKeyName] +  (parseFloat(d[errorKeyName]) || 0)/2
-            );
-         
+          const yMinMax = d3.extent(
+            values,
+            (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0) / 2
+          );
 
           y.domain([0, yMinMax[1] * 1.05]);
           if (showYAxis) {

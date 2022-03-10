@@ -182,6 +182,18 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "xtick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "X axis tick size"
+    },
+    {
+      "stanza:key": "ytick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Y axis tick size"
+    },
+    {
       "stanza:key": "xlabel-angle",
       "stanza:example": -90,
       "stanza:description": "X label angle (in degree)"
@@ -280,12 +292,6 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Line width"
     },
     {
       "stanza:key": "--togostanza-axis-color",
@@ -388,6 +394,18 @@
       "stanza:type": "number",
       "stanza:default": 10,
       "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-bars-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Bars border color"
+    },
+    {
+      "stanza:key": "--togostanza-bars-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Bars border width"
     },
     {
       "stanza:key": "--togostanza-border-color",
