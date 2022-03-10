@@ -132,21 +132,6 @@
       "stanza:description": "Show Y grid"
     },
     {
-      "stanza:key": "xtick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show X tick"
-    },
-
-    {
-      "stanza:key": "ytick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y tick"
-    },
-    {
       "stanza:key": "xtick-size",
       "stanza:type": "number",
       "stanza:example": 5,

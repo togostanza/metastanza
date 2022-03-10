@@ -38,8 +38,6 @@ export default class Barchart extends Stanza {
     const yKeyName = this.params["value"];
     const xAxisTitle = this.params["category-title"];
     const yAxisTitle = this.params["value-title"];
-    const showXTicks = this.params["xtick"] === "true" ? true : false;
-    const showYTicks = this.params["ytick"] === "true" ? true : false;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const showLegend = this.params["legend"] || "top-right";
     const groupKeyName = this.params["group-by"];
@@ -292,17 +290,9 @@ export default class Barchart extends Stanza {
 
       const barsGroups = barsArea.append("g").attr("class", "bars-group");
 
-      if (!showXTicks) {
-        xAxisGenerator.tickSize(0);
-      } else {
-        xAxisGenerator.tickSize(xTickSize);
-      }
+      xAxisGenerator.tickSize(parseInt(xTickSize) || 0);
 
-      if (!showYTicks) {
-        yAxisGenerator.tickSize(0);
-      } else {
-        yAxisGenerator.tickSize(yTickSize);
-      }
+      yAxisGenerator.tickSize(parseInt(yTickSize) || 0);
 
       const update = (values) => {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
