@@ -71,8 +71,12 @@ export default class Barchart extends Stanza {
     const ylabelFormat = this.params["ylabel-format"] || null;
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 25;
-    const xTickSize = parseInt(this.params["xtick-size"]) ? parseInt(this.params["xtick-size"]) : 0
-    const yTickSize = parseInt(this.params["ytick-size"]) ? parseInt(this.params["ytick-size"]) : 0
+    const xTickSize = parseInt(this.params["xtick-size"])
+      ? parseInt(this.params["xtick-size"])
+      : 0;
+    const yTickSize = parseInt(this.params["ytick-size"])
+      ? parseInt(this.params["ytick-size"])
+      : 0;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
     const barPaddings =
@@ -138,6 +142,23 @@ export default class Barchart extends Stanza {
         item.error = item[yKeyName] * 0.2;
       }
     });
+
+    // Check data
+    let error;
+    if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
+      error = new Error(
+        "--togostanza-barchart ERROR: No y-axis key found in data"
+      );
+      console.error(error);
+      return error;
+    }
+    if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
+      error = new Error(
+        "--togostanza-barchart ERROR: No x-axis key found in data"
+      );
+      console.error(error);
+      return error;
+    }
 
     //=========
 
