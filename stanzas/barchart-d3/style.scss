@@ -52,7 +52,8 @@ svg {
 
 main {
   background-color: var(--togostanza-background-color);
-  border: var(--togostanza-border-width) solid var(--togostanza-border-color);
+  border: calc(var(--togostanza-border-width) * 1px) solid
+    var(--togostanza-border-color);
 }
 
 .legend .label text {
