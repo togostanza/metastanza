@@ -484,9 +484,7 @@ export default class Barchart extends Stanza {
         function updateGroupedBars(values) {
           const dataset = d3.group(values, (d) => d[xKeyName]);
 
-          let yMinMax;
-
-          yMinMax = d3.extent(
+          const yMinMax = d3.extent(
             values,
             (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0) / 2
           );
