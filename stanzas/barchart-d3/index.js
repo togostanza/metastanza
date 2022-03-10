@@ -151,12 +151,11 @@ export default class Barchart extends Stanza {
     }
 
     let dataMax;
-    if (showErrorBars) {
-      dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-    } else {
-      dataMax = d3.max(values, (d) => +d[yKeyName]);
-    }
-
+    dataMax = d3.max(
+      values,
+      (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
+    );
+ 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
@@ -488,14 +487,12 @@ export default class Barchart extends Stanza {
           const dataset = d3.group(values, (d) => d[xKeyName]);
 
           let yMinMax;
-          if (showErrorBars) {
+          
             yMinMax = d3.extent(
               values,
-              (d) => Number(d[yKeyName]) + d[errorKeyName] / 2
+              (d) => +d[yKeyName] +  (parseFloat(d[errorKeyName]) || 0)/2
             );
-          } else {
-            yMinMax = d3.extent(values, (d) => Number(d[yKeyName]));
-          }
+         
 
           y.domain([0, yMinMax[1] * 1.05]);
           if (showYAxis) {
