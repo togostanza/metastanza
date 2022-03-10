@@ -153,11 +153,26 @@
       "stanza:description": "Show Y grid"
     },
     {
+      "stanza:key": "xtick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show X tick"
+    },
+    {
       "stanza:key": "xtick-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["center", "in-between"],
       "stanza:example": "in-between",
       "stanza:description": "Show X tick"
+    },
+
+    {
+      "stanza:key": "ytick",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show Y tick"
     },
 
     {
