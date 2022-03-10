@@ -1,6 +1,11 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
+.legend .label text {
+  color: black;
+  font-size: 0.5em;
+}
+
 svg {
   .gridlines {
     & > .tick > line {
@@ -54,9 +59,4 @@ main {
   background-color: var(--togostanza-background-color);
   border: calc(var(--togostanza-border-width) * 1px) solid
     var(--togostanza-border-color);
-}
-
-.legend .label text {
-  color: black;
-  font-size: 0.5em;
 }
