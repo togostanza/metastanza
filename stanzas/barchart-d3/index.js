@@ -10,7 +10,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -22,7 +21,6 @@ export default class Barchart extends Stanza {
       downloadJSONMenuItem(this, "barchart", this._data),
       downloadCSVMenuItem(this, "barchart", this._data),
       downloadTSVMenuItem(this, "barchart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -155,7 +153,7 @@ export default class Barchart extends Stanza {
       values,
       (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
     );
- 
+
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
@@ -487,12 +485,11 @@ export default class Barchart extends Stanza {
           const dataset = d3.group(values, (d) => d[xKeyName]);
 
           let yMinMax;
-          
-            yMinMax = d3.extent(
-              values,
-              (d) => +d[yKeyName] +  (parseFloat(d[errorKeyName]) || 0)/2
-            );
-         
+
+          yMinMax = d3.extent(
+            values,
+            (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0) / 2
+          );
 
           y.domain([0, yMinMax[1] * 1.05]);
           if (showYAxis) {
