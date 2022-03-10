@@ -370,7 +370,7 @@
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": 0.5,
+      "stanza:default": 0,
       "stanza:description": "Border width"
     },
     {

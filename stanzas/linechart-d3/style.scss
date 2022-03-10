@@ -9,7 +9,7 @@ svg {
     stroke-width: var(--togostanza-errorbar-line-width);
     stroke: var(--togostanza-errorbar-line-color);
   }
-  
+
   .gridlines {
     & > .tick > line {
       stroke: var(--togostanza-grid-color);
@@ -21,10 +21,9 @@ svg {
     & > path.domain {
       display: none;
     }
-
   }
 
-  .axis  {
+  .axis {
     & > .tick > line {
       stroke: var(--togostanza-tick-color);
       stroke-width: var(--togostanza-tick-width);
@@ -34,7 +33,7 @@ svg {
       stroke: var(--togostanza-axis-color);
       stroke-width: var(--togostanza-axis-width);
     }
-    
+
     &.title text {
       font-size: calc(var(--togostanza-title-font-size) * 1px);
       font-weight: var(--togostanza-title-font-weight);
@@ -47,7 +46,6 @@ svg {
       font-size: calc(var(--togostanza-label-font-size) * 1px);
       fill: var(--togostanza-label-font-color);
     }
-
   }
 
   path.data-lines {
@@ -60,11 +58,11 @@ svg {
     stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
     opacity: var(--togostanza-errorbar-line-opacity);
   }
-  
-} 
+}
 main {
   background-color: var(--togostanza-background-color);
-  border: var(--togostanza-border-width) solid var(--togostanza-border-color);
+  border: calc(var(--togostanza-border-width) * 1px) solid
+    var(--togostanza-border-color);
 }
 
 .-off {
