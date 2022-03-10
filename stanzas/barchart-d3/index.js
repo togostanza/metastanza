@@ -71,8 +71,8 @@ export default class Barchart extends Stanza {
     const ylabelFormat = this.params["ylabel-format"] || null;
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 25;
-    const xTickSize = this.params["xtick-size"] || 5;
-    const yTickSize = this.params["ytick-size"] || 5;
+    const xTickSize = parseInt(this.params["xtick-size"]) ? parseInt(this.params["xtick-size"]) : 0
+    const yTickSize = parseInt(this.params["ytick-size"]) ? parseInt(this.params["ytick-size"]) : 0
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
     const barPaddings =
@@ -290,9 +290,9 @@ export default class Barchart extends Stanza {
 
       const barsGroups = barsArea.append("g").attr("class", "bars-group");
 
-      xAxisGenerator.tickSize(parseInt(xTickSize) || 0);
+      xAxisGenerator.tickSize(xTickSize);
 
-      yAxisGenerator.tickSize(parseInt(yTickSize) || 0);
+      yAxisGenerator.tickSize(yTickSize);
 
       const update = (values) => {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
