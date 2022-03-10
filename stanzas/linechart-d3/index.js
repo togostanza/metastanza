@@ -34,8 +34,6 @@ export default class Linechart extends Stanza {
     const yKeyName = this.params["y-axis-key"];
     const xAxisTitle = this.params["x-axis-title"] || "";
     const yAxisTitle = this.params["y-axis-title"] || "";
-    const showXTicks = this.params["xtick"] === "true" ? true : false;
-    const showYTicks = this.params["ytick"] === "true" ? true : false;
     const xTicksNumber = this.params["xticks-number"] || 5;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const groupKeyName = this.params["group-by"];
@@ -75,9 +73,13 @@ export default class Linechart extends Stanza {
 
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 15;
+    const xTickSize = parseInt(this.params["xtick-size"])
+      ? parseInt(this.params["xtick-size"])
+      : 0;
+    const yTickSize = parseInt(this.params["ytick-size"])
+      ? parseInt(this.params["ytick-size"])
+      : 0;
 
-    const xTickSize = this.params["xtick-size"] || 5;
-    const yTickSize = this.params["ytick-size"] || 5;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
 
@@ -351,10 +353,6 @@ export default class Linechart extends Stanza {
           xAxisGenerator.ticks(xTicksNumber);
         }
 
-        if (!showXTicks) {
-          xAxisGenerator.tickSize(0);
-        }
-
         xAxisArea
           .transition()
           .duration(200)
@@ -417,10 +415,6 @@ export default class Linechart extends Stanza {
           .ticks(yTicksNumber)
           .tickFormat((d) => d3.format(ylabelFormat)(d))
           .tickSizeInner(yTickSize);
-
-        if (!showYTicks) {
-          yAxisGenerator.tickSize(0);
-        }
 
         yAxisArea
           .transition()
