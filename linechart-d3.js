@@ -4,38 +4,13 @@ import { s as select } from './index-2dcff241.js';
 import { l as loadData } from './load-data-5664e120.js';
 import { L as Legend } from './Legend-19eab368.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
-import { I as InternMap, o as ordinal, i as initRange, f as format } from './ordinal-0780ae77.js';
+import { a as array, g as group, b as band, c as axisBottom, d as axisLeft, e as axisTop, f as axisRight } from './array-3d4b6b32.js';
+import { o as ordinal, f as format } from './ordinal-0780ae77.js';
 import { m as max } from './max-2c042256.js';
 import { l as linear } from './linear-b6a8628a.js';
-import { c as constant, p as path } from './constant-131b8143.js';
+import { c as constant } from './constant-c49047a5.js';
+import { p as path } from './path-a78af922.js';
 import './dsv-8e18f33d.js';
-
-function identity$1(x) {
-  return x;
-}
-
-function group(values, ...keys) {
-  return nest(values, identity$1, identity$1, keys);
-}
-
-function nest(values, map, reduce, keys) {
-  return (function regroup(values, i) {
-    if (i >= keys.length) return reduce(values);
-    const groups = new InternMap();
-    const keyof = keys[i++];
-    let index = -1;
-    for (const value of values) {
-      const key = keyof(value, ++index, values);
-      const group = groups.get(key);
-      if (group) group.push(value);
-      else groups.set(key, [value]);
-    }
-    for (const [key, values] of groups) {
-      groups.set(key, regroup(values, i));
-    }
-    return map(groups);
-  })(values, 0);
-}
 
 function min(values, valueof) {
   let min;
@@ -56,283 +31,6 @@ function min(values, valueof) {
     }
   }
   return min;
-}
-
-function range(start, stop, step) {
-  start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
-
-  var i = -1,
-      n = Math.max(0, Math.ceil((stop - start) / step)) | 0,
-      range = new Array(n);
-
-  while (++i < n) {
-    range[i] = start + i * step;
-  }
-
-  return range;
-}
-
-function identity(x) {
-  return x;
-}
-
-var top = 1,
-    right = 2,
-    bottom = 3,
-    left = 4,
-    epsilon = 1e-6;
-
-function translateX(x) {
-  return "translate(" + x + ",0)";
-}
-
-function translateY(y) {
-  return "translate(0," + y + ")";
-}
-
-function number(scale) {
-  return d => +scale(d);
-}
-
-function center(scale, offset) {
-  offset = Math.max(0, scale.bandwidth() - offset * 2) / 2;
-  if (scale.round()) offset = Math.round(offset);
-  return d => +scale(d) + offset;
-}
-
-function entering() {
-  return !this.__axis;
-}
-
-function axis(orient, scale) {
-  var tickArguments = [],
-      tickValues = null,
-      tickFormat = null,
-      tickSizeInner = 6,
-      tickSizeOuter = 6,
-      tickPadding = 3,
-      offset = typeof window !== "undefined" && window.devicePixelRatio > 1 ? 0 : 0.5,
-      k = orient === top || orient === left ? -1 : 1,
-      x = orient === left || orient === right ? "x" : "y",
-      transform = orient === top || orient === bottom ? translateX : translateY;
-
-  function axis(context) {
-    var values = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain()) : tickValues,
-        format = tickFormat == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : identity) : tickFormat,
-        spacing = Math.max(tickSizeInner, 0) + tickPadding,
-        range = scale.range(),
-        range0 = +range[0] + offset,
-        range1 = +range[range.length - 1] + offset,
-        position = (scale.bandwidth ? center : number)(scale.copy(), offset),
-        selection = context.selection ? context.selection() : context,
-        path = selection.selectAll(".domain").data([null]),
-        tick = selection.selectAll(".tick").data(values, scale).order(),
-        tickExit = tick.exit(),
-        tickEnter = tick.enter().append("g").attr("class", "tick"),
-        line = tick.select("line"),
-        text = tick.select("text");
-
-    path = path.merge(path.enter().insert("path", ".tick")
-        .attr("class", "domain")
-        .attr("stroke", "currentColor"));
-
-    tick = tick.merge(tickEnter);
-
-    line = line.merge(tickEnter.append("line")
-        .attr("stroke", "currentColor")
-        .attr(x + "2", k * tickSizeInner));
-
-    text = text.merge(tickEnter.append("text")
-        .attr("fill", "currentColor")
-        .attr(x, k * spacing)
-        .attr("dy", orient === top ? "0em" : orient === bottom ? "0.71em" : "0.32em"));
-
-    if (context !== selection) {
-      path = path.transition(context);
-      tick = tick.transition(context);
-      line = line.transition(context);
-      text = text.transition(context);
-
-      tickExit = tickExit.transition(context)
-          .attr("opacity", epsilon)
-          .attr("transform", function(d) { return isFinite(d = position(d)) ? transform(d + offset) : this.getAttribute("transform"); });
-
-      tickEnter
-          .attr("opacity", epsilon)
-          .attr("transform", function(d) { var p = this.parentNode.__axis; return transform((p && isFinite(p = p(d)) ? p : position(d)) + offset); });
-    }
-
-    tickExit.remove();
-
-    path
-        .attr("d", orient === left || orient === right
-            ? (tickSizeOuter ? "M" + k * tickSizeOuter + "," + range0 + "H" + offset + "V" + range1 + "H" + k * tickSizeOuter : "M" + offset + "," + range0 + "V" + range1)
-            : (tickSizeOuter ? "M" + range0 + "," + k * tickSizeOuter + "V" + offset + "H" + range1 + "V" + k * tickSizeOuter : "M" + range0 + "," + offset + "H" + range1));
-
-    tick
-        .attr("opacity", 1)
-        .attr("transform", function(d) { return transform(position(d) + offset); });
-
-    line
-        .attr(x + "2", k * tickSizeInner);
-
-    text
-        .attr(x, k * spacing)
-        .text(format);
-
-    selection.filter(entering)
-        .attr("fill", "none")
-        .attr("font-size", 10)
-        .attr("font-family", "sans-serif")
-        .attr("text-anchor", orient === right ? "start" : orient === left ? "end" : "middle");
-
-    selection
-        .each(function() { this.__axis = position; });
-  }
-
-  axis.scale = function(_) {
-    return arguments.length ? (scale = _, axis) : scale;
-  };
-
-  axis.ticks = function() {
-    return tickArguments = Array.from(arguments), axis;
-  };
-
-  axis.tickArguments = function(_) {
-    return arguments.length ? (tickArguments = _ == null ? [] : Array.from(_), axis) : tickArguments.slice();
-  };
-
-  axis.tickValues = function(_) {
-    return arguments.length ? (tickValues = _ == null ? null : Array.from(_), axis) : tickValues && tickValues.slice();
-  };
-
-  axis.tickFormat = function(_) {
-    return arguments.length ? (tickFormat = _, axis) : tickFormat;
-  };
-
-  axis.tickSize = function(_) {
-    return arguments.length ? (tickSizeInner = tickSizeOuter = +_, axis) : tickSizeInner;
-  };
-
-  axis.tickSizeInner = function(_) {
-    return arguments.length ? (tickSizeInner = +_, axis) : tickSizeInner;
-  };
-
-  axis.tickSizeOuter = function(_) {
-    return arguments.length ? (tickSizeOuter = +_, axis) : tickSizeOuter;
-  };
-
-  axis.tickPadding = function(_) {
-    return arguments.length ? (tickPadding = +_, axis) : tickPadding;
-  };
-
-  axis.offset = function(_) {
-    return arguments.length ? (offset = +_, axis) : offset;
-  };
-
-  return axis;
-}
-
-function axisTop(scale) {
-  return axis(top, scale);
-}
-
-function axisRight(scale) {
-  return axis(right, scale);
-}
-
-function axisBottom(scale) {
-  return axis(bottom, scale);
-}
-
-function axisLeft(scale) {
-  return axis(left, scale);
-}
-
-function band() {
-  var scale = ordinal().unknown(undefined),
-      domain = scale.domain,
-      ordinalRange = scale.range,
-      r0 = 0,
-      r1 = 1,
-      step,
-      bandwidth,
-      round = false,
-      paddingInner = 0,
-      paddingOuter = 0,
-      align = 0.5;
-
-  delete scale.unknown;
-
-  function rescale() {
-    var n = domain().length,
-        reverse = r1 < r0,
-        start = reverse ? r1 : r0,
-        stop = reverse ? r0 : r1;
-    step = (stop - start) / Math.max(1, n - paddingInner + paddingOuter * 2);
-    if (round) step = Math.floor(step);
-    start += (stop - start - step * (n - paddingInner)) * align;
-    bandwidth = step * (1 - paddingInner);
-    if (round) start = Math.round(start), bandwidth = Math.round(bandwidth);
-    var values = range(n).map(function(i) { return start + step * i; });
-    return ordinalRange(reverse ? values.reverse() : values);
-  }
-
-  scale.domain = function(_) {
-    return arguments.length ? (domain(_), rescale()) : domain();
-  };
-
-  scale.range = function(_) {
-    return arguments.length ? ([r0, r1] = _, r0 = +r0, r1 = +r1, rescale()) : [r0, r1];
-  };
-
-  scale.rangeRound = function(_) {
-    return [r0, r1] = _, r0 = +r0, r1 = +r1, round = true, rescale();
-  };
-
-  scale.bandwidth = function() {
-    return bandwidth;
-  };
-
-  scale.step = function() {
-    return step;
-  };
-
-  scale.round = function(_) {
-    return arguments.length ? (round = !!_, rescale()) : round;
-  };
-
-  scale.padding = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, paddingOuter = +_), rescale()) : paddingInner;
-  };
-
-  scale.paddingInner = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, _), rescale()) : paddingInner;
-  };
-
-  scale.paddingOuter = function(_) {
-    return arguments.length ? (paddingOuter = +_, rescale()) : paddingOuter;
-  };
-
-  scale.align = function(_) {
-    return arguments.length ? (align = Math.max(0, Math.min(1, _)), rescale()) : align;
-  };
-
-  scale.copy = function() {
-    return band(domain(), [r0, r1])
-        .round(round)
-        .paddingInner(paddingInner)
-        .paddingOuter(paddingOuter)
-        .align(align);
-  };
-
-  return initRange.apply(rescale(), arguments);
-}
-
-function array(x) {
-  return typeof x === "object" && "length" in x
-    ? x // Array, TypedArray, NodeList, array-like
-    : Array.from(x); // Map, Set, iterable, string, or anything else
 }
 
 function Linear(context) {
@@ -448,8 +146,6 @@ class Linechart extends Stanza {
     const yKeyName = this.params["y-axis-key"];
     const xAxisTitle = this.params["x-axis-title"] || "";
     const yAxisTitle = this.params["y-axis-title"] || "";
-    const showXTicks = this.params["xtick"] === "true" ? true : false;
-    const showYTicks = this.params["ytick"] === "true" ? true : false;
     const xTicksNumber = this.params["xticks-number"] || 5;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const groupKeyName = this.params["group-by"];
@@ -465,8 +161,10 @@ class Linechart extends Stanza {
         : parseInt(this.params["ylabel-angle"]) || 0;
 
     const xDataType = this.params["x-axis-data-type"] || "string";
-    const errorKeyName = this.params["error-key"] || "error";
-    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
+    const errorKeyName = this.params["error-key"];
+    const showErrorBars =
+      this.params["error-key"] !== "" || this.params["error-key"] !== undefined;
+
     const errorBarWidth =
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
@@ -487,9 +185,13 @@ class Linechart extends Stanza {
 
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 15;
+    const xTickSize = parseInt(this.params["xtick-size"])
+      ? parseInt(this.params["xtick-size"])
+      : 0;
+    const yTickSize = parseInt(this.params["ytick-size"])
+      ? parseInt(this.params["ytick-size"])
+      : 0;
 
-    const xTickSize = this.params["xtick-size"] || 5;
-    const yTickSize = this.params["ytick-size"] || 5;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
 
@@ -524,15 +226,42 @@ class Linechart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO change data to include errors. For now, artificially add 20% error
+    function getRandomTrueFalse() {
+      return Math.random() >= 0.5;
+    }
+
+    // TODO change data to include errors. For now, artificially add 20% error  and randomly add or not add it.
     values.forEach((item) => {
-      item.error = item.count * 0.2;
+      if (getRandomTrueFalse()) {
+        item.error = item[yKeyName] * 0.2;
+      }
     });
 
     //Filter out all non-numeric x-axis values from data
     if (xDataType === "number") {
       values = values.filter((item) => !isNaN(item[xKeyName]));
     }
+
+    // Check data
+    {
+      let error;
+      if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No y-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+      if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No x-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+    }
+
+    //=========
 
     this._data = values;
 
@@ -552,28 +281,6 @@ class Linechart extends Stanza {
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
-    const MARGIN = {
-      TOP:
-        xAxisPlacement === "top"
-          ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
-          : 10,
-      BOTTOM:
-        xAxisPlacement === "top"
-          ? 10
-          : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
-      LEFT:
-        yAxisPlacement === "left"
-          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-          : 10,
-      RIGHT:
-        yAxisPlacement === "right"
-          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-          : 10,
-    };
-
-    const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
-    const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
     const el = this.root.querySelector("#linechart-d3");
 
     const svg = select(el)
@@ -581,444 +288,525 @@ class Linechart extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
-    const graphArea = svg.append("g").attr("class", "chart");
-
-    const linesArea = graphArea
-      .append("g")
-      .attr("class", "lines")
-      .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
-
-    const dataGroup = linesArea.append("g").attr("class", "data-lines");
-
-    const xAxisArea = graphArea.append("g").attr("class", "x axis");
-
-    const yAxisArea = graphArea.append("g").attr("class", "y axis");
-
-    const yTitleArea = graphArea.append("g").attr("class", "y axis title");
-
-    const xTitleArea = graphArea.append("g").attr("class", "x axis title");
-
-    if (xAxisPlacement === "top") {
-      xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-
-      xTitleArea
-        .attr(
-          "transform",
-          `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
-        )
-        .attr("dominant-baseline", "bottom");
-    } else {
-      xAxisArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
-      );
-      xTitleArea
-        .attr(
-          "transform",
-          `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
-        )
-        .attr("dominant-baseline", "hanging");
-    }
-
-    if (yAxisPlacement === "right") {
-      yAxisArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
-      );
-      yTitleArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
-      );
-    } else {
-      yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-      yTitleArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
-      );
-    }
-
-    yTitleArea
-      .append("text")
-      .text(yAxisTitle)
-      .attr("text-anchor", "middle")
-      .attr("transform", `rotate(-90)`)
-      .attr("x", -HEIGHT / 2 - MARGIN.TOP);
-
-    xTitleArea
-      .append("text")
-      .text(xAxisTitle)
-      .attr("text-anchor", "middle")
-      .attr("x", MARGIN.LEFT + WIDTH / 2);
-
-    const errorBarsGroup = linesArea
-      .append("g")
-      .attr("class", "error-bars-group");
-
-    const xAxisLabelsProps = getXTextLabelProps(
-      xLabelAngle,
-      xLabelPadding + xTickSize,
-      xAxisPlacement
-    );
-    const yAxisLabelsProps = getYTextLabelProps(
-      yLabelAngle,
-      yLabelPadding + yTickSize,
-      yAxisPlacement
-    );
-
-    // Axes preparation
-    let dataMax, dataMin;
-    if (showErrorBars) {
-      dataMax = max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-      dataMin = min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-    } else {
-      dataMax = max(values, (d) => +d[yKeyName]);
-      dataMin = min(values, (d) => +d[yKeyName]);
-    }
-
-    let x;
-    if (xDataType === "number") {
-      const xAxisData = values.map((d) => +d[xKeyName]);
-      const xDataMinMax = [min(xAxisData), max(xAxisData)];
-      x = linear().domain(xDataMinMax).range([0, WIDTH]);
-    } else {
-      const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-      x = band().domain(xAxisLabels).range([0, WIDTH]);
-    }
-
-    const y = linear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
-
-    const xAxisGridGenerator = axisBottom(x)
-      .tickSize(-HEIGHT)
-      .tickFormat("")
-      .ticks(xTicksNumber);
-
-    const yAxisGridGenerator = axisLeft(y)
-      .tickSize(-WIDTH)
-      .tickFormat("")
-      .ticks(yTicksNumber);
-
-    const xGridLines = linesArea
-      .append("g")
-      .attr("class", "x gridlines")
-      .attr("transform", "translate(0," + HEIGHT + ")");
-
-    const yGridLines = linesArea.append("g").attr("class", "y gridlines");
-
-    const update = (values) => {
-      const categorizedData = group(values, (d) => d[groupKeyName]);
-
-      if (showErrorBars) {
-        dataMax = max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-        dataMin = min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-      } else {
-        dataMax = max(values, (d) => +d[yKeyName]);
-        dataMin = min(values, (d) => +d[yKeyName]);
+    const redrawSVG = (
+      MARGIN = {
+        TOP:
+          xAxisPlacement === "top"
+            ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
+            : 10,
+        BOTTOM:
+          xAxisPlacement === "top"
+            ? 10
+            : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
+        LEFT:
+          yAxisPlacement === "left"
+            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+            : 10,
+        RIGHT:
+          yAxisPlacement === "right"
+            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+            : 10,
+      }
+    ) => {
+      const existingChart = svg.select("g.chart");
+      if (!existingChart.empty()) {
+        existingChart
+          .transition()
+          .duration(200)
+          .attr("opacity", 0)
+          .on("end", () => {
+            existingChart.remove();
+          });
       }
 
+      const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+      const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
+
+      const graphArea = svg.append("g").attr("class", "chart");
+
+      const linesArea = graphArea
+        .append("g")
+        .attr("class", "lines")
+        .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
+
+      const dataGroup = linesArea.append("g").attr("class", "data-lines");
+
+      const xAxisArea = graphArea.append("g").attr("class", "x axis");
+
+      const yAxisArea = graphArea.append("g").attr("class", "y axis");
+
+      const yTitleArea = graphArea.append("g").attr("class", "y axis title");
+
+      const xTitleArea = graphArea.append("g").attr("class", "x axis title");
+
+      if (xAxisPlacement === "top") {
+        xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+
+        xTitleArea
+          .attr(
+            "transform",
+            `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
+          )
+          .attr("dominant-baseline", "bottom");
+      } else {
+        xAxisArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
+        );
+        xTitleArea
+          .attr(
+            "transform",
+            `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
+          )
+          .attr("dominant-baseline", "hanging");
+      }
+
+      if (yAxisPlacement === "right") {
+        yAxisArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
+        );
+        yTitleArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
+        );
+      } else {
+        yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+        yTitleArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
+        );
+      }
+
+      yTitleArea
+        .append("text")
+        .text(yAxisTitle)
+        .attr("text-anchor", "middle")
+        .attr("transform", `rotate(-90)`)
+        .attr("x", -HEIGHT / 2 - MARGIN.TOP);
+
+      xTitleArea
+        .append("text")
+        .text(xAxisTitle)
+        .attr("text-anchor", "middle")
+        .attr("x", MARGIN.LEFT + WIDTH / 2);
+
+      const errorBarsGroup = linesArea
+        .append("g")
+        .attr("class", "error-bars-group");
+
+      const xAxisLabelsProps = getXTextLabelProps(
+        xLabelAngle,
+        xLabelPadding + xTickSize,
+        xAxisPlacement
+      );
+      const yAxisLabelsProps = getYTextLabelProps(
+        yLabelAngle,
+        yLabelPadding + yTickSize,
+        yAxisPlacement
+      );
+
+      // Axes preparation
+      let dataMax, dataMin;
+
+      dataMax = max(
+        values,
+        (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
+      );
+      dataMin = min(
+        values,
+        (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+      );
+
+      let x;
       if (xDataType === "number") {
         const xAxisData = values.map((d) => +d[xKeyName]);
         const xDataMinMax = [min(xAxisData), max(xAxisData)];
-        x.domain(xDataMinMax);
+        x = linear().domain(xDataMinMax).range([0, WIDTH]);
       } else {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-        x.domain(xAxisLabels);
+        x = band().domain(xAxisLabels).range([0, WIDTH]);
       }
 
-      y.domain([dataMin, dataMax]);
+      const y = linear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
 
-      let xAxisGenerator;
+      const xAxisGridGenerator = axisBottom(x)
+        .tickSize(-HEIGHT)
+        .tickFormat("")
+        .ticks(xTicksNumber);
 
-      if (xAxisPlacement === "top") {
-        xAxisGenerator = axisTop(x);
-      } else {
-        xAxisGenerator = axisBottom(x);
-      }
-      xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
+      const yAxisGridGenerator = axisLeft(y)
+        .tickSize(-WIDTH)
+        .tickFormat("")
+        .ticks(yTicksNumber);
 
-      if (xDataType === "number") {
-        xAxisGenerator.ticks(xTicksNumber);
-      }
+      const xGridLines = linesArea
+        .append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(0," + HEIGHT + ")");
 
-      if (!showXTicks) {
-        xAxisGenerator.tickSize(0);
-      }
+      const yGridLines = linesArea.append("g").attr("class", "y gridlines");
 
-      xAxisArea
-        .transition()
-        .duration(200)
-        .call(xAxisGenerator)
-        .selectAll("text")
-        .attr("text-anchor", xAxisLabelsProps.textAnchor)
-        .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
-        .attr("y", xAxisLabelsProps.y)
-        .attr("x", xAxisLabelsProps.x)
-        .attr("dy", null)
-        .attr("transform", `rotate(${xLabelAngle})`);
+      const update = (values) => {
+        const categorizedData = group(values, (d) => d[groupKeyName]);
 
-      let yAxisGenerator;
-
-      if (yAxisPlacement === "right") {
-        yAxisGenerator = axisRight(y).tickSizeOuter(0);
-      } else {
-        yAxisGenerator = axisLeft(y).tickSizeOuter(0);
-      }
-
-      yAxisGenerator
-        .ticks(yTicksNumber)
-        .tickFormat((d) => format(ylabelFormat)(d))
-        .tickSizeInner(yTickSize);
-
-      if (!showYTicks) {
-        yAxisGenerator.tickSize(0);
-      }
-
-      yAxisArea
-        .transition()
-        .duration(200)
-        .call(yAxisGenerator)
-        .selectAll("text")
-        .attr("text-anchor", yAxisLabelsProps.textAnchor)
-        .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
-        .attr("dy", null)
-        .attr("x", yAxisLabelsProps.x)
-        .attr("y", yAxisLabelsProps.y)
-        .attr("transform", `rotate(${yLabelAngle})`);
-
-      const g = dataGroup.selectAll("path").data(categorizedData, (d) => d[0]);
-
-      g.exit().remove();
-
-      // update
-      g.transition()
-        .duration(200)
-        .attr("d", function (d) {
-          return line()
-            .x(function (d) {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .y(function (d) {
-              return y(+d[yKeyName]);
-            })(d[1]);
-        });
-
-      // enter
-      g.enter()
-        .append("path")
-        .attr("id", (d) => "data-" + groups.findIndex((item) => item === d[0]))
-        .attr("class", "data-lines")
-        .attr("fill", "none")
-        .attr("stroke", function (d) {
-          return color(d[0]);
-        })
-        .attr("stroke-width", 1.5)
-        .attr("d", function (d) {
-          return line()
-            .x(function (d) {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .y(function (d) {
-              return y(+d[yKeyName]);
-            })(d[1]);
-        });
-
-      if (showErrorBars) {
-        //Draw error bars
-        const barGroups = errorBarsGroup
-          .selectAll("g")
-          .data(
-            values,
-            (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
-          );
-
-        const barGroupsEnter = barGroups
-          .enter()
-          .append("g")
-          .attr("class", "errorbar-group");
-
-        barGroupsEnter.append("line").attr("class", "errorbar vl");
-        barGroupsEnter.append("line").attr("class", "errorbar bl");
-        barGroupsEnter.append("line").attr("class", "errorbar tl");
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.vl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.bl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.tl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroups.exit().remove();
-
-        barGroupsEnter
-          .select("line.errorbar-vl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroupsEnter
-          .select("line.errorbar-bl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-        barGroupsEnter
-          .select("line.errorbar-tl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-      }
-
-      // Show/hide grid lines
-      if (showXGrid) {
-        xGridLines.transition().duration(200).call(xAxisGridGenerator);
-      }
-
-      if (showYGrid) {
-        yGridLines.transition().duration(200).call(yAxisGridGenerator);
-      }
-
-      // update legend
-      if (legendShow !== "none") {
-        this.legend.setup(
-          groups.map((item, index) => ({
-            id: "" + index,
-            label: item,
-            color: color(item),
-            node: this.root.querySelector(`svg #data-${index}`) || null,
-          })),
-          this.root.querySelector("main"),
-          {
-            fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-            position: legendShow.split("-"),
-            fadeProp: "stroke-opacity",
-          }
+        dataMax = max(
+          values,
+          (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
         );
+        dataMin = min(
+          values,
+          (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+        );
+
+        if (xDataType === "number") {
+          const xAxisData = values.map((d) => +d[xKeyName]);
+          const xDataMinMax = [min(xAxisData), max(xAxisData)];
+          x.domain(xDataMinMax);
+        } else {
+          const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+          x.domain(xAxisLabels);
+        }
+
+        y.domain([dataMin, dataMax]);
+
+        let xAxisGenerator;
+
+        if (xAxisPlacement === "top") {
+          xAxisGenerator = axisTop(x);
+        } else {
+          xAxisGenerator = axisBottom(x);
+        }
+        xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
+
+        if (xDataType === "number") {
+          xAxisGenerator.ticks(xTicksNumber);
+        }
+
+        xAxisArea
+          .transition()
+          .duration(200)
+          .call(xAxisGenerator)
+          .selectAll("text")
+          .attr("text-anchor", xAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
+          .attr("y", xAxisLabelsProps.y)
+          .attr("x", xAxisLabelsProps.x)
+          .attr("dy", null)
+          .attr("transform", `rotate(${xLabelAngle})`)
+          .on("end", function (_, i, nodes) {
+            if (i === nodes.length - 1) {
+              check(xAxisArea.node().getBoundingClientRect());
+            }
+          });
+
+        function check(axisBBox) {
+          const svgBBox = svg.node().getBoundingClientRect();
+
+          const deltaLeftWidth = svgBBox.left - axisBBox.left;
+          const deltaRightWidth = axisBBox.right - svgBBox.right;
+          const deltaBottomHeight = axisBBox.bottom - svgBBox.bottom;
+          const deltaTopHeight = svgBBox.top - axisBBox.top;
+
+          if (
+            deltaLeftWidth > 0 ||
+            deltaRightWidth > 0 ||
+            deltaBottomHeight > 0 ||
+            deltaTopHeight > 0
+          ) {
+            MARGIN.LEFT =
+              deltaLeftWidth > 0
+                ? MARGIN.LEFT + deltaLeftWidth + 5
+                : MARGIN.LEFT;
+            MARGIN.RIGHT =
+              deltaRightWidth > 0
+                ? MARGIN.RIGHT + deltaRightWidth + 5
+                : MARGIN.RIGHT;
+            MARGIN.BOTTOM =
+              deltaBottomHeight > 0
+                ? MARGIN.BOTTOM + deltaBottomHeight + 5
+                : MARGIN.BOTTOM;
+            MARGIN.TOP =
+              deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
+
+            redrawSVG(MARGIN);
+          }
+        }
+
+        let yAxisGenerator;
+
+        if (yAxisPlacement === "right") {
+          yAxisGenerator = axisRight(y).tickSizeOuter(0);
+        } else {
+          yAxisGenerator = axisLeft(y).tickSizeOuter(0);
+        }
+
+        yAxisGenerator
+          .ticks(yTicksNumber)
+          .tickFormat((d) => format(ylabelFormat)(d))
+          .tickSizeInner(yTickSize);
+
+        yAxisArea
+          .transition()
+          .duration(200)
+          .call(yAxisGenerator)
+          .selectAll("text")
+          .attr("text-anchor", yAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+          .attr("dy", null)
+          .attr("x", yAxisLabelsProps.x)
+          .attr("y", yAxisLabelsProps.y)
+          .attr("transform", `rotate(${yLabelAngle})`);
+
+        const g = dataGroup
+          .selectAll("path")
+          .data(categorizedData, (d) => d[0]);
+
+        g.exit().remove();
+
+        // update
+        g.transition()
+          .duration(200)
+          .attr("d", function (d) {
+            return line()
+              .x(function (d) {
+                if (xDataType === "number") {
+                  return x(d[xKeyName]);
+                } else {
+                  return x(d[xKeyName]) + x.bandwidth() / 2;
+                }
+              })
+              .y(function (d) {
+                return y(+d[yKeyName]);
+              })(d[1]);
+          });
+
+        // enter
+        g.enter()
+          .append("path")
+          .attr(
+            "id",
+            (d) => "data-" + groups.findIndex((item) => item === d[0])
+          )
+          .attr("class", "data-lines")
+          .attr("fill", "none")
+          .attr("stroke", function (d) {
+            return color(d[0]);
+          })
+          .attr("stroke-width", 1.5)
+          .attr("d", function (d) {
+            return line()
+              .x(function (d) {
+                if (xDataType === "number") {
+                  return x(d[xKeyName]);
+                } else {
+                  return x(d[xKeyName]) + x.bandwidth() / 2;
+                }
+              })
+              .y(function (d) {
+                return y(+d[yKeyName]);
+              })(d[1]);
+          });
+
+        if (showErrorBars) {
+          //Draw error bars
+          const barGroups = errorBarsGroup
+            .selectAll("g")
+            .data(
+              values,
+              (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
+            );
+
+          const barGroupsEnter = barGroups
+            .enter()
+            .filter((d) => {
+              return (
+                d[errorKeyName] !== undefined &&
+                !isNaN(parseFloat(d[errorKeyName]))
+              );
+            })
+            .append("g")
+            .attr("class", "errorbar-group");
+
+          barGroupsEnter.append("line").attr("class", "errorbar vl");
+          barGroupsEnter.append("line").attr("class", "errorbar bl");
+          barGroupsEnter.append("line").attr("class", "errorbar tl");
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.vl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.bl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.tl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroups.exit().remove();
+
+          barGroupsEnter
+            .select("line.errorbar-vl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroupsEnter
+            .select("line.errorbar-bl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
+
+          barGroupsEnter
+            .select("line.errorbar-tl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+        }
+
+        // Show/hide grid lines
+        if (showXGrid) {
+          xGridLines.transition().duration(200).call(xAxisGridGenerator);
+        }
+
+        if (showYGrid) {
+          yGridLines.transition().duration(200).call(yAxisGridGenerator);
+        }
+
+        // update legend
+        if (legendShow !== "none") {
+          this.legend.setup(
+            groups.map((item, index) => ({
+              id: "" + index,
+              label: item,
+              color: color(item),
+              node: this.root.querySelector(`svg #data-${index}`) || null,
+            })),
+            this.root.querySelector("main"),
+            {
+              fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+              position: legendShow.split("-"),
+              fadeProp: "stroke-opacity",
+            }
+          );
+        }
+      };
+
+      update(values);
+
+      if (legendShow !== "none") {
+        const legend = this.root
+          .querySelector("togostanza--legend")
+          .shadowRoot.querySelector(".legend > table > tbody");
+
+        // Set toggle behaviour
+        legend.addEventListener("click", (e) => {
+          const parentNode = e.target.parentNode;
+          if (parentNode.nodeName === "TR") {
+            const id = parentNode.dataset.id;
+            parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
+            toggleState.set("" + id, !toggleState.get("" + id));
+
+            // filter out data wich was clicked
+            const newData = values.filter(
+              (item) =>
+                !toggleState.get("" + groups.indexOf(item[groupKeyName]))
+            );
+
+            update(newData);
+          }
+        });
       }
     };
-
-    update(values);
-
-    if (legendShow !== "none") {
-      const legend = this.root
-        .querySelector("togostanza--legend")
-        .shadowRoot.querySelector(".legend > table > tbody");
-
-      // Set toggle behaviour
-      legend.addEventListener("click", (e) => {
-        const parentNode = e.target.parentNode;
-        if (parentNode.nodeName === "TR") {
-          const id = parentNode.dataset.id;
-          parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-          toggleState.set("" + id, !toggleState.get("" + id));
-
-          // filter out data wich was clicked
-          const newData = values.filter(
-            (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
-          );
-
-          update(newData);
-        }
-      });
-    }
+    redrawSVG();
   }
 }
 
@@ -1204,17 +992,6 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "error-bars",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
-		"stanza:example": true,
-		"stanza:description": "Show error bars",
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "error-key",
 		"stanza:type": "string",
 		"stanza:example": "error",
@@ -1290,26 +1067,6 @@ var metadata = {
 		],
 		"stanza:example": true,
 		"stanza:description": "Show Y grid"
-	},
-	{
-		"stanza:key": "xtick",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
-		"stanza:example": true,
-		"stanza:description": "Show X tick"
-	},
-	{
-		"stanza:key": "ytick",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
-		"stanza:example": true,
-		"stanza:description": "Show Y tick"
 	},
 	{
 		"stanza:key": "xtick-size",
@@ -1442,18 +1199,6 @@ var metadata = {
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--togostanza-line-width",
-		"stanza:type": "number",
-		"stanza:default": 1,
-		"stanza:description": "Chart lines width"
-	},
-	{
-		"stanza:key": "--togostanza-line-opacity",
-		"stanza:type": "number",
-		"stanza:default": 1,
-		"stanza:description": "Chart lines opacity"
-	},
-	{
 		"stanza:key": "--togostanza-axis-color",
 		"stanza:type": "color",
 		"stanza:default": "#333333",
@@ -1464,6 +1209,18 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": 1,
 		"stanza:description": "Axis width"
+	},
+	{
+		"stanza:key": "--togostanza-line-width",
+		"stanza:type": "number",
+		"stanza:default": 1,
+		"stanza:description": "Chart lines width"
+	},
+	{
+		"stanza:key": "--togostanza-line-opacity",
+		"stanza:type": "number",
+		"stanza:default": 1,
+		"stanza:description": "Chart lines opacity"
 	},
 	{
 		"stanza:key": "--togostanza-grid-color",
@@ -1494,6 +1251,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#4E5059",
 		"stanza:description": "Tick color"
+	},
+	{
+		"stanza:key": "--togostanza-tick-length",
+		"stanza:type": "number",
+		"stanza:default": 1.5,
+		"stanza:description": "Tick length (in pixel)"
 	},
 	{
 		"stanza:key": "--togostanza-tick-width",
@@ -1548,6 +1311,18 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": 10,
 		"stanza:description": "Label font size"
+	},
+	{
+		"stanza:key": "--togostanza-border-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Border color"
+	},
+	{
+		"stanza:key": "--togostanza-border-width",
+		"stanza:type": "number",
+		"stanza:default": 0,
+		"stanza:description": "Border width"
 	},
 	{
 		"stanza:key": "--togostanza-background-color",

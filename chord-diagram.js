@@ -3,8 +3,9 @@ import { S as Stanza } from './stanza-b8cf3904.js';
 import { s as select } from './index-2dcff241.js';
 import { s as sum } from './sum-44e7480e.js';
 import { t as tsv } from './dsv-8e18f33d.js';
-import { p as path } from './constant-131b8143.js';
-import { a as arc } from './arc-ece65a73.js';
+import { p as path } from './path-a78af922.js';
+import { a as arc } from './arc-b9bfd524.js';
+import './constant-c49047a5.js';
 
 function descending(a, b) {
   return a == null || b == null ? NaN

@@ -7,10 +7,11 @@ import { s as stratify, h as hierarchy } from './stratify-8f602319.js';
 import { f as format, o as ordinal, a as interpolate } from './ordinal-0780ae77.js';
 import { t as treemapDice, r as roundNode } from './dice-7bdb0652.js';
 import { m as max } from './max-2c042256.js';
-import { a as arc } from './arc-ece65a73.js';
+import { a as arc } from './arc-b9bfd524.js';
 import { s as sum } from './sum-44e7480e.js';
-import { p as path$1 } from './constant-131b8143.js';
+import { p as path$1 } from './path-a78af922.js';
 import './dsv-8e18f33d.js';
+import './constant-c49047a5.js';
 
 function partition() {
   var dx = 1,

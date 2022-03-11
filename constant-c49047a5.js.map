@@ -1,0 +1,1 @@
+{"version":3,"file":"constant-c49047a5.js","sources":["../../../home/runner/work/metastanza/metastanza/node_modules/d3-shape/src/constant.js"],"sourcesContent":["export default function(x) {\n  return function constant() {\n    return x;\n  };\n}\n"],"names":[],"mappings":"AAAe,iBAAQ,CAAC,CAAC,EAAE;AAC3B,EAAE,OAAO,SAAS,QAAQ,GAAG;AAC7B,IAAI,OAAO,CAAC,CAAC;AACb,GAAG,CAAC;AACJ;;;;"}

@@ -127,11 +127,5 @@ Path.prototype = path.prototype = {
   }
 };
 
-function constant(x) {
-  return function constant() {
-    return x;
-  };
-}
-
-export { constant as c, path as p };
-//# sourceMappingURL=constant-131b8143.js.map
+export { path as p };
+//# sourceMappingURL=path-a78af922.js.map
