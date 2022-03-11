@@ -10,7 +10,6 @@ import {
   downloadJSONMenuItem,
   downloadCSVMenuItem,
   downloadTSVMenuItem,
-  copyHTMLSnippetToClipboardMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
 
@@ -22,7 +21,6 @@ export default class Barchart extends Stanza {
       downloadJSONMenuItem(this, "barchart", this._data),
       downloadCSVMenuItem(this, "barchart", this._data),
       downloadTSVMenuItem(this, "barchart", this._data),
-      copyHTMLSnippetToClipboardMenuItem(this),
     ];
   }
 
@@ -38,8 +36,6 @@ export default class Barchart extends Stanza {
     const yKeyName = this.params["value"];
     const xAxisTitle = this.params["category-title"];
     const yAxisTitle = this.params["value-title"];
-    const showXTicks = this.params["xtick"] === "true" ? true : false;
-    const showYTicks = this.params["ytick"] === "true" ? true : false;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const showLegend = this.params["legend"] || "top-right";
     const groupKeyName = this.params["group-by"];
@@ -73,8 +69,12 @@ export default class Barchart extends Stanza {
     const ylabelFormat = this.params["ylabel-format"] || null;
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 25;
-    const xTickSize = this.params["xtick-size"] || 5;
-    const yTickSize = this.params["ytick-size"] || 5;
+    const xTickSize = parseInt(this.params["xtick-size"])
+      ? parseInt(this.params["xtick-size"])
+      : 0;
+    const yTickSize = parseInt(this.params["ytick-size"])
+      ? parseInt(this.params["ytick-size"])
+      : 0;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
     const barPaddings =
@@ -141,6 +141,23 @@ export default class Barchart extends Stanza {
       }
     });
 
+    // Check data
+    let error;
+    if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
+      error = new Error(
+        "--togostanza-barchart ERROR: No y-axis key found in data"
+      );
+      console.error(error);
+      return error;
+    }
+    if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
+      error = new Error(
+        "--togostanza-barchart ERROR: No x-axis key found in data"
+      );
+      console.error(error);
+      return error;
+    }
+
     //=========
 
     this._data = values;
@@ -150,12 +167,11 @@ export default class Barchart extends Stanza {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
 
-    let dataMax;
-    dataMax = d3.max(
+    const dataMax = d3.max(
       values,
       (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
     );
- 
+
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
@@ -292,13 +308,9 @@ export default class Barchart extends Stanza {
 
       const barsGroups = barsArea.append("g").attr("class", "bars-group");
 
-      if (!showXTicks) {
-        xAxisGenerator.tickSize(0);
-      }
+      xAxisGenerator.tickSize(xTickSize);
 
-      if (!showYTicks) {
-        yAxisGenerator.tickSize(0);
-      }
+      yAxisGenerator.tickSize(yTickSize);
 
       const update = (values) => {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
@@ -486,13 +498,10 @@ export default class Barchart extends Stanza {
         function updateGroupedBars(values) {
           const dataset = d3.group(values, (d) => d[xKeyName]);
 
-          let yMinMax;
-          
-            yMinMax = d3.extent(
-              values,
-              (d) => +d[yKeyName] +  (parseFloat(d[errorKeyName]) || 0)/2
-            );
-         
+          const yMinMax = d3.extent(
+            values,
+            (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0) / 2
+          );
 
           y.domain([0, yMinMax[1] * 1.05]);
           if (showYAxis) {
