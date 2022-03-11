@@ -167,7 +167,7 @@ export default class Barchart extends Stanza {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
 
-    const dataMax = d3.max(
+    let dataMax = d3.max(
       values,
       (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
     );
