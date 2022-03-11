@@ -90,7 +90,7 @@ export default class Barchart extends Stanza {
       this.params["bar-tooltips"] === "true" ? true : false;
 
     const showXAxis = this.params["show-x-axis"] === "false" ? false : true;
-    const showYAxis = this.params["show-x-axis"] === "false" ? false : true;
+    const showYAxis = this.params["show-y-axis"] === "false" ? false : true;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
