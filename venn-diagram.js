@@ -2111,6 +2111,7 @@ class VennStanza extends Stanza {
     });
     this.legend.setup(items, this.root.querySelector("main"), {
       fadeoutNodes: selectedDiagram.querySelectorAll(":scope > g"),
+      showLeaders: true,
     });
   }
 
