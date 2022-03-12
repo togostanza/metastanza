@@ -90,7 +90,7 @@ export default class Barchart extends Stanza {
       this.params["bar-tooltips"] === "true" ? true : false;
 
     const showXAxis = this.params["show-x-axis"] === "false" ? false : true;
-    const showYAxis = this.params["show-x-axis"] === "false" ? false : true;
+    const showYAxis = this.params["show-y-axis"] === "false" ? false : true;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -167,7 +167,7 @@ export default class Barchart extends Stanza {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
 
-    const dataMax = d3.max(
+    let dataMax = d3.max(
       values,
       (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
     );
