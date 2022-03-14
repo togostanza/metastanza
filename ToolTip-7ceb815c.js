@@ -54,8 +54,12 @@ class ToolTip extends s {
     `;
   }
 
+  // Get tooltip element only after it was mounted
+  firstUpdated() {
+    this.tooltip = this.shadowRoot.querySelector(".tooltip");
+  }
+
   setup(nodes) {
-    const tooltip = this.shadowRoot.querySelector(".tooltip");
     nodes.forEach((node) => {
       node.addEventListener("mouseover", () => {
         const originRect = this.shadowRoot
@@ -63,16 +67,17 @@ class ToolTip extends s {
           .getBoundingClientRect();
         const rect = node.getBoundingClientRect();
         if (node.dataset.tooltipHtml === "true") {
-          tooltip.innerHTML = node.dataset.tooltip;
+          this.tooltip.innerHTML = node.dataset.tooltip;
         } else {
-          tooltip.textContent = node.dataset.tooltip;
+          this.tooltip.textContent = node.dataset.tooltip;
         }
-        tooltip.style.left = rect.x + rect.width * 0.5 - originRect.x + "px";
-        tooltip.style.top = rect.y - originRect.y - 5 + "px";
-        tooltip.classList.add("-show");
+        this.tooltip.style.left =
+          rect.x + rect.width * 0.5 - originRect.x + "px";
+        this.tooltip.style.top = rect.y - originRect.y - 5 + "px";
+        this.tooltip.classList.add("-show");
       });
       node.addEventListener("mouseleave", () => {
-        tooltip.classList.remove("-show");
+        this.tooltip.classList.remove("-show");
       });
     });
   }
@@ -81,4 +86,4 @@ class ToolTip extends s {
 customElements.define("togostanza--tooltip", ToolTip);
 
 export { ToolTip as T };
-//# sourceMappingURL=ToolTip-c525cceb.js.map
+//# sourceMappingURL=ToolTip-7ceb815c.js.map
