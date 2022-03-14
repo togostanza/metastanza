@@ -32,8 +32,6 @@ export default class Linechart extends Stanza {
     const yKeyName = this.params["y-axis-key"];
     const xAxisTitle = this.params["x-axis-title"] || "";
     const yAxisTitle = this.params["y-axis-title"] || "";
-    const showXTicks = this.params["xtick"] === "true" ? true : false;
-    const showYTicks = this.params["ytick"] === "true" ? true : false;
     const xTicksNumber = this.params["xticks-number"] || 5;
     const yTicksNumber = this.params["yticks-number"] || 3;
     const groupKeyName = this.params["group-by"];
@@ -49,8 +47,10 @@ export default class Linechart extends Stanza {
         : parseInt(this.params["ylabel-angle"]) || 0;
 
     const xDataType = this.params["x-axis-data-type"] || "string";
-    const errorKeyName = this.params["error-key"] || "error";
-    const showErrorBars = this.params["error-bars"] === "true" ? true : false;
+    const errorKeyName = this.params["error-key"];
+    const showErrorBars =
+      this.params["error-key"] !== "" || this.params["error-key"] !== undefined;
+
     const errorBarWidth =
       typeof this.params["error-bar-width"] !== "undefined"
         ? this.params["error-bar-width"]
@@ -71,9 +71,13 @@ export default class Linechart extends Stanza {
 
     const xTitlePadding = this.params["xtitle-padding"] || 15;
     const yTitlePadding = this.params["ytitle-padding"] || 15;
+    const xTickSize = parseInt(this.params["xtick-size"])
+      ? parseInt(this.params["xtick-size"])
+      : 0;
+    const yTickSize = parseInt(this.params["ytick-size"])
+      ? parseInt(this.params["ytick-size"])
+      : 0;
 
-    const xTickSize = this.params["xtick-size"] || 5;
-    const yTickSize = this.params["ytick-size"] || 5;
     const axisTitleFontSize =
       parseInt(css("--togostanza-title-font-size")) || 10;
 
@@ -108,15 +112,42 @@ export default class Linechart extends Stanza {
       this.params["data-type"]
     );
 
-    // TODO change data to include errors. For now, artificially add 20% error
+    function getRandomTrueFalse() {
+      return Math.random() >= 0.5;
+    }
+
+    // TODO change data to include errors. For now, artificially add 20% error  and randomly add or not add it.
     values.forEach((item) => {
-      item.error = item.count * 0.2;
+      if (getRandomTrueFalse()) {
+        item.error = item[yKeyName] * 0.2;
+      }
     });
 
     //Filter out all non-numeric x-axis values from data
     if (xDataType === "number") {
       values = values.filter((item) => !isNaN(item[xKeyName]));
     }
+
+    // Check data
+    {
+      let error;
+      if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No y-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+      if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
+        error = new Error(
+          "--togostanza-barchart ERROR: No x-axis key found in data"
+        );
+        console.error(error);
+        return error;
+      }
+    }
+
+    //=========
 
     this._data = values;
 
@@ -136,28 +167,6 @@ export default class Linechart extends Stanza {
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
-    const MARGIN = {
-      TOP:
-        xAxisPlacement === "top"
-          ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
-          : 10,
-      BOTTOM:
-        xAxisPlacement === "top"
-          ? 10
-          : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
-      LEFT:
-        yAxisPlacement === "left"
-          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-          : 10,
-      RIGHT:
-        yAxisPlacement === "right"
-          ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-          : 10,
-    };
-
-    const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
-    const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
     const el = this.root.querySelector("#linechart-d3");
 
     const svg = d3
@@ -166,448 +175,529 @@ export default class Linechart extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
-    const graphArea = svg.append("g").attr("class", "chart");
-
-    const linesArea = graphArea
-      .append("g")
-      .attr("class", "lines")
-      .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
-
-    const dataGroup = linesArea.append("g").attr("class", "data-lines");
-
-    const xAxisArea = graphArea.append("g").attr("class", "x axis");
-
-    const yAxisArea = graphArea.append("g").attr("class", "y axis");
-
-    const yTitleArea = graphArea.append("g").attr("class", "y axis title");
-
-    const xTitleArea = graphArea.append("g").attr("class", "x axis title");
-
-    if (xAxisPlacement === "top") {
-      xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-
-      xTitleArea
-        .attr(
-          "transform",
-          `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
-        )
-        .attr("dominant-baseline", "bottom");
-    } else {
-      xAxisArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
-      );
-      xTitleArea
-        .attr(
-          "transform",
-          `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
-        )
-        .attr("dominant-baseline", "hanging");
-    }
-
-    if (yAxisPlacement === "right") {
-      yAxisArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
-      );
-      yTitleArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
-      );
-    } else {
-      yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-      yTitleArea.attr(
-        "transform",
-        `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
-      );
-    }
-
-    yTitleArea
-      .append("text")
-      .text(yAxisTitle)
-      .attr("text-anchor", "middle")
-      .attr("transform", `rotate(-90)`)
-      .attr("x", -HEIGHT / 2 - MARGIN.TOP);
-
-    xTitleArea
-      .append("text")
-      .text(xAxisTitle)
-      .attr("text-anchor", "middle")
-      .attr("x", MARGIN.LEFT + WIDTH / 2);
-
-    const errorBarsGroup = linesArea
-      .append("g")
-      .attr("class", "error-bars-group");
-
-    const xAxisLabelsProps = getXTextLabelProps(
-      xLabelAngle,
-      xLabelPadding + xTickSize,
-      xAxisPlacement
-    );
-    const yAxisLabelsProps = getYTextLabelProps(
-      yLabelAngle,
-      yLabelPadding + yTickSize,
-      yAxisPlacement
-    );
-
-    // Axes preparation
-    let dataMax, dataMin;
-    if (showErrorBars) {
-      dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-      dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-    } else {
-      dataMax = d3.max(values, (d) => +d[yKeyName]);
-      dataMin = d3.min(values, (d) => +d[yKeyName]);
-    }
-
-    let x;
-    if (xDataType === "number") {
-      const xAxisData = values.map((d) => +d[xKeyName]);
-      const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
-      x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
-    } else {
-      const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-      x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
-    }
-
-    const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
-
-    const xAxisGridGenerator = d3
-      .axisBottom(x)
-      .tickSize(-HEIGHT)
-      .tickFormat("")
-      .ticks(xTicksNumber);
-
-    const yAxisGridGenerator = d3
-      .axisLeft(y)
-      .tickSize(-WIDTH)
-      .tickFormat("")
-      .ticks(yTicksNumber);
-
-    const xGridLines = linesArea
-      .append("g")
-      .attr("class", "x gridlines")
-      .attr("transform", "translate(0," + HEIGHT + ")");
-
-    const yGridLines = linesArea.append("g").attr("class", "y gridlines");
-
-    const update = (values) => {
-      const categorizedData = d3.group(values, (d) => d[groupKeyName]);
-
-      if (showErrorBars) {
-        dataMax = d3.max(values, (d) => +d[yKeyName] + d[errorKeyName]);
-        dataMin = d3.min(values, (d) => +d[yKeyName] - d[errorKeyName]);
-      } else {
-        dataMax = d3.max(values, (d) => +d[yKeyName]);
-        dataMin = d3.min(values, (d) => +d[yKeyName]);
+    const redrawSVG = (
+      MARGIN = {
+        TOP:
+          xAxisPlacement === "top"
+            ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
+            : 10,
+        BOTTOM:
+          xAxisPlacement === "top"
+            ? 10
+            : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
+        LEFT:
+          yAxisPlacement === "left"
+            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+            : 10,
+        RIGHT:
+          yAxisPlacement === "right"
+            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
+            : 10,
+      }
+    ) => {
+      const existingChart = svg.select("g.chart");
+      if (!existingChart.empty()) {
+        existingChart
+          .transition()
+          .duration(200)
+          .attr("opacity", 0)
+          .on("end", () => {
+            existingChart.remove();
+          });
       }
 
+      const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+      const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
+
+      const graphArea = svg.append("g").attr("class", "chart");
+
+      const linesArea = graphArea
+        .append("g")
+        .attr("class", "lines")
+        .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
+
+      const dataGroup = linesArea.append("g").attr("class", "data-lines");
+
+      const xAxisArea = graphArea.append("g").attr("class", "x axis");
+
+      const yAxisArea = graphArea.append("g").attr("class", "y axis");
+
+      const yTitleArea = graphArea.append("g").attr("class", "y axis title");
+
+      const xTitleArea = graphArea.append("g").attr("class", "x axis title");
+
+      if (xAxisPlacement === "top") {
+        xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+
+        xTitleArea
+          .attr(
+            "transform",
+            `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
+          )
+          .attr("dominant-baseline", "bottom");
+      } else {
+        xAxisArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
+        );
+        xTitleArea
+          .attr(
+            "transform",
+            `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
+          )
+          .attr("dominant-baseline", "hanging");
+      }
+
+      if (yAxisPlacement === "right") {
+        yAxisArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
+        );
+        yTitleArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
+        );
+      } else {
+        yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
+        yTitleArea.attr(
+          "transform",
+          `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
+        );
+      }
+
+      yTitleArea
+        .append("text")
+        .text(yAxisTitle)
+        .attr("text-anchor", "middle")
+        .attr("transform", `rotate(-90)`)
+        .attr("x", -HEIGHT / 2 - MARGIN.TOP);
+
+      xTitleArea
+        .append("text")
+        .text(xAxisTitle)
+        .attr("text-anchor", "middle")
+        .attr("x", MARGIN.LEFT + WIDTH / 2);
+
+      const errorBarsGroup = linesArea
+        .append("g")
+        .attr("class", "error-bars-group");
+
+      const xAxisLabelsProps = getXTextLabelProps(
+        xLabelAngle,
+        xLabelPadding + xTickSize,
+        xAxisPlacement
+      );
+      const yAxisLabelsProps = getYTextLabelProps(
+        yLabelAngle,
+        yLabelPadding + yTickSize,
+        yAxisPlacement
+      );
+
+      // Axes preparation
+      let dataMax, dataMin;
+
+      dataMax = d3.max(
+        values,
+        (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
+      );
+      dataMin = d3.min(
+        values,
+        (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+      );
+
+      let x;
       if (xDataType === "number") {
         const xAxisData = values.map((d) => +d[xKeyName]);
         const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
-        x.domain(xDataMinMax);
+        x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
       } else {
         const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-        x.domain(xAxisLabels);
+        x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
       }
 
-      y.domain([dataMin, dataMax]);
+      const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
 
-      let xAxisGenerator;
+      const xAxisGridGenerator = d3
+        .axisBottom(x)
+        .tickSize(-HEIGHT)
+        .tickFormat("")
+        .ticks(xTicksNumber);
 
-      if (xAxisPlacement === "top") {
-        xAxisGenerator = d3.axisTop(x);
-      } else {
-        xAxisGenerator = d3.axisBottom(x);
-      }
-      xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
+      const yAxisGridGenerator = d3
+        .axisLeft(y)
+        .tickSize(-WIDTH)
+        .tickFormat("")
+        .ticks(yTicksNumber);
 
-      if (xDataType === "number") {
-        xAxisGenerator.ticks(xTicksNumber);
-      }
+      const xGridLines = linesArea
+        .append("g")
+        .attr("class", "x gridlines")
+        .attr("transform", "translate(0," + HEIGHT + ")");
 
-      if (!showXTicks) {
-        xAxisGenerator.tickSize(0);
-      }
+      const yGridLines = linesArea.append("g").attr("class", "y gridlines");
 
-      xAxisArea
-        .transition()
-        .duration(200)
-        .call(xAxisGenerator)
-        .selectAll("text")
-        .attr("text-anchor", xAxisLabelsProps.textAnchor)
-        .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
-        .attr("y", xAxisLabelsProps.y)
-        .attr("x", xAxisLabelsProps.x)
-        .attr("dy", null)
-        .attr("transform", `rotate(${xLabelAngle})`);
+      const update = (values) => {
+        const categorizedData = d3.group(values, (d) => d[groupKeyName]);
 
-      let yAxisGenerator;
-
-      if (yAxisPlacement === "right") {
-        yAxisGenerator = d3.axisRight(y).tickSizeOuter(0);
-      } else {
-        yAxisGenerator = d3.axisLeft(y).tickSizeOuter(0);
-      }
-
-      yAxisGenerator
-        .ticks(yTicksNumber)
-        .tickFormat((d) => d3.format(ylabelFormat)(d))
-        .tickSizeInner(yTickSize);
-
-      if (!showYTicks) {
-        yAxisGenerator.tickSize(0);
-      }
-
-      yAxisArea
-        .transition()
-        .duration(200)
-        .call(yAxisGenerator)
-        .selectAll("text")
-        .attr("text-anchor", yAxisLabelsProps.textAnchor)
-        .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
-        .attr("dy", null)
-        .attr("x", yAxisLabelsProps.x)
-        .attr("y", yAxisLabelsProps.y)
-        .attr("transform", `rotate(${yLabelAngle})`);
-
-      const g = dataGroup.selectAll("path").data(categorizedData, (d) => d[0]);
-
-      g.exit().remove();
-
-      // update
-      g.transition()
-        .duration(200)
-        .attr("d", function (d) {
-          return d3
-            .line()
-            .x(function (d) {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .y(function (d) {
-              return y(+d[yKeyName]);
-            })(d[1]);
-        });
-
-      // enter
-      g.enter()
-        .append("path")
-        .attr("id", (d) => "data-" + groups.findIndex((item) => item === d[0]))
-        .attr("class", "data-lines")
-        .attr("fill", "none")
-        .attr("stroke", function (d) {
-          return color(d[0]);
-        })
-        .attr("stroke-width", 1.5)
-        .attr("d", function (d) {
-          return d3
-            .line()
-            .x(function (d) {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .y(function (d) {
-              return y(+d[yKeyName]);
-            })(d[1]);
-        });
-
-      if (showErrorBars) {
-        //Draw error bars
-        const barGroups = errorBarsGroup
-          .selectAll("g")
-          .data(
-            values,
-            (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
-          );
-
-        const barGroupsEnter = barGroups
-          .enter()
-          .append("g")
-          .attr("class", "errorbar-group");
-
-        barGroupsEnter.append("line").attr("class", "errorbar vl");
-        barGroupsEnter.append("line").attr("class", "errorbar bl");
-        barGroupsEnter.append("line").attr("class", "errorbar tl");
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.vl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.bl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-        barGroups
-          .merge(barGroupsEnter)
-          .select("line.errorbar.tl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroups.exit().remove();
-
-        barGroupsEnter
-          .select("line.errorbar-vl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]);
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2;
-            }
-          })
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-        barGroupsEnter
-          .select("line.errorbar-bl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-        barGroupsEnter
-          .select("line.errorbar-tl")
-          .attr("x1", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) - errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-            }
-          })
-          .attr("x2", (d) => {
-            if (xDataType === "number") {
-              return x(d[xKeyName]) + errorBarWidth / 2;
-            } else {
-              return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-            }
-          })
-          .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-          .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-      }
-
-      // Show/hide grid lines
-      if (showXGrid) {
-        xGridLines.transition().duration(200).call(xAxisGridGenerator);
-      }
-
-      if (showYGrid) {
-        yGridLines.transition().duration(200).call(yAxisGridGenerator);
-      }
-
-      // update legend
-      if (legendShow !== "none") {
-        this.legend.setup(
-          groups.map((item, index) => ({
-            id: "" + index,
-            label: item,
-            color: color(item),
-            node: this.root.querySelector(`svg #data-${index}`) || null,
-          })),
-          this.root.querySelector("main"),
-          {
-            fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-            position: legendShow.split("-"),
-            fadeProp: "stroke-opacity",
-          }
+        dataMax = d3.max(
+          values,
+          (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
         );
+        dataMin = d3.min(
+          values,
+          (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
+        );
+
+        if (xDataType === "number") {
+          const xAxisData = values.map((d) => +d[xKeyName]);
+          const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
+          x.domain(xDataMinMax);
+        } else {
+          const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
+          x.domain(xAxisLabels);
+        }
+
+        y.domain([dataMin, dataMax]);
+
+        let xAxisGenerator;
+
+        if (xAxisPlacement === "top") {
+          xAxisGenerator = d3.axisTop(x);
+        } else {
+          xAxisGenerator = d3.axisBottom(x);
+        }
+        xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
+
+        if (xDataType === "number") {
+          xAxisGenerator.ticks(xTicksNumber);
+        }
+
+        xAxisArea
+          .transition()
+          .duration(200)
+          .call(xAxisGenerator)
+          .selectAll("text")
+          .attr("text-anchor", xAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
+          .attr("y", xAxisLabelsProps.y)
+          .attr("x", xAxisLabelsProps.x)
+          .attr("dy", null)
+          .attr("transform", `rotate(${xLabelAngle})`)
+          .on("end", function (_, i, nodes) {
+            if (i === nodes.length - 1) {
+              check(xAxisArea.node().getBoundingClientRect());
+            }
+          });
+
+        function check(axisBBox) {
+          const svgBBox = svg.node().getBoundingClientRect();
+
+          const deltaLeftWidth = svgBBox.left - axisBBox.left;
+          const deltaRightWidth = axisBBox.right - svgBBox.right;
+          const deltaBottomHeight = axisBBox.bottom - svgBBox.bottom;
+          const deltaTopHeight = svgBBox.top - axisBBox.top;
+
+          if (
+            deltaLeftWidth > 0 ||
+            deltaRightWidth > 0 ||
+            deltaBottomHeight > 0 ||
+            deltaTopHeight > 0
+          ) {
+            MARGIN.LEFT =
+              deltaLeftWidth > 0
+                ? MARGIN.LEFT + deltaLeftWidth + 5
+                : MARGIN.LEFT;
+            MARGIN.RIGHT =
+              deltaRightWidth > 0
+                ? MARGIN.RIGHT + deltaRightWidth + 5
+                : MARGIN.RIGHT;
+            MARGIN.BOTTOM =
+              deltaBottomHeight > 0
+                ? MARGIN.BOTTOM + deltaBottomHeight + 5
+                : MARGIN.BOTTOM;
+            MARGIN.TOP =
+              deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
+
+            redrawSVG(MARGIN);
+          }
+        }
+
+        let yAxisGenerator;
+
+        if (yAxisPlacement === "right") {
+          yAxisGenerator = d3.axisRight(y).tickSizeOuter(0);
+        } else {
+          yAxisGenerator = d3.axisLeft(y).tickSizeOuter(0);
+        }
+
+        yAxisGenerator
+          .ticks(yTicksNumber)
+          .tickFormat((d) => d3.format(ylabelFormat)(d))
+          .tickSizeInner(yTickSize);
+
+        yAxisArea
+          .transition()
+          .duration(200)
+          .call(yAxisGenerator)
+          .selectAll("text")
+          .attr("text-anchor", yAxisLabelsProps.textAnchor)
+          .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
+          .attr("dy", null)
+          .attr("x", yAxisLabelsProps.x)
+          .attr("y", yAxisLabelsProps.y)
+          .attr("transform", `rotate(${yLabelAngle})`);
+
+        const g = dataGroup
+          .selectAll("path")
+          .data(categorizedData, (d) => d[0]);
+
+        g.exit().remove();
+
+        // update
+        g.transition()
+          .duration(200)
+          .attr("d", function (d) {
+            return d3
+              .line()
+              .x(function (d) {
+                if (xDataType === "number") {
+                  return x(d[xKeyName]);
+                } else {
+                  return x(d[xKeyName]) + x.bandwidth() / 2;
+                }
+              })
+              .y(function (d) {
+                return y(+d[yKeyName]);
+              })(d[1]);
+          });
+
+        // enter
+        g.enter()
+          .append("path")
+          .attr(
+            "id",
+            (d) => "data-" + groups.findIndex((item) => item === d[0])
+          )
+          .attr("class", "data-lines")
+          .attr("fill", "none")
+          .attr("stroke", function (d) {
+            return color(d[0]);
+          })
+          .attr("stroke-width", 1.5)
+          .attr("d", function (d) {
+            return d3
+              .line()
+              .x(function (d) {
+                if (xDataType === "number") {
+                  return x(d[xKeyName]);
+                } else {
+                  return x(d[xKeyName]) + x.bandwidth() / 2;
+                }
+              })
+              .y(function (d) {
+                return y(+d[yKeyName]);
+              })(d[1]);
+          });
+
+        if (showErrorBars) {
+          //Draw error bars
+          const barGroups = errorBarsGroup
+            .selectAll("g")
+            .data(
+              values,
+              (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
+            );
+
+          const barGroupsEnter = barGroups
+            .enter()
+            .filter((d) => {
+              return (
+                d[errorKeyName] !== undefined &&
+                !isNaN(parseFloat(d[errorKeyName]))
+              );
+            })
+            .append("g")
+            .attr("class", "errorbar-group");
+
+          barGroupsEnter.append("line").attr("class", "errorbar vl");
+          barGroupsEnter.append("line").attr("class", "errorbar bl");
+          barGroupsEnter.append("line").attr("class", "errorbar tl");
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.vl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.bl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
+
+          barGroups
+            .merge(barGroupsEnter)
+            .select("line.errorbar.tl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroups.exit().remove();
+
+          barGroupsEnter
+            .select("line.errorbar-vl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]);
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2;
+              }
+            })
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+
+          barGroupsEnter
+            .select("line.errorbar-bl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
+
+          barGroupsEnter
+            .select("line.errorbar-tl")
+            .attr("x1", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) - errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
+              }
+            })
+            .attr("x2", (d) => {
+              if (xDataType === "number") {
+                return x(d[xKeyName]) + errorBarWidth / 2;
+              } else {
+                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
+              }
+            })
+            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
+            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
+        }
+
+        // Show/hide grid lines
+        if (showXGrid) {
+          xGridLines.transition().duration(200).call(xAxisGridGenerator);
+        }
+
+        if (showYGrid) {
+          yGridLines.transition().duration(200).call(yAxisGridGenerator);
+        }
+
+        // update legend
+        if (legendShow !== "none") {
+          this.legend.setup(
+            groups.map((item, index) => ({
+              id: "" + index,
+              label: item,
+              color: color(item),
+              node: this.root.querySelector(`svg #data-${index}`) || null,
+            })),
+            this.root.querySelector("main"),
+            {
+              fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
+              position: legendShow.split("-"),
+              fadeProp: "stroke-opacity",
+            }
+          );
+        }
+      };
+
+      update(values);
+
+      if (legendShow !== "none") {
+        const legend = this.root
+          .querySelector("togostanza--legend")
+          .shadowRoot.querySelector(".legend > table > tbody");
+
+        // Set toggle behaviour
+        legend.addEventListener("click", (e) => {
+          const parentNode = e.target.parentNode;
+          if (parentNode.nodeName === "TR") {
+            const id = parentNode.dataset.id;
+            parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
+            toggleState.set("" + id, !toggleState.get("" + id));
+
+            // filter out data wich was clicked
+            const newData = values.filter(
+              (item) =>
+                !toggleState.get("" + groups.indexOf(item[groupKeyName]))
+            );
+
+            update(newData);
+          }
+        });
       }
     };
-
-    update(values);
-
-    if (legendShow !== "none") {
-      const legend = this.root
-        .querySelector("togostanza--legend")
-        .shadowRoot.querySelector(".legend > table > tbody");
-
-      // Set toggle behaviour
-      legend.addEventListener("click", (e) => {
-        const parentNode = e.target.parentNode;
-        if (parentNode.nodeName === "TR") {
-          const id = parentNode.dataset.id;
-          parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-          toggleState.set("" + id, !toggleState.get("" + id));
-
-          // filter out data wich was clicked
-          const newData = values.filter(
-            (item) => !toggleState.get("" + groups.indexOf(item[groupKeyName]))
-          );
-
-          update(newData);
-        }
-      });
-    }
+    redrawSVG();
   }
 }
 
