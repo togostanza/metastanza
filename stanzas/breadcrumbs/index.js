@@ -2,6 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import * as FAIcons from "@fortawesome/free-solid-svg-icons";
+import roundPathCorners from "./rounding.js";
 
 //convert kebab-case into camelCase
 const camelize = (s) => s.replace(/-./g, (x) => x[1].toUpperCase());
@@ -51,12 +52,13 @@ export default class Breadcrumbs extends Stanza {
     const homeIcon = this.params["home-icon"] || "Home";
     const showingStyle = this.params["showing-style"];
 
-    const data = await loadData(
+    const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
-    this._data = data;
+
+    this._data = values;
 
     if (!currentDataId && this.params["initinal-data-id"]) {
       currentDataId = this.params["initinal-data-id"];
@@ -66,292 +68,313 @@ export default class Breadcrumbs extends Stanza {
       template: "stanza.html.hbs",
     });
 
-    const filteredData = data.filter(
-      (item) => (item.children && !item.n) || (item.n && item.n > 0)
+    const app = this.root.getElementById("breadcrumbs");
+    const appBreadcrumbs = app.appendChild(
+      d3.create("div").attr("id", "app-breadcrumbs").node()
     );
+    const button = app.appendChild(
+      d3.create("button").attr("id", "app-copy-button").node()
+    );
+    button.setAttribute("height", "20px");
 
-    //Add root element if there are more than one elements without parent.
-    const rootElemIndexes = [];
-    for (let i = 0; i < filteredData.length - 1; i++) {
-      if (!filteredData[i]?.parent) {
-        rootElemIndexes.push(i);
+    const idMap = new Map();
+
+    addRoot();
+
+    values.forEach((node) => {
+      node.id = "" + node.id;
+      if (node?.children) {
+        node.children = node.children.map((child) => "" + child);
       }
-    }
-    if (rootElemIndexes.length > 1) {
-      filteredData.push({ id: -1, value: "", label: "" });
-
-      rootElemIndexes.forEach((index) => {
-        filteredData[index].parent = -1;
-      });
-    }
-
-    const el = this.root.querySelector("#breadcrumbs");
-
-    // Hide dropdown menu on scroll if any
-    window.document.addEventListener("scroll", () => {
-      if (currentDropdownMenu) {
-        d3.select(currentDropdownMenu).remove();
+      if (node?.parent) {
+        node.parent = "" + node.parent;
       }
+      idMap.set(node.id, node);
     });
 
-    const opts = {
-      width,
+    const initialId = "6";
+    let showingMenu = null;
+
+    function getById(id) {
+      return idMap.get(id);
+    }
+
+    function getPolygon(width, height, arrowLength = 10) {
+      if (width < arrowLength) {
+        throw new Error("Width must be greater than arrow length");
+      }
+
+      const points = [
+        [0, 0],
+        [width - arrowLength, 0],
+        [width, height / 2],
+        [width - arrowLength, height],
+        [0, height],
+      ];
+
+      const path = `M 0,0 L ${points[1].join(",")} L ${points[2].join(
+        ","
+      )} L ${points[3].join(",")} L ${points[4].join(",")} Z`;
+
+      return path;
+    }
+
+    function generateSVGBreadcrumb(
+      datum,
       height,
-      showDropdown,
-      homeIcon,
-      showingStyle,
-    };
-    renderElement(el, filteredData, opts, dispatcher, currentDataId);
-  }
-}
+      strokeWidth = 1,
+      arrowLength = 10,
+      r = 3
+    ) {
+      let path;
+      const svg = d3.create("svg");
+      const text = svg.append("text");
 
-let showingD;
+      text.append("tspan").text(datum.label);
 
-function renderElement(el, data, opts, dispatcher = null) {
-  const showingStyle = opts.showingStyle;
-  const nestedData = d3
-    .stratify()
-    .id((d) => d.id)
-    .parentId((d) => d.parent)(data);
+      app.appendChild(svg.node()); // TODO
+      let textWidth = text.node().getBBox().width;
+      text.remove();
+      app.removeChild(svg.node()); //TODO
 
-  const container = d3
-    .select(el)
-    .attr("style", `width:${opts.width}px;height:${opts.height}px;`)
-    .append("div")
-    .classed("container", true);
+      if (!textWidth || textWidth < arrowLength) {
+        textWidth = arrowLength + 10;
+      }
 
-  //Context menu "copy path" substrate to capture left click without dispatching unnecessary events
-  const subDiv = container
-    .append("div")
-    .classed("context-menu-substrate", true)
-    .style("height", container);
+      svg
+        .attr("width", textWidth + arrowLength + strokeWidth + 4)
+        .attr("height", height + strokeWidth);
 
-  const contextMenu = subDiv.append("div");
+      const g = svg.append("g");
 
-  contextMenu
-    .classed("right-click-menu", true)
-    .append("ul")
-    .append("li")
-    .text("Copy path");
-
-  subDiv.on("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    subDiv.style("display", "none");
-    contextMenu.style("display", "none");
-  });
-
-  container.on("contextmenu", function (e) {
-    e.stopPropagation();
-    e.preventDefault();
-    const rect = this.getBoundingClientRect();
-
-    subDiv.style("display", "block");
-
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    contextMenu
-      .style("display", "block")
-      .style("left", `${x}px`)
-      .style("top", `${y}px`);
-  });
-
-  contextMenu.on("click", function (e) {
-    e.stopPropagation();
-    const textarea = container
-      .append("textarea")
-      .classed("path-selection", true);
-
-    const currentPath = getCurrentData(currentDataId)
-      .map((item) => item.data.data.label)
-      .join("/");
-
-    textarea.text(currentPath);
-
-    copyToClipbard(textarea.node(), "copy");
-
-    textarea.remove();
-    subDiv.style("display", "none");
-    contextMenu.style("display", "none");
-  });
-
-  // ====
-
-  const hierarchyData = d3.hierarchy(nestedData);
-
-  const getCurrentData = (id) => {
-    return hierarchyData
-      .find((item) => {
-        return item.data.data.id === id;
-      })
-      .ancestors()
-      .reverse();
-  };
-
-  function showDropdown(e, datum) {
-    if (showingD === datum) {
-      // container.selectAll(".node-dropdown-menu").remove();
-      showingD = null;
-      currentDropdownMenu = null;
-      return;
-    }
-
-    showingD = datum;
-
-    container.selectAll(".node-dropdown-menu").remove();
-
-    const menuBack = container
-      .append("div")
-      .classed("node-dropdown-menu", true)
-      .style(
-        "left",
-        () => {
-          return (
-            this.parentNode.getBoundingClientRect().left +
-            (this.parentNode.getBoundingClientRect().right -
-              parseFloat(getComputedStyle(this.parentNode).marginRight) -
-              this.parentNode.getBoundingClientRect().left -
-              (this.getBoundingClientRect().right -
-                parseFloat(getComputedStyle(this.parentNode).marginRight) -
-                this.getBoundingClientRect().left)) /
-              2 +
-            "px"
-          );
-        } // center
-      )
-      .style(
-        "top",
-        this.parentNode.getBoundingClientRect().top +
-          this.parentNode.getBoundingClientRect().height +
-          "px"
-      );
-
-    currentDropdownMenu = menuBack.node();
-
-    const rows = menuBack
-      .selectAll("div")
-      .data(datum.parent.children.filter((d) => d !== datum));
-
-    const rowContainer = rows
-      .join("div")
-      .classed("node-dropdown-menu-item-container", true);
-
-    const row = rowContainer
-      .append("div")
-      .classed("node-dropdown-menu-item", true);
-
-    row
-      .filter((d) => d.children)
-      .on("click", (e, d) => {
-        container.selectAll(".node-dropdown-menu").remove();
-        showingD = null;
-        currentDropdownMenu = null;
-        dispatcher.dispatchEvent(
-          new CustomEvent("selectedDatumChanged", {
-            detail: { id: d.data.data.id },
-          })
+      if (typeof r === "number" && r > 0) {
+        path = roundPathCorners(
+          getPolygon(
+            textWidth - strokeWidth + arrowLength + 4,
+            height - strokeWidth
+          ),
+          r,
+          0
         );
-        currentDataId = d.data.data.id;
-        return update(getCurrentData(d.data.data.id));
+      } else {
+        path = getPolygon(
+          textWidth - strokeWidth + arrowLength + 4,
+          height - strokeWidth,
+          arrowLength
+        );
+      }
+
+      g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
+
+      const breadcrumbPath = g
+        .append("path")
+        .attr("d", path)
+        .attr("class", "breadcrumb-path");
+
+      const label = g
+        .append("text")
+        .text(datum.label)
+        .attr("y", 10)
+        .attr("x", 4)
+        .attr("alignment-baseline", "middle")
+        .attr("opacity", 1);
+
+      if (datum.id !== "root") {
+        svg.on("mouseover", () => {
+          breadcrumbPath.classed("breadcrumb-path-hover", true);
+          label.classed("breadcrumb-label-hover", true);
+        });
+
+        svg.on("mouseleave", () => {
+          breadcrumbPath.classed("breadcrumb-path-hover", false);
+          label.classed("breadcrumb-label-hover", false);
+        });
+      }
+
+      svg.on("click", () => {
+        handleChange(datum.id);
       });
 
-    row
-      .append("span")
-      .text((d) => d.data.data.label)
-      .classed("disabled", (d) => !d.children);
-
-    //Separator
-    rowContainer.filter((_, i, nodes) => i < nodes.length - 1).append("hr");
-  }
-
-  function update(data) {
-    const breadcrumbNodes = container
-      .selectAll("div.breadcrumb-node")
-      .data(data, (d) => d.data.data.id);
-
-    // REMOVE
-    breadcrumbNodes.exit().remove();
-
-    // ADD
-    const breadcrumbNode = breadcrumbNodes
-      .enter()
-      .append("div")
-      .classed("breadcrumb-node", true)
-      .classed("graphical", showingStyle === "arrows");
-
-    const labelContainer = breadcrumbNode
-      .append("div")
-      .attr("class", "label-container")
-      .on("click", (e, d) => {
-        dispatcher.dispatchEvent(
-          new CustomEvent("selectedDatumChanged", {
-            detail: { id: d.data.data.id },
-          })
-        );
-        currentDataId = d.data.data.id;
-        return update(getCurrentData(currentDataId));
-      });
-
-    const label = labelContainer.append("div").classed("node-label", true);
-
-    if (opts.showDropdown) {
-      labelContainer.on("mouseover", showDropdown);
-      // label.on("mouseout", showDropdown);
+      return svg;
     }
 
-    label.filter((d) => d.parent).text((d) => d.data.data.label);
+    function getAscendants(id) {
+      let currentNode = getById(id);
+      const ascendants = [currentNode];
 
-    // Add icon from fontawesome as inline SVG
+      while (currentNode?.parent) {
+        ascendants.push(getById(currentNode.parent));
+        currentNode = getById(currentNode.parent);
+      }
+      ascendants.reverse();
+      return ascendants;
+    }
 
-    const camelizedIconName =
-      camelize(`fa-${opts.homeIcon}`) in FAIcons
-        ? camelize(`fa-${opts.homeIcon}`)
-        : "faHome";
+    function getNeighbourNodes(id) {
+      const currentNode = getById(id);
+      if (!currentNode?.parent) {
+        return [];
+      }
+      const parent = getById(currentNode.parent);
+      if (!parent?.children) {
+        return [];
+      }
+      return parent.children
+        .filter((child) => child !== id)
+        .map((id) => getById(id));
+    }
 
-    label
-      .filter((d) => !d.parent)
-      .append("svg")
-      .attr(
-        "viewBox",
-        `0 0 ${FAIcons[camelizedIconName].icon[0]} ${FAIcons[camelizedIconName].icon[1]}`
-      )
-      .attr("width", "0.8rem")
-      .append("path")
-      .attr("d", FAIcons[camelizedIconName].icon[4])
-      .attr("class", "home-icon");
+    function getMenuForId(id) {
+      const parentElem = this;
 
-    // if (opts.showDropdown) {
-    //   // node dropdown icon
-    //   breadcrumbNode
-    //     .append("div")
-    //     .classed("node-dropdown-container", true)
-    //     .attr("style", (d) => {
-    //       if (d.parent && d.parent.children.length > 1) {
-    //         return null;
-    //       }
-    //       return "display:none";
-    //     })
-    //     .filter((d) => d.parent && d.parent.children.length > 1)
-    //     .on("click", showDropdown)
-    //     .append("div")
-    //     .classed("node-dropdown", true);
-    // }
+      const parent = d3.select(parentElem);
+      const path = parent.select("path");
+      const label = parent.select("text");
+      const neighbourNodes = getNeighbourNodes(id);
 
-    // node forward icon
-    breadcrumbNode.append("div").classed("node-forward", true);
-    //.attr("style", "margin: 0 0.4em");
+      const menuContainer = d3
+        .create("div")
+        .attr("class", "breadcrumb-menu-container");
 
-    // UPDATE
+      menuContainer.on("mouseenter", () => {
+        d3.select(parentElem).on("mouseleave", null);
 
-    breadcrumbNodes
-      .filter((d) => d.depth > 0)
-      .selectAll("div.node-label")
-      .text((d) => d.data.data.label);
+        path.classed("breadcrumb-path-hover", true);
+        label.classed("breadcrumb-label-hover", true);
+      });
+
+      const menuTriangle = menuContainer
+        .append("div")
+        .attr("class", "menu-triangle");
+
+      const menuTriangle2 = menuContainer
+        .append("div")
+        .attr("class", "menu-triangle menu-triangle-overlay");
+
+      menuTriangle.node().style.left =
+        parentElem.getBoundingClientRect().width / 2 + "px";
+
+      menuTriangle2.node().style.left =
+        parentElem.getBoundingClientRect().width / 2 + "px";
+
+      const menu = menuContainer.append("div").attr("class", "breadcrumb-menu");
+
+      const menuData = menu.selectAll("div").data(neighbourNodes, (d) => d.id);
+
+      menuContainer.on("mouseleave", () => {
+        d3.select(parentElem).on("mouseleave", (e) => {
+          if (e.offsetY <= 0) {
+            showingMenu.remove();
+          }
+        });
+
+        path.classed("breadcrumb-path-hover", false);
+        label.classed("breadcrumb-label-hover", false);
+
+        if (showingMenu) {
+          showingMenu.remove();
+        }
+      });
+
+      menuData
+        .join("div")
+        .attr("class", "breadcrumb-menu-item")
+        .text((d) => d.label)
+        .on("click", (e, d) => {
+          handleChange(d.id);
+        });
+
+      return menuContainer;
+    }
+
+    function updateId(id = initialId) {
+      if (showingMenu) {
+        showingMenu.remove();
+      }
+      const data = getAscendants(id);
+      const selectBreadcrumb = d3
+        .select(appBreadcrumbs)
+        .selectAll("div")
+        .data(data, (d) => d.id);
+
+      selectBreadcrumb
+        .join(
+          (enter) => {
+            const result = enter.append("div").attr("style", `height: 20px`);
+
+            result.append((d) => generateSVGBreadcrumb(d, 20).node());
+            result
+              .on("mouseenter", function (e, d) {
+                if (d.id === "root") {
+                  return;
+                }
+                if (showingMenu) {
+                  showingMenu.remove();
+                }
+
+                showingMenu = getMenuForId.call(this, d.id);
+                const breadcrumbCoords = this.getBoundingClientRect();
+                const appRect = app.getBoundingClientRect();
+                // console.log("app rect", app.getBoundingClientRect());
+                app.appendChild(showingMenu.node()); //TODO
+                // console.log({ breadcrumbCoords });
+                // console.log("e.pageX", e.pageX);
+                // console.log("e.ClientX", e.clientX);
+                // console.log("e", e);
+
+                // console.log(
+                //   "parent padding top",
+                //   getComputedStyle(app.parentElement).paddingTop
+                // );
+
+                showingMenu.node().style.left = `${
+                  breadcrumbCoords.left -
+                  appRect.left +
+                  parseFloat(getComputedStyle(app.parentElement).paddingLeft)
+                }px`;
+                showingMenu.node().style.top = `${
+                  breadcrumbCoords.bottom -
+                  4 -
+                  appRect.top +
+                  parseFloat(getComputedStyle(app.parentElement).paddingTop)
+                }px`;
+              })
+              .on("mouseleave", (e) => {
+                console.log(e.offsetY);
+                if (e.offsetY <= 0) {
+                  showingMenu.remove();
+                }
+              });
+            return result;
+          },
+          (update) => update,
+          (exit) => exit.remove()
+        )
+        .attr("class", "breadcrumb");
+    }
+
+    function addRoot() {
+      const root = {
+        id: "root",
+        label: "Root",
+        children: [],
+      };
+
+      values.forEach((node, i) => {
+        if (!node.parent) {
+          root.children.push(node.id);
+          values[i].parent = "root";
+        }
+      });
+
+      values.push(root);
+    }
+
+    function handleChange(id) {
+      // emit events etc. here
+      updateId(id);
+    }
+
+    updateId(initialId);
   }
-
-  if (!currentDataId) {
-    currentDataId = hierarchyData.find((data) => data.depth === 0).data.data.id;
-  }
-
-  update(getCurrentData(currentDataId));
 }
