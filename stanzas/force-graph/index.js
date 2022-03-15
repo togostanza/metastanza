@@ -336,6 +336,7 @@ export default class ForceGraph extends Stanza {
         .style("stroke-width", (d) => d.weight * 0.5)
         .style("stroke", (d) => color(d.source.id))
         .style("stroke-opacity", 0.25)
+        .style("stroke-linecap", "round")
         .attr("x1", (d) => d.source.x)
         .attr("y1", (d) => d.source.y)
         .attr("x2", (d) => d.target.x)
@@ -353,7 +354,10 @@ export default class ForceGraph extends Stanza {
         .attr("cy", (d) => d.y);
 
       circles.on("mouseover", function (e, d) {
+        // highlight current node
         d3.select(this).classed("active", true);
+
+        // fade out all other nodes, highlight a little connected ones
         circles
           .classed("fadeout", (p) => d !== p)
           .classed("half-active", (p) => {
@@ -363,14 +367,21 @@ export default class ForceGraph extends Stanza {
             );
           });
 
+        // fadeout not connected edges, highlight connected ones
         links
           .classed("fadeout", (p) => !d[edgeSym].includes(p))
           .classed("active", (p) => d[edgeSym].includes(p));
       });
 
       circles.on("mouseleave", function () {
-        circles.classed("active", false).classed("fadeout", false);
-        links.classed("active", false).classed("fadeout", false);
+        circles
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
+        links
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
       });
     };
 

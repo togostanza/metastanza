@@ -1,27 +1,41 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
-.node.active {
-  fill: #f00 !important;
-  stroke: gray !important;
-  stroke-width: 5px !important;
-  stroke-opacity: 0.7 !important;
+.active {
+  transition: all 0.1s ease-in-out;
+}
+.fadeout {
+  transition: all 0.1s ease-in-out;
+}
+.half-active {
+  transition: all 0.1s ease-in-out;
 }
 
-.link.active {
-  stroke-opacity: 1 !important;
+.node {
+  transition: all 0.1s ease-in-out;
+
+  &.active {
+    stroke: gray !important;
+    stroke-width: 5px !important;
+    stroke-opacity: 0.7 !important;
+  }
+  &.fadeout {
+    opacity: 0.1 !important;
+  }
+  &.half-active {
+    opacity: 0.8 !important;
+    stroke: gray !important;
+    stroke-width: 3px !important;
+    stroke-opacity: 0.2 !important;
+  }
 }
 
-.node.fadeout {
-  opacity: 0.1 !important;
-}
-.node.half-active {
-  opacity: 0.8 !important;
-  stroke: gray !important;
-  stroke-width: 3px !important;
-  stroke-opacity: 0.5 !important;
-}
-
-.link.fadeout {
-  stroke-opacity: 0.1 !important;
+.link {
+  transition: all 0.2s ease-in-out;
+  &.active {
+    stroke-opacity: 1 !important;
+  }
+  &.fadeout {
+    stroke-opacity: 0.1 !important;
+  }
 }
