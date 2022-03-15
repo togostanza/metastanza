@@ -288,11 +288,12 @@ export default class ForceGraph extends Stanza {
       let ii = 0;
       let jj = 0;
       const gridSize = Math.ceil(Math.sqrt(nodes.length));
-      console.log(gridSize);
+
       const dx = (width - 2 * marX) / (gridSize - 1);
       const dy = (height - 2 * marY) / (gridSize - 1);
 
       nodes.forEach((node) => {
+        nodeHash[node.id] = node;
         if (jj < gridSize) {
           node.x = jj * dx;
           node.y = ii * dy;
@@ -304,12 +305,21 @@ export default class ForceGraph extends Stanza {
           node.y = ii * dy;
           jj++;
         }
-        nodeHash[node.id] = node;
       });
+
       edges.forEach((edge) => {
         edge.weight = parseInt(edge.value);
         edge.source = nodeHash[edge.source];
         edge.target = nodeHash[edge.target];
+      });
+
+      const edgeSym = Symbol("edges");
+
+      nodes.forEach((node) => {
+        const adjEdges = edges.filter((edge) => {
+          return edge.source.id === node.id || edge.target.id === node.id;
+        });
+        node[edgeSym] = adjEdges;
       });
 
       const gridG = svg
@@ -317,7 +327,7 @@ export default class ForceGraph extends Stanza {
         .attr("id", "gridG")
         .attr("transform", `translate(${marX},${marY})`);
 
-      gridG
+      const links = gridG
         .selectAll("path")
         .data(edges)
         .enter()
@@ -331,7 +341,7 @@ export default class ForceGraph extends Stanza {
         .attr("x2", (d) => d.target.x)
         .attr("y2", (d) => d.target.y);
 
-      gridG
+      const circles = gridG
         .selectAll("circle")
         .data(nodes)
         .enter()
@@ -342,7 +352,26 @@ export default class ForceGraph extends Stanza {
         .attr("cx", (d) => d.x)
         .attr("cy", (d) => d.y);
 
-      gridG.on("mouseover", function (e, d) {});
+      circles.on("mouseover", function (e, d) {
+        d3.select(this).classed("active", true);
+        circles
+          .classed("fadeout", (p) => d !== p)
+          .classed("half-active", (p) => {
+            return (
+              p !== d &&
+              d[edgeSym].some((edge) => edge.source === p || edge.target === p)
+            );
+          });
+
+        links
+          .classed("fadeout", (p) => !d[edgeSym].includes(p))
+          .classed("active", (p) => d[edgeSym].includes(p));
+      });
+
+      circles.on("mouseleave", function () {
+        circles.classed("active", false).classed("fadeout", false);
+        links.classed("active", false).classed("fadeout", false);
+      });
     };
 
     // Useful functions

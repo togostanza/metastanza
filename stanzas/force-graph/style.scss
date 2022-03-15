@@ -1,7 +1,27 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
-.active {
-  stroke-opacity: 1;
-  fill: #fff;
+.node.active {
+  fill: #f00 !important;
+  stroke: gray !important;
+  stroke-width: 5px !important;
+  stroke-opacity: 0.7 !important;
+}
+
+.link.active {
+  stroke-opacity: 1 !important;
+}
+
+.node.fadeout {
+  opacity: 0.1 !important;
+}
+.node.half-active {
+  opacity: 0.8 !important;
+  stroke: gray !important;
+  stroke-width: 3px !important;
+  stroke-opacity: 0.5 !important;
+}
+
+.link.fadeout {
+  stroke-opacity: 0.1 !important;
 }
