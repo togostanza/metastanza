@@ -2,6 +2,8 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
+import drawGridLayout from "./drawGridLayout";
+import drawArcLayout from "./drawArcLayout";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -23,6 +25,7 @@ export default class ForceGraph extends Stanza {
   }
 
   async render() {
+    console.log("render");
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -56,9 +59,11 @@ export default class ForceGraph extends Stanza {
         count[element.source] = 1;
       }
     }
+    this[Symbol.for("count")] = count;
 
     // Setting node size scale
     const sizeScale = d3.scaleSqrt([0, d3.max(Object.values(count))], [4, 16]);
+    this[Symbol.for("sizeScale")] = sizeScale;
 
     // Setting color scale
     const togostanzaColors = [];
@@ -66,6 +71,7 @@ export default class ForceGraph extends Stanza {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
     const color = d3.scaleOrdinal().range(togostanzaColors);
+    this[Symbol.for("color")] = color;
 
     const width = parseInt(this.params["width"]) || 300;
     const height = parseInt(this.params["height"]) || 200;
@@ -77,94 +83,18 @@ export default class ForceGraph extends Stanza {
       root.append(this.tooltip);
     }
 
-    const svg = d3
-      .select(root)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    const marker = svg
-      .append("defs")
-      .append("marker")
-      .attr("id", "arrow")
-      .attr("refX", 12)
-      .attr("refY", 6)
-      .attr("markerUnits", "userSpaceOnUse")
-      .attr("markerWidth", 12)
-      .attr("markerHeight", 18)
-      .attr("orient", "auto")
-      .append("path")
-      .attr("d", "M 0 0 12 6 0 12 3 6");
-
-    const drawArcDiagram = (nodes, edges) => {
-      const nodeHash = {};
-      nodes.forEach((node, i) => {
-        nodeHash[node.id] = node;
-        node.x = parseInt(i) * 10;
-      });
-      edges.forEach((edge) => {
-        edge.weight = parseInt(edge.value);
-        edge.source = nodeHash[edge.source];
-        edge.target = nodeHash[edge.target];
-      });
-
-      const arcG = svg
-        .append("g")
-        .attr("id", "arcG")
-        .attr("transform", `translate(50,${height / 2})`);
-
-      arcG
-        .selectAll("path")
-        .data(edges)
-        .enter()
-        .append("path")
-        .attr("class", "arc")
-        .style("stroke-width", (d) => d.weight * 0.5)
-        .style("stroke", (d) => color(d.source.id))
-        .style("stroke-opacity", 0.25)
-        .style("fill", "none")
-        .attr("d", arc)
-        .attr("marker-end", "url(#arrow)");
-
-      arcG
-        .selectAll("circle")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("class", "node")
-        .attr("fill", (d) => color(d.id))
-        .attr("r", (d) => sizeScale(count[d.id]))
-        .attr("cx", (d) => d.x);
-
-      svg.selectAll("circle").on("mouseover", nodeOver);
-      svg.selectAll("path").on("mouseover", edgeOver);
-      svg.selectAll("circle").on("mouseout", nodeOut);
-      svg.selectAll("path").on("mouseout", edgeOut);
-
-      function nodeOut() {
-        d3.select(this).classed("active", false);
-        svg.selectAll("path").classed("active", false);
-      }
-
-      function edgeOut() {
-        d3.select(this).classed("active", false);
-        svg.selectAll("circle").classed("active", false);
-      }
-
-      function nodeOver(e, d) {
-        svg.selectAll("circle").classed("active", (p) => p === d);
-        svg
-          .selectAll("path")
-          .classed("active", (p) => p.source === d || p.target === d);
-      }
-      function edgeOver(e, d) {
-        svg.selectAll("path").classed("active", (p) => p === d);
-        svg
-          .selectAll("circle")
-          .classed("source", (p) => p === d.source)
-          .classed("target", (p) => p === d.target);
-      }
-    };
+    // svg
+    //   .append("defs")
+    //   .append("marker")
+    //   .attr("id", "arrow")
+    //   .attr("refX", 12)
+    //   .attr("refY", 6)
+    //   .attr("markerUnits", "userSpaceOnUse")
+    //   .attr("markerWidth", 12)
+    //   .attr("markerHeight", 18)
+    //   .attr("orient", "auto")
+    //   .append("path")
+    //   .attr("d", "M 0 0 12 6 0 12 3 6");
 
     const drawForceSim = () => {
       const gLinks = svg.append("g").attr("class", "links");
@@ -279,134 +209,17 @@ export default class ForceGraph extends Stanza {
       }
     };
 
-    const drawGridLayout = (nodes, edges) => {
-      const nodeHash = {};
-
-      const marX = 50;
-      const marY = 30;
-
-      let ii = 0;
-      let jj = 0;
-      const gridSize = Math.ceil(Math.sqrt(nodes.length));
-
-      const dx = (width - 2 * marX) / (gridSize - 1);
-      const dy = (height - 2 * marY) / (gridSize - 1);
-
-      nodes.forEach((node) => {
-        nodeHash[node.id] = node;
-        if (jj < gridSize) {
-          node.x = jj * dx;
-          node.y = ii * dy;
-          jj++;
-        } else {
-          jj = 0;
-          ii++;
-          node.x = jj * dx;
-          node.y = ii * dy;
-          jj++;
-        }
-      });
-
-      edges.forEach((edge) => {
-        edge.weight = parseInt(edge.value);
-        edge.source = nodeHash[edge.source];
-        edge.target = nodeHash[edge.target];
-      });
-
-      const edgeSym = Symbol("edges");
-
-      nodes.forEach((node) => {
-        const adjEdges = edges.filter((edge) => {
-          return edge.source.id === node.id || edge.target.id === node.id;
-        });
-        node[edgeSym] = adjEdges;
-      });
-
-      const gridG = svg
-        .append("g")
-        .attr("id", "gridG")
-        .attr("transform", `translate(${marX},${marY})`);
-
-      const links = gridG
-        .selectAll("path")
-        .data(edges)
-        .enter()
-        .append("line")
-        .attr("class", "link")
-        .style("stroke-width", (d) => d.weight * 0.5)
-        .style("stroke", (d) => color(d.source.id))
-        .style("stroke-opacity", 0.25)
-        .style("stroke-linecap", "round")
-        .attr("x1", (d) => d.source.x)
-        .attr("y1", (d) => d.source.y)
-        .attr("x2", (d) => d.target.x)
-        .attr("y2", (d) => d.target.y);
-
-      const circles = gridG
-        .selectAll("circle")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("class", "node")
-        .attr("fill", (d) => color(d.id))
-        .attr("r", (d) => sizeScale(count[d.id]))
-        .attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y);
-
-      circles.on("mouseover", function (e, d) {
-        // highlight current node
-        d3.select(this).classed("active", true);
-
-        // fade out all other nodes, highlight a little connected ones
-        circles
-          .classed("fadeout", (p) => d !== p)
-          .classed("half-active", (p) => {
-            return (
-              p !== d &&
-              d[edgeSym].some((edge) => edge.source === p || edge.target === p)
-            );
-          });
-
-        // fadeout not connected edges, highlight connected ones
-        links
-          .classed("fadeout", (p) => !d[edgeSym].includes(p))
-          .classed("active", (p) => d[edgeSym].includes(p));
-      });
-
-      circles.on("mouseleave", function () {
-        circles
-          .classed("active", false)
-          .classed("fadeout", false)
-          .classed("half-active", false);
-        links
-          .classed("active", false)
-          .classed("fadeout", false)
-          .classed("half-active", false);
-      });
-    };
-
     // Useful functions
-
-    function arc(d) {
-      var draw = d3.line().curve(d3.curveBasis);
-      var midX = (d.source.x + d.target.x) / 2;
-      var midY = (d.source.x - d.target.x) * 2;
-      return draw([
-        [d.source.x, 0],
-        [midX, midY],
-        [d.target.x, 0],
-      ]);
-    }
 
     switch (this.params["layout"]) {
       case "force":
         drawForceSim();
         break;
       case "arc":
-        drawArcDiagram(nodes, links);
+        drawArcLayout.call(this, nodes, links);
         break;
       case "grid":
-        drawGridLayout(nodes, links);
+        drawGridLayout.call(this, nodes, links);
         break;
       default:
         break;
