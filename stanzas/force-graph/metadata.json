@@ -46,31 +46,11 @@
       "stanza:description": "Padding"
     },
     {
-      "stanza:key": "legend",
+      "stanza:key": "layout",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Where to show the legend. 'none' for no legend"
-    },
-    {
-      "stanza:key": "xgrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X grid"
-    },
-    {
-      "stanza:key": "ygrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y grid"
+      "stanza:choice": ["focre", "arc", "grid"],
+      "stanza:example": "grid",
+      "stanza:description": "Graph layout"
     }
   ],
   "stanza:menu-placement": "bottom-right",
