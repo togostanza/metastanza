@@ -1,38 +1,56 @@
 import * as d3 from "d3";
 
-export default function () {
-  const nodes = this[Symbol.for("nodes")];
-  const edges = this[Symbol.for("edges")];
+export default function (svg, nodes, edges) {
+  const nodesC = JSON.parse(JSON.stringify(nodes));
+  const edgesC = JSON.parse(JSON.stringify(edges));
 
-  console.log("edges", edges);
-  const root = this.root.querySelector(":scope > div");
-  const width = parseInt(this.params["width"]) || 300;
-  const height = parseInt(this.params["height"]) || 200;
+  const MARGIN = {
+    TOP: 10,
+    BOTTOM: 10,
+    LEFT: 10,
+    RIGHT: 10,
+  };
+  const height = svg.attr("height");
+  const width = svg.attr("width");
+
+  // const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+  const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
   const color = this[Symbol.for("color")];
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
 
-  // Laying out nodes=========
-  nodes.forEach((node, i) => {
-    node.x = parseInt(i) * 10;
+  const nodeHash = {};
+  nodesC.forEach((node) => {
+    nodeHash[node.id] = node;
   });
-  // =========
 
-  const svg = d3
-    .select(root)
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+  edgesC.forEach((edge) => {
+    edge.weight = parseInt(edge.value);
+    edge.sourceNode = nodeHash[edge.source];
+    edge.targetNode = nodeHash[edge.target];
+  });
+
+  nodesC.forEach((node) => {
+    const adjEdges = edgesC.filter((edge) => {
+      return edge.sourceNode === node || edge.targetNode === node;
+    });
+    node[Symbol.for("nodeAdjEdges")] = adjEdges;
+  });
+
+  const pointScale = d3
+    .scalePoint()
+    .domain(nodesC.map((node) => node.id))
+    .range([0, WIDTH]);
 
   const arcG = svg
     .append("g")
     .attr("id", "arcG")
-    .attr("transform", `translate(50,${height / 2})`);
+    .attr("transform", `translate(${MARGIN.LEFT},${height / 2})`);
 
   arcG
     .selectAll("path")
-    .data(edges)
+    .data(edgesC)
     .enter()
     .append("path")
     .attr("class", "arc")
@@ -47,13 +65,14 @@ export default function () {
 
   arcG
     .selectAll("circle")
-    .data(nodes)
+    .data(nodesC)
     .enter()
     .append("circle")
     .attr("class", "node")
     .attr("fill", (d) => color(d.id))
     .attr("r", (d) => sizeScale(count[d.id]))
-    .attr("cx", (d) => d.x);
+    .attr("cx", (d) => pointScale(d.id))
+    .attr("data-tooltip", (d) => d.id);
 
   svg.selectAll("circle").on("mouseover", nodeOver);
   svg.selectAll("path").on("mouseover", edgeOver);
@@ -85,12 +104,14 @@ export default function () {
   }
   function arc(d) {
     const draw = d3.line().curve(d3.curveBasis);
-    const midX = (d.sourceNode.x + d.targetNode.x) / 2;
-    const midY = (d.sourceNode.x - d.targetNode.x) * 2;
+    const sourceX = pointScale(d.sourceNode.id);
+    const targetX = pointScale(d.targetNode.id);
+    const midX = (sourceX + targetX) / 2;
+    const midY = 20 + (sourceX - targetX) / 3;
     return draw([
-      [d.sourceNode.x, 0],
+      [sourceX, 0],
       [midX, midY],
-      [d.targetNode.x, 0],
+      [targetX, 0],
     ]);
   }
 }

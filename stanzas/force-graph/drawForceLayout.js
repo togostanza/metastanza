@@ -1,35 +1,28 @@
 import * as d3 from "d3";
 
-export default function () {
-  const nodes = this[Symbol.for("nodes")];
-  const edges = this[Symbol.for("edges")];
-
-  const root = this.root.querySelector(":scope > div");
-  const width = parseInt(this.params["width"]) || 300;
-  const height = parseInt(this.params["height"]) || 200;
+export default function (svg, nodes, edges) {
+  const nodesC = JSON.parse(JSON.stringify(nodes));
+  const edgesC = JSON.parse(JSON.stringify(edges));
 
   const color = this[Symbol.for("color")];
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
 
-  const svg = d3
-    .select(root)
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+  const width = svg.attr("width");
+  const height = svg.attr("height");
 
   const gLinks = svg.append("g").attr("class", "links");
   const gNodes = svg.append("g").attr("class", "nodes");
 
   const simulation = d3
-    .forceSimulation(nodes)
+    .forceSimulation(nodesC)
     .force("charge", d3.forceManyBody().strength(-100))
     .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
     .force(
       "link",
       d3
         .forceLink()
-        .links(edges)
+        .links(edgesC)
         .id((d) => d.id)
         .distance(50)
         .strength(0.5)
@@ -46,16 +39,16 @@ export default function () {
 
   const joinedLinks = gLinks
     .selectAll("line")
-    .data(edges)
+    .data(edgesC)
     .join("line")
     .attr("stroke", "gray");
 
   function updateLinks() {
     joinedLinks
-      .attr("x1", (d) => d.sourceNode.x)
-      .attr("y1", (d) => d.sourceNode.y)
-      .attr("x2", (d) => d.targetNode.x)
-      .attr("y2", (d) => d.targetNode.y);
+      .attr("x1", (d) => d.source.x)
+      .attr("y1", (d) => d.source.y)
+      .attr("x2", (d) => d.target.x)
+      .attr("y2", (d) => d.target.y);
   }
   function updateNodes() {
     joinedNodes.attr("transform", (d) => {
@@ -76,7 +69,7 @@ export default function () {
 
   const joinedNodes = gNodes
     .selectAll("g")
-    .data(nodes)
+    .data(nodesC)
     .enter()
     .append("g")
     .attr("class", "node")

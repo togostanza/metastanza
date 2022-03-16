@@ -5,6 +5,7 @@ import ToolTip from "@/lib/ToolTip";
 import drawGridLayout from "./drawGridLayout";
 import drawArcLayout from "./drawArcLayout";
 import drawFoecLayout from "./drawForceLayout";
+import drawCircleLayout from "./drawCircleLayout";
 
 import {
   downloadSvgMenuItem,
@@ -33,6 +34,9 @@ export default class ForceGraph extends Stanza {
 
     //data
 
+    const width = parseInt(this.params["width"]) || 300;
+    const height = parseInt(this.params["height"]) || 200;
+
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
@@ -57,24 +61,6 @@ export default class ForceGraph extends Stanza {
 
     this[Symbol.for("nodeHash")] = nodeHash;
 
-    console.log("nodeHash", this[Symbol.for("nodeHash")]);
-
-    edges.forEach((edge) => {
-      edge.weight = parseInt(edge.value);
-      edge.sourceNode = nodeHash[edge.source];
-      edge.targetNode = nodeHash[edge.target];
-    });
-
-    nodes.forEach((node) => {
-      const adjEdges = edges.filter((edge) => {
-        return edge.source === node || edge.target === node;
-      });
-      node[Symbol.for("nodeAdjEdges")] = adjEdges;
-    });
-
-    this[Symbol.for("nodes")] = nodes;
-    this[Symbol.for("edges")] = edges;
-
     const count = {};
     for (const element of edges) {
       if (count[element.target]) {
@@ -88,8 +74,10 @@ export default class ForceGraph extends Stanza {
         count[element.source] = 1;
       }
     }
+
     this[Symbol.for("count")] = count;
 
+    console.log(count);
     // Setting node size scale
     const sizeScale = d3.scaleSqrt([0, d3.max(Object.values(count))], [4, 16]);
     this[Symbol.for("sizeScale")] = sizeScale;
@@ -103,6 +91,16 @@ export default class ForceGraph extends Stanza {
     this[Symbol.for("color")] = color;
 
     const root = this.root.querySelector(":scope > div");
+
+    const existingSvg = root.querySelector("svg");
+    if (existingSvg) {
+      existingSvg.remove();
+    }
+    const svg = d3
+      .select(root)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
     if (!this.tooltip) {
       this.tooltip = new ToolTip();
@@ -125,13 +123,16 @@ export default class ForceGraph extends Stanza {
     // Useful functions
     switch (this.params["layout"]) {
       case "force":
-        drawFoecLayout.call(this);
+        drawFoecLayout.call(this, svg, nodes, edges);
         break;
       case "arc":
-        drawArcLayout.call(this);
+        drawArcLayout.call(this, svg, nodes, edges);
         break;
       case "grid":
-        drawGridLayout.call(this);
+        drawGridLayout.call(this, svg, nodes, edges);
+        break;
+      case "circle":
+        drawCircleLayout.call(this, svg, nodes, edges);
         break;
       default:
         break;

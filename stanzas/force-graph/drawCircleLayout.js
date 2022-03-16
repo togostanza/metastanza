@@ -4,13 +4,24 @@ export default function (svg, nodes, edges) {
   const nodesC = JSON.parse(JSON.stringify(nodes));
   const edgesC = JSON.parse(JSON.stringify(edges));
 
-  const width = svg.attr("width");
+  const MARGIN = {
+    TOP: 20,
+    BOTTOM: 20,
+    LEFT: 20,
+    RIGHT: 20,
+  };
   const height = svg.attr("height");
+  const width = svg.attr("width");
+
+  const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+  const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
   const color = this[Symbol.for("color")];
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
   const edgeSym = Symbol.for("nodeAdjEdges");
+
+  const R = Math.min(WIDTH, HEIGHT) / 2;
 
   const nodeHash = {};
   nodesC.forEach((node) => {
@@ -30,39 +41,25 @@ export default function (svg, nodes, edges) {
     node[edgeSym] = adjEdges;
   });
 
-  // Laying out nodes=========
-  const marX = 50;
-  const marY = 30;
-
-  let ii = 0;
-  let jj = 0;
-
-  const gridSize = Math.ceil(Math.sqrt(nodesC.length));
-
-  const dx = (width - 2 * marX) / (gridSize - 1);
-  const dy = (height - 2 * marY) / (gridSize - 1);
+  // Laying out nodes ===
+  const angleScale = d3
+    .scalePoint()
+    .domain(nodesC.map((node) => node.id))
+    .range([0, Math.PI * 2 - (Math.PI * 2) / nodesC.length]);
 
   nodesC.forEach((node) => {
-    if (jj < gridSize) {
-      node.x = jj * dx;
-      node.y = ii * dy;
-      jj++;
-    } else {
-      jj = 0;
-      ii++;
-      node.x = jj * dx;
-      node.y = ii * dy;
-      jj++;
-    }
+    node.x = Math.cos(angleScale(node.id)) * R + WIDTH / 2;
+    node.y = Math.sin(angleScale(node.id)) * R + HEIGHT / 2;
   });
+
   // =========
 
-  const gridG = svg
+  const circleG = svg
     .append("g")
-    .attr("id", "gridG")
-    .attr("transform", `translate(${marX},${marY})`);
+    .attr("id", "circleG")
+    .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
 
-  const links = gridG
+  const links = circleG
     .selectAll("path")
     .data(edgesC)
     .enter()
@@ -77,7 +74,7 @@ export default function (svg, nodes, edges) {
     .attr("x2", (d) => d.targetNode.x)
     .attr("y2", (d) => d.targetNode.y);
 
-  const circles = gridG
+  const circles = circleG
     .selectAll("circle")
     .data(nodesC)
     .enter()

@@ -48,8 +48,8 @@
     {
       "stanza:key": "layout",
       "stanza:type": "single-choice",
-      "stanza:choice": ["focre", "arc", "grid", "circle"],
-      "stanza:example": "grid",
+      "stanza:choice": ["force", "arc", "grid", "circle"],
+      "stanza:example": "force",
       "stanza:description": "Graph layout"
     }
   ],
