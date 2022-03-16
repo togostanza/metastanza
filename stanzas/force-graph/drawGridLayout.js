@@ -1,6 +1,9 @@
 import * as d3 from "d3";
 
-export default function (nodes, edges) {
+export default function () {
+  const nodes = this[Symbol.for("nodes")];
+  const edges = this[Symbol.for("edges")];
+
   const root = this.root.querySelector(":scope > div");
 
   const width = parseInt(this.params["width"]) || 300;
@@ -9,6 +12,7 @@ export default function (nodes, edges) {
   const color = this[Symbol.for("color")];
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
+  const edgeSym = Symbol.for("nodeAdjEdges");
 
   const svg = d3
     .select(root)
@@ -16,8 +20,7 @@ export default function (nodes, edges) {
     .attr("width", width)
     .attr("height", height);
 
-  const nodeHash = {};
-
+  // Laying out nodes=========
   const marX = 50;
   const marY = 30;
 
@@ -30,7 +33,6 @@ export default function (nodes, edges) {
   const dy = (height - 2 * marY) / (gridSize - 1);
 
   nodes.forEach((node) => {
-    nodeHash[node.id] = node;
     if (jj < gridSize) {
       node.x = jj * dx;
       node.y = ii * dy;
@@ -43,21 +45,7 @@ export default function (nodes, edges) {
       jj++;
     }
   });
-
-  edges.forEach((edge) => {
-    edge.weight = parseInt(edge.value);
-    edge.source = nodeHash[edge.source];
-    edge.target = nodeHash[edge.target];
-  });
-
-  const edgeSym = Symbol("edges");
-
-  nodes.forEach((node) => {
-    const adjEdges = edges.filter((edge) => {
-      return edge.source.id === node.id || edge.target.id === node.id;
-    });
-    node[edgeSym] = adjEdges;
-  });
+  // =========
 
   const gridG = svg
     .append("g")
@@ -71,13 +59,13 @@ export default function (nodes, edges) {
     .append("line")
     .attr("class", "link")
     .style("stroke-width", (d) => d.weight * 0.5)
-    .style("stroke", (d) => color(d.source.id))
+    .style("stroke", (d) => color(d.sourceNode.id))
     .style("stroke-opacity", 0.25)
     .style("stroke-linecap", "round")
-    .attr("x1", (d) => d.source.x)
-    .attr("y1", (d) => d.source.y)
-    .attr("x2", (d) => d.target.x)
-    .attr("y2", (d) => d.target.y);
+    .attr("x1", (d) => d.sourceNode.x)
+    .attr("y1", (d) => d.sourceNode.y)
+    .attr("x2", (d) => d.targetNode.x)
+    .attr("y2", (d) => d.targetNode.y);
 
   const circles = gridG
     .selectAll("circle")
@@ -100,7 +88,9 @@ export default function (nodes, edges) {
       .classed("half-active", (p) => {
         return (
           p !== d &&
-          d[edgeSym].some((edge) => edge.source === p || edge.target === p)
+          d[edgeSym].some(
+            (edge) => edge.sourceNode === p || edge.targetNode === p
+          )
         );
       });
 

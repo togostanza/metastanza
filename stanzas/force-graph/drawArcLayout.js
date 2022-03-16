@@ -1,18 +1,11 @@
 import * as d3 from "d3";
 
-function arc(d) {
-  var draw = d3.line().curve(d3.curveBasis);
-  var midX = (d.source.x + d.target.x) / 2;
-  var midY = (d.source.x - d.target.x) * 2;
-  return draw([
-    [d.source.x, 0],
-    [midX, midY],
-    [d.target.x, 0],
-  ]);
-}
-export default function (nodes, edges) {
-  const root = this.root.querySelector(":scope > div");
+export default function () {
+  const nodes = this[Symbol.for("nodes")];
+  const edges = this[Symbol.for("edges")];
 
+  console.log("edges", edges);
+  const root = this.root.querySelector(":scope > div");
   const width = parseInt(this.params["width"]) || 300;
   const height = parseInt(this.params["height"]) || 200;
 
@@ -20,16 +13,11 @@ export default function (nodes, edges) {
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
 
-  const nodeHash = {};
+  // Laying out nodes=========
   nodes.forEach((node, i) => {
-    nodeHash[node.id] = node;
     node.x = parseInt(i) * 10;
   });
-  edges.forEach((edge) => {
-    edge.weight = parseInt(edge.value);
-    edge.source = nodeHash[edge.source];
-    edge.target = nodeHash[edge.target];
-  });
+  // =========
 
   const svg = d3
     .select(root)
@@ -49,10 +37,12 @@ export default function (nodes, edges) {
     .append("path")
     .attr("class", "arc")
     .style("stroke-width", (d) => d.weight * 0.5)
-    .style("stroke", (d) => color(d.source.id))
+    .style("stroke", (d) => {
+      return color(d.sourceNode.id);
+    })
     .style("stroke-opacity", 0.25)
     .style("fill", "none")
-    .attr("d", arc)
+    .attr("d", (d) => arc(d))
     .attr("marker-end", "url(#arrow)");
 
   arcG
@@ -84,13 +74,23 @@ export default function (nodes, edges) {
     svg.selectAll("circle").classed("active", (p) => p === d);
     svg
       .selectAll("path")
-      .classed("active", (p) => p.source === d || p.target === d);
+      .classed("active", (p) => p.sourceNode === d || p.targetNode === d);
   }
   function edgeOver(e, d) {
     svg.selectAll("path").classed("active", (p) => p === d);
     svg
       .selectAll("circle")
-      .classed("source", (p) => p === d.source)
-      .classed("target", (p) => p === d.target);
+      .classed("source", (p) => p === d.sourceNode)
+      .classed("target", (p) => p === d.targetNode);
+  }
+  function arc(d) {
+    const draw = d3.line().curve(d3.curveBasis);
+    const midX = (d.sourceNode.x + d.targetNode.x) / 2;
+    const midY = (d.sourceNode.x - d.targetNode.x) * 2;
+    return draw([
+      [d.sourceNode.x, 0],
+      [midX, midY],
+      [d.targetNode.x, 0],
+    ]);
   }
 }
