@@ -1,15 +1,12 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
+.legend .label text {
+  color: black;
+  font-size: 0.5em;
+}
+
 svg {
-  font-family: var(--togostanza-font-family);
-  background-color: var(--togostanza-background-color);
-
-  .error-bar > line {
-    stroke-width: var(--togostanza-errorbar-line-width);
-    stroke: var(--togostanza-errorbar-line-color);
-  }
-
   .gridlines {
     & > .tick > line {
       stroke: var(--togostanza-grid-color);
@@ -23,10 +20,20 @@ svg {
     }
   }
 
+  .bars rect {
+    stroke-width: var(--togostanza-bars-border-width);
+    stroke: var(--togostanza-bars-border-color);
+  }
+
   .axis {
     & > .tick > line {
       stroke: var(--togostanza-tick-color);
       stroke-width: var(--togostanza-tick-width);
+    }
+
+    & > .tick > text {
+      font-size: calc(var(--togostanza-label-font-size) * 1px);
+      fill: var(--togostanza-label-font-color);
     }
 
     & > path {
@@ -37,34 +44,19 @@ svg {
     &.title text {
       font-size: calc(var(--togostanza-title-font-size) * 1px);
       font-weight: var(--togostanza-title-font-weight);
-      font-family: var(--togostanza-font-family) !important;
       fill: var(--togostanza-title-font-color);
     }
-
-    & > .tick > text {
-      font-family: var(--togostanza-font-family);
-      font-size: calc(var(--togostanza-label-font-size) * 1px);
-      fill: var(--togostanza-label-font-color);
-    }
   }
 
-  path.data-lines {
-    stroke-width: var(--togostanza-line-width);
-    opacity: var(--togostanza-line-opacity);
-  }
-
-  line.errorbar {
+  line.error-bar-line {
     stroke: var(--togostanza-errorbar-line-color);
     stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
     opacity: var(--togostanza-errorbar-line-opacity);
   }
 }
+
 main {
   background-color: var(--togostanza-background-color);
   border: calc(var(--togostanza-border-width) * 1px) solid
     var(--togostanza-border-color);
-}
-
-.-off {
-  opacity: 0.5;
 }

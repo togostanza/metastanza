@@ -1,18 +1,26 @@
-# D3 Linechart
+# Barchart
 
 ### Legend
 
 With legend on, you can hide/show data lines by clicking the correspondong legend item.
 
-### Data type
+### Params
 
-Data specified by `y-axis-key` should be numbers or string numerical values (`"123.456"`). All other data will be converted to numbers, and any non-numerical values will be ignored.
+#### category
 
-#### x-axis-data-type
+X axis will use values stored with this key
 
-Type of data for x axis.
+#### value
 
-If `x-axis-data-type` is set to `number`, Linechart Stanza will ignore all non-numeric values, and show only those, which could be represented as a numbers. (Even is numbers is in string format (`"123.456"`))
+Y axis will use values stored with this key
+
+#### group-by
+
+Inside each `category` divide data by this key's value
+
+#### error-key
+
+Use error data (for error bars) stored in value with this key
 
 #### xlabel-angle
 
