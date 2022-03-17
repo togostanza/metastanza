@@ -30,30 +30,6 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "top",
-      "stanza:type": "number",
-      "stanza:example": 30,
-      "stanza:description": "top"
-    },
-    {
-      "stanza:key": "right",
-      "stanza:type": "number",
-      "stanza:example": 30,
-      "stanza:description": "right"
-    },
-    {
-      "stanza:key": "left",
-      "stanza:type": "number",
-      "stanza:example": 30,
-      "stanza:description": "left"
-    },
-    {
-      "stanza:key": "bottom",
-      "stanza:type": "number",
-      "stanza:example": 30,
-      "stanza:description": "bottom"
-    },
-    {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 450,
@@ -70,6 +46,18 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Show domains"
+    },
+    {
+      "stanza:key": "x-label-angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "X label angle (in degree)"
+    },
+    {
+      "stanza:key": "y-label-angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Y label angle (in degree)"
     },
     {
       "stanza:key": "show-tick-lines",
@@ -93,7 +81,7 @@
     {
       "stanza:key": "legend-groups",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 3,
       "stanza:description": "amount of groups for legend"
     }
   ],
@@ -139,8 +127,14 @@
     {
       "stanza:key": "--togostanza-border-radius",
       "stanza:type": "number",
-      "stanza:default": 5,
+      "stanza:default": 0,
       "stanza:description": "Border radius"
+    },
+    {
+      "stanza:key": "--togostanza-tick-size",
+      "stanza:type": "number",
+      "stanza:default": 2,
+      "stanza:description": "Tick length (in pixel)"
     },
     {
       "stanza:key": "--togostanza-hover-border-color",
