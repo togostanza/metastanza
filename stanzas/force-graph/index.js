@@ -167,7 +167,7 @@ export default class ForceGraph extends Stanza {
         drawArcLayout(svg, nodes, edges, params);
         break;
       case "grid":
-        drawGridLayout.call(this, svg, nodes, edges);
+        drawGridLayout(svg, nodes, edges, params);
         break;
       case "circle":
         drawCircleLayout(svg, nodes, edges, params);

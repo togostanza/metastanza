@@ -1,46 +1,89 @@
 import * as d3 from "d3";
 
-export default function (svg, nodes, edges) {
+export default function (svg, nodes, edges, params) {
   const nodesC = JSON.parse(JSON.stringify(nodes));
   const edgesC = JSON.parse(JSON.stringify(edges));
 
-  const width = svg.attr("width");
-  const height = svg.attr("height");
+  const {
+    width,
+    height,
+    MARGIN,
+    color,
+    symbols,
+    nodeSizeParams,
+    edgeWidthParams,
+    labelsParams,
+  } = params;
 
-  const color = this[Symbol.for("color")];
-  const sizeScale = this[Symbol.for("sizeScale")];
-  const count = this[Symbol.for("count")];
-  const edgeSym = Symbol.for("nodeAdjEdges");
+  const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+  const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
   const nodeHash = {};
   nodesC.forEach((node) => {
     nodeHash[node.id] = node;
   });
 
+  let edgeWidthScale;
+  if (edgeWidthParams.basedOn === "dataKey") {
+    edgeWidthScale = d3
+      .scaleLinear()
+      .domain(d3.extent(edgesC, (d) => d[edgeWidthParams.dataKey]))
+      .range([edgeWidthParams.minWidth, edgeWidthParams.maxWidth]);
+  } else {
+    edgeWidthScale = () => edgeWidthParams.fixedWidth;
+  }
+
   edgesC.forEach((edge) => {
-    edge.weight = parseInt(edge.value);
-    edge.sourceNode = nodeHash[edge.source];
-    edge.targetNode = nodeHash[edge.target];
+    edge[symbols.edgeWidthSym] = edgeWidthScale(
+      parseFloat(edge[edgeWidthParams.dataKey])
+    );
+    edge[symbols.sourceNodeSym] = nodeHash[edge.source];
+    edge[symbols.targetNodeSym] = nodeHash[edge.target];
   });
 
   nodesC.forEach((node) => {
     const adjEdges = edgesC.filter((edge) => {
-      return edge.sourceNode === node || edge.targetNode === node;
+      return (
+        edge[symbols.sourceNodeSym] === node ||
+        edge[symbols.targetNodeSym] === node
+      );
     });
-    node[edgeSym] = adjEdges;
+    node[symbols.edgeSym] = adjEdges;
   });
 
+  let nodeSizeScale;
+  if (nodeSizeParams.basedOn === "dataKey") {
+    nodeSizeScale = d3
+      .scaleLinear()
+      .domain(d3.extent(nodesC, (d) => d[nodeSizeParams.dataKey]))
+      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
+    nodesC.forEach((node) => {
+      node[symbols.nodeSizeSym] = nodeSizeScale(node[nodeSizeParams.dataKey]);
+    });
+  } else if (nodeSizeParams.basedOn === "edgesNumber") {
+    nodeSizeScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(nodesC, (d) => d[symbols.edgeSym].length)])
+      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
+
+    nodesC.forEach((node) => {
+      node[symbols.nodeSizeSym] = nodeSizeScale(node[symbols.edgeSym].length);
+    });
+  } else {
+    nodesC.forEach((node) => {
+      node[symbols.nodeSizeSym] = nodeSizeParams.fixedSize;
+    });
+  }
+
   // Laying out nodes=========
-  const marX = 50;
-  const marY = 30;
 
   let ii = 0;
   let jj = 0;
 
   const gridSize = Math.ceil(Math.sqrt(nodesC.length));
 
-  const dx = (width - 2 * marX) / (gridSize - 1);
-  const dy = (height - 2 * marY) / (gridSize - 1);
+  const dx = WIDTH / (gridSize - 1);
+  const dy = HEIGHT / (gridSize - 1);
 
   // add random noise to pisition to prevent fully overlapping edges
 
@@ -66,7 +109,7 @@ export default function (svg, nodes, edges) {
   const gridG = svg
     .append("g")
     .attr("id", "gridG")
-    .attr("transform", `translate(${marX},${marY})`);
+    .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
 
   const links = gridG
     .selectAll("path")
@@ -74,55 +117,65 @@ export default function (svg, nodes, edges) {
     .enter()
     .append("line")
     .attr("class", "link")
-    .style("stroke-width", (d) => d.weight * 0.5)
-    .style("stroke", (d) => color(d.sourceNode.id))
-    .style("stroke-opacity", 0.25)
-    .style("stroke-linecap", "round")
-    .attr("x1", (d) => d.sourceNode.x)
-    .attr("y1", (d) => d.sourceNode.y)
-    .attr("x2", (d) => d.targetNode.x)
-    .attr("y2", (d) => d.targetNode.y);
+    .style("stroke-width", (d) => d[symbols.edgeWidthSym])
+    .style("stroke", (d) => color(d[symbols.sourceNodeSym].id))
+    .attr("x1", (d) => d[symbols.sourceNodeSym].x)
+    .attr("y1", (d) => d[symbols.sourceNodeSym].y)
+    .attr("x2", (d) => d[symbols.targetNodeSym].x)
+    .attr("y2", (d) => d[symbols.targetNodeSym].y);
 
-  const circles = gridG
-    .selectAll("circle")
+  const nodeGroups = gridG
+    .selectAll("g")
     .data(nodesC)
     .enter()
+    .append("g")
+    .attr("class", "node-group")
+    .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+  const circles = nodeGroups
     .append("circle")
     .attr("class", "node")
     .attr("fill", (d) => color(d.id))
-    .attr("r", (d) => sizeScale(count[d.id]))
-    .attr("cx", (d) => d.x)
-    .attr("cy", (d) => d.y)
+    .attr("r", (d) => d[symbols.nodeSizeSym])
     .attr("data-tooltip", (d) => d.id);
 
-  circles.on("mouseover", function (e, d) {
+  if (labelsParams.show) {
+    const labels = nodeGroups
+      .append("text")
+      .text((d) => d.id)
+      .attr("alignment-baseline", "middle")
+      .attr("x", labelsParams.margin)
+      .attr("class", "label");
+  }
+
+  nodeGroups.on("mouseover", function (e, d) {
     // highlight current node
     d3.select(this).classed("active", true);
-
     // fade out all other nodes, highlight a little connected ones
-    circles
+    nodeGroups
       .classed("fadeout", (p) => d !== p)
       .classed("half-active", (p) => {
         return (
           p !== d &&
-          d[edgeSym].some(
-            (edge) => edge.sourceNode === p || edge.targetNode === p
+          d[symbols.edgeSym].some(
+            (edge) =>
+              edge[symbols.sourceNodeSym] === p ||
+              edge[symbols.targetNodeSym] === p
           )
         );
       });
-
     // fadeout not connected edges, highlight connected ones
     links
-      .classed("fadeout", (p) => !d[edgeSym].includes(p))
-      .classed("active", (p) => d[edgeSym].includes(p));
+      .classed("fadeout", (p) => !d[symbols.edgeSym].includes(p))
+      .classed("active", (p) => d[symbols.edgeSym].includes(p));
   });
 
-  circles.on("mouseleave", function () {
-    circles
+  nodeGroups.on("mouseleave", function () {
+    links
       .classed("active", false)
       .classed("fadeout", false)
       .classed("half-active", false);
-    links
+    nodeGroups
       .classed("active", false)
       .classed("fadeout", false)
       .classed("half-active", false);
