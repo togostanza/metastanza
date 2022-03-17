@@ -95,8 +95,6 @@ export default function (svg, nodes, edges, params) {
     .style("stroke", (d) => {
       return color(d[symbols.sourceNodeSym].id);
     })
-    .style("stroke-opacity", 0.25)
-    .style("fill", "none")
     .attr("d", (d) => arc(d));
 
   const nodeGroups = arcG

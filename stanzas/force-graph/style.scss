@@ -42,6 +42,9 @@
 
 .link {
   transition: all 0.2s ease-in-out;
+  stroke-opacity: 0.25;
+  stroke-linecap: round;
+  fill: none;
   &.active {
     stroke-opacity: 1 !important;
   }

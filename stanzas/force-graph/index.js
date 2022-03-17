@@ -69,10 +69,10 @@ export default class ForceGraph extends Stanza {
     this[Symbol.for("count")] = count;
 
     const MARGIN = {
-      TOP: 10,
-      BOTTOM: 10,
-      LEFT: 10,
-      RIGHT: 10,
+      TOP: 50,
+      BOTTOM: 50,
+      LEFT: 50,
+      RIGHT: 50,
     };
 
     // TODO delete next lines
@@ -159,7 +159,6 @@ export default class ForceGraph extends Stanza {
     //   .append("path")
     //   .attr("d", "M 0 0 12 6 0 12 3 6");
 
-    // Useful functions
     switch (this.params["layout"]) {
       case "force":
         drawFoecLayout.call(this, svg, nodes, edges);
@@ -171,7 +170,7 @@ export default class ForceGraph extends Stanza {
         drawGridLayout.call(this, svg, nodes, edges);
         break;
       case "circle":
-        drawCircleLayout.call(this, svg, nodes, edges);
+        drawCircleLayout(svg, nodes, edges, params);
         break;
       default:
         break;
