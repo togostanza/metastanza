@@ -19,6 +19,7 @@ export default function (svg, nodes, edges) {
   const color = this[Symbol.for("color")];
   const sizeScale = this[Symbol.for("sizeScale")];
   const count = this[Symbol.for("count")];
+  const edgeSym = Symbol.for("nodeAdjEdges");
 
   const nodeHash = {};
   nodesC.forEach((node) => {
@@ -35,7 +36,7 @@ export default function (svg, nodes, edges) {
     const adjEdges = edgesC.filter((edge) => {
       return edge.sourceNode === node || edge.targetNode === node;
     });
-    node[Symbol.for("nodeAdjEdges")] = adjEdges;
+    node[edgeSym] = adjEdges;
   });
 
   const pointScale = d3
@@ -48,12 +49,12 @@ export default function (svg, nodes, edges) {
     .attr("id", "arcG")
     .attr("transform", `translate(${MARGIN.LEFT},${height / 2})`);
 
-  arcG
+  const links = arcG
     .selectAll("path")
     .data(edgesC)
     .enter()
     .append("path")
-    .attr("class", "arc")
+    .attr("class", "link")
     .style("stroke-width", (d) => d.weight * 0.5)
     .style("stroke", (d) => {
       return color(d.sourceNode.id);
@@ -63,7 +64,7 @@ export default function (svg, nodes, edges) {
     .attr("d", (d) => arc(d))
     .attr("marker-end", "url(#arrow)");
 
-  arcG
+  const circles = arcG
     .selectAll("circle")
     .data(nodesC)
     .enter()
@@ -74,40 +75,46 @@ export default function (svg, nodes, edges) {
     .attr("cx", (d) => pointScale(d.id))
     .attr("data-tooltip", (d) => d.id);
 
-  svg.selectAll("circle").on("mouseover", nodeOver);
-  svg.selectAll("path").on("mouseover", edgeOver);
-  svg.selectAll("circle").on("mouseout", nodeOut);
-  svg.selectAll("path").on("mouseout", edgeOut);
+  circles.on("mouseover", function (e, d) {
+    // highlight current node
+    d3.select(this).classed("active", true);
 
-  function nodeOut() {
-    d3.select(this).classed("active", false);
-    svg.selectAll("path").classed("active", false);
-  }
+    // fade out all other nodes, highlight a little connected ones
+    circles
+      .classed("fadeout", (p) => d !== p)
+      .classed("half-active", (p) => {
+        return (
+          p !== d &&
+          d[edgeSym].some(
+            (edge) => edge.sourceNode === p || edge.targetNode === p
+          )
+        );
+      });
 
-  function edgeOut() {
-    d3.select(this).classed("active", false);
-    svg.selectAll("circle").classed("active", false);
-  }
+    // fadeout not connected edges, highlight connected ones
+    links
+      .classed("fadeout", (p) => !d[edgeSym].includes(p))
+      .classed("active", (p) => d[edgeSym].includes(p));
+  });
 
-  function nodeOver(e, d) {
-    svg.selectAll("circle").classed("active", (p) => p === d);
-    svg
-      .selectAll("path")
-      .classed("active", (p) => p.sourceNode === d || p.targetNode === d);
-  }
-  function edgeOver(e, d) {
-    svg.selectAll("path").classed("active", (p) => p === d);
-    svg
-      .selectAll("circle")
-      .classed("source", (p) => p === d.sourceNode)
-      .classed("target", (p) => p === d.targetNode);
-  }
+  circles.on("mouseleave", function () {
+    circles
+      .classed("active", false)
+      .classed("fadeout", false)
+      .classed("half-active", false);
+    links
+      .classed("active", false)
+      .classed("fadeout", false)
+      .classed("half-active", false);
+  });
+
   function arc(d) {
     const draw = d3.line().curve(d3.curveBasis);
     const sourceX = pointScale(d.sourceNode.id);
     const targetX = pointScale(d.targetNode.id);
+    console.log(sourceX - targetX);
     const midX = (sourceX + targetX) / 2;
-    const midY = 20 + (sourceX - targetX) / 3;
+    const midY = (sourceX - targetX) / 3;
     return draw([
       [sourceX, 0],
       [midX, midY],

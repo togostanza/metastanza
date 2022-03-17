@@ -46,20 +46,12 @@ export default class ForceGraph extends Stanza {
       this.params["data-type"]
     );
 
-    const nodeHash = {};
-
     this._data = values;
 
     const nodes = values.nodes;
     const edges = values.links;
 
-    nodes.forEach((node) => {
-      nodeHash[node.id] = node;
-    });
-
     await setTimeout(() => {}, 100);
-
-    this[Symbol.for("nodeHash")] = nodeHash;
 
     const count = {};
     for (const element of edges) {
@@ -77,7 +69,6 @@ export default class ForceGraph extends Stanza {
 
     this[Symbol.for("count")] = count;
 
-    console.log(count);
     // Setting node size scale
     const sizeScale = d3.scaleSqrt([0, d3.max(Object.values(count))], [4, 16]);
     this[Symbol.for("sizeScale")] = sizeScale;
@@ -91,13 +82,14 @@ export default class ForceGraph extends Stanza {
     this[Symbol.for("color")] = color;
 
     const root = this.root.querySelector(":scope > div");
+    const el = this.root.getElementById("force-graph");
 
-    const existingSvg = root.querySelector("svg");
+    const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
       existingSvg.remove();
     }
     const svg = d3
-      .select(root)
+      .select(el)
       .append("svg")
       .attr("width", width)
       .attr("height", height);
@@ -138,6 +130,6 @@ export default class ForceGraph extends Stanza {
         break;
     }
 
-    this.tooltip.setup(this.root.querySelectorAll("circle[data-tooltip]"));
+    this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
   }
 }

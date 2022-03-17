@@ -52,19 +52,19 @@ export default function (svg, nodes, edges) {
   }
   function updateNodes() {
     joinedNodes.attr("transform", (d) => {
-      const r = sizeScale(count[d.id]);
-      const dx = Math.max(r, Math.min(width - r, d.x));
-      const dy = Math.max(r, Math.min(width - r, d.y));
-      d.x = dx;
-      d.y = dy;
-      return `translate(${dx},${dy})`;
+      //   const r = sizeScale(count[d.id]);
+      //   const dx = Math.max(r, Math.min(width - r, d.x));
+      //   const dy = Math.max(r, Math.min(width - r, d.y));
+      //   d.x = dx;
+      //   d.y = dy;
+      return `translate(${d.x},${d.y})`;
     });
     //joinedNodes.attr("transform", (d) => `translate(${d.x},${d.y})`);
   }
 
   function ticked() {
-    updateLinks();
     updateNodes();
+    updateLinks();
   }
 
   const joinedNodes = gNodes

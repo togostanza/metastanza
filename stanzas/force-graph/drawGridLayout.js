@@ -42,16 +42,22 @@ export default function (svg, nodes, edges) {
   const dx = (width - 2 * marX) / (gridSize - 1);
   const dy = (height - 2 * marY) / (gridSize - 1);
 
+  // add random noise to pisition to prevent fully overlapping edges
+
+  const rand = () => {
+    return 0;
+  }; // d3.randomNormal(0, 5);
+
   nodesC.forEach((node) => {
     if (jj < gridSize) {
-      node.x = jj * dx;
-      node.y = ii * dy;
+      node.x = jj * dx + rand();
+      node.y = ii * dy + rand();
       jj++;
     } else {
       jj = 0;
       ii++;
-      node.x = jj * dx;
-      node.y = ii * dy;
+      node.x = jj * dx + rand();
+      node.y = ii * dy + rand();
       jj++;
     }
   });
