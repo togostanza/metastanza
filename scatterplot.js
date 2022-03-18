@@ -57,7 +57,11 @@ class ScatterPlot extends Stanza {
 
     const xVariable = this.params["x"];
     const yVariable = this.params["y"];
-    const zVariable = this.params["z"] ? this.params["z"] : "none";
+    const zVariable = this.params["z"] || "none";
+
+    const adjustYBottom = this.params["adjust-y-range"];
+    const adjustXLeft = this.params["adjust-x-range"];
+
 
     const _data = await loadData(
       this.params["data-url"],
@@ -88,7 +92,7 @@ class ScatterPlot extends Stanza {
         type: "linear",
         round: true,
         nice: true,
-        zero: true,
+        zero: !adjustXLeft,
         domain: { data: "source", field: xVariable },
         range: "width",
       },
@@ -97,7 +101,7 @@ class ScatterPlot extends Stanza {
         type: "linear",
         round: true,
         nice: true,
-        zero: true,
+        zero: !adjustYBottom,
         domain: { data: "source", field: yVariable },
         range: "height",
       },
@@ -126,7 +130,6 @@ class ScatterPlot extends Stanza {
         gridOpacity: css("--togostanza-grid-opacity"),
         gridWidth: css("--togostanza-grid-width"),
         ticks: this.params["xtick"] === "true",
-        // tickCount: params["xtick-count"],
         tickColor: "var(--togostanza-tick-color)",
         tickSize: css("--togostanza-tick-length"),
         tickWidth: css("--togostanza-tick-width"),
@@ -167,7 +170,6 @@ class ScatterPlot extends Stanza {
         gridOpacity: css("--togostanza-grid-opacity"),
         gridWidth: css("--togostanza-grid-width"),
         ticks: this.params["ytick"] === "true",
-        // tickCount: params["ytick-count"],
         tickColor: "var(--togostanza-tick-color)",
         tickSize: css("--togostanza-tick-length"),
         tickWidth: css("--togostanza-tick-width"),
@@ -406,6 +408,18 @@ var metadata = {
 		],
 		"stanza:example": true,
 		"stanza:description": "Show Y grid"
+	},
+	{
+		"stanza:key": "adjust-x-range",
+		"stanza:type": "boolean",
+		"stanza:example": true,
+		"stanza:description": "Adjust X axis range"
+	},
+	{
+		"stanza:key": "adjust-y-range",
+		"stanza:type": "boolean",
+		"stanza:example": true,
+		"stanza:description": "Adjust Y axis range"
 	},
 	{
 		"stanza:key": "xtick",
