@@ -1,16 +1,6 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
-.active {
-  transition: all 0.1s ease-in-out;
-}
-.fadeout {
-  transition: all 0.1s ease-in-out;
-}
-.half-active {
-  transition: all 0.1s ease-in-out;
-}
-
 .label {
   transition: opacity 0.1s ease-in-out;
   font-size: calc(var(--togostanza-label-font-size) * 1px);
@@ -31,6 +21,8 @@
 }
 
 .active {
+  transition: all 0.1s ease-in-out;
+
   &.node {
     stroke: gray !important;
     stroke-width: 5px !important;
@@ -41,12 +33,16 @@
   }
 }
 .fadeout {
+  transition: all 0.1s ease-in-out;
+
   opacity: 0.1 !important;
   &.link {
     stroke-opacity: 0.1 !important;
   }
 }
 .half-active {
+  transition: all 0.1s ease-in-out;
+
   opacity: 0.8 !important;
   &.node {
     stroke: gray !important;
