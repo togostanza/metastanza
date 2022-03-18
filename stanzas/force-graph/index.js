@@ -111,6 +111,7 @@ export default class ForceGraph extends Stanza {
     const sourceNodeSym = Symbol.for("sourceNode");
     const targetNodeSym = Symbol.for("targetNode");
     const nodeSizeSym = Symbol.for("nodeSize");
+    const nodeColorSym = Symbol.for("nodeColor");
 
     const symbols = {
       edgeSym,
@@ -118,6 +119,7 @@ export default class ForceGraph extends Stanza {
       sourceNodeSym,
       targetNodeSym,
       nodeSizeSym,
+      nodeColorSym,
     };
     const nodeSizeParams = {
       basedOn: "edgesNumber",
@@ -126,12 +128,22 @@ export default class ForceGraph extends Stanza {
       minSize: 5,
       maxSize: 15,
     };
+    const nodeColorParams = {
+      basedOn: "dataKey",
+      dataKey: "value",
+    };
+
     const edgeWidthParams = {
       basedOn: "dataKey",
       dataKey: "value",
       fixedWidth: 2,
       minWidth: 1,
       maxWidth: 10,
+    };
+
+    const edgeColorParams = {
+      basedOn: "edgesNumber",
+      dataKey: "value",
     };
 
     const params = {
@@ -142,7 +154,9 @@ export default class ForceGraph extends Stanza {
       color,
       symbols,
       nodeSizeParams,
+      nodeColorParams,
       edgeWidthParams,
+      edgeColorParams,
       labelsParams: { margin: 10, show: true },
     };
 
