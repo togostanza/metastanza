@@ -161,7 +161,7 @@ export default class ForceGraph extends Stanza {
 
     switch (this.params["layout"]) {
       case "force":
-        drawFoecLayout.call(this, svg, nodes, edges);
+        drawFoecLayout(svg, nodes, edges, params);
         break;
       case "arc":
         drawArcLayout(svg, nodes, edges, params);
