@@ -96,9 +96,8 @@ export default class Barchart extends Stanza {
       template: "stanza.html.hbs",
     });
 
-    const root = this.root.querySelector(":scope > div");
-
-    const el = this.root.querySelector("#barchart-d3");
+    const root = this.root.querySelector("main");
+    const el = this.root.getElementById("barchart-d3");
 
     // On change params rerender - Check if legend and svg already existing and remove them -
     const existingLegend = this.root.querySelector("togostanza--legend");
