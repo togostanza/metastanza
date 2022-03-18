@@ -91,12 +91,13 @@ export default class regionGeographicMap extends Stanza {
       0,
       Number(this.params["group-amount"])
     );
+    const val = values.map(val => val[this.params["value-key"]]);
 
     const scales = [
       {
         name: "userColor",
         type: "quantize",
-        domain: [0, 0.15],
+        domain: [Math.min(...val), Math.max(...val)],
         range: colorRange,
       },
     ];
@@ -106,9 +107,6 @@ export default class regionGeographicMap extends Stanza {
         fill: "userColor",
         orient: this.params["legend-orient"],
         title: this.params["legend-title"],
-        titleColor: "var(--togostanza-title-font-color)",
-        titleFont: "var(--togostanza-font-family)",
-        titleFontWeight: "var(--togostanza-title-font-weight)",
         format: this.params["percentage"] ? "0.1%" : "",
       },
     ];

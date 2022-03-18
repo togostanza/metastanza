@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://penqeinc.github.io/metastanza//assets/named_map_world_test.tsv",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/tsv/named-map-data.tsv",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -113,9 +113,16 @@
     },
     {
       "stanza:key": "--togostanza-title-font-weight",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["normal", "bold", "lighter"],
+      "stanza:default": "normal",
+      "stanza:description": "Title font weight"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-size",
       "stanza:type": "number",
-      "stanza:default": "400",
-      "stanza:description": "Font weight of legend title"
+      "stanza:default": 12,
+      "stanza:description": "Title font size in pixels"
     },
     {
       "stanza:key": "--togostanza-series-0-color",
