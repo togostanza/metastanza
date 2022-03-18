@@ -91,7 +91,7 @@ export default class regionGeographicMap extends Stanza {
       0,
       Number(this.params["group-amount"])
     );
-    const val = values.map(val => val[this.params["value-key"]]);
+    const val = values.map((val) => val[this.params["value-key"]]);
 
     const scales = [
       {
