@@ -11,7 +11,9 @@ export default function (svg, nodes, edges, params) {
     color,
     symbols,
     nodeSizeParams,
+    nodeColorParams,
     edgeWidthParams,
+    edgeColorParams,
     labelsParams,
   } = params;
 
@@ -23,6 +25,7 @@ export default function (svg, nodes, edges, params) {
     nodeHash[node.id] = node;
   });
 
+  // Edges width
   let edgeWidthScale;
   if (edgeWidthParams.basedOn === "dataKey") {
     edgeWidthScale = d3
@@ -32,6 +35,7 @@ export default function (svg, nodes, edges, params) {
   } else {
     edgeWidthScale = () => edgeWidthParams.fixedWidth;
   }
+  // ===
 
   edgesC.forEach((edge) => {
     edge[symbols.edgeWidthSym] = edgeWidthScale(
@@ -51,6 +55,34 @@ export default function (svg, nodes, edges, params) {
     node[symbols.edgeSym] = adjEdges;
   });
 
+  //Edges color
+
+  if (edgeColorParams.basedOn === "dataKey") {
+    // Match hex color
+    const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
+    edgesC.forEach((edge) => {
+      // if data key value is a hex color, use it, else use color ordinal scale provided
+      if (regex.test(edge[edgeColorParams.dataKey])) {
+        edge[symbols.edgeColorSym] = edge[edgeColorParams.dataKey];
+      } else {
+        edge[symbols.edgeColorSym] = color(edge[edgeColorParams.dataKey]);
+      }
+    });
+  } else if (edgeColorParams.basedOn.match(/source|target/gi).length > 0) {
+    const wichColor = edgeColorParams.basedOn.match(/source|target/gi)[0];
+    edgesC.forEach((edge) => {
+      edge[symbols.edgeColorSym] =
+        edge[symbols[`${wichColor}NodeSym`]][symbols.nodeColorSym];
+    });
+  } else {
+    edgesC.forEach((edge) => {
+      edge[symbols.edgeColorSym] = null;
+    });
+  }
+
+  // ===
+
+  // Nodes size
   let nodeSizeScale;
   if (nodeSizeParams.basedOn === "dataKey") {
     nodeSizeScale = d3
@@ -74,6 +106,26 @@ export default function (svg, nodes, edges, params) {
       node[symbols.nodeSizeSym] = nodeSizeParams.fixedSize;
     });
   }
+  // ===
+
+  // Nodes color
+  if (nodeColorParams.basedOn === "dataKey") {
+    // Match hex color
+    const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
+    nodesC.forEach((node) => {
+      // if data key value is a hex color, use it, else use color ordinal scale provided
+      if (regex.test(node[nodeColorParams.dataKey])) {
+        node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
+      } else {
+        node[symbols.nodeColorSym] = color(node[nodeColorParams.dataKey]);
+      }
+    });
+  } else {
+    nodesC.forEach((node) => {
+      node[symbols.nodeColorSym] = null;
+    });
+  }
+  // ===
 
   const forceG = svg
     .append("g")
@@ -157,7 +209,7 @@ export default function (svg, nodes, edges, params) {
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", (d) => d[symbols.nodeSizeSym])
-    .attr("fill", (d) => color(d.id))
+    .attr("fill", (d) => d[symbols.nodeColorSym])
     .attr("data-tooltip", (d) => d.id);
 
   nodeGroups
