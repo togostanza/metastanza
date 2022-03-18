@@ -133,7 +133,7 @@
       "stanza:description": "Font size of the legend title"
     },
     {
-      "stanza:key": "--togostanza-font-weight",
+      "stanza:key": "--togostanza-title-font-weight",
       "stanza:type": "number",
       "stanza:default": 400,
       "stanza:description": "Font weight of legend title"
