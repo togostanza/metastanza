@@ -1,0 +1,178 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "named-map",
+  "stanza:label": "Named map",
+  "stanza:definition": "Named map MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Map",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
+  "stanza:created": "2021-04-23",
+  "stanza:updated": "2021-08-25",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/tsv/named-map-data.tsv",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "tsv",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "value-key",
+      "stanza:example": "rate",
+      "stanza:description": "Value key of data",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "area",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["us", "world"],
+      "stanza:example": "world",
+      "stanza:description": "Area of map",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "border",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show border between"
+    },
+    {
+      "stanza:key": "legend",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": true,
+      "stanza:description": "Show legend"
+    },
+    {
+      "stanza:key": "legend-orient",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
+      "stanza:example": "top-right",
+      "stanza:description": "Legend Placement"
+    },
+    {
+      "stanza:key": "legend-title",
+      "stanza:type": "text",
+      "stanza:example": "Legend Title",
+      "stanza:description": "Legend Title"
+    },
+    {
+      "stanza:key": "group-amount",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["2", "3", "4", "5", "6", "7", "8"],
+      "stanza:example": "5",
+      "stanza:description": "Amount of Region groups"
+    },
+    {
+      "stanza:key": "percentage",
+      "stanza:type": "boolean",
+      "stanza:choice": ["true", "false"],
+      "stanza:example": "false",
+      "stanza:description": "Format data as percentage"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-region-border-color",
+      "stanza:type": "color",
+      "stanza:default": "black",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-hover-color",
+      "stanza:type": "color",
+      "stanza:default": "#FB0E0E",
+      "stanza:description": "Hover color when hovering over region"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Title font color"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-weight",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["normal", "bold", "lighter"],
+      "stanza:default": "normal",
+      "stanza:description": "Title font weight"
+    },
+    {
+      "stanza:key": "--togostanza-title-font-size",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Title font size in pixels"
+    },
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Category color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Category color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Category color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Category color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Category color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Category color 5"
+    },
+    {
+      "stanza:key": "--togostanza-series-6-color",
+      "stanza:type": "color",
+      "stanza:default": "#8251DB",
+      "stanza:description": "Category color 6"
+    },
+    {
+      "stanza:key": "--togostanza-series-7-color",
+      "stanza:type": "color",
+      "stanza:default": "#9C6363",
+      "stanza:description": "Category color 7"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
