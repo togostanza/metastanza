@@ -1,79 +1,14 @@
 import * as d3 from "d3";
-
+import prepareGraphData from "./prepareGraphData";
 export default function (svg, nodes, edges, params) {
   const nodesC = JSON.parse(JSON.stringify(nodes));
   const edgesC = JSON.parse(JSON.stringify(edges));
 
-  const {
-    width,
-    height,
-    MARGIN,
-    color,
-    symbols,
-    nodeSizeParams,
-    edgeWidthParams,
-    labelsParams,
-  } = params;
+  prepareGraphData(nodesC, edgesC, params);
+  const { width, height, MARGIN, symbols, labelsParams } = params;
 
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
-  const nodeHash = {};
-  nodesC.forEach((node) => {
-    nodeHash[node.id] = node;
-  });
-
-  let edgeWidthScale;
-  if (edgeWidthParams.basedOn === "dataKey") {
-    edgeWidthScale = d3
-      .scaleLinear()
-      .domain(d3.extent(edgesC, (d) => d[edgeWidthParams.dataKey]))
-      .range([edgeWidthParams.minWidth, edgeWidthParams.maxWidth]);
-  } else {
-    edgeWidthScale = () => edgeWidthParams.fixedWidth;
-  }
-
-  edgesC.forEach((edge) => {
-    edge[symbols.edgeWidthSym] = edgeWidthScale(
-      parseFloat(edge[edgeWidthParams.dataKey])
-    );
-    edge[symbols.sourceNodeSym] = nodeHash[edge.source];
-    edge[symbols.targetNodeSym] = nodeHash[edge.target];
-  });
-
-  nodesC.forEach((node) => {
-    const adjEdges = edgesC.filter((edge) => {
-      return (
-        edge[symbols.sourceNodeSym] === node ||
-        edge[symbols.targetNodeSym] === node
-      );
-    });
-    node[symbols.edgeSym] = adjEdges;
-  });
-
-  let nodeSizeScale;
-  if (nodeSizeParams.basedOn === "dataKey") {
-    nodeSizeScale = d3
-      .scaleLinear()
-      .domain(d3.extent(nodesC, (d) => d[nodeSizeParams.dataKey]))
-      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeScale(node[nodeSizeParams.dataKey]);
-    });
-  } else if (nodeSizeParams.basedOn === "edgesNumber") {
-    nodeSizeScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(nodesC, (d) => d[symbols.edgeSym].length)])
-      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
-
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeScale(node[symbols.edgeSym].length);
-    });
-  } else {
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeParams.fixedSize;
-    });
-  }
 
   // Laying out nodes=========
 
@@ -118,7 +53,7 @@ export default function (svg, nodes, edges, params) {
     .append("line")
     .attr("class", "link")
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
-    .style("stroke", (d) => color(d[symbols.sourceNodeSym].id))
+    .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("x1", (d) => d[symbols.sourceNodeSym].x)
     .attr("y1", (d) => d[symbols.sourceNodeSym].y)
     .attr("x2", (d) => d[symbols.targetNodeSym].x)
@@ -136,13 +71,13 @@ export default function (svg, nodes, edges, params) {
   const circles = nodeGroups
     .append("circle")
     .attr("class", "node")
-    .attr("fill", (d) => color(d.id))
+    .style("fill", (d) => d[symbols.nodeColorSym])
     .attr("r", (d) => d[symbols.nodeSizeSym]);
 
-  if (labelsParams.show) {
+  if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
     const labels = nodeGroups
       .append("text")
-      .text((d) => d.id)
+      .text((d) => d[labelsParams.dataKey])
       .attr("alignment-baseline", "middle")
       .attr("x", labelsParams.margin)
       .attr("class", "label");

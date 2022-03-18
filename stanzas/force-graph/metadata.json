@@ -31,19 +31,21 @@
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:description": "Width"
+      "stanza:default": 600,
+      "stanza:description": "Width in px"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:description": "Height"
+      "stanza:default": 600,
+      "stanza:description": "Height in px"
     },
     {
       "stanza:key": "padding",
       "stanza:type": "number",
       "stanza:example": 50,
-      "stanza:description": "Padding"
+      "stanza:description": "Inner padding in px"
     },
     {
       "stanza:key": "layout",
@@ -55,53 +57,54 @@
       "stanza:description": "Graph layout"
     },
     {
-      "stanza:key": "node-size-basedOn",
+      "stanza:key": "node-size-based-on",
       "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "edges number", "fixed"],
-      "stanza:example": "edges number",
-      "stanza:default": "edges number",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "fixed",
+      "stanza:default": "fixed",
+      "stanza:required": true,
       "stanza:description": "Set size of the node  data key"
     },
     {
-      "stanza:key": "node-size-dataKey",
+      "stanza:key": "node-size-data-key",
       "stanza:type": "string",
       "stanza:example": "",
       "stanza:description": "Set size on the node based on data key"
     },
     {
-      "stanza:key": "node-size-minSize",
+      "stanza:key": "node-size-min-size",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 4,
       "stanza:description": "Minimum node radius in px"
     },
     {
-      "stanza:key": "node-size-maxSize",
+      "stanza:key": "node-size-max-size",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 12,
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-size-fixedWidth",
+      "stanza:key": "node-size-fixed-size",
       "stanza:type": "number",
       "stanza:example": 5,
       "stanza:description": "Fixed node radius in px"
     },
     {
-      "stanza:key": "node-color-basedOn",
+      "stanza:key": "node-color-based-on",
       "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "edges number", "fixed"],
-      "stanza:example": "edges number",
-      "stanza:default": "edges number",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "data key",
+      "stanza:default": "data key",
       "stanza:description": "Set color of the node  data key"
     },
     {
-      "stanza:key": "node-color-dataKey",
+      "stanza:key": "node-color-data-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
     },
     {
-      "stanza:key": "edge-width-basedOn",
+      "stanza:key": "edge-width-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
       "stanza:example": "fixed",
@@ -109,31 +112,31 @@
       "stanza:description": "Set edge width  data key"
     },
     {
-      "stanza:key": "edge-width-dataKey",
+      "stanza:key": "edge-width-data-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set width of the edge  data key"
     },
     {
-      "stanza:key": "edge-width-minSize",
+      "stanza:key": "edge-min-width",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 2,
       "stanza:description": "Minimum edge width in px"
     },
     {
-      "stanza:key": "edge-width-maxSize",
+      "stanza:key": "edge-max-width",
       "stanza:type": "number",
-      "stanza:example": 15,
+      "stanza:example": 6,
       "stanza:description": "Maximum edge width in px"
     },
     {
-      "stanza:key": "edge-width-fixedWidth",
+      "stanza:key": "edge-fixed-width",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 2,
       "stanza:description": "Fixed edge width in px"
     },
     {
-      "stanza:key": "edge-color-basedOn",
+      "stanza:key": "edge-color-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "source color", "target color", "fixed"],
       "stanza:example": "source color",
@@ -141,20 +144,34 @@
       "stanza:description": "Set color of the edge based on this"
     },
     {
-      "stanza:key": "edge-color-dataKey",
+      "stanza:key": "edge-color-data-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "labels-dataKey",
+      "stanza:key": "tooltip-data-key",
       "stanza:type": "string",
-      "stanza:default": "",
-      "stanza:example": "",
+      "stanza:default": "id",
+      "stanza:example": "id",
       "stanza:description": "Node labels data key. If empty, no labels will be shown"
     },
     {
-      "stanza:key": "nodes-tooltip-dataKey",
+      "stanza:key": "labels-data-key",
+      "stanza:type": "string",
+      "stanza:default": "id",
+      "stanza:example": "id",
+      "stanza:description": "Node labels data key. If empty, no labels will be shown"
+    },
+    {
+      "stanza:key": "labels-margin",
+      "stanza:type": "number",
+      "stanza:default": 15,
+      "stanza:example": 15,
+      "stanza:description": "Node labels offset from node center, in px."
+    },
+    {
+      "stanza:key": "nodes-tooltip-data-key",
       "stanza:type": "string",
       "stanza:default": "id",
       "stanza:example": "id",
@@ -200,16 +217,22 @@
       "stanza:description": "Group color 5"
     },
     {
+      "stanza:key": "--togostanza-forcechart-node-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Nodes default color"
+    },
+    {
+      "stanza:key": "--togostanza-forcechart-edge-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Egdes default color"
+    },
+    {
       "stanza:key": "--togostanza-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Line width"
     },
     {
       "stanza:key": "--togostanza-label-font-color",
@@ -220,7 +243,7 @@
     {
       "stanza:key": "--togostanza-label-font-size",
       "stanza:type": "number",
-      "stanza:default": 10,
+      "stanza:default": 7,
       "stanza:description": "Label font size"
     },
     {

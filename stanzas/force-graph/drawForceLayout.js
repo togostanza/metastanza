@@ -1,131 +1,14 @@
 import * as d3 from "d3";
-
+import prepareGraphData from "./prepareGraphData";
 export default function (svg, nodes, edges, params) {
   const nodesC = JSON.parse(JSON.stringify(nodes));
   const edgesC = JSON.parse(JSON.stringify(edges));
 
-  const {
-    width,
-    height,
-    MARGIN,
-    color,
-    symbols,
-    nodeSizeParams,
-    nodeColorParams,
-    edgeWidthParams,
-    edgeColorParams,
-    labelsParams,
-  } = params;
+  prepareGraphData(nodesC, edgesC, params);
+  const { width, height, MARGIN, symbols, labelsParams } = params;
 
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
-  const nodeHash = {};
-  nodesC.forEach((node) => {
-    nodeHash[node.id] = node;
-  });
-
-  // Edges width
-  let edgeWidthScale;
-  if (edgeWidthParams.basedOn === "dataKey") {
-    edgeWidthScale = d3
-      .scaleLinear()
-      .domain(d3.extent(edgesC, (d) => d[edgeWidthParams.dataKey]))
-      .range([edgeWidthParams.minWidth, edgeWidthParams.maxWidth]);
-  } else {
-    edgeWidthScale = () => edgeWidthParams.fixedWidth;
-  }
-  // ===
-
-  edgesC.forEach((edge) => {
-    edge[symbols.edgeWidthSym] = edgeWidthScale(
-      parseFloat(edge[edgeWidthParams.dataKey])
-    );
-    edge[symbols.sourceNodeSym] = nodeHash[edge.source];
-    edge[symbols.targetNodeSym] = nodeHash[edge.target];
-  });
-
-  nodesC.forEach((node) => {
-    const adjEdges = edgesC.filter((edge) => {
-      return (
-        edge[symbols.sourceNodeSym] === node ||
-        edge[symbols.targetNodeSym] === node
-      );
-    });
-    node[symbols.edgeSym] = adjEdges;
-  });
-
-  //Edges color
-
-  if (edgeColorParams.basedOn === "dataKey") {
-    // Match hex color
-    const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
-    edgesC.forEach((edge) => {
-      // if data key value is a hex color, use it, else use color ordinal scale provided
-      if (regex.test(edge[edgeColorParams.dataKey])) {
-        edge[symbols.edgeColorSym] = edge[edgeColorParams.dataKey];
-      } else {
-        edge[symbols.edgeColorSym] = color(edge[edgeColorParams.dataKey]);
-      }
-    });
-  } else if (edgeColorParams.basedOn.match(/source|target/gi).length > 0) {
-    const wichColor = edgeColorParams.basedOn.match(/source|target/gi)[0];
-    edgesC.forEach((edge) => {
-      edge[symbols.edgeColorSym] =
-        edge[symbols[`${wichColor}NodeSym`]][symbols.nodeColorSym];
-    });
-  } else {
-    edgesC.forEach((edge) => {
-      edge[symbols.edgeColorSym] = null;
-    });
-  }
-
-  // ===
-
-  // Nodes size
-  let nodeSizeScale;
-  if (nodeSizeParams.basedOn === "dataKey") {
-    nodeSizeScale = d3
-      .scaleLinear()
-      .domain(d3.extent(nodesC, (d) => d[nodeSizeParams.dataKey]))
-      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeScale(node[nodeSizeParams.dataKey]);
-    });
-  } else if (nodeSizeParams.basedOn === "edgesNumber") {
-    nodeSizeScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(nodesC, (d) => d[symbols.edgeSym].length)])
-      .range([nodeSizeParams.minSize, nodeSizeParams.maxSize]);
-
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeScale(node[symbols.edgeSym].length);
-    });
-  } else {
-    nodesC.forEach((node) => {
-      node[symbols.nodeSizeSym] = nodeSizeParams.fixedSize;
-    });
-  }
-  // ===
-
-  // Nodes color
-  if (nodeColorParams.basedOn === "dataKey") {
-    // Match hex color
-    const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
-    nodesC.forEach((node) => {
-      // if data key value is a hex color, use it, else use color ordinal scale provided
-      if (regex.test(node[nodeColorParams.dataKey])) {
-        node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
-      } else {
-        node[symbols.nodeColorSym] = color(node[nodeColorParams.dataKey]);
-      }
-    });
-  } else {
-    nodesC.forEach((node) => {
-      node[symbols.nodeColorSym] = null;
-    });
-  }
-  // ===
 
   const forceG = svg
     .append("g")
@@ -163,9 +46,7 @@ export default function (svg, nodes, edges, params) {
     .data(edgesC)
     .join("line")
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
-    .style("stroke", (d) => {
-      return color(d[symbols.sourceNodeSym].id);
-    })
+    .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("class", "link");
 
   function updateLinks() {
@@ -209,14 +90,17 @@ export default function (svg, nodes, edges, params) {
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", (d) => d[symbols.nodeSizeSym])
-    .attr("fill", (d) => d[symbols.nodeColorSym])
+    .style("fill", (d) => d[symbols.nodeColorSym])
     .attr("data-tooltip", (d) => d.id);
 
-  nodeGroups
-    .append("text")
-    .attr("dx", labelsParams.margin)
-    .attr("alignment-baseline", "middle")
-    .text((d) => d.id);
+  if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
+    nodeGroups
+      .append("text")
+      .attr("dx", labelsParams.margin)
+      .attr("class", "label")
+      .attr("alignment-baseline", "middle")
+      .text((d) => d[labelsParams.dataKey]);
+  }
 
   let isDragging = false;
 

@@ -34,8 +34,8 @@ export default class ForceGraph extends Stanza {
 
     //data
 
-    const width = parseInt(this.params["width"]) || 300;
-    const height = parseInt(this.params["height"]) || 200;
+    const width = parseInt(this.params["width"]);
+    const height = parseInt(this.params["height"]);
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -65,20 +65,12 @@ export default class ForceGraph extends Stanza {
       }
     }
 
-    // TODO delete next line
-    this[Symbol.for("count")] = count;
-
     const MARGIN = {
-      TOP: 50,
-      BOTTOM: 50,
-      LEFT: 50,
-      RIGHT: 50,
+      TOP: this.params["padding"],
+      BOTTOM: this.params["padding"],
+      LEFT: this.params["padding"],
+      RIGHT: this.params["padding"],
     };
-
-    // TODO delete next lines
-    // Setting node size scale
-    const sizeScale = d3.scaleSqrt([0, d3.max(Object.values(count))], [4, 16]);
-    this[Symbol.for("sizeScale")] = sizeScale;
 
     // Setting color scale
     const togostanzaColors = [];
@@ -86,7 +78,6 @@ export default class ForceGraph extends Stanza {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
     const color = d3.scaleOrdinal().range(togostanzaColors);
-    this[Symbol.for("color")] = color;
 
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("force-graph");
@@ -106,12 +97,12 @@ export default class ForceGraph extends Stanza {
       root.append(this.tooltip);
     }
 
-    const edgeSym = Symbol.for("nodeAdjEdges");
-    const edgeWidthSym = Symbol.for("edgeWidth");
-    const sourceNodeSym = Symbol.for("sourceNode");
-    const targetNodeSym = Symbol.for("targetNode");
-    const nodeSizeSym = Symbol.for("nodeSize");
-    const nodeColorSym = Symbol.for("nodeColor");
+    const edgeSym = Symbol("nodeAdjEdges");
+    const edgeWidthSym = Symbol("edgeWidth");
+    const sourceNodeSym = Symbol("sourceNode");
+    const targetNodeSym = Symbol("targetNode");
+    const nodeSizeSym = Symbol("nodeSize");
+    const nodeColorSym = Symbol("nodeColor");
 
     const symbols = {
       edgeSym,
@@ -122,28 +113,28 @@ export default class ForceGraph extends Stanza {
       nodeColorSym,
     };
     const nodeSizeParams = {
-      basedOn: "edgesNumber",
-      dataKey: "value",
-      fixedSize: 10,
-      minSize: 5,
-      maxSize: 15,
+      basedOn: this.params["node-size-based-on"],
+      dataKey: this.params["node-size-data-key"],
+      fixedSize: this.params["node-size-fixed-size"],
+      minSize: this.params["node-size-min-size"],
+      maxSize: this.params["node-size-max-size"],
     };
     const nodeColorParams = {
-      basedOn: "dataKey",
-      dataKey: "value",
+      basedOn: this.params["node-color-based-on"],
+      dataKey: this.params["node-color-data-key"],
     };
 
     const edgeWidthParams = {
-      basedOn: "dataKey",
-      dataKey: "value",
-      fixedWidth: 2,
-      minWidth: 1,
-      maxWidth: 10,
+      basedOn: this.params["edge-width-based-on"],
+      dataKey: this.params["edge-width-data-key"],
+      fixedWidth: this.params["edge-fixed-width"],
+      minWidth: this.params["edge-min-width"],
+      maxWidth: this.params["edge-max-width"],
     };
 
     const edgeColorParams = {
-      basedOn: "edgesNumber",
-      dataKey: "value",
+      basedOn: this.params["edge-color-based-on"],
+      dataKey: this.params["edge-color-data-key"],
     };
 
     const params = {
@@ -157,7 +148,10 @@ export default class ForceGraph extends Stanza {
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
-      labelsParams: { margin: 10, show: true },
+      labelsParams: {
+        margin: this.params["labels-margin"],
+        dataKey: this.params["labels-data-key"],
+      },
     };
 
     // svg
