@@ -39,14 +39,14 @@ export default function (svg, nodes, edges, params) {
     .attr("transform", (d) => `translate(${pointScale(d.id)},0)`)
     .attr("data-tooltip", (d) => d.id);
 
-  const circles = nodeGroups
+  nodeGroups
     .append("circle")
     .attr("class", "node")
     .style("fill", (d) => d[symbols.nodeColorSym])
     .attr("r", (d) => d[symbols.nodeSizeSym]);
 
   if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
-    const labels = nodeGroups
+    nodeGroups
       .append("text")
       .text((d) => d[labelsParams.dataKey])
       .attr("alignment-baseline", "middle")
