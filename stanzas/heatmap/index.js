@@ -99,12 +99,7 @@ export default class Heatmap extends Stanza {
       svg.selectAll(".tick line").remove();
     }
 
-    graphArea
-      .selectAll("text")
-      .attr("font-family", this.css("--togostanza-font-family"))
-      .attr("fill", this.css("--togostanza-font-color"))
-      .attr("font-size", Number(this.css("--togostanza-font-size")))
-      .attr("font-weight", this.css("--togostanza-font-weight"));
+    graphArea.selectAll("text").attr("class", "text");
 
     const myColor = d3
       .scaleLinear()
