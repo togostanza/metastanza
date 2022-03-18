@@ -103,14 +103,14 @@ export default function (svg, nodes, edges, params) {
     .enter()
     .append("g")
     .attr("class", "node-group")
-    .attr("transform", (d) => `translate(${pointScale(d.id)},0)`);
+    .attr("transform", (d) => `translate(${pointScale(d.id)},0)`)
+    .attr("data-tooltip", (d) => d.id);
 
   const circles = nodeGroups
     .append("circle")
     .attr("class", "node")
     .attr("fill", (d) => color(d.id))
-    .attr("r", (d) => d[symbols.nodeSizeSym])
-    .attr("data-tooltip", (d) => d.id);
+    .attr("r", (d) => d[symbols.nodeSizeSym]);
 
   if (labelsParams.show) {
     const labels = nodeGroups
