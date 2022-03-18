@@ -100,7 +100,7 @@ export default function (svg, nodes, edges, params) {
       "collide",
       d3
         .forceCollide()
-        .radius((d) => nodeSizeScale(d.id))
+        .radius((d) => d[symbols.nodeSizeSym])
         .iterations(2)
         .strength(0.9)
     )
@@ -125,11 +125,11 @@ export default function (svg, nodes, edges, params) {
   }
   function updateNodes() {
     nodeGroups.attr("transform", (d) => {
-      //   const r = sizeScale(count[d.id]);
-      //   const dx = Math.max(r, Math.min(width - r, d.x));
-      //   const dy = Math.max(r, Math.min(width - r, d.y));
-      //   d.x = dx;
-      //   d.y = dy;
+      const r = d[symbols.nodeSizeSym];
+      const dx = Math.max(r, Math.min(WIDTH - r, d.x));
+      const dy = Math.max(r, Math.min(HEIGHT - r, d.y));
+      d.x = dx;
+      d.y = dy;
       return `translate(${d.x},${d.y})`;
     });
     //joinedNodes.attr("transform", (d) => `translate(${d.x},${d.y})`);
