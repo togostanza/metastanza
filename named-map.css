@@ -1,0 +1,10 @@
+main {
+  padding: 1rem 2rem;
+}
+
+main .mark-text.role-legend-title * {
+  font-size: calc(var(--togostanza-title-font-size) * 1px);
+  font-family: var(--togostanza-title-font-family);
+  font-weight: var(--togostanza-title-font-weight);
+  color: var(--togostanza-title-font-color);
+}

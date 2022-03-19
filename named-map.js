@@ -88,12 +88,13 @@ class regionGeographicMap extends Stanza {
       0,
       Number(this.params["group-amount"])
     );
+    const val = values.map((val) => val[this.params["value-key"]]);
 
     const scales = [
       {
         name: "userColor",
         type: "quantize",
-        domain: [0, 0.15],
+        domain: [Math.min(...val), Math.max(...val)],
         range: colorRange,
       },
     ];
@@ -103,9 +104,6 @@ class regionGeographicMap extends Stanza {
         fill: "userColor",
         orient: this.params["legend-orient"],
         title: this.params["legend-title"],
-        titleColor: "var(--togostanza-title-font-color)",
-        titleFont: "var(--togostanza-font-family)",
-        titleFontWeight: "var(--togostanza-title-font-weight)",
         format: this.params["percentage"] ? "0.1%" : "",
       },
     ];
@@ -164,9 +162,9 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "region-geographic-map",
-	"stanza:label": "Region geographic map",
-	"stanza:definition": "Region geographic map MetaStanza",
+	"@id": "named-map",
+	"stanza:label": "Named map",
+	"stanza:definition": "Named map MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Map",
 	"stanza:provider": "TogoStanza",
@@ -181,7 +179,7 @@ var metadata = {
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
-		"stanza:example": "https://penqeinc.github.io/metastanza//assets/named_map_world_test.tsv",
+		"stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/tsv/named-map-data.tsv",
 		"stanza:description": "Data source URL",
 		"stanza:required": true
 	},
@@ -307,9 +305,20 @@ var metadata = {
 	},
 	{
 		"stanza:key": "--togostanza-title-font-weight",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"normal",
+			"bold",
+			"lighter"
+		],
+		"stanza:default": "normal",
+		"stanza:description": "Title font weight"
+	},
+	{
+		"stanza:key": "--togostanza-title-font-size",
 		"stanza:type": "number",
-		"stanza:default": "400",
-		"stanza:description": "Font weight of legend title"
+		"stanza:default": 12,
+		"stanza:description": "Title font size in pixels"
 	},
 	{
 		"stanza:key": "--togostanza-series-0-color",
@@ -368,20 +377,11 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
-    + "</p>";
+    return "";
 },"useData":true}]
 ];
 
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=region-geographic-map.js.map
+//# sourceMappingURL=named-map.js.map
