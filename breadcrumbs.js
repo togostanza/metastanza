@@ -1,8 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2dcff241.js';
-import { l as loadData } from './load-data-5664e120.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
+import { s as select } from './index-2e5f765c.js';
+import { l as loadData } from './load-data-52aeb3ee.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
 import { s as stratify, h as hierarchy } from './stratify-8f602319.js';
 import './dsv-8e18f33d.js';
 

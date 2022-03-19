@@ -1,4 +1,4 @@
-import { c as constant, i as interpolateNumber, a as color, b as interpolateRgb, d as interpolateString } from './index-2dcff241.js';
+import { c as constant, i as interpolateNumber, a as color, b as interpolateRgb, d as interpolateString } from './index-2e5f765c.js';
 
 class InternMap extends Map {
   constructor(entries, key = keyof) {
@@ -486,4 +486,4 @@ function ordinal() {
 }
 
 export { InternMap as I, interpolate as a, formatSpecifier as b, formatPrefix as c, exponent as e, format as f, initRange as i, ordinal as o };
-//# sourceMappingURL=ordinal-0780ae77.js.map
+//# sourceMappingURL=ordinal-736fbed7.js.map

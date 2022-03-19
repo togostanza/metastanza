@@ -2595,5 +2595,5 @@ function selection_transition(name) {
 selection.prototype.interrupt = selection_interrupt;
 selection.prototype.transition = selection_transition;
 
-export { color as a, interpolateRgb as b, constant as c, interpolateString as d, interpolateNumber as i, select as s };
-//# sourceMappingURL=index-2dcff241.js.map
+export { color as a, interpolateRgb as b, constant as c, interpolateString as d, dispatch as e, interpolateNumber as i, select as s, timer as t };
+//# sourceMappingURL=index-2e5f765c.js.map

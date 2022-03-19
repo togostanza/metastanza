@@ -1,46 +1,18 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2dcff241.js';
-import { l as loadData } from './load-data-5664e120.js';
+import { s as select } from './index-2e5f765c.js';
+import { l as loadData } from './load-data-52aeb3ee.js';
 import { T as ToolTip } from './ToolTip-7ceb815c.js';
 import { L as Legend } from './Legend-19eab368.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
 import { m as max } from './max-2c042256.js';
-import { a as array, b as band, c as axisBottom, d as axisLeft, g as group } from './array-3d4b6b32.js';
-import { l as linear } from './linear-b6a8628a.js';
-import { o as ordinal, f as format } from './ordinal-0780ae77.js';
+import { a as array, b as band } from './array-76bc119e.js';
+import { o as ordinal, f as format } from './ordinal-736fbed7.js';
+import { l as linear } from './linear-71a834cd.js';
+import { a as axisBottom, b as axisLeft, g as group } from './axis-7bd0b45e.js';
 import { c as constant } from './constant-c49047a5.js';
+import { e as extent } from './extent-14a1e8e9.js';
 import './dsv-8e18f33d.js';
-
-function extent(values, valueof) {
-  let min;
-  let max;
-  if (valueof === undefined) {
-    for (const value of values) {
-      if (value != null) {
-        if (min === undefined) {
-          if (value >= value) min = max = value;
-        } else {
-          if (min > value) min = value;
-          if (max < value) max = value;
-        }
-      }
-    }
-  } else {
-    let index = -1;
-    for (let value of values) {
-      if ((value = valueof(value, ++index, values)) != null) {
-        if (min === undefined) {
-          if (value >= value) min = max = value;
-        } else {
-          if (min > value) min = value;
-          if (max < value) max = value;
-        }
-      }
-    }
-  }
-  return [min, max];
-}
 
 function none$1(series, order) {
   if (!((n = series.length) > 1)) return;

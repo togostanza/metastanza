@@ -1,16 +1,18 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2dcff241.js';
-import { l as loadData } from './load-data-5664e120.js';
+import { s as select } from './index-2e5f765c.js';
+import { l as loadData } from './load-data-52aeb3ee.js';
 import { L as Legend } from './Legend-19eab368.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
-import { a as array, g as group, b as band, c as axisBottom, d as axisLeft, e as axisTop, f as axisRight } from './array-3d4b6b32.js';
-import { o as ordinal, f as format } from './ordinal-0780ae77.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
+import { g as group, a as axisBottom, b as axisLeft, c as axisTop, d as axisRight } from './axis-7bd0b45e.js';
+import { o as ordinal, f as format } from './ordinal-736fbed7.js';
 import { m as max } from './max-2c042256.js';
-import { l as linear } from './linear-b6a8628a.js';
-import { c as constant } from './constant-c49047a5.js';
-import { p as path } from './path-a78af922.js';
+import { l as linear } from './linear-71a834cd.js';
+import { b as band } from './array-76bc119e.js';
+import { l as line } from './line-213eb7d1.js';
 import './dsv-8e18f33d.js';
+import './constant-c49047a5.js';
+import './path-a78af922.js';
 
 function min(values, valueof) {
   let min;
@@ -31,98 +33,6 @@ function min(values, valueof) {
     }
   }
   return min;
-}
-
-function Linear(context) {
-  this._context = context;
-}
-
-Linear.prototype = {
-  areaStart: function() {
-    this._line = 0;
-  },
-  areaEnd: function() {
-    this._line = NaN;
-  },
-  lineStart: function() {
-    this._point = 0;
-  },
-  lineEnd: function() {
-    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
-    this._line = 1 - this._line;
-  },
-  point: function(x, y) {
-    x = +x, y = +y;
-    switch (this._point) {
-      case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
-      case 1: this._point = 2; // falls through
-      default: this._context.lineTo(x, y); break;
-    }
-  }
-};
-
-function curveLinear(context) {
-  return new Linear(context);
-}
-
-function x(p) {
-  return p[0];
-}
-
-function y(p) {
-  return p[1];
-}
-
-function line(x$1, y$1) {
-  var defined = constant(true),
-      context = null,
-      curve = curveLinear,
-      output = null;
-
-  x$1 = typeof x$1 === "function" ? x$1 : (x$1 === undefined) ? x : constant(x$1);
-  y$1 = typeof y$1 === "function" ? y$1 : (y$1 === undefined) ? y : constant(y$1);
-
-  function line(data) {
-    var i,
-        n = (data = array(data)).length,
-        d,
-        defined0 = false,
-        buffer;
-
-    if (context == null) output = curve(buffer = path());
-
-    for (i = 0; i <= n; ++i) {
-      if (!(i < n && defined(d = data[i], i, data)) === defined0) {
-        if (defined0 = !defined0) output.lineStart();
-        else output.lineEnd();
-      }
-      if (defined0) output.point(+x$1(d, i, data), +y$1(d, i, data));
-    }
-
-    if (buffer) return output = null, buffer + "" || null;
-  }
-
-  line.x = function(_) {
-    return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant(+_), line) : x$1;
-  };
-
-  line.y = function(_) {
-    return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant(+_), line) : y$1;
-  };
-
-  line.defined = function(_) {
-    return arguments.length ? (defined = typeof _ === "function" ? _ : constant(!!_), line) : defined;
-  };
-
-  line.curve = function(_) {
-    return arguments.length ? (curve = _, context != null && (output = curve(context)), line) : curve;
-  };
-
-  line.context = function(_) {
-    return arguments.length ? (_ == null ? context = output = null : output = curve(context = _), line) : context;
-  };
-
-  return line;
 }
 
 class Linechart extends Stanza {

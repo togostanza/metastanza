@@ -1,8 +1,8 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { l as loadData } from './load-data-5664e120.js';
-import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7299c921.js';
-import './index-2dcff241.js';
+import { l as loadData } from './load-data-52aeb3ee.js';
+import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
+import './index-2e5f765c.js';
 import './dsv-8e18f33d.js';
 
 class HashTable extends Stanza {
