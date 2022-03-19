@@ -1,4 +1,4 @@
-import { o as ordinal, i as initRange } from './ordinal-736fbed7.js';
+import { i as initRange, o as ordinal } from './ordinal-736fbed7.js';
 
 function range(start, stop, step) {
   start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
@@ -112,11 +112,5 @@ function point() {
   return pointish(band.apply(null, arguments).paddingInner(1));
 }
 
-function array(x) {
-  return typeof x === "object" && "length" in x
-    ? x // Array, TypedArray, NodeList, array-like
-    : Array.from(x); // Map, Set, iterable, string, or anything else
-}
-
-export { array as a, band as b, point as p };
-//# sourceMappingURL=array-76bc119e.js.map
+export { band as b, point as p };
+//# sourceMappingURL=band-01d5492f.js.map

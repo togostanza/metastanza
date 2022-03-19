@@ -1,0 +1,22 @@
+main {
+  padding: 1rem 2rem;
+}
+main .titles {
+  font-family: var(--togostanza-font-family);
+  font-weight: var(--togostanza-font-weight);
+}
+main .domain {
+  color: var(--togostanza-domain-color);
+}
+main .tick {
+  color: var(--togostanza-tick-color);
+}
+main .text {
+  font-family: var(--togostanza-font-family);
+  font-weight: var(--togostanza-font-weight);
+  font-size: calc(var(--togostanza-font-size) * 1px);
+  color: var(--togostanza-font-color);
+}
+main .cell {
+  border-radius: var(--togostanza-border-radius);
+}

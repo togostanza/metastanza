@@ -3,7 +3,7 @@ import { S as Stanza } from './stanza-b8cf3904.js';
 import { l as loadData } from './load-data-52aeb3ee.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
 import { T as ToolTip } from './ToolTip-7ceb815c.js';
-import { L as Legend } from './Legend-19eab368.js';
+import { L as Legend } from './Legend-90239b0e.js';
 import './index-2e5f765c.js';
 import './dsv-8e18f33d.js';
 

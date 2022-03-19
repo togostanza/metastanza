@@ -5,11 +5,12 @@ import { l as loadData } from './load-data-52aeb3ee.js';
 import { T as ToolTip } from './ToolTip-7ceb815c.js';
 import { l as linear } from './linear-71a834cd.js';
 import { e as extent } from './extent-14a1e8e9.js';
-import { p as point$1 } from './array-76bc119e.js';
-import { l as line } from './line-213eb7d1.js';
+import { p as point$1 } from './band-01d5492f.js';
+import { l as line } from './line-975b456c.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
 import { o as ordinal } from './ordinal-736fbed7.js';
 import './dsv-8e18f33d.js';
+import './array-89f97098.js';
 import './constant-c49047a5.js';
 import './path-a78af922.js';
 

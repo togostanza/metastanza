@@ -101,6 +101,7 @@ class Legend extends s {
    * @param {string?} opt.fadeProp
    */
   setup(items, container, opt) {
+    console.log(container);
     this.items = items;
 
     this.render();
@@ -194,4 +195,4 @@ class Legend extends s {
 customElements.define("togostanza--legend", Legend);
 
 export { Legend as L };
-//# sourceMappingURL=Legend-19eab368.js.map
+//# sourceMappingURL=Legend-90239b0e.js.map
