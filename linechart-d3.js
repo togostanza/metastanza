@@ -201,7 +201,7 @@ class Linechart extends Stanza {
 
     const legendShow = this.params["legend"] || "none";
 
-    const root = this.root.querySelector(":scope > div");
+    const root = this.root.querySelector("main");
 
     // On change params rerender - Check if legend and svg already existing and remove them -
     const existingLegend = this.root.querySelector("togostanza--legend");
@@ -281,7 +281,7 @@ class Linechart extends Stanza {
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
 
-    const el = this.root.querySelector("#linechart-d3");
+    const el = this.root.getElementById("linechart-d3");
 
     const svg = select(el)
       .append("svg")
