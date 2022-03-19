@@ -1,0 +1,160 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "heatmap",
+  "stanza:label": "Heatmap",
+  "stanza:definition": "Heatmap stanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
+  "stanza:created": "2021-08-26",
+  "stanza:updated": "2022-02-14",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/heatmap-data.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 450,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 450,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "show-domains",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show domains"
+    },
+    {
+      "stanza:key": "x-label-angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "X label angle (in degree)"
+    },
+    {
+      "stanza:key": "y-label-angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Y label angle (in degree)"
+    },
+    {
+      "stanza:key": "show-tick-lines",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show tick lines"
+    },
+    {
+      "stanza:key": "metastanza-menu-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "none"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Menu button placement"
+    },
+    {
+      "stanza:key": "legend-groups",
+      "stanza:type": "number",
+      "stanza:example": 3,
+      "stanza:description": "amount of groups for legend"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#EDEDED",
+      "stanza:description": "Depth color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#256D80",
+      "stanza:description": "Depth color 2"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-font-size",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Font size"
+    },
+    {
+      "stanza:key": "--togostanza-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Title font color"
+    },
+    {
+      "stanza:key": "--togostanza-font-weight",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["normal", "bold", "lighter"],
+      "stanza:default": "normal",
+      "stanza:description": "Title font weight"
+    },
+    {
+      "stanza:key": "--togostanza-border-radius",
+      "stanza:type": "number",
+      "stanza:default": 0,
+      "stanza:description": "Border radius"
+    },
+    {
+      "stanza:key": "--togostanza-tick-size",
+      "stanza:type": "number",
+      "stanza:default": 2,
+      "stanza:description": "Tick length (in pixel)"
+    },
+    {
+      "stanza:key": "--togostanza-hover-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#FFDF3D",
+      "stanza:description": "Hover border color"
+    },
+    {
+      "stanza:key": "--togostanza-domain-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Domain color"
+    },
+    {
+      "stanza:key": "--togostanza-tick-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Tick color"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
