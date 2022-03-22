@@ -51,24 +51,35 @@ export default class TreeMapStanza extends Stanza {
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
+    console.log(
+      "data parent id = -1",
+      data.filter((d) => d.parent === -1)
+    );
+
     // filter out all elements with n=0
     const filteredData = data.filter(
       (item) => (item.children && !item.n) || (item.n && item.n > 0)
     );
 
     //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
-    const rootElemIndexes = [];
-    for (let i = 0; i < filteredData.length - 1; i++) {
-      if (!filteredData[i]?.parent) {
-        rootElemIndexes.push(i);
-      }
-    }
-    if (rootElemIndexes.length > 1) {
+    const rootElems = filteredData
+      .map((d, i) => ({
+        d,
+        i,
+      }))
+      .filter((d) => !d.d.parent)
+      .map((d) => d.i);
+
+    if (rootElems.length > 1) {
       filteredData.push({ id: -1, value: "", label: "" });
 
-      rootElemIndexes.forEach((index) => {
+      rootElems.forEach((index) => {
         filteredData[index].parent = -1;
       });
+    }
+
+    if (!filteredData.find((d) => d.id === -1)) {
+      filteredData.push({ id: -1, value: "", label: "" });
     }
 
     const treeMapElement = this.root.querySelector("#treemap");
