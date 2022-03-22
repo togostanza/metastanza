@@ -1996,10 +1996,8 @@ class ForceGraph extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
-    if (!this.tooltip) {
-      this.tooltip = new ToolTip();
-      root.append(this.tooltip);
-    }
+    this.tooltip = new ToolTip();
+    root.append(this.tooltip);
 
     const edgeSym = Symbol("nodeAdjEdges");
     const edgeWidthSym = Symbol("edgeWidth");
