@@ -110,16 +110,16 @@ svg {
   background-color: #f9f9fa;
   border: 1px solid #e0e0e1;
   border-radius: 5px;
-  max-height: 150px;
+  max-height: 20rem;
   overflow-y: scroll;
-  padding: 0.2em 0.5em;
+  padding: 0.5em;
 }
 
 .breadcrumb-menu-item {
   z-index: 2;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 9px;
-  padding: 0.5em 0.2em;
+  padding: 0.5em;
 }
 
 .breadcrumb-menu-item:hover {

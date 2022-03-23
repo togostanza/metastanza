@@ -77,6 +77,12 @@ export default class Breadcrumbs extends Stanza {
     );
     button.setAttribute("height", "20px");
 
+    d3.select(button).on("mouseenter", () => {
+      if (showingMenu) {
+        showingMenu.remove();
+      }
+    });
+
     const idMap = new Map();
 
     addRoot();
@@ -315,17 +321,7 @@ export default class Breadcrumbs extends Stanza {
                 showingMenu = getMenuForId.call(this, d.id);
                 const breadcrumbCoords = this.getBoundingClientRect();
                 const appRect = app.getBoundingClientRect();
-                // console.log("app rect", app.getBoundingClientRect());
                 app.appendChild(showingMenu.node()); //TODO
-                // console.log({ breadcrumbCoords });
-                // console.log("e.pageX", e.pageX);
-                // console.log("e.ClientX", e.clientX);
-                // console.log("e", e);
-
-                // console.log(
-                //   "parent padding top",
-                //   getComputedStyle(app.parentElement).paddingTop
-                // );
 
                 showingMenu.node().style.left = `${
                   breadcrumbCoords.left -
@@ -340,7 +336,6 @@ export default class Breadcrumbs extends Stanza {
                 }px`;
               })
               .on("mouseleave", (e) => {
-                console.log(e.offsetY);
                 if (e.offsetY <= 0) {
                   showingMenu.remove();
                 }
