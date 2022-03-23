@@ -35,7 +35,7 @@ The tree nodes that does not have any children should contain number value
 
 ### Copying current path
 
-The path to current node can be copied in clipboard by right clicking in any point on this stanza and selecting `Copy path` context menu.
+The path to current node can be copied in clipboard by clicking the ⧉ button
 
 ### Coupling with another stanza
 

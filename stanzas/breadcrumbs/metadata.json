@@ -38,10 +38,37 @@
     {
       "stanza:key": "home-icon",
       "stanza:type": "string",
-      "stanza:description": "Root icon",
+      "stanza:description": "Root icon (Font Awesome icon name)",
+      "stanza:default": "Home",
       "stanza:example": "Home",
       "stanza:required": true
     },
+    {
+      "stanza:key": "home-node-label-text",
+      "stanza:type": "string",
+      "stanza:description": "Root node label text",
+      "stanza:default": "Home",
+      "stanza:example": "Home",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "home-node-label-icon",
+      "stanza:type": "string",
+      "stanza:description": "Root node label icon (Font Awesome icon name)",
+      "stanza:default": "Home",
+      "stanza:example": "Home",
+      "stanza:required": false
+    },
+
+    {
+      "stanza:key": "copy-icon",
+      "stanza:type": "string",
+      "stanza:description": "Copy icon (Font Awesome icon name)",
+      "stanza:default": "Copy",
+      "stanza:example": "Copy",
+      "stanza:required": true
+    },
+
     {
       "stanza:key": "showing-style",
       "stanza:type": "single-choice",

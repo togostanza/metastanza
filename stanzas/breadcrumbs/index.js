@@ -7,6 +7,8 @@ import roundPathCorners from "./rounding.js";
 //convert kebab-case into camelCase
 const camelize = (s) => s.replace(/-./g, (x) => x[1].toUpperCase());
 
+// FAIcons.library.add(FAIcons.faArrowRight);
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -49,7 +51,9 @@ export default class Breadcrumbs extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const showDropdown = this.params["show-dropdown"];
-    const homeIcon = this.params["home-icon"] || "Home";
+    const homeIcon = camelize(this.params["home-icon"]);
+    const copyIcon = camelize(this.params["copy-icon"]);
+
     const showingStyle = this.params["showing-style"];
 
     const values = await loadData(
@@ -76,6 +80,18 @@ export default class Breadcrumbs extends Stanza {
       d3.create("button").attr("id", "app-copy-button").node()
     );
     button.setAttribute("height", "20px");
+    // button.innerText = "⧉";
+    function generateFAIcon(iconName, className) {
+      const camelizedIconName = FAIcons[`fa${camelize(iconName)}`].icon;
+      const result = d3
+        .create("svg")
+        .attr("class", className)
+        .attr("viewBox", `0 0 ${camelizedIconName[0]} ${camelizedIconName[1]}`);
+      result.append("path").attr("d", camelizedIconName[4]);
+      return result.node();
+    }
+
+    button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
 
     d3.select(button).on("mouseenter", () => {
       if (showingMenu) {
@@ -125,6 +141,22 @@ export default class Breadcrumbs extends Stanza {
       return path;
     }
 
+    function getTextRect(app, text) {
+      const svg = d3.create("svg");
+      const textEl = svg.append("text");
+
+      textEl.append("tspan").text(text);
+
+      app.appendChild(svg.node()); // TODO
+      const textWidth = textEl.node().getBBox().width;
+      const textHeight = textEl.node().getBBox().height;
+      textEl.remove();
+      app.removeChild(svg.node()); //TODO
+      svg.remove();
+
+      return { textWidth, textHeight };
+    }
+
     function generateSVGBreadcrumb(
       datum,
       height,
@@ -133,67 +165,210 @@ export default class Breadcrumbs extends Stanza {
       r = 3
     ) {
       let path;
+
       const svg = d3.create("svg");
-      const text = svg.append("text");
 
-      text.append("tspan").text(datum.label);
+      const labelText = datum.label;
 
-      app.appendChild(svg.node()); // TODO
-      let textWidth = text.node().getBBox().width;
-      text.remove();
-      app.removeChild(svg.node()); //TODO
+      const camelizedIconName = FAIcons[`fa${camelize(homeIcon)}`]?.icon;
 
-      if (!textWidth || textWidth < arrowLength) {
-        textWidth = arrowLength + 10;
-      }
+      const innerMargin = 4;
+      let textRect, iconLeft, labelLeft, iconTop;
+      let textWidth = 0;
+      let textHeight = 0;
+      let iconWidth = 0;
+      let svgBreadcrumbWidth = 0;
 
-      svg
-        .attr("width", textWidth + arrowLength + strokeWidth + 4)
-        .attr("height", height + strokeWidth);
+      let breadcrumbPath, label;
 
-      const g = svg.append("g");
+      if (
+        labelText &&
+        labelText.length > 0 &&
+        camelizedIconName &&
+        datum.id === "root"
+      ) {
+        console.log("icon + text");
+        // text + icon
+        textRect = getTextRect(app, labelText);
+        textWidth = textRect.textWidth;
+        textHeight = textRect.textHeight;
+        iconWidth = textHeight;
 
-      if (typeof r === "number" && r > 0) {
-        path = roundPathCorners(
-          getPolygon(
-            textWidth - strokeWidth + arrowLength + 4,
-            height - strokeWidth
-          ),
-          r,
-          0
+        labelLeft = innerMargin * 2 + iconWidth;
+        svgBreadcrumbWidth = Math.max(
+          arrowLength + textWidth + 3 * innerMargin + iconWidth,
+          arrowLength + 10
         );
+        iconLeft = -svgBreadcrumbWidth / 2 + iconWidth / 2 + innerMargin;
+        iconTop = height / 2 - iconWidth / 2;
+        svg
+          .attr("width", svgBreadcrumbWidth)
+          .attr("height", height + strokeWidth);
+        const g = svg.append("g");
+
+        if (typeof r === "number" && r > 0) {
+          path = roundPathCorners(
+            getPolygon(svgBreadcrumbWidth - strokeWidth, height - strokeWidth),
+            r,
+            0
+          );
+        } else {
+          path = getPolygon(
+            svgBreadcrumbWidth - strokeWidth,
+            height - strokeWidth,
+            arrowLength
+          );
+        }
+        g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
+        breadcrumbPath = g
+          .append("path")
+          .attr("d", path)
+          .attr("class", "breadcrumb-path");
+
+        const icon = g
+          .append("svg")
+          .attr("x", iconLeft)
+          .attr("y", iconTop)
+          .attr(
+            "viewBox",
+            `0 0 ${camelizedIconName[0]} ${camelizedIconName[1]}`
+          );
+        icon.append("path").attr("d", camelizedIconName[4]);
+        icon.attr("height", textHeight);
+
+        label = g
+          .append("text")
+          .text(datum.label)
+          .attr("y", 10)
+          .attr("x", labelLeft)
+          .attr("alignment-baseline", "middle")
+          .attr("opacity", 1);
+      } else if (camelizedIconName && datum.id === "root") {
+        console.log("icon only");
+
+        textHeight = getTextRect(app, "W").textHeight;
+        iconWidth = textHeight;
+        svgBreadcrumbWidth = Math.max(
+          arrowLength + iconWidth + 2 * innerMargin,
+          arrowLength + 10
+        );
+        iconLeft = -svgBreadcrumbWidth / 2 + iconWidth / 2 + innerMargin;
+
+        svg
+          .attr("width", svgBreadcrumbWidth)
+          .attr("height", height + strokeWidth);
+        const g = svg.append("g");
+        if (typeof r === "number" && r > 0) {
+          path = roundPathCorners(
+            getPolygon(svgBreadcrumbWidth - strokeWidth, height - strokeWidth),
+            r,
+            0
+          );
+        } else {
+          path = getPolygon(
+            svgBreadcrumbWidth - strokeWidth,
+            height - strokeWidth,
+            arrowLength
+          );
+        }
+        g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
+        breadcrumbPath = g
+          .append("path")
+          .attr("d", path)
+          .attr("class", "breadcrumb-path");
+
+        const icon = g
+          .append("svg")
+          .attr("x", iconLeft)
+          .attr("y", iconTop)
+          .attr(
+            "viewBox",
+            `0 0 ${camelizedIconName[0]} ${camelizedIconName[1]}`
+          );
+        icon.append("path").attr("d", camelizedIconName[4]);
+        icon.attr("height", textHeight);
+      } else if (labelText && labelText.length > 0) {
+        console.log("text only");
+
+        textRect = getTextRect(app, labelText);
+        textWidth = textRect.textWidth;
+        textHeight = textRect.textHeight;
+        svgBreadcrumbWidth = Math.max(
+          arrowLength + textWidth + 2 * innerMargin,
+          arrowLength + 10
+        );
+        labelLeft = innerMargin;
+        svg
+          .attr("width", svgBreadcrumbWidth)
+          .attr("height", height + strokeWidth);
+
+        const g = svg.append("g");
+        if (typeof r === "number" && r > 0) {
+          path = roundPathCorners(
+            getPolygon(svgBreadcrumbWidth - strokeWidth, height - strokeWidth),
+            r,
+            0
+          );
+        } else {
+          path = getPolygon(
+            svgBreadcrumbWidth - strokeWidth,
+            height - strokeWidth,
+            arrowLength
+          );
+        }
+        g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
+        breadcrumbPath = g
+          .append("path")
+          .attr("d", path)
+          .attr("class", "breadcrumb-path");
+
+        label = g
+          .append("text")
+          .text(datum.label)
+          .attr("y", 10)
+          .attr("x", labelLeft)
+          .attr("alignment-baseline", "middle")
+          .attr("opacity", 1);
       } else {
-        path = getPolygon(
-          textWidth - strokeWidth + arrowLength + 4,
-          height - strokeWidth,
-          arrowLength
-        );
+        console.log("no icon, no text");
+
+        // no icon and no text
+        svgBreadcrumbWidth = arrowLength + 10;
+        svg
+          .attr("width", svgBreadcrumbWidth)
+          .attr("height", height + strokeWidth);
+
+        const g = svg.append("g");
+        if (typeof r === "number" && r > 0) {
+          path = roundPathCorners(
+            getPolygon(svgBreadcrumbWidth - strokeWidth, height - strokeWidth),
+            r,
+            0
+          );
+        } else {
+          path = getPolygon(
+            svgBreadcrumbWidth - strokeWidth,
+            height - strokeWidth,
+            arrowLength
+          );
+        }
+        g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
+
+        breadcrumbPath = g
+          .append("path")
+          .attr("d", path)
+          .attr("class", "breadcrumb-path");
       }
-
-      g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
-
-      const breadcrumbPath = g
-        .append("path")
-        .attr("d", path)
-        .attr("class", "breadcrumb-path");
-
-      const label = g
-        .append("text")
-        .text(datum.label)
-        .attr("y", 10)
-        .attr("x", 4)
-        .attr("alignment-baseline", "middle")
-        .attr("opacity", 1);
 
       if (datum.id !== "root") {
         svg.on("mouseover", () => {
           breadcrumbPath.classed("breadcrumb-path-hover", true);
-          label.classed("breadcrumb-label-hover", true);
+          //label.classed("breadcrumb-label-hover", true);
         });
 
         svg.on("mouseleave", () => {
           breadcrumbPath.classed("breadcrumb-path-hover", false);
-          label.classed("breadcrumb-label-hover", false);
+          //label.classed("breadcrumb-label-hover", false);
         });
       }
 

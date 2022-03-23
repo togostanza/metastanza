@@ -34,10 +34,16 @@ main {
   width: 20px;
   position: relative;
   box-sizing: border-box;
+  > svg.copy-icon {
+    height: 1rem;
+  }
 }
 
 #app-copy-button:hover {
   background-color: #396c7e;
+  > svg.copy-icon {
+    fill: #f9f9fa;
+  }
 }
 #app-copy-button::before {
   content: "";
@@ -60,6 +66,18 @@ svg {
   cursor: pointer;
   font-size: 10px;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.breadcrumb > svg:hover {
+  path {
+    fill: #396c7e;
+  }
+  text {
+    fill: #f9f9fa;
+  }
+  svg path {
+    fill: #f9f9fa;
+  }
 }
 
 .breadcrumb-path {
