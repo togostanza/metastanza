@@ -1,6 +1,6 @@
 # Breadcrumbs
 
-### Showinb nodes
+### Showing nodes
 
 In order to visualise the data, Breadcrumbs stanza should receive:
 
@@ -28,7 +28,7 @@ The data should be hierarchy tree-like data of the format:
 ]
 ```
 
-`id`, `label` and `parent` keys are mandatory. `id` should be uniqe, positive integer number.
+`id`, `label` and `parent` keys are mandatory. `id` should be uniqe.
 
 The tree nodes that does not have any children should contain number value
 `"n": 12345` (where `12345` is a "size" of a node) as well.

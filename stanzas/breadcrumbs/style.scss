@@ -10,8 +10,7 @@ main {
 
 #breadcrumbs {
   flex: 1;
-  width: 200px;
-  height: 50px;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -20,7 +19,7 @@ main {
 #app-breadcrumbs {
   overflow-x: scroll;
   overflow-y: hidden;
-  height: 20px;
+
   display: inline-flex;
 }
 
@@ -30,8 +29,7 @@ main {
   background-color: #f9f9fa;
   border: 1px solid #e0e0e1;
   border-radius: 4px;
-  height: 20px;
-  width: 20px;
+
   position: relative;
   box-sizing: border-box;
   > svg.copy-icon {

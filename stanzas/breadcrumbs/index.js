@@ -53,8 +53,7 @@ export default class Breadcrumbs extends Stanza {
     const showDropdown = this.params["show-dropdown"];
     const homeIcon = camelize(this.params["home-icon"]);
     const copyIcon = camelize(this.params["copy-icon"]);
-
-    const showingStyle = this.params["showing-style"];
+    const initialId = this.params["initial-data-id"];
 
     const values = await loadData(
       this.params["data-url"],
@@ -73,13 +72,17 @@ export default class Breadcrumbs extends Stanza {
     });
 
     const app = this.root.getElementById("breadcrumbs");
+    app.style.maxWidth = width + "px";
+    app.style.height = height + "px";
+
     const appBreadcrumbs = app.appendChild(
       d3.create("div").attr("id", "app-breadcrumbs").node()
     );
     const button = app.appendChild(
       d3.create("button").attr("id", "app-copy-button").node()
     );
-    button.setAttribute("height", "20px");
+
+    button.setAttribute("height", height + "px");
     // button.innerText = "⧉";
     function generateFAIcon(iconName, className) {
       const camelizedIconName = FAIcons[`fa${camelize(iconName)}`].icon;
@@ -101,7 +104,7 @@ export default class Breadcrumbs extends Stanza {
 
     const idMap = new Map();
 
-    addRoot();
+    addRoot(values);
 
     values.forEach((node) => {
       node.id = "" + node.id;
@@ -114,7 +117,6 @@ export default class Breadcrumbs extends Stanza {
       idMap.set(node.id, node);
     });
 
-    const initialId = "6";
     let showingMenu = null;
 
     function getById(id) {
@@ -172,7 +174,7 @@ export default class Breadcrumbs extends Stanza {
 
       const camelizedIconName = FAIcons[`fa${camelize(homeIcon)}`]?.icon;
 
-      const innerMargin = 4;
+      const innerMargin = 6;
       let textRect, iconLeft, labelLeft, iconTop;
       let textWidth = 0;
       let textHeight = 0;
@@ -187,7 +189,6 @@ export default class Breadcrumbs extends Stanza {
         camelizedIconName &&
         datum.id === "root"
       ) {
-        console.log("icon + text");
         // text + icon
         textRect = getTextRect(app, labelText);
         textWidth = textRect.textWidth;
@@ -360,17 +361,17 @@ export default class Breadcrumbs extends Stanza {
           .attr("class", "breadcrumb-path");
       }
 
-      if (datum.id !== "root") {
-        svg.on("mouseover", () => {
-          breadcrumbPath.classed("breadcrumb-path-hover", true);
-          //label.classed("breadcrumb-label-hover", true);
-        });
+      // if (datum.id !== "root") {
+      //   svg.on("mouseover", () => {
+      //     breadcrumbPath.classed("breadcrumb-path-hover", true);
+      //     //label.classed("breadcrumb-label-hover", true);
+      //   });
 
-        svg.on("mouseleave", () => {
-          breadcrumbPath.classed("breadcrumb-path-hover", false);
-          //label.classed("breadcrumb-label-hover", false);
-        });
-      }
+      //   svg.on("mouseleave", () => {
+      //     breadcrumbPath.classed("breadcrumb-path-hover", false);
+      //     //label.classed("breadcrumb-label-hover", false);
+      //   });
+      // }
 
       svg.on("click", () => {
         handleChange(datum.id);
@@ -393,10 +394,13 @@ export default class Breadcrumbs extends Stanza {
 
     function getNeighbourNodes(id) {
       const currentNode = getById(id);
+      console.log("id", id);
+      console.log("currentNode", currentNode);
       if (!currentNode?.parent) {
         return [];
       }
       const parent = getById(currentNode.parent);
+      console.log("parent", parent);
       if (!parent?.children) {
         return [];
       }
@@ -481,40 +485,44 @@ export default class Breadcrumbs extends Stanza {
       selectBreadcrumb
         .join(
           (enter) => {
-            const result = enter.append("div").attr("style", `height: 20px`);
+            const result = enter
+              .append("div")
+              .attr("style", `height: ${height}px`);
 
-            result.append((d) => generateSVGBreadcrumb(d, 20).node());
-            result
-              .on("mouseenter", function (e, d) {
-                if (d.id === "root") {
-                  return;
-                }
-                if (showingMenu) {
-                  showingMenu.remove();
-                }
+            result.append((d) => generateSVGBreadcrumb(d, height).node());
+            if (showDropdown) {
+              result
+                .on("mouseenter", function (e, d) {
+                  if (d.id === "root") {
+                    return;
+                  }
+                  if (showingMenu) {
+                    showingMenu.remove();
+                  }
 
-                showingMenu = getMenuForId.call(this, d.id);
-                const breadcrumbCoords = this.getBoundingClientRect();
-                const appRect = app.getBoundingClientRect();
-                app.appendChild(showingMenu.node()); //TODO
+                  showingMenu = getMenuForId.call(this, d.id);
+                  const breadcrumbCoords = this.getBoundingClientRect();
+                  const appRect = app.getBoundingClientRect();
+                  app.appendChild(showingMenu.node()); //TODO
 
-                showingMenu.node().style.left = `${
-                  breadcrumbCoords.left -
-                  appRect.left +
-                  parseFloat(getComputedStyle(app.parentElement).paddingLeft)
-                }px`;
-                showingMenu.node().style.top = `${
-                  breadcrumbCoords.bottom -
-                  4 -
-                  appRect.top +
-                  parseFloat(getComputedStyle(app.parentElement).paddingTop)
-                }px`;
-              })
-              .on("mouseleave", (e) => {
-                if (e.offsetY <= 0) {
-                  showingMenu.remove();
-                }
-              });
+                  showingMenu.node().style.left = `${
+                    breadcrumbCoords.left -
+                    appRect.left +
+                    parseFloat(getComputedStyle(app.parentElement).paddingLeft)
+                  }px`;
+                  showingMenu.node().style.top = `${
+                    breadcrumbCoords.bottom -
+                    4 -
+                    appRect.top +
+                    parseFloat(getComputedStyle(app.parentElement).paddingTop)
+                  }px`;
+                })
+                .on("mouseleave", (e) => {
+                  if (e.offsetY <= 0) {
+                    showingMenu.remove();
+                  }
+                });
+            }
             return result;
           },
           (update) => update,
@@ -523,21 +531,32 @@ export default class Breadcrumbs extends Stanza {
         .attr("class", "breadcrumb");
     }
 
-    function addRoot() {
-      const root = {
-        id: "root",
-        label: "Root",
-        children: [],
-      };
+    /**
+     * Checks if the given hierarchy has a single root node. If no, adds it in-place
+     *
+     * @param {Array} values Array of hierarchy nodes
+     * @param {string} rootId id to use for the root node
+     * @param {string} rootLabel label to use for the root node
+     * @returns {Array} Array of hierarchy nodes with a single root node
+     */
+    function addRoot(values, rootId = "root", rootLabel = "Root") {
+      if (values.filter((node) => !node?.parent).length > 1) {
+        const rootNode = {
+          id: "" + rootId,
+          label: "" + rootLabel,
+          children: [],
+        };
 
-      values.forEach((node, i) => {
-        if (!node.parent) {
-          root.children.push(node.id);
-          values[i].parent = "root";
-        }
-      });
+        values.forEach((node, i) => {
+          if (!node.parent) {
+            rootNode.children.push(node.id);
+            values[i].parent = "root";
+          }
+        });
 
-      values.push(root);
+        values.push(rootNode);
+      }
+      return values;
     }
 
     function handleChange(id) {

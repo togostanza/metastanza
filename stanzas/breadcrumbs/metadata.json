@@ -29,10 +29,24 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "initinal-data-id",
+      "stanza:key": "width",
       "stanza:type": "number",
+      "stanza:example": 400,
+      "stanza:description": "Width in px",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 20,
+      "stanza:description": "Height in px",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "initial-data-id",
+      "stanza:type": "string",
       "stanza:description": "Initial node id",
-      "stanza:example": 6,
+      "stanza:example": "6",
       "stanza:required": true
     },
     {
@@ -84,20 +98,7 @@
       "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
     },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 400,
-      "stanza:description": "Width",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 40,
-      "stanza:description": "Height",
-      "stanza:required": true
-    },
+
     {
       "stanza:key": "show-dropdown",
       "stanza:type": "boolean",
