@@ -49,16 +49,9 @@
       "stanza:example": "6",
       "stanza:required": true
     },
+
     {
-      "stanza:key": "home-icon",
-      "stanza:type": "string",
-      "stanza:description": "Root icon (Font Awesome icon name)",
-      "stanza:default": "Home",
-      "stanza:example": "Home",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "home-node-label-text",
+      "stanza:key": "root-node-label-text",
       "stanza:type": "string",
       "stanza:description": "Root node label text",
       "stanza:default": "Home",
@@ -66,7 +59,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "home-node-label-icon",
+      "stanza:key": "root-node-label-icon",
       "stanza:type": "string",
       "stanza:description": "Root node label icon (Font Awesome icon name)",
       "stanza:default": "Home",
@@ -82,13 +75,12 @@
       "stanza:example": "Copy",
       "stanza:required": true
     },
-
     {
-      "stanza:key": "showing-style",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["simple", "arrows"],
-      "stanza:description": "Style of the breadcrumbs nodes",
-      "stanza:example": "arrows",
+      "stanza:key": "labels-data-key",
+      "stanza:type": "string",
+      "stanza:description": "Data key for labels",
+      "stanza:default": "label",
+      "stanza:example": "label",
       "stanza:required": true
     },
 

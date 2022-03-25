@@ -51,15 +51,22 @@ export default class Breadcrumbs extends Stanza {
     const width = this.params["width"];
     const height = this.params["height"];
     const showDropdown = this.params["show-dropdown"];
-    const homeIcon = camelize(this.params["home-icon"]);
+    const rootIcon = camelize(this.params["root-node-label-icon"]);
+    const rootLabel = this.params["root-node-label-text"];
     const copyIcon = camelize(this.params["copy-icon"]);
     const initialId = this.params["initial-data-id"];
+    const labelsDataKey = this.params["labels-data-key"];
 
     const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
+
+    if (values.filter((d) => d[labelsDataKey]).length === 0) {
+      console.error("No data found with the key '" + labelsDataKey + "'");
+      return;
+    }
 
     this._data = values;
 
@@ -98,7 +105,7 @@ export default class Breadcrumbs extends Stanza {
     try {
       button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
     } catch (error) {
-      button.innerText = "Copy";
+      button.innerText = "⧉";
     }
 
     d3.select(button).on("mouseenter", () => {
@@ -175,9 +182,9 @@ export default class Breadcrumbs extends Stanza {
 
       const svg = d3.create("svg");
 
-      const labelText = datum.label;
+      const labelText = datum[labelsDataKey];
 
-      const camelizedIconName = FAIcons[`fa${camelize(homeIcon)}`]?.icon;
+      const camelizedIconName = FAIcons[`fa${camelize(rootIcon)}`]?.icon;
 
       const innerMargin = 6;
       let textRect, iconLeft, labelLeft, iconTop;
@@ -186,8 +193,6 @@ export default class Breadcrumbs extends Stanza {
       let textHeight = 0;
       let iconWidth = 0;
       let svgBreadcrumbWidth = 0;
-
-      let breadcrumbPath, label;
 
       if (
         labelText &&
@@ -246,7 +251,7 @@ export default class Breadcrumbs extends Stanza {
 
         label = g
           .append("text")
-          .text(datum.label)
+          .text(datum[labelsDataKey])
           .attr("y", labelTop)
           .attr("x", labelLeft)
           .attr("alignment-baseline", "middle")
@@ -470,7 +475,7 @@ export default class Breadcrumbs extends Stanza {
       menuData
         .join("div")
         .attr("class", "breadcrumb-menu-item")
-        .text((d) => d.label)
+        .text((d) => d[labelsDataKey])
         .on("click", (e, d) => {
           handleChange(d.id);
         });
@@ -542,10 +547,9 @@ export default class Breadcrumbs extends Stanza {
      *
      * @param {Array} values Array of hierarchy nodes
      * @param {string} rootId id to use for the root node
-     * @param {string} rootLabel label to use for the root node
      * @returns {Array} Array of hierarchy nodes with a single root node
      */
-    function addRoot(values, rootId = "root", rootLabel = "Root") {
+    function addRoot(values, rootId = "root") {
       if (values.filter((node) => !node?.parent).length > 1) {
         const rootNode = {
           id: "" + rootId,
