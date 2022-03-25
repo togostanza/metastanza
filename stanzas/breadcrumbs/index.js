@@ -176,6 +176,7 @@ export default class Breadcrumbs extends Stanza {
 
       const innerMargin = 6;
       let textRect, iconLeft, labelLeft, iconTop;
+      const labelTop = (height + strokeWidth) / 2;
       let textWidth = 0;
       let textHeight = 0;
       let iconWidth = 0;
@@ -196,6 +197,7 @@ export default class Breadcrumbs extends Stanza {
         iconWidth = textHeight;
 
         labelLeft = innerMargin * 2 + iconWidth;
+
         svgBreadcrumbWidth = Math.max(
           arrowLength + textWidth + 3 * innerMargin + iconWidth,
           arrowLength + 10
@@ -240,7 +242,7 @@ export default class Breadcrumbs extends Stanza {
         label = g
           .append("text")
           .text(datum.label)
-          .attr("y", 10)
+          .attr("y", labelTop)
           .attr("x", labelLeft)
           .attr("alignment-baseline", "middle")
           .attr("opacity", 1);
@@ -325,8 +327,8 @@ export default class Breadcrumbs extends Stanza {
 
         label = g
           .append("text")
-          .text(datum.label)
-          .attr("y", 10)
+          .text(labelText)
+          .attr("y", labelTop)
           .attr("x", labelLeft)
           .attr("alignment-baseline", "middle")
           .attr("opacity", 1);
@@ -394,13 +396,12 @@ export default class Breadcrumbs extends Stanza {
 
     function getNeighbourNodes(id) {
       const currentNode = getById(id);
-      console.log("id", id);
-      console.log("currentNode", currentNode);
+
       if (!currentNode?.parent) {
         return [];
       }
       const parent = getById(currentNode.parent);
-      console.log("parent", parent);
+
       if (!parent?.children) {
         return [];
       }
