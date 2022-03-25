@@ -83,6 +83,22 @@
       "stanza:example": "label",
       "stanza:required": true
     },
+    {
+      "stanza:key": "breadcrumbs-corner-radius",
+      "stanza:type": "number",
+      "stanza:description": "Corner radius of breadcrumbs, in px",
+      "stanza:default": 3,
+      "stanza:example": 3,
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "breadcrumbs-arrow-length",
+      "stanza:type": "number",
+      "stanza:description": "Corner radius of breadcrumbs, in px",
+      "stanza:default": 10,
+      "stanza:example": 10,
+      "stanza:required": true
+    },
 
     {
       "stanza:key": "custom-css-url",

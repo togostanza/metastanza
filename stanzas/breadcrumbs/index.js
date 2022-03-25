@@ -56,6 +56,8 @@ export default class Breadcrumbs extends Stanza {
     const copyIcon = camelize(this.params["copy-icon"]);
     const initialId = this.params["initial-data-id"];
     const labelsDataKey = this.params["labels-data-key"];
+    const breadcrumbsR = this.params["breadcrumbs-corner-radius"];
+    const breadcrumbsArrowLength = this.params["breadcrumbs-arrow-length"];
 
     const values = await loadData(
       this.params["data-url"],
@@ -135,16 +137,16 @@ export default class Breadcrumbs extends Stanza {
       return idMap.get(id);
     }
 
-    function getPolygon(width, height, arrowLength = 10) {
-      if (width < arrowLength) {
+    function getPolygon(width, height) {
+      if (width < breadcrumbsArrowLength) {
         throw new Error("Width must be greater than arrow length");
       }
 
       const points = [
         [0, 0],
-        [width - arrowLength, 0],
+        [width - breadcrumbsArrowLength, 0],
         [width, height / 2],
-        [width - arrowLength, height],
+        [width - breadcrumbsArrowLength, height],
         [0, height],
       ];
 
@@ -171,13 +173,7 @@ export default class Breadcrumbs extends Stanza {
       return { textWidth, textHeight };
     }
 
-    function generateSVGBreadcrumb(
-      datum,
-      height,
-      strokeWidth = 1,
-      arrowLength = 10,
-      r = 3
-    ) {
+    function generateSVGBreadcrumb(datum, height, strokeWidth = 1, r = 3) {
       let path;
 
       const svg = d3.create("svg");
@@ -194,6 +190,8 @@ export default class Breadcrumbs extends Stanza {
       let iconWidth = 0;
       let svgBreadcrumbWidth = 0;
 
+      let breadcrumbPath, label;
+
       if (
         labelText &&
         labelText.length > 0 &&
@@ -209,8 +207,8 @@ export default class Breadcrumbs extends Stanza {
         labelLeft = innerMargin * 2 + iconWidth;
 
         svgBreadcrumbWidth = Math.max(
-          arrowLength + textWidth + 3 * innerMargin + iconWidth,
-          arrowLength + 10
+          breadcrumbsArrowLength + textWidth + 3 * innerMargin + iconWidth,
+          breadcrumbsArrowLength + 10
         );
         iconLeft = -svgBreadcrumbWidth / 2 + iconWidth / 2 + innerMargin;
         iconTop = height / 2 - iconWidth / 2;
@@ -229,7 +227,7 @@ export default class Breadcrumbs extends Stanza {
           path = getPolygon(
             svgBreadcrumbWidth - strokeWidth,
             height - strokeWidth,
-            arrowLength
+            breadcrumbsArrowLength
           );
         }
         g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
@@ -262,8 +260,8 @@ export default class Breadcrumbs extends Stanza {
         textHeight = getTextRect(app, "W").textHeight;
         iconWidth = textHeight;
         svgBreadcrumbWidth = Math.max(
-          arrowLength + iconWidth + 2 * innerMargin,
-          arrowLength + 10
+          breadcrumbsArrowLength + iconWidth + 2 * innerMargin,
+          breadcrumbsArrowLength + 10
         );
         iconLeft = -svgBreadcrumbWidth / 2 + iconWidth / 2 + innerMargin;
 
@@ -281,7 +279,7 @@ export default class Breadcrumbs extends Stanza {
           path = getPolygon(
             svgBreadcrumbWidth - strokeWidth,
             height - strokeWidth,
-            arrowLength
+            breadcrumbsArrowLength
           );
         }
         g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
@@ -307,8 +305,8 @@ export default class Breadcrumbs extends Stanza {
         textWidth = textRect.textWidth;
         textHeight = textRect.textHeight;
         svgBreadcrumbWidth = Math.max(
-          arrowLength + textWidth + 2 * innerMargin,
-          arrowLength + 10
+          breadcrumbsArrowLength + textWidth + 2 * innerMargin,
+          breadcrumbsArrowLength + 10
         );
         labelLeft = innerMargin;
         svg
@@ -326,7 +324,7 @@ export default class Breadcrumbs extends Stanza {
           path = getPolygon(
             svgBreadcrumbWidth - strokeWidth,
             height - strokeWidth,
-            arrowLength
+            breadcrumbsArrowLength
           );
         }
         g.attr("transform", `translate(${strokeWidth / 2},${strokeWidth / 2})`);
@@ -346,7 +344,7 @@ export default class Breadcrumbs extends Stanza {
         console.log("no icon, no text");
 
         // no icon and no text
-        svgBreadcrumbWidth = arrowLength + 10;
+        svgBreadcrumbWidth = breadcrumbsArrowLength + 10;
         svg
           .attr("width", svgBreadcrumbWidth)
           .attr("height", height + strokeWidth);
@@ -500,7 +498,9 @@ export default class Breadcrumbs extends Stanza {
               .append("div")
               .attr("style", `height: ${height}px`);
 
-            result.append((d) => generateSVGBreadcrumb(d, height).node());
+            result.append((d) =>
+              generateSVGBreadcrumb(d, height, 1, breadcrumbsR).node()
+            );
             if (showDropdown) {
               result
                 .on("mouseenter", function (e, d) {
