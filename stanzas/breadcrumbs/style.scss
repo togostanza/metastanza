@@ -16,6 +16,23 @@ main {
   overflow-x: scroll;
   overflow-y: hidden;
   display: inline-flex;
+  &::after {
+    content: "";
+
+    height: 100%;
+    width: 1rem;
+
+    right: 0;
+
+    position: absolute;
+
+    /* background-color: #e0e0e1; */
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
 }
 
 #app-copy-button {
@@ -28,32 +45,17 @@ main {
   align-items: center;
   position: relative;
   box-sizing: border-box;
+  font-size: 10px;
   > svg.copy-icon {
     height: 0.75rem;
   }
-}
-
-#app-copy-button:hover {
-  background-color: #396c7e;
-  > svg.copy-icon {
-    fill: #f9f9fa;
+  &:hover {
+    color: #f9f9fa;
+    background-color: #396c7e;
+    > svg.copy-icon {
+      fill: #f9f9fa;
+    }
   }
-}
-#app-copy-button::before {
-  content: "";
-  height: 20px;
-  width: 10px;
-  top: -1px;
-  left: -11px;
-
-  position: absolute;
-
-  /* background-color: #e0e0e1; */
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 1) 100%
-  );
 }
 
 svg {

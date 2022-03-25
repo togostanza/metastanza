@@ -85,7 +85,8 @@ export default class Breadcrumbs extends Stanza {
     button.setAttribute("height", height + "px");
     // button.innerText = "⧉";
     function generateFAIcon(iconName, className) {
-      const camelizedIconName = FAIcons[`fa${camelize(iconName)}`].icon;
+      const camelizedIconName = FAIcons[`fa${camelize(iconName)}`]?.icon;
+
       const result = d3
         .create("svg")
         .attr("class", className)
@@ -94,7 +95,11 @@ export default class Breadcrumbs extends Stanza {
       return result.node();
     }
 
-    button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
+    try {
+      button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
+    } catch (error) {
+      button.innerText = "Copy";
+    }
 
     d3.select(button).on("mouseenter", () => {
       if (showingMenu) {
@@ -513,7 +518,7 @@ export default class Breadcrumbs extends Stanza {
                   }px`;
                   showingMenu.node().style.top = `${
                     breadcrumbCoords.bottom -
-                    4 -
+                    2 -
                     appRect.top +
                     parseFloat(getComputedStyle(app.parentElement).paddingTop)
                   }px`;
