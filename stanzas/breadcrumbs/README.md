@@ -33,6 +33,10 @@ The data should be hierarchy tree-like data of the format:
 The tree nodes that does not have any children should contain number value
 `"n": 12345` (where `12345` is a "size" of a node) as well.
 
+### Dropdown menu display
+
+In order to display dropdown menu for the nodes on top of on other elements, container element of the breadcrumbs stanza should have `overflow: visible !important;` CSS property
+
 ### Copying current path
 
 The path to current node can be copied in clipboard by clicking the ⧉ button
