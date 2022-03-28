@@ -1,10 +1,10 @@
 import * as d3 from "d3";
 import prepareGraphData from "./prepareGraphData";
 export default function (svg, nodes, edges, params) {
-  const nodesC = JSON.parse(JSON.stringify(nodes));
-  const edgesC = JSON.parse(JSON.stringify(edges));
+  // const nodesC = JSON.parse(JSON.stringify(nodes));
+  //const edges = JSON.parse(JSON.stringify(edges));
 
-  prepareGraphData(nodesC, edgesC, params);
+  prepareGraphData(nodes, edges, params);
   const { width, height, MARGIN, symbols, labelsParams } = params;
 
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
@@ -19,14 +19,14 @@ export default function (svg, nodes, edges, params) {
   const gNodes = forceG.append("g").attr("class", "nodes");
 
   const simulation = d3
-    .forceSimulation(nodesC)
+    .forceSimulation(nodes)
     .force("charge", d3.forceManyBody().strength(-100))
     .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
     .force(
       "link",
       d3
         .forceLink()
-        .links(edgesC)
+        .links(edges)
         .id((d) => d.id)
         .distance(50)
         .strength(0.5)
@@ -43,7 +43,7 @@ export default function (svg, nodes, edges, params) {
 
   const links = gLinks
     .selectAll("line")
-    .data(edgesC)
+    .data(edges)
     .join("line")
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
@@ -75,7 +75,7 @@ export default function (svg, nodes, edges, params) {
 
   const nodeGroups = gNodes
     .selectAll("g")
-    .data(nodesC)
+    .data(nodes)
     .enter()
     .append("g")
     .attr("class", "node-group")
@@ -93,7 +93,7 @@ export default function (svg, nodes, edges, params) {
     .style("fill", (d) => d[symbols.nodeColorSym])
     .attr("data-tooltip", (d) => d.id);
 
-  if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
+  if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
       .attr("dx", labelsParams.margin)

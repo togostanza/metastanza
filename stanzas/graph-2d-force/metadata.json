@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "force-graph",
-  "stanza:label": "Force Graph",
-  "stanza:definition": "Force Graph MetaStanza",
+  "@id": "graph-2d-force",
+  "stanza:label": "Graph force layout",
+  "stanza:definition": "Graph Force Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Einishi Tech"],
-  "stanza:created": "2021-02-16",
-  "stanza:updated": "2021-02-16",
+  "stanza:created": "2022-03-28",
+  "stanza:updated": "2022-03-28",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
