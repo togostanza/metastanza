@@ -1,0 +1,52 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+.label {
+  transition: opacity 0.1s ease-in-out;
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+.node {
+  transition: all 0.1s ease-in-out;
+  fill: var(--togostanza-forcechart-node-color);
+}
+
+.link {
+  transition: all 0.2s ease-in-out;
+  stroke-opacity: 0.25;
+  stroke-linecap: round;
+  fill: none;
+  stroke: var(--togostanza-forcechart-edge-color);
+}
+
+.active {
+  transition: all 0.1s ease-in-out;
+
+  &.node {
+    stroke: gray !important;
+    stroke-width: 5px !important;
+    stroke-opacity: 0.7 !important;
+  }
+  &.link {
+    stroke-opacity: 1 !important;
+  }
+}
+.fadeout {
+  transition: all 0.1s ease-in-out;
+
+  opacity: 0.1 !important;
+  &.link {
+    stroke-opacity: 0.1 !important;
+  }
+}
+.half-active {
+  transition: all 0.1s ease-in-out;
+
+  opacity: 0.8 !important;
+  &.node {
+    stroke: gray !important;
+    stroke-width: 3px !important;
+    stroke-opacity: 0.2 !important;
+  }
+}

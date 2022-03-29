@@ -1,0 +1,268 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "graph-2d-circle",
+  "stanza:label": "Graph circle layout",
+  "stanza:definition": "Graph Circle Layout MetaStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
+  "stanza:created": "2022-03-29",
+  "stanza:updated": "2022-03-29",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://gist.githubusercontent.com/abkunal/98d35b9b235312e90f3e43c9f7b6932b/raw/d5589ddd53731ae8eec7abd091320df91cdcf5cd/miserables.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 600,
+      "stanza:default": 600,
+      "stanza:description": "Width in px"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 600,
+      "stanza:default": 600,
+      "stanza:description": "Height in px"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": 50,
+      "stanza:description": "Inner padding in px"
+    },
+    {
+      "stanza:key": "layout",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["force", "arc", "grid", "circle"],
+      "stanza:required": true,
+      "stanza:default": "force",
+      "stanza:example": "force",
+      "stanza:description": "Graph layout"
+    },
+    {
+      "stanza:key": "node-size-based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "fixed",
+      "stanza:default": "fixed",
+      "stanza:required": true,
+      "stanza:description": "Set size of the node  data key"
+    },
+    {
+      "stanza:key": "node-size-data-key",
+      "stanza:type": "string",
+      "stanza:example": "",
+      "stanza:description": "Set size on the node based on data key"
+    },
+    {
+      "stanza:key": "node-size-min-size",
+      "stanza:type": "number",
+      "stanza:example": 4,
+      "stanza:description": "Minimum node radius in px"
+    },
+    {
+      "stanza:key": "node-size-max-size",
+      "stanza:type": "number",
+      "stanza:example": 12,
+      "stanza:description": "Maximum node radius in px"
+    },
+    {
+      "stanza:key": "node-size-fixed-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Fixed node radius in px"
+    },
+    {
+      "stanza:key": "node-color-based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "data key",
+      "stanza:default": "data key",
+      "stanza:description": "Set color of the node  data key"
+    },
+    {
+      "stanza:key": "node-color-data-key",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Set color of the node based on data key"
+    },
+    {
+      "stanza:key": "edge-width-based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "fixed",
+      "stanza:default": "fixed",
+      "stanza:description": "Set edge width  data key"
+    },
+    {
+      "stanza:key": "edge-width-data-key",
+      "stanza:type": "string",
+      "stanza:example": "value",
+      "stanza:description": "Set width of the edge  data key"
+    },
+    {
+      "stanza:key": "edge-min-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Minimum edge width in px"
+    },
+    {
+      "stanza:key": "edge-max-width",
+      "stanza:type": "number",
+      "stanza:example": 6,
+      "stanza:description": "Maximum edge width in px"
+    },
+    {
+      "stanza:key": "edge-fixed-width",
+      "stanza:type": "number",
+      "stanza:example": 2,
+      "stanza:description": "Fixed edge width in px"
+    },
+    {
+      "stanza:key": "edge-color-based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["data key", "source color", "target color", "fixed"],
+      "stanza:example": "source color",
+      "stanza:default": "source color",
+      "stanza:description": "Set color of the edge based on this"
+    },
+    {
+      "stanza:key": "edge-color-data-key",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Set color of the edge based on this data key"
+    },
+    {
+      "stanza:key": "tooltip-data-key",
+      "stanza:type": "string",
+      "stanza:default": "id",
+      "stanza:example": "id",
+      "stanza:description": "Node labels data key. If empty, no labels will be shown"
+    },
+    {
+      "stanza:key": "labels-data-key",
+      "stanza:type": "string",
+      "stanza:default": "id",
+      "stanza:example": "id",
+      "stanza:description": "Node labels data key. If empty, no labels will be shown"
+    },
+    {
+      "stanza:key": "labels-margin",
+      "stanza:type": "number",
+      "stanza:default": 15,
+      "stanza:example": 15,
+      "stanza:description": "Node labels offset from node center, in px."
+    },
+    {
+      "stanza:key": "nodes-tooltip-data-key",
+      "stanza:type": "string",
+      "stanza:default": "id",
+      "stanza:example": "id",
+      "stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-forcechart-node-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Nodes default color"
+    },
+    {
+      "stanza:key": "--togostanza-forcechart-edge-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Egdes default color"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 7,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Border width"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    }
+  ]
+}

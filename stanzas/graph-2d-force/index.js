@@ -1,28 +1,26 @@
-import ToolTip from "@/lib/ToolTip";
-import * as d3 from "d3";
-import {
-  appendCustomCss,
-  downloadCSVMenuItem,
-  downloadJSONMenuItem,
-  downloadPngMenuItem,
-  downloadSvgMenuItem,
-  downloadTSVMenuItem,
-} from "togostanza-utils";
-import loadData from "togostanza-utils/load-data";
 import Stanza from "togostanza/stanza";
-import drawArcLayout from "./drawArcLayout";
-import drawCircleLayout from "./drawCircleLayout";
-import drawFoecLayout from "./drawForceLayout";
-import drawGridLayout from "./drawGridLayout";
+import * as d3 from "d3";
+import loadData from "togostanza-utils/load-data";
+import ToolTip from "@/lib/ToolTip";
+import drawForceLayout from "./drawForceLayout";
+
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  appendCustomCss,
+} from "togostanza-utils";
 
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "force-graph"),
-      downloadPngMenuItem(this, "force-graph"),
-      downloadJSONMenuItem(this, "force-graph", this._data),
-      downloadCSVMenuItem(this, "force-graph", this._data),
-      downloadTSVMenuItem(this, "force-graph", this._data),
+      downloadSvgMenuItem(this, "graph-2d-force"),
+      downloadPngMenuItem(this, "graph-2d-force"),
+      downloadJSONMenuItem(this, "graph-2d-force", this._data),
+      downloadCSVMenuItem(this, "graph-2d-force", this._data),
+      downloadTSVMenuItem(this, "graph-2d-force", this._data),
     ];
   }
 
@@ -51,20 +49,6 @@ export default class ForceGraph extends Stanza {
     const nodes = values.nodes;
     const edges = values.links;
 
-    const count = {};
-    for (const element of edges) {
-      if (count[element.target]) {
-        count[element.target] += 1;
-      } else {
-        count[element.target] = 1;
-      }
-      if (count[element.source]) {
-        count[element.source] += 1;
-      } else {
-        count[element.source] = 1;
-      }
-    }
-
     const MARGIN = {
       TOP: this.params["padding"],
       BOTTOM: this.params["padding"],
@@ -80,7 +64,7 @@ export default class ForceGraph extends Stanza {
     const color = d3.scaleOrdinal().range(togostanzaColors);
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("force-graph");
+    const el = this.root.getElementById("graph-2d-force");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
@@ -135,6 +119,16 @@ export default class ForceGraph extends Stanza {
       dataKey: this.params["edge-color-data-key"],
     };
 
+    const labelsParams = {
+      margin: this.params["labels-margin"],
+      dataKey: this.params["labels-data-key"],
+    };
+
+    const tooltipParams = {
+      dataKey: this.params["nodes-tooltip-data-key"],
+      show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
+    };
+
     const params = {
       MARGIN,
       width,
@@ -146,41 +140,11 @@ export default class ForceGraph extends Stanza {
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
-      labelsParams: {
-        margin: this.params["labels-margin"],
-        dataKey: this.params["labels-data-key"],
-      },
+      labelsParams,
+      tooltipParams,
     };
 
-    // svg
-    //   .append("defs")
-    //   .append("marker")
-    //   .attr("id", "arrow")
-    //   .attr("refX", 12)
-    //   .attr("refY", 6)
-    //   .attr("markerUnits", "userSpaceOnUse")
-    //   .attr("markerWidth", 12)
-    //   .attr("markerHeight", 18)
-    //   .attr("orient", "auto")
-    //   .append("path")
-    //   .attr("d", "M 0 0 12 6 0 12 3 6");
-
-    switch (this.params["layout"]) {
-      case "force":
-        drawFoecLayout(svg, nodes, edges, params);
-        break;
-      case "arc":
-        drawArcLayout(svg, nodes, edges, params);
-        break;
-      case "grid":
-        drawGridLayout(svg, nodes, edges, params);
-        break;
-      case "circle":
-        drawCircleLayout(svg, nodes, edges, params);
-        break;
-      default:
-        break;
-    }
+    drawForceLayout(svg, nodes, edges, params);
 
     this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
   }

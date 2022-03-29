@@ -1,28 +1,26 @@
-import ToolTip from "@/lib/ToolTip";
-import * as d3 from "d3";
-import {
-  appendCustomCss,
-  downloadCSVMenuItem,
-  downloadJSONMenuItem,
-  downloadPngMenuItem,
-  downloadSvgMenuItem,
-  downloadTSVMenuItem,
-} from "togostanza-utils";
-import loadData from "togostanza-utils/load-data";
 import Stanza from "togostanza/stanza";
-import drawArcLayout from "./drawArcLayout";
+import * as d3 from "d3";
+import loadData from "togostanza-utils/load-data";
+import ToolTip from "@/lib/ToolTip";
 import drawCircleLayout from "./drawCircleLayout";
-import drawFoecLayout from "./drawForceLayout";
-import drawGridLayout from "./drawGridLayout";
+
+import {
+  downloadSvgMenuItem,
+  downloadPngMenuItem,
+  downloadJSONMenuItem,
+  downloadCSVMenuItem,
+  downloadTSVMenuItem,
+  appendCustomCss,
+} from "togostanza-utils";
 
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "force-graph"),
-      downloadPngMenuItem(this, "force-graph"),
-      downloadJSONMenuItem(this, "force-graph", this._data),
-      downloadCSVMenuItem(this, "force-graph", this._data),
-      downloadTSVMenuItem(this, "force-graph", this._data),
+      downloadSvgMenuItem(this, "graph-2d-force"),
+      downloadPngMenuItem(this, "graph-2d-force"),
+      downloadJSONMenuItem(this, "graph-2d-force", this._data),
+      downloadCSVMenuItem(this, "graph-2d-force", this._data),
+      downloadTSVMenuItem(this, "graph-2d-force", this._data),
     ];
   }
 
@@ -80,7 +78,7 @@ export default class ForceGraph extends Stanza {
     const color = d3.scaleOrdinal().range(togostanzaColors);
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("force-graph");
+    const el = this.root.getElementById("graph-2d-force");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
@@ -152,35 +150,7 @@ export default class ForceGraph extends Stanza {
       },
     };
 
-    // svg
-    //   .append("defs")
-    //   .append("marker")
-    //   .attr("id", "arrow")
-    //   .attr("refX", 12)
-    //   .attr("refY", 6)
-    //   .attr("markerUnits", "userSpaceOnUse")
-    //   .attr("markerWidth", 12)
-    //   .attr("markerHeight", 18)
-    //   .attr("orient", "auto")
-    //   .append("path")
-    //   .attr("d", "M 0 0 12 6 0 12 3 6");
-
-    switch (this.params["layout"]) {
-      case "force":
-        drawFoecLayout(svg, nodes, edges, params);
-        break;
-      case "arc":
-        drawArcLayout(svg, nodes, edges, params);
-        break;
-      case "grid":
-        drawGridLayout(svg, nodes, edges, params);
-        break;
-      case "circle":
-        drawCircleLayout(svg, nodes, edges, params);
-        break;
-      default:
-        break;
-    }
+    drawCircleLayout(svg, nodes, edges, params);
 
     this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
   }
