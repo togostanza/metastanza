@@ -49,20 +49,6 @@ export default class ForceGraph extends Stanza {
     const nodes = values.nodes;
     const edges = values.links;
 
-    const count = {};
-    for (const element of edges) {
-      if (count[element.target]) {
-        count[element.target] += 1;
-      } else {
-        count[element.target] = 1;
-      }
-      if (count[element.source]) {
-        count[element.source] += 1;
-      } else {
-        count[element.source] = 1;
-      }
-    }
-
     const MARGIN = {
       TOP: this.params["padding"],
       BOTTOM: this.params["padding"],
@@ -133,6 +119,18 @@ export default class ForceGraph extends Stanza {
       dataKey: this.params["edge-color-data-key"],
     };
 
+    const labelsParams = {
+      margin: this.params["labels-margin"],
+      dataKey: this.params["labels-data-key"],
+    };
+
+    const tooltipParams = {
+      dataKey: this.params["nodes-tooltip-data-key"],
+      show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
+    };
+
+    const highlightAdjEdges = this.params["highlight-adjacent-edges"];
+
     const params = {
       MARGIN,
       width,
@@ -140,14 +138,13 @@ export default class ForceGraph extends Stanza {
       svg,
       color,
       symbols,
+      highlightAdjEdges,
       nodeSizeParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
-      labelsParams: {
-        margin: this.params["labels-margin"],
-        dataKey: this.params["labels-data-key"],
-      },
+      labelsParams,
+      tooltipParams,
     };
 
     drawCircleLayout(svg, nodes, edges, params);
