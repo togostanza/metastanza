@@ -94,7 +94,7 @@ export default function (nodesC, edgesC, params) {
         edge[symbols.edgeColorSym] = null;
       }
     });
-  } else if (edgeColorParams.basedOn.match(/source|target/gi).length > 0) {
+  } else if (edgeColorParams.basedOn.match(/source|target/gi)) {
     const wichColor = edgeColorParams.basedOn.match(/source|target/gi)[0];
     edgesC.forEach((edge) => {
       edge[symbols.edgeColorSym] =
