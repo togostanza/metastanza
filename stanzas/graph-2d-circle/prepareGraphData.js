@@ -64,7 +64,7 @@ export default function (nodesC, edgesC, params) {
       // if data key value is a hex color, use it, else use color ordinal scale provided
       if (regex.test(node[nodeColorParams.dataKey])) {
         node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
-      } else if (node[nodeColorParams.dataKey]) {
+      } else if ("" + node[nodeColorParams.dataKey]) {
         node[symbols.nodeColorSym] = color(node[nodeColorParams.dataKey]);
       } else {
         node[symbols.nodeColorSym] = null;

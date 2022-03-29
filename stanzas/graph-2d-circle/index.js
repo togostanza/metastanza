@@ -64,7 +64,7 @@ export default class ForceGraph extends Stanza {
     const color = d3.scaleOrdinal().range(togostanzaColors);
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("graph-2d-force");
+    const el = this.root.getElementById("graph-2d-circle");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
