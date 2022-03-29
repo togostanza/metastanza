@@ -16,7 +16,15 @@ export default function (nodesC, edgesC, params) {
 
   // Edges width
   let edgeWidthScale;
-  if (edgeWidthParams.basedOn === "data key") {
+  if (
+    edgeWidthParams.basedOn === "data key" &&
+    edgesC.some(
+      (edge) =>
+        edge[edgeWidthParams.dataKey] &&
+        edgeWidthParams.minWidth &&
+        edgeWidthParams.maxWidth
+    )
+  ) {
     edgeWidthScale = d3
       .scaleLinear()
       .domain(d3.extent(edgesC, (d) => d[edgeWidthParams.dataKey]))
@@ -30,11 +38,11 @@ export default function (nodesC, edgesC, params) {
     edge[symbols.edgeWidthSym] = edgeWidthScale(
       parseFloat(edge[edgeWidthParams.dataKey]) || edgeWidthParams.minWidth
     );
-    // console.log(edge[symbols.edgeWidthSym]);
     edge[symbols.sourceNodeSym] = nodeHash[edge.source];
     edge[symbols.targetNodeSym] = nodeHash[edge.target];
   });
 
+  // Add adjacent edges to node
   nodesC.forEach((node) => {
     const adjEdges = edgesC.filter((edge) => {
       return (
@@ -46,15 +54,20 @@ export default function (nodesC, edgesC, params) {
   });
 
   // Nodes color
-  if (nodeColorParams.basedOn === "data key") {
+  if (
+    nodeColorParams.basedOn === "data key" &&
+    nodesC.some((d) => d[nodeColorParams.dataKey])
+  ) {
     // Match hex color
     const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
     nodesC.forEach((node) => {
       // if data key value is a hex color, use it, else use color ordinal scale provided
       if (regex.test(node[nodeColorParams.dataKey])) {
         node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
-      } else {
+      } else if (node[nodeColorParams.dataKey]) {
         node[symbols.nodeColorSym] = color(node[nodeColorParams.dataKey]);
+      } else {
+        node[symbols.nodeColorSym] = null;
       }
     });
   } else {
@@ -65,18 +78,23 @@ export default function (nodesC, edgesC, params) {
   // ===
 
   //Edges color
-  if (edgeColorParams.basedOn === "data key") {
+  if (
+    edgeColorParams.basedOn === "data key" &&
+    edgesC.some((d) => d[edgeColorParams.dataKey])
+  ) {
     // Match hex color
     const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
     edgesC.forEach((edge) => {
       // if data key value is a hex color, use it, else use color ordinal scale provided
       if (regex.test(edge[edgeColorParams.dataKey])) {
         edge[symbols.edgeColorSym] = edge[edgeColorParams.dataKey];
-      } else {
+      } else if (edge[edgeColorParams.dataKey]) {
         edge[symbols.edgeColorSym] = color(edge[edgeColorParams.dataKey]);
+      } else {
+        edge[symbols.edgeColorSym] = null;
       }
     });
-  } else if (edgeColorParams.basedOn.match(/source|target/gi).length > 0) {
+  } else if (edgeColorParams.basedOn.match(/source|target/gi)) {
     const wichColor = edgeColorParams.basedOn.match(/source|target/gi)[0];
     edgesC.forEach((edge) => {
       edge[symbols.edgeColorSym] =
@@ -92,7 +110,12 @@ export default function (nodesC, edgesC, params) {
 
   // Nodes size
   let nodeSizeScale;
-  if (nodeSizeParams.basedOn === "data key") {
+  if (
+    nodeSizeParams.basedOn === "data key" &&
+    nodesC.some((d) => d[nodeSizeParams.dataKey]) &&
+    nodeSizeParams.minSize &&
+    nodeSizeParams.maxSize
+  ) {
     nodeSizeScale = d3
       .scaleLinear()
       .domain(d3.extent(nodesC, (d) => d[nodeSizeParams.dataKey]))
