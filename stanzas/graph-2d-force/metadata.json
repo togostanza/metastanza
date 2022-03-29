@@ -150,6 +150,13 @@
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
+      "stanza:key": "highlight-adjacent-edges",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "Highlight adjacent edges on node mouse hover"
+    },
+    {
       "stanza:key": "tooltip-data-key",
       "stanza:type": "string",
       "stanza:default": "id",
@@ -217,13 +224,13 @@
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-forcechart-node-color",
+      "stanza:key": "--togostanza-default-node-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Nodes default color"
     },
     {
-      "stanza:key": "--togostanza-forcechart-edge-color",
+      "stanza:key": "--togostanza-default-edge-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"

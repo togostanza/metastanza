@@ -9,7 +9,7 @@
 
 .node {
   transition: all 0.1s ease-in-out;
-  fill: var(--togostanza-forcechart-node-color);
+  fill: var(--togostanza-default-node-color);
 }
 
 .link {
@@ -17,7 +17,7 @@
   stroke-opacity: 0.25;
   stroke-linecap: round;
   fill: none;
-  stroke: var(--togostanza-forcechart-edge-color);
+  stroke: var(--togostanza-default-edge-color);
 }
 
 .active {
