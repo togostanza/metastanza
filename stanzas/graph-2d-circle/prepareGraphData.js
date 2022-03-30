@@ -58,6 +58,7 @@ export default function (nodesC, edgesC, params) {
     nodeColorParams.basedOn === "data key" &&
     nodesC.some((d) => d[nodeColorParams.dataKey])
   ) {
+    const nodeColorFunc = color();
     // Match hex color
     const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
     nodesC.forEach((node) => {
@@ -65,7 +66,9 @@ export default function (nodesC, edgesC, params) {
       if (regex.test(node[nodeColorParams.dataKey])) {
         node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
       } else if ("" + node[nodeColorParams.dataKey]) {
-        node[symbols.nodeColorSym] = color(node[nodeColorParams.dataKey]);
+        node[symbols.nodeColorSym] = nodeColorFunc(
+          node[nodeColorParams.dataKey]
+        );
       } else {
         node[symbols.nodeColorSym] = null;
       }
@@ -82,6 +85,7 @@ export default function (nodesC, edgesC, params) {
     edgeColorParams.basedOn === "data key" &&
     edgesC.some((d) => d[edgeColorParams.dataKey])
   ) {
+    const edgeColorFunc = color();
     // Match hex color
     const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
     edgesC.forEach((edge) => {
@@ -89,7 +93,9 @@ export default function (nodesC, edgesC, params) {
       if (regex.test(edge[edgeColorParams.dataKey])) {
         edge[symbols.edgeColorSym] = edge[edgeColorParams.dataKey];
       } else if (edge[edgeColorParams.dataKey]) {
-        edge[symbols.edgeColorSym] = color(edge[edgeColorParams.dataKey]);
+        edge[symbols.edgeColorSym] = edgeColorFunc(
+          edge[edgeColorParams.dataKey]
+        );
       } else {
         edge[symbols.edgeColorSym] = null;
       }
