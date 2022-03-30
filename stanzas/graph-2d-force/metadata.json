@@ -137,7 +137,7 @@
     {
       "stanza:key": "edge-color-data-key",
       "stanza:type": "string",
-      "stanza:example": "group",
+      "stanza:example": "value",
       "stanza:description": "Set color of the edge based on this data key"
     },
     {

@@ -61,7 +61,9 @@ export default class ForceGraph extends Stanza {
     for (let i = 0; i < 6; i++) {
       togostanzaColors.push(css(`--togostanza-series-${i}-color`));
     }
-    const color = d3.scaleOrdinal().range(togostanzaColors);
+    const color = function () {
+      return d3.scaleOrdinal().range(togostanzaColors);
+    };
 
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("graph-2d-force");
