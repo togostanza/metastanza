@@ -2,7 +2,7 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "graph-2d-grid",
+  "@id": "graph-3d-grid",
   "stanza:label": "Graph grid layout",
   "stanza:definition": "Graph Grid Layout MetaStanza",
   "stanza:license": "MIT",
