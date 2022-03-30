@@ -2,7 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-import drawForceLayout from "./drawForceLayout";
+import drawGridLayout from "./drawGridLayout";
 
 import {
   downloadSvgMenuItem,
@@ -16,11 +16,11 @@ import {
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "graph-2d-force"),
-      downloadPngMenuItem(this, "graph-2d-force"),
-      downloadJSONMenuItem(this, "graph-2d-force", this._data),
-      downloadCSVMenuItem(this, "graph-2d-force", this._data),
-      downloadTSVMenuItem(this, "graph-2d-force", this._data),
+      downloadSvgMenuItem(this, "graph-2d-grid"),
+      downloadPngMenuItem(this, "graph-2d-grid"),
+      downloadJSONMenuItem(this, "graph-2d-grid", this._data),
+      downloadCSVMenuItem(this, "graph-2d-grid", this._data),
+      downloadTSVMenuItem(this, "graph-2d-grid", this._data),
     ];
   }
 
@@ -66,7 +66,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("graph-2d-force");
+    const el = this.root.getElementById("graph-2d-grid");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
@@ -149,7 +149,7 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    drawForceLayout(svg, nodes, edges, params);
+    drawGridLayout(svg, nodes, edges, params);
 
     this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
   }
