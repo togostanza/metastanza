@@ -165,6 +165,8 @@ export default class ForceGraph extends Stanza {
       },
       startAngle = Math.PI / 4;
 
+    const nodesColor = color();
+    const edgesColor = color();
     const svgG = svg
       .call(
         d3.drag().on("drag", dragged).on("start", dragStart).on("end", dragEnd)
@@ -172,13 +174,6 @@ export default class ForceGraph extends Stanza {
       .append("g");
 
     var mx, my, mouseX, mouseY;
-
-    // var grid3d = _3d()
-    //   .shape("GRID", 20)
-    //   .origin(origin)
-    //   .rotateY(startAngle)
-    //   .rotateX(-startAngle)
-    //   .scale(scale);
 
     const point3d = _3d()
       .x(function (d) {
@@ -195,55 +190,32 @@ export default class ForceGraph extends Stanza {
       .rotateX(-startAngle)
       .scale(scale);
 
-    // var yScale3d = _3d()
-    //   .shape("LINE_STRIP")
-    //   .origin(origin)
-    //   .rotateY(startAngle)
-    //   .rotateX(-startAngle)
-    //   .scale(scale);
+    const edge3d = _3d()
+      .scale(scale)
+      .origin(origin)
+      .shape("LINE")
+      .rotateY(startAngle)
+      .rotateX(-startAngle);
 
     function processData(data, tt) {
-      /* ----------- GRID ----------- */
-
-      // var xGrid = svgG.selectAll("path.grid").data(data[0], key);
-
-      // xGrid
-      //   .enter()
-      //   .append("path")
-      //   .attr("class", "_3d grid")
-      //   .merge(xGrid)
-      //   .attr("stroke", "black")
-      //   .attr("stroke-width", 0.3)
-      //   .attr("fill", function (d) {
-      //     return d.ccw ? "lightgrey" : "#717171";
-      //   })
-      //   .attr("fill-opacity", 0.9)
-      //   .attr("d", grid3d.draw);
-
-      // xGrid.exit().remove();
-
-      /* ----------- POINTS ----------- */
-
-      var points = svgG.selectAll("circle").data(data, key);
+      var points = svgG.selectAll("circle").data(data[0], key);
 
       points
         .enter()
         .append("circle")
         .attr("class", "_3d")
         .attr("opacity", 0)
-        .attr("cx", (d) => {
-          posPointX(d);
-        })
+        .attr("cx", posPointX)
         .attr("cy", posPointY)
         .merge(points)
         .transition()
         .duration(tt)
         .attr("r", 3)
         .attr("stroke", function (d) {
-          return d3.color(color()(d.id)).darker(3);
+          return d3.color(nodesColor(d.id)).darker(3);
         })
         .attr("fill", function (d) {
-          return color()(d.id);
+          return nodesColor(d.id);
         })
         .attr("opacity", 1)
         .attr("cx", posPointX)
@@ -251,45 +223,34 @@ export default class ForceGraph extends Stanza {
 
       points.exit().remove();
 
-      /* ----------- y-Scale ----------- */
+      const linesStrip = svgG.selectAll("line").data(data[1]);
 
-      // var yScale = svgG.selectAll("path.yScale").data(data[2]);
+      linesStrip
+        .enter()
+        .append("line")
+        .merge(linesStrip)
+        .attr("fill", "none")
+        .attr("stroke", function (d) {
+          return edgesColor(d.source);
+        })
+        .attr("stroke-width", 2)
+        .sort(function (a, b) {
+          return b[0].rotated.z - a[0].rotated.z;
+        })
+        .attr("x1", function (d) {
+          return d[0].projected.x;
+        })
+        .attr("y1", function (d) {
+          return d[0].projected.y;
+        })
+        .attr("x2", function (d) {
+          return d[1].projected.x;
+        })
+        .attr("y2", function (d) {
+          return d[1].projected.y;
+        });
 
-      // yScale
-      //   .enter()
-      //   .append("path")
-      //   .attr("class", "_3d yScale")
-      //   .merge(yScale)
-      //   .attr("stroke", "black")
-      //   .attr("stroke-width", 0.5)
-      //   .attr("d", yScale3d.draw);
-
-      // yScale.exit().remove();
-
-      // /* ----------- y-Scale Text ----------- */
-
-      // var yText = svgG.selectAll("text.yText").data(data[2][0]);
-
-      // yText
-      //   .enter()
-      //   .append("text")
-      //   .attr("class", "_3d yText")
-      //   .attr("dx", ".3em")
-      //   .merge(yText)
-      //   .each(function (d) {
-      //     d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z };
-      //   })
-      //   .attr("x", function (d) {
-      //     return d.projected.x;
-      //   })
-      //   .attr("y", function (d) {
-      //     return d.projected.y;
-      //   })
-      //   .text(function (d) {
-      //     return d[1] <= 0 ? d[1] : "";
-      //   });
-
-      // yText.exit().remove();
+      linesStrip.exit().remove();
 
       d3.selectAll("._3d").sort(_3d().sort);
     }
@@ -301,20 +262,21 @@ export default class ForceGraph extends Stanza {
     function posPointY(d) {
       return d.projected.y;
     }
+    const edgesCoords = [];
 
     function init() {
       // Laying out nodes=========
 
-      const groups = [...new Set(nodes.map((d) => "" + d.group))];
-
       const gridSizeForGroup = {};
       const groupHash = {};
+      const nodesHash = {};
 
       nodes.forEach((node) => {
         const groupName = "" + node.group;
         groupHash[groupName]
           ? groupHash[groupName].push(node)
           : (groupHash[groupName] = [node]);
+        nodesHash["" + node.id] = node;
       });
 
       nodes.forEach((node) => {
@@ -325,7 +287,9 @@ export default class ForceGraph extends Stanza {
       });
 
       const DEPTH = WIDTH;
-      const yPointScale = d3.scalePoint([0, DEPTH]).domain(groups);
+      const yPointScale = d3
+        .scalePoint([0, DEPTH])
+        .domain(Object.keys(groupHash));
 
       // add random noise to pisition to prevent fully overlapping edges
 
@@ -362,13 +326,22 @@ export default class ForceGraph extends Stanza {
         });
       });
 
-      // =========
+      edges.forEach((edge) => {
+        edgesCoords.push([
+          [
+            nodesHash[edge.source].x,
+            nodesHash[edge.source].y,
+            nodesHash[edge.source].z,
+          ],
+          [
+            nodesHash[edge.target].x,
+            nodesHash[edge.target].y,
+            nodesHash[edge.target].z,
+          ],
+        ]);
+      });
 
-      // d3.range(-1, 11, 1).forEach(function (d) {
-      //   yLine.push([-j, -d, -j]);
-      // });
-
-      const data = point3d(nodes);
+      const data = [point3d(nodes), edge3d(edgesCoords)];
       processData(data, 1000);
     }
 
@@ -382,9 +355,12 @@ export default class ForceGraph extends Stanza {
       mouseY = mouseY || 0;
       beta = ((e.x - mx + mouseX) * Math.PI) / 230;
       alpha = (((e.y - my + mouseY) * Math.PI) / 230) * -1;
-      const data = point3d
-        .rotateY(beta + startAngle)
-        .rotateX(alpha - startAngle)(nodes);
+      const data = [
+        point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(nodes),
+        edge3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
+          edgesCoords
+        ),
+      ];
       processData(data, 0);
     }
 
