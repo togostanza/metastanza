@@ -163,6 +163,10 @@ export default class ForceGraph extends Stanza {
       nodesHash["" + node.id] = node;
     });
 
+    edges.forEach((edge, index) => {
+      edge.id = `edge${index}`;
+    });
+
     // === Drawing the grid ===
     const origin = [WIDTH / 2, HEIGHT / 2];
 
@@ -218,8 +222,13 @@ export default class ForceGraph extends Stanza {
       .rotateX(-startAngle)
       .scale(scale);
 
+    const edgeScale = d3
+      .scaleLinear()
+      .domain(d3.extent(edges.map((d) => d.value)))
+      .range([1, 8]);
+
     function processData(data) {
-      const planes = svgG.selectAll("path").data(data[2]);
+      const planes = svgG.selectAll("path").data(data[2], (d) => d.groupId);
 
       planes
         .enter()
@@ -237,18 +246,17 @@ export default class ForceGraph extends Stanza {
 
       planes.exit().remove();
 
-      const linesStrip = svgG.selectAll("line").data(data[1]);
+      const linesStrip = svgG.selectAll("line").data(data[1], key);
 
       linesStrip
         .enter()
         .append("line")
         .attr("class", "_3d")
         .classed("link", true)
+
         .merge(linesStrip)
         .style("stroke", (d) => d.color)
-        .sort(function (a, b) {
-          return b[0].rotated.z - a[0].rotated.z;
-        })
+        .style("stroke-width", (d) => edgeScale(d.value))
         .attr("x1", function (d) {
           return d[0].projected.x;
         })
@@ -294,6 +302,7 @@ export default class ForceGraph extends Stanza {
         if (isDragging) {
           return;
         }
+
         const groupId = d.groupId;
         const group = groupHash[groupId];
         const nodesIdsInGroup = group.map((node) => node.id);
@@ -363,7 +372,19 @@ export default class ForceGraph extends Stanza {
         linesStrip
           .filter(
             (p) =>
-              nodesIdsInGroup.includes(p.source.id) ||
+              (connectedNodes.includes(p.source.id) ||
+                connectedNodes.includes(p.target.id)) &&
+              (nodesIdsInGroup.includes(p.source.id) ||
+                nodesIdsInGroup.includes(p.target.id))
+          )
+          .classed("fadeout", false)
+          .classed("half-active", true)
+          .classed("dashed", true);
+
+        linesStrip
+          .filter(
+            (p) =>
+              nodesIdsInGroup.includes(p.source.id) &&
               nodesIdsInGroup.includes(p.target.id)
           )
           .classed("fadeout", false)
@@ -377,6 +398,7 @@ export default class ForceGraph extends Stanza {
         linesStrip.classed("fadeout", false);
         linesStrip.classed("active", false);
         linesStrip.classed("half-active", false);
+        linesStrip.classed("dashed", false);
         planes.classed("active", false);
         planes.classed("fadeout", false);
         planes.classed("half-active", false);
@@ -467,6 +489,8 @@ export default class ForceGraph extends Stanza {
           ],
         ];
         toPush.color = edgesColor(edge.source);
+        toPush.id = edge.id;
+        toPush.value = edge.value;
         toPush.source = nodesHash[edge.source];
         toPush.target = nodesHash[edge.target];
         edgesCoords.push(toPush);
