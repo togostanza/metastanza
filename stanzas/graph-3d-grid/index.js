@@ -152,6 +152,17 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
+    const groupHash = {};
+    const nodesHash = {};
+
+    nodes.forEach((node) => {
+      const groupName = "" + node.group;
+      groupHash[groupName]
+        ? groupHash[groupName].push(node)
+        : (groupHash[groupName] = [node]);
+      nodesHash["" + node.id] = node;
+    });
+
     // === Drawing the grid ===
     const origin = [WIDTH / 2, HEIGHT / 2];
 
@@ -164,6 +175,10 @@ export default class ForceGraph extends Stanza {
 
     const nodesColor = color();
     const edgesColor = color();
+    const groupPlaneColor = color();
+
+    const groupColor = color().domain(Object.keys(groupHash));
+
     const svgG = svg
       .call(
         d3.drag().on("drag", dragged).on("start", dragStart).on("end", dragEnd)
@@ -194,6 +209,13 @@ export default class ForceGraph extends Stanza {
       .rotateY(startAngle)
       .rotateX(-startAngle);
 
+    const plane3d = _3d()
+      .shape("PLANE")
+      .origin(origin)
+      .rotateY(startAngle)
+      .rotateX(-startAngle)
+      .scale(scale);
+
     function processData(data) {
       const linesStrip = svgG.selectAll("line").data(data[1]);
 
@@ -204,7 +226,7 @@ export default class ForceGraph extends Stanza {
         .merge(linesStrip)
         .attr("fill", "none")
         .attr("stroke", (d) => d.color)
-        .attr("opacity", 0.5)
+        .attr("opacity", 0.6)
         .attr("stroke-width", 2)
         .sort(function (a, b) {
           return b[0].rotated.z - a[0].rotated.z;
@@ -220,7 +242,8 @@ export default class ForceGraph extends Stanza {
         })
         .attr("y2", function (d) {
           return d[1].projected.y;
-        });
+        })
+        .sort(edge3d.sort);
 
       linesStrip.exit().remove();
 
@@ -235,15 +258,31 @@ export default class ForceGraph extends Stanza {
         .attr("cy", posPointY)
         .attr("r", 3)
         .attr("stroke", function (d) {
-          return d3.color(nodesColor(d.id)).darker(3);
+          return d3.color(groupColor("" + d.group)).darker(3);
         })
         .attr("fill", function (d) {
-          return nodesColor(d.id);
+          return groupColor("" + d.group);
         })
         .attr("opacity", 1)
-        .attr("data-tooltip", (d) => d.id);
+        .attr("data-tooltip", (d) => d.id)
+        .sort(point3d.sort);
 
       points.exit().remove();
+
+      const planes = svgG.selectAll("path").data(data[2]);
+
+      planes
+        .enter()
+        .append("path")
+        .attr("class", "_3d")
+        .merge(planes)
+        .attr("fill", (d) => groupColor("" + d.id))
+        .attr("opacity", 0.2)
+        .attr("stroke", "gray")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 1)
+        .attr("d", plane3d.draw)
+        .sort(plane3d.sort);
 
       d3.selectAll("._3d").sort(_3d().sort);
     }
@@ -256,28 +295,12 @@ export default class ForceGraph extends Stanza {
       return d.projected.y;
     }
     const edgesCoords = [];
+    let groupPlanes = [];
 
     function init() {
       // Laying out nodes=========
 
       // const gridSizeForGroup = {};
-      const groupHash = {};
-      const nodesHash = {};
-
-      nodes.forEach((node) => {
-        const groupName = "" + node.group;
-        groupHash[groupName]
-          ? groupHash[groupName].push(node)
-          : (groupHash[groupName] = [node]);
-        nodesHash["" + node.id] = node;
-      });
-
-      // nodes.forEach((node) => {
-      //   const groupName = "" + node.group;
-      //   gridSizeForGroup[groupName] = Math.ceil(
-      //     Math.sqrt(groupHash[groupName].length)
-      //   );
-      // });
 
       const DEPTH = WIDTH;
       const yPointScale = d3
@@ -297,10 +320,22 @@ export default class ForceGraph extends Stanza {
         const group = groupHash[gKey];
         const gridSize = Math.ceil(Math.sqrt(groupHash[gKey].length));
 
-        const dx = WIDTH / gridSize;
-        const dz = HEIGHT / gridSize;
+        const dx = WIDTH / (gridSize - 1);
+        const dz = HEIGHT / (gridSize - 1);
 
-        group.forEach((node) => {
+        group.forEach((node, index) => {
+          if (group.length === 1) {
+            node.x = 0;
+            node.z = 0;
+            node.y = yPointScale(gKey) + rand();
+            return;
+          } else if (group.length === 2) {
+            node.x = index * (WIDTH / 3) - WIDTH / 6;
+            node.z = 0;
+            node.y = yPointScale(gKey) + rand();
+            jj++;
+            return;
+          }
           if (jj < gridSize) {
             node.x = jj * dx + rand() - WIDTH / 2;
             node.z = ii * dz + rand() - HEIGHT / 2;
@@ -316,6 +351,11 @@ export default class ForceGraph extends Stanza {
           }
         });
       });
+      // nodes.push({ id: "ZERO", group: 0, x: 0, y: 0, z: 0 });
+      // nodes.push({ id: "RIGHT", group: 0, x: WIDTH / 2, y: 0, z: 0 });
+      // nodes.push({ id: "LEFT", group: 0, x: -WIDTH / 2, y: 0, z: 0 });
+      // nodes.push({ id: "TOP", group: 0, x: 0, y: 0, z: HEIGHT / 2 });
+      // nodes.push({ id: "BOTTOM", group: 0, x: 0, y: 0, z: -HEIGHT / 2 });
 
       edges.forEach((edge) => {
         const toPush = [
@@ -334,7 +374,20 @@ export default class ForceGraph extends Stanza {
         edgesCoords.push(toPush);
       });
 
-      const data = [point3d(nodes), edge3d(edgesCoords)];
+      function getGroupPlane(group) {
+        const y = yPointScale(group);
+        const LU = [-WIDTH / 2, y, -HEIGHT / 2];
+        const LD = [-WIDTH / 2, y, HEIGHT / 2];
+        const RD = [WIDTH / 2, y, HEIGHT / 2];
+        const RU = [WIDTH / 2, y, -HEIGHT / 2];
+        const groupPlane = [LU, LD, RD, RU];
+        groupPlane.id = group;
+        return groupPlane;
+      }
+
+      groupPlanes = Object.keys(groupHash).map(getGroupPlane);
+
+      const data = [point3d(nodes), edge3d(edgesCoords), plane3d(groupPlanes)];
       processData(data);
     }
 
@@ -355,6 +408,9 @@ export default class ForceGraph extends Stanza {
         point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(nodes),
         edge3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
           edgesCoords
+        ),
+        plane3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
+          groupPlanes
         ),
       ];
       processData(data);
