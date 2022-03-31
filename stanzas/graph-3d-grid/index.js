@@ -168,6 +168,8 @@ export default class ForceGraph extends Stanza {
 
     const scale = 0.75;
 
+    let isDragging = false;
+
     const key = function (d) {
       return d.id;
     };
@@ -217,17 +219,33 @@ export default class ForceGraph extends Stanza {
       .scale(scale);
 
     function processData(data) {
+      const planes = svgG.selectAll("path").data(data[2]);
+
+      planes
+        .enter()
+        .append("path")
+        .attr("class", "_3d")
+        .classed("group-plane", true)
+        .merge(planes)
+        .attr("fill", (d) => groupColor("" + d.groupId))
+        .attr("opacity", 0.2)
+        .attr("stroke", "gray")
+        .attr("stroke-width", 1)
+        .attr("stroke-opacity", 1)
+        .attr("d", plane3d.draw)
+        .sort(plane3d.sort);
+
+      planes.exit().remove();
+
       const linesStrip = svgG.selectAll("line").data(data[1]);
 
       linesStrip
         .enter()
         .append("line")
         .attr("class", "_3d")
+        .classed("link", true)
         .merge(linesStrip)
-        .attr("fill", "none")
-        .attr("stroke", (d) => d.color)
-        .attr("opacity", 0.6)
-        .attr("stroke-width", 2)
+        .style("stroke", (d) => d.color)
         .sort(function (a, b) {
           return b[0].rotated.z - a[0].rotated.z;
         })
@@ -253,14 +271,15 @@ export default class ForceGraph extends Stanza {
         .enter()
         .append("circle")
         .attr("class", "_3d")
+        .classed("node", true)
         .merge(points)
         .attr("cx", posPointX)
         .attr("cy", posPointY)
         .attr("r", 3)
-        .attr("stroke", function (d) {
+        .style("stroke", function (d) {
           return d3.color(groupColor("" + d.group)).darker(3);
         })
-        .attr("fill", function (d) {
+        .style("fill", function (d) {
           return groupColor("" + d.group);
         })
         .attr("opacity", 1)
@@ -269,22 +288,104 @@ export default class ForceGraph extends Stanza {
 
       points.exit().remove();
 
-      const planes = svgG.selectAll("path").data(data[2]);
+      planes.on("mouseover", function (_e, d) {
+        // plane highlight is done by css.
+        // here - logic to highlight all nodes in the group
+        if (isDragging) {
+          return;
+        }
+        const groupId = d.groupId;
+        const group = groupHash[groupId];
+        const nodesIdsInGroup = group.map((node) => node.id);
+        const edgesConnectedToThisGroup = edges.filter(
+          (edge) =>
+            nodesIdsInGroup.includes(edge.source) ||
+            nodesIdsInGroup.includes(edge.target)
+        );
+        const sourcesGroups = edgesConnectedToThisGroup.map(
+          (edge) => "" + nodesHash[edge.source].group
+        );
+        const targetsGroups = edgesConnectedToThisGroup.map(
+          (edge) => "" + nodesHash[edge.target].group
+        );
 
-      planes
-        .enter()
-        .append("path")
-        .attr("class", "_3d")
-        .merge(planes)
-        .attr("fill", (d) => groupColor("" + d.id))
-        .attr("opacity", 0.2)
-        .attr("stroke", "gray")
-        .attr("stroke-width", 1)
-        .attr("stroke-opacity", 1)
-        .attr("d", plane3d.draw)
-        .sort(plane3d.sort);
+        const connectedTargetNodes = edgesConnectedToThisGroup.map(
+          (edge) => edge.target
+        );
+        const connectedSourceNodes = edgesConnectedToThisGroup.map(
+          (edge) => edge.source
+        );
+        const allConnectedNodes = [
+          ...new Set([...connectedTargetNodes, ...connectedSourceNodes]),
+        ];
+        const connectedNodes = allConnectedNodes.filter(
+          (nodeId) => !nodesIdsInGroup.includes(nodeId)
+        );
 
-      d3.selectAll("._3d").sort(_3d().sort);
+        const allGroups = [...new Set([...sourcesGroups, ...targetsGroups])];
+        const connectedGroups = allGroups.filter((group) => group !== groupId);
+
+        planes.classed("fadeout", true);
+        planes.classed("active", false);
+        planes.classed("half-active", false);
+
+        planes
+          .filter((p) => {
+            return connectedGroups.includes(p.groupId);
+          })
+          .classed("fadeout", false)
+          .classed("half-active", true);
+
+        d3.select(this).classed("active", true).classed("fadeout", false);
+
+        // highlight nodes belonging to this group
+        points.classed("fadeout", true);
+        points.classed("active", false);
+        points.classed("half-active", false);
+
+        points
+          .filter((p) => {
+            return nodesIdsInGroup.includes(p.id);
+          })
+          .classed("fadeout", false)
+          .classed("active", true);
+
+        points
+          .filter((p) => {
+            return connectedNodes.includes("" + p.id);
+          })
+          .classed("fadeout", false)
+          .classed("half-active", true);
+
+        // highlight edges that belongs to this group
+        linesStrip.classed("fadeout", true);
+
+        linesStrip
+          .filter(
+            (p) =>
+              nodesIdsInGroup.includes(p.source.id) ||
+              nodesIdsInGroup.includes(p.target.id)
+          )
+          .classed("fadeout", false)
+          .classed("active", true);
+      });
+
+      planes.on("mouseleave", () => {
+        if (isDragging) {
+          return;
+        }
+        linesStrip.classed("fadeout", false);
+        linesStrip.classed("active", false);
+        linesStrip.classed("half-active", false);
+        planes.classed("active", false);
+        planes.classed("fadeout", false);
+        planes.classed("half-active", false);
+        points.classed("fadeout", false);
+        points.classed("active", false);
+        points.classed("half-active", false);
+      });
+
+      // d3.selectAll("._3d").sort(_3d().sort);
     }
 
     function posPointX(d) {
@@ -351,11 +452,6 @@ export default class ForceGraph extends Stanza {
           }
         });
       });
-      // nodes.push({ id: "ZERO", group: 0, x: 0, y: 0, z: 0 });
-      // nodes.push({ id: "RIGHT", group: 0, x: WIDTH / 2, y: 0, z: 0 });
-      // nodes.push({ id: "LEFT", group: 0, x: -WIDTH / 2, y: 0, z: 0 });
-      // nodes.push({ id: "TOP", group: 0, x: 0, y: 0, z: HEIGHT / 2 });
-      // nodes.push({ id: "BOTTOM", group: 0, x: 0, y: 0, z: -HEIGHT / 2 });
 
       edges.forEach((edge) => {
         const toPush = [
@@ -371,6 +467,8 @@ export default class ForceGraph extends Stanza {
           ],
         ];
         toPush.color = edgesColor(edge.source);
+        toPush.source = nodesHash[edge.source];
+        toPush.target = nodesHash[edge.target];
         edgesCoords.push(toPush);
       });
 
@@ -381,7 +479,8 @@ export default class ForceGraph extends Stanza {
         const RD = [WIDTH / 2, y, HEIGHT / 2];
         const RU = [WIDTH / 2, y, -HEIGHT / 2];
         const groupPlane = [LU, LD, RD, RU];
-        groupPlane.id = group;
+        groupPlane.group = groupHash[group];
+        groupPlane.groupId = group;
         return groupPlane;
       }
 
@@ -392,6 +491,7 @@ export default class ForceGraph extends Stanza {
     }
 
     function dragStart(e) {
+      isDragging = true;
       mx = e.x;
       my = e.y;
     }
@@ -417,6 +517,7 @@ export default class ForceGraph extends Stanza {
     }
 
     function dragEnd(e) {
+      isDragging = false;
       mouseX = e.x - mx + mouseX;
       mouseY = e.y - my + mouseY;
     }
