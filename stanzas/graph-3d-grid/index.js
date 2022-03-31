@@ -153,17 +153,14 @@ export default class ForceGraph extends Stanza {
     };
 
     // === Drawing the grid ===
-    let origin = [WIDTH / 2, HEIGHT / 2],
-      j = 10,
-      scale = 1,
-      // yLine = [],
-      // xGrid = [],
-      beta = 0,
-      alpha = 0,
-      key = function (d) {
-        return d.id;
-      },
-      startAngle = Math.PI / 4;
+    const origin = [WIDTH / 2, HEIGHT / 2];
+
+    const scale = 0.75;
+
+    const key = function (d) {
+      return d.id;
+    };
+    const startAngle = Math.PI / 4;
 
     const nodesColor = color();
     const edgesColor = color();
@@ -197,42 +194,17 @@ export default class ForceGraph extends Stanza {
       .rotateY(startAngle)
       .rotateX(-startAngle);
 
-    function processData(data, tt) {
-      var points = svgG.selectAll("circle").data(data[0], key);
-
-      points
-        .enter()
-        .append("circle")
-        .attr("class", "_3d")
-        .attr("opacity", 0)
-        .attr("cx", posPointX)
-        .attr("cy", posPointY)
-        .merge(points)
-        .transition()
-        .duration(tt)
-        .attr("r", 3)
-        .attr("stroke", function (d) {
-          return d3.color(nodesColor(d.id)).darker(3);
-        })
-        .attr("fill", function (d) {
-          return nodesColor(d.id);
-        })
-        .attr("opacity", 1)
-        .attr("cx", posPointX)
-        .attr("cy", posPointY);
-
-      points.exit().remove();
-
+    function processData(data) {
       const linesStrip = svgG.selectAll("line").data(data[1]);
 
       linesStrip
         .enter()
         .append("line")
+        .attr("class", "_3d")
         .merge(linesStrip)
         .attr("fill", "none")
-        .attr("stroke", function (d) {
-          return edgesColor(d.source);
-        })
+        .attr("stroke", (d) => d.color)
+        .attr("opacity", 0.5)
         .attr("stroke-width", 2)
         .sort(function (a, b) {
           return b[0].rotated.z - a[0].rotated.z;
@@ -252,6 +224,27 @@ export default class ForceGraph extends Stanza {
 
       linesStrip.exit().remove();
 
+      const points = svgG.selectAll("circle").data(data[0], key);
+
+      points
+        .enter()
+        .append("circle")
+        .attr("class", "_3d")
+        .merge(points)
+        .attr("cx", posPointX)
+        .attr("cy", posPointY)
+        .attr("r", 3)
+        .attr("stroke", function (d) {
+          return d3.color(nodesColor(d.id)).darker(3);
+        })
+        .attr("fill", function (d) {
+          return nodesColor(d.id);
+        })
+        .attr("opacity", 1)
+        .attr("data-tooltip", (d) => d.id);
+
+      points.exit().remove();
+
       d3.selectAll("._3d").sort(_3d().sort);
     }
 
@@ -267,7 +260,7 @@ export default class ForceGraph extends Stanza {
     function init() {
       // Laying out nodes=========
 
-      const gridSizeForGroup = {};
+      // const gridSizeForGroup = {};
       const groupHash = {};
       const nodesHash = {};
 
@@ -279,16 +272,16 @@ export default class ForceGraph extends Stanza {
         nodesHash["" + node.id] = node;
       });
 
-      nodes.forEach((node) => {
-        const groupName = "" + node.group;
-        gridSizeForGroup[groupName] = Math.ceil(
-          Math.sqrt(groupHash[groupName].length)
-        );
-      });
+      // nodes.forEach((node) => {
+      //   const groupName = "" + node.group;
+      //   gridSizeForGroup[groupName] = Math.ceil(
+      //     Math.sqrt(groupHash[groupName].length)
+      //   );
+      // });
 
       const DEPTH = WIDTH;
       const yPointScale = d3
-        .scalePoint([0, DEPTH])
+        .scalePoint([-DEPTH / 2, DEPTH / 2])
         .domain(Object.keys(groupHash));
 
       // add random noise to pisition to prevent fully overlapping edges
@@ -309,25 +302,23 @@ export default class ForceGraph extends Stanza {
 
         group.forEach((node) => {
           if (jj < gridSize) {
-            node.x = jj * dx + rand();
-            node.z = ii * dz + rand();
+            node.x = jj * dx + rand() - WIDTH / 2;
+            node.z = ii * dz + rand() - HEIGHT / 2;
             node.y = yPointScale(gKey) + rand();
-            //xGrid.push([jj * dx + rand(), 1, ii * dz + rand()]);
             jj++;
           } else {
             jj = 0;
             ii++;
-            node.x = jj * dx + rand();
-            node.z = ii * dz + rand();
+            node.x = jj * dx + rand() - WIDTH / 2;
+            node.z = ii * dz + rand() - HEIGHT / 2;
             node.y = yPointScale(gKey) + rand();
-            //xGrid.push([jj * dx + rand(), 1, ii * dz + rand()]);
             jj++;
           }
         });
       });
 
       edges.forEach((edge) => {
-        edgesCoords.push([
+        const toPush = [
           [
             nodesHash[edge.source].x,
             nodesHash[edge.source].y,
@@ -338,11 +329,13 @@ export default class ForceGraph extends Stanza {
             nodesHash[edge.target].y,
             nodesHash[edge.target].z,
           ],
-        ]);
+        ];
+        toPush.color = edgesColor(edge.source);
+        edgesCoords.push(toPush);
       });
 
       const data = [point3d(nodes), edge3d(edgesCoords)];
-      processData(data, 1000);
+      processData(data);
     }
 
     function dragStart(e) {
@@ -351,6 +344,9 @@ export default class ForceGraph extends Stanza {
     }
 
     function dragged(e) {
+      let alpha = 0;
+      let beta = 0;
+
       mouseX = mouseX || 0;
       mouseY = mouseY || 0;
       beta = ((e.x - mx + mouseX) * Math.PI) / 230;
@@ -361,7 +357,7 @@ export default class ForceGraph extends Stanza {
           edgesCoords
         ),
       ];
-      processData(data, 0);
+      processData(data);
     }
 
     function dragEnd(e) {
@@ -373,8 +369,6 @@ export default class ForceGraph extends Stanza {
 
     init();
 
-    //
-
-    // this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
+    this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
   }
 }
