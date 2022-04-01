@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "graph-3d-grid",
-  "stanza:label": "Graph grid layout",
-  "stanza:definition": "Graph Grid Layout MetaStanza",
+  "@id": "graph-3d-circle",
+  "stanza:label": "Graph 3d circle layout",
+  "stanza:definition": "Graph 3D Circle Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Einishi Tech"],
-  "stanza:created": "2022-03-30",
-  "stanza:updated": "2022-03-30",
+  "stanza:created": "2022-04-01",
+  "stanza:updated": "2022-04-01",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",

@@ -17,11 +17,11 @@ import {
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "graph-3d-grid"),
-      downloadPngMenuItem(this, "graph-3d-grid"),
-      downloadJSONMenuItem(this, "graph-3d-grid", this._data),
-      downloadCSVMenuItem(this, "graph-3d-grid", this._data),
-      downloadTSVMenuItem(this, "graph-3d-grid", this._data),
+      downloadSvgMenuItem(this, "graph-3d-circle"),
+      downloadPngMenuItem(this, "graph-3d-circle"),
+      downloadJSONMenuItem(this, "graph-3d-circle", this._data),
+      downloadCSVMenuItem(this, "graph-3d-circle", this._data),
+      downloadTSVMenuItem(this, "graph-3d-circle", this._data),
     ];
   }
 
@@ -69,7 +69,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("graph-3d-grid");
+    const el = this.root.getElementById("graph-3d-circle");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
@@ -179,9 +179,7 @@ export default class ForceGraph extends Stanza {
     };
     const startAngle = Math.PI / 4;
 
-    const nodesColor = color();
     const edgesColor = color();
-    const groupPlaneColor = color();
 
     const groupColor = color().domain(Object.keys(groupHash));
 
@@ -297,8 +295,6 @@ export default class ForceGraph extends Stanza {
       points.exit().remove();
 
       planes.on("mouseover", function (_e, d) {
-        // plane highlight is done by css.
-        // here - logic to highlight all nodes in the group
         if (isDragging) {
           return;
         }
