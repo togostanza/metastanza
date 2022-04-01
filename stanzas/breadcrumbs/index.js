@@ -71,6 +71,7 @@ export default class Breadcrumbs extends Stanza {
 
     this._data = values;
 
+    // set overflow: visible for stanza container
     const parentDiv = this.root.getRootNode().host.parentNode.parentNode;
 
     if (parentDiv.classList.contains("overflow-auto")) {
@@ -80,11 +81,13 @@ export default class Breadcrumbs extends Stanza {
     if (!currentDataId && this.params["initinal-data-id"]) {
       currentDataId = this.params["initinal-data-id"];
     }
+    //
 
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
 
+    const root = this.root;
     const app = this.root.getElementById("breadcrumbs");
     app.style.maxWidth = width + "px";
     app.style.height = height + "px";
@@ -598,10 +601,15 @@ export default class Breadcrumbs extends Stanza {
       copyToClipbard(textArea, "copy");
       textArea.remove();
 
+      const right =
+        root.getRootNode().host.getClientRects()[1].right -
+        button.getClientRects()[0].right;
+
       const popupNode = d3
         .create("div")
         .attr("class", "popup")
         .style("border-radius", breadcrumbsR + "px")
+        .style("right", right + "px")
         .text("Copied!")
         .node();
 
