@@ -4,7 +4,7 @@ import { _3d } from "d3-3d";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 // import drawGridLayout from "./drawGridLayout";
-
+import prepareGraphData from "./prepareGraphData";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -84,12 +84,15 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const edgeSym = Symbol("nodeAdjEdges");
-    const edgeWidthSym = Symbol("edgeWidth");
-    const sourceNodeSym = Symbol("sourceNode");
-    const targetNodeSym = Symbol("targetNode");
-    const nodeSizeSym = Symbol("nodeSize");
-    const nodeColorSym = Symbol("nodeColor");
+    const edgeSym = Symbol.for("nodeAdjEdges");
+    const groupSym = Symbol.for("nodeGroup");
+    const edgeWidthSym = Symbol.for("edgeWidth");
+    const sourceNodeSym = Symbol.for("sourceNode");
+    const targetNodeSym = Symbol.for("targetNode");
+    const nodeSizeSym = Symbol.for("nodeSize");
+    const nodeColorSym = Symbol.for("nodeColor");
+    const nodeLabelSym = Symbol.for("nodeLabel");
+    const edgeColorSym = Symbol.for("edgeColor");
 
     const symbols = {
       edgeSym,
@@ -98,6 +101,8 @@ export default class ForceGraph extends Stanza {
       targetNodeSym,
       nodeSizeSym,
       nodeColorSym,
+      groupSym,
+      edgeColorSym,
     };
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"],
@@ -152,18 +157,19 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    const groupHash = {};
-    const nodesHash = {};
+    const { prepNodes, prepEdges } = prepareGraphData(nodes, edges, params);
 
-    nodes.forEach((node) => {
+    const groupHash = {};
+    const nodeHash = {};
+    prepNodes.forEach((node) => {
       const groupName = "" + node.group;
       groupHash[groupName]
         ? groupHash[groupName].push(node)
         : (groupHash[groupName] = [node]);
-      nodesHash["" + node.id] = node;
+      nodeHash["" + node.id] = node;
     });
 
-    edges.forEach((edge, index) => {
+    prepEdges.forEach((edge, index) => {
       edge.id = `edge${index}`;
     });
 
@@ -187,8 +193,6 @@ export default class ForceGraph extends Stanza {
       return d.id;
     };
     const startAngle = Math.PI / 4;
-
-    const edgesColor = color();
 
     const groupColor = color().domain(Object.keys(groupHash));
 
@@ -219,6 +223,7 @@ export default class ForceGraph extends Stanza {
       .scale(scale)
       .origin(origin)
       .shape("LINE")
+
       .rotateY(startAngle)
       .rotateX(-startAngle);
 
@@ -228,11 +233,6 @@ export default class ForceGraph extends Stanza {
       .rotateY(startAngle)
       .rotateX(-startAngle)
       .scale(scale);
-
-    const edgeScale = d3
-      .scaleLinear()
-      .domain(d3.extent(edges.map((d) => d.value)))
-      .range([1, 8]);
 
     function processData(data) {
       const planes = svgG.selectAll("path").data(data[2], (d) => d.groupId);
@@ -253,28 +253,27 @@ export default class ForceGraph extends Stanza {
 
       planes.exit().remove();
 
-      const linesStrip = svgG.selectAll("line").data(data[1], key);
+      const linesStrip = svgG.selectAll("line").data(data[1], (d) => d.edge.id);
 
       linesStrip
         .enter()
         .append("line")
         .attr("class", "_3d")
         .classed("link", true)
-
         .merge(linesStrip)
-        .style("stroke", (d) => d.color)
-        .style("stroke-width", (d) => edgeScale(d.value))
+        .style("stroke", (d) => d.edge[edgeColorSym])
+        .style("stroke-width", (d) => d.edge[edgeWidthSym])
         .attr("x1", function (d) {
-          return d[0].projected.x;
+          return d.edge[sourceNodeSym].projected.x;
         })
         .attr("y1", function (d) {
-          return d[0].projected.y;
+          return d.edge[sourceNodeSym].projected.y;
         })
         .attr("x2", function (d) {
-          return d[1].projected.x;
+          return d.edge[targetNodeSym].projected.x;
         })
         .attr("y2", function (d) {
-          return d[1].projected.y;
+          return d.edge[targetNodeSym].projected.y;
         })
         .sort(edge3d.sort);
 
@@ -292,10 +291,10 @@ export default class ForceGraph extends Stanza {
         .attr("cy", posPointY)
         .attr("r", 3)
         .style("stroke", function (d) {
-          return d3.color(groupColor("" + d.group)).darker(3);
+          return d3.color(d[symbols.nodeColorSym].trim()).darker(3);
         })
         .style("fill", function (d) {
-          return groupColor("" + d.group);
+          return d[symbols.nodeColorSym];
         })
         .attr("opacity", 1)
         .attr("data-tooltip", (d) => d.id)
@@ -308,27 +307,33 @@ export default class ForceGraph extends Stanza {
           return;
         }
 
-        const groupId = d.groupId;
-        const group = groupHash[groupId];
+        // const groupId = d.groupId;
+        const group = d.group;
+
         const nodesIdsInGroup = group.map((node) => node.id);
-        const edgesConnectedToThisGroup = edges.filter(
-          (edge) =>
+
+        const edgesConnectedToThisGroup = prepEdges.filter((edge) => {
+          return (
             nodesIdsInGroup.includes(edge.source) ||
             nodesIdsInGroup.includes(edge.target)
-        );
+          );
+        });
+
         const sourcesGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + nodesHash[edge.source].group
+          (edge) => "" + edge[sourceNodeSym].group
         );
         const targetsGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + nodesHash[edge.target].group
+          (edge) => "" + edge[targetNodeSym].group
         );
 
         const connectedTargetNodes = edgesConnectedToThisGroup.map(
           (edge) => edge.target
         );
+
         const connectedSourceNodes = edgesConnectedToThisGroup.map(
           (edge) => edge.source
         );
+
         const allConnectedNodes = [
           ...new Set([...connectedTargetNodes, ...connectedSourceNodes]),
         ];
@@ -337,7 +342,9 @@ export default class ForceGraph extends Stanza {
         );
 
         const allGroups = [...new Set([...sourcesGroups, ...targetsGroups])];
-        const connectedGroups = allGroups.filter((group) => group !== groupId);
+        const connectedGroups = allGroups.filter(
+          (group) => group !== d.groupId
+        );
 
         planes.classed("fadeout", true);
         planes.classed("active", false);
@@ -375,13 +382,17 @@ export default class ForceGraph extends Stanza {
         linesStrip.classed("fadeout", true);
 
         linesStrip
-          .filter(
-            (p) =>
-              (connectedNodes.includes(p.source.id) ||
-                connectedNodes.includes(p.target.id)) &&
-              (nodesIdsInGroup.includes(p.source.id) ||
-                nodesIdsInGroup.includes(p.target.id))
-          )
+          .filter((p) => {
+            // console.log("connectedNodes", connectedNodes);
+            // console.log("nodesIdsInGroup", nodesIdsInGroup);
+
+            return (
+              (connectedNodes.includes(p.edge[sourceNodeSym].id) ||
+                connectedNodes.includes(p.edge[targetNodeSym].id)) &&
+              (nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) ||
+                nodesIdsInGroup.includes(p.edge[targetNodeSym].id))
+            );
+          })
           .classed("fadeout", false)
           .classed("half-active", true)
           .classed("dashed", true);
@@ -389,8 +400,8 @@ export default class ForceGraph extends Stanza {
         linesStrip
           .filter(
             (p) =>
-              nodesIdsInGroup.includes(p.source.id) &&
-              nodesIdsInGroup.includes(p.target.id)
+              nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) &&
+              nodesIdsInGroup.includes(p.edge[targetNodeSym].id)
           )
           .classed("fadeout", false)
           .classed("active", true);
@@ -412,7 +423,36 @@ export default class ForceGraph extends Stanza {
         points.classed("half-active", false);
       });
 
-      // d3.selectAll("._3d").sort(_3d().sort);
+      points.on("mouseover", function (e, d) {
+        // highlight current node
+        d3.select(this).classed("active", true);
+        // fade out all other nodes, highlight a little connected ones
+        points
+          .classed("fadeout", (p) => d !== p)
+          .classed("half-active", (p) => {
+            return (
+              p !== d &&
+              d[edgeSym].some(
+                (edge) => edge[sourceNodeSym] === p || edge[targetNodeSym] === p
+              )
+            );
+          });
+        // fadeout not connected edges, highlight connected ones
+        linesStrip
+          .classed("fadeout", (p) => !d[edgeSym].includes(p))
+          .classed("active", (p) => d[edgeSym].includes(p));
+      });
+
+      points.on("mouseleave", function () {
+        linesStrip
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
+        points
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
+      });
     }
 
     function posPointX(d) {
@@ -422,8 +462,17 @@ export default class ForceGraph extends Stanza {
     function posPointY(d) {
       return d.projected.y;
     }
-    const edgesCoords = [];
+
     let groupPlanes = [];
+
+    const edgesWithCoords = prepEdges.map((edge) => {
+      const toPush = [
+        [edge[sourceNodeSym].x, edge[sourceNodeSym].y, edge[sourceNodeSym].z],
+        [edge[targetNodeSym].x, edge[targetNodeSym].y, edge[targetNodeSym].z],
+      ];
+      toPush.edge = edge;
+      return toPush;
+    });
 
     function init() {
       // Laying out nodes=========
@@ -467,27 +516,6 @@ export default class ForceGraph extends Stanza {
         });
       });
 
-      edges.forEach((edge) => {
-        const toPush = [
-          [
-            nodesHash[edge.source].x,
-            nodesHash[edge.source].y,
-            nodesHash[edge.source].z,
-          ],
-          [
-            nodesHash[edge.target].x,
-            nodesHash[edge.target].y,
-            nodesHash[edge.target].z,
-          ],
-        ];
-        toPush.color = edgesColor(edge.source);
-        toPush.id = edge.id;
-        toPush.value = edge.value;
-        toPush.source = nodesHash[edge.source];
-        toPush.target = nodesHash[edge.target];
-        edgesCoords.push(toPush);
-      });
-
       function getGroupPlane(group) {
         const y = yPointScale(group);
         const LU = [-WIDTH / 2, y, -HEIGHT / 2];
@@ -502,7 +530,11 @@ export default class ForceGraph extends Stanza {
 
       groupPlanes = Object.keys(groupHash).map(getGroupPlane);
 
-      const data = [point3d(nodes), edge3d(edgesCoords), plane3d(groupPlanes)];
+      const data = [
+        point3d(prepNodes),
+        edge3d(edgesWithCoords),
+        plane3d(groupPlanes),
+      ];
       processData(data);
     }
 
@@ -521,9 +553,11 @@ export default class ForceGraph extends Stanza {
       beta = ((e.x - mx + mouseX) * Math.PI) / 230;
       alpha = (((e.y - my + mouseY) * Math.PI) / 230) * -1;
       const data = [
-        point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(nodes),
+        point3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
+          prepNodes
+        ),
         edge3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
-          edgesCoords
+          edgesWithCoords
         ),
         plane3d.rotateY(beta + startAngle).rotateX(alpha - startAngle)(
           groupPlanes
@@ -537,8 +571,6 @@ export default class ForceGraph extends Stanza {
       mouseX = e.x - mx + mouseX;
       mouseY = e.y - my + mouseY;
     }
-
-    d3.selectAll("button").on("click", init);
 
     init();
 

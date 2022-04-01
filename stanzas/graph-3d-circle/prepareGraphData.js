@@ -1,5 +1,8 @@
 import * as d3 from "d3";
 export default function (nodesC, edgesC, params) {
+  nodesC = JSON.parse(JSON.stringify(nodesC));
+  edgesC = JSON.parse(JSON.stringify(edgesC));
+
   const {
     color,
     symbols,
@@ -134,5 +137,7 @@ export default function (nodesC, edgesC, params) {
       node[symbols.nodeSizeSym] = nodeSizeParams.fixedSize;
     });
   }
+
+  return { prepNodes: nodesC, prepEdges: edgesC };
   // ===
 }
