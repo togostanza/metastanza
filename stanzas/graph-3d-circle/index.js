@@ -103,6 +103,7 @@ export default class ForceGraph extends Stanza {
       nodeColorSym,
       groupSym,
       edgeColorSym,
+      nodeLabelSym,
     };
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"],
@@ -263,18 +264,10 @@ export default class ForceGraph extends Stanza {
         .merge(linesStrip)
         .style("stroke", (d) => d.edge[edgeColorSym])
         .style("stroke-width", (d) => d.edge[edgeWidthSym])
-        .attr("x1", function (d) {
-          return d.edge[sourceNodeSym].projected.x;
-        })
-        .attr("y1", function (d) {
-          return d.edge[sourceNodeSym].projected.y;
-        })
-        .attr("x2", function (d) {
-          return d.edge[targetNodeSym].projected.x;
-        })
-        .attr("y2", function (d) {
-          return d.edge[targetNodeSym].projected.y;
-        })
+        .attr("x1", (d) => d.edge[sourceNodeSym].projected.x)
+        .attr("y1", (d) => d.edge[sourceNodeSym].projected.y)
+        .attr("x2", (d) => d.edge[targetNodeSym].projected.x)
+        .attr("y2", (d) => d.edge[targetNodeSym].projected.y)
         .sort(edge3d.sort);
 
       linesStrip.exit().remove();
