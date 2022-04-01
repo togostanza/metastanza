@@ -167,6 +167,15 @@ export default class ForceGraph extends Stanza {
       edge.id = `edge${index}`;
     });
 
+    const maxNodesInGroup = d3.max(
+      Object.entries(groupHash),
+      (d) => d[1].length
+    );
+
+    const R = Math.min(WIDTH, HEIGHT) / 2;
+
+    const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
+
     // === Drawing the grid ===
     const origin = [WIDTH / 2, HEIGHT / 2];
 
@@ -426,48 +435,35 @@ export default class ForceGraph extends Stanza {
         .scalePoint([-DEPTH / 2, DEPTH / 2])
         .domain(Object.keys(groupHash));
 
-      // add random noise to pisition to prevent fully overlapping edges
+      // add random noise to position to prevent fully overlapping edges
 
       const rand = () => {
         return 0;
       }; // d3.randomNormal(0, 5);
 
       Object.keys(groupHash).forEach((gKey) => {
-        let ii = 0;
-        let jj = 0;
+        // Laying out nodes ===
 
         const group = groupHash[gKey];
-        const gridSize = Math.ceil(Math.sqrt(groupHash[gKey].length));
 
-        const dx = WIDTH / (gridSize - 1);
-        const dz = HEIGHT / (gridSize - 1);
+        const angleScale = d3
+          .scalePoint()
+          .domain(group.map((node) => node.id))
+          .range([0, Math.PI * 2 - (Math.PI * 2) / group.length]);
 
-        group.forEach((node, index) => {
+        const R = arcLength / ((Math.PI * 2) / group.length);
+
+        group.forEach((node) => {
           if (group.length === 1) {
             node.x = 0;
             node.z = 0;
             node.y = yPointScale(gKey) + rand();
             return;
-          } else if (group.length === 2) {
-            node.x = index * (WIDTH / 3) - WIDTH / 6;
-            node.z = 0;
-            node.y = yPointScale(gKey) + rand();
-            jj++;
-            return;
           }
-          if (jj < gridSize) {
-            node.x = jj * dx + rand() - WIDTH / 2;
-            node.z = ii * dz + rand() - HEIGHT / 2;
-            node.y = yPointScale(gKey) + rand();
-            jj++;
-          } else {
-            jj = 0;
-            ii++;
-            node.x = jj * dx + rand() - WIDTH / 2;
-            node.z = ii * dz + rand() - HEIGHT / 2;
-            node.y = yPointScale(gKey) + rand();
-            jj++;
-          }
+
+          node.x = R * Math.cos(angleScale(node.id));
+          node.z = R * Math.sin(angleScale(node.id));
+          node.y = yPointScale(gKey) + rand();
         });
       });
 
