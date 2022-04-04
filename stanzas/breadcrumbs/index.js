@@ -78,10 +78,13 @@ export default class Breadcrumbs extends Stanza {
       parentDiv.style = "overflow: visible !important;";
     }
 
-    if (!currentDataId && this.params["initinal-data-id"]) {
+    if (
+      !currentDataId &&
+      currentDataId !== 0 &&
+      this.params["initinal-data-id"]
+    ) {
       currentDataId = this.params["initinal-data-id"];
     }
-    //
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -268,8 +271,6 @@ export default class Breadcrumbs extends Stanza {
 
         return svg;
       } else if (camelizedIconName && datum.id === "root") {
-        console.log("icon only");
-
         textHeight = getTextRect(app, "W").textHeight;
         iconWidth = textHeight;
         svgBreadcrumbWidth = Math.max(
@@ -315,8 +316,6 @@ export default class Breadcrumbs extends Stanza {
 
         return svg;
       } else if (labelText && labelText.length > 0) {
-        console.log("text only");
-
         textRect = getTextRect(app, labelText);
         textWidth = textRect.textWidth;
         textHeight = textRect.textHeight;

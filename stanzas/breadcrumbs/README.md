@@ -28,14 +28,11 @@ The data should be hierarchy tree-like data of the format:
 ]
 ```
 
-`id`, `label` and `parent` keys are mandatory. `id` should be uniqe.
-
-The tree nodes that does not have any children should contain number value
-`"n": 12345` (where `12345` is a "size" of a node) as well.
+`id` key in data is mandatory and its values should be uniqe for every node.
 
 ### Dropdown menu display
 
-In order to display dropdown menu for the nodes on top of on other elements, container element of the breadcrumbs stanza should have `overflow: visible !important;` CSS property
+In order to display dropdown menu for the nodes on top of other elements, container element of the breadcrumbs stanza should have `overflow: visible !important;` CSS property
 
 ### Copying current path
 
@@ -56,8 +53,13 @@ Than could be done by using
 
 To change currently showing hierarchy node, Breadcrumbs stanza need to receive event `selectedDatumChanged` with
 
-```
-{details:{id: <id of the node to show>}}
+```javascript
+{
+  details:
+  {
+    id: <id of the node to show>
+  }
+}
 ```
 
 as event payload.
