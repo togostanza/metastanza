@@ -102,6 +102,8 @@ export default class Breadcrumbs extends Stanza {
     button.addEventListener("click", handleCopyToClipboard);
 
     button.setAttribute("height", height + "px");
+    button.style["border-radius"] = breadcrumbsR + "px";
+
     // button.innerText = "⧉";
     function generateFAIcon(iconName, className) {
       const camelizedIconName = FAIcons[`fa${camelize(iconName)}`]?.icon;
@@ -248,7 +250,8 @@ export default class Breadcrumbs extends Stanza {
           .attr(
             "viewBox",
             `0 0 ${camelizedIconName[0]} ${camelizedIconName[1]}`
-          );
+          )
+          .attr("class", "home-icon");
         icon.append("path").attr("d", camelizedIconName[4]);
         icon.attr("height", textHeight);
 
@@ -356,8 +359,6 @@ export default class Breadcrumbs extends Stanza {
 
         return svg;
       } else {
-        console.log("no icon, no text");
-
         // no icon and no text
         svgBreadcrumbWidth = breadcrumbsArrowLength + 10;
         svg
@@ -452,6 +453,7 @@ export default class Breadcrumbs extends Stanza {
         parentElem.getBoundingClientRect().width / 2 + "px";
 
       const menu = menuContainer.append("div").attr("class", "breadcrumb-menu");
+      menu.node().style["border-radius"] = breadcrumbsR + "px";
 
       const menuData = menu.selectAll("div").data(neighbourNodes, (d) => d.id);
 
