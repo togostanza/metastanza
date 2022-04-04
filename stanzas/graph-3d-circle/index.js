@@ -183,7 +183,6 @@ export default class ForceGraph extends Stanza {
 
     const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
 
-    // === Drawing the grid ===
     const origin = [WIDTH / 2, HEIGHT / 2];
 
     const scale = 0.75;
@@ -193,9 +192,10 @@ export default class ForceGraph extends Stanza {
     const key = function (d) {
       return d.id;
     };
+
     const startAngle = Math.PI / 4;
 
-    const groupColor = color().domain(Object.keys(groupHash));
+    const groupColor = color().domain(Object.keys(groupHash).sort());
 
     const svgG = svg
       .call(
@@ -244,7 +244,9 @@ export default class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("group-plane", true)
         .merge(planes)
-        .attr("fill", (d) => groupColor("" + d.groupId))
+        .attr("fill", (d) => {
+          return groupColor("" + d.groupId);
+        })
         .attr("opacity", 0.2)
         .attr("stroke", "gray")
         .attr("stroke-width", 1)
@@ -417,8 +419,12 @@ export default class ForceGraph extends Stanza {
       });
 
       points.on("mouseover", function (e, d) {
+        if (isDragging) {
+          return;
+        }
         // highlight current node
         d3.select(this).classed("active", true);
+        const edgeIdsOnThisNode = d[edgeSym].map((edge) => edge.id);
         // fade out all other nodes, highlight a little connected ones
         points
           .classed("fadeout", (p) => d !== p)
@@ -431,12 +437,16 @@ export default class ForceGraph extends Stanza {
             );
           });
         // fadeout not connected edges, highlight connected ones
+        console.log("node group:", d.group);
         linesStrip
-          .classed("fadeout", (p) => !d[edgeSym].includes(p))
-          .classed("active", (p) => d[edgeSym].includes(p));
+          .classed("fadeout", (p) => !edgeIdsOnThisNode.includes(p.edge.id))
+          .classed("active", (p) => edgeIdsOnThisNode.includes(p.edge.id));
       });
 
       points.on("mouseleave", function () {
+        if (isDragging) {
+          return;
+        }
         linesStrip
           .classed("active", false)
           .classed("fadeout", false)

@@ -61,7 +61,9 @@ export default function (nodesC, edgesC, params) {
     nodeColorParams.basedOn === "data key" &&
     nodesC.some((d) => d[nodeColorParams.dataKey])
   ) {
-    const nodeColorFunc = color();
+    const nodeColorFunc = color().domain(
+      [...new Set(nodesC.map((d) => "" + d[nodeColorParams.dataKey]))].sort()
+    );
     // Match hex color
     const regex = /^#(?:[0-9a-f]{3}){1,2}$/i;
     nodesC.forEach((node) => {
@@ -70,7 +72,7 @@ export default function (nodesC, edgesC, params) {
         node[symbols.nodeColorSym] = node[nodeColorParams.dataKey];
       } else if ("" + node[nodeColorParams.dataKey]) {
         node[symbols.nodeColorSym] = nodeColorFunc(
-          node[nodeColorParams.dataKey]
+          "" + node[nodeColorParams.dataKey]
         );
       } else {
         node[symbols.nodeColorSym] = null;
