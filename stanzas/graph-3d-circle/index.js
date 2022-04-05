@@ -141,6 +141,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const highlightAdjEdges = this.params["highlight-adjacent-edges"];
+    const highlightGroupPlanes = this.params["highlight-group-planes"];
 
     const params = {
       MARGIN,
@@ -193,7 +194,7 @@ export default class ForceGraph extends Stanza {
       return d.id;
     };
 
-    const startAngle = Math.PI / 4;
+    const startAngle = (Math.PI * 8) / 180;
 
     const groupColor = color().domain(Object.keys(groupHash).sort());
 
@@ -255,7 +256,6 @@ export default class ForceGraph extends Stanza {
         .sort(plane3d.sort);
 
       planes.exit().remove();
-
       const linesStrip = svgG.selectAll("line").data(data[1], (d) => d.edge.id);
 
       linesStrip
@@ -296,166 +296,6 @@ export default class ForceGraph extends Stanza {
         .sort(point3d.sort);
 
       points.exit().remove();
-
-      planes.on("mouseover", function (_e, d) {
-        if (isDragging) {
-          return;
-        }
-
-        // const groupId = d.groupId;
-        const group = d.group;
-
-        const nodesIdsInGroup = group.map((node) => node.id);
-
-        const edgesConnectedToThisGroup = prepEdges.filter((edge) => {
-          return (
-            nodesIdsInGroup.includes(edge.source) ||
-            nodesIdsInGroup.includes(edge.target)
-          );
-        });
-
-        const sourcesGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + edge[sourceNodeSym].group
-        );
-        const targetsGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + edge[targetNodeSym].group
-        );
-
-        const connectedTargetNodes = edgesConnectedToThisGroup.map(
-          (edge) => edge.target
-        );
-
-        const connectedSourceNodes = edgesConnectedToThisGroup.map(
-          (edge) => edge.source
-        );
-
-        const allConnectedNodes = [
-          ...new Set([...connectedTargetNodes, ...connectedSourceNodes]),
-        ];
-        const connectedNodes = allConnectedNodes.filter(
-          (nodeId) => !nodesIdsInGroup.includes(nodeId)
-        );
-
-        const allGroups = [...new Set([...sourcesGroups, ...targetsGroups])];
-        const connectedGroups = allGroups.filter(
-          (group) => group !== d.groupId
-        );
-
-        planes.classed("fadeout", true);
-        planes.classed("active", false);
-        planes.classed("half-active", false);
-
-        planes
-          .filter((p) => {
-            return connectedGroups.includes(p.groupId);
-          })
-          .classed("fadeout", false)
-          .classed("half-active", true);
-
-        d3.select(this).classed("active", true).classed("fadeout", false);
-
-        // highlight nodes belonging to this group
-        points.classed("fadeout", true);
-        points.classed("active", false);
-        points.classed("half-active", false);
-
-        points
-          .filter((p) => {
-            return nodesIdsInGroup.includes(p.id);
-          })
-          .classed("fadeout", false)
-          .classed("active", true);
-
-        points
-          .filter((p) => {
-            return connectedNodes.includes("" + p.id);
-          })
-          .classed("fadeout", false)
-          .classed("half-active", true);
-
-        // highlight edges that belongs to this group
-        linesStrip.classed("fadeout", true);
-
-        linesStrip
-          .filter((p) => {
-            // console.log("connectedNodes", connectedNodes);
-            // console.log("nodesIdsInGroup", nodesIdsInGroup);
-
-            return (
-              (connectedNodes.includes(p.edge[sourceNodeSym].id) ||
-                connectedNodes.includes(p.edge[targetNodeSym].id)) &&
-              (nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) ||
-                nodesIdsInGroup.includes(p.edge[targetNodeSym].id))
-            );
-          })
-          .classed("fadeout", false)
-          .classed("half-active", true)
-          .classed("dashed", true);
-
-        linesStrip
-          .filter(
-            (p) =>
-              nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) &&
-              nodesIdsInGroup.includes(p.edge[targetNodeSym].id)
-          )
-          .classed("fadeout", false)
-          .classed("active", true);
-      });
-
-      planes.on("mouseleave", () => {
-        if (isDragging) {
-          return;
-        }
-        linesStrip.classed("fadeout", false);
-        linesStrip.classed("active", false);
-        linesStrip.classed("half-active", false);
-        linesStrip.classed("dashed", false);
-        planes.classed("active", false);
-        planes.classed("fadeout", false);
-        planes.classed("half-active", false);
-        points.classed("fadeout", false);
-        points.classed("active", false);
-        points.classed("half-active", false);
-      });
-
-      points.on("mouseover", function (e, d) {
-        if (isDragging) {
-          return;
-        }
-        // highlight current node
-        d3.select(this).classed("active", true);
-        const edgeIdsOnThisNode = d[edgeSym].map((edge) => edge.id);
-        // fade out all other nodes, highlight a little connected ones
-        points
-          .classed("fadeout", (p) => d !== p)
-          .classed("half-active", (p) => {
-            return (
-              p !== d &&
-              d[edgeSym].some(
-                (edge) => edge[sourceNodeSym] === p || edge[targetNodeSym] === p
-              )
-            );
-          });
-        // fadeout not connected edges, highlight connected ones
-        console.log("node group:", d.group);
-        linesStrip
-          .classed("fadeout", (p) => !edgeIdsOnThisNode.includes(p.edge.id))
-          .classed("active", (p) => edgeIdsOnThisNode.includes(p.edge.id));
-      });
-
-      points.on("mouseleave", function () {
-        if (isDragging) {
-          return;
-        }
-        linesStrip
-          .classed("active", false)
-          .classed("fadeout", false)
-          .classed("half-active", false);
-        points
-          .classed("active", false)
-          .classed("fadeout", false)
-          .classed("half-active", false);
-      });
     }
 
     function posPointX(d) {
@@ -539,6 +379,18 @@ export default class ForceGraph extends Stanza {
         plane3d(groupPlanes),
       ];
       processData(data);
+
+      const planes = svgG.selectAll("path.group-plane");
+      const points = svgG.selectAll("circle.node");
+      const links = svgG.selectAll("line.link");
+
+      if (highlightGroupPlanes) {
+        addPlanesHighlight(planes, points, links);
+      }
+
+      if (highlightAdjEdges) {
+        addEdgesHighlight(points, links);
+      }
     }
 
     function dragStart(e) {
@@ -573,6 +425,166 @@ export default class ForceGraph extends Stanza {
       isDragging = false;
       mouseX = e.x - mx + mouseX;
       mouseY = e.y - my + mouseY;
+    }
+
+    function addPlanesHighlight(planes, points, links) {
+      planes.on("mouseover", function (_e, d) {
+        if (isDragging) {
+          return;
+        }
+
+        // const groupId = d.groupId;
+        const group = d.group;
+
+        const nodesIdsInGroup = group.map((node) => node.id);
+
+        const edgesConnectedToThisGroup = prepEdges.filter((edge) => {
+          return (
+            nodesIdsInGroup.includes(edge.source) ||
+            nodesIdsInGroup.includes(edge.target)
+          );
+        });
+
+        const sourcesGroups = edgesConnectedToThisGroup.map(
+          (edge) => "" + edge[sourceNodeSym].group
+        );
+        const targetsGroups = edgesConnectedToThisGroup.map(
+          (edge) => "" + edge[targetNodeSym].group
+        );
+
+        const connectedTargetNodes = edgesConnectedToThisGroup.map(
+          (edge) => edge.target
+        );
+
+        const connectedSourceNodes = edgesConnectedToThisGroup.map(
+          (edge) => edge.source
+        );
+
+        const allConnectedNodes = [
+          ...new Set([...connectedTargetNodes, ...connectedSourceNodes]),
+        ];
+        const connectedNodes = allConnectedNodes.filter(
+          (nodeId) => !nodesIdsInGroup.includes(nodeId)
+        );
+
+        const allGroups = [...new Set([...sourcesGroups, ...targetsGroups])];
+        const connectedGroups = allGroups.filter(
+          (group) => group !== d.groupId
+        );
+
+        planes.classed("fadeout", true);
+        planes.classed("active", false);
+        planes.classed("half-active", false);
+
+        planes
+          .filter((p) => {
+            return connectedGroups.includes(p.groupId);
+          })
+          .classed("fadeout", false)
+          .classed("half-active", true);
+
+        d3.select(this).classed("active", true).classed("fadeout", false);
+
+        // highlight nodes belonging to this group
+        points.classed("fadeout", true);
+        points.classed("active", false);
+        points.classed("half-active", false);
+
+        points
+          .filter((p) => {
+            return nodesIdsInGroup.includes(p.id);
+          })
+          .classed("fadeout", false)
+          .classed("active", true);
+
+        points
+          .filter((p) => {
+            return connectedNodes.includes("" + p.id);
+          })
+          .classed("fadeout", false)
+          .classed("half-active", true);
+
+        // highlight edges that belongs to this group
+        links.classed("fadeout", true);
+
+        links
+          .filter((p) => {
+            return (
+              (connectedNodes.includes(p.edge[sourceNodeSym].id) ||
+                connectedNodes.includes(p.edge[targetNodeSym].id)) &&
+              (nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) ||
+                nodesIdsInGroup.includes(p.edge[targetNodeSym].id))
+            );
+          })
+          .classed("fadeout", false)
+          .classed("half-active", true)
+          .classed("dashed", true);
+
+        links
+          .filter(
+            (p) =>
+              nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) &&
+              nodesIdsInGroup.includes(p.edge[targetNodeSym].id)
+          )
+          .classed("fadeout", false)
+          .classed("active", true);
+      });
+
+      planes.on("mouseleave", () => {
+        if (isDragging) {
+          return;
+        }
+        links.classed("fadeout", false);
+        links.classed("active", false);
+        links.classed("half-active", false);
+        links.classed("dashed", false);
+        planes.classed("active", false);
+        planes.classed("fadeout", false);
+        planes.classed("half-active", false);
+        points.classed("fadeout", false);
+        points.classed("active", false);
+        points.classed("half-active", false);
+      });
+    }
+
+    function addEdgesHighlight(points, links) {
+      points.on("mouseover", function (e, d) {
+        if (isDragging) {
+          return;
+        }
+        // highlight current node
+        d3.select(this).classed("active", true);
+        const edgeIdsOnThisNode = d[edgeSym].map((edge) => edge.id);
+        // fade out all other nodes, highlight a little connected ones
+        points
+          .classed("fadeout", (p) => d !== p)
+          .classed("half-active", (p) => {
+            return (
+              p !== d &&
+              d[edgeSym].some(
+                (edge) => edge[sourceNodeSym] === p || edge[targetNodeSym] === p
+              )
+            );
+          });
+        // fadeout not connected edges, highlight connected ones
+        links
+          .classed("fadeout", (p) => !edgeIdsOnThisNode.includes(p.edge.id))
+          .classed("active", (p) => edgeIdsOnThisNode.includes(p.edge.id));
+      });
+
+      points.on("mouseleave", function () {
+        if (isDragging) {
+          return;
+        }
+        links
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
+        points
+          .classed("active", false)
+          .classed("fadeout", false)
+          .classed("half-active", false);
+      });
     }
 
     init();
