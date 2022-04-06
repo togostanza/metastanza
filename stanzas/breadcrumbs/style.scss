@@ -29,6 +29,8 @@ main {
   overflow-y: hidden;
   display: inline-flex;
   height: fit-content;
+  scrollbar-width: thin;
+
   &::-webkit-scrollbar {
     height: 0.5em;
   }
