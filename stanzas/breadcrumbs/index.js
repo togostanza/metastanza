@@ -611,7 +611,7 @@ export default class Breadcrumbs extends Stanza {
 
       const right =
         root.getRootNode().host.getClientRects()[1].right -
-        button.getClientRects()[0].right;
+        this.getClientRects()[0].right;
 
       const popupNode = d3
         .create("div")
@@ -641,8 +641,8 @@ export default class Breadcrumbs extends Stanza {
     }
 
     // Set currentId to render
-    if (!state.currentId && this.params["initial-data-id"]) {
-      state.currentId = this.params["initial-data-id"];
+    if (initialId) {
+      state.currentId = initialId;
     } else {
       state.currentId = "-1";
     }

@@ -3,6 +3,8 @@
 
 main {
   padding: 1rem 2rem;
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  font-family: var(--togostanza-label-font-family);
 }
 
 #breadcrumbs {
@@ -52,7 +54,6 @@ main {
   align-items: center;
   position: relative;
   box-sizing: border-box;
-  font-size: calc(var(--togostanza-label-font-size) * 1px);
   > svg.copy-icon {
     height: 0.75rem;
   }
@@ -65,30 +66,31 @@ main {
   }
 }
 
-svg {
-  cursor: pointer;
-  font-size: calc(var(--togostanza-label-font-size) * 1px);
-  font-family: var(--togostanza-label-font-family);
-  text {
-    fill: var(--togostanza-label-font-color);
-  }
-  svg.home-icon path {
-    fill: var(--togostanza-home-icon-color);
-    &:hover {
-      fill: var(--togostanza-label-font-color-hover);
+.breadcrumb {
+  > svg {
+    cursor: pointer;
+    text {
+      fill: var(--togostanza-label-font-color);
     }
-  }
-}
 
-.breadcrumb > svg:hover {
-  path {
-    fill: var(--togostanza-label-background-color-hover);
-  }
-  text {
-    fill: var(--togostanza-label-font-color-hover);
-  }
-  svg path {
-    fill: var(--togostanza-label-font-color-hover);
+    &:hover {
+      path {
+        fill: var(--togostanza-label-background-color-hover);
+      }
+      text {
+        fill: var(--togostanza-label-font-color-hover);
+      }
+      svg path {
+        fill: var(--togostanza-label-font-color-hover);
+      }
+    }
+
+    svg.home-icon path {
+      fill: var(--togostanza-home-icon-color);
+      &:hover {
+        fill: var(--togostanza-label-font-color-hover);
+      }
+    }
   }
 }
 
