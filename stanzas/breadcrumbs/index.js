@@ -38,31 +38,29 @@ export default class Breadcrumbs extends Stanza {
 
   handleEvent(event) {
     event.stopPropagation();
-
     if (event.target !== this.element) {
-      this.state.currentId = event.detail.id;
-      // this.render();
+      this.state.currentId = "" + event.detail.id;
     }
   }
 
   async render() {
-    this.state = new Proxy(
-      { currentId: null },
-      {
-        set(target, key, value) {
-          if (key === "currentId") {
-            updateId(value);
-            dispatcher.dispatchEvent(
-              new CustomEvent("selectedDatumChanged", {
-                detail: { id: value },
-              })
-            );
-          }
-          return Reflect.set(...arguments);
-        },
-        get: Reflect.get,
-      }
-    );
+    this.state = new Proxy(this.state, {
+      set(target, key, value) {
+        if (key === "currentId") {
+          updateId(value);
+        }
+        return Reflect.set(...arguments);
+      },
+      get: Reflect.get,
+    });
+
+    const dispatchEvent = (value) => {
+      dispatcher.dispatchEvent(
+        new CustomEvent("selectedDatumChanged", {
+          detail: { id: parseInt(value) },
+        })
+      );
+    };
 
     const state = this.state;
 
@@ -218,7 +216,7 @@ export default class Breadcrumbs extends Stanza {
         labelText &&
         labelText.length > 0 &&
         camelizedIconName &&
-        datum.id === "root"
+        datum.id === "-1"
       ) {
         // text + icon
         textRect = getTextRect(app, labelText);
@@ -277,10 +275,11 @@ export default class Breadcrumbs extends Stanza {
         svg.on("click", () => {
           // handleChange(datum.id);
           state.currentId = datum.id;
+          dispatchEvent(datum.id);
         });
 
         return svg;
-      } else if (camelizedIconName && datum.id === "root") {
+      } else if (camelizedIconName && datum.id === "-1") {
         textHeight = getTextRect(app, "W").textHeight;
         iconWidth = textHeight;
         svgBreadcrumbWidth = Math.max(
@@ -323,6 +322,7 @@ export default class Breadcrumbs extends Stanza {
         svg.on("click", () => {
           // handleChange(datum.id);
           state.currentId = datum.id;
+          dispatchEvent(datum.id);
         });
 
         return svg;
@@ -366,6 +366,7 @@ export default class Breadcrumbs extends Stanza {
         svg.on("click", () => {
           // handleChange(datum.id);
           state.currentId = datum.id;
+          dispatchEvent(datum.id);
         });
 
         return svg;
@@ -397,6 +398,7 @@ export default class Breadcrumbs extends Stanza {
         svg.on("click", () => {
           // handleChange(datum.id);
           state.currentId = datum.id;
+          dispatchEvent(datum.id);
         });
 
         return svg;
@@ -490,15 +492,16 @@ export default class Breadcrumbs extends Stanza {
         .text((d) => d[labelsDataKey])
         .on("click", (e, d) => {
           state.currentId = d.id;
-          // handleChange(d.id);
+          dispatchEvent(d.id);
         });
 
       return menuContainer;
     }
 
-    function updateId(id = initialId) {
+    function updateId(id) {
       if (!idMap.get(id)) {
         console.error(`BREADCRUMB STANZA: id not found: ${id}`);
+        console.error(`BREADCRUMB STANZA: id type is: ${typeof id}`);
         return;
       }
 
@@ -524,7 +527,7 @@ export default class Breadcrumbs extends Stanza {
             if (showDropdown) {
               result
                 .on("mouseenter", function (e, d) {
-                  if (d.id === "root") {
+                  if (d.id === "-1") {
                     return;
                   }
                   if (showingMenu) {
@@ -569,7 +572,7 @@ export default class Breadcrumbs extends Stanza {
      * @param {string} rootId id to use for the root node
      * @returns {Array} Array of hierarchy nodes with a single root node
      */
-    function addRoot(values, rootId = "root") {
+    function addRoot(values, rootId = "-1") {
       if (values.filter((node) => !node?.parent).length > 1) {
         const rootNode = {
           id: "" + rootId,
@@ -577,10 +580,10 @@ export default class Breadcrumbs extends Stanza {
           children: [],
         };
 
-        values.forEach((node, i) => {
+        values.forEach((node) => {
           if (!node.parent) {
             rootNode.children.push(node.id);
-            values[i].parent = "root";
+            node.parent = "-1";
           }
         });
 
@@ -588,16 +591,6 @@ export default class Breadcrumbs extends Stanza {
       }
       return values;
     }
-
-    // function handleChange(id) {
-    //   // emit events etc. here
-    //   dispatcher.dispatchEvent(
-    //     new CustomEvent("selectedDatumChanged", {
-    //       detail: { id },
-    //     })
-    //   );
-    //   updateId(id);
-    // }
 
     /**
      * Copy to clipboard handler
@@ -648,12 +641,10 @@ export default class Breadcrumbs extends Stanza {
     }
 
     // Set currentId to render
-    if (
-      !state.currentId &&
-      state.currentId !== 0 &&
-      this.params["initial-data-id"]
-    ) {
+    if (!state.currentId && this.params["initial-data-id"]) {
       state.currentId = this.params["initial-data-id"];
+    } else {
+      state.currentId = "-1";
     }
   }
 }
