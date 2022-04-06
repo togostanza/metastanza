@@ -19,9 +19,13 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
-let currentDataId;
-
 export default class Breadcrumbs extends Stanza {
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      currentId: null,
+    };
+  }
   menu() {
     return [
       downloadSvgMenuItem(this, "breadcrumbs"),
@@ -36,13 +40,35 @@ export default class Breadcrumbs extends Stanza {
     event.stopPropagation();
 
     if (event.target !== this.element) {
-      currentDataId = event.detail.id;
-      this.render();
+      this.state.currentId = event.detail.id;
+      // this.render();
     }
   }
 
   async render() {
+    this.state = new Proxy(
+      { currentId: null },
+      {
+        set(target, key, value) {
+          if (key === "currentId") {
+            updateId(value);
+            dispatcher.dispatchEvent(
+              new CustomEvent("selectedDatumChanged", {
+                detail: { id: value },
+              })
+            );
+          }
+          return Reflect.set(...arguments);
+        },
+        get: Reflect.get,
+      }
+    );
+
+    const state = this.state;
+
     const dispatcher = this.element;
+
+    let showingMenu = null;
 
     appendCustomCss(this, this.params["custom-css-url"]);
 
@@ -56,6 +82,7 @@ export default class Breadcrumbs extends Stanza {
     const labelsDataKey = this.params["labels-data-key"];
     const breadcrumbsR = this.params["breadcrumbs-corner-radius"];
     const breadcrumbsArrowLength = this.params["breadcrumbs-arrow-length"];
+    const showCopyButton = this.params["show-copy-button"];
 
     const values = await loadData(
       this.params["data-url"],
@@ -71,21 +98,6 @@ export default class Breadcrumbs extends Stanza {
 
     this._data = values;
 
-    // set overflow: visible for stanza container
-    const parentDiv = this.root.getRootNode().host.parentNode.parentNode;
-
-    if (parentDiv.classList.contains("overflow-auto")) {
-      parentDiv.style = "overflow: visible !important;";
-    }
-
-    if (
-      !currentDataId &&
-      currentDataId !== 0 &&
-      this.params["initinal-data-id"]
-    ) {
-      currentDataId = this.params["initinal-data-id"];
-    }
-
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
@@ -98,14 +110,29 @@ export default class Breadcrumbs extends Stanza {
     const appBreadcrumbs = app.appendChild(
       d3.create("div").attr("id", "app-breadcrumbs").node()
     );
-    const button = app.appendChild(
-      d3.create("button").attr("id", "app-copy-button").node()
-    );
 
-    button.addEventListener("click", handleCopyToClipboard);
+    if (showCopyButton) {
+      const button = app.appendChild(
+        d3.create("button").attr("id", "app-copy-button").node()
+      );
 
-    button.setAttribute("height", height + "px");
-    button.style["border-radius"] = breadcrumbsR + "px";
+      button.addEventListener("click", handleCopyToClipboard);
+
+      button.setAttribute("height", height + "px");
+      button.style["border-radius"] = breadcrumbsR + "px";
+
+      try {
+        button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
+      } catch (error) {
+        button.innerText = "⧉";
+      }
+
+      d3.select(button).on("mouseenter", () => {
+        if (showingMenu) {
+          showingMenu.remove();
+        }
+      });
+    }
 
     // button.innerText = "⧉";
     function generateFAIcon(iconName, className) {
@@ -118,18 +145,6 @@ export default class Breadcrumbs extends Stanza {
       result.append("path").attr("d", camelizedIconName[4]);
       return result.node();
     }
-
-    try {
-      button.appendChild(generateFAIcon(copyIcon, "copy-icon"));
-    } catch (error) {
-      button.innerText = "⧉";
-    }
-
-    d3.select(button).on("mouseenter", () => {
-      if (showingMenu) {
-        showingMenu.remove();
-      }
-    });
 
     const idMap = new Map();
 
@@ -145,12 +160,6 @@ export default class Breadcrumbs extends Stanza {
       }
       idMap.set(node.id, node);
     });
-
-    let showingMenu = null;
-
-    function getById(id) {
-      return idMap.get(id);
-    }
 
     function getPolygon(width, height) {
       if (width < breadcrumbsArrowLength) {
@@ -266,7 +275,8 @@ export default class Breadcrumbs extends Stanza {
           .attr("opacity", 1);
 
         svg.on("click", () => {
-          handleChange(datum.id);
+          // handleChange(datum.id);
+          state.currentId = datum.id;
         });
 
         return svg;
@@ -311,7 +321,8 @@ export default class Breadcrumbs extends Stanza {
         icon.attr("height", textHeight);
 
         svg.on("click", () => {
-          handleChange(datum.id);
+          // handleChange(datum.id);
+          state.currentId = datum.id;
         });
 
         return svg;
@@ -353,7 +364,8 @@ export default class Breadcrumbs extends Stanza {
           .attr("opacity", 1);
 
         svg.on("click", () => {
-          handleChange(datum.id);
+          // handleChange(datum.id);
+          state.currentId = datum.id;
         });
 
         return svg;
@@ -383,7 +395,8 @@ export default class Breadcrumbs extends Stanza {
         g.append("path").attr("d", path).attr("class", "breadcrumb-path");
 
         svg.on("click", () => {
-          handleChange(datum.id);
+          // handleChange(datum.id);
+          state.currentId = datum.id;
         });
 
         return svg;
@@ -391,31 +404,31 @@ export default class Breadcrumbs extends Stanza {
     }
 
     function getAscendants(id) {
-      let currentNode = getById(id);
+      let currentNode = idMap.get(id);
       const ascendants = [currentNode];
 
       while (currentNode?.parent) {
-        ascendants.push(getById(currentNode.parent));
-        currentNode = getById(currentNode.parent);
+        ascendants.push(idMap.get(currentNode.parent));
+        currentNode = idMap.get(currentNode.parent);
       }
       ascendants.reverse();
       return ascendants;
     }
 
     function getNeighbourNodes(id) {
-      const currentNode = getById(id);
+      const currentNode = idMap.get(id);
 
       if (!currentNode?.parent) {
         return [];
       }
-      const parent = getById(currentNode.parent);
+      const parent = idMap.get(currentNode.parent);
 
       if (!parent?.children) {
         return [];
       }
       return parent.children
         .filter((child) => child !== id)
-        .map((id) => getById(id));
+        .map((id) => idMap.get(id));
     }
 
     function getMenuForId(id) {
@@ -476,18 +489,19 @@ export default class Breadcrumbs extends Stanza {
         .attr("class", "breadcrumb-menu-item")
         .text((d) => d[labelsDataKey])
         .on("click", (e, d) => {
-          handleChange(d.id);
+          state.currentId = d.id;
+          // handleChange(d.id);
         });
 
       return menuContainer;
     }
 
     function updateId(id = initialId) {
-      if (!getById(id)) {
-        console.error("BREADCRUMB STANZA: id not found");
+      if (!idMap.get(id)) {
+        console.error(`BREADCRUMB STANZA: id not found: ${id}`);
         return;
       }
-      currentDataId = id;
+
       if (showingMenu) {
         showingMenu.remove();
       }
@@ -575,15 +589,15 @@ export default class Breadcrumbs extends Stanza {
       return values;
     }
 
-    function handleChange(id) {
-      // emit events etc. here
-      dispatcher.dispatchEvent(
-        new CustomEvent("selectedDatumChanged", {
-          detail: { id },
-        })
-      );
-      updateId(id);
-    }
+    // function handleChange(id) {
+    //   // emit events etc. here
+    //   dispatcher.dispatchEvent(
+    //     new CustomEvent("selectedDatumChanged", {
+    //       detail: { id },
+    //     })
+    //   );
+    //   updateId(id);
+    // }
 
     /**
      * Copy to clipboard handler
@@ -594,7 +608,7 @@ export default class Breadcrumbs extends Stanza {
      */
     function handleCopyToClipboard() {
       const textArea = document.createElement("textarea");
-      const text = getAscendants(currentDataId)
+      const text = getAscendants(state.currentId)
         .map((d) => d.label)
         .join(" > ");
       textArea.value = text;
@@ -633,6 +647,13 @@ export default class Breadcrumbs extends Stanza {
       }, 800);
     }
 
-    updateId(initialId);
+    // Set currentId to render
+    if (
+      !state.currentId &&
+      state.currentId !== 0 &&
+      this.params["initial-data-id"]
+    ) {
+      state.currentId = this.params["initial-data-id"];
+    }
   }
 }

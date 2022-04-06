@@ -28,7 +28,7 @@ The data should be hierarchy tree-like data of the format:
 ]
 ```
 
-`id` key in data is mandatory and its values should be uniqe for every node.
+`id` key in data is mandatory and its values should be uniqe for every node. Numbers as well as strings are accepted.
 
 ### Dropdown menu display
 
@@ -36,7 +36,8 @@ In order to display dropdown menu for the nodes on top of other elements, contai
 
 ### Copying current path
 
-The path to current node can be copied in clipboard by clicking the ⧉ button
+The path to current node can be copied in clipboard by clicking the Copy button. The copied path will be in the format:
+`{Node1 label} > {Node2 label} > {Node3 label} > ....`
 
 ### Coupling with another stanza
 

@@ -110,8 +110,17 @@
     {
       "stanza:key": "show-dropdown",
       "stanza:type": "boolean",
-      "stanza:example": true,
+      "stanza:example": false,
       "stanza:description": "Show dropdown menu for sibling nodes",
+      "stanza:required": false
+    },
+
+    {
+      "stanza:key": "show-copy-button",
+      "stanza:type": "boolean",
+      "stanza:example": false,
+      "stanza:default": false,
+      "stanza:description": "Show copy button",
       "stanza:required": false
     }
   ],
