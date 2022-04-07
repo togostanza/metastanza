@@ -2208,41 +2208,6 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "label-0",
-		"stanza:type": "string",
-		"stanza:example": "10090",
-		"stanza:description": "Label name",
-		"stanza:required": true
-	},
-	{
-		"stanza:key": "label-1",
-		"stanza:type": "string",
-		"stanza:example": "7955",
-		"stanza:description": "Label name",
-		"stanza:required": false
-	},
-	{
-		"stanza:key": "label-2",
-		"stanza:type": "string",
-		"stanza:example": "9606",
-		"stanza:description": "Label name",
-		"stanza:required": false
-	},
-	{
-		"stanza:key": "label-3",
-		"stanza:type": "string",
-		"stanza:example": "9601",
-		"stanza:description": "Label name",
-		"stanza:required": false
-	},
-	{
-		"stanza:key": "label-4",
-		"stanza:type": "string",
-		"stanza:example": "9606",
-		"stanza:description": "Label name",
-		"stanza:required": false
-	},
-	{
 		"stanza:key": "custom-css-url",
 		"stanza:example": "",
 		"stanza:description": "Stylesheet(css file) URL to override current style",
@@ -2269,8 +2234,7 @@ var metadata = {
 			"screen"
 		],
 		"stanza:example": "screen",
-		"stanza:description": "How to mix colors in overlapping areas",
-		"stanza:required": true
+		"stanza:description": "How to mix colors in overlapping areas"
 	}
 ],
 	"stanza:menu-placement": "bottom-right",
