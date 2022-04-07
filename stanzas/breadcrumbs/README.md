@@ -1,6 +1,6 @@
 # Breadcrumbs
 
-### Showinb nodes
+### Showing nodes
 
 In order to visualise the data, Breadcrumbs stanza should receive:
 
@@ -28,14 +28,16 @@ The data should be hierarchy tree-like data of the format:
 ]
 ```
 
-`id`, `label` and `parent` keys are mandatory. `id` should be uniqe, positive integer number.
+`id` key in data is mandatory and its values should be uniqe for every node. Numbers as well as strings are accepted.
 
-The tree nodes that does not have any children should contain number value
-`"n": 12345` (where `12345` is a "size" of a node) as well.
+### Dropdown menu display
+
+In order to display dropdown menu for the nodes on top of other elements, container element of the breadcrumbs stanza should have `overflow: visible !important;` CSS property
 
 ### Copying current path
 
-The path to current node can be copied in clipboard by right clicking in any point on this stanza and selecting `Copy path` context menu.
+The path to current node can be copied in clipboard by clicking the Copy button. The copied path will be in the format:
+`{Node1 label} > {Node2 label} > {Node3 label} > ....`
 
 ### Coupling with another stanza
 
@@ -52,8 +54,13 @@ Than could be done by using
 
 To change currently showing hierarchy node, Breadcrumbs stanza need to receive event `selectedDatumChanged` with
 
-```
-{details:{id: <id of the node to show>}}
+```javascript
+{
+  details:
+  {
+    id: <id of the node to show>
+  }
+}
 ```
 
 as event payload.
