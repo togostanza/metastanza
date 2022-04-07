@@ -1,6 +1,6 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2e5f765c.js';
+import { s as select } from './index-f69e001d.js';
 import { s as sum } from './sum-44e7480e.js';
 import { t as tsv } from './dsv-8e18f33d.js';
 import { p as path } from './path-a78af922.js';

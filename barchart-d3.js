@@ -1,18 +1,18 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2e5f765c.js';
-import { l as loadData } from './load-data-52aeb3ee.js';
+import { s as select } from './index-f69e001d.js';
+import { l as loadData } from './load-data-382dc104.js';
 import { T as ToolTip } from './ToolTip-7ceb815c.js';
 import { L as Legend } from './Legend-90239b0e.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-60a01240.js';
 import { m as max } from './max-2c042256.js';
-import { o as ordinal, f as format } from './ordinal-736fbed7.js';
-import { b as band } from './band-01d5492f.js';
-import { l as linear } from './linear-71a834cd.js';
+import { o as ordinal, f as format } from './ordinal-2a500a97.js';
+import { b as band } from './band-cb090c93.js';
+import { l as linear } from './linear-0737660c.js';
 import { a as axisBottom, b as axisLeft } from './axis-3dba94d9.js';
 import { a as array } from './array-89f97098.js';
 import { c as constant } from './constant-c49047a5.js';
-import { g as group } from './group-c82787b9.js';
+import { g as group } from './group-4f051069.js';
 import { e as extent } from './extent-14a1e8e9.js';
 import './dsv-8e18f33d.js';
 

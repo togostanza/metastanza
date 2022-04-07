@@ -1,15 +1,14 @@
 import { d as defineStanzaElement } from './stanza-element-626dadde.js';
 import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-2e5f765c.js';
-import { l as loadData } from './load-data-52aeb3ee.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-5222e5c6.js';
+import { s as select } from './index-f69e001d.js';
+import { l as loadData } from './load-data-382dc104.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-60a01240.js';
+import { t as treemapDice, r as roundNode, s as stratify, h as hierarchy } from './stratify-6cbca1ed.js';
 import { p as path$1 } from './path-a78af922.js';
-import { s as stratify, h as hierarchy } from './stratify-8f602319.js';
-import { f as format, o as ordinal, a as interpolate } from './ordinal-736fbed7.js';
+import { f as format, o as ordinal, a as interpolate } from './ordinal-2a500a97.js';
 import { m as max } from './max-2c042256.js';
 import { a as arc } from './arc-b9bfd524.js';
 import { s as sum } from './sum-44e7480e.js';
-import { t as treemapDice, r as roundNode } from './dice-7bdb0652.js';
 import './dsv-8e18f33d.js';
 import './constant-c49047a5.js';
 

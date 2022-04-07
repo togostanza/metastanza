@@ -9751,6 +9751,7 @@ var scripts = {
 	"lint:editorconfig": "editorconfig-checker"
 };
 var dependencies = {
+	"@fortawesome/fontawesome-free": "^6.1.1",
 	"@fortawesome/fontawesome-svg-core": "^1.2.35",
 	"@fortawesome/free-solid-svg-icons": "^5.15.3",
 	"@fortawesome/vue-fontawesome": "^3.0.0-1",
@@ -9868,4 +9869,4 @@ script.render = render;
 script.__file = "node_modules/togostanza/src/components/Layout.vue";
 
 export { Fragment as F, createElementBlock as a, renderList as b, createBlock as c, defineComponent as d, createBaseVNode as e, createCommentVNode as f, createApp as g, computed as h, createTextVNode as i, ref as j, octicons as k, watch as l, mergeProps as m, normalizeClass as n, openBlock as o, createVNode as p, normalizeProps as q, resolveComponent as r, script as s, toDisplayString as t, guardReactiveProps as u, resolveDynamicComponent as v, withCtx as w, pushScopeId as x, popScopeId as y, n as z };
-//# sourceMappingURL=Layout-8b7fe0ca.js.map
+//# sourceMappingURL=Layout-bb1fcec9.js.map

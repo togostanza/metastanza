@@ -1,4 +1,4 @@
-import { i as initRange, o as ordinal } from './ordinal-736fbed7.js';
+import { i as initRange, o as ordinal } from './ordinal-2a500a97.js';
 
 function range(start, stop, step) {
   start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
@@ -113,4 +113,4 @@ function point() {
 }
 
 export { band as b, point as p };
-//# sourceMappingURL=band-01d5492f.js.map
+//# sourceMappingURL=band-cb090c93.js.map
