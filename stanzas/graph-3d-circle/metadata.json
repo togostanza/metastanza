@@ -151,20 +151,6 @@
       "stanza:description": "Highlight adjacent group planes on mouse hover"
     },
     {
-      "stanza:key": "labels-data-key",
-      "stanza:type": "string",
-      "stanza:default": "id",
-      "stanza:example": "id",
-      "stanza:description": "Node labels data key. If empty, no labels will be shown"
-    },
-    {
-      "stanza:key": "labels-margin",
-      "stanza:type": "number",
-      "stanza:default": 15,
-      "stanza:example": 15,
-      "stanza:description": "Node labels offset from node center, in px."
-    },
-    {
       "stanza:key": "nodes-tooltip-data-key",
       "stanza:type": "string",
       "stanza:default": "id",
@@ -227,30 +213,6 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 7,
-      "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
     },
     {
       "stanza:key": "--togostanza-background-color",

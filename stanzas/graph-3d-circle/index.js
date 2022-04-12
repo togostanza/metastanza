@@ -3,9 +3,10 @@ import * as d3 from "d3";
 import { _3d } from "d3-3d";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-// import drawGridLayout from "./drawGridLayout";
-// import prepareGraphData from "./prepareGraphData";
-import prepareData, { get3DEdges, getGroupPlanes } from "@/lib/prepareData";
+import prepareGraphData, {
+  get3DEdges,
+  getGroupPlanes,
+} from "@/lib/prepareGraphData";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -86,33 +87,28 @@ export default class ForceGraph extends Stanza {
     root.append(this.tooltip);
 
     const nodeSizeParams = {
-      basedOn: this.params["node-size-based-on"],
-      dataKey: this.params["node-size-data-key"],
-      fixedSize: this.params["node-size-fixed-size"],
+      basedOn: this.params["node-size-based-on"] || "fixed",
+      dataKey: this.params["node-size-data-key"] || "",
+      fixedSize: this.params["node-size-fixed-size"] || 3,
       minSize: this.params["node-size-min-size"],
       maxSize: this.params["node-size-max-size"],
     };
     const nodeColorParams = {
-      basedOn: this.params["node-color-based-on"],
-      dataKey: this.params["node-color-data-key"],
+      basedOn: this.params["node-color-based-on"] || "fixed",
+      dataKey: this.params["node-color-data-key"] || "",
     };
 
     const edgeWidthParams = {
-      basedOn: this.params["edge-width-based-on"],
-      dataKey: this.params["edge-width-data-key"],
-      fixedWidth: this.params["edge-fixed-width"],
+      basedOn: this.params["edge-width-based-on"] || "fixed",
+      dataKey: this.params["edge-width-data-key"] || "",
+      fixedWidth: this.params["edge-fixed-width"] || 1,
       minWidth: this.params["edge-min-width"],
       maxWidth: this.params["edge-max-width"],
     };
 
     const edgeColorParams = {
-      basedOn: this.params["edge-color-based-on"],
-      dataKey: this.params["edge-color-data-key"],
-    };
-
-    const labelsParams = {
-      margin: this.params["labels-margin"],
-      dataKey: this.params["labels-data-key"],
+      basedOn: this.params["edge-color-based-on"] || "fixed",
+      dataKey: this.params["edge-color-data-key"] || "",
     };
 
     const tooltipParams = {
@@ -120,8 +116,8 @@ export default class ForceGraph extends Stanza {
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
-    const highlightAdjEdges = this.params["highlight-adjacent-edges"];
-    const highlightGroupPlanes = this.params["highlight-group-planes"];
+    const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
+    const highlightGroupPlanes = this.params["highlight-group-planes"] || false;
 
     const params = {
       MARGIN,
@@ -134,17 +130,14 @@ export default class ForceGraph extends Stanza {
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
-      labelsParams,
       tooltipParams,
     };
 
-    const { prepNodes, prepEdges, groupHash, symbols } = prepareData(
+    const { prepNodes, prepEdges, groupHash, symbols } = prepareGraphData(
       nodes,
       edges,
       params
     );
-
-    // OK
 
     const maxNodesInGroup = d3.max(
       Object.entries(groupHash),
@@ -155,7 +148,7 @@ export default class ForceGraph extends Stanza {
 
     const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
 
-    const origin = [WIDTH / 2, HEIGHT / 2];
+    const origin = [MARGIN.LEFT + WIDTH / 2, MARGIN.TOP + HEIGHT / 2];
 
     const scale = 0.75;
 
@@ -166,8 +159,6 @@ export default class ForceGraph extends Stanza {
     };
 
     const startAngle = (Math.PI * 8) / 180;
-
-    //const groupColor = color().domain(Object.keys(groupHash).sort());
 
     const svgG = svg
       .call(
@@ -385,7 +376,6 @@ export default class ForceGraph extends Stanza {
           return;
         }
 
-        // const groupId = d.groupId;
         const group = d.group;
 
         const nodesIdsInGroup = group.map((node) => node.id);
