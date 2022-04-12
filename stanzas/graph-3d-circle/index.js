@@ -4,7 +4,8 @@ import { _3d } from "d3-3d";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 // import drawGridLayout from "./drawGridLayout";
-import prepareGraphData from "./prepareGraphData";
+// import prepareGraphData from "./prepareGraphData";
+import prepareData, { get3DEdges, getGroupPlanes } from "@/lib/prepareData";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -84,27 +85,6 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const edgeSym = Symbol.for("nodeAdjEdges");
-    const groupSym = Symbol.for("nodeGroup");
-    const edgeWidthSym = Symbol.for("edgeWidth");
-    const sourceNodeSym = Symbol.for("sourceNode");
-    const targetNodeSym = Symbol.for("targetNode");
-    const nodeSizeSym = Symbol.for("nodeSize");
-    const nodeColorSym = Symbol.for("nodeColor");
-    const nodeLabelSym = Symbol.for("nodeLabel");
-    const edgeColorSym = Symbol.for("edgeColor");
-
-    const symbols = {
-      edgeSym,
-      edgeWidthSym,
-      sourceNodeSym,
-      targetNodeSym,
-      nodeSizeSym,
-      nodeColorSym,
-      groupSym,
-      edgeColorSym,
-      nodeLabelSym,
-    };
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"],
       dataKey: this.params["node-size-data-key"],
@@ -149,7 +129,6 @@ export default class ForceGraph extends Stanza {
       height,
       svg,
       color,
-      symbols,
       highlightAdjEdges,
       nodeSizeParams,
       nodeColorParams,
@@ -159,21 +138,13 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    const { prepNodes, prepEdges } = prepareGraphData(nodes, edges, params);
+    const { prepNodes, prepEdges, groupHash, symbols } = prepareData(
+      nodes,
+      edges,
+      params
+    );
 
-    const groupHash = {};
-    const nodeHash = {};
-    prepNodes.forEach((node) => {
-      const groupName = "" + node.group;
-      groupHash[groupName]
-        ? groupHash[groupName].push(node)
-        : (groupHash[groupName] = [node]);
-      nodeHash["" + node.id] = node;
-    });
-
-    prepEdges.forEach((edge, index) => {
-      edge.id = `edge${index}`;
-    });
+    // OK
 
     const maxNodesInGroup = d3.max(
       Object.entries(groupHash),
@@ -196,7 +167,7 @@ export default class ForceGraph extends Stanza {
 
     const startAngle = (Math.PI * 8) / 180;
 
-    const groupColor = color().domain(Object.keys(groupHash).sort());
+    //const groupColor = color().domain(Object.keys(groupHash).sort());
 
     const svgG = svg
       .call(
@@ -245,9 +216,7 @@ export default class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("group-plane", true)
         .merge(planes)
-        .attr("fill", (d) => {
-          return groupColor("" + d.groupId);
-        })
+        .attr("fill", (d) => d.color)
         .attr("opacity", 0.2)
         .attr("stroke", "gray")
         .attr("stroke-width", 1)
@@ -264,12 +233,12 @@ export default class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("link", true)
         .merge(linesStrip)
-        .style("stroke", (d) => d.edge[edgeColorSym])
-        .style("stroke-width", (d) => d.edge[edgeWidthSym])
-        .attr("x1", (d) => d.edge[sourceNodeSym].projected.x)
-        .attr("y1", (d) => d.edge[sourceNodeSym].projected.y)
-        .attr("x2", (d) => d.edge[targetNodeSym].projected.x)
-        .attr("y2", (d) => d.edge[targetNodeSym].projected.y)
+        .style("stroke", (d) => d.edge[symbols.edgeColorSym])
+        .style("stroke-width", (d) => d.edge[symbols.edgeWidthSym])
+        .attr("x1", (d) => d.edge[symbols.sourceNodeSym].projected.x)
+        .attr("y1", (d) => d.edge[symbols.sourceNodeSym].projected.y)
+        .attr("x2", (d) => d.edge[symbols.targetNodeSym].projected.x)
+        .attr("y2", (d) => d.edge[symbols.targetNodeSym].projected.y)
         .sort(edge3d.sort);
 
       linesStrip.exit().remove();
@@ -286,7 +255,7 @@ export default class ForceGraph extends Stanza {
         .attr("cy", posPointY)
         .attr("r", 3)
         .style("stroke", function (d) {
-          return d3.color(d[symbols.nodeColorSym].trim()).darker(3);
+          return d[symbols.nodeBorderColorSym];
         })
         .style("fill", function (d) {
           return d[symbols.nodeColorSym];
@@ -308,26 +277,17 @@ export default class ForceGraph extends Stanza {
 
     let groupPlanes = [];
 
-    const edgesWithCoords = prepEdges.map((edge) => {
-      const toPush = [
-        [edge[sourceNodeSym].x, edge[sourceNodeSym].y, edge[sourceNodeSym].z],
-        [edge[targetNodeSym].x, edge[targetNodeSym].y, edge[targetNodeSym].z],
-      ];
-      toPush.edge = edge;
-      return toPush;
-    });
+    let edgesWithCoords = [];
 
     function init() {
-      // Laying out nodes=========
+      edgesWithCoords = get3DEdges(prepEdges);
 
-      // const gridSizeForGroup = {};
+      // Laying out nodes=========
 
       const DEPTH = WIDTH;
       const yPointScale = d3
         .scalePoint([-DEPTH / 2, DEPTH / 2])
         .domain(Object.keys(groupHash));
-
-      // add random noise to position to prevent fully overlapping edges
 
       const rand = () => {
         return 0;
@@ -359,25 +319,14 @@ export default class ForceGraph extends Stanza {
         });
       });
 
-      function getGroupPlane(group) {
-        const y = yPointScale(group);
-        const LU = [-WIDTH / 2, y, -HEIGHT / 2];
-        const LD = [-WIDTH / 2, y, HEIGHT / 2];
-        const RD = [WIDTH / 2, y, HEIGHT / 2];
-        const RU = [WIDTH / 2, y, -HEIGHT / 2];
-        const groupPlane = [LU, LD, RD, RU];
-        groupPlane.group = groupHash[group];
-        groupPlane.groupId = group;
-        return groupPlane;
-      }
-
-      groupPlanes = Object.keys(groupHash).map(getGroupPlane);
+      groupPlanes = getGroupPlanes(groupHash, { WIDTH, HEIGHT, DEPTH, color }); // Object.keys(groupHash).map(getGroupPlane);
 
       const data = [
         point3d(prepNodes),
         edge3d(edgesWithCoords),
         plane3d(groupPlanes),
       ];
+
       processData(data);
 
       const planes = svgG.selectAll("path.group-plane");
@@ -446,10 +395,10 @@ export default class ForceGraph extends Stanza {
         });
 
         const sourcesGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + edge[sourceNodeSym].group
+          (edge) => "" + edge[symbols.sourceNodeSym].group
         );
         const targetsGroups = edgesConnectedToThisGroup.map(
-          (edge) => "" + edge[targetNodeSym].group
+          (edge) => "" + edge[symbols.targetNodeSym].group
         );
 
         const connectedTargetNodes = edgesConnectedToThisGroup.map(
@@ -510,10 +459,10 @@ export default class ForceGraph extends Stanza {
         links
           .filter((p) => {
             return (
-              (connectedNodes.includes(p.edge[sourceNodeSym].id) ||
-                connectedNodes.includes(p.edge[targetNodeSym].id)) &&
-              (nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) ||
-                nodesIdsInGroup.includes(p.edge[targetNodeSym].id))
+              (connectedNodes.includes(p.edge[symbols.sourceNodeSym].id) ||
+                connectedNodes.includes(p.edge[symbols.targetNodeSym].id)) &&
+              (nodesIdsInGroup.includes(p.edge[symbols.sourceNodeSym].id) ||
+                nodesIdsInGroup.includes(p.edge[symbols.targetNodeSym].id))
             );
           })
           .classed("fadeout", false)
@@ -523,8 +472,8 @@ export default class ForceGraph extends Stanza {
         links
           .filter(
             (p) =>
-              nodesIdsInGroup.includes(p.edge[sourceNodeSym].id) &&
-              nodesIdsInGroup.includes(p.edge[targetNodeSym].id)
+              nodesIdsInGroup.includes(p.edge[symbols.sourceNodeSym].id) &&
+              nodesIdsInGroup.includes(p.edge[symbols.targetNodeSym].id)
           )
           .classed("fadeout", false)
           .classed("active", true);
@@ -554,15 +503,17 @@ export default class ForceGraph extends Stanza {
         }
         // highlight current node
         d3.select(this).classed("active", true);
-        const edgeIdsOnThisNode = d[edgeSym].map((edge) => edge.id);
+        const edgeIdsOnThisNode = d[symbols.edgeSym].map((edge) => edge.id);
         // fade out all other nodes, highlight a little connected ones
         points
           .classed("fadeout", (p) => d !== p)
           .classed("half-active", (p) => {
             return (
               p !== d &&
-              d[edgeSym].some(
-                (edge) => edge[sourceNodeSym] === p || edge[targetNodeSym] === p
+              d[symbols.edgeSym].some(
+                (edge) =>
+                  edge[symbols.sourceNodeSym] === p ||
+                  edge[symbols.targetNodeSym] === p
               )
             );
           });

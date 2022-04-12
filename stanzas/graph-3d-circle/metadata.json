@@ -26,19 +26,16 @@
       "stanza:description": "Data type",
       "stanza:required": true
     },
-
     {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:default": 600,
       "stanza:description": "Width in px"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:default": 600,
       "stanza:description": "Height in px"
     },
     {
@@ -52,7 +49,6 @@
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
       "stanza:example": "fixed",
-      "stanza:default": "fixed",
       "stanza:required": true,
       "stanza:description": "Set size of the node  data key"
     },
