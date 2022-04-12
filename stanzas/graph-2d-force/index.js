@@ -58,9 +58,6 @@ export default class ForceGraph extends Stanza {
       RIGHT: this.params["padding"],
     };
 
-    const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
-    const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
     // Setting color scale
     const togostanzaColors = [];
     for (let i = 0; i < 6; i++) {
