@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "graph-3d-grid",
-  "stanza:label": "Graph grid layout",
-  "stanza:definition": "Graph Grid Layout MetaStanza",
+  "stanza:label": "Graph 3D grid layout",
+  "stanza:definition": "Graph 3D Grid Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
