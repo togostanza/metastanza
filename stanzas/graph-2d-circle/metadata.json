@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "graph-2d-circle",
-  "stanza:label": "Graph circle layout",
-  "stanza:definition": "Graph Circle Layout MetaStanza",
+  "stanza:label": "Graph 2D circle layout",
+  "stanza:definition": "Graph 2D Circle Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
