@@ -225,7 +225,9 @@ export default class ForceGraph extends Stanza {
         .sort(plane3d.sort);
 
       planes.exit().remove();
-      const linesStrip = svgG.selectAll("line").data(data[1], (d) => d.edge.id);
+      const linesStrip = svgG
+        .selectAll("line")
+        .data(data[1], (d) => d.edge[symbols.idSym]);
 
       linesStrip
         .enter()
@@ -245,7 +247,7 @@ export default class ForceGraph extends Stanza {
 
       const points = svgG.selectAll("circle").data(data[0], key);
 
-      points
+      const p = points
         .enter()
         .append("circle")
         .attr("class", "_3d")
@@ -253,16 +255,15 @@ export default class ForceGraph extends Stanza {
         .merge(points)
         .attr("cx", posPointX)
         .attr("cy", posPointY)
-        .attr("r", 3)
-        .style("stroke", function (d) {
-          return d[symbols.nodeBorderColorSym];
-        })
-        .style("fill", function (d) {
-          return d[symbols.nodeColorSym];
-        })
+        .attr("r", (d) => d[symbols.nodeSizeSym])
+        .style("stroke", (d) => d[symbols.nodeBorderColorSym])
+        .style("fill", (d) => d[symbols.nodeColorSym])
         .attr("opacity", 1)
-        .attr("data-tooltip", (d) => d.id)
         .sort(point3d.sort);
+
+      if (tooltipParams.show) {
+        p.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
+      }
 
       points.exit().remove();
     }
@@ -280,18 +281,14 @@ export default class ForceGraph extends Stanza {
     let edgesWithCoords = [];
 
     function init() {
+      // Add x,y,z of source and target nodes to 3D edges
       edgesWithCoords = get3DEdges(prepEdges);
 
       // Laying out nodes=========
-
       const DEPTH = WIDTH;
       const yPointScale = d3
         .scalePoint([-DEPTH / 2, DEPTH / 2])
         .domain(Object.keys(groupHash));
-
-      const rand = () => {
-        return 0;
-      }; // d3.randomNormal(0, 5);
 
       Object.keys(groupHash).forEach((gKey) => {
         // Laying out nodes ===
@@ -309,17 +306,23 @@ export default class ForceGraph extends Stanza {
           if (group.length === 1) {
             node.x = 0;
             node.z = 0;
-            node.y = yPointScale(gKey) + rand();
+            node.y = yPointScale(gKey);
             return;
           }
 
           node.x = R * Math.cos(angleScale(node.id));
           node.z = R * Math.sin(angleScale(node.id));
-          node.y = yPointScale(gKey) + rand();
+          node.y = yPointScale(gKey);
         });
       });
 
-      groupPlanes = getGroupPlanes(groupHash, { WIDTH, HEIGHT, DEPTH, color }); // Object.keys(groupHash).map(getGroupPlane);
+      groupPlanes = getGroupPlanes(groupHash, {
+        WIDTH,
+        HEIGHT,
+        DEPTH,
+        color,
+        yPointScale,
+      });
 
       const data = [
         point3d(prepNodes),
@@ -503,7 +506,9 @@ export default class ForceGraph extends Stanza {
         }
         // highlight current node
         d3.select(this).classed("active", true);
-        const edgeIdsOnThisNode = d[symbols.edgeSym].map((edge) => edge.id);
+        const edgeIdsOnThisNode = d[symbols.edgeSym].map(
+          (edge) => edge[symbols.idSym]
+        );
         // fade out all other nodes, highlight a little connected ones
         points
           .classed("fadeout", (p) => d !== p)
@@ -519,8 +524,13 @@ export default class ForceGraph extends Stanza {
           });
         // fadeout not connected edges, highlight connected ones
         links
-          .classed("fadeout", (p) => !edgeIdsOnThisNode.includes(p.edge.id))
-          .classed("active", (p) => edgeIdsOnThisNode.includes(p.edge.id));
+          .classed(
+            "fadeout",
+            (p) => !edgeIdsOnThisNode.includes(p.edge[symbols.idSym])
+          )
+          .classed("active", (p) =>
+            edgeIdsOnThisNode.includes(p.edge[symbols.idSym])
+          );
       });
 
       points.on("mouseleave", function () {
@@ -540,6 +550,8 @@ export default class ForceGraph extends Stanza {
 
     init();
 
-    this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
+    if (tooltipParams.show) {
+      this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
+    }
   }
 }

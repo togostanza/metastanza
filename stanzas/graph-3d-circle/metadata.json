@@ -148,7 +148,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:default": false,
-      "stanza:description": "Highlight adjacent edges on node mouse hover"
+      "stanza:description": "Highlight adjacent group planes on mouse hover"
     },
     {
       "stanza:key": "labels-data-key",
