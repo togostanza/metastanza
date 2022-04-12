@@ -1,0 +1,82 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+svg {
+  background-color: var(--togostanza-background-color);
+}
+
+.label {
+  transition: opacity 0.1s ease-in-out;
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+.node {
+  transition: opacity 0.1s ease-in-out;
+  fill: var(--togostanza-default-node-color);
+}
+
+.link {
+  transition: opacity 0.2s ease-in-out;
+  stroke-opacity: 0.25;
+  stroke-linecap: round;
+  stroke-width: 1px;
+  fill: none;
+  stroke: var(--togostanza-default-edge-color);
+  pointer-events: none;
+
+  &.dashed {
+    stroke-dasharray: 5;
+  }
+}
+
+.group-plane {
+  transition: opacity 0.1s ease-in-out;
+  opacity: 0.2;
+  stroke-width: 1px;
+}
+
+.active {
+  transition: opacity 0.1s ease-in-out;
+  opacity: 1;
+  &.node {
+    stroke-width: 2px !important;
+    stroke-opacity: 0.7 !important;
+  }
+  &.link {
+    stroke-opacity: 1 !important;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+  }
+  &.group-plane {
+    stroke-opacity: 0.7 !important;
+    opacity: 0.75 !important;
+    stroke-width: 3px !important;
+  }
+}
+.fadeout {
+  transition: opacity 0.1s ease-in-out;
+
+  opacity: 0.1 !important;
+  &.link {
+    stroke-opacity: 0.1 !important;
+  }
+}
+.half-active {
+  transition: opacity 0.1s ease-in-out;
+
+  opacity: 0.9 !important;
+  &.node {
+    stroke: gray !important;
+    stroke-width: 1px !important;
+    stroke-opacity: 0.5 !important;
+  }
+  &.link {
+    stroke-opacity: 0.5 !important;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+  }
+  &.group-plane {
+    stroke-opacity: 0.4 !important;
+    opacity: 0.4 !important;
+    stroke-width: 2px !important;
+  }
+}

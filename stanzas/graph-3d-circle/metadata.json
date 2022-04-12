@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "force-graph",
-  "stanza:label": "Force Graph",
-  "stanza:definition": "Force Graph MetaStanza",
+  "@id": "graph-3d-circle",
+  "stanza:label": "Graph 3d circle layout",
+  "stanza:definition": "Graph 3D Circle Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Einishi Tech"],
-  "stanza:created": "2021-02-16",
-  "stanza:updated": "2021-02-16",
+  "stanza:created": "2022-04-01",
+  "stanza:updated": "2022-04-01",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -26,19 +26,16 @@
       "stanza:description": "Data type",
       "stanza:required": true
     },
-
     {
       "stanza:key": "width",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:default": 600,
       "stanza:description": "Width in px"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
       "stanza:example": 600,
-      "stanza:default": 600,
       "stanza:description": "Height in px"
     },
     {
@@ -48,20 +45,10 @@
       "stanza:description": "Inner padding in px"
     },
     {
-      "stanza:key": "layout",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["force", "arc", "grid", "circle"],
-      "stanza:required": true,
-      "stanza:default": "force",
-      "stanza:example": "force",
-      "stanza:description": "Graph layout"
-    },
-    {
       "stanza:key": "node-size-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
       "stanza:example": "fixed",
-      "stanza:default": "fixed",
       "stanza:required": true,
       "stanza:description": "Set size of the node  data key"
     },
@@ -146,29 +133,22 @@
     {
       "stanza:key": "edge-color-data-key",
       "stanza:type": "string",
-      "stanza:example": "group",
+      "stanza:example": "value",
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "tooltip-data-key",
-      "stanza:type": "string",
-      "stanza:default": "id",
-      "stanza:example": "id",
-      "stanza:description": "Node labels data key. If empty, no labels will be shown"
+      "stanza:key": "highlight-adjacent-edges",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "Highlight adjacent edges on node mouse hover"
     },
     {
-      "stanza:key": "labels-data-key",
-      "stanza:type": "string",
-      "stanza:default": "id",
-      "stanza:example": "id",
-      "stanza:description": "Node labels data key. If empty, no labels will be shown"
-    },
-    {
-      "stanza:key": "labels-margin",
-      "stanza:type": "number",
-      "stanza:default": 15,
-      "stanza:example": 15,
-      "stanza:description": "Node labels offset from node center, in px."
+      "stanza:key": "highlight-group-planes",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "Highlight group planes on mouse hover"
     },
     {
       "stanza:key": "nodes-tooltip-data-key",
@@ -217,13 +197,13 @@
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-forcechart-node-color",
+      "stanza:key": "--togostanza-default-node-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Nodes default color"
     },
     {
-      "stanza:key": "--togostanza-forcechart-edge-color",
+      "stanza:key": "--togostanza-default-edge-color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"
@@ -233,30 +213,6 @@
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 7,
-      "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
     },
     {
       "stanza:key": "--togostanza-background-color",
