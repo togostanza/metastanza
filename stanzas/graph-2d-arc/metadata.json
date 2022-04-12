@@ -3,8 +3,8 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "graph-2d-arc",
-  "stanza:label": "Graph arc layout",
-  "stanza:definition": "Graph Arc Layout MetaStanza",
+  "stanza:label": "Graph 2D arc layout",
+  "stanza:definition": "Graph 2D Arc Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",

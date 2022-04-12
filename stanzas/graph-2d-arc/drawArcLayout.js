@@ -1,11 +1,6 @@
 import * as d3 from "d3";
-import prepareGraphData from "./prepareGraphData";
 
 export default function (svg, nodes, edges, params) {
-  const nodesC = JSON.parse(JSON.stringify(nodes));
-  const edgesC = JSON.parse(JSON.stringify(edges));
-
-  prepareGraphData(nodesC, edgesC, params);
   const {
     width,
     height,
@@ -20,7 +15,7 @@ export default function (svg, nodes, edges, params) {
 
   const pointScale = d3
     .scalePoint()
-    .domain(nodesC.map((node) => node.id))
+    .domain(nodes.map((node) => node.id))
     .range([0, WIDTH]);
 
   const arcG = svg
@@ -30,7 +25,7 @@ export default function (svg, nodes, edges, params) {
 
   const links = arcG
     .selectAll("path")
-    .data(edgesC)
+    .data(edges)
     .enter()
     .append("path")
     .attr("class", "link")
@@ -40,7 +35,7 @@ export default function (svg, nodes, edges, params) {
 
   const nodeGroups = arcG
     .selectAll("g")
-    .data(nodesC)
+    .data(nodes)
     .enter()
     .append("g")
     .attr("class", "node-group")
@@ -56,12 +51,11 @@ export default function (svg, nodes, edges, params) {
     nodeCircles.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
   }
 
-  if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
+  if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
       .text((d) => d[labelsParams.dataKey])
       .attr("alignment-baseline", "middle")
-      //.attr("text-anchor", "end")
       .attr("transform", "rotate(90)")
       .attr("x", labelsParams.margin)
       .attr("class", "label");
