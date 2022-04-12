@@ -1,5 +1,8 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
+svg {
+  background-color: var(--togostanza-background-color);
+}
 
 .label {
   transition: opacity 0.1s ease-in-out;
