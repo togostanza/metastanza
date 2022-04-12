@@ -126,7 +126,6 @@ export default class ForceGraph extends Stanza {
       height,
       svg,
       color,
-      symbols,
       highlightAdjEdges,
       nodeSizeParams,
       nodeColorParams,
