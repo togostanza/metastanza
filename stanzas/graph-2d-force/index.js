@@ -4,6 +4,8 @@ import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import drawForceLayout from "./drawForceLayout";
 
+import prepareGraphData from "@/lib/prepareGraphData";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -56,6 +58,9 @@ export default class ForceGraph extends Stanza {
       RIGHT: this.params["padding"],
     };
 
+    const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
+    const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
+
     // Setting color scale
     const togostanzaColors = [];
     for (let i = 0; i < 6; i++) {
@@ -81,44 +86,29 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const edgeSym = Symbol("nodeAdjEdges");
-    const edgeWidthSym = Symbol("edgeWidth");
-    const sourceNodeSym = Symbol("sourceNode");
-    const targetNodeSym = Symbol("targetNode");
-    const nodeSizeSym = Symbol("nodeSize");
-    const nodeColorSym = Symbol("nodeColor");
-
-    const symbols = {
-      edgeSym,
-      edgeWidthSym,
-      sourceNodeSym,
-      targetNodeSym,
-      nodeSizeSym,
-      nodeColorSym,
-    };
     const nodeSizeParams = {
-      basedOn: this.params["node-size-based-on"],
-      dataKey: this.params["node-size-data-key"],
-      fixedSize: this.params["node-size-fixed-size"],
+      basedOn: this.params["node-size-based-on"] || "fixed",
+      dataKey: this.params["node-size-data-key"] || "",
+      fixedSize: this.params["node-size-fixed-size"] || 3,
       minSize: this.params["node-size-min-size"],
       maxSize: this.params["node-size-max-size"],
     };
     const nodeColorParams = {
-      basedOn: this.params["node-color-based-on"],
-      dataKey: this.params["node-color-data-key"],
+      basedOn: this.params["node-color-based-on"] || "fixed",
+      dataKey: this.params["node-color-data-key"] || "",
     };
 
     const edgeWidthParams = {
-      basedOn: this.params["edge-width-based-on"],
-      dataKey: this.params["edge-width-data-key"],
-      fixedWidth: this.params["edge-fixed-width"],
+      basedOn: this.params["edge-width-based-on"] || "fixed",
+      dataKey: this.params["edge-width-data-key"] || "",
+      fixedWidth: this.params["edge-fixed-width"] || 1,
       minWidth: this.params["edge-min-width"],
       maxWidth: this.params["edge-max-width"],
     };
 
     const edgeColorParams = {
-      basedOn: this.params["edge-color-based-on"],
-      dataKey: this.params["edge-color-data-key"],
+      basedOn: this.params["edge-color-based-on"] || "fixed",
+      dataKey: this.params["edge-color-data-key"] || "",
     };
 
     const labelsParams = {
@@ -131,7 +121,7 @@ export default class ForceGraph extends Stanza {
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
-    const highlightAdjEdges = this.params["highlight-adjacent-edges"];
+    const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
 
     const params = {
       MARGIN,
@@ -139,7 +129,6 @@ export default class ForceGraph extends Stanza {
       height,
       svg,
       color,
-      symbols,
       highlightAdjEdges,
       nodeSizeParams,
       nodeColorParams,
@@ -149,8 +138,16 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    drawForceLayout(svg, nodes, edges, params);
+    const { prepNodes, prepEdges, symbols } = prepareGraphData(
+      nodes,
+      edges,
+      params
+    );
 
-    this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
+    drawForceLayout(svg, prepNodes, prepEdges, { ...params, symbols });
+
+    if (tooltipParams.show) {
+      this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
+    }
   }
 }

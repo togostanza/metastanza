@@ -73,7 +73,6 @@ export default function (svg, nodes, edges, params) {
       d.y = dy;
       return `translate(${d.x},${d.y})`;
     });
-    //joinedNodes.attr("transform", (d) => `translate(${d.x},${d.y})`);
   }
 
   function ticked() {
