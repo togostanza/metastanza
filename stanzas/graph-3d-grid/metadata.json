@@ -215,6 +215,18 @@
       "stanza:description": "Font family"
     },
     {
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-border-width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Border width"
+    },
+    {
       "stanza:key": "--togostanza-background-color",
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
