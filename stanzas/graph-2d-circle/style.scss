@@ -4,6 +4,7 @@
 svg {
   background-color: var(--togostanza-background-color);
 }
+
 .label {
   transition: opacity 0.1s ease-in-out;
   font-size: calc(var(--togostanza-label-font-size) * 1px);
@@ -12,44 +13,52 @@ svg {
 
 .node {
   transition: all 0.1s ease-in-out;
-  fill: var(--togostanza-forcechart-node-color);
+  fill: var(--togostanza-default-node-color);
+  stroke: var(--togostanza-border-color);
+  stroke-width: var(--togostanza-border-width);
 }
 
 .link {
   transition: all 0.2s ease-in-out;
-  stroke-opacity: 0.25;
+  stroke-opacity: 0.5;
   stroke-linecap: round;
   fill: none;
-  stroke: var(--togostanza-forcechart-edge-color);
+  stroke: var(--togostanza-default-edge-color);
 }
 
 .active {
   transition: all 0.1s ease-in-out;
 
-  &.node {
-    stroke: gray !important;
-    stroke-width: 5px !important;
-    stroke-opacity: 0.7 !important;
+  & > .node {
+    stroke-width: calc(var(--togostanza-border-width) * 2.5px);
+    stroke-opacity: 1;
   }
-  &.link {
-    stroke-opacity: 1 !important;
+  & > .link {
+    stroke-opacity: 1;
+  }
+  & > .label {
+    opacity: 1;
   }
 }
+
 .fadeout {
   transition: all 0.1s ease-in-out;
-
-  opacity: 0.1 !important;
-  &.link {
-    stroke-opacity: 0.1 !important;
+  opacity: 0.1;
+  & > .link {
+    stroke-opacity: 0.1;
   }
 }
+
 .half-active {
   transition: all 0.1s ease-in-out;
 
-  opacity: 0.8 !important;
-  &.node {
-    stroke: gray !important;
-    stroke-width: 3px !important;
-    stroke-opacity: 0.2 !important;
+  opacity: 0.8;
+  & > .node {
+    stroke-width: calc(var(--togostanza-border-width) * 1.6px);
+    stroke-opacity: 0.8;
+  }
+
+  & > .label {
+    opacity: 0.6;
   }
 }
