@@ -5,19 +5,40 @@ svg {
   background-color: var(--togostanza-background-color);
 }
 
+.label,
+.node,
+.link,
+.group-plane,
+.active,
+.fadeout,
+.half-active {
+  transition: all 0.1s ease-in-out;
+  transition-property: opacity, stroke-width, stroke-opacity;
+}
+
 .label {
-  transition: opacity 0.1s ease-in-out;
   font-size: calc(var(--togostanza-label-font-size) * 1px);
   fill: var(--togostanza-label-font-color);
 }
 
 .node {
-  transition: opacity 0.1s ease-in-out;
   fill: var(--togostanza-default-node-color);
+  stroke: var(--togostanza-border-color);
+  stroke-width: var(--togostanza-border-width);
+  &.active {
+    opacity: 1;
+    stroke-width: calc(var(--togostanza-border-width) * 2.5px);
+  }
+  &.half-active {
+    stroke-opacity: 0.5;
+    stroke-width: calc(var(--togostanza-border-width) * 1.5px);
+  }
+  &.fadeout {
+    opacity: 0.1;
+  }
 }
 
 .link {
-  transition: opacity 0.2s ease-in-out;
   stroke-opacity: 0.25;
   stroke-linecap: round;
   stroke-width: 1px;
@@ -28,54 +49,38 @@ svg {
   &.dashed {
     stroke-dasharray: 5;
   }
+  &.active {
+    opacity: 1;
+    stroke-opacity: 1;
+    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+  }
+  &.half-active {
+    opacity: 0.5;
+    stroke-opacity: 0.5;
+  }
+  &.fadeout {
+    opacity: 0.1;
+    stroke-opacity: 0.1;
+  }
 }
 
 .group-plane {
-  transition: opacity 0.1s ease-in-out;
   opacity: 0.2;
-  stroke-width: 1px;
-}
-
-.active {
-  transition: opacity 0.1s ease-in-out;
-  opacity: 1;
-  &.node {
-    stroke-width: 2px !important;
-    stroke-opacity: 0.7 !important;
+  stroke: var(--togostanza-border-color);
+  stroke-linejoin: round;
+  stroke-width: calc(var(--togostanza-border-width) * 1.5px);
+  stroke-opacity: 0.2;
+  &.active {
+    stroke-opacity: 0.7;
+    opacity: 0.75;
+    stroke-width: calc(var(--togostanza-border-width) * 4px);
   }
-  &.link {
-    stroke-opacity: 1 !important;
-    filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+  &.half-active {
+    stroke-opacity: 0.4;
+    opacity: 0.4;
+    stroke-width: calc(var(--togostanza-border-width) * 2.5px);
   }
-  &.group-plane {
-    stroke-opacity: 0.7 !important;
-    opacity: 0.75 !important;
-    stroke-width: 3px !important;
-  }
-}
-.fadeout {
-  transition: opacity 0.1s ease-in-out;
-
-  opacity: 0.1 !important;
-  &.link {
-    stroke-opacity: 0.1 !important;
-  }
-}
-.half-active {
-  transition: opacity 0.1s ease-in-out;
-
-  opacity: 0.9 !important;
-  &.node {
-    stroke: gray !important;
-    stroke-width: 1px !important;
-    stroke-opacity: 0.5 !important;
-  }
-  &.link {
-    stroke-opacity: 0.5 !important;
-  }
-  &.group-plane {
-    stroke-opacity: 0.4 !important;
-    opacity: 0.4 !important;
-    stroke-width: 2px !important;
+  &.fadeout {
+    opacity: 0.1;
   }
 }
