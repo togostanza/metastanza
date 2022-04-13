@@ -1,12 +1,18 @@
 import * as d3 from "d3";
-import prepareGraphData from "./prepareGraphData";
-export default function (svg, nodes, edges, params) {
-  const nodesC = JSON.parse(JSON.stringify(nodes));
-  const edgesC = JSON.parse(JSON.stringify(edges));
-
-  prepareGraphData(nodesC, edgesC, params);
-  const { width, height, MARGIN, symbols, labelsParams } = params;
-
+export default function (
+  svg,
+  nodes,
+  edges,
+  {
+    width,
+    height,
+    MARGIN,
+    symbols,
+    labelsParams,
+    tooltipParams,
+    highlightAdjEdges,
+  }
+) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
@@ -19,14 +25,14 @@ export default function (svg, nodes, edges, params) {
   const gNodes = forceG.append("g").attr("class", "nodes");
 
   const simulation = d3
-    .forceSimulation(nodesC)
+    .forceSimulation(nodes)
     .force("charge", d3.forceManyBody().strength(-100))
     .force("center", d3.forceCenter(width / 2, height / 2).strength(0.05))
     .force(
       "link",
       d3
         .forceLink()
-        .links(edgesC)
+        .links(edges)
         .id((d) => d.id)
         .distance(50)
         .strength(0.5)
@@ -43,7 +49,7 @@ export default function (svg, nodes, edges, params) {
 
   const links = gLinks
     .selectAll("line")
-    .data(edgesC)
+    .data(edges)
     .join("line")
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
@@ -65,7 +71,6 @@ export default function (svg, nodes, edges, params) {
       d.y = dy;
       return `translate(${d.x},${d.y})`;
     });
-    //joinedNodes.attr("transform", (d) => `translate(${d.x},${d.y})`);
   }
 
   function ticked() {
@@ -75,7 +80,7 @@ export default function (svg, nodes, edges, params) {
 
   const nodeGroups = gNodes
     .selectAll("g")
-    .data(nodesC)
+    .data(nodes)
     .enter()
     .append("g")
     .attr("class", "node-group")
@@ -84,16 +89,19 @@ export default function (svg, nodes, edges, params) {
     })
     .call(drag(simulation));
 
-  nodeGroups
+  const nodeCircles = nodeGroups
     .append("circle")
     .attr("class", "node")
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", (d) => d[symbols.nodeSizeSym])
-    .style("fill", (d) => d[symbols.nodeColorSym])
-    .attr("data-tooltip", (d) => d.id);
+    .style("fill", (d) => d[symbols.nodeColorSym]);
 
-  if (labelsParams.dataKey !== "" && nodesC[0][labelsParams.dataKey]) {
+  if (tooltipParams.show) {
+    nodeCircles.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
+  }
+
+  if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
       .attr("dx", labelsParams.margin)
@@ -135,43 +143,45 @@ export default function (svg, nodes, edges, params) {
       .on("end", dragended);
   }
 
-  nodeGroups.on("mouseover", function (e, d) {
-    if (isDragging) {
-      return;
-    }
-    // highlight current node
-    d3.select(this).classed("active", true);
-    // fade out all other nodes, highlight a little connected ones
-    nodeGroups
-      .classed("fadeout", (p) => d !== p)
-      .classed("half-active", (p) => {
-        return (
-          p !== d &&
-          d[symbols.edgeSym].some(
-            (edge) =>
-              edge[symbols.sourceNodeSym] === p ||
-              edge[symbols.targetNodeSym] === p
-          )
-        );
-      });
+  if (highlightAdjEdges) {
+    nodeGroups.on("mouseover", function (e, d) {
+      if (isDragging) {
+        return;
+      }
+      // highlight current node
+      d3.select(this).classed("active", true);
+      // fade out all other nodes, highlight a little connected ones
+      nodeGroups
+        .classed("fadeout", (p) => d !== p)
+        .classed("half-active", (p) => {
+          return (
+            p !== d &&
+            d[symbols.edgeSym].some(
+              (edge) =>
+                edge[symbols.sourceNodeSym] === p ||
+                edge[symbols.targetNodeSym] === p
+            )
+          );
+        });
 
-    // fadeout not connected edges, highlight connected ones
-    links
-      .classed("fadeout", (p) => !d[symbols.edgeSym].includes(p))
-      .classed("active", (p) => d[symbols.edgeSym].includes(p));
-  });
+      // fadeout not connected edges, highlight connected ones
+      links
+        .classed("fadeout", (p) => !d[symbols.edgeSym].includes(p))
+        .classed("active", (p) => d[symbols.edgeSym].includes(p));
+    });
 
-  nodeGroups.on("mouseleave", function () {
-    if (isDragging) {
-      return;
-    }
-    links
-      .classed("active", false)
-      .classed("fadeout", false)
-      .classed("half-active", false);
-    nodeGroups
-      .classed("active", false)
-      .classed("fadeout", false)
-      .classed("half-active", false);
-  });
+    nodeGroups.on("mouseleave", function () {
+      if (isDragging) {
+        return;
+      }
+      links
+        .classed("active", false)
+        .classed("fadeout", false)
+        .classed("half-active", false);
+      nodeGroups
+        .classed("active", false)
+        .classed("fadeout", false)
+        .classed("half-active", false);
+    });
+  }
 }
