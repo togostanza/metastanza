@@ -1,11 +1,12 @@
-import { d as defineStanzaElement } from './stanza-element-626dadde.js';
-import { S as Stanza } from './stanza-b8cf3904.js';
-import { l as loadData } from './load-data-382dc104.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-60a01240.js';
-import { T as ToolTip } from './ToolTip-7ceb815c.js';
-import { L as Legend } from './Legend-90239b0e.js';
-import './index-f69e001d.js';
-import './dsv-8e18f33d.js';
+import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
+import { S as Stanza } from './timer-1ca7e150.js';
+import { l as loadData } from './load-data-03ddc67c.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
+import { T as ToolTip } from './ToolTip-23bc44c8.js';
+import { L as Legend } from './Legend-08cf2f79.js';
+import './index-847f2a80.js';
+import './dsv-cde6fd06.js';
+import './dsv-cd3740c6.js';
 
 var colorString$1 = {exports: {}};
 
@@ -1467,8 +1468,6 @@ var colorConvert = convert$1;
 const colorString = colorString$1.exports;
 const convert = colorConvert;
 
-const _slice = [].slice;
-
 const skippedModels = [
 	// To be honest, I don't really feel like keyword belongs in color convert, but eh.
 	'keyword',
@@ -1482,7 +1481,7 @@ const skippedModels = [
 
 const hashedModelKeys = {};
 for (const model of Object.keys(convert)) {
-	hashedModelKeys[_slice.call(convert[model].labels).sort().join('')] = model;
+	hashedModelKeys[[...convert[model].labels].sort().join('')] = model;
 }
 
 const limiters = {};
@@ -1509,7 +1508,7 @@ function Color(object, model) {
 		this.valpha = 1;
 	} else if (object instanceof Color) {
 		this.model = object.model;
-		this.color = object.color.slice();
+		this.color = [...object.color];
 		this.valpha = object.valpha;
 	} else if (typeof object === 'string') {
 		const result = colorString.get(object);
@@ -1524,7 +1523,7 @@ function Color(object, model) {
 	} else if (object.length > 0) {
 		this.model = model || 'rgb';
 		channels = convert[this.model].channels;
-		const newArray = _slice.call(object, 0, channels);
+		const newArray = Array.prototype.slice.call(object, 0, channels);
 		this.color = zeroArray(newArray, channels);
 		this.valpha = typeof object[channels] === 'number' ? object[channels] : 1;
 	} else if (typeof object === 'number') {
@@ -1552,7 +1551,7 @@ function Color(object, model) {
 
 		this.model = hashedModelKeys[hashedKeys];
 
-		const labels = convert[this.model].labels;
+		const {labels} = convert[this.model];
 		const color = [];
 		for (i = 0; i < labels.length; i++) {
 			color.push(object[labels[i]]);
@@ -1591,24 +1590,24 @@ Color.prototype = {
 	string(places) {
 		let self = this.model in colorString.to ? this : this.rgb();
 		self = self.round(typeof places === 'number' ? places : 1);
-		const args = self.valpha === 1 ? self.color : self.color.concat(this.valpha);
+		const args = self.valpha === 1 ? self.color : [...self.color, this.valpha];
 		return colorString.to[self.model](args);
 	},
 
 	percentString(places) {
 		const self = this.rgb().round(typeof places === 'number' ? places : 1);
-		const args = self.valpha === 1 ? self.color : self.color.concat(this.valpha);
+		const args = self.valpha === 1 ? self.color : [...self.color, this.valpha];
 		return colorString.to.rgb.percent(args);
 	},
 
 	array() {
-		return this.valpha === 1 ? this.color.slice() : this.color.concat(this.valpha);
+		return this.valpha === 1 ? [...this.color] : [...this.color, this.valpha];
 	},
 
 	object() {
 		const result = {};
-		const channels = convert[this.model].channels;
-		const labels = convert[this.model].labels;
+		const {channels} = convert[this.model];
+		const {labels} = convert[this.model];
 
 		for (let i = 0; i < channels; i++) {
 			result[labels[i]] = this.color[i];
@@ -1649,12 +1648,12 @@ Color.prototype = {
 
 	round(places) {
 		places = Math.max(places || 0, 0);
-		return new Color(this.color.map(roundToPlace(places)).concat(this.valpha), this.model);
+		return new Color([...this.color.map(roundToPlace(places)), this.valpha], this.model);
 	},
 
 	alpha(value) {
-		if (arguments.length > 0) {
-			return new Color(this.color.concat(Math.max(0, Math.min(1, value))), this.model);
+		if (value !== undefined) {
+			return new Color([...this.color, Math.max(0, Math.min(1, value))], this.model);
 		}
 
 		return this.valpha;
@@ -1684,16 +1683,16 @@ Color.prototype = {
 	yellow: getset('cmyk', 2, maxfn(100)),
 	black: getset('cmyk', 3, maxfn(100)),
 
-	x: getset('xyz', 0, maxfn(100)),
+	x: getset('xyz', 0, maxfn(95.047)),
 	y: getset('xyz', 1, maxfn(100)),
-	z: getset('xyz', 2, maxfn(100)),
+	z: getset('xyz', 2, maxfn(108.833)),
 
 	l: getset('lab', 0, maxfn(100)),
 	a: getset('lab', 1),
 	b: getset('lab', 2),
 
 	keyword(value) {
-		if (arguments.length > 0) {
+		if (value !== undefined) {
 			return new Color(value);
 		}
 
@@ -1701,7 +1700,7 @@ Color.prototype = {
 	},
 
 	hex(value) {
-		if (arguments.length > 0) {
+		if (value !== undefined) {
 			return new Color(value);
 		}
 
@@ -1709,7 +1708,7 @@ Color.prototype = {
 	},
 
 	hexa(value) {
-		if (arguments.length > 0) {
+		if (value !== undefined) {
 			return new Color(value);
 		}
 
@@ -1735,7 +1734,7 @@ Color.prototype = {
 		const lum = [];
 		for (const [i, element] of rgb.entries()) {
 			const chan = element / 255;
-			lum[i] = (chan <= 0.039_28) ? chan / 12.92 : ((chan + 0.055) / 1.055) ** 2.4;
+			lum[i] = (chan <= 0.04045) ? chan / 12.92 : ((chan + 0.055) / 1.055) ** 2.4;
 		}
 
 		return 0.2126 * lum[0] + 0.7152 * lum[1] + 0.0722 * lum[2];
@@ -1754,8 +1753,9 @@ Color.prototype = {
 	},
 
 	level(color2) {
+		// https://www.w3.org/TR/WCAG/#contrast-enhanced
 		const contrastRatio = this.contrast(color2);
-		if (contrastRatio >= 7.1) {
+		if (contrastRatio >= 7) {
 			return 'AAA';
 		}
 
@@ -1765,7 +1765,7 @@ Color.prototype = {
 	isDark() {
 		// YIQ equation from http://24ways.org/2010/calculating-color-contrast
 		const rgb = this.rgb().color;
-		const yiq = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+		const yiq = (rgb[0] * 2126 + rgb[1] * 7152 + rgb[2] * 722) / 10000;
 		return yiq < 128;
 	},
 
@@ -1873,26 +1873,26 @@ for (const model of Object.keys(convert)) {
 		continue;
 	}
 
-	const channels = convert[model].channels;
+	const {channels} = convert[model];
 
 	// Conversion methods
-	Color.prototype[model] = function () {
+	Color.prototype[model] = function (...args) {
 		if (this.model === model) {
 			return new Color(this);
 		}
 
-		if (arguments.length > 0) {
-			return new Color(arguments, model);
+		if (args.length > 0) {
+			return new Color(args, model);
 		}
 
-		const newAlpha = typeof arguments[channels] === 'number' ? channels : this.valpha;
-		return new Color(assertArray(convert[this.model][model].raw(this.color)).concat(newAlpha), model);
+		return new Color([...assertArray(convert[this.model][model].raw(this.color)), this.valpha], model);
 	};
 
 	// 'static' construction methods
-	Color[model] = function (color) {
+	Color[model] = function (...args) {
+		let color = args[0];
 		if (typeof color === 'number') {
-			color = zeroArray(_slice.call(arguments), channels);
+			color = zeroArray(args, channels);
 		}
 
 		return new Color(color, model);
@@ -1921,7 +1921,7 @@ function getset(model, channel, modifier) {
 	return function (value) {
 		let result;
 
-		if (arguments.length > 0) {
+		if (value !== undefined) {
 			if (modifier) {
 				value = modifier(value);
 			}
@@ -1961,6 +1961,8 @@ function zeroArray(array, length) {
 }
 
 var color = Color;
+
+var Color$1 = color;
 
 class VennStanza extends Stanza {
   // colorSeries;
@@ -2126,11 +2128,11 @@ class VennStanza extends Stanza {
   }
 
   getBlendedColor(targets) {
-    let blendedColor = color(this.colorSeries[targets[0]]);
+    let blendedColor = Color$1(this.colorSeries[targets[0]]);
     targets.forEach((target, index) => {
       if (index > 0) {
         blendedColor = blendedColor.mix(
-          color(this.colorSeries[target]),
+          Color$1(this.colorSeries[target]),
           1 / (index + 1)
         );
       }

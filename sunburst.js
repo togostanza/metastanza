@@ -1,66 +1,18 @@
-import { d as defineStanzaElement } from './stanza-element-626dadde.js';
-import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-f69e001d.js';
-import { l as loadData } from './load-data-382dc104.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-60a01240.js';
-import { t as treemapDice, r as roundNode, s as stratify, h as hierarchy } from './stratify-6cbca1ed.js';
-import { p as path$1 } from './path-a78af922.js';
-import { f as format, o as ordinal, a as interpolate } from './ordinal-2a500a97.js';
+import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
+import { S as Stanza } from './timer-1ca7e150.js';
+import { s as select } from './index-847f2a80.js';
+import { l as loadData } from './load-data-03ddc67c.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
+import { s as stratify, h as hierarchy } from './stratify-5205cf04.js';
+import { f as format, o as ordinal, a as interpolate$1 } from './ordinal-0cb0fa8d.js';
 import { m as max } from './max-2c042256.js';
-import { a as arc } from './arc-b9bfd524.js';
+import { a as arc$2 } from './arc-49333d16.js';
 import { s as sum } from './sum-44e7480e.js';
-import './dsv-8e18f33d.js';
+import { p as partition } from './partition-2c1b5971.js';
+import { p as path$1 } from './path-a78af922.js';
+import './dsv-cde6fd06.js';
+import './dsv-cd3740c6.js';
 import './constant-c49047a5.js';
-
-function partition() {
-  var dx = 1,
-      dy = 1,
-      padding = 0,
-      round = false;
-
-  function partition(root) {
-    var n = root.height + 1;
-    root.x0 =
-    root.y0 = padding;
-    root.x1 = dx;
-    root.y1 = dy / n;
-    root.eachBefore(positionNode(dy, n));
-    if (round) root.eachBefore(roundNode);
-    return root;
-  }
-
-  function positionNode(dy, n) {
-    return function(node) {
-      if (node.children) {
-        treemapDice(node, node.x0, dy * (node.depth + 1) / n, node.x1, dy * (node.depth + 2) / n);
-      }
-      var x0 = node.x0,
-          y0 = node.y0,
-          x1 = node.x1 - padding,
-          y1 = node.y1 - padding;
-      if (x1 < x0) x0 = x1 = (x0 + x1) / 2;
-      if (y1 < y0) y0 = y1 = (y0 + y1) / 2;
-      node.x0 = x0;
-      node.y0 = y0;
-      node.x1 = x1;
-      node.y1 = y1;
-    };
-  }
-
-  partition.round = function(x) {
-    return arguments.length ? (round = !!x, partition) : round;
-  };
-
-  partition.size = function(x) {
-    return arguments.length ? (dx = +x[0], dy = +x[1], partition) : [dx, dy];
-  };
-
-  partition.padding = function(x) {
-    return arguments.length ? (padding = +x, partition) : padding;
-  };
-
-  return partition;
-}
 
 let path;
 
@@ -226,7 +178,7 @@ class Sunburst extends Stanza {
 
     const radius = width / ((depthLim + 1) * 2);
 
-    const arc$1 = arc()
+    const arc = arc$2()
       .startAngle((d) => d.x0)
       .endAngle((d) => d.x1)
       .padAngle((d) => Math.min((d.x1 - d.x0) / 2, nodesGapWidth / 500))
@@ -326,7 +278,7 @@ class Sunburst extends Stanza {
       .attr("fill-opacity", (d) =>
         arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0
       )
-      .attr("d", (d) => arc$1(d.current));
+      .attr("d", (d) => arc(d.current));
 
     path
       .filter((d) => d.children)
@@ -451,7 +403,7 @@ class Sunburst extends Stanza {
       path
         .transition(t)
         .tween("data", (d) => {
-          const i = interpolate(d.current, d.target);
+          const i = interpolate$1(d.current, d.target);
           return (t) => (d.current = i(t));
         })
         .filter(function (d) {
@@ -464,7 +416,7 @@ class Sunburst extends Stanza {
           d.children && arcVisible(d.target) ? "pointer" : "auto"
         )
 
-        .attrTween("d", (d) => () => arc$1(d.current));
+        .attrTween("d", (d) => () => arc(d.current));
 
       parent.transition(t).attr("fill", () => {
         let b = p;

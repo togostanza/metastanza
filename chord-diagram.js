@@ -1,19 +1,13 @@
-import { d as defineStanzaElement } from './stanza-element-626dadde.js';
-import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-f69e001d.js';
+import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
+import { S as Stanza } from './timer-1ca7e150.js';
+import { s as select } from './index-847f2a80.js';
+import { d as descending } from './descending-63ef45b8.js';
 import { s as sum } from './sum-44e7480e.js';
-import { t as tsv } from './dsv-8e18f33d.js';
+import { t as tsv } from './dsv-cde6fd06.js';
 import { p as path } from './path-a78af922.js';
-import { a as arc } from './arc-b9bfd524.js';
+import { a as arc$2 } from './arc-49333d16.js';
+import './dsv-cd3740c6.js';
 import './constant-c49047a5.js';
-
-function descending(a, b) {
-  return a == null || b == null ? NaN
-    : b < a ? -1
-    : b > a ? 1
-    : b >= a ? 0
-    : NaN;
-}
 
 var abs = Math.abs;
 var cos = Math.cos;
@@ -342,7 +336,7 @@ class ChordDiagram extends Stanza {
     const ribbon = ribbonArrow()
       .radius(innerRadius - this.params["edge-offset"])
       .padAngle(1 / innerRadius);
-    const arc$1 = arc().innerRadius(innerRadius).outerRadius(outerRadius);
+    const arc = arc$2().innerRadius(innerRadius).outerRadius(outerRadius);
     const chord = chordDirected()
       .padAngle(this.params["arcs-gap"] / innerRadius)
       .sortSubgroups(descending)
@@ -361,7 +355,7 @@ class ChordDiagram extends Stanza {
       .attr("id", fullsircleId)
       .attr(
         "d",
-        arc()({ outerRadius, startAngle: 0, endAngle: 2 * Math.PI })
+        arc$2()({ outerRadius, startAngle: 0, endAngle: 2 * Math.PI })
       );
 
     rootGroup
@@ -390,7 +384,7 @@ class ChordDiagram extends Stanza {
       .call((g) =>
         g
           .append("path")
-          .attr("d", arc$1)
+          .attr("d", arc)
           // .attr('fill', d => color(names[d.index]))
           .attr("fill", (d) => color.hsl(d.index))
           .attr("stroke", "#fff")

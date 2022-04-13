@@ -1,41 +1,24 @@
-import { d as defineStanzaElement } from './stanza-element-626dadde.js';
-import { S as Stanza } from './stanza-b8cf3904.js';
-import { s as select } from './index-f69e001d.js';
-import { l as loadData } from './load-data-382dc104.js';
-import { L as Legend } from './Legend-90239b0e.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-60a01240.js';
-import { g as group } from './group-4f051069.js';
-import { o as ordinal, f as format } from './ordinal-2a500a97.js';
+import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
+import { S as Stanza } from './timer-1ca7e150.js';
+import { s as select } from './index-847f2a80.js';
+import { l as loadData } from './load-data-03ddc67c.js';
+import { L as Legend } from './Legend-08cf2f79.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
+import { g as group } from './group-ac79bcd0.js';
+import { o as ordinal, f as format } from './ordinal-0cb0fa8d.js';
 import { m as max } from './max-2c042256.js';
-import { l as linear } from './linear-0737660c.js';
-import { b as band } from './band-cb090c93.js';
+import { m as min } from './min-4a3f8e4e.js';
+import { l as linear } from './linear-af9e44cc.js';
+import { b as band } from './band-6f9e71db.js';
 import { a as axisBottom, b as axisLeft, c as axisTop, d as axisRight } from './axis-3dba94d9.js';
-import { l as line } from './line-975b456c.js';
-import './dsv-8e18f33d.js';
+import { l as line$2 } from './line-620615aa.js';
+import './dsv-cde6fd06.js';
+import './dsv-cd3740c6.js';
+import './descending-63ef45b8.js';
+import './range-e15c6861.js';
 import './array-89f97098.js';
 import './constant-c49047a5.js';
 import './path-a78af922.js';
-
-function min(values, valueof) {
-  let min;
-  if (valueof === undefined) {
-    for (const value of values) {
-      if (value != null
-          && (min > value || (min === undefined && value >= value))) {
-        min = value;
-      }
-    }
-  } else {
-    let index = -1;
-    for (let value of values) {
-      if ((value = valueof(value, ++index, values)) != null
-          && (min > value || (min === undefined && value >= value))) {
-        min = value;
-      }
-    }
-  }
-  return min;
-}
 
 class Linechart extends Stanza {
   menu() {
@@ -480,7 +463,7 @@ class Linechart extends Stanza {
         g.transition()
           .duration(200)
           .attr("d", function (d) {
-            return line()
+            return line$2()
               .x(function (d) {
                 if (xDataType === "number") {
                   return x(d[xKeyName]);
@@ -507,7 +490,7 @@ class Linechart extends Stanza {
           })
           .attr("stroke-width", 1.5)
           .attr("d", function (d) {
-            return line()
+            return line$2()
               .x(function (d) {
                 if (xDataType === "number") {
                   return x(d[xKeyName]);
