@@ -1,7 +1,10 @@
 import * as d3 from "d3";
 
-export default function (svg, nodes, edges, params) {
-  const {
+export default function (
+  svg,
+  nodes,
+  edges,
+  {
     width,
     height,
     MARGIN,
@@ -9,8 +12,8 @@ export default function (svg, nodes, edges, params) {
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
-  } = params;
-
+  }
+) {
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
   const pointScale = d3
