@@ -149,7 +149,6 @@ export default class ForceGraph extends Stanza {
     const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
 
     const origin = [MARGIN.LEFT + WIDTH / 2, MARGIN.TOP + HEIGHT / 2];
-
     const scale = 0.75;
 
     let isDragging = false;
@@ -208,10 +207,6 @@ export default class ForceGraph extends Stanza {
         .classed("group-plane", true)
         .merge(planes)
         .attr("fill", (d) => d.color)
-        .attr("opacity", 0.2)
-        .attr("stroke", "gray")
-        .attr("stroke-width", 1)
-        .attr("stroke-opacity", 1)
         .attr("d", plane3d.draw)
         .sort(plane3d.sort);
 
@@ -249,7 +244,6 @@ export default class ForceGraph extends Stanza {
         .attr("r", (d) => d[symbols.nodeSizeSym])
         .style("stroke", (d) => d[symbols.nodeBorderColorSym])
         .style("fill", (d) => d[symbols.nodeColorSym])
-        .attr("opacity", 1)
         .sort(point3d.sort);
 
       if (tooltipParams.show) {
@@ -270,7 +264,6 @@ export default class ForceGraph extends Stanza {
     let groupPlanes = [];
 
     let edgesWithCoords = [];
-
     function init() {
       // Add x,y,z of source and target nodes to 3D edges
       edgesWithCoords = get3DEdges(prepEdges);
@@ -494,15 +487,12 @@ export default class ForceGraph extends Stanza {
         if (isDragging) {
           return;
         }
-        // highlight current node
-        d3.select(this).classed("active", true);
-        const edgeIdsOnThisNode = d[symbols.edgeSym].map(
-          (edge) => edge[symbols.idSym]
-        );
+
         // fade out all other nodes, highlight a little connected ones
+        points.classed("fadeout", true);
+
         points
-          .classed("fadeout", (p) => d !== p)
-          .classed("half-active", (p) => {
+          .filter((p) => {
             return (
               p !== d &&
               d[symbols.edgeSym].some(
@@ -511,7 +501,16 @@ export default class ForceGraph extends Stanza {
                   edge[symbols.targetNodeSym] === p
               )
             );
-          });
+          })
+          .classed("half-active", true)
+          .classed("fadeout", false);
+
+        // highlight current node
+        d3.select(this).classed("active", true).classed("fadeout", false);
+        const edgeIdsOnThisNode = d[symbols.edgeSym].map(
+          (edge) => edge[symbols.idSym]
+        );
+
         // fadeout not connected edges, highlight connected ones
         links
           .classed(
