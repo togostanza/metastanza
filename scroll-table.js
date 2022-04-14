@@ -400,8 +400,10 @@ var script = defineComponent({
 
     function handleScroll(e) {
       if (
-        e.path[0].scrollTop ===
-          e.path[0].firstChild.clientHeight - e.path[0].clientHeight &&
+        e.path[0].scrollTop >
+          e.path[0].firstChild.clientHeight - e.path[0].clientHeight - 5 &&
+        e.path[0].scrollTop <
+          e.path[0].firstChild.clientHeight - e.path[0].clientHeight + 5 &&
         !state.isFetching
       ) {
         state.offset = state.offset + params.pageSize;
