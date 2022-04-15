@@ -102,6 +102,12 @@
       "stanza:description": "Set edge type"
     },
     {
+      "stanza:key": "edge-curve-strength",
+      "stanza:type": "number",
+      "stanza:example": 25,
+      "stanza:description": "Set edge curve strength, in % of Radius"
+    },
+    {
       "stanza:key": "edge-width-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],

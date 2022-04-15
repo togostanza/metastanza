@@ -118,7 +118,10 @@ export default class ForceGraph extends Stanza {
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
-    const edgeType = this.params["edge-type"] || "curved";
+    const edgeParams = {
+      type: this.params["edge-type"] || "curved",
+      curveStrength: this.params["edge-curve-strength"] || 0,
+    };
 
     const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
 
@@ -133,7 +136,7 @@ export default class ForceGraph extends Stanza {
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
-      edgeType,
+      edgeParams,
       labelsParams,
       tooltipParams,
     };

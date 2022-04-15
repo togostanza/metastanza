@@ -12,7 +12,7 @@ export default function (
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
-    edgeType,
+    edgeParams,
   }
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
@@ -41,7 +41,7 @@ export default function (
   let links;
   let draw;
 
-  if (edgeType === "line") {
+  if (edgeParams.type === "line") {
     links = circleG
       .selectAll("path")
       .data(edges)
@@ -54,7 +54,7 @@ export default function (
       .attr("y1", (d) => d[symbols.sourceNodeSym].y)
       .attr("x2", (d) => d[symbols.targetNodeSym].x)
       .attr("y2", (d) => d[symbols.targetNodeSym].y);
-  } else if (edgeType === "curve") {
+  } else if (edgeParams.type === "curve") {
     draw = d3.line().curve(d3.curveBasis);
 
     links = circleG
@@ -79,6 +79,10 @@ export default function (
     ];
   }
 
+  function distance(a, b) {
+    return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
+  }
+
   function arc(d) {
     const sourceX = d[symbols.sourceNodeSym].x;
     const targetX = d[symbols.targetNodeSym].x;
@@ -87,7 +91,14 @@ export default function (
     const midX = (sourceX + targetX) / 2;
     const midY = (sourceY + targetY) / 2;
 
-    const movedPoint = movePoint([midX, midY], [WIDTH / 2, HEIGHT / 2], R / 4);
+    const movedPoint = movePoint(
+      [midX, midY],
+      [WIDTH / 2, HEIGHT / 2],
+      (distance([midX, midY], [WIDTH / 2, HEIGHT / 2]) *
+        edgeParams.curveStrength *
+        1.5) /
+        100
+    );
 
     return draw([[sourceX, sourceY], [...movedPoint], [targetX, targetY]]);
   }
