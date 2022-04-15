@@ -95,6 +95,13 @@
       "stanza:description": "Set color of the node based on data key"
     },
     {
+      "stanza:key": "edge-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["line", "curve"],
+      "stanza:example": "curve",
+      "stanza:description": "Set edge type"
+    },
+    {
       "stanza:key": "edge-width-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
