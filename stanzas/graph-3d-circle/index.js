@@ -86,6 +86,11 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const nodesSortParams = {
+      sortBy: this.params["group-planes-sort-by"],
+      sortOrder: this.params["group-planes-sort-order"] || "ascending",
+    };
+
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
@@ -127,6 +132,7 @@ export default class ForceGraph extends Stanza {
       color,
       highlightAdjEdges,
       nodeSizeParams,
+      nodesSortParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
@@ -186,7 +192,6 @@ export default class ForceGraph extends Stanza {
       .scale(scale)
       .origin(origin)
       .shape("LINE")
-
       .rotateY(startAngle)
       .rotateX(-startAngle);
 
@@ -270,9 +275,19 @@ export default class ForceGraph extends Stanza {
 
       // Laying out nodes=========
       const DEPTH = WIDTH;
-      const yPointScale = d3
-        .scalePoint([-DEPTH / 2, DEPTH / 2])
-        .domain(Object.keys(groupHash));
+      const yPointScale = d3.scalePoint([-DEPTH / 2, DEPTH / 2]).domain(
+        Object.keys(groupHash).sort((a, b) => {
+          if (a > b) {
+            return nodesSortParams.sortOrder === "ascending" ? 1 : -1;
+          }
+          if (a < b) {
+            return nodesSortParams.sortOrder === "ascending" ? -1 : 1;
+          }
+          return 0;
+        })
+      );
+
+      //TODO not nodesSost, but Planes Sort. NodesSort - - within planes
 
       Object.keys(groupHash).forEach((gKey) => {
         // Laying out nodes ===
@@ -300,6 +315,7 @@ export default class ForceGraph extends Stanza {
         });
       });
 
+      console.log("nodesSortParams", nodesSortParams);
       groupPlanes = getGroupPlanes(groupHash, {
         WIDTH,
         HEIGHT,
