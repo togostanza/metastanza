@@ -86,6 +86,11 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const groupPlaneColorParams = {
+      basedOn: this.params["group-plane-color-based-on"],
+      // default fixed color by css
+    };
+
     const nodesSortParams = {
       sortBy: this.params["group-planes-sort-by"],
       sortOrder: this.params["group-planes-sort-order"] || "ascending",
@@ -211,7 +216,7 @@ export default class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("group-plane", true)
         .merge(planes)
-        .attr("fill", (d) => d.color)
+        .attr("style", (d) => `fill: ${d.color}`)
         .attr("d", plane3d.draw)
         .sort(plane3d.sort);
 
@@ -315,13 +320,13 @@ export default class ForceGraph extends Stanza {
         });
       });
 
-      console.log("nodesSortParams", nodesSortParams);
       groupPlanes = getGroupPlanes(groupHash, {
         WIDTH,
         HEIGHT,
         DEPTH,
         color,
         yPointScale,
+        groupPlaneColorParams,
       });
 
       const data = [
