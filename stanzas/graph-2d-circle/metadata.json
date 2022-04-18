@@ -48,6 +48,19 @@
       "stanza:description": "Inner padding in px"
     },
     {
+      "stanza:key": "nodes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Sort nodes by this data key value"
+    },
+    {
+      "stanza:key": "nodes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Nodes sorting order"
+    },
+    {
       "stanza:key": "node-size-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
@@ -93,6 +106,19 @@
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
+    },
+    {
+      "stanza:key": "edge-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["line", "curve"],
+      "stanza:example": "curve",
+      "stanza:description": "Set edge type"
+    },
+    {
+      "stanza:key": "edge-curve-strength",
+      "stanza:type": "number",
+      "stanza:example": 25,
+      "stanza:description": "Set edge curve strength, in % of Radius"
     },
     {
       "stanza:key": "edge-width-based-on",
