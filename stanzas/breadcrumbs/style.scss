@@ -84,13 +84,6 @@ main {
         fill: var(--togostanza-label-font-color-hover);
       }
     }
-
-    svg.home-icon path {
-      fill: var(--togostanza-home-icon-color);
-      &:hover {
-        fill: var(--togostanza-label-font-color-hover);
-      }
-    }
   }
 }
 
