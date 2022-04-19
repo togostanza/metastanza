@@ -86,20 +86,27 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const constRarius = !!this.params["constant-radius"];
+
     const groupPlaneColorParams = {
       basedOn: this.params["group-plane-color-based-on"],
       // default fixed color by css
     };
 
-    const nodesSortParams = {
+    const groupsSortParams = {
       sortBy: this.params["group-planes-sort-by"],
       sortOrder: this.params["group-planes-sort-order"] || "ascending",
+    };
+
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
     };
 
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
+      fixedSize: this.params["node-fixed-size"] || 3,
       minSize: this.params["node-size-min-size"],
       maxSize: this.params["node-size-max-size"],
     };
@@ -138,6 +145,7 @@ export default class ForceGraph extends Stanza {
       highlightAdjEdges,
       nodeSizeParams,
       nodesSortParams,
+      groupsSortParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
@@ -155,9 +163,9 @@ export default class ForceGraph extends Stanza {
       (d) => d[1].length
     );
 
-    const R = Math.min(WIDTH, HEIGHT) / 2;
+    const Rmax = (0.8 * WIDTH) / 2;
 
-    const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
+    const arcLength = ((2 * Math.PI) / maxNodesInGroup) * Rmax;
 
     const origin = [MARGIN.LEFT + WIDTH / 2, MARGIN.TOP + HEIGHT / 2];
     const scale = 0.75;
@@ -279,20 +287,18 @@ export default class ForceGraph extends Stanza {
       edgesWithCoords = get3DEdges(prepEdges);
 
       // Laying out nodes=========
-      const DEPTH = WIDTH;
+      const DEPTH = HEIGHT;
       const yPointScale = d3.scalePoint([-DEPTH / 2, DEPTH / 2]).domain(
         Object.keys(groupHash).sort((a, b) => {
           if (a > b) {
-            return nodesSortParams.sortOrder === "ascending" ? 1 : -1;
+            return groupsSortParams.sortOrder === "ascending" ? 1 : -1;
           }
           if (a < b) {
-            return nodesSortParams.sortOrder === "ascending" ? -1 : 1;
+            return groupsSortParams.sortOrder === "ascending" ? -1 : 1;
           }
           return 0;
         })
       );
-
-      //TODO not nodesSost, but Planes Sort. NodesSort - - within planes
 
       Object.keys(groupHash).forEach((gKey) => {
         // Laying out nodes ===
@@ -304,7 +310,9 @@ export default class ForceGraph extends Stanza {
           .domain(group.map((node) => node.id))
           .range([0, Math.PI * 2 - (Math.PI * 2) / group.length]);
 
-        const R = arcLength / ((Math.PI * 2) / group.length);
+        const R = constRarius
+          ? Rmax
+          : arcLength / ((Math.PI * 2) / group.length);
 
         group.forEach((node) => {
           if (group.length === 1) {

@@ -3,7 +3,7 @@
     "stanza": "http://togostanza.org/resource/stanza#"
   },
   "@id": "graph-3d-circle",
-  "stanza:label": "Graph 3d circle layout",
+  "stanza:label": "Graph 3D circle layout",
   "stanza:definition": "Graph 3D Circle Layout MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
@@ -35,7 +35,7 @@
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 600,
+      "stanza:example": 1000,
       "stanza:description": "Height in px"
     },
     {
@@ -58,6 +58,19 @@
       "stanza:description": "Group planes sorting order"
     },
     {
+      "stanza:key": "nodes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "id",
+      "stanza:description": "Sort nodes by this data key value"
+    },
+    {
+      "stanza:key": "nodes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Nodes sorting order"
+    },
+    {
       "stanza:key": "node-size-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
@@ -68,7 +81,7 @@
     {
       "stanza:key": "node-size-data-key",
       "stanza:type": "string",
-      "stanza:example": "",
+      "stanza:example": "group",
       "stanza:description": "Set size on the node based on data key"
     },
     {
@@ -84,7 +97,7 @@
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-size-fixed-size",
+      "stanza:key": "node-fixed-size",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Fixed node radius in px"
@@ -154,6 +167,13 @@
       "stanza:choice": ["data key", "fixed"],
       "stanza:example": "fixed",
       "stanza:description": "Set color of the group planes based on this data key"
+    },
+
+    {
+      "stanza:key": "constant-radius",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Constant radius for all groups"
     },
     {
       "stanza:key": "highlight-adjacent-edges",
