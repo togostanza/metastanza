@@ -46,6 +46,19 @@
       "stanza:description": "Inner padding in px"
     },
     {
+      "stanza:key": "nodes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Sort nodes by this data key value"
+    },
+    {
+      "stanza:key": "nodes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Nodes sorting order"
+    },
+    {
       "stanza:key": "node-size-based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "fixed"],
