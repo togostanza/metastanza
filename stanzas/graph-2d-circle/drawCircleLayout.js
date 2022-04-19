@@ -140,9 +140,9 @@ export default function (
       })
       .attr("x", (d) => {
         if (angleScale(d.id) > 90 && angleScale(d.id) < 270) {
-          return -labelsParams.margin;
+          return -labelsParams.margin - d[symbols.nodeSizeSym];
         }
-        return labelsParams.margin;
+        return labelsParams.margin + d[symbols.nodeSizeSym];
       })
       .attr("transform", (d) => {
         if (angleScale(d.id) > 90 && angleScale(d.id) < 270) {

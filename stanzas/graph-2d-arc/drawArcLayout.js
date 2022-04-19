@@ -60,9 +60,10 @@ export default function (
       .text((d) => d[labelsParams.dataKey])
       .attr("alignment-baseline", "middle")
       .attr("transform", "rotate(90)")
-      .attr("x", labelsParams.margin)
+      .attr("x", (d) => d[symbols.nodeSizeSym] + labelsParams.margin)
       .attr("class", "label");
   }
+
   if (highlightAdjEdges) {
     nodeGroups.on("mouseover", function (e, d) {
       // highlight current node
