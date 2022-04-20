@@ -35,7 +35,7 @@
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 600,
+      "stanza:example": 1000,
       "stanza:description": "Height in px"
     },
     {
@@ -43,6 +43,32 @@
       "stanza:type": "number",
       "stanza:example": 50,
       "stanza:description": "Inner padding in px"
+    },
+    {
+      "stanza:key": "group-planes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Sort group planes by this data key value"
+    },
+    {
+      "stanza:key": "group-planes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Group planes sorting order"
+    },
+    {
+      "stanza:key": "nodes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "id",
+      "stanza:description": "Sort nodes by this data key value"
+    },
+    {
+      "stanza:key": "nodes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Nodes sorting order"
     },
     {
       "stanza:key": "node-size-based-on",
@@ -61,19 +87,19 @@
     {
       "stanza:key": "node-min-size",
       "stanza:type": "number",
-      "stanza:example": 4,
+      "stanza:example": 3,
       "stanza:description": "Minimum node radius in px"
     },
     {
       "stanza:key": "node-max-size",
       "stanza:type": "number",
-      "stanza:example": 12,
+      "stanza:example": 6,
       "stanza:description": "Maximum node radius in px"
     },
     {
       "stanza:key": "node-fixed-size",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 3,
       "stanza:description": "Fixed node radius in px"
     },
     {
@@ -107,19 +133,19 @@
     {
       "stanza:key": "edge-min-width",
       "stanza:type": "number",
-      "stanza:example": 2,
+      "stanza:example": 0.5,
       "stanza:description": "Minimum edge width in px"
     },
     {
       "stanza:key": "edge-max-width",
       "stanza:type": "number",
-      "stanza:example": 6,
+      "stanza:example": 3,
       "stanza:description": "Maximum edge width in px"
     },
     {
       "stanza:key": "edge-fixed-width",
       "stanza:type": "number",
-      "stanza:example": 2,
+      "stanza:example": 0.5,
       "stanza:description": "Fixed edge width in px"
     },
     {
@@ -135,6 +161,13 @@
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set color of the edge based on this data key"
+    },
+    {
+      "stanza:key": "group-plane-color-based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["data key", "fixed"],
+      "stanza:example": "fixed",
+      "stanza:description": "Set color of the group planes based on this data key"
     },
     {
       "stanza:key": "highlight-adjacent-edges",
@@ -181,7 +214,7 @@
     {
       "stanza:key": "--togostanza-series-3-color",
       "stanza:type": "color",
-      "stanza:default": "#F5DA64",
+      "stanza:default": "#E6BB1A",
       "stanza:description": "Group color 3"
     },
     {
