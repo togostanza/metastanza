@@ -104,9 +104,11 @@ export default function (
   if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
-      .attr("dx", labelsParams.margin)
+      .attr("x", 0)
+      .attr("dy", (d) => labelsParams.margin + d[symbols.nodeSizeSym])
       .attr("class", "label")
-      .attr("alignment-baseline", "middle")
+      .attr("alignment-baseline", "hanging")
+      .attr("text-anchor", "middle")
       .text((d) => d[labelsParams.dataKey]);
   }
 
