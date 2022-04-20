@@ -40,3 +40,7 @@ Use following data format to vizualize the graph in this stanza:
 | `target` | `id` of target node | `String` or `Number` | Unique node id           |
 | `key2`   | Node attribute      | `String` or `Number` | Arbitrary edge attribute |
 | ...      | Node attribute      | `String` or `Number` | Arbitrary edge attribute |
+
+### 3D
+
+3d visualization is made possible by `d3-3d` plugin (https://github.com/Niekes/d3-3d)
