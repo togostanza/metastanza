@@ -86,10 +86,12 @@ export default function (
   if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
-      .text((d) => d[labelsParams.dataKey])
-      .attr("alignment-baseline", "middle")
-      .attr("x", labelsParams.margin)
-      .attr("class", "label");
+      .attr("x", 0)
+      .attr("dy", (d) => labelsParams.margin + d[symbols.nodeSizeSym])
+      .attr("class", "label")
+      .attr("alignment-baseline", "hanging")
+      .attr("text-anchor", "middle")
+      .text((d) => d[labelsParams.dataKey]);
   }
 
   if (highlightAdjEdges) {
