@@ -91,9 +91,9 @@ export default class ForceGraph extends Stanza {
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",

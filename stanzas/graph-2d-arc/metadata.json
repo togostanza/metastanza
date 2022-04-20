@@ -73,19 +73,19 @@
       "stanza:description": "Set size on the node based on data key"
     },
     {
-      "stanza:key": "node-size-min-size",
+      "stanza:key": "node-min-size",
       "stanza:type": "number",
       "stanza:example": 4,
       "stanza:description": "Minimum node radius in px"
     },
     {
-      "stanza:key": "node-size-max-size",
+      "stanza:key": "node-max-size",
       "stanza:type": "number",
       "stanza:example": 12,
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-size-fixed-size",
+      "stanza:key": "node-fixed-size",
       "stanza:type": "number",
       "stanza:example": 2,
       "stanza:description": "Fixed node radius in px"
