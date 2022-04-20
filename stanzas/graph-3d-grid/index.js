@@ -16,7 +16,7 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
-export default class ForceGraph extends Stanza {
+export default class GridGraph extends Stanza {
   menu() {
     return [
       downloadSvgMenuItem(this, "graph-3d-grid"),
@@ -86,6 +86,21 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const groupPlaneColorParams = {
+      basedOn: this.params["group-plane-color-based-on"],
+      // default fixed color by css
+    };
+
+    const groupsSortParams = {
+      sortBy: this.params["group-planes-sort-by"],
+      sortOrder: this.params["group-planes-sort-order"] || "ascending",
+    };
+
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
+    };
+
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
@@ -127,6 +142,8 @@ export default class ForceGraph extends Stanza {
       color,
       highlightAdjEdges,
       nodeSizeParams,
+      nodesSortParams,
+      groupsSortParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
@@ -197,7 +214,7 @@ export default class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("group-plane", true)
         .merge(planes)
-        .attr("fill", (d) => d.color)
+        .attr("style", (d) => `fill: ${d.color}`)
         .attr("d", plane3d.draw)
         .sort(plane3d.sort);
 
@@ -255,16 +272,49 @@ export default class ForceGraph extends Stanza {
     let groupPlanes = [];
 
     let edgesWithCoords = [];
+
+    function isNumeric(str) {
+      if (typeof str !== "string") {
+        return false;
+      } // we only process strings!
+      return (
+        !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str))
+      ); // ...and ensure strings of whitespace fail
+    }
+
     function init() {
       // Add x,y,z of source and target nodes to 3D edges
       edgesWithCoords = get3DEdges(prepEdges);
 
       // Laying out nodes=========
-      const DEPTH = WIDTH;
-      const yPointScale = d3
-        .scalePoint([-DEPTH / 2, DEPTH / 2])
-        .domain(Object.keys(groupHash));
+      const DEPTH = HEIGHT;
 
+      // Check if group ids is a numbers. (To make group hash, group ids are all converted to strings by doing "" + groupId)
+      const ifGroupIdsIsNumber = Object.keys(groupHash).every((groupId) =>
+        isNumeric(groupId)
+      );
+
+      let modificator;
+      if (ifGroupIdsIsNumber) {
+        modificator = (str) => parseInt(str);
+      } else {
+        modificator = (str) => str;
+      }
+
+      const yPointScale = d3.scalePoint([-DEPTH / 2, DEPTH / 2]).domain(
+        Object.keys(groupHash).sort((a, b) => {
+          if (modificator(a) > modificator(b)) {
+            return groupsSortParams.sortOrder === "ascending" ? 1 : -1;
+          }
+          if (modificator(a) < modificator(b)) {
+            return groupsSortParams.sortOrder === "ascending" ? -1 : 1;
+          }
+          return 0;
+        })
+      );
+
+      const offset = WIDTH * 0.1;
       Object.keys(groupHash).forEach((gKey) => {
         let ii = 0;
         let jj = 0;
@@ -272,8 +322,8 @@ export default class ForceGraph extends Stanza {
         const group = groupHash[gKey];
         const gridSize = Math.ceil(Math.sqrt(groupHash[gKey].length));
 
-        const dx = WIDTH / (gridSize - 1);
-        const dz = HEIGHT / (gridSize - 1);
+        const dx = (WIDTH - 2 * offset) / (gridSize - 1);
+        const dz = (WIDTH - 2 * offset) / (gridSize - 1);
 
         group.forEach((node, index) => {
           if (group.length === 1) {
@@ -282,22 +332,22 @@ export default class ForceGraph extends Stanza {
             node.y = yPointScale(gKey);
             return;
           } else if (group.length === 2) {
-            node.x = index * (WIDTH / 3) - WIDTH / 6;
+            node.x = 0 + index * (WIDTH / 3) - WIDTH / 6;
             node.z = 0;
             node.y = yPointScale(gKey);
             jj++;
             return;
           }
           if (jj < gridSize) {
-            node.x = jj * dx - WIDTH / 2;
-            node.z = ii * dz - HEIGHT / 2;
+            node.x = offset + jj * dx - WIDTH / 2;
+            node.z = offset + ii * dz - WIDTH / 2;
             node.y = yPointScale(gKey);
             jj++;
           } else {
             jj = 0;
             ii++;
-            node.x = jj * dx - WIDTH / 2;
-            node.z = ii * dz - HEIGHT / 2;
+            node.x = offset + jj * dx - WIDTH / 2;
+            node.z = offset + ii * dz - WIDTH / 2;
             node.y = yPointScale(gKey);
             jj++;
           }
@@ -310,6 +360,7 @@ export default class ForceGraph extends Stanza {
         DEPTH,
         color,
         yPointScale,
+        groupPlaneColorParams,
       });
 
       const data = [
