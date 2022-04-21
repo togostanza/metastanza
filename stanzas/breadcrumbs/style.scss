@@ -97,7 +97,7 @@ main {
   fill: var(--togostanza-label-background-color-hover);
 }
 .breadcrumb-label-hover {
-  fill: var(--togostanza-label-font-color-hover);
+  fill: var(--togostanza-label-font-color-hover) !important;
 }
 
 .menu-triangle {
@@ -131,16 +131,17 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   background-color: var(--togostanza-background-color);
   border: 1px solid var(--togostanza-border-color);
   max-height: 20rem;
   min-width: 8rem;
   max-width: 10rem;
-  overflow-y: scroll;
-  padding: 0.2rem;
-  padding-left: 0.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
   &::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.3rem;
   }
   &::-webkit-scrollbar-thumb {
     background: var(--togostanza-scrollbar-color);
@@ -157,6 +158,8 @@ main {
   font-size: calc(var(--togostanza-label-font-size) * 1px);
   color: var(--togostanza-label-font-color);
   padding: 0.2rem;
+  width: 100%;
+  line-height: 0.9rem;
 }
 
 .breadcrumb-menu-item:hover {
