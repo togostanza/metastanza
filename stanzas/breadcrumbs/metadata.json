@@ -173,7 +173,7 @@
     {
       "stanza:key": "--togostanza-label-background-color-hover",
       "stanza:type": "color",
-      "stanza:default": "#396c7e",
+      "stanza:default": "#16ADE3",
       "stanza:description": "Color the labels on mouseover"
     },
     {
