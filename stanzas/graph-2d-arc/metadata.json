@@ -196,7 +196,7 @@
     {
       "stanza:key": "--togostanza-series-3-color",
       "stanza:type": "color",
-      "stanza:default": "#E0BB1A",
+      "stanza:default": "#E6BB1A",
       "stanza:description": "Group color 3"
     },
     {
