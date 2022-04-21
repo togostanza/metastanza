@@ -44,7 +44,7 @@
     {
       "stanza:key": "padding",
       "stanza:type": "number",
-      "stanza:example": 50,
+      "stanza:example": 60,
       "stanza:description": "Inner padding in px"
     },
     {
