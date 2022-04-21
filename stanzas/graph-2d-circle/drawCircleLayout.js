@@ -91,12 +91,17 @@ export default function (
     const midX = (sourceX + targetX) / 2;
     const midY = (sourceY + targetY) / 2;
 
+    const factor =
+      ((distance([sourceX, sourceY], [targetX, targetY]) / angleScale.step()) *
+        Math.PI) /
+      180;
     const movedPoint = movePoint(
       [midX, midY],
       [WIDTH / 2, HEIGHT / 2],
       (distance([midX, midY], [WIDTH / 2, HEIGHT / 2]) *
         edgeParams.curveStrength *
-        1.5) /
+        1.5 *
+        factor) /
         100
     );
 
