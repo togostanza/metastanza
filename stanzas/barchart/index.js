@@ -25,18 +25,29 @@ export default class Barchart extends Stanza {
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
 
+    const { default: metadata } = await import("./metadata.json");
+
+    const defaultParams = new Map(
+      metadata["stanza:parameter"].map((param) => [
+        param["stanza:key"],
+        param["stanza:example"],
+      ])
+    );
+
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
-    const chartType = this.params["chart-type"];
+    const chartType =
+      this.params["chart-type"] || defaultParams.get("chart-type");
 
     //width,height,padding
-    const width = this.params["width"];
-    const height = this.params["height"];
+    const width = this.params["width"] || defaultParams.get("width");
+    const height = this.params["height"] || defaultParams.get("height");
     const padding = this.params["padding"];
 
     //data
-    const labelVariable = this.params["category"]; //x
-    const valueVariable = this.params["value"]; //y
-    const groupVariable = this.params["group-by"]
+    const labelVariable =
+      this.params["category"] || defaultParams.get("category"); //x
+    const valueVariable = this.params["value"] || defaultParams.get("value"); //y
+    const groupVariable = this.params["group-by"] //group
       ? this.params["group-by"]
       : "none"; //z
 
@@ -119,7 +130,9 @@ export default class Barchart extends Stanza {
         titleFontWeight: css("--togostanza-title-font-weight"),
         titlePadding: this.params["xtitle-padding"],
         labelPadding: this.params["xlabel-padding"],
-        labelAlign: this.params["xlabel-alignment"],
+        labelAlign:
+          this.params["xlabel-alignment"] ||
+          defaultParams.get("xlabel-alignment"),
         labelLimit: this.params["xlabel-max-width"],
         encode: {
           labels: {
@@ -135,7 +148,9 @@ export default class Barchart extends Stanza {
       },
       {
         scale: "yscale",
-        orient: this.params["yaxis-placement"],
+        orient:
+          this.params["yaxis-placement"] ||
+          defaultParams.get("yaxis-placement"),
         domainColor: "var(--togostanza-axis-color)",
         domainWidth: css("--togostanza-axis-width"),
         grid: this.params["ygrid"] === "true",
@@ -159,14 +174,20 @@ export default class Barchart extends Stanza {
         titleFontWeight: css("--togostanza-title-font-weight"),
         titlePadding: this.params["ytitle-padding"],
         labelPadding: this.params["ylabel-padding"],
-        labelAlign: this.params["ylabel-alignment"],
+        labelAlign:
+          this.params["ylabel-alignment"] ||
+          defaultParams.get("ylabel-alignment"),
         labelLimit: this.params["ylabel-max-width"],
         zindex: 0,
         encode: {
           labels: {
             interactive: true,
             update: {
-              angle: { value: this.params["ylabel-angle"] },
+              angle: {
+                value:
+                  this.params["ylabel-angle"] ||
+                  defaultParams.get("ylabel-angle"),
+              },
               fill: { value: "var(--togostanza-label-font-color)" },
               font: {
                 value: css("--togostanza-font-family"),
@@ -318,7 +339,12 @@ export default class Barchart extends Stanza {
               encode: {
                 enter: {
                   x: { scale: "xscale", field: labelVariable },
-                  width: { scale: "xscale", band: this.params["bar-width"] },
+                  width: {
+                    scale: "xscale",
+                    band:
+                      this.params["bar-width"] ||
+                      defaultParams.get("bar-width"),
+                  },
                   y: { scale: "yscale", field: "y0" },
                   y2: { scale: "yscale", field: "y1" },
                   fill: { scale: "color", field: groupVariable },
