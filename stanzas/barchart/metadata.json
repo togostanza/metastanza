@@ -173,11 +173,6 @@
       "stanza:description": "Y label angle (in degree)"
     },
     {
-      "stanza:key": "ylabel-angle",
-      "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
-    },
-    {
       "stanza:key": "xlabel-padding",
       "stanza:type": "number",
       "stanza:example": 5,
