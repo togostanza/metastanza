@@ -83,12 +83,17 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
+    };
+
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
@@ -118,6 +123,11 @@ export default class ForceGraph extends Stanza {
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
+    const edgeParams = {
+      type: this.params["edge-type"] || "curved",
+      curveStrength: this.params["edge-curve-strength"] || 0,
+    };
+
     const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
 
     const params = {
@@ -127,10 +137,12 @@ export default class ForceGraph extends Stanza {
       svg,
       color,
       highlightAdjEdges,
+      nodesSortParams,
       nodeSizeParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
+      edgeParams,
       labelsParams,
       tooltipParams,
     };
