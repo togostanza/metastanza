@@ -909,7 +909,7 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": 400,
+		"stanza:example": 420,
 		"stanza:description": "Width in px",
 		"stanza:required": true
 	},
@@ -925,14 +925,12 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:description": "Initial node id",
 		"stanza:example": "6",
-		"stanza:default": "-1",
 		"stanza:required": false
 	},
 	{
 		"stanza:key": "root-node-label-text",
 		"stanza:type": "string",
 		"stanza:description": "Root node label text",
-		"stanza:default": "Home",
 		"stanza:example": "Home",
 		"stanza:required": false
 	},
@@ -940,7 +938,6 @@ var metadata = {
 		"stanza:key": "root-node-label-icon",
 		"stanza:type": "string",
 		"stanza:description": "Root node label icon (Font Awesome icon name)",
-		"stanza:default": "Home",
 		"stanza:example": "Home",
 		"stanza:required": false
 	},
@@ -948,7 +945,6 @@ var metadata = {
 		"stanza:key": "copy-icon",
 		"stanza:type": "string",
 		"stanza:description": "Copy icon (Font Awesome icon name)",
-		"stanza:default": "Copy",
 		"stanza:example": "Copy",
 		"stanza:required": true
 	},
@@ -956,7 +952,6 @@ var metadata = {
 		"stanza:key": "labels-data-key",
 		"stanza:type": "string",
 		"stanza:description": "Data key for labels",
-		"stanza:default": "label",
 		"stanza:example": "label",
 		"stanza:required": true
 	},
@@ -964,7 +959,6 @@ var metadata = {
 		"stanza:key": "breadcrumbs-corner-radius",
 		"stanza:type": "number",
 		"stanza:description": "Corner radius of breadcrumbs, in px",
-		"stanza:default": 3,
 		"stanza:example": 3,
 		"stanza:required": false
 	},
@@ -972,7 +966,6 @@ var metadata = {
 		"stanza:key": "breadcrumbs-arrow-length",
 		"stanza:type": "number",
 		"stanza:description": "Corner radius of breadcrumbs, in px",
-		"stanza:default": 10,
 		"stanza:example": 10,
 		"stanza:required": true
 	},
@@ -993,7 +986,6 @@ var metadata = {
 		"stanza:key": "show-copy-button",
 		"stanza:type": "boolean",
 		"stanza:example": false,
-		"stanza:default": false,
 		"stanza:description": "Show copy button",
 		"stanza:required": false
 	}
@@ -1051,7 +1043,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-label-background-color-hover",
 		"stanza:type": "color",
-		"stanza:default": "#396c7e",
+		"stanza:default": "#16ADE3",
 		"stanza:description": "Color the labels on mouseover"
 	},
 	{

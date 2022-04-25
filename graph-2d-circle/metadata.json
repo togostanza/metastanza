@@ -44,8 +44,21 @@
     {
       "stanza:key": "padding",
       "stanza:type": "number",
-      "stanza:example": 50,
+      "stanza:example": 60,
       "stanza:description": "Inner padding in px"
+    },
+    {
+      "stanza:key": "nodes-sort-by",
+      "stanza:type": "string",
+      "stanza:example": "group",
+      "stanza:description": "Sort nodes by this data key value"
+    },
+    {
+      "stanza:key": "nodes-sort-order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
+      "stanza:description": "Nodes sorting order"
     },
     {
       "stanza:key": "node-size-based-on",
@@ -63,21 +76,21 @@
       "stanza:description": "Set size on the node based on data key"
     },
     {
-      "stanza:key": "node-size-min-size",
+      "stanza:key": "node-min-size",
       "stanza:type": "number",
-      "stanza:example": 4,
+      "stanza:example": 3,
       "stanza:description": "Minimum node radius in px"
     },
     {
-      "stanza:key": "node-size-max-size",
+      "stanza:key": "node-max-size",
       "stanza:type": "number",
-      "stanza:example": 12,
+      "stanza:example": 6,
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-size-fixed-size",
+      "stanza:key": "node-fixed-size",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 3,
       "stanza:description": "Fixed node radius in px"
     },
     {
@@ -93,6 +106,19 @@
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
+    },
+    {
+      "stanza:key": "edge-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["line", "curve"],
+      "stanza:example": "curve",
+      "stanza:description": "Set edge type"
+    },
+    {
+      "stanza:key": "edge-curve-strength",
+      "stanza:type": "number",
+      "stanza:example": 25,
+      "stanza:description": "Set edge curve strength, in % of Radius"
     },
     {
       "stanza:key": "edge-width-based-on",
@@ -111,19 +137,19 @@
     {
       "stanza:key": "edge-min-width",
       "stanza:type": "number",
-      "stanza:example": 2,
+      "stanza:example": 0.5,
       "stanza:description": "Minimum edge width in px"
     },
     {
       "stanza:key": "edge-max-width",
       "stanza:type": "number",
-      "stanza:example": 6,
+      "stanza:example": 3,
       "stanza:description": "Maximum edge width in px"
     },
     {
       "stanza:key": "edge-fixed-width",
       "stanza:type": "number",
-      "stanza:example": 2,
+      "stanza:example": 0.5,
       "stanza:description": "Fixed edge width in px"
     },
     {
@@ -157,8 +183,8 @@
     {
       "stanza:key": "labels-margin",
       "stanza:type": "number",
-      "stanza:default": 15,
-      "stanza:example": 15,
+      "stanza:default": 5,
+      "stanza:example": 5,
       "stanza:description": "Node labels offset from node center, in px."
     },
     {
@@ -192,7 +218,7 @@
     {
       "stanza:key": "--togostanza-series-3-color",
       "stanza:type": "color",
-      "stanza:default": "#F5DA64",
+      "stanza:default": "#E6BB1A",
       "stanza:description": "Group color 3"
     },
     {
@@ -246,7 +272,7 @@
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": 0.5,
+      "stanza:default": 0,
       "stanza:description": "Border width"
     },
     {

@@ -113,8 +113,23 @@ function prepareGraphData (nodesC, edgesC, params) {
     nodeColorParams,
     edgeWidthParams,
     edgeColorParams,
+    nodesSortParams,
   } = params;
 
+  if (
+    nodesSortParams &&
+    nodesC.every((node) => node[nodesSortParams.sortBy] !== undefined)
+  ) {
+    nodesC.sort((a, b) => {
+      if (a[nodesSortParams.sortBy] > b[nodesSortParams.sortBy]) {
+        return nodesSortParams.sortOrder === "ascending" ? 1 : -1;
+      }
+      if (a[nodesSortParams.sortBy] < b[nodesSortParams.sortBy]) {
+        return nodesSortParams.sortOrder === "ascending" ? -1 : 1;
+      }
+      return 0;
+    });
+  }
   const nodeHash = {};
 
   const groupHash = {};
@@ -282,19 +297,22 @@ const get3DEdges = (edgesC) => {
  */
 const getGroupPlanes = (groupHash, planeParams) => {
   const groupIds = Object.keys(groupHash);
-  const { WIDTH, HEIGHT } = planeParams;
-  const groupColor = planeParams.color().domain(Object.keys(groupHash).sort());
+  const { WIDTH, groupPlaneColorParams } = planeParams;
+  const groupColor = planeParams.color().domain(groupIds.sort());
 
   function getGroupPlane(group) {
     const y = planeParams.yPointScale(group);
-    const LU = [-WIDTH / 2, y, -HEIGHT / 2];
-    const LD = [-WIDTH / 2, y, HEIGHT / 2];
-    const RD = [WIDTH / 2, y, HEIGHT / 2];
-    const RU = [WIDTH / 2, y, -HEIGHT / 2];
+    const LU = [-WIDTH / 2, y, -WIDTH / 2];
+    const LD = [-WIDTH / 2, y, WIDTH / 2];
+    const RD = [WIDTH / 2, y, WIDTH / 2];
+    const RU = [WIDTH / 2, y, -WIDTH / 2];
     const groupPlane = [LU, LD, RD, RU];
     groupPlane.group = groupHash[group];
     groupPlane.groupId = group;
-    groupPlane.color = groupColor(group);
+
+    groupPlane.color =
+      groupPlaneColorParams.basedOn === "fixed" ? null : groupColor(group);
+
     return groupPlane;
   }
 
@@ -302,4 +320,4 @@ const getGroupPlanes = (groupHash, planeParams) => {
 };
 
 export { getGroupPlanes as a, get3DEdges as g, prepareGraphData as p };
-//# sourceMappingURL=prepareGraphData-a1bbd783.js.map
+//# sourceMappingURL=prepareGraphData-e6f24e2e.js.map

@@ -3,7 +3,7 @@ import { S as Stanza } from './timer-1ca7e150.js';
 import { s as select } from './index-847f2a80.js';
 import { l as loadData } from './load-data-03ddc67c.js';
 import { T as ToolTip } from './ToolTip-23bc44c8.js';
-import { p as prepareGraphData } from './prepareGraphData-a1bbd783.js';
+import { p as prepareGraphData } from './prepareGraphData-e6f24e2e.js';
 import { p as point } from './band-6f9e71db.js';
 import { l as line$2 } from './line-620615aa.js';
 import { c as curveBasis } from './basis-0dde91c7.js';
@@ -78,9 +78,10 @@ function drawArcLayout (
       .text((d) => d[labelsParams.dataKey])
       .attr("alignment-baseline", "middle")
       .attr("transform", "rotate(90)")
-      .attr("x", labelsParams.margin)
+      .attr("x", (d) => d[symbols.nodeSizeSym] + labelsParams.margin)
       .attr("class", "label");
   }
+
   if (highlightAdjEdges) {
     nodeGroups.on("mouseover", function (e, d) {
       // highlight current node
@@ -202,12 +203,16 @@ class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
+    };
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
@@ -246,6 +251,7 @@ class ForceGraph extends Stanza {
       svg,
       color,
       highlightAdjEdges,
+      nodesSortParams,
       nodeSizeParams,
       nodeColorParams,
       edgeWidthParams,
@@ -310,15 +316,13 @@ var metadata = {
 	{
 		"stanza:key": "width",
 		"stanza:type": "number",
-		"stanza:example": 600,
-		"stanza:default": 600,
+		"stanza:example": 900,
 		"stanza:description": "Width in px"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
 		"stanza:example": 600,
-		"stanza:default": 600,
 		"stanza:description": "Height in px"
 	},
 	{
@@ -328,6 +332,22 @@ var metadata = {
 		"stanza:description": "Inner padding in px"
 	},
 	{
+		"stanza:key": "nodes-sort-by",
+		"stanza:type": "string",
+		"stanza:example": "group",
+		"stanza:description": "Sort nodes by this data key value"
+	},
+	{
+		"stanza:key": "nodes-sort-order",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"ascending",
+			"descending"
+		],
+		"stanza:example": "ascending",
+		"stanza:description": "Nodes sorting order"
+	},
+	{
 		"stanza:key": "node-size-based-on",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
@@ -335,7 +355,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "fixed",
-		"stanza:default": "fixed",
 		"stanza:required": true,
 		"stanza:description": "Set size of the node  data key"
 	},
@@ -346,21 +365,21 @@ var metadata = {
 		"stanza:description": "Set size on the node based on data key"
 	},
 	{
-		"stanza:key": "node-size-min-size",
+		"stanza:key": "node-min-size",
 		"stanza:type": "number",
 		"stanza:example": 4,
 		"stanza:description": "Minimum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-max-size",
+		"stanza:key": "node-max-size",
 		"stanza:type": "number",
 		"stanza:example": 12,
 		"stanza:description": "Maximum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-fixed-size",
+		"stanza:key": "node-fixed-size",
 		"stanza:type": "number",
-		"stanza:example": 5,
+		"stanza:example": 2,
 		"stanza:description": "Fixed node radius in px"
 	},
 	{
@@ -371,7 +390,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "data key",
-		"stanza:default": "data key",
 		"stanza:description": "Set color of the node  data key"
 	},
 	{
@@ -388,7 +406,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "fixed",
-		"stanza:default": "fixed",
 		"stanza:description": "Set edge width  data key"
 	},
 	{
@@ -400,19 +417,19 @@ var metadata = {
 	{
 		"stanza:key": "edge-min-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Minimum edge width in px"
 	},
 	{
 		"stanza:key": "edge-max-width",
 		"stanza:type": "number",
-		"stanza:example": 6,
+		"stanza:example": 3,
 		"stanza:description": "Maximum edge width in px"
 	},
 	{
 		"stanza:key": "edge-fixed-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Fixed edge width in px"
 	},
 	{
@@ -425,7 +442,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "source color",
-		"stanza:default": "source color",
 		"stanza:description": "Set color of the edge based on this"
 	},
 	{
@@ -438,21 +454,18 @@ var metadata = {
 		"stanza:key": "highlight-adjacent-edges",
 		"stanza:type": "boolean",
 		"stanza:example": true,
-		"stanza:default": false,
 		"stanza:description": "Highlight adjacent edges on node mouse hover"
 	},
 	{
 		"stanza:key": "labels-data-key",
 		"stanza:type": "string",
-		"stanza:default": "id",
 		"stanza:example": "id",
 		"stanza:description": "Node labels data key. If empty, no labels will be shown"
 	},
 	{
 		"stanza:key": "labels-margin",
 		"stanza:type": "number",
-		"stanza:default": 15,
-		"stanza:example": 15,
+		"stanza:example": 5,
 		"stanza:description": "Node labels offset from node center, in px."
 	},
 	{
@@ -486,7 +499,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#F5DA64",
+		"stanza:default": "#E6BB1A",
 		"stanza:description": "Group color 3"
 	},
 	{
@@ -512,6 +525,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Egdes default color"
+	},
+	{
+		"stanza:key": "--togostanza-edge-opacity",
+		"stanza:type": "number",
+		"stanza:default": 0.8,
+		"stanza:description": "Edge opacity"
 	},
 	{
 		"stanza:key": "--togostanza-font-family",
@@ -540,7 +559,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": 0.5,
+		"stanza:default": 0,
 		"stanza:description": "Border width"
 	},
 	{

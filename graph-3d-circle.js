@@ -4,7 +4,7 @@ import { s as select } from './index-847f2a80.js';
 import { _ as _3d } from './3d-7f166d8e.js';
 import { l as loadData } from './load-data-03ddc67c.js';
 import { T as ToolTip } from './ToolTip-23bc44c8.js';
-import { p as prepareGraphData, g as get3DEdges, a as getGroupPlanes } from './prepareGraphData-a1bbd783.js';
+import { p as prepareGraphData, g as get3DEdges, a as getGroupPlanes } from './prepareGraphData-e6f24e2e.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
 import { m as max } from './max-2c042256.js';
 import { d as drag } from './drag-c4f62c8c.js';
@@ -86,12 +86,29 @@ class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const constRarius = !!this.params["constant-radius"];
+
+    const groupPlaneColorParams = {
+      basedOn: this.params["group-plane-color-based-on"],
+      // default fixed color by css
+    };
+
+    const groupsSortParams = {
+      sortBy: this.params["group-planes-sort-by"],
+      sortOrder: this.params["group-planes-sort-order"] || "ascending",
+    };
+
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
+    };
+
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
@@ -127,6 +144,8 @@ class ForceGraph extends Stanza {
       color,
       highlightAdjEdges,
       nodeSizeParams,
+      nodesSortParams,
+      groupsSortParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
@@ -144,9 +163,9 @@ class ForceGraph extends Stanza {
       (d) => d[1].length
     );
 
-    const R = Math.min(WIDTH, HEIGHT) / 2;
+    const Rmax = (0.8 * WIDTH) / 2;
 
-    const arcLength = ((2 * Math.PI) / maxNodesInGroup) * R;
+    const arcLength = ((2 * Math.PI) / maxNodesInGroup) * Rmax;
 
     const origin = [MARGIN.LEFT + WIDTH / 2, MARGIN.TOP + HEIGHT / 2];
     const scale = 0.75;
@@ -186,7 +205,6 @@ class ForceGraph extends Stanza {
       .scale(scale)
       .origin(origin)
       .shape("LINE")
-
       .rotateY(startAngle)
       .rotateX(-startAngle);
 
@@ -206,7 +224,7 @@ class ForceGraph extends Stanza {
         .attr("class", "_3d")
         .classed("group-plane", true)
         .merge(planes)
-        .attr("fill", (d) => d.color)
+        .attr("style", (d) => `fill: ${d.color}`)
         .attr("d", plane3d.draw)
         .sort(plane3d.sort);
 
@@ -269,9 +287,18 @@ class ForceGraph extends Stanza {
       edgesWithCoords = get3DEdges(prepEdges);
 
       // Laying out nodes=========
-      const DEPTH = WIDTH;
-      const yPointScale = point([-DEPTH / 2, DEPTH / 2])
-        .domain(Object.keys(groupHash));
+      const DEPTH = HEIGHT;
+      const yPointScale = point([-DEPTH / 2, DEPTH / 2]).domain(
+        Object.keys(groupHash).sort((a, b) => {
+          if (a > b) {
+            return groupsSortParams.sortOrder === "ascending" ? 1 : -1;
+          }
+          if (a < b) {
+            return groupsSortParams.sortOrder === "ascending" ? -1 : 1;
+          }
+          return 0;
+        })
+      );
 
       Object.keys(groupHash).forEach((gKey) => {
         // Laying out nodes ===
@@ -282,7 +309,9 @@ class ForceGraph extends Stanza {
           .domain(group.map((node) => node.id))
           .range([0, Math.PI * 2 - (Math.PI * 2) / group.length]);
 
-        const R = arcLength / ((Math.PI * 2) / group.length);
+        const R = constRarius
+          ? Rmax
+          : arcLength / ((Math.PI * 2) / group.length);
 
         group.forEach((node) => {
           if (group.length === 1) {
@@ -304,6 +333,7 @@ class ForceGraph extends Stanza {
         DEPTH,
         color,
         yPointScale,
+        groupPlaneColorParams,
       });
 
       const data = [
@@ -553,7 +583,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "graph-3d-circle",
-	"stanza:label": "Graph 3d circle layout",
+	"stanza:label": "Graph 3D circle layout",
 	"stanza:definition": "Graph 3D Circle Layout MetaStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
@@ -593,7 +623,7 @@ var metadata = {
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": 600,
+		"stanza:example": 1000,
 		"stanza:description": "Height in px"
 	},
 	{
@@ -601,6 +631,38 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:example": 50,
 		"stanza:description": "Inner padding in px"
+	},
+	{
+		"stanza:key": "group-planes-sort-by",
+		"stanza:type": "string",
+		"stanza:example": "group",
+		"stanza:description": "Sort group planes by this data key value"
+	},
+	{
+		"stanza:key": "group-planes-sort-order",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"ascending",
+			"descending"
+		],
+		"stanza:example": "ascending",
+		"stanza:description": "Group planes sorting order"
+	},
+	{
+		"stanza:key": "nodes-sort-by",
+		"stanza:type": "string",
+		"stanza:example": "id",
+		"stanza:description": "Sort nodes by this data key value"
+	},
+	{
+		"stanza:key": "nodes-sort-order",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"ascending",
+			"descending"
+		],
+		"stanza:example": "ascending",
+		"stanza:description": "Nodes sorting order"
 	},
 	{
 		"stanza:key": "node-size-based-on",
@@ -616,25 +678,25 @@ var metadata = {
 	{
 		"stanza:key": "node-size-data-key",
 		"stanza:type": "string",
-		"stanza:example": "",
+		"stanza:example": "group",
 		"stanza:description": "Set size on the node based on data key"
 	},
 	{
-		"stanza:key": "node-size-min-size",
+		"stanza:key": "node-min-size",
 		"stanza:type": "number",
-		"stanza:example": 4,
+		"stanza:example": 3,
 		"stanza:description": "Minimum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-max-size",
+		"stanza:key": "node-max-size",
 		"stanza:type": "number",
-		"stanza:example": 12,
+		"stanza:example": 6,
 		"stanza:description": "Maximum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-fixed-size",
+		"stanza:key": "node-fixed-size",
 		"stanza:type": "number",
-		"stanza:example": 5,
+		"stanza:example": 3,
 		"stanza:description": "Fixed node radius in px"
 	},
 	{
@@ -674,19 +736,19 @@ var metadata = {
 	{
 		"stanza:key": "edge-min-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Minimum edge width in px"
 	},
 	{
 		"stanza:key": "edge-max-width",
 		"stanza:type": "number",
-		"stanza:example": 6,
+		"stanza:example": 3,
 		"stanza:description": "Maximum edge width in px"
 	},
 	{
 		"stanza:key": "edge-fixed-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Fixed edge width in px"
 	},
 	{
@@ -699,7 +761,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "source color",
-		"stanza:default": "source color",
 		"stanza:description": "Set color of the edge based on this"
 	},
 	{
@@ -709,23 +770,36 @@ var metadata = {
 		"stanza:description": "Set color of the edge based on this data key"
 	},
 	{
+		"stanza:key": "group-plane-color-based-on",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"data key",
+			"fixed"
+		],
+		"stanza:example": "fixed",
+		"stanza:description": "Set color of the group planes based on this data key"
+	},
+	{
+		"stanza:key": "constant-radius",
+		"stanza:type": "boolean",
+		"stanza:example": true,
+		"stanza:description": "Constant radius for all groups"
+	},
+	{
 		"stanza:key": "highlight-adjacent-edges",
 		"stanza:type": "boolean",
 		"stanza:example": true,
-		"stanza:default": false,
 		"stanza:description": "Highlight adjacent edges on node mouse hover"
 	},
 	{
 		"stanza:key": "highlight-group-planes",
 		"stanza:type": "boolean",
 		"stanza:example": true,
-		"stanza:default": false,
 		"stanza:description": "Highlight group planes on mouse hover"
 	},
 	{
 		"stanza:key": "nodes-tooltip-data-key",
 		"stanza:type": "string",
-		"stanza:default": "id",
 		"stanza:example": "id",
 		"stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
 	}
@@ -753,7 +827,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#F5DA64",
+		"stanza:default": "#E6BB1A",
 		"stanza:description": "Group color 3"
 	},
 	{
@@ -781,6 +855,12 @@ var metadata = {
 		"stanza:description": "Egdes default color"
 	},
 	{
+		"stanza:key": "--togostanza-default-plane-color",
+		"stanza:type": "color",
+		"stanza:default": "#333333",
+		"stanza:description": "Egdes default color"
+	},
+	{
 		"stanza:key": "--togostanza-font-family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica Neue",
@@ -795,7 +875,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": 0.5,
+		"stanza:default": 0,
 		"stanza:description": "Border width"
 	},
 	{

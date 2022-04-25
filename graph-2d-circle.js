@@ -3,8 +3,10 @@ import { S as Stanza } from './timer-1ca7e150.js';
 import { s as select } from './index-847f2a80.js';
 import { l as loadData } from './load-data-03ddc67c.js';
 import { T as ToolTip } from './ToolTip-23bc44c8.js';
-import { p as prepareGraphData } from './prepareGraphData-a1bbd783.js';
+import { p as prepareGraphData } from './prepareGraphData-e6f24e2e.js';
 import { p as point } from './band-6f9e71db.js';
+import { l as line$2 } from './line-620615aa.js';
+import { c as curveBasis } from './basis-0dde91c7.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
 import { o as ordinal } from './ordinal-0cb0fa8d.js';
 import './dsv-cde6fd06.js';
@@ -13,6 +15,9 @@ import './extent-14a1e8e9.js';
 import './linear-af9e44cc.js';
 import './descending-63ef45b8.js';
 import './range-e15c6861.js';
+import './array-89f97098.js';
+import './constant-c49047a5.js';
+import './path-a78af922.js';
 
 function drawCircleLayout (
   svg,
@@ -26,6 +31,7 @@ function drawCircleLayout (
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
+    edgeParams,
   }
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
@@ -50,18 +56,75 @@ function drawCircleLayout (
     .attr("id", "circleG")
     .attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
 
-  const links = circleG
-    .selectAll("path")
-    .data(edges)
-    .enter()
-    .append("line")
-    .attr("class", "link")
-    .style("stroke-width", (d) => d[symbols.edgeWidthSym])
-    .style("stroke", (d) => d[symbols.edgeColorSym])
-    .attr("x1", (d) => d[symbols.sourceNodeSym].x)
-    .attr("y1", (d) => d[symbols.sourceNodeSym].y)
-    .attr("x2", (d) => d[symbols.targetNodeSym].x)
-    .attr("y2", (d) => d[symbols.targetNodeSym].y);
+  let links;
+  let draw;
+
+  if (edgeParams.type === "line") {
+    links = circleG
+      .selectAll("path")
+      .data(edges)
+      .enter()
+      .append("line")
+      .attr("class", "link")
+      .style("stroke-width", (d) => d[symbols.edgeWidthSym])
+      .style("stroke", (d) => d[symbols.edgeColorSym])
+      .attr("x1", (d) => d[symbols.sourceNodeSym].x)
+      .attr("y1", (d) => d[symbols.sourceNodeSym].y)
+      .attr("x2", (d) => d[symbols.targetNodeSym].x)
+      .attr("y2", (d) => d[symbols.targetNodeSym].y);
+  } else if (edgeParams.type === "curve") {
+    draw = line$2().curve(curveBasis);
+
+    links = circleG
+      .selectAll("path")
+      .data(edges)
+      .enter()
+      .append("path")
+      .attr("class", "link")
+      .style("stroke-width", (d) => d[symbols.edgeWidthSym])
+      .style("stroke", (d) => d[symbols.edgeColorSym])
+      .attr("d", arc);
+  }
+
+  function movePoint(pointA, pointB, distance) {
+    // Move point a towards point b by distance
+    const vector = [pointB[0] - pointA[0], pointB[1] - pointA[1]];
+    const length = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+    const unitVector = [vector[0] / length, vector[1] / length];
+    return [
+      pointA[0] + unitVector[0] * distance,
+      pointA[1] + unitVector[1] * distance,
+    ];
+  }
+
+  function distance(a, b) {
+    return Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2));
+  }
+
+  function arc(d) {
+    const sourceX = d[symbols.sourceNodeSym].x;
+    const targetX = d[symbols.targetNodeSym].x;
+    const sourceY = d[symbols.sourceNodeSym].y;
+    const targetY = d[symbols.targetNodeSym].y;
+    const midX = (sourceX + targetX) / 2;
+    const midY = (sourceY + targetY) / 2;
+
+    const factor =
+      ((distance([sourceX, sourceY], [targetX, targetY]) / angleScale.step()) *
+        Math.PI) /
+      180;
+    const movedPoint = movePoint(
+      [midX, midY],
+      [WIDTH / 2, HEIGHT / 2],
+      (distance([midX, midY], [WIDTH / 2, HEIGHT / 2]) *
+        edgeParams.curveStrength *
+        1.5 *
+        factor) /
+        100
+    );
+
+    return draw([[sourceX, sourceY], [...movedPoint], [targetX, targetY]]);
+  }
 
   const nodeGroups = circleG
     .selectAll("g")
@@ -100,9 +163,9 @@ function drawCircleLayout (
       })
       .attr("x", (d) => {
         if (angleScale(d.id) > 90 && angleScale(d.id) < 270) {
-          return -labelsParams.margin;
+          return -labelsParams.margin - d[symbols.nodeSizeSym];
         }
-        return labelsParams.margin;
+        return labelsParams.margin + d[symbols.nodeSizeSym];
       })
       .attr("transform", (d) => {
         if (angleScale(d.id) > 90 && angleScale(d.id) < 270) {
@@ -218,12 +281,17 @@ class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const nodesSortParams = {
+      sortBy: this.params["nodes-sort-by"],
+      sortOrder: this.params["nodes-sort-order"] || "ascending",
+    };
+
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
@@ -253,6 +321,11 @@ class ForceGraph extends Stanza {
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
+    const edgeParams = {
+      type: this.params["edge-type"] || "curved",
+      curveStrength: this.params["edge-curve-strength"] || 0,
+    };
+
     const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
 
     const params = {
@@ -262,10 +335,12 @@ class ForceGraph extends Stanza {
       svg,
       color,
       highlightAdjEdges,
+      nodesSortParams,
       nodeSizeParams,
       nodeColorParams,
       edgeWidthParams,
       edgeColorParams,
+      edgeParams,
       labelsParams,
       tooltipParams,
     };
@@ -340,8 +415,24 @@ var metadata = {
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": 50,
+		"stanza:example": 60,
 		"stanza:description": "Inner padding in px"
+	},
+	{
+		"stanza:key": "nodes-sort-by",
+		"stanza:type": "string",
+		"stanza:example": "group",
+		"stanza:description": "Sort nodes by this data key value"
+	},
+	{
+		"stanza:key": "nodes-sort-order",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"ascending",
+			"descending"
+		],
+		"stanza:example": "ascending",
+		"stanza:description": "Nodes sorting order"
 	},
 	{
 		"stanza:key": "node-size-based-on",
@@ -362,21 +453,21 @@ var metadata = {
 		"stanza:description": "Set size on the node based on data key"
 	},
 	{
-		"stanza:key": "node-size-min-size",
+		"stanza:key": "node-min-size",
 		"stanza:type": "number",
-		"stanza:example": 4,
+		"stanza:example": 3,
 		"stanza:description": "Minimum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-max-size",
+		"stanza:key": "node-max-size",
 		"stanza:type": "number",
-		"stanza:example": 12,
+		"stanza:example": 6,
 		"stanza:description": "Maximum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-fixed-size",
+		"stanza:key": "node-fixed-size",
 		"stanza:type": "number",
-		"stanza:example": 5,
+		"stanza:example": 3,
 		"stanza:description": "Fixed node radius in px"
 	},
 	{
@@ -395,6 +486,22 @@ var metadata = {
 		"stanza:type": "string",
 		"stanza:example": "group",
 		"stanza:description": "Set color of the node based on data key"
+	},
+	{
+		"stanza:key": "edge-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"line",
+			"curve"
+		],
+		"stanza:example": "curve",
+		"stanza:description": "Set edge type"
+	},
+	{
+		"stanza:key": "edge-curve-strength",
+		"stanza:type": "number",
+		"stanza:example": 25,
+		"stanza:description": "Set edge curve strength, in % of Radius"
 	},
 	{
 		"stanza:key": "edge-width-based-on",
@@ -416,19 +523,19 @@ var metadata = {
 	{
 		"stanza:key": "edge-min-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Minimum edge width in px"
 	},
 	{
 		"stanza:key": "edge-max-width",
 		"stanza:type": "number",
-		"stanza:example": 6,
+		"stanza:example": 3,
 		"stanza:description": "Maximum edge width in px"
 	},
 	{
 		"stanza:key": "edge-fixed-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Fixed edge width in px"
 	},
 	{
@@ -467,8 +574,8 @@ var metadata = {
 	{
 		"stanza:key": "labels-margin",
 		"stanza:type": "number",
-		"stanza:default": 15,
-		"stanza:example": 15,
+		"stanza:default": 5,
+		"stanza:example": 5,
 		"stanza:description": "Node labels offset from node center, in px."
 	},
 	{
@@ -502,7 +609,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#F5DA64",
+		"stanza:default": "#E6BB1A",
 		"stanza:description": "Group color 3"
 	},
 	{
@@ -556,7 +663,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": 0.5,
+		"stanza:default": 0,
 		"stanza:description": "Border width"
 	},
 	{

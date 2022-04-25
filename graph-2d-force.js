@@ -5,7 +5,7 @@ import { l as loadData } from './load-data-03ddc67c.js';
 import { T as ToolTip } from './ToolTip-23bc44c8.js';
 import { f as forceSimulation, d as forceManyBody, a as forceCenter, e as forceLink, b as forceCollide } from './manyBody-15224179.js';
 import { d as drag } from './drag-c4f62c8c.js';
-import { p as prepareGraphData } from './prepareGraphData-a1bbd783.js';
+import { p as prepareGraphData } from './prepareGraphData-e6f24e2e.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
 import { o as ordinal } from './ordinal-0cb0fa8d.js';
 import './dsv-cde6fd06.js';
@@ -116,9 +116,11 @@ function drawForceLayout (
   if (labelsParams.dataKey !== "" && nodes[0][labelsParams.dataKey]) {
     nodeGroups
       .append("text")
-      .attr("dx", labelsParams.margin)
+      .attr("x", 0)
+      .attr("dy", (d) => labelsParams.margin + d[symbols.nodeSizeSym])
       .attr("class", "label")
-      .attr("alignment-baseline", "middle")
+      .attr("alignment-baseline", "hanging")
+      .attr("text-anchor", "middle")
       .text((d) => d[labelsParams.dataKey]);
   }
 
@@ -267,9 +269,9 @@ class ForceGraph extends Stanza {
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-size-fixed-size"] || 3,
-      minSize: this.params["node-size-min-size"],
-      maxSize: this.params["node-size-max-size"],
+      fixedSize: this.params["node-fixed-size"] || 3,
+      minSize: this.params["node-min-size"],
+      maxSize: this.params["node-max-size"],
     };
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
@@ -375,20 +377,18 @@ var metadata = {
 		"stanza:key": "width",
 		"stanza:type": "number",
 		"stanza:example": 600,
-		"stanza:default": 600,
 		"stanza:description": "Width in px"
 	},
 	{
 		"stanza:key": "height",
 		"stanza:type": "number",
-		"stanza:example": 600,
-		"stanza:default": 600,
+		"stanza:example": 800,
 		"stanza:description": "Height in px"
 	},
 	{
 		"stanza:key": "padding",
 		"stanza:type": "number",
-		"stanza:example": 50,
+		"stanza:example": 20,
 		"stanza:description": "Inner padding in px"
 	},
 	{
@@ -399,7 +399,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "fixed",
-		"stanza:default": "fixed",
 		"stanza:required": true,
 		"stanza:description": "Set size of the node  data key"
 	},
@@ -410,21 +409,21 @@ var metadata = {
 		"stanza:description": "Set size on the node based on data key"
 	},
 	{
-		"stanza:key": "node-size-min-size",
+		"stanza:key": "node-min-size",
 		"stanza:type": "number",
-		"stanza:example": 4,
+		"stanza:example": 3,
 		"stanza:description": "Minimum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-max-size",
+		"stanza:key": "node-max-size",
 		"stanza:type": "number",
-		"stanza:example": 12,
+		"stanza:example": 6,
 		"stanza:description": "Maximum node radius in px"
 	},
 	{
-		"stanza:key": "node-size-fixed-size",
+		"stanza:key": "node-fixed-size",
 		"stanza:type": "number",
-		"stanza:example": 5,
+		"stanza:example": 3,
 		"stanza:description": "Fixed node radius in px"
 	},
 	{
@@ -435,7 +434,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "data key",
-		"stanza:default": "data key",
 		"stanza:description": "Set color of the node  data key"
 	},
 	{
@@ -452,7 +450,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "fixed",
-		"stanza:default": "fixed",
 		"stanza:description": "Set edge width  data key"
 	},
 	{
@@ -464,19 +461,19 @@ var metadata = {
 	{
 		"stanza:key": "edge-min-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Minimum edge width in px"
 	},
 	{
 		"stanza:key": "edge-max-width",
 		"stanza:type": "number",
-		"stanza:example": 6,
+		"stanza:example": 3,
 		"stanza:description": "Maximum edge width in px"
 	},
 	{
 		"stanza:key": "edge-fixed-width",
 		"stanza:type": "number",
-		"stanza:example": 2,
+		"stanza:example": 0.5,
 		"stanza:description": "Fixed edge width in px"
 	},
 	{
@@ -489,7 +486,6 @@ var metadata = {
 			"fixed"
 		],
 		"stanza:example": "source color",
-		"stanza:default": "source color",
 		"stanza:description": "Set color of the edge based on this"
 	},
 	{
@@ -502,27 +498,23 @@ var metadata = {
 		"stanza:key": "highlight-adjacent-edges",
 		"stanza:type": "boolean",
 		"stanza:example": true,
-		"stanza:default": false,
 		"stanza:description": "Highlight adjacent edges on node mouse hover"
 	},
 	{
 		"stanza:key": "labels-data-key",
 		"stanza:type": "string",
-		"stanza:default": "id",
 		"stanza:example": "id",
 		"stanza:description": "Node labels data key. If empty, no labels will be shown"
 	},
 	{
 		"stanza:key": "labels-margin",
 		"stanza:type": "number",
-		"stanza:default": 15,
-		"stanza:example": 15,
+		"stanza:example": 3,
 		"stanza:description": "Node labels offset from node center, in px."
 	},
 	{
 		"stanza:key": "nodes-tooltip-data-key",
 		"stanza:type": "string",
-		"stanza:default": "id",
 		"stanza:example": "id",
 		"stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
 	}
@@ -550,7 +542,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#F5DA64",
+		"stanza:default": "#E6BB1A",
 		"stanza:description": "Group color 3"
 	},
 	{
@@ -576,6 +568,12 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Egdes default color"
+	},
+	{
+		"stanza:key": "--togostanza-edge-opacity",
+		"stanza:type": "number",
+		"stanza:default": 0.8,
+		"stanza:description": "Edge default opacity"
 	},
 	{
 		"stanza:key": "--togostanza-font-family",
@@ -604,7 +602,7 @@ var metadata = {
 	{
 		"stanza:key": "--togostanza-border-width",
 		"stanza:type": "number",
-		"stanza:default": 0.5,
+		"stanza:default": 0,
 		"stanza:description": "Border width"
 	},
 	{

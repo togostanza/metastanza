@@ -17,7 +17,7 @@ svg {
 
 .link {
   transition: all 0.2s ease-in-out;
-  stroke-opacity: 0.5;
+  stroke-opacity: var(--togostanza-edge-opacity);
   stroke-linecap: round;
   fill: none;
   stroke: var(--togostanza-default-edge-color);
@@ -39,10 +39,10 @@ svg {
 
 .fadeout {
   transition: all 0.1s ease-in-out;
-  opacity: 0.1;
+  opacity: 0.05;
 }
 .fadeout > .link {
-  stroke-opacity: 0.1;
+  stroke-opacity: 0.05;
 }
 
 .half-active {

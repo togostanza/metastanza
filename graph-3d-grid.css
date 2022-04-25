@@ -1,3 +1,7 @@
+main {
+  font-family: var(--togostanza-font-family);
+}
+
 svg {
   background-color: var(--togostanza-background-color);
 }
@@ -44,39 +48,36 @@ svg {
   pointer-events: none;
 }
 .link.dashed {
-  stroke-dasharray: 5;
+  stroke-dasharray: 2;
 }
 .link.active {
-  opacity: 1;
   stroke-opacity: 1;
-  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
 }
 .link.half-active {
-  opacity: 0.5;
-  stroke-opacity: 0.5;
+  stroke-opacity: 1;
 }
 .link.fadeout {
-  opacity: 0.1;
-  stroke-opacity: 0.1;
+  stroke-opacity: 0.01;
 }
 
 .group-plane {
-  opacity: 0.2;
+  opacity: 0.05;
   stroke: var(--togostanza-border-color);
   stroke-linejoin: round;
   stroke-width: calc(var(--togostanza-border-width) * 1.5px);
+  fill: var(--togostanza-default-plane-color);
   stroke-opacity: 0.2;
 }
 .group-plane.active {
-  stroke-opacity: 0.7;
-  opacity: 0.75;
+  stroke-opacity: 0.1;
+  opacity: 0.1;
   stroke-width: calc(var(--togostanza-border-width) * 4px);
 }
 .group-plane.half-active {
-  stroke-opacity: 0.4;
-  opacity: 0.4;
+  stroke-opacity: 0.05;
+  opacity: 0.05;
   stroke-width: calc(var(--togostanza-border-width) * 2.5px);
 }
 .group-plane.fadeout {
-  opacity: 0.1;
+  opacity: 0.01;
 }
