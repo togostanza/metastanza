@@ -1,0 +1,12 @@
+{
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "tooltips_data-key",
+        "stanza:type": "text",
+        "stanza:example": "count",
+        "stanza:description": "Data key to show tooltips. No tooltips are shown if empty"
+      }
+    ]
+  }
+}

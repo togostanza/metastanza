@@ -1,0 +1,23 @@
+{
+  "@id": "barchart-d3",
+  "stanza:label": "Barchart-D3",
+  "stanza:definition": "Barchart-D3 MetaStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
+  "stanza:created": "2021-01-18",
+  "stanza:updated": "2021-02-16",
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "chart-type",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["stacked", "grouped"],
+        "stanza:example": "stacked",
+        "stanza:description": "Type of barchart",
+        "stanza:required": true
+      }
+    ]
+  }
+}

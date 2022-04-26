@@ -15,6 +15,13 @@
         "stanza:description": "Show this axis"
       },
       {
+        "stanza:key": "axis_y_axis-placement",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["left", "right"],
+        "stanza:example": "left",
+        "stanza:description": "Axis placement"
+      },
+      {
         "stanza:key": "axis_y_scale",
         "stanza:type": "single-choice",
         "stanza:choice": ["linear", "ordinal", "log10", "time"],

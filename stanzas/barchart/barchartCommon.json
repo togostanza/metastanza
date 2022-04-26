@@ -1,0 +1,14 @@
+{
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "chart-type",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["stacked", "grouped"],
+        "stanza:example": "stacked",
+        "stanza:description": "Type of barchart",
+        "stanza:required": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-series_group-by_data-key",
+      "stanza:example": "id"
+    }
+  ],
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza_theme_series-0-color",
+      "stanza:default": "aquamarine"
+    }
+  ]
+}

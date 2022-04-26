@@ -2,18 +2,7 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "barchart",
-  "stanza:label": "Barchart",
-  "stanza:definition": "Barchart MetaStanza",
-  "stanza:type": "Stanza",
-  "stanza:display": "Chart",
-  "stanza:provider": "TogoStanza",
-  "stanza:license": "MIT",
-  "stanza:author": "DBCLS",
-  "stanza:address": "https://github.com/togostanza/metastanza",
-  "stanza:contributor": ["PENQE", "Einishi Tech"],
-  "stanza:created": "2020-11-06",
-  "stanza:updated": "2020-11-06",
+
   "stanza:parameter": [
     {
       "stanza:key": "data_url",
