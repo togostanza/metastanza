@@ -36,7 +36,7 @@ try {
   merged["stanza:style"] = mergedWithExamplesStyles;
 
   const mergedJSON = JSON.stringify(merged, null, 2);
-  fs.writeFileSync("metadata.json", mergedJSON);
+  fs.writeFileSync("metadata-new.json", mergedJSON);
   console.log("Done merging");
 } catch (error) {
   console.error(error);

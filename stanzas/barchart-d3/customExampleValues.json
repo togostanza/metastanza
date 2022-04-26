@@ -8,7 +8,8 @@
   "stanza:style": [
     {
       "stanza:key": "--togostanza_theme_series-0-color",
-      "stanza:default": "aquamarine"
+      "stanza:default": "aquamarine",
+      "new_prop": "aquamarine"
     }
   ]
 }
