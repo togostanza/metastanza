@@ -1,0 +1,115 @@
+{
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "axis_x_data-key",
+        "stanza:type": "text",
+        "stanza:example": "category",
+        "stanza:description": "What key in data to use",
+        "stanza:required": true
+      },
+      {
+        "stanza:key": "axis_x_show",
+        "stanza:type": "boolean",
+        "stanza:example": true,
+        "stanza:description": "Show this axis"
+      },
+      {
+        "stanza:key": "axis_x_axis-placement",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["bottom", "top"],
+        "stanza:example": "bottom",
+        "stanza:description": "Axis placement"
+      },
+      {
+        "stanza:key": "axis_x_scale",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["linear", "ordinal", "log10", "time"],
+        "stanza:example": "linear",
+        "stanza:description": "Scale type"
+      },
+      {
+        "stanza:key": "axis_x_range-min",
+        "stanza:type": "number",
+        "stanza:example": 0,
+        "stanza:description": "Axis range minimum value"
+      },
+      {
+        "stanza:key": "axis_x_range-max",
+        "stanza:type": "number",
+        "stanza:description": "Axis range maximum value"
+      },
+      {
+        "stanza:key": "axis_x_title",
+        "stanza:example": "chromosome",
+        "stanza:description": "Axis title"
+      },
+      {
+        "stanza:key": "axis_x_title-padding",
+        "stanza:example": 7,
+        "stanza:description": "Axis title padding"
+      },
+      {
+        "stanza:key": "axis_x_ticks-interval",
+        "stanza:example": 1,
+        "stanza:description": "Axis ticks interval"
+      },
+      {
+        "stanza:key": "axis_x_ticks-interval-units",
+        "stanza:type": "single-choice",
+        "stanza:choice": [
+          "none",
+          "ms",
+          "s",
+          "minutes",
+          "hours",
+          "days",
+          "weeks",
+          "months",
+          "years"
+        ],
+        "stanza:example": "none",
+        "stanza:description": "Axis ticks interval units"
+      },
+      {
+        "stanza:key": "axis_x_labels-format",
+        "stanza:type": "text",
+        "stanza:example": ".2f",
+        "stanza:description": "Axis labels format"
+      },
+      {
+        "stanza:key": "axis_x_gridlines-interval",
+        "stanza:example": 1,
+        "stanza:type": "number",
+        "stanza:description": "Axis gridlines interval"
+      },
+      {
+        "stanza:key": "axis_x_gridlines-interval-units",
+        "stanza:type": "single-choice",
+        "stanza:choice": [
+          "none",
+          "ms",
+          "s",
+          "minutes",
+          "hours",
+          "days",
+          "weeks",
+          "months",
+          "years"
+        ],
+        "stanza:example": "none",
+        "stanza:description": "Axis gridlines interval units"
+      }
+    ]
+  },
+  "stanza:style": {
+    "$append": [
+      {
+        "stanza:key": "--togostanza_axis_x_width",
+        "stanza:type": "number",
+        "stanza:default": 1,
+        "stanza:description": "Axis width"
+      }
+    ]
+  }
+}

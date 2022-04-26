@@ -1,390 +1,381 @@
 {
-  "@context": {
-    "stanza": "http://togostanza.org/resource/stanza#"
-  },
-  "@id": "barchart",
-  "stanza:label": "Barchart",
-  "stanza:definition": "Barchart MetaStanza",
-  "stanza:type": "Stanza",
-  "stanza:display": "Chart",
-  "stanza:provider": "TogoStanza",
-  "stanza:license": "MIT",
-  "stanza:author": "DBCLS",
-  "stanza:address": "https://github.com/togostanza/metastanza",
-  "stanza:contributor": ["PENQE"],
-  "stanza:created": "2020-11-06",
-  "stanza:updated": "2020-11-06",
-  "stanza:parameter": [
-    {
-      "stanza:key": "chart-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["stacked", "grouped"],
-      "stanza:example": "stacked",
-      "stanza:description": "Type of barchart",
-      "stanza:required": true
+    "@context": {
+        "stanza": "http://togostanza.org/resource/stanza#"
     },
-    {
-      "stanza:key": "data-url",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
-      "stanza:description": "Data source URL",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
-      "stanza:description": "Data type",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "category",
-      "stanza:example": "chromosome",
-      "stanza:description": "Variable to be assigned as category",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "value",
-      "stanza:example": "count",
-      "stanza:description": "Variable to be assigned as value",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "group-by",
-      "stanza:example": "category",
-      "stanza:description": "Variable to be assigned as group",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "category-title",
-      "stanza:example": "",
-      "stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "value-title",
-      "stanza:example": "",
-      "stanza:description": "Title for value variable (In case of blank, 'value' variable name will be assigned)",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "legend-title",
-      "stanza:example": "",
-      "stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "custom-css-url",
-      "stanza:example": "",
-      "stanza:description": "Stylesheet(css file) URL to override current style",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 400,
-      "stanza:description": "Width"
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 300,
-      "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Padding"
-    },
-    {
-      "stanza:key": "padding-inner",
-      "stanza:type": "number",
-      "stanza:example": 0.1,
-      "stanza:description": "Padding between each bars (0-1)"
-    },
-    {
-      "stanza:key": "padding-outer",
-      "stanza:example": 0.4,
-      "stanza:description": "Padding outside of bar group (0-1)"
-    },
-    {
-      "stanza:key": "xaxis-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
-      "stanza:description": "X axis placement"
-    },
-    {
-      "stanza:key": "yaxis-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
-      "stanza:description": "Y axis placement"
-    },
-    {
-      "stanza:key": "xgrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X grid"
-    },
-    {
-      "stanza:key": "ygrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y grid"
-    },
-    {
-      "stanza:key": "xtick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X tick"
-    },
-    {
-      "stanza:key": "ytick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y tick"
-    },
-    {
-      "stanza:key": "xlabel-max-width",
-      "stanza:type": "number",
-      "stanza:example": 200,
-      "stanza:description": "Max width of each X label"
-    },
-    {
-      "stanza:key": "ylabel-max-width",
-      "stanza:type": "number",
-      "stanza:example": 200,
-      "stanza:description": "Max width of each Y label"
-    },
-    {
-      "stanza:key": "xlabel-angle",
-      "stanza:example": 0,
-      "stanza:description": "X label angle (in degree)"
-    },
-    {
-      "stanza:key": "ylabel-angle",
-      "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
-    },
-    {
-      "stanza:key": "ylabel-angle",
-      "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
-    },
-    {
-      "stanza:key": "xlabel-padding",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "Padding between X label and tick"
-    },
-    {
-      "stanza:key": "ylabel-padding",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "Padding between Y label and tick"
-    },
-    {
-      "stanza:key": "xlabel-alignment",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:example": "left",
-      "stanza:description": "X label alignment"
-    },
-    {
-      "stanza:key": "ylabel-alignment",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:example": "right",
-      "stanza:description": "Y label alignment"
-    },
-    {
-      "stanza:key": "xtitle-padding",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Padding between X title and label"
-    },
-    {
-      "stanza:key": "ytitle-padding",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Padding between Y title and label"
-    },
-    {
-      "stanza:key": "bar-width",
-      "stanza:example": 0.8,
-      "stanza:description": "Bar width (0-1)"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show legend"
-    },
-    {
-      "stanza:key": "legend-padding",
-      "stanza:type": "number",
-      "stanza:example": 18,
-      "stanza:description": "Padding between chart and legend"
-    }
-  ],
-  "stanza:menu-placement": "bottom-right",
-  "stanza:style": [
-    {
-      "stanza:key": "--togostanza-series-0-color",
-      "stanza:type": "color",
-      "stanza:default": "#6590e6",
-      "stanza:description": "Group color 0"
-    },
-    {
-      "stanza:key": "--togostanza-series-1-color",
-      "stanza:type": "color",
-      "stanza:default": "#3ac9b6",
-      "stanza:description": "Group color 1"
-    },
-    {
-      "stanza:key": "--togostanza-series-2-color",
-      "stanza:type": "color",
-      "stanza:default": "#9ede2f",
-      "stanza:description": "Group color 2"
-    },
-    {
-      "stanza:key": "--togostanza-series-3-color",
-      "stanza:type": "color",
-      "stanza:default": "#F5DA64",
-      "stanza:description": "Group color 3"
-    },
-    {
-      "stanza:key": "--togostanza-series-4-color",
-      "stanza:type": "color",
-      "stanza:default": "#F57F5B",
-      "stanza:description": "Group color 4"
-    },
-    {
-      "stanza:key": "--togostanza-series-5-color",
-      "stanza:type": "color",
-      "stanza:default": "#F75976",
-      "stanza:description": "Group color 5"
-    },
-    {
-      "stanza:key": "--togostanza-font-family",
-      "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family"
-    },
-    {
-      "stanza:key": "--togostanza-axis-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Axis color"
-    },
-    {
-      "stanza:key": "--togostanza-axis-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Axis width"
-    },
-    {
-      "stanza:key": "--togostanza-grid-color",
-      "stanza:type": "color",
-      "stanza:default": "#aeb3bf",
-      "stanza:description": "Grid color"
-    },
-    {
-      "stanza:key": "--togostanza-grid-dash-length",
-      "stanza:type": "number",
-      "stanza:default": "",
-      "stanza:description": "Grid dash length (Blank for solid lines)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Grid opacity (0-1)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Grid width"
-    },
-    {
-      "stanza:key": "--togostanza-tick-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Tick color"
-    },
-    {
-      "stanza:key": "--togostanza-tick-length",
-      "stanza:type": "number",
-      "stanza:default": 1.5,
-      "stanza:description": "Tick length (in pixel)"
-    },
-    {
-      "stanza:key": "--togostanza-tick-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Tick width (in pixel)"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 10,
-      "stanza:description": "Label font size"
-    },
-    {
-      "stanza:key": "--togostanza-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
-    },
-    {
-      "stanza:key": "--togostanza-border-width",
-      "stanza:type": "number",
-      "stanza:default": 0.5,
-      "stanza:description": "Border width"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Title font color"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-size",
-      "stanza:type": "number",
-      "stanza:default": 12,
-      "stanza:description": "Title font size"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-weight",
-      "stanza:type": "number",
-      "stanza:default": 400,
-      "stanza:description": "Title font weight"
-    },
-    {
-      "stanza:key": "--togostanza-background-color",
-      "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
-    },
-    {
-      "stanza:key": "--togostanza-background-color",
-      "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
-    }
-  ]
+    "@id": "barchart",
+    "stanza:label": "Barchart",
+    "stanza:definition": "Barchart MetaStanza",
+    "stanza:type": "Stanza",
+    "stanza:display": "Chart",
+    "stanza:provider": "TogoStanza",
+    "stanza:license": "MIT",
+    "stanza:author": "DBCLS",
+    "stanza:address": "https://github.com/togostanza/metastanza",
+    "stanza:contributor": [
+        "PENQE",
+        "Einishi Tech"
+    ],
+    "stanza:created": "2020-11-06",
+    "stanza:updated": "2020-11-06",
+    "stanza:parameter": [
+        {
+            "stanza:key": "data_url",
+            "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+            "stanza:description": "Data source URL",
+            "stanza:required": true
+        },
+        {
+            "stanza:key": "data_type",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "json",
+                "tsv",
+                "csv",
+                "sparql-results-json"
+            ],
+            "stanza:example": "json",
+            "stanza:description": "Data type",
+            "stanza:required": true
+        },
+        {
+            "stanza:key": "misc_custom-css-url",
+            "stanza:example": "",
+            "stanza:description": "Stylesheet(css file) URL to override current style",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_x_data-key",
+            "stanza:type": "text",
+            "stanza:example": "category",
+            "stanza:description": "What key in data to use",
+            "stanza:required": true
+        },
+        {
+            "stanza:key": "axis_x_show",
+            "stanza:type": "boolean",
+            "stanza:example": true,
+            "stanza:description": "Show this axis"
+        },
+        {
+            "stanza:key": "axis_x_axis-placement",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "bottom",
+                "top"
+            ],
+            "stanza:example": "bottom",
+            "stanza:description": "Axis placement"
+        },
+        {
+            "stanza:key": "axis_x_scale",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "linear",
+                "ordinal",
+                "log10",
+                "time"
+            ],
+            "stanza:example": "linear",
+            "stanza:description": "Scale type"
+        },
+        {
+            "stanza:key": "axis_x_range-min",
+            "stanza:type": "number",
+            "stanza:example": 0,
+            "stanza:description": "Axis range minimum value"
+        },
+        {
+            "stanza:key": "axis_x_range-max",
+            "stanza:type": "number",
+            "stanza:description": "Axis range maximum value"
+        },
+        {
+            "stanza:key": "axis_x_title",
+            "stanza:example": "chromosome",
+            "stanza:description": "Axis title"
+        },
+        {
+            "stanza:key": "axis_x_title-padding",
+            "stanza:example": 7,
+            "stanza:description": "Axis title padding"
+        },
+        {
+            "stanza:key": "axis_x_ticks-interval",
+            "stanza:example": 1,
+            "stanza:description": "Axis ticks interval"
+        },
+        {
+            "stanza:key": "axis_x_ticks-interval-units",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "none",
+                "ms",
+                "s",
+                "minutes",
+                "hours",
+                "days",
+                "weeks",
+                "months",
+                "years"
+            ],
+            "stanza:example": "none",
+            "stanza:description": "Axis ticks interval units"
+        },
+        {
+            "stanza:key": "axis_x_labels-format",
+            "stanza:type": "text",
+            "stanza:example": ".2f",
+            "stanza:description": "Axis labels format"
+        },
+        {
+            "stanza:key": "axis_x_gridlines-interval",
+            "stanza:example": 1,
+            "stanza:type": "number",
+            "stanza:description": "Axis gridlines interval"
+        },
+        {
+            "stanza:key": "axis_x_gridlines-interval-units",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "none",
+                "ms",
+                "s",
+                "minutes",
+                "hours",
+                "days",
+                "weeks",
+                "months",
+                "years"
+            ],
+            "stanza:example": "none",
+            "stanza:description": "Axis gridlines interval units"
+        },
+        {
+            "stanza:key": "axis_y_data-key",
+            "stanza:type": "text",
+            "stanza:example": "category",
+            "stanza:description": "What key in data to use",
+            "stanza:required": true
+        },
+        {
+            "stanza:key": "axis_y_show",
+            "stanza:type": "boolean",
+            "stanza:example": true,
+            "stanza:description": "Show this axis"
+        },
+        {
+            "stanza:key": "axis_y_scale",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "linear",
+                "ordinal",
+                "log10",
+                "time"
+            ],
+            "stanza:example": "linear",
+            "stanza:description": "Scale type"
+        },
+        {
+            "stanza:key": "axis_y_range-min",
+            "stanza:type": "number",
+            "stanza:example": 0,
+            "stanza:description": "Axis range minimum value",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_range-max",
+            "stanza:type": "number",
+            "stanza:description": "Axis range maximum value",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_title",
+            "stanza:example": "chromosome",
+            "stanza:description": "Axis title",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_title-padding",
+            "stanza:example": 7,
+            "stanza:description": "Axis title padding",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_ticks-interval",
+            "stanza:example": 1,
+            "stanza:description": "Axis ticks interval",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_ticks-interval-units",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "none",
+                "ms",
+                "s",
+                "minutes",
+                "hours",
+                "days",
+                "weeks",
+                "months",
+                "years"
+            ],
+            "stanza:example": "none",
+            "stanza:description": "Axis ticks interval units"
+        },
+        {
+            "stanza:key": "axis_y_labels-format",
+            "stanza:type": "text",
+            "stanza:example": ".2f",
+            "stanza:description": "Axis labels format",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_gridlines-interval",
+            "stanza:example": 1,
+            "stanza:type": "number",
+            "stanza:description": "Axis gridlines interval",
+            "stanza:required": false
+        },
+        {
+            "stanza:key": "axis_y_gridlines-interval-units",
+            "stanza:type": "single-choice",
+            "stanza:choice": [
+                "none",
+                "ms",
+                "s",
+                "minutes",
+                "hours",
+                "days",
+                "weeks",
+                "months",
+                "years"
+            ],
+            "stanza:example": "none",
+            "stanza:description": "Axis gridlines interval units"
+        }
+    ],
+    "stanza:menu-placement": "bottom-right",
+    "stanza:style": [
+        {
+            "stanza:key": "--togostanza_theme_series-0-color",
+            "stanza:type": "color",
+            "stanza:default": "#6590e6",
+            "stanza:description": "Group color 0"
+        },
+        {
+            "stanza:key": "--togostanza_theme_series-1-color",
+            "stanza:type": "color",
+            "stanza:default": "#3ac9b6",
+            "stanza:description": "Group color 1"
+        },
+        {
+            "stanza:key": "--togostanza_theme_series-2-color",
+            "stanza:type": "color",
+            "stanza:default": "#9ede2f",
+            "stanza:description": "Group color 2"
+        },
+        {
+            "stanza:key": "--togostanza_theme_series-3-color",
+            "stanza:type": "color",
+            "stanza:default": "#F5DA64",
+            "stanza:description": "Group color 3"
+        },
+        {
+            "stanza:key": "--togostanza_theme_series-4-color",
+            "stanza:type": "color",
+            "stanza:default": "#F57F5B",
+            "stanza:description": "Group color 4"
+        },
+        {
+            "stanza:key": "--togostanza_theme_series-5-color",
+            "stanza:type": "color",
+            "stanza:default": "#F75976",
+            "stanza:description": "Group color 5"
+        },
+        {
+            "stanza:key": "--togostanza_fonts_font-family",
+            "stanza:type": "text",
+            "stanza:default": "Helvetica Neue",
+            "stanza:description": "Font family"
+        },
+        {
+            "stanza:key": "--togostanza_fonts_font-color",
+            "stanza:type": "color",
+            "stanza:default": "#4E5059",
+            "stanza:description": "Font color"
+        },
+        {
+            "stanza:key": "--togostanza_fonts_font-size-primary",
+            "stanza:type": "number",
+            "stanza:default": 12,
+            "stanza:description": "Primary font size"
+        },
+        {
+            "stanza:key": "--togostanza_fonts_font-size-secondary",
+            "stanza:type": "number",
+            "stanza:default": 9,
+            "stanza:description": "Secondary font size"
+        },
+        {
+            "stanza:key": "--togostanza_outline_width",
+            "stanza:type": "number",
+            "stanza:default": 300,
+            "stanza:description": "Width"
+        },
+        {
+            "stanza:key": "--togostanza_outline_height",
+            "stanza:type": "number",
+            "stanza:default": 300,
+            "stanza:description": "Height"
+        },
+        {
+            "stanza:key": "--togostanza_outline_padding-top",
+            "stanza:type": "number",
+            "stanza:default": 20,
+            "stanza:description": "Padding top"
+        },
+        {
+            "stanza:key": "--togostanza_outline_padding-right",
+            "stanza:type": "number",
+            "stanza:default": 20,
+            "stanza:description": "Padding right"
+        },
+        {
+            "stanza:key": "--togostanza_outline_padding-bottom",
+            "stanza:type": "number",
+            "stanza:default": 20,
+            "stanza:description": "Padding bottom"
+        },
+        {
+            "stanza:key": "--togostanza_outline_padding-left",
+            "stanza:type": "number",
+            "stanza:default": 20,
+            "stanza:description": "Padding left"
+        },
+        {
+            "stanza:key": "--togostanza_border_color",
+            "stanza:type": "color",
+            "stanza:default": "#4E5059",
+            "stanza:description": "Border color"
+        },
+        {
+            "stanza:key": "--togostanza_border_width",
+            "stanza:type": "number",
+            "stanza:default": 0,
+            "stanza:description": "Border width"
+        },
+        {
+            "stanza:key": "--togostanza_axis_x_width",
+            "stanza:type": "number",
+            "stanza:default": 1,
+            "stanza:description": "Axis width"
+        },
+        {
+            "stanza:key": "--togostanza_axis_y_width",
+            "stanza:type": "number",
+            "stanza:default": 1,
+            "stanza:description": "Axis width"
+        }
+    ]
 }

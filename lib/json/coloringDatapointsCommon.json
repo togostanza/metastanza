@@ -1,0 +1,29 @@
+{
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "datapoints-color_data-key",
+        "stanza:type": "text",
+        "stanza:example": "category",
+        "stanza:description": "What key in data to use to color the data points"
+      },
+      {
+        "stanza:key": "datapoints-color_scale",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["linear", "ordinal"],
+        "stanza:example": "ordinal",
+        "stanza:description": "What key in data to use to color the data series"
+      }
+    ]
+  },
+  "stanza:style": {
+    "$append": [
+      {
+        "stanza:key": "--togostanza_data-series_fixed-color",
+        "stanza:type": "color",
+        "stanza:default": "#4E5059",
+        "stanza:description": "Default solor for data series"
+      }
+    ]
+  }
+}

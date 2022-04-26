@@ -1,0 +1,116 @@
+{
+  "stanza:parameter": {
+    "$append": [
+      {
+        "stanza:key": "axis_y_data-key",
+        "stanza:type": "text",
+        "stanza:example": "category",
+        "stanza:description": "What key in data to use",
+        "stanza:required": true
+      },
+      {
+        "stanza:key": "axis_y_show",
+        "stanza:type": "boolean",
+        "stanza:example": true,
+        "stanza:description": "Show this axis"
+      },
+      {
+        "stanza:key": "axis_y_scale",
+        "stanza:type": "single-choice",
+        "stanza:choice": ["linear", "ordinal", "log10", "time"],
+        "stanza:example": "linear",
+        "stanza:description": "Scale type"
+      },
+      {
+        "stanza:key": "axis_y_range-min",
+        "stanza:type": "number",
+        "stanza:example": 0,
+        "stanza:description": "Axis range minimum value",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_range-max",
+        "stanza:type": "number",
+
+        "stanza:description": "Axis range maximum value",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_title",
+        "stanza:example": "chromosome",
+        "stanza:description": "Axis title",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_title-padding",
+        "stanza:example": 7,
+        "stanza:description": "Axis title padding",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_ticks-interval",
+        "stanza:example": 1,
+        "stanza:description": "Axis ticks interval",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_ticks-interval-units",
+        "stanza:type": "single-choice",
+        "stanza:choice": [
+          "none",
+          "ms",
+          "s",
+          "minutes",
+          "hours",
+          "days",
+          "weeks",
+          "months",
+          "years"
+        ],
+        "stanza:example": "none",
+        "stanza:description": "Axis ticks interval units"
+      },
+      {
+        "stanza:key": "axis_y_labels-format",
+        "stanza:type": "text",
+        "stanza:example": ".2f",
+        "stanza:description": "Axis labels format",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_gridlines-interval",
+        "stanza:example": 1,
+        "stanza:type": "number",
+        "stanza:description": "Axis gridlines interval",
+        "stanza:required": false
+      },
+      {
+        "stanza:key": "axis_y_gridlines-interval-units",
+        "stanza:type": "single-choice",
+        "stanza:choice": [
+          "none",
+          "ms",
+          "s",
+          "minutes",
+          "hours",
+          "days",
+          "weeks",
+          "months",
+          "years"
+        ],
+        "stanza:example": "none",
+        "stanza:description": "Axis gridlines interval units"
+      }
+    ]
+  },
+  "stanza:style": {
+    "$append": [
+      {
+        "stanza:key": "--togostanza_axis_y_width",
+        "stanza:type": "number",
+        "stanza:default": 1,
+        "stanza:description": "Axis width"
+      }
+    ]
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "barchart",
+  "stanza:label": "Barchart",
+  "stanza:definition": "Barchart MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Chart",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
+  "stanza:created": "2020-11-06",
+  "stanza:updated": "2020-11-06",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data_url",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "misc_custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza_theme_series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Font color"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-size-primary",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Primary font size"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-size-secondary",
+      "stanza:type": "number",
+      "stanza:default": 9,
+      "stanza:description": "Secondary font size"
+    },
+    {
+      "stanza:key": "--togostanza_outline_width",
+      "stanza:type": "number",
+      "stanza:default": 300,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "--togostanza_outline_height",
+      "stanza:type": "number",
+      "stanza:default": 300,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-top",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Padding top"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-right",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Padding right"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-bottom",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Padding bottom"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-left",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Padding left"
+    },
+    {
+      "stanza:key": "--togostanza_border_color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza_border_width",
+      "stanza:type": "number",
+      "stanza:default": 0,
+      "stanza:description": "Border width"
+    }
+  ]
+}
