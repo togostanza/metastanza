@@ -315,6 +315,7 @@ export default class Barchart extends Stanza {
                 {
                   name: "bars",
                   from: { data: "facet" },
+
                   type: "rect",
                   encode: {
                     enter: {
@@ -341,9 +342,7 @@ export default class Barchart extends Stanza {
                   x: { scale: "xscale", field: labelVariable },
                   width: {
                     scale: "xscale",
-                    band:
-                      this.params["bar-width"] ||
-                      defaultParams.get("bar-width"),
+                    band: this.params["bar-width"],
                   },
                   y: { scale: "yscale", field: "y0" },
                   y2: { scale: "yscale", field: "y1" },
