@@ -105,6 +105,7 @@
     },
     {
       "stanza:key": "padding-outer",
+      "stanza:type": "number",
       "stanza:example": 0.4,
       "stanza:description": "Padding outside of bar group (0-1)"
     },
@@ -166,11 +167,6 @@
       "stanza:key": "xlabel-angle",
       "stanza:example": 0,
       "stanza:description": "X label angle (in degree)"
-    },
-    {
-      "stanza:key": "ylabel-angle",
-      "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
     },
     {
       "stanza:key": "ylabel-angle",
