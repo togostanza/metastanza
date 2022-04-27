@@ -27,26 +27,37 @@ export default class Barchart extends Stanza {
 
     const { default: metadata } = await import("./metadata.json");
 
-    const defaultParams = new Map(
+    const params = new Map(
       metadata["stanza:parameter"].map((param) => [
         param["stanza:key"],
-        param["stanza:example"],
+        {
+          default: param["stanza:example"],
+          required: !!param["stanza:required"],
+        },
       ])
     );
 
+    for (const param in this.params) {
+      if (
+        params.get(param).required &&
+        typeof this.params[param] === "undefined"
+      ) {
+        throw new Error(`Required parameter ${param} is not defined`);
+      }
+    }
+
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
     const chartType =
-      this.params["chart-type"] || defaultParams.get("chart-type");
+      this.params["chart-type"] || params.get("chart-type").default;
 
     //width,height,padding
-    const width = this.params["width"] || defaultParams.get("width");
-    const height = this.params["height"] || defaultParams.get("height");
+    const width = this.params["width"] || params.get("width").default;
+    const height = this.params["height"] || params.get("height").default;
     const padding = this.params["padding"];
 
     //data
-    const labelVariable =
-      this.params["category"] || defaultParams.get("category"); //x
-    const valueVariable = this.params["value"] || defaultParams.get("value"); //y
+    const labelVariable = this.params["category"]; //x
+    const valueVariable = this.params["value"]; //y
     const groupVariable = this.params["group-by"] //group
       ? this.params["group-by"]
       : "none"; //z
@@ -108,7 +119,7 @@ export default class Barchart extends Stanza {
         scale: "xscale",
         orient:
           this.params["xaxis-placement"] ||
-          defaultParams.get("xaxis-placement"),
+          params.get("xaxis-placement").default,
         domainColor: "var(--togostanza-axis-color)",
         domainWidth: css("--togostanza-axis-width"),
         grid: this.params["xgrid"] === "true",
@@ -134,7 +145,7 @@ export default class Barchart extends Stanza {
         labelPadding: this.params["xlabel-padding"],
         labelAlign:
           this.params["xlabel-alignment"] ||
-          defaultParams.get("xlabel-alignment"),
+          params.get("xlabel-alignment").default,
         labelLimit: this.params["xlabel-max-width"],
         encode: {
           labels: {
@@ -152,7 +163,7 @@ export default class Barchart extends Stanza {
         scale: "yscale",
         orient:
           this.params["yaxis-placement"] ||
-          defaultParams.get("yaxis-placement"),
+          params.get("yaxis-placement").default,
         domainColor: "var(--togostanza-axis-color)",
         domainWidth: css("--togostanza-axis-width"),
         grid: this.params["ygrid"] === "true",
@@ -178,7 +189,7 @@ export default class Barchart extends Stanza {
         labelPadding: this.params["ylabel-padding"],
         labelAlign:
           this.params["ylabel-alignment"] ||
-          defaultParams.get("ylabel-alignment"),
+          params.get("ylabel-alignment").default,
         labelLimit: this.params["ylabel-max-width"],
         zindex: 0,
         encode: {
@@ -188,7 +199,7 @@ export default class Barchart extends Stanza {
               angle: {
                 value:
                   this.params["ylabel-angle"] ||
-                  defaultParams.get("ylabel-angle"),
+                  params.get("ylabel-angle").default,
               },
               fill: { value: "var(--togostanza-label-font-color)" },
               font: {
@@ -346,7 +357,7 @@ export default class Barchart extends Stanza {
                     scale: "xscale",
                     band:
                       this.params["bar-width"] ||
-                      defaultParams.get("bar-width"),
+                      params.get("bar-width").default,
                   },
                   y: { scale: "yscale", field: "y0" },
                   y2: { scale: "yscale", field: "y1" },
