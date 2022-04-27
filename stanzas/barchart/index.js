@@ -47,8 +47,7 @@ export default class Barchart extends Stanza {
     }
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
-    const chartType =
-      this.params["chart-type"] || params.get("chart-type").default;
+    const chartType = this.params["chart-type"];
 
     //width,height,padding
     const width = this.params["width"] || params.get("width").default;
@@ -197,9 +196,7 @@ export default class Barchart extends Stanza {
             interactive: true,
             update: {
               angle: {
-                value:
-                  this.params["ylabel-angle"] ||
-                  params.get("ylabel-angle").default,
+                value: this.params["ylabel-angle"],
               },
               fill: { value: "var(--togostanza-label-font-color)" },
               font: {
