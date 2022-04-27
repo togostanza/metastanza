@@ -142,9 +142,7 @@ export default class Barchart extends Stanza {
         titleFontWeight: css("--togostanza-title-font-weight"),
         titlePadding: this.params["xtitle-padding"],
         labelPadding: this.params["xlabel-padding"],
-        labelAlign:
-          this.params["xlabel-alignment"] ||
-          params.get("xlabel-alignment").default,
+        labelAlign: this.params["xlabel-alignment"],
         labelLimit: this.params["xlabel-max-width"],
         encode: {
           labels: {
@@ -186,9 +184,7 @@ export default class Barchart extends Stanza {
         titleFontWeight: css("--togostanza-title-font-weight"),
         titlePadding: this.params["ytitle-padding"],
         labelPadding: this.params["ylabel-padding"],
-        labelAlign:
-          this.params["ylabel-alignment"] ||
-          params.get("ylabel-alignment").default,
+        labelAlign: this.params["ylabel-alignment"],
         labelLimit: this.params["ylabel-max-width"],
         zindex: 0,
         encode: {
