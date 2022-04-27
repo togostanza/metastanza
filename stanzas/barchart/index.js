@@ -106,7 +106,9 @@ export default class Barchart extends Stanza {
     const axes = [
       {
         scale: "xscale",
-        orient: this.params["xaxis-placement"],
+        orient:
+          this.params["xaxis-placement"] ||
+          defaultParams.get("xaxis-placement"),
         domainColor: "var(--togostanza-axis-color)",
         domainWidth: css("--togostanza-axis-width"),
         grid: this.params["xgrid"] === "true",
@@ -342,7 +344,9 @@ export default class Barchart extends Stanza {
                   x: { scale: "xscale", field: labelVariable },
                   width: {
                     scale: "xscale",
-                    band: this.params["bar-width"],
+                    band:
+                      this.params["bar-width"] ||
+                      defaultParams.get("bar-width"),
                   },
                   y: { scale: "yscale", field: "y0" },
                   y2: { scale: "yscale", field: "y1" },
