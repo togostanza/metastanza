@@ -12,27 +12,175 @@
   "stanza:updated": "2022-04-28",
   "stanza:parameter": [
     {
-      "stanza:key": "say-to",
+      "stanza:key": "data_url",
+      "stanza:example": "./assets/energy.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_nodes_accessor",
       "stanza:type": "string",
-      "stanza:example": "world",
-      "stanza:description": "who to say hello to",
-      "stanza:required": false
+      "stanza:example": "nodes",
+      "stanza:description": "Data nodes accessor",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_nodes_id-accessor",
+      "stanza:type": "string",
+      "stanza:example": "id",
+      "stanza:description": "Data nodes id accessor. If not present the node id will be its index in the nodes array"
+    },
+    {
+      "stanza:key": "data_links_accessor",
+      "stanza:type": "string",
+      "stanza:example": "links",
+      "stanza:description": "Data links accessor",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_links_source-accessor",
+      "stanza:type": "string",
+      "stanza:example": "source",
+      "stanza:description": "Link source node id",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data_links_target-accessor",
+      "stanza:type": "string",
+      "stanza:example": "target",
+      "stanza:description": "Link target node id",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "misc_custom-css-url",
+      "stanza:type": "string",
+      "stanza:example": "",
+      "stanza:description": "Custom CSS URL"
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--greeting-color",
+      "stanza:key": "--togostanza_theme_series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#eb7900",
-      "stanza:description": "text color of greeting"
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--greeting-align",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
-      "stanza:default": "center",
-      "stanza:description": "text align of greeting"
+      "stanza:key": "--togostanza_theme_series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#E6BB1A",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza_theme_series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza_theme_background-color",
+      "stanza:type": "color",
+      "stanza:default": "#fafafa",
+      "stanza:description": "Stanza background color"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Font color"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-size-primary",
+      "stanza:type": "number",
+      "stanza:default": 10,
+      "stanza:description": "Primary font size"
+    },
+    {
+      "stanza:key": "--togostanza_fonts_font-size-secondary",
+      "stanza:type": "number",
+      "stanza:default": 8,
+      "stanza:description": "Secondary font size"
+    },
+    {
+      "stanza:key": "--togostanza_outline_width",
+      "stanza:type": "number",
+      "stanza:default": 600,
+      "stanza:description": "Stanza width"
+    },
+    {
+      "stanza:key": "--togostanza_outline_height",
+      "stanza:type": "number",
+      "stanza:default": 400,
+      "stanza:description": "Stanza height"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-top",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Stanza padding top"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-right",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Stanza padding right"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-bottom",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Stanza padding bottom"
+    },
+    {
+      "stanza:key": "--togostanza_outline_padding-left",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Stanza padding left"
+    },
+    {
+      "stanza:key": "--togostanza_border_color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Stanza border color"
+    },
+    {
+      "stanza:key": "--togostanza_border_width",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Stanza border width"
     }
   ],
   "stanza:incomingEvent": [],
