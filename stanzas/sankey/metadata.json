@@ -1,0 +1,40 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "sankey",
+  "stanza:label": "Sankey Stanza",
+  "stanza:definition": "Sankey Diagram Stanza",
+  "stanza:license": "MIT",
+  "stanza:author": "PENQE",
+  "stanza:contributor": ["PENQE", "Einishi Tech"],
+  "stanza:created": "2022-04-28",
+  "stanza:updated": "2022-04-28",
+  "stanza:parameter": [
+    {
+      "stanza:key": "say-to",
+      "stanza:type": "string",
+      "stanza:example": "world",
+      "stanza:description": "who to say hello to",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--greeting-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "text color of greeting"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "center", "right"],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}
