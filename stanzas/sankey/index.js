@@ -81,9 +81,7 @@ export default class Sankey extends Stanza {
     for (let i = 0; i < 6; i++) {
       togostanzaColors.push(css(`--togostanza_theme_series-${i}-color`));
     }
-    const color = function () {
-      return d3.scaleOrdinal().range(togostanzaColors);
-    };
+    const color = d3.scaleOrdinal(togostanzaColors);
 
     const dataNodesParams = {
       nodesAccessor:
@@ -127,8 +125,11 @@ export default class Sankey extends Stanza {
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
     const _sankey = d3sankey()
-      .nodeWidth(15)
-      .nodePadding(10)
+      .nodeWidth(5)
+      .nodePadding(5)
+      .nodeSort((a, b) => {
+        return b.value - a.value;
+      })
       .extent([
         [0, 0],
         [WIDTH, HEIGHT],
@@ -157,7 +158,10 @@ export default class Sankey extends Stanza {
       .attr("x", (d) => d.x0)
       .attr("y", (d) => d.y0)
       .attr("height", (d) => d.y1 - d.y0)
-      .attr("width", (d) => d.x1 - d.x0);
+      .attr("width", (d) => d.x1 - d.x0)
+      .attr("fill", (d) => {
+        return color(d.name);
+      });
 
     const link = g
       .append("g")
@@ -166,17 +170,32 @@ export default class Sankey extends Stanza {
       .selectAll("g")
       .data(links)
       .join("g")
-      .attr("stroke-width", (d) => {
-        console.log(d);
-        return d.width;
-      })
+      .attr("stroke-width", (d) => d.width)
       .style("mix-blend-mode", "multiply");
 
     link
       .append("path")
       .attr("d", sankeyLinkHorizontal())
-      .attr("stroke", "green")
-      .attr("stroke-width", ({ width }) => Math.max(1, width));
+      .attr("stroke-width", ({ width }) => Math.max(0.5, width));
+
+    const gradient = link
+      .append("linearGradient")
+      .attr("id", (d) => `gradient-${d.index}`)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", ({ source }) => source.x0)
+      .attr("x2", ({ target }) => target.x1);
+
+    gradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", (d) => color(d.source.name));
+
+    gradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", (d) => color(d.target.name));
+
+    link.attr("stroke", (d) => `url(#gradient-${d.index})`);
   }
 }
 
