@@ -21,4 +21,5 @@ svg {
 
 .fadeout {
   opacity: 0.05;
+  transition: opacity 0.2s ease-in-out;
 }

@@ -158,12 +158,16 @@ export default class Sankey extends Stanza {
       dataKey: this.params["tooltips_data-key"],
     };
 
+    const highlightParams = {
+      highlight: !!this.params["nodes_highlight"],
+    };
+
     const sortFnGenerator = (sortBy, sortOrder) => {
       switch (sortOrder) {
         case "ascending":
-          return (a, b) => a[sortBy] - b[sortBy];
+          return (a, b) => (a[sortBy] > b[sortBy] ? 1 : -1);
         case "descending":
-          return (a, b) => b[sortBy] - a[sortBy];
+          return (a, b) => (a[sortBy] > b[sortBy] ? -1 : 1);
         case "none":
           return () => 0;
         default:
@@ -187,10 +191,10 @@ export default class Sankey extends Stanza {
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
     const MARGIN = {
-      TOP: 20,
-      BOTTOM: 20,
-      LEFT: 20,
-      RIGHT: 20,
+      TOP: parseInt(css("--togostanza_outline_padding-top")) || 0,
+      BOTTOM: parseInt(css("--togostanza_outline_padding-bottom")) || 0,
+      LEFT: parseInt(css("--togostanza_outline_padding-left")) || 0,
+      RIGHT: parseInt(css("--togostanza_outline_padding-right")) || 0,
     };
 
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
@@ -229,6 +233,7 @@ export default class Sankey extends Stanza {
       .selectAll("rect")
       .data(nodes)
       .join("rect")
+      .attr("class", "node")
       .attr("x", (d) => d.x0)
       .attr("y", (d) => d.y0)
       .attr("height", (d) => d.y1 - d.y0)
@@ -326,38 +331,42 @@ export default class Sankey extends Stanza {
       }
     }
 
-    node.on("mouseover", function (e, d) {
-      node.classed("fadeout", true);
-      link.classed("fadeout", true);
+    if (highlightParams.highlight) {
+      node.on("mouseover", function (e, d) {
+        node.classed("fadeout", true);
+        link.classed("fadeout", true);
 
-      node.filter((p) => d.index === p.index).classed("fadeout", false);
+        node.filter((p) => d.index === p.index).classed("fadeout", false);
 
-      const neighbourNodes = link
-        .filter((p) => d.index === p.source.index || d.index === p.target.index)
-        .classed("fadeout", false)
-        .data()
-        .map((d) => [d.source.index, d.target.index])
-        .flat();
+        const neighbourNodes = link
+          .filter(
+            (p) => d.index === p.source.index || d.index === p.target.index
+          )
+          .classed("fadeout", false)
+          .data()
+          .map((d) => [d.source.index, d.target.index])
+          .flat();
 
-      node
-        .filter((p) => neighbourNodes.includes(p.index))
-        .classed("fadeout", false);
-      if (label) {
-        label.classed("fadeout", true);
-        label.filter((p) => d.index === p.index).classed("fadeout", false);
-        label
+        node
           .filter((p) => neighbourNodes.includes(p.index))
           .classed("fadeout", false);
-      }
-    });
+        if (label) {
+          label.classed("fadeout", true);
+          label.filter((p) => d.index === p.index).classed("fadeout", false);
+          label
+            .filter((p) => neighbourNodes.includes(p.index))
+            .classed("fadeout", false);
+        }
+      });
 
-    node.on("mouseout", function () {
-      node.classed("fadeout", false);
-      link.classed("fadeout", false);
-      if (label) {
-        label.classed("fadeout", false);
-      }
-    });
+      node.on("mouseout", function () {
+        node.classed("fadeout", false);
+        link.classed("fadeout", false);
+        if (label) {
+          label.classed("fadeout", false);
+        }
+      });
+    }
   }
 }
 
