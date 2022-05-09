@@ -144,14 +144,14 @@ export default class Sankey extends Stanza {
 
     const nodeLabelParams = {
       dataKey:
-        this.params["node_label_data-key"] ||
-        params.get("node_label_data-key").default,
+        this.params["nodes_label_data-key"] ||
+        params.get("nodes_label_data-key").default,
 
       margin:
-        this.params["node_label_margin"] === 0
+        this.params["nodes_label_margin"] === 0
           ? 0
-          : this.params["node_label_margin"] ||
-            params.get("node_label_margin").default,
+          : this.params["nodes_label_margin"] ||
+            params.get("nodes_label_margin").default,
     };
 
     const tooltipParams = {
@@ -170,15 +170,16 @@ export default class Sankey extends Stanza {
           return () => 0;
       }
     };
-    const el = this.root.getElementById("sankey");
+
     const root = this.root.querySelector("main");
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
     const svg = d3.select(main).append("svg");
 
-    width = 600;
-    height = 400;
+    width = parseInt(css("--togostanza_outline_width"));
+    height = parseInt(css("--togostanza_outline_height"));
+
     svg
       .attr("width", width)
       .attr("height", height)
@@ -242,8 +243,9 @@ export default class Sankey extends Stanza {
       this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
     }
 
+    let label;
     if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
-      const label = g
+      label = g
         .append("g")
         .selectAll("text")
         .data(nodes)
@@ -258,8 +260,6 @@ export default class Sankey extends Stanza {
         .attr("dominant-baseline", "middle")
         .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
         .text((d) => d[nodeLabelParams.dataKey] || "");
-
-      console.log("nodes", nodes);
     }
 
     const link = g
@@ -325,6 +325,39 @@ export default class Sankey extends Stanza {
         link.attr("stroke", togostanzaColors[0]);
       }
     }
+
+    node.on("mouseover", function (e, d) {
+      node.classed("fadeout", true);
+      link.classed("fadeout", true);
+
+      node.filter((p) => d.index === p.index).classed("fadeout", false);
+
+      const neighbourNodes = link
+        .filter((p) => d.index === p.source.index || d.index === p.target.index)
+        .classed("fadeout", false)
+        .data()
+        .map((d) => [d.source.index, d.target.index])
+        .flat();
+
+      node
+        .filter((p) => neighbourNodes.includes(p.index))
+        .classed("fadeout", false);
+      if (label) {
+        label.classed("fadeout", true);
+        label.filter((p) => d.index === p.index).classed("fadeout", false);
+        label
+          .filter((p) => neighbourNodes.includes(p.index))
+          .classed("fadeout", false);
+      }
+    });
+
+    node.on("mouseout", function () {
+      node.classed("fadeout", false);
+      link.classed("fadeout", false);
+      if (label) {
+        label.classed("fadeout", false);
+      }
+    });
   }
 }
 

@@ -100,13 +100,13 @@
       "stanza:description": "Effective only if `links_color_based-on` is set to `data-key`. If there is no such data key, default color will be used."
     },
     {
-      "stanza:key": "node_label_data-key",
+      "stanza:key": "nodes_label_data-key",
       "stanza:type": "string",
       "stanza:example": "name",
       "stanza:description": "Node label data key"
     },
     {
-      "stanza:key": "node_label_margin",
+      "stanza:key": "nodes_label_margin",
       "stanza:type": "number",
       "stanza:example": 5,
       "stanza:description": "Node label margin"
@@ -116,6 +116,12 @@
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Sort nodes in columns by this data key value"
+    },
+    {
+      "stanza:key": "nodes_highlight",
+      "stanza:type": "boolean",
+      "stanza:example": "true",
+      "stanza:description": "Highlight nodes and its links on mouse hover"
     },
     {
       "stanza:key": "nodes_sort_order",

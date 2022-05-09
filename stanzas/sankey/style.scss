@@ -4,7 +4,21 @@
 // The following is just an example. Feel free to modify it.
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
-svg text.label {
-  font-family: var(--togostanza_fonts_font-family);
-  font-size: calc(var(--togostanza_fonts_font-size-secondary) * 1px);
+svg {
+  text.label {
+    font-family: var(--togostanza_fonts_font-family);
+    font-size: calc(var(--togostanza_fonts_font-size-secondary) * 1px);
+  }
+
+  path.link {
+    pointer-events: none;
+  }
+
+  rect.node {
+    cursor: pointer;
+  }
+}
+
+.fadeout {
+  opacity: 0.05;
 }
