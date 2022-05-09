@@ -26,34 +26,34 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "data_nodes_accessor",
+      "stanza:key": "data_nodes_data-key",
       "stanza:type": "string",
       "stanza:example": "nodes",
       "stanza:description": "Data nodes accessor",
       "stanza:required": true
     },
     {
-      "stanza:key": "data_nodes_id-accessor",
+      "stanza:key": "data_nodes_id-data-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Data nodes id accessor. If not present the node id will be its index in the nodes array"
     },
     {
-      "stanza:key": "data_links_accessor",
+      "stanza:key": "data_links_data-key",
       "stanza:type": "string",
       "stanza:example": "links",
       "stanza:description": "Data links accessor",
       "stanza:required": true
     },
     {
-      "stanza:key": "data_links_source-accessor",
+      "stanza:key": "data_links_source-data-key",
       "stanza:type": "string",
       "stanza:example": "source",
       "stanza:description": "Link source node id",
       "stanza:required": true
     },
     {
-      "stanza:key": "data_links_target-accessor",
+      "stanza:key": "data_links_target-data-key",
       "stanza:type": "string",
       "stanza:example": "target",
       "stanza:description": "Link target node id",
@@ -64,6 +64,32 @@
       "stanza:type": "string",
       "stanza:example": "",
       "stanza:description": "Custom CSS URL"
+    },
+    {
+      "stanza:key": "nodes_color_data-key",
+      "stanza:type": "string",
+      "stanza:example": "name",
+      "stanza:description": "Based on what key the nodes will be colored. If the value of the key is a hex color, it will be used directly."
+    },
+    {
+      "stanza:key": "nodes_color_scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "ordinal"],
+      "stanza:example": "ordinal",
+      "stanza:description": "Color scale"
+    },
+    {
+      "stanza:key": "links_color_based-on",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["source", "target", "source-target", "data-key"],
+      "stanza:example": "source",
+      "stanza:description": "Based on what key the links will be colored"
+    },
+    {
+      "stanza:key": "links_color_data-key",
+      "stanza:type": "string",
+      "stanza:example": "name",
+      "stanza:description": "Effective only if `links_color_based-on` is set to `data-key`. If there is no such data key, default color will be used."
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -181,6 +207,24 @@
       "stanza:type": "number",
       "stanza:default": 0.5,
       "stanza:description": "Stanza border width"
+    },
+    {
+      "stanza:key": "--togostanza_nodes-color_min-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Color scale min color"
+    },
+    {
+      "stanza:key": "--togostanza_nodes-color_max-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Color scale min color"
+    },
+    {
+      "stanza:key": "--togostanza_nodes-color_fixed-color",
+      "stanza:type": "color",
+      "stanza:default": "blue",
+      "stanza:description": "Node default color"
     }
   ],
   "stanza:incomingEvent": [],

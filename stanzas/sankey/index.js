@@ -84,26 +84,39 @@ export default class Sankey extends Stanza {
     const color = d3.scaleOrdinal(togostanzaColors);
 
     const dataNodesParams = {
-      nodesAccessor:
-        this.params["data_nodes_accessor"] ||
-        params.get("data_nodes_accessor").default,
-      nodeIdAccessor:
-        this.params["data_nodes_id-accessor"] ||
-        params.get("data_node_id-accessor").default,
+      dataKey:
+        this.params["data_nodes_data-key"] ||
+        params.get("data_nodes_data-key").default,
+      IdDataKey:
+        this.params["data_nodes_id-data-key"] ||
+        params.get("data_node_id-data-key").default,
+    };
+
+    const nodesColorParams = {
+      dataKey: this.params["nodes-color_data-key"],
+      minColor: this.params["nodes-color_min-color"],
+      maxColor: this.params["nodes-color_max-color"],
+      colorScale: this.params["nodes-color_scale"],
     };
 
     const dataLinksParams = {
-      linksAccessor:
-        this.params["data_links_accessor"] ||
-        params.get("data_links_accessor").default,
-      linkSourceAccessor:
-        this.params["data_links_source-accessor"] ||
-        params.get("data_links_source-accessor").default,
-      linkTargetAccessor:
-        this.params["data_links_target-accessor"] ||
-        params.get("data_links_target-accessor").default,
+      dataKey:
+        this.params["data_links_data-key"] ||
+        params.get("data_links_data-key").default,
+      sourceDataKey:
+        this.params["data_links_source-data-key"] ||
+        params.get("data_links_source-data-key").default,
+      targetDataKey:
+        this.params["data_links_target-data-key"] ||
+        params.get("data_links_target-data-key").default,
     };
 
+    const linkColorParams = {
+      basedOn:
+        this.params["links_color_based-on"] ||
+        params.get("links_color_based-on").default,
+      dataKey: this.params["links_color_data-key"],
+    };
     const svg = d3.select(main).append("svg");
 
     width = 600;
@@ -135,10 +148,10 @@ export default class Sankey extends Stanza {
         [WIDTH, HEIGHT],
       ]);
 
-    const sankey = ({ nodes, links }) =>
+    const sankey = (data) =>
       _sankey({
-        nodes: nodes.map((d) => d),
-        links: links.map((d) => d),
+        nodes: data[dataNodesParams.dataKey].map((d) => d),
+        links: data[dataLinksParams.dataKey].map((d) => d),
       });
 
     const { nodes, links } = sankey(values);
@@ -159,9 +172,7 @@ export default class Sankey extends Stanza {
       .attr("y", (d) => d.y0)
       .attr("height", (d) => d.y1 - d.y0)
       .attr("width", (d) => d.x1 - d.x0)
-      .attr("fill", (d) => {
-        return color(d.name);
-      });
+      .attr("fill", (d) => color(d.name));
 
     const link = g
       .append("g")
@@ -176,26 +187,56 @@ export default class Sankey extends Stanza {
     link
       .append("path")
       .attr("d", sankeyLinkHorizontal())
-      .attr("stroke-width", ({ width }) => Math.max(0.5, width));
+      .attr("stroke-width", ({ width }) => Math.max(0.5, width))
+      .attr("class", "link");
 
-    const gradient = link
-      .append("linearGradient")
-      .attr("id", (d) => `gradient-${d.index}`)
-      .attr("gradientUnits", "userSpaceOnUse")
-      .attr("x1", ({ source }) => source.x0)
-      .attr("x2", ({ target }) => target.x1);
+    if (linkColorParams.basedOn === "source-target") {
+      const gradient = link
+        .append("linearGradient")
+        .attr("id", (d) => `gradient-${d.index}`)
+        .attr("gradientUnits", "userSpaceOnUse")
+        .attr("x1", ({ source }) => source.x0)
+        .attr("x2", ({ target }) => target.x1);
 
-    gradient
-      .append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", (d) => color(d.source.name));
+      gradient
+        .append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", (d) =>
+          color(d[dataLinksParams.sourceDataKey].name)
+        );
 
-    gradient
-      .append("stop")
-      .attr("offset", "100%")
-      .attr("stop-color", (d) => color(d.target.name));
+      gradient
+        .append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", (d) =>
+          color(d[dataLinksParams.targetDataKey].name)
+        );
 
-    link.attr("stroke", (d) => `url(#gradient-${d.index})`);
+      link.attr("stroke", (d) => `url(#gradient-${d.index})`);
+    } else if (
+      linkColorParams.basedOn === "source" ||
+      linkColorParams.basedOn === "target"
+    ) {
+      link.attr("stroke", (d) => color(d[linkColorParams.basedOn].name));
+    } else {
+      // if "data-key"
+      if (
+        linkColorParams.dataKey &&
+        links.every((d) => d[linkColorParams.dataKey])
+      ) {
+        // if there is such datakey in every link
+        // then if its a hex color, use it directly
+        if (links.every((d) => checkIfHexColor(d[linkColorParams.dataKey]))) {
+          link.attr("stroke", (d) => d[linkColorParams.dataKey]);
+        } else {
+          // else use ordinal scale
+          link.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
+        }
+      } else {
+        //no datakey, use default color
+        link.attr("stroke", togostanzaColors[0]);
+      }
+    }
   }
 }
 
@@ -220,11 +261,16 @@ function validateParams(metadata, thisparams) {
   for (const param in thisparams) {
     if (
       params.get(param).required &&
-      typeof thisparams[param] === "undefined"
+      (typeof thisparams[param] === "undefined" || thisparams[param] === "")
     ) {
       throw new Error(`Required parameter ${param} is not defined`);
     }
   }
 
   return params;
+}
+
+function checkIfHexColor(text) {
+  const hexRegex = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i;
+  return hexRegex.test(text);
 }
