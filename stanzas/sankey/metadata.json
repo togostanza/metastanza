@@ -79,6 +79,14 @@
       "stanza:description": "Color scale"
     },
     {
+      "stanza:key": "nodes_alignment",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["left", "right", "center", "justify"],
+      "stanza:example": "justify",
+      "stanza:description": "Color scale"
+    },
+
+    {
       "stanza:key": "links_color_based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["source", "target", "source-target", "data-key"],
@@ -90,6 +98,38 @@
       "stanza:type": "string",
       "stanza:example": "name",
       "stanza:description": "Effective only if `links_color_based-on` is set to `data-key`. If there is no such data key, default color will be used."
+    },
+    {
+      "stanza:key": "node_label_data-key",
+      "stanza:type": "string",
+      "stanza:example": "name",
+      "stanza:description": "Node label data key"
+    },
+    {
+      "stanza:key": "node_label_position",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["below", "above", "left", "right"],
+      "stanza:example": "right",
+      "stanza:description": "Node label position"
+    },
+    {
+      "stanza:key": "node_label_margin",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Node label margin"
+    },
+    {
+      "stanza:key": "nodes_sort_by",
+      "stanza:type": "string",
+      "stanza:example": "value",
+      "stanza:description": "Sort nodes in columns by this data key value"
+    },
+    {
+      "stanza:key": "nodes_sort_order",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["none", "ascending", "descending"],
+      "stanza:example": "descending",
+      "stanza:description": "Sort order"
     }
   ],
   "stanza:menu-placement": "bottom-right",

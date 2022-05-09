@@ -1,10 +1,17 @@
 import Stanza from "togostanza/stanza";
 
 import * as d3 from "d3";
-import { sankey as d3sankey, sankeyLinkHorizontal } from "d3-sankey";
+import {
+  sankey as d3sankey,
+  sankeyLinkHorizontal,
+  sankeyLeft,
+  sankeyRight,
+  sankeyCenter,
+  sankeyJustify,
+} from "d3-sankey";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-import { debounce } from "lodash";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -117,6 +124,37 @@ export default class Sankey extends Stanza {
         params.get("links_color_based-on").default,
       dataKey: this.params["links_color_data-key"],
     };
+
+    const nodesAlignParams = {
+      alignment:
+        {
+          left: sankeyLeft,
+          right: sankeyRight,
+          center: sankeyCenter,
+          justify: sankeyJustify,
+        }[this.params["nodes_alignment"]] ||
+        params.get("nodes_alignment").default,
+    };
+
+    const nodesSortParams = {
+      sortBy:
+        this.params["nodes_sort_by"] || params.get("nodes_sort_by").default,
+      sortOrder: this.params["nodes_sort_order"],
+    };
+
+    const sortFnGenerator = (sortBy, sortOrder) => {
+      switch (sortOrder) {
+        case "ascending":
+          return (a, b) => a[sortBy] - b[sortBy];
+        case "descending":
+          return (a, b) => b[sortBy] - a[sortBy];
+        case "none":
+          return () => 0;
+        default:
+          return () => 0;
+      }
+    };
+
     const svg = d3.select(main).append("svg");
 
     width = 600;
@@ -140,13 +178,15 @@ export default class Sankey extends Stanza {
     const _sankey = d3sankey()
       .nodeWidth(5)
       .nodePadding(5)
-      .nodeSort((a, b) => {
-        return b.value - a.value;
-      })
+      .nodeSort(
+        sortFnGenerator(nodesSortParams.sortBy, nodesSortParams.sortOrder)
+      )
       .extent([
         [0, 0],
         [WIDTH, HEIGHT],
-      ]);
+      ])
+      .nodeAlign(nodesAlignParams.alignment)
+      .iterations(32);
 
     const sankey = (data) =>
       _sankey({
