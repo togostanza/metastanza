@@ -106,13 +106,6 @@
       "stanza:description": "Node label data key"
     },
     {
-      "stanza:key": "node_label_position",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["below", "above", "left", "right"],
-      "stanza:example": "right",
-      "stanza:description": "Node label position"
-    },
-    {
       "stanza:key": "node_label_margin",
       "stanza:type": "number",
       "stanza:example": 5,
@@ -192,13 +185,13 @@
       "stanza:key": "--togostanza_fonts_font-size-primary",
       "stanza:type": "number",
       "stanza:default": 10,
-      "stanza:description": "Primary font size"
+      "stanza:description": "Primary font size in px"
     },
     {
       "stanza:key": "--togostanza_fonts_font-size-secondary",
       "stanza:type": "number",
       "stanza:default": 8,
-      "stanza:description": "Secondary font size"
+      "stanza:description": "Secondary font size in px"
     },
     {
       "stanza:key": "--togostanza_outline_width",

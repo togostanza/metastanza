@@ -142,6 +142,18 @@ export default class Sankey extends Stanza {
       sortOrder: this.params["nodes_sort_order"],
     };
 
+    const nodeLabelParams = {
+      dataKey:
+        this.params["node_label_data-key"] ||
+        params.get("node_label_data-key").default,
+
+      margin:
+        this.params["node_label_margin"] === 0
+          ? 0
+          : this.params["node_label_margin"] ||
+            params.get("node_label_margin").default,
+    };
+
     const sortFnGenerator = (sortBy, sortOrder) => {
       switch (sortOrder) {
         case "ascending":
@@ -213,6 +225,26 @@ export default class Sankey extends Stanza {
       .attr("height", (d) => d.y1 - d.y0)
       .attr("width", (d) => d.x1 - d.x0)
       .attr("fill", (d) => color(d.name));
+
+    if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
+      const label = g
+        .append("g")
+        .selectAll("text")
+        .data(nodes)
+        .join("text")
+        .attr("class", "label")
+        .attr("x", (d) =>
+          d.x0 < width / 2
+            ? d.x1 + nodeLabelParams.margin
+            : d.x0 - nodeLabelParams.margin
+        )
+        .attr("y", (d) => (d.y1 + d.y0) / 2)
+        .attr("dominant-baseline", "middle")
+        .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
+        .text((d) => d[nodeLabelParams.dataKey] || "");
+
+      console.log("nodes", nodes);
+    }
 
     const link = g
       .append("g")
