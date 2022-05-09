@@ -154,6 +154,10 @@ export default class Sankey extends Stanza {
             params.get("node_label_margin").default,
     };
 
+    const tooltipParams = {
+      dataKey: this.params["tooltips_data-key"],
+    };
+
     const sortFnGenerator = (sortBy, sortOrder) => {
       switch (sortOrder) {
         case "ascending":
@@ -166,6 +170,10 @@ export default class Sankey extends Stanza {
           return () => 0;
       }
     };
+    const el = this.root.getElementById("sankey");
+    const root = this.root.querySelector("main");
+    this.tooltip = new ToolTip();
+    root.append(this.tooltip);
 
     const svg = d3.select(main).append("svg");
 
@@ -225,6 +233,14 @@ export default class Sankey extends Stanza {
       .attr("height", (d) => d.y1 - d.y0)
       .attr("width", (d) => d.x1 - d.x0)
       .attr("fill", (d) => color(d.name));
+
+    if (
+      tooltipParams.dataKey &&
+      nodes.some((d) => !!d[tooltipParams.dataKey])
+    ) {
+      node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
+      this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
+    }
 
     if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
       const label = g

@@ -90,7 +90,7 @@
       "stanza:key": "links_color_based-on",
       "stanza:type": "single-choice",
       "stanza:choice": ["source", "target", "source-target", "data-key"],
-      "stanza:example": "source",
+      "stanza:example": "source-target",
       "stanza:description": "Based on what key the links will be colored"
     },
     {
@@ -123,6 +123,12 @@
       "stanza:choice": ["none", "ascending", "descending"],
       "stanza:example": "descending",
       "stanza:description": "Sort order"
+    },
+    {
+      "stanza:key": "tooltips_data-key",
+      "stanza:type": "string",
+      "stanza:example": "name",
+      "stanza:description": "Tooltip data key"
     }
   ],
   "stanza:menu-placement": "bottom-right",
