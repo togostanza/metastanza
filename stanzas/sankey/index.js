@@ -35,6 +35,19 @@ export default class Sankey extends Stanza {
     appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
+    const getParam = (param) => {
+      if (typeof this.params[param] === undefined) {
+        if (params.get(param).default) {
+          return params.get(param).default;
+        }
+        return undefined;
+      }
+      if (this.params[param] === 0 || this.params[param] === "") {
+        return this.params[param];
+      }
+      return this.params[param];
+    };
+
     const { default: metadata } = await import("./metadata.json");
 
     let params;
@@ -70,12 +83,8 @@ export default class Sankey extends Stanza {
       .range([togostanzaColors[0], togostanzaColors[5]]);
 
     const dataNodesParams = {
-      dataKey:
-        this.params["data_nodes_data-key"] ||
-        params.get("data_nodes_data-key").default,
-      IdDataKey:
-        this.params["data_nodes_id-data-key"] ||
-        params.get("data_node_id-data-key").default,
+      dataKey: getParam("data_nodes_data-key"),
+      IdDataKey: getParam("data_nodes_id-data-key"),
     };
 
     const nodesColorParams = {
@@ -90,15 +99,11 @@ export default class Sankey extends Stanza {
     };
 
     const dataLinksParams = {
-      dataKey:
-        this.params["data_links_data-key"] ||
-        params.get("data_links_data-key").default,
+      dataKey: getParam("data_links_data-key"),
     };
 
     const linkColorParams = {
-      basedOn:
-        this.params["links_color_based-on"] ||
-        params.get("links_color_based-on").default,
+      basedOn: getParam("links_color_based-on"),
       dataKey: this.params["links_color_data-key"],
     };
 
@@ -114,21 +119,18 @@ export default class Sankey extends Stanza {
     };
 
     const nodesSortParams = {
-      sortBy:
-        this.params["nodes_sort_by"] || params.get("nodes_sort_by").default,
+      sortBy: getParam("nodes_sort_by"),
       sortOrder: this.params["nodes_sort_order"],
     };
 
-    const nodeLabelParams = {
-      dataKey:
-        this.params["nodes_label_data-key"] ||
-        params.get("nodes_label_data-key").default,
+    const nodesParams = {
+      padding: getParam("nodes_padding"),
+      width: getParam("nodes_width"),
+    };
 
-      margin:
-        this.params["nodes_label_margin"] === 0
-          ? 0
-          : this.params["nodes_label_margin"] ||
-            params.get("nodes_label_margin").default,
+    const nodeLabelParams = {
+      dataKey: getParam("nodes_label_data-key"),
+      margin: getParam("nodes_label_margin"),
     };
 
     const tooltipParams = {
@@ -178,8 +180,8 @@ export default class Sankey extends Stanza {
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
     const _sankey = d3sankey()
-      .nodeWidth(5)
-      .nodePadding(5)
+      .nodeWidth(nodesParams.width)
+      .nodePadding(nodesParams.padding)
       .nodeSort(
         sortFnGenerator(nodesSortParams.sortBy, nodesSortParams.sortOrder)
       )
@@ -188,8 +190,7 @@ export default class Sankey extends Stanza {
         [WIDTH, HEIGHT],
       ])
       .nodeAlign(nodesAlignParams.alignment)
-
-      .iterations(32);
+      .iterations(10);
 
     const sankey = (data) =>
       _sankey({

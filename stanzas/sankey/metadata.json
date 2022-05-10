@@ -117,6 +117,18 @@
       "stanza:description": "Sort order"
     },
     {
+      "stanza:key": "nodes_padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Vertical gap between nodes in column in px"
+    },
+    {
+      "stanza:key": "nodes_width",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Width of the nodes in px"
+    },
+    {
       "stanza:key": "tooltips_data-key",
       "stanza:type": "string",
       "stanza:example": "name",
