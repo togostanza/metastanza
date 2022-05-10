@@ -5,9 +5,12 @@
 // --greeting-color and --greeting-align are style variables, which are defined in metadata.json.
 
 svg {
+  background-color: var(--togostanza_theme_background-color);
+
   text.label {
     font-family: var(--togostanza_fonts_font-family);
     font-size: calc(var(--togostanza_fonts_font-size-secondary) * 1px);
+    fill: var(--togostanza_fonts_font-color);
   }
 
   path.link {
@@ -16,6 +19,19 @@ svg {
 
   rect.node {
     cursor: pointer;
+    fill: var(--togostanza_theme_series-0-color);
+    stroke: var(--togostanza_border_color);
+    stroke-width: 0.5px;
+  }
+
+  text.label,
+  path.link,
+  rect.node {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  path.link {
+    opacity: 0.5;
   }
 }
 

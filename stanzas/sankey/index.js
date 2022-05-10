@@ -35,9 +35,6 @@ export default class Sankey extends Stanza {
     appendCustomCss(this, this.params["custom-css-url"]);
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    let width;
-    let height;
-
     const { default: metadata } = await import("./metadata.json");
 
     let params;
@@ -47,27 +44,6 @@ export default class Sankey extends Stanza {
       console.error(error);
       return;
     }
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        console.log("size changed!");
-        if (entry.contentBoxSize) {
-          // Firefox implements `contentBoxSize` as a single content rect, rather than an array
-          const contentBoxSize = Array.isArray(entry.contentBoxSize)
-            ? entry.contentBoxSize[0]
-            : entry.contentBoxSize;
-
-          width = contentBoxSize.inlineSize;
-          height = contentBoxSize.blockSize;
-        } else {
-          width = entry.contentRect.width;
-          height = entry.contentRect.height;
-        }
-      }
-    });
-
-    const main = this.root.querySelector("main");
-    //resizeObserver.observe(main);
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -89,6 +65,9 @@ export default class Sankey extends Stanza {
       togostanzaColors.push(css(`--togostanza_theme_series-${i}-color`));
     }
     const color = d3.scaleOrdinal(togostanzaColors);
+    const linearColor = d3
+      .scaleLinear()
+      .range([togostanzaColors[0], togostanzaColors[5]]);
 
     const dataNodesParams = {
       dataKey:
@@ -100,22 +79,20 @@ export default class Sankey extends Stanza {
     };
 
     const nodesColorParams = {
-      dataKey: this.params["nodes-color_data-key"],
-      minColor: this.params["nodes-color_min-color"],
-      maxColor: this.params["nodes-color_max-color"],
-      colorScale: this.params["nodes-color_scale"],
+      dataKey: this.params["nodes_color_data-key"],
+      minColor:
+        this.params["nodes_color_min-color"] ||
+        css("--togostanza_theme_series-0-color"),
+      maxColor:
+        this.params["nodes_color_max-color"] ||
+        css("--togostanza_theme_series-5-color"),
+      colorScale: this.params["nodes_color_scale"] || "ordinal",
     };
 
     const dataLinksParams = {
       dataKey:
         this.params["data_links_data-key"] ||
         params.get("data_links_data-key").default,
-      sourceDataKey:
-        this.params["data_links_source-data-key"] ||
-        params.get("data_links_source-data-key").default,
-      targetDataKey:
-        this.params["data_links_target-data-key"] ||
-        params.get("data_links_target-data-key").default,
     };
 
     const linkColorParams = {
@@ -165,9 +142,9 @@ export default class Sankey extends Stanza {
     const sortFnGenerator = (sortBy, sortOrder) => {
       switch (sortOrder) {
         case "ascending":
-          return (a, b) => (a[sortBy] > b[sortBy] ? 1 : -1);
-        case "descending":
           return (a, b) => (a[sortBy] > b[sortBy] ? -1 : 1);
+        case "descending":
+          return (a, b) => (a[sortBy] > b[sortBy] ? 1 : -1);
         case "none":
           return () => 0;
         default:
@@ -179,10 +156,10 @@ export default class Sankey extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const svg = d3.select(main).append("svg");
+    const svg = d3.select(root).append("svg");
 
-    width = parseInt(css("--togostanza_outline_width"));
-    height = parseInt(css("--togostanza_outline_height"));
+    const width = parseInt(css("--togostanza_outline_width"));
+    const height = parseInt(css("--togostanza_outline_height"));
 
     svg
       .attr("width", width)
@@ -211,6 +188,7 @@ export default class Sankey extends Stanza {
         [WIDTH, HEIGHT],
       ])
       .nodeAlign(nodesAlignParams.alignment)
+
       .iterations(32);
 
     const sankey = (data) =>
@@ -221,15 +199,58 @@ export default class Sankey extends Stanza {
 
     const { nodes, links } = sankey(values);
 
+    const colorSym = Symbol("color");
+
+    if (
+      nodes.every((d) => typeof d[nodesColorParams.dataKey] !== "undefined")
+    ) {
+      // if there is such datakey in every node
+      // then if its a hex color, use it directly
+      if (nodes.every((d) => checkIfHexColor(d[nodesColorParams.dataKey]))) {
+        nodes.forEach((d) => {
+          d[colorSym] = d[nodesColorParams.dataKey];
+        });
+      } else {
+        // else if
+        if (nodesColorParams.colorScale === "linear") {
+          if (
+            nodes.every((d) => checkIfIntOrFloat(d[nodesColorParams.dataKey]))
+          ) {
+            // if the color scale is linear
+            // then use the linear scale
+            linearColor.domain([
+              d3.min(nodes, (d) => d[nodesColorParams.dataKey]),
+              d3.max(nodes, (d) => d[nodesColorParams.dataKey]),
+            ]);
+            nodes.forEach((d) => {
+              d[colorSym] = linearColor(d[nodesColorParams.dataKey]);
+            });
+          } else {
+            // else use the ordinal scale
+            nodes.forEach((d) => {
+              d[colorSym] = color(d[nodesColorParams.dataKey]);
+            });
+          }
+        } else {
+          // else use the ordinal scale
+          nodes.forEach((d) => {
+            d[colorSym] = color(d[nodesColorParams.dataKey]);
+          });
+        }
+      }
+    }
+
+    const nodeHash = nodes.reduce(
+      (acc, node) => ({ ...acc, [node[dataNodesParams.IdDataKey]]: node }),
+      {}
+    );
+
     const g = svg
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
     const node = g
       .append("g")
-      .attr("stroke", "black")
-      .attr("stroke-width", 0.5)
-      .attr("stroke-opacity", 0.8)
       .selectAll("rect")
       .data(nodes)
       .join("rect")
@@ -238,7 +259,7 @@ export default class Sankey extends Stanza {
       .attr("y", (d) => d.y0)
       .attr("height", (d) => d.y1 - d.y0)
       .attr("width", (d) => d.x1 - d.x0)
-      .attr("fill", (d) => color(d.name));
+      .attr("style", (d) => `fill: ${d[colorSym]};`);
 
     if (
       tooltipParams.dataKey &&
@@ -288,21 +309,23 @@ export default class Sankey extends Stanza {
         .append("linearGradient")
         .attr("id", (d) => `gradient-${d.index}`)
         .attr("gradientUnits", "userSpaceOnUse")
-        .attr("x1", ({ source }) => source.x0)
-        .attr("x2", ({ target }) => target.x1);
+        .attr("x1", (d) => nodeHash[d.source[dataNodesParams.IdDataKey]].x0)
+        .attr("x2", (d) => nodeHash[d.target[dataNodesParams.IdDataKey]].x1);
 
       gradient
         .append("stop")
         .attr("offset", "0%")
-        .attr("stop-color", (d) =>
-          color(d[dataLinksParams.sourceDataKey].name)
+        .attr(
+          "stop-color",
+          (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][colorSym]
         );
 
       gradient
         .append("stop")
         .attr("offset", "100%")
-        .attr("stop-color", (d) =>
-          color(d[dataLinksParams.targetDataKey].name)
+        .attr(
+          "stop-color",
+          (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][colorSym]
         );
 
       link.attr("stroke", (d) => `url(#gradient-${d.index})`);
@@ -310,7 +333,13 @@ export default class Sankey extends Stanza {
       linkColorParams.basedOn === "source" ||
       linkColorParams.basedOn === "target"
     ) {
-      link.attr("stroke", (d) => color(d[linkColorParams.basedOn].name));
+      link.attr(
+        "stroke",
+        (d) =>
+          nodeHash[d[linkColorParams.basedOn][dataNodesParams.IdDataKey]][
+            colorSym
+          ]
+      );
     } else {
       // if "data-key"
       if (
@@ -403,4 +432,16 @@ function validateParams(metadata, thisparams) {
 function checkIfHexColor(text) {
   const hexRegex = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i;
   return hexRegex.test(text);
+}
+
+function checkIfIntOrFloat(value) {
+  console.log("check number", value);
+  if (typeof value === "number") {
+    console.log(true);
+    return true;
+  }
+  const intRegex = /^\d+$/;
+  const floatRegex = /^\d+\.\d+$/;
+  console.log(intRegex.test(value) || floatRegex.test(value));
+  return intRegex.test(value) || floatRegex.test(value);
 }

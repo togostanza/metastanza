@@ -35,7 +35,7 @@
     {
       "stanza:key": "data_nodes_id-data-key",
       "stanza:type": "string",
-      "stanza:example": "id",
+      "stanza:example": "name",
       "stanza:description": "Data nodes id accessor. If not present the node id will be its index in the nodes array"
     },
     {
@@ -43,20 +43,6 @@
       "stanza:type": "string",
       "stanza:example": "links",
       "stanza:description": "Data links accessor",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data_links_source-data-key",
-      "stanza:type": "string",
-      "stanza:example": "source",
-      "stanza:description": "Link source node id",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "data_links_target-data-key",
-      "stanza:type": "string",
-      "stanza:example": "target",
-      "stanza:description": "Link target node id",
       "stanza:required": true
     },
     {
@@ -127,7 +113,7 @@
       "stanza:key": "nodes_sort_order",
       "stanza:type": "single-choice",
       "stanza:choice": ["none", "ascending", "descending"],
-      "stanza:example": "descending",
+      "stanza:example": "ascending",
       "stanza:description": "Sort order"
     },
     {
