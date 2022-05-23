@@ -86,6 +86,30 @@
       "stanza:description": "Effective only if `links_color_based-on` is set to `data-key`. If there is no such data key, default color will be used."
     },
     {
+      "stanza:key": "links_color_blend-mode",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "normal",
+        "multiply",
+        "screen",
+        "overlay",
+        "darken",
+        "lighten",
+        "color-dodge",
+        "color-burn",
+        "hard-light",
+        "soft-light",
+        "difference",
+        "exclusion",
+        "hue",
+        "saturation",
+        "color",
+        "luminosity"
+      ],
+      "stanza:example": "multiply",
+      "stanza:description": "Blend mode of links color"
+    },
+    {
       "stanza:key": "nodes_label_data-key",
       "stanza:type": "string",
       "stanza:example": "name",
@@ -202,6 +226,12 @@
       "stanza:type": "number",
       "stanza:default": 8,
       "stanza:description": "Secondary font size in px"
+    },
+    {
+      "stanza:key": "--togostanza_link_opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Link opacity"
     },
     {
       "stanza:key": "--togostanza_outline_width",

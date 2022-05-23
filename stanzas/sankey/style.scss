@@ -6,6 +6,7 @@
 
 svg {
   background-color: var(--togostanza_theme_background-color);
+  isolation: isolate;
 
   text.label {
     font-family: var(--togostanza_fonts_font-family);
@@ -31,7 +32,7 @@ svg {
   }
 
   path.link {
-    opacity: 0.5;
+    opacity: var(--togostanza_link_opacity);
   }
 }
 

@@ -105,6 +105,9 @@ export default class Sankey extends Stanza {
     const linkColorParams = {
       basedOn: getParam("links_color_based-on"),
       dataKey: this.params["links_color_data-key"],
+      blendMode:
+        this.params["links_color_blend-mode"] ||
+        params.get("links_color_blend-mode").default,
     };
 
     const nodesAlignParams = {
@@ -250,54 +253,14 @@ export default class Sankey extends Stanza {
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
-    const node = g
-      .append("g")
-      .selectAll("rect")
-      .data(nodes)
-      .join("rect")
-      .attr("class", "node")
-      .attr("x", (d) => d.x0)
-      .attr("y", (d) => d.y0)
-      .attr("height", (d) => d.y1 - d.y0)
-      .attr("width", (d) => d.x1 - d.x0)
-      .attr("style", (d) => `fill: ${d[colorSym]};`);
-
-    if (
-      tooltipParams.dataKey &&
-      nodes.some((d) => !!d[tooltipParams.dataKey])
-    ) {
-      node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
-      this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
-    }
-
-    let label;
-    if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
-      label = g
-        .append("g")
-        .selectAll("text")
-        .data(nodes)
-        .join("text")
-        .attr("class", "label")
-        .attr("x", (d) =>
-          d.x0 < width / 2
-            ? d.x1 + nodeLabelParams.margin
-            : d.x0 - nodeLabelParams.margin
-        )
-        .attr("y", (d) => (d.y1 + d.y0) / 2)
-        .attr("dominant-baseline", "middle")
-        .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
-        .text((d) => d[nodeLabelParams.dataKey] || "");
-    }
-
     const link = g
       .append("g")
       .attr("fill", "none")
-      .attr("stroke-opacity", 0.8)
       .selectAll("g")
       .data(links)
       .join("g")
       .attr("stroke-width", (d) => d.width)
-      .style("mix-blend-mode", "multiply");
+      .style("mix-blend-mode", linkColorParams.blendMode);
 
     link
       .append("path")
@@ -359,6 +322,45 @@ export default class Sankey extends Stanza {
         //no datakey, use default color
         link.attr("stroke", togostanzaColors[0]);
       }
+    }
+
+    const node = g
+      .append("g")
+      .selectAll("rect")
+      .data(nodes)
+      .join("rect")
+      .attr("class", "node")
+      .attr("x", (d) => d.x0)
+      .attr("y", (d) => d.y0)
+      .attr("height", (d) => d.y1 - d.y0)
+      .attr("width", (d) => d.x1 - d.x0)
+      .attr("style", (d) => `fill: ${d[colorSym]};`);
+
+    if (
+      tooltipParams.dataKey &&
+      nodes.some((d) => !!d[tooltipParams.dataKey])
+    ) {
+      node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
+      this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
+    }
+
+    let label;
+    if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
+      label = g
+        .append("g")
+        .selectAll("text")
+        .data(nodes)
+        .join("text")
+        .attr("class", "label")
+        .attr("x", (d) =>
+          d.x0 < width / 2
+            ? d.x1 + nodeLabelParams.margin
+            : d.x0 - nodeLabelParams.margin
+        )
+        .attr("y", (d) => (d.y1 + d.y0) / 2)
+        .attr("dominant-baseline", "middle")
+        .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
+        .text((d) => d[nodeLabelParams.dataKey] || "");
     }
 
     if (highlightParams.highlight) {
