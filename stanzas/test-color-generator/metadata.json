@@ -54,11 +54,11 @@
       "stanza:description": "Number of Gradation"
     },
     {
-      "stanza:key": "type-of-color-change",
+      "stanza:key": "type-of-color-circulation",
       "stanza:type": "single-choice",
-      "stanza:choice": ["categorical", "diverging"],
-      "stanza:example": "categorical",
-      "stanza:description": "How the color changes"
+      "stanza:choice": ["circulate", "stretch"],
+      "stanza:example": "circulate",
+      "stanza:description": "How the color circulations (by categorical colors)"
     },
     {
       "stanza:key": "color-scheme",
