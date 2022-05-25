@@ -193,212 +193,287 @@ export default class Sankey extends Stanza {
         [WIDTH, HEIGHT],
       ])
       .nodeAlign(nodesAlignParams.alignment)
+      .nodes(values[dataNodesParams.dataKey].map((d) => d))
+      .links(values[dataLinksParams.dataKey].map((d) => d))
       .iterations(10);
 
-    const sankey = (data) =>
-      _sankey({
-        nodes: data[dataNodesParams.dataKey].map((d) => d),
-        links: data[dataLinksParams.dataKey].map((d) => d),
-      });
+    const sankey = _sankey();
+    // const sankey = (data) =>
+    //   _sankey({
+    //     nodes: data[dataNodesParams.dataKey].map((d) => d),
+    //     links: data[dataLinksParams.dataKey].map((d) => d),
+    //   });
 
-    const { nodes, links } = sankey(values);
+    // const { nodes, links } = sankey(values);
 
     const colorSym = Symbol("color");
 
-    if (
-      nodes.every((d) => typeof d[nodesColorParams.dataKey] !== "undefined")
-    ) {
-      // if there is such datakey in every node
-      // then if its a hex color, use it directly
-      if (nodes.every((d) => checkIfHexColor(d[nodesColorParams.dataKey]))) {
-        nodes.forEach((d) => {
-          d[colorSym] = d[nodesColorParams.dataKey];
-        });
-      } else {
-        // else if
-        if (nodesColorParams.colorScale === "linear") {
-          if (
-            nodes.every((d) => checkIfIntOrFloat(d[nodesColorParams.dataKey]))
-          ) {
-            // if the color scale is linear
-            // then use the linear scale
-            linearColor.domain([
-              d3.min(nodes, (d) => d[nodesColorParams.dataKey]),
-              d3.max(nodes, (d) => d[nodesColorParams.dataKey]),
-            ]);
-            nodes.forEach((d) => {
-              d[colorSym] = linearColor(d[nodesColorParams.dataKey]);
-            });
-          } else {
-            // else use the ordinal scale
-            nodes.forEach((d) => {
-              d[colorSym] = color(d[nodesColorParams.dataKey]);
-            });
-          }
-        } else {
-          // else use the ordinal scale
-          nodes.forEach((d) => {
-            d[colorSym] = color(d[nodesColorParams.dataKey]);
-          });
-        }
-      }
-    }
+    // if (
+    //   nodes.every((d) => typeof d[nodesColorParams.dataKey] !== "undefined")
+    // ) {
+    //   // if there is such datakey in every node
+    //   // then if its a hex color, use it directly
+    //   if (nodes.every((d) => checkIfHexColor(d[nodesColorParams.dataKey]))) {
+    //     nodes.forEach((d) => {
+    //       d[colorSym] = d[nodesColorParams.dataKey];
+    //     });
+    //   } else {
+    //     // else if
+    //     if (nodesColorParams.colorScale === "linear") {
+    //       if (
+    //         nodes.every((d) => checkIfIntOrFloat(d[nodesColorParams.dataKey]))
+    //       ) {
+    //         // if the color scale is linear
+    //         // then use the linear scale
+    //         linearColor.domain([
+    //           d3.min(nodes, (d) => d[nodesColorParams.dataKey]),
+    //           d3.max(nodes, (d) => d[nodesColorParams.dataKey]),
+    //         ]);
+    //         nodes.forEach((d) => {
+    //           d[colorSym] = linearColor(d[nodesColorParams.dataKey]);
+    //         });
+    //       } else {
+    //         // else use the ordinal scale
+    //         nodes.forEach((d) => {
+    //           d[colorSym] = color(d[nodesColorParams.dataKey]);
+    //         });
+    //       }
+    //     } else {
+    //       // else use the ordinal scale
+    //       nodes.forEach((d) => {
+    //         d[colorSym] = color(d[nodesColorParams.dataKey]);
+    //       });
+    //     }
+    //   }
+    // }
 
-    const nodeHash = nodes.reduce(
-      (acc, node) => ({ ...acc, [node[dataNodesParams.IdDataKey]]: node }),
-      {}
-    );
+    // const nodeHash = nodes.reduce(
+    //   (acc, node) => ({ ...acc, [node[dataNodesParams.IdDataKey]]: node }),
+    //   {}
+    // );
 
     const g = svg
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
-    const link = g
-      .append("g")
-      .attr("fill", "none")
-      .selectAll("g")
-      .data(links)
-      .join("g")
-      .attr("stroke-width", (d) => d.width)
-      .style("mix-blend-mode", linkColorParams.blendMode);
+    // if (linkColorParams.basedOn === "source-target") {
+    //   const gradient = link
+    //     .append("linearGradient")
+    //     .attr("id", (d) => `gradient-${d.index}`)
+    //     .attr("gradientUnits", "userSpaceOnUse")
+    //     .attr("x1", (d) => nodeHash[d.source[dataNodesParams.IdDataKey]].x0)
+    //     .attr("x2", (d) => nodeHash[d.target[dataNodesParams.IdDataKey]].x1);
 
-    link
-      .append("path")
-      .attr("d", sankeyLinkHorizontal())
-      .attr("stroke-width", ({ width }) => Math.max(0.5, width))
-      .attr("class", "link");
+    //   gradient
+    //     .append("stop")
+    //     .attr("offset", "0%")
+    //     .attr(
+    //       "stop-color",
+    //       (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][colorSym]
+    //     );
 
-    if (linkColorParams.basedOn === "source-target") {
-      const gradient = link
-        .append("linearGradient")
-        .attr("id", (d) => `gradient-${d.index}`)
-        .attr("gradientUnits", "userSpaceOnUse")
-        .attr("x1", (d) => nodeHash[d.source[dataNodesParams.IdDataKey]].x0)
-        .attr("x2", (d) => nodeHash[d.target[dataNodesParams.IdDataKey]].x1);
+    //   gradient
+    //     .append("stop")
+    //     .attr("offset", "100%")
+    //     .attr(
+    //       "stop-color",
+    //       (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][colorSym]
+    //     );
 
-      gradient
-        .append("stop")
-        .attr("offset", "0%")
-        .attr(
-          "stop-color",
-          (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][colorSym]
-        );
+    //   link.attr("stroke", (d) => `url(#gradient-${d.index})`);
+    // } else if (
+    //   linkColorParams.basedOn === "source" ||
+    //   linkColorParams.basedOn === "target"
+    // ) {
+    //   link.attr(
+    //     "stroke",
+    //     (d) =>
+    //       nodeHash[d[linkColorParams.basedOn][dataNodesParams.IdDataKey]][
+    //         colorSym
+    //       ]
+    //   );
+    // } else {
+    //   // if "data-key"
+    //   if (
+    //     linkColorParams.dataKey &&
+    //     links.every((d) => d[linkColorParams.dataKey])
+    //   ) {
+    //     // if there is such datakey in every link
+    //     // then if its a hex color, use it directly
+    //     if (links.every((d) => checkIfHexColor(d[linkColorParams.dataKey]))) {
+    //       link.attr("stroke", (d) => d[linkColorParams.dataKey]);
+    //     } else {
+    //       // else use ordinal scale
+    //       link.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
+    //     }
+    //   } else {
+    //     //no datakey, use default color
+    //     link.attr("stroke", togostanzaColors[0]);
+    //   }
+    // }
 
-      gradient
-        .append("stop")
-        .attr("offset", "100%")
-        .attr(
-          "stop-color",
-          (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][colorSym]
-        );
+    // const showLabels = nodes.some((d) => d[nodeLabelParams.dataKey]);
 
-      link.attr("stroke", (d) => `url(#gradient-${d.index})`);
-    } else if (
-      linkColorParams.basedOn === "source" ||
-      linkColorParams.basedOn === "target"
-    ) {
-      link.attr(
-        "stroke",
-        (d) =>
-          nodeHash[d[linkColorParams.basedOn][dataNodesParams.IdDataKey]][
-            colorSym
-          ]
-      );
-    } else {
-      // if "data-key"
-      if (
-        linkColorParams.dataKey &&
-        links.every((d) => d[linkColorParams.dataKey])
-      ) {
-        // if there is such datakey in every link
-        // then if its a hex color, use it directly
-        if (links.every((d) => checkIfHexColor(d[linkColorParams.dataKey]))) {
-          link.attr("stroke", (d) => d[linkColorParams.dataKey]);
-        } else {
-          // else use ordinal scale
-          link.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
-        }
-      } else {
-        //no datakey, use default color
-        link.attr("stroke", togostanzaColors[0]);
-      }
+    const node = g.append("g");
+    const link = g.append("g");
+
+    function update() {
+      const { links, nodes } = sankey;
+
+      const n = node.selectAll("rect").data(nodes, (d) => d.name);
+
+      n.enter()
+        .append("rect")
+        .attr("class", "node")
+        .attr("style", (d) => `fill: ${d[colorSym]};`)
+        .call(
+          d3
+            .drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended)
+        )
+        .merge(n)
+        .attr("x", (d) => d.x0)
+        .attr("y", (d) => d.y0)
+        .attr("height", (d) => d.y1 - d.y0)
+        .attr("width", (d) => d.x1 - d.x0);
+
+      n.exit().remove();
+
+      const l = link.selectAll("path").data(links, (d) => d.index);
+
+      l.enter()
+        .append("path")
+        .attr("stroke-width", (d) => d.width)
+        .style("mix-blend-mode", linkColorParams.blendMode)
+        .merge(l)
+        .attr("d", sankeyLinkHorizontal())
+        .attr("stroke-width", ({ width }) => Math.max(0.5, width))
+        .attr("class", "link");
+
+      // n
+      // .join(
+      //   (enter) => {
+      //     console.log("enter");
+      //     enter
+
+      //     return enter;
+      //     // if (showLabels) {
+      //     //   g.append("text")
+      //     //     .attr("class", "label")
+      //     //     .attr("x", (d) =>
+      //     //       d.x0 < width / 2
+      //     //         ? d.x1 + nodeLabelParams.margin
+      //     //         : d.x0 - nodeLabelParams.margin
+      //     //     )
+      //     //     .attr("y", (d) => (d.y1 + d.y0) / 2)
+      //     //     .attr("dominant-baseline", "middle")
+      //     //     .attr("text-anchor", (d) =>
+      //     //       d.x0 < width / 2 ? "start" : "end"
+      //     //     )
+      //     //     .text((d) => d[nodeLabelParams.dataKey] || "");
+      //     // }
+      //   },
+      //   (update) => {
+      //     return update;
+      //     // .attr("x", (d) => d.x0)
+      //     // .attr("y", (d) => d.y0)
+      //     // .attr("height", (d) => d.y1 - d.y0)
+      //     // .attr("width", (d) => d.x1 - d.x0);
+      //   }
     }
 
-    const node = g
-      .append("g")
-      .selectAll("rect")
-      .data(nodes)
-      .join("rect")
-      .attr("class", "node")
-      .attr("x", (d) => d.x0)
-      .attr("y", (d) => d.y0)
-      .attr("height", (d) => d.y1 - d.y0)
-      .attr("width", (d) => d.x1 - d.x0)
-      .attr("style", (d) => `fill: ${d[colorSym]};`);
+    update();
 
-    if (
-      tooltipParams.dataKey &&
-      nodes.some((d) => !!d[tooltipParams.dataKey])
-    ) {
-      node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
-      this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
+    // if (
+    //   tooltipParams.dataKey &&
+    //   nodes.some((d) => !!d[tooltipParams.dataKey])
+    // ) {
+    //   node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
+    //   this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
+    // }
+
+    let startY, nodeHeight;
+
+    function dragstarted(event, d) {
+      nodeHeight = d.y1 - d.y0;
+      startY = d3.select(this).attr("y");
+      //d3.select(this).raise().attr("stroke", "black");
+    }
+
+    function dragged(event, d) {
+      d.y0 += event.dy;
+
+      d.y1 = d.y0 + nodeHeight;
+
+      d3sankey().update(sankey);
+      update();
+      // d3.select(this).attr(
+      //   "transform",
+      //   `translate(0, ${Math.max(event.y - startY, event.y - 0)})`
+      // );
+    }
+
+    function dragended(event, d) {
+      d3.select(this).attr("stroke", null);
     }
 
     let label;
-    if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
-      label = g
-        .append("g")
-        .selectAll("text")
-        .data(nodes)
-        .join("text")
-        .attr("class", "label")
-        .attr("x", (d) =>
-          d.x0 < width / 2
-            ? d.x1 + nodeLabelParams.margin
-            : d.x0 - nodeLabelParams.margin
-        )
-        .attr("y", (d) => (d.y1 + d.y0) / 2)
-        .attr("dominant-baseline", "middle")
-        .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
-        .text((d) => d[nodeLabelParams.dataKey] || "");
-    }
+    // if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
+    //   label = g
+    //     .append("g")
+    //     .selectAll("text")
+    //     .data(nodes)
+    //     .join("text")
+    //     .attr("class", "label")
+    //     .attr("x", (d) =>
+    //       d.x0 < width / 2
+    //         ? d.x1 + nodeLabelParams.margin
+    //         : d.x0 - nodeLabelParams.margin
+    //     )
+    //     .attr("y", (d) => (d.y1 + d.y0) / 2)
+    //     .attr("dominant-baseline", "middle")
+    //     .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
+    //     .text((d) => d[nodeLabelParams.dataKey] || "");
+    // }
 
-    if (highlightParams.highlight) {
-      node.on("mouseover", function (e, d) {
-        node.classed("fadeout", true);
-        link.classed("fadeout", true);
+    // if (highlightParams.highlight) {
+    //   node.on("mouseover", function (e, d) {
+    //     node.classed("fadeout", true);
+    //     link.classed("fadeout", true);
 
-        node.filter((p) => d.index === p.index).classed("fadeout", false);
+    //     node.filter((p) => d.index === p.index).classed("fadeout", false);
 
-        const neighbourNodes = link
-          .filter(
-            (p) => d.index === p.source.index || d.index === p.target.index
-          )
-          .classed("fadeout", false)
-          .data()
-          .map((d) => [d.source.index, d.target.index])
-          .flat();
+    //     const neighbourNodes = link
+    //       .filter(
+    //         (p) => d.index === p.source.index || d.index === p.target.index
+    //       )
+    //       .classed("fadeout", false)
+    //       .data()
+    //       .map((d) => [d.source.index, d.target.index])
+    //       .flat();
 
-        node
-          .filter((p) => neighbourNodes.includes(p.index))
-          .classed("fadeout", false);
-        if (label) {
-          label.classed("fadeout", true);
-          label.filter((p) => d.index === p.index).classed("fadeout", false);
-          label
-            .filter((p) => neighbourNodes.includes(p.index))
-            .classed("fadeout", false);
-        }
-      });
+    //     node
+    //       .filter((p) => neighbourNodes.includes(p.index))
+    //       .classed("fadeout", false);
+    //     if (label) {
+    //       label.classed("fadeout", true);
+    //       label.filter((p) => d.index === p.index).classed("fadeout", false);
+    //       label
+    //         .filter((p) => neighbourNodes.includes(p.index))
+    //         .classed("fadeout", false);
+    //     }
+    //   });
 
-      node.on("mouseout", function () {
-        node.classed("fadeout", false);
-        link.classed("fadeout", false);
-        if (label) {
-          label.classed("fadeout", false);
-        }
-      });
-    }
+    //   node.on("mouseout", function () {
+    //     node.classed("fadeout", false);
+    //     link.classed("fadeout", false);
+    //     if (label) {
+    //       label.classed("fadeout", false);
+    //     }
+    //   });
+    // }
   }
 }
 
