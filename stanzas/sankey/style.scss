@@ -34,9 +34,9 @@ svg {
   path.link {
     opacity: var(--togostanza_link_opacity);
   }
-}
 
-.fadeout {
-  opacity: 0.05;
-  transition: opacity 0.2s ease-in-out;
+  .fadeout {
+    opacity: 0.05 !important;
+    transition: opacity 0.2s ease-in-out;
+  }
 }

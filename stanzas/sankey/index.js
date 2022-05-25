@@ -259,8 +259,8 @@ export default class Sankey extends Stanza {
 
     // const showLabels = nodes.some((d) => d[nodeLabelParams.dataKey]);
 
-    const node = g.append("g");
-    const link = g.append("g");
+    const node = g.append("g").attr("id", "node-groups");
+    const link = g.append("g").attr("id", "link-groups");
     const defs = svg.append("defs");
 
     if (linkColorParams.basedOn === "source-target") {
@@ -333,21 +333,18 @@ export default class Sankey extends Stanza {
           links.forEach(
             (link) => (link[linkColorSym] = link[linkColorParams.dataKey])
           );
-          //lEnter.attr("stroke", (d) => d[linkColorParams.dataKey]);
         } else {
           // else use ordinal scale
           links.forEach(
             (link) =>
               (link[linkColorSym] = color(link[linkColorParams.dataKey]))
           );
-          //lEnter.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
         }
       } else {
         //no datakey, use default color
         links.forEach(
           (link) => (link[linkColorSym] = linkColorParams.defaultColor)
         );
-        //lEnter.attr("stroke", togostanzaColors[0]);
       }
     }
 
@@ -391,11 +388,19 @@ export default class Sankey extends Stanza {
             .attr("height", (d) => d.y1 - d.y0)
             .attr("style", (d) => `fill: ${d[nodeColorSym]};`);
 
-          g.append("text")
+          const label = g
+            .append("text")
             .attr("class", "label")
-            .attr("x", 5)
+            .attr("x", (d) => {
+              if (d.x0 < WIDTH / 2) {
+                return nodesParams.width + nodeLabelParams.margin;
+              }
+              return -nodeLabelParams.margin;
+            })
             .attr("y", (d) => (d.y1 - d.y0) / 2)
-            .text((d) => d.name);
+            .attr("dominant-baseline", "middle")
+            .attr("text-anchor", (d) => (d.x0 < WIDTH / 2 ? "start" : "end"))
+            .text((d) => d[nodeLabelParams.dataKey] || "");
 
           g.call(d3.drag().on("start", dragstarted).on("drag", dragged));
 
@@ -407,13 +412,6 @@ export default class Sankey extends Stanza {
           });
         }
       );
-
-      // .attr("x", (d) => d.x0)
-      // .attr("y", (d) => d.y0)
-      // .attr("height", (d) => d.y1 - d.y0)
-      // .attr("width", (d) => d.x1 - d.x0);
-
-      n.exit().remove();
     }
 
     update();
@@ -442,60 +440,36 @@ export default class Sankey extends Stanza {
       update();
     }
 
-    // if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
-    //   label = g
-    //     .append("g")
-    //     .selectAll("text")
-    //     .data(nodes)
-    //     .join("text")
-    //     .attr("class", "label")
-    //     .attr("x", (d) =>
-    //       d.x0 < width / 2
-    //         ? d.x1 + nodeLabelParams.margin
-    //         : d.x0 - nodeLabelParams.margin
-    //     )
-    //     .attr("y", (d) => (d.y1 + d.y0) / 2)
-    //     .attr("dominant-baseline", "middle")
-    //     .attr("text-anchor", (d) => (d.x0 < width / 2 ? "start" : "end"))
-    //     .text((d) => d[nodeLabelParams.dataKey] || "");
-    // }
+    if (highlightParams.highlight) {
+      const highlightedNode = node.selectAll(".node-group");
+      const highlightedLink = link.selectAll(".link");
+      highlightedNode.on("mouseover", function (e, d) {
+        highlightedNode.classed("fadeout", true);
+        highlightedLink.classed("fadeout", true);
 
-    // if (highlightParams.highlight) {
-    //   node.on("mouseover", function (e, d) {
-    //     node.classed("fadeout", true);
-    //     link.classed("fadeout", true);
+        highlightedNode
+          .filter((p) => d.index === p.index)
+          .classed("fadeout", false);
 
-    //     node.filter((p) => d.index === p.index).classed("fadeout", false);
+        const neighbourNodes = highlightedLink
+          .filter((p) => {
+            return d.index === p.source.index || d.index === p.target.index;
+          })
+          .classed("fadeout", false)
+          .data()
+          .map((d) => [d.source.index, d.target.index])
+          .flat();
 
-    //     const neighbourNodes = link
-    //       .filter(
-    //         (p) => d.index === p.source.index || d.index === p.target.index
-    //       )
-    //       .classed("fadeout", false)
-    //       .data()
-    //       .map((d) => [d.source.index, d.target.index])
-    //       .flat();
+        highlightedNode
+          .filter((p) => neighbourNodes.includes(p.index))
+          .classed("fadeout", false);
+      });
 
-    //     node
-    //       .filter((p) => neighbourNodes.includes(p.index))
-    //       .classed("fadeout", false);
-    //     if (label) {
-    //       label.classed("fadeout", true);
-    //       label.filter((p) => d.index === p.index).classed("fadeout", false);
-    //       label
-    //         .filter((p) => neighbourNodes.includes(p.index))
-    //         .classed("fadeout", false);
-    //     }
-    //   });
-
-    //   node.on("mouseout", function () {
-    //     node.classed("fadeout", false);
-    //     link.classed("fadeout", false);
-    //     if (label) {
-    //       label.classed("fadeout", false);
-    //     }
-    //   });
-    // }
+      highlightedNode.on("mouseout", function () {
+        highlightedNode.classed("fadeout", false);
+        highlightedLink.classed("fadeout", false);
+      });
+    }
   }
 }
 
