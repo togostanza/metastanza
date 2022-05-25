@@ -204,222 +204,244 @@ export default class Sankey extends Stanza {
     //     links: data[dataLinksParams.dataKey].map((d) => d),
     //   });
 
-    // const { nodes, links } = sankey(values);
+    const { links, nodes } = sankey;
 
-    const colorSym = Symbol("color");
+    const nodeColorSym = Symbol("nodeColor");
+    const linkColorSym = Symbol("linkColor");
 
-    // if (
-    //   nodes.every((d) => typeof d[nodesColorParams.dataKey] !== "undefined")
-    // ) {
-    //   // if there is such datakey in every node
-    //   // then if its a hex color, use it directly
-    //   if (nodes.every((d) => checkIfHexColor(d[nodesColorParams.dataKey]))) {
-    //     nodes.forEach((d) => {
-    //       d[colorSym] = d[nodesColorParams.dataKey];
-    //     });
-    //   } else {
-    //     // else if
-    //     if (nodesColorParams.colorScale === "linear") {
-    //       if (
-    //         nodes.every((d) => checkIfIntOrFloat(d[nodesColorParams.dataKey]))
-    //       ) {
-    //         // if the color scale is linear
-    //         // then use the linear scale
-    //         linearColor.domain([
-    //           d3.min(nodes, (d) => d[nodesColorParams.dataKey]),
-    //           d3.max(nodes, (d) => d[nodesColorParams.dataKey]),
-    //         ]);
-    //         nodes.forEach((d) => {
-    //           d[colorSym] = linearColor(d[nodesColorParams.dataKey]);
-    //         });
-    //       } else {
-    //         // else use the ordinal scale
-    //         nodes.forEach((d) => {
-    //           d[colorSym] = color(d[nodesColorParams.dataKey]);
-    //         });
-    //       }
-    //     } else {
-    //       // else use the ordinal scale
-    //       nodes.forEach((d) => {
-    //         d[colorSym] = color(d[nodesColorParams.dataKey]);
-    //       });
-    //     }
-    //   }
-    // }
+    if (
+      nodes.every((d) => typeof d[nodesColorParams.dataKey] !== "undefined")
+    ) {
+      // if there is such datakey in every node
+      // then if its a hex color, use it directly
+      if (nodes.every((d) => checkIfHexColor(d[nodesColorParams.dataKey]))) {
+        nodes.forEach((d) => {
+          d[nodeColorSym] = d[nodesColorParams.dataKey];
+        });
+      } else {
+        // else if
+        if (nodesColorParams.colorScale === "linear") {
+          if (
+            nodes.every((d) => checkIfIntOrFloat(d[nodesColorParams.dataKey]))
+          ) {
+            // if the color scale is linear
+            // then use the linear scale
+            linearColor.domain([
+              d3.min(nodes, (d) => d[nodesColorParams.dataKey]),
+              d3.max(nodes, (d) => d[nodesColorParams.dataKey]),
+            ]);
+            nodes.forEach((d) => {
+              d[nodeColorSym] = linearColor(d[nodesColorParams.dataKey]);
+            });
+          } else {
+            // else use the ordinal scale
+            nodes.forEach((d) => {
+              d[nodeColorSym] = color(d[nodesColorParams.dataKey]);
+            });
+          }
+        } else {
+          // else use the ordinal scale
+          nodes.forEach((d) => {
+            d[nodeColorSym] = color(d[nodesColorParams.dataKey]);
+          });
+        }
+      }
+    }
 
-    // const nodeHash = nodes.reduce(
-    //   (acc, node) => ({ ...acc, [node[dataNodesParams.IdDataKey]]: node }),
-    //   {}
-    // );
+    const nodeHash = nodes.reduce(
+      (acc, node) => ({ ...acc, [node[dataNodesParams.IdDataKey]]: node }),
+      {}
+    );
 
     const g = svg
       .append("g")
       .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
-    // if (linkColorParams.basedOn === "source-target") {
-    //   const gradient = link
-    //     .append("linearGradient")
-    //     .attr("id", (d) => `gradient-${d.index}`)
-    //     .attr("gradientUnits", "userSpaceOnUse")
-    //     .attr("x1", (d) => nodeHash[d.source[dataNodesParams.IdDataKey]].x0)
-    //     .attr("x2", (d) => nodeHash[d.target[dataNodesParams.IdDataKey]].x1);
-
-    //   gradient
-    //     .append("stop")
-    //     .attr("offset", "0%")
-    //     .attr(
-    //       "stop-color",
-    //       (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][colorSym]
-    //     );
-
-    //   gradient
-    //     .append("stop")
-    //     .attr("offset", "100%")
-    //     .attr(
-    //       "stop-color",
-    //       (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][colorSym]
-    //     );
-
-    //   link.attr("stroke", (d) => `url(#gradient-${d.index})`);
-    // } else if (
-    //   linkColorParams.basedOn === "source" ||
-    //   linkColorParams.basedOn === "target"
-    // ) {
-    //   link.attr(
-    //     "stroke",
-    //     (d) =>
-    //       nodeHash[d[linkColorParams.basedOn][dataNodesParams.IdDataKey]][
-    //         colorSym
-    //       ]
-    //   );
-    // } else {
-    //   // if "data-key"
-    //   if (
-    //     linkColorParams.dataKey &&
-    //     links.every((d) => d[linkColorParams.dataKey])
-    //   ) {
-    //     // if there is such datakey in every link
-    //     // then if its a hex color, use it directly
-    //     if (links.every((d) => checkIfHexColor(d[linkColorParams.dataKey]))) {
-    //       link.attr("stroke", (d) => d[linkColorParams.dataKey]);
-    //     } else {
-    //       // else use ordinal scale
-    //       link.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
-    //     }
-    //   } else {
-    //     //no datakey, use default color
-    //     link.attr("stroke", togostanzaColors[0]);
-    //   }
-    // }
-
     // const showLabels = nodes.some((d) => d[nodeLabelParams.dataKey]);
 
     const node = g.append("g");
     const link = g.append("g");
+    const defs = svg.append("defs");
+
+    if (linkColorParams.basedOn === "source-target") {
+      const d = defs.selectAll("linearGradient").data(links, (d) => d.index);
+
+      const gradient = d.join(
+        (enter) => {
+          const grad = enter
+            .append("linearGradient")
+            .attr("id", (d) => `gradient-${d.index}`)
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr("x1", (d) => nodeHash[d.source[dataNodesParams.IdDataKey]].x0)
+            .attr(
+              "x2",
+              (d) => nodeHash[d.target[dataNodesParams.IdDataKey]].x1
+            );
+
+          grad
+            .append("stop")
+            .attr("offset", "0%")
+            .attr(
+              "stop-color",
+              (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][nodeColorSym]
+            );
+
+          grad
+            .append("stop")
+            .attr("offset", "100%")
+            .attr(
+              "stop-color",
+              (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][nodeColorSym]
+            );
+
+          return grad;
+        },
+        (exit) => exit.remove(),
+        (update) => {
+          console.log("update", update.node());
+          update
+            .select("stop[offset='0%']")
+            .attr(
+              "stop-color",
+              (d) => nodeHash[d.source[dataNodesParams.IdDataKey]][nodeColorSym]
+            );
+          update
+            .select("stop[offset='100%']")
+            .attr(
+              "stop-color",
+              (d) => nodeHash[d.target[dataNodesParams.IdDataKey]][nodeColorSym]
+            );
+        }
+      );
+    } else if (
+      linkColorParams.basedOn === "source" ||
+      linkColorParams.basedOn === "target"
+    ) {
+      links.forEach(
+        (link) =>
+          (link[linkColorSym] =
+            nodeHash[link[linkColorParams.basedOn][dataNodesParams.IdDataKey]][
+              nodeColorSym
+            ])
+      );
+    } else {
+      // if "data-key"
+      if (linkColorParams.dataKey) {
+        // if there is such datakey in every link
+        // then if its a hex color, use it directly
+        if (links.every((d) => checkIfHexColor(d[linkColorParams.dataKey]))) {
+          links.forEach(
+            (link) => (link[linkColorSym] = link[linkColorParams.dataKey])
+          );
+          //lEnter.attr("stroke", (d) => d[linkColorParams.dataKey]);
+        } else {
+          // else use ordinal scale
+          links.forEach(
+            (link) =>
+              (link[linkColorSym] = color(link[linkColorParams.dataKey]))
+          );
+          //lEnter.attr("stroke", (d) => color(d[linkColorParams.dataKey]));
+        }
+      } else {
+        //no datakey, use default color
+        links.forEach(
+          (link) => (link[linkColorSym] = linkColorParams.defaultColor)
+        );
+        //lEnter.attr("stroke", togostanzaColors[0]);
+      }
+    }
 
     function update() {
-      const { links, nodes } = sankey;
-
-      const n = node.selectAll("rect").data(nodes, (d) => d.name);
-
-      n.enter()
-        .append("rect")
-        .attr("class", "node")
-        .attr("style", (d) => `fill: ${d[colorSym]};`)
-        .call(
-          d3
-            .drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended)
-        )
-        .merge(n)
-        .attr("x", (d) => d.x0)
-        .attr("y", (d) => d.y0)
-        .attr("height", (d) => d.y1 - d.y0)
-        .attr("width", (d) => d.x1 - d.x0);
-
-      n.exit().remove();
+      const n = node.selectAll("g").data(nodes, (d) => d.name);
 
       const l = link.selectAll("path").data(links, (d) => d.index);
 
-      l.enter()
+      const lEnter = l
+        .enter()
         .append("path")
-        .attr("stroke-width", (d) => d.width)
         .style("mix-blend-mode", linkColorParams.blendMode)
         .merge(l)
         .attr("d", sankeyLinkHorizontal())
         .attr("stroke-width", ({ width }) => Math.max(0.5, width))
-        .attr("class", "link");
+        .attr("class", "link")
+        .attr("fill", "none");
 
-      // n
-      // .join(
-      //   (enter) => {
-      //     console.log("enter");
-      //     enter
+      if (linkColorParams.basedOn === "source-target") {
+        lEnter.each(function (d) {
+          d3.select(this).attr("stroke", `url(#gradient-${d.index})`);
+        });
+      } else {
+        lEnter.each(function () {
+          d3.select(this).attr("stroke", (d) => d[linkColorSym]);
+        });
+      }
 
-      //     return enter;
-      //     // if (showLabels) {
-      //     //   g.append("text")
-      //     //     .attr("class", "label")
-      //     //     .attr("x", (d) =>
-      //     //       d.x0 < width / 2
-      //     //         ? d.x1 + nodeLabelParams.margin
-      //     //         : d.x0 - nodeLabelParams.margin
-      //     //     )
-      //     //     .attr("y", (d) => (d.y1 + d.y0) / 2)
-      //     //     .attr("dominant-baseline", "middle")
-      //     //     .attr("text-anchor", (d) =>
-      //     //       d.x0 < width / 2 ? "start" : "end"
-      //     //     )
-      //     //     .text((d) => d[nodeLabelParams.dataKey] || "");
-      //     // }
-      //   },
-      //   (update) => {
-      //     return update;
-      //     // .attr("x", (d) => d.x0)
-      //     // .attr("y", (d) => d.y0)
-      //     // .attr("height", (d) => d.y1 - d.y0)
-      //     // .attr("width", (d) => d.x1 - d.x0);
-      //   }
+      n.join(
+        (enter) => {
+          const g = enter
+            .append("g")
+            .attr("class", "node-group")
+            .attr("transform", (d) => `translate(${d.x0}, ${d.y0})`);
+
+          g.append("rect")
+            .attr("class", "node")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 5)
+            .attr("height", (d) => d.y1 - d.y0)
+            .attr("style", (d) => `fill: ${d[nodeColorSym]};`);
+
+          g.append("text")
+            .attr("class", "label")
+            .attr("x", 5)
+            .attr("y", (d) => (d.y1 - d.y0) / 2)
+            .text((d) => d.name);
+
+          g.call(d3.drag().on("start", dragstarted).on("drag", dragged));
+
+          return g;
+        },
+        (update) => {
+          update.attr("transform", (d) => {
+            return `translate(${d.x0}, ${d.y0})`;
+          });
+        }
+      );
+
+      // .attr("x", (d) => d.x0)
+      // .attr("y", (d) => d.y0)
+      // .attr("height", (d) => d.y1 - d.y0)
+      // .attr("width", (d) => d.x1 - d.x0);
+
+      n.exit().remove();
     }
 
     update();
 
-    // if (
-    //   tooltipParams.dataKey &&
-    //   nodes.some((d) => !!d[tooltipParams.dataKey])
-    // ) {
-    //   node.attr("data-tooltip", (d) => d[tooltipParams.dataKey]);
-    //   this.tooltip.setup(svg.node().querySelectorAll("[data-tooltip]"));
-    // }
-
-    let startY, nodeHeight;
+    let startY;
+    let nodeHeight;
 
     function dragstarted(event, d) {
       nodeHeight = d.y1 - d.y0;
       startY = d3.select(this).attr("y");
-      //d3.select(this).raise().attr("stroke", "black");
     }
 
     function dragged(event, d) {
-      d.y0 += event.dy;
+      const newY0 = d.y0 + event.dy;
 
-      d.y1 = d.y0 + nodeHeight;
+      if (
+        (newY0 > 0 || (newY0 <= 0 && event.dy > 0)) &&
+        (newY0 < HEIGHT - nodeHeight ||
+          (newY0 >= HEIGHT - nodeHeight && event.dy < 0))
+      ) {
+        d.y0 = newY0;
+        d.y1 = d.y0 + nodeHeight;
+      }
 
       d3sankey().update(sankey);
       update();
-      // d3.select(this).attr(
-      //   "transform",
-      //   `translate(0, ${Math.max(event.y - startY, event.y - 0)})`
-      // );
     }
 
-    function dragended(event, d) {
-      d3.select(this).attr("stroke", null);
-    }
-
-    let label;
     // if (nodes.some((d) => d[nodeLabelParams.dataKey])) {
     //   label = g
     //     .append("g")
