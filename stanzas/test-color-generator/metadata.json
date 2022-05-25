@@ -56,7 +56,7 @@
     {
       "stanza:key": "type-of-color-circulation",
       "stanza:type": "single-choice",
-      "stanza:choice": ["circulate", "stretch"],
+      "stanza:choice": ["circulate", "interpolate"],
       "stanza:example": "circulate",
       "stanza:description": "How the color circulations (by categorical colors)"
     },

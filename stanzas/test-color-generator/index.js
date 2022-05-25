@@ -56,23 +56,26 @@ export default class TestColorGenerator extends Stanza {
     }
 
     let domain, colorScale;
+    const unit = 1 / colors.length;
     switch(colorCirculation) {
       case 'circulate':
-        domain = [...Array(colors.length)].map((_, index) => index);
+        domain = [...Array(colors.length)].map((_, index) => index * unit);
         colorScale = d3.scaleOrdinal()
           .domain(domain)
           .range(colors);
         break;
-      case 'stretch':
-        domain = [...Array(colors.length)].map((_, index) =>  numOfGradation / colors.length * index);
+      case 'interpolate':
+        domain = [...Array(colors.length)].map((_, index) =>  numOfGradation / colors.length * index * unit);
         colorScale = d3.scaleLinear()
           .domain(domain)
           .range(colors);
         break;
     }
 
+    console.log(d3.schemeBrBG)
+
     colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
-      return `<li style="background: ${colorScale(index)}"></li>`
+      return `<li style="background: ${colorScale(index * unit)}"></li>`
     }).join('');
 
   }
