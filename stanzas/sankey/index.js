@@ -198,11 +198,6 @@ export default class Sankey extends Stanza {
       .iterations(10);
 
     const sankey = _sankey();
-    // const sankey = (data) =>
-    //   _sankey({
-    //     nodes: data[dataNodesParams.dataKey].map((d) => d),
-    //     links: data[dataLinksParams.dataKey].map((d) => d),
-    //   });
 
     const { links, nodes } = sankey;
 
@@ -379,13 +374,24 @@ export default class Sankey extends Stanza {
             .attr("class", "node-group")
             .attr("transform", (d) => `translate(${d.x0}, ${d.y0})`);
 
-          g.append("rect")
+          const rect = g
+            .append("rect")
             .classed("node", true)
             .attr("x", 0)
             .attr("y", 0)
-            .attr("width", 5)
+            .attr("width", nodesParams.width)
             .attr("height", (d) => d.y1 - d.y0)
             .attr("style", (d) => `fill: ${d[nodeColorSym]};`);
+
+          if (tooltipParams.dataKey && tooltipParams.dataKey !== "") {
+            rect.attr("data-tooltip", (d) => {
+              const num = parseFloat(d[tooltipParams.dataKey]);
+              if (!isNaN(num)) {
+                return d3.format(".2f")(num);
+              }
+              return d[tooltipParams.dataKey];
+            });
+          }
 
           g.append("text")
             .attr("class", "label")
@@ -488,6 +494,10 @@ export default class Sankey extends Stanza {
         highlightedNode.classed("fadeout", false);
         highlightedLink.classed("fadeout", false);
       });
+    }
+
+    if (tooltipParams.dataKey && tooltipParams.dataKey !== "") {
+      this.tooltip.setup(root.querySelectorAll("[data-tooltip]"));
     }
   }
 }
