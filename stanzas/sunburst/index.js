@@ -91,10 +91,6 @@ export default class Sunburst extends Stanza {
       template: "stanza.html.hbs",
     });
 
-    const dataset = data.filter(
-      (item) => (item.children && !item.n) || (item.n && item.n > 0)
-    );
-
     data.forEach((node) => {
       node.id = "" + node.id;
       if (node?.children) {
@@ -107,22 +103,30 @@ export default class Sunburst extends Stanza {
 
     //Add root element if there are more than one elements without parent. D3 cannot process data with more than one root elements
     const rootElemIndexes = [];
-    for (let i = 0; i < dataset.length - 1; i++) {
-      if (!dataset[i]?.parent) {
-        rootElemIndexes.push(i);
+    data.forEach((node, index) => {
+      if (!node.parent) {
+        rootElemIndexes.push(index);
       }
-    }
-    if (rootElemIndexes.length > 1) {
-      dataset.push({ id: "-1", value: "", label: "" });
+    });
+
+    if (rootElemIndexes.length > 1 || !data.find((item) => item.id === "-1")) {
+      const rootElem = {
+        id: "-1",
+        value: "",
+      };
+      data.push(rootElem);
 
       rootElemIndexes.forEach((index) => {
-        dataset[index].parent = -1;
+        data[index].parent = rootElem.id;
       });
     }
 
-    const el = this.root.querySelector("#sunburst");
+    const dataset = data.filter(
+      (item) =>
+        (item.children && !item.n) || (item.n && item.n > 0) || item.id === "-1"
+    );
 
-    //draw(sunburstElement, filteredData, opts, dispatcher, currentDataId);
+    const el = this.root.querySelector("#sunburst");
 
     const stratifiedData = d3
       .stratify()
