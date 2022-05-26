@@ -62,13 +62,13 @@ export default class Sankey extends Stanza {
       template: "stanza.html.hbs",
     });
 
-    const { default: values } = await import("./assets/energy.json");
+    //const { default: values } = await import("./assets/energy.json");
 
-    // = await loadData(
-    //   this.params["data-url"],
-    //   this.params["data-type"],
-    //   this.root.querySelector("main")
-    // );
+    const values = await loadData(
+      this.params["data_url"],
+      this.params["data_type"],
+      this.root.querySelector("main")
+    );
 
     this._data = values;
 
@@ -266,7 +266,7 @@ export default class Sankey extends Stanza {
     if (linkColorParams.basedOn === "source-target") {
       const d = defs.selectAll("linearGradient").data(links, (d) => d.index);
 
-      const gradient = d.join(
+      d.join(
         (enter) => {
           const grad = enter
             .append("linearGradient")
@@ -298,7 +298,6 @@ export default class Sankey extends Stanza {
         },
         (exit) => exit.remove(),
         (update) => {
-          console.log("update", update.node());
           update
             .select("stop[offset='0%']")
             .attr(
@@ -360,7 +359,7 @@ export default class Sankey extends Stanza {
         .merge(l)
         .attr("d", sankeyLinkHorizontal())
         .attr("stroke-width", ({ width }) => Math.max(0.5, width))
-        .attr("class", "link")
+        .classed("link", true)
         .attr("fill", "none");
 
       if (linkColorParams.basedOn === "source-target") {
@@ -381,15 +380,14 @@ export default class Sankey extends Stanza {
             .attr("transform", (d) => `translate(${d.x0}, ${d.y0})`);
 
           g.append("rect")
-            .attr("class", "node")
+            .classed("node", true)
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", 5)
             .attr("height", (d) => d.y1 - d.y0)
             .attr("style", (d) => `fill: ${d[nodeColorSym]};`);
 
-          const label = g
-            .append("text")
+          g.append("text")
             .attr("class", "label")
             .attr("x", (d) => {
               if (d.x0 < WIDTH / 2) {
@@ -402,7 +400,13 @@ export default class Sankey extends Stanza {
             .attr("text-anchor", (d) => (d.x0 < WIDTH / 2 ? "start" : "end"))
             .text((d) => d[nodeLabelParams.dataKey] || "");
 
-          g.call(d3.drag().on("start", dragstarted).on("drag", dragged));
+          g.call(
+            d3
+              .drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended)
+          );
 
           return g;
         },
@@ -416,10 +420,13 @@ export default class Sankey extends Stanza {
 
     update();
 
+    //eslint-disable-next-line
     let startY;
     let nodeHeight;
-
-    function dragstarted(event, d) {
+    let isDragging = false;
+    function dragstarted(_, d) {
+      d3.select(this).raise();
+      isDragging = true;
       nodeHeight = d.y1 - d.y0;
       startY = d3.select(this).attr("y");
     }
@@ -440,10 +447,19 @@ export default class Sankey extends Stanza {
       update();
     }
 
+    function dragended() {
+      isDragging = false;
+      d3.select(this).dispatch("mouseleave");
+    }
+
     if (highlightParams.highlight) {
       const highlightedNode = node.selectAll(".node-group");
       const highlightedLink = link.selectAll(".link");
+
       highlightedNode.on("mouseover", function (e, d) {
+        if (isDragging) {
+          return;
+        }
         highlightedNode.classed("fadeout", true);
         highlightedLink.classed("fadeout", true);
 
@@ -465,7 +481,10 @@ export default class Sankey extends Stanza {
           .classed("fadeout", false);
       });
 
-      highlightedNode.on("mouseout", function () {
+      highlightedNode.on("mouseleave", function () {
+        if (isDragging) {
+          return;
+        }
         highlightedNode.classed("fadeout", false);
         highlightedLink.classed("fadeout", false);
       });
@@ -509,13 +528,10 @@ function checkIfHexColor(text) {
 }
 
 function checkIfIntOrFloat(value) {
-  console.log("check number", value);
   if (typeof value === "number") {
-    console.log(true);
     return true;
   }
   const intRegex = /^\d+$/;
   const floatRegex = /^\d+\.\d+$/;
-  console.log(intRegex.test(value) || floatRegex.test(value));
   return intRegex.test(value) || floatRegex.test(value);
 }
