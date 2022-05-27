@@ -357,7 +357,7 @@ function draw(el, dataset, opts) {
       .append("text")
       .attr("clip-path", (d) => d.clipUid)
       .attr("y", "1.5em")
-      .attr("x", "0.5rem")
+      .attr("x", "1em")
       .text((d) => {
         if (d === root) {
           return name(d);
@@ -365,14 +365,6 @@ function draw(el, dataset, opts) {
           return `${d.data.data.label}`;
         }
       });
-
-    // append expand icon
-    // node
-    //   .filter((d) => d !== root && d.children)
-    //   .append("image")
-    //   .attr("width", 10)
-    //   .attr("height", 10)
-    //   .attr("href", expandSvg);
 
     //adjust rectangles positions
     group.call(position, root, true, zoomInOut);
@@ -440,7 +432,7 @@ function draw(el, dataset, opts) {
             //set tspan to last added tspan and append word that didnt fit
             tspan = text
               .append("tspan")
-              .attr("x", x)
+              .attr("x", "1em")
               .attr("y", y)
               .attr("dy", ++lineNumber * lineHeight + dy + "em")
               .text(word);
@@ -452,7 +444,7 @@ function draw(el, dataset, opts) {
         .append("tspan")
         .attr("class", "number-label")
         .attr("dy", "1.6em")
-        .attr("x", "0.5rem")
+        .attr("x", "1.6em")
         .text((d) => format$1(sum(d, (d) => d?.data?.data?.n || 0)));
     }
   }
@@ -472,32 +464,6 @@ function draw(el, dataset, opts) {
         })`;
       }
     });
-
-    // Placing icons in the middle of nodes
-    // group
-    //   .selectAll("image")
-    //   .attr("x", (d) => {
-    //     if (x(d.x0) === width) {
-    //       return (
-    //         (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - 2 * borderWidth
-    //       );
-    //     } else {
-    //       return (
-    //         (x(d.x0) + x(d.x1)) / 2 - x(d.x0) - iconWidth / 2 - borderWidth
-    //       );
-    //     }
-    //   })
-    //   .attr("y", (d) => {
-    //     if (y(d.y0) === height) {
-    //       return (
-    //         (y(d.y0) + y(d.y1) - 2 * borderWidth) / 2 - y(d.y0) - iconHeight / 2
-    //       );
-    //     } else {
-    //       return (
-    //         (y(d.y0) + y(d.y1) - borderWidth) / 2 - y(d.y0) - iconHeight / 2
-    //       );
-    //     }
-    //   });
 
     a.select("rect")
       .attr("width", (d) => {
