@@ -20,3 +20,6 @@ main .text {
 main .cell {
   border-radius: var(--togostanza-border-radius);
 }
+main .highlighted {
+  stroke: var(--togostanza-hover-border-color);
+}
