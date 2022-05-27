@@ -13,9 +13,7 @@ export default class Heatmap extends Stanza {
     return getComputedStyle(this.element).getPropertyValue(key);
   }
   async render() {
-    const chartElement = this.root.querySelector("main");
-
-    const root = this.root.querySelector(":scope > div");
+    const root = this.root.querySelector("main");
     if (!this.tooltip) {
       this.tooltip = new ToolTip();
       root.append(this.tooltip);
@@ -28,7 +26,7 @@ export default class Heatmap extends Stanza {
       this.params["data-type"]
     );
 
-    this.draw(chartElement, data);
+    this.draw(root, data);
   }
   async draw(el, dataset) {
     const tickSize = +this.css("--togostanza-tick-size") || 0;
