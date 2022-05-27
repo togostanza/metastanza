@@ -22,4 +22,7 @@ main {
   .cell {
     border-radius: var(--togostanza-border-radius);
   }
+  .highlighted {
+    stroke: var(--togostanza-hover-border-color);
+  }
 }
