@@ -1991,7 +1991,7 @@ class VennStanza extends Stanza {
     this.renderTemplate({ template: "stanza.html.hbs" });
 
     // append tooltip, legend
-    const root = this.root.querySelector(":scope > div");
+    const root = this.root.querySelector("main");
     if (!this.tooltip) {
       this.tooltip = new ToolTip();
       root.append(this.tooltip);
@@ -2087,7 +2087,6 @@ class VennStanza extends Stanza {
       // tooltip
       group.dataset.tooltip = `<strong>${labels.join("∩")}</strong>: ${count}`;
       group.dataset.tooltipHtml = true;
-      // this.setTooltip(group);
     });
     this.tooltip.setup(selectedDiagram.querySelectorAll("[data-tooltip]"));
 
