@@ -13,9 +13,7 @@ export default class Heatmap extends Stanza {
     return getComputedStyle(this.element).getPropertyValue(key);
   }
   async render() {
-    const chartElement = this.root.querySelector("main");
-
-    const root = this.root.querySelector(":scope > div");
+    const root = this.root.querySelector("main");
     if (!this.tooltip) {
       this.tooltip = new ToolTip();
       root.append(this.tooltip);
@@ -28,7 +26,7 @@ export default class Heatmap extends Stanza {
       this.params["data-type"]
     );
 
-    this.draw(chartElement, data);
+    this.draw(root, data);
   }
   async draw(el, dataset) {
     const tickSize = +this.css("--togostanza-tick-size") || 0;
@@ -118,23 +116,31 @@ export default class Heatmap extends Stanza {
       .append("rect")
       .attr("x", (d) => x(d.group))
       .attr("y", (d) => y(d.variable))
-      .attr("data-tooltipHtml", true)
+      .attr("data-tooltip-html", true)
       .attr("data-tooltip", (d) => tooltipHTML(d))
       .attr("width", x.bandwidth())
       .attr("height", y.bandwidth())
       .attr("rx", this.css("--togostanza-border-radius"))
       .attr("ry", this.css("--togostanza-border-radius"))
       .style("fill", (d) => myColor(d.value))
-      .on("mouseover", this.mouseover.bind(this))
-      .on("mouseleave", this.mouseleave);
+      .on("mouseover", mouseover)
+      .on("mouseleave", mouseleave);
 
     const values = [...new Set(dataset.map((d) => d.value))];
-    this.tooltip.setup([...svg.selectAll("[data-tooltip]")]);
+
+    this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     this.legend.setup(
       this.intervals(values, myColor),
       {},
       this.root.querySelector("main")
     );
+
+    function mouseover() {
+      d3.select(this).classed("highlighted", true);
+    }
+    function mouseleave() {
+      d3.select(this).classed("highlighted", false);
+    }
   }
   // create legend objects based on min and max data values with number of steps as set by user in this.params
   intervals(
@@ -150,14 +156,5 @@ export default class Heatmap extends Stanza {
         color: color(n),
       };
     });
-  }
-  mouseover(e) {
-    d3.select(e.path[0]).style(
-      "stroke",
-      this.css("--togostanza-hover-border-color")
-    );
-  }
-  mouseleave() {
-    d3.select(this).style("stroke", "none");
   }
 }
