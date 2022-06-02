@@ -1,12 +1,9 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { l as loadData } from './load-data-03ddc67c.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
-import { T as ToolTip } from './ToolTip-23bc44c8.js';
-import { L as Legend } from './Legend-08cf2f79.js';
-import './index-847f2a80.js';
-import './dsv-cde6fd06.js';
-import './dsv-cd3740c6.js';
+import { S as Stanza, d as defineStanzaElement } from './index-b5d248a6.js';
+import { l as loadData } from './load-data-496b5cc0.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7f1da972.js';
+import { T as ToolTip } from './ToolTip-eee0abe0.js';
+import { L as Legend } from './Legend-e04e40ed.js';
+import './dsv-a2b46273.js';
 
 var colorString$1 = {exports: {}};
 

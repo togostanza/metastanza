@@ -1,11 +1,8 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { s as select, c as creator } from './index-847f2a80.js';
-import { l as loadData } from './load-data-03ddc67c.js';
+import { s as select, A as creator, S as Stanza, d as defineStanzaElement } from './index-b5d248a6.js';
+import { l as loadData } from './load-data-496b5cc0.js';
 import { F as FAIcons } from './index.es-5d65738a.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
-import './dsv-cde6fd06.js';
-import './dsv-cd3740c6.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7f1da972.js';
+import './dsv-a2b46273.js';
 
 function create(name) {
   return select(creator(name).call(document.documentElement));

@@ -1,12 +1,9 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { s as select } from './index-847f2a80.js';
+import { S as Stanza, s as select, d as defineStanzaElement } from './index-b5d248a6.js';
 import { d as descending } from './descending-63ef45b8.js';
 import { s as sum } from './sum-44e7480e.js';
-import { t as tsv } from './dsv-cde6fd06.js';
+import { t as tsv } from './dsv-a2b46273.js';
 import { p as path } from './path-a78af922.js';
 import { a as arc$2 } from './arc-49333d16.js';
-import './dsv-cd3740c6.js';
 import './constant-c49047a5.js';
 
 var abs = Math.abs;

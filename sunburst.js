@@ -1,17 +1,14 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { s as select } from './index-847f2a80.js';
-import { l as loadData } from './load-data-03ddc67c.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
+import { S as Stanza, s as select, d as defineStanzaElement } from './index-b5d248a6.js';
+import { l as loadData } from './load-data-496b5cc0.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7f1da972.js';
 import { s as stratify, h as hierarchy } from './stratify-5205cf04.js';
-import { f as format, o as ordinal, a as interpolate$1 } from './ordinal-0cb0fa8d.js';
+import { f as format, o as ordinal, a as interpolate$1 } from './ordinal-fad7692d.js';
 import { m as max } from './max-2c042256.js';
 import { a as arc$2 } from './arc-49333d16.js';
 import { s as sum } from './sum-44e7480e.js';
 import { p as partition } from './partition-2c1b5971.js';
 import { p as path$1 } from './path-a78af922.js';
-import './dsv-cde6fd06.js';
-import './dsv-cd3740c6.js';
+import './dsv-a2b46273.js';
 import './constant-c49047a5.js';
 
 let path;

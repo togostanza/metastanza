@@ -1,15 +1,12 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { l as loadData } from './load-data-03ddc67c.js';
-import { T as ToolTip } from './ToolTip-23bc44c8.js';
-import { L as Legend } from './Legend-08cf2f79.js';
-import { s as select } from './index-847f2a80.js';
-import { b as band } from './band-6f9e71db.js';
+import { S as Stanza, s as select, d as defineStanzaElement } from './index-b5d248a6.js';
+import { l as loadData } from './load-data-496b5cc0.js';
+import { T as ToolTip } from './ToolTip-eee0abe0.js';
+import { L as Legend } from './Legend-e04e40ed.js';
+import { b as band } from './band-85443245.js';
 import { a as axisBottom, b as axisLeft } from './axis-3dba94d9.js';
-import { l as linear } from './linear-af9e44cc.js';
-import './dsv-cde6fd06.js';
-import './dsv-cd3740c6.js';
-import './ordinal-0cb0fa8d.js';
+import { l as linear } from './linear-a97213e6.js';
+import './dsv-a2b46273.js';
+import './ordinal-fad7692d.js';
 import './range-e15c6861.js';
 import './descending-63ef45b8.js';
 

@@ -1,12 +1,11 @@
-import { d as defineStanzaElement } from './stanza-element-f1811bb2.js';
-import { S as Stanza } from './timer-1ca7e150.js';
-import { e as embed } from './vega-embed.module-07804790.js';
-import { l as loadData } from './load-data-03ddc67c.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-d2bbc90f.js';
-import './linear-af9e44cc.js';
-import './ordinal-0cb0fa8d.js';
+import { S as Stanza, d as defineStanzaElement } from './index-b5d248a6.js';
+import { e as embed } from './vega-embed.module-73a1051a.js';
+import { l as loadData } from './load-data-496b5cc0.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7f1da972.js';
+import './linear-a97213e6.js';
+import './ordinal-fad7692d.js';
 import './descending-63ef45b8.js';
-import './dsv-cd3740c6.js';
+import './dsv-a2b46273.js';
 import './max-2c042256.js';
 import './min-4a3f8e4e.js';
 import './range-e15c6861.js';
@@ -17,12 +16,10 @@ import './array-89f97098.js';
 import './line-620615aa.js';
 import './basis-0dde91c7.js';
 import './sum-44e7480e.js';
-import './manyBody-15224179.js';
+import './manyBody-b3244f68.js';
 import './stratify-5205cf04.js';
 import './index-beeea236.js';
 import './partition-2c1b5971.js';
-import './index-847f2a80.js';
-import './dsv-cde6fd06.js';
 
 class PieChart extends Stanza {
   menu() {
