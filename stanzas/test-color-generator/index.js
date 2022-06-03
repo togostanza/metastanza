@@ -60,18 +60,10 @@ export default class TestColorGenerator extends Stanza {
         colors = [...d3[ `scheme${d3ColorScheme}` ]];
       }
     } else {
-      d3ColorScheme= d3ColorScheme.replace("Continuous-", "");
-      if (d3ColorScheme === 'Custom') {
-        for (let i = 0; i < 6; i++) {
-          colors.push(
-            window.getComputedStyle(this.element).getPropertyValue(`--togostanza-series-${i}-color`).trim()
-          )
-        }
-      } else {
-        const makeColor = d3[`interpolate${d3ColorScheme}`];
-        for (let i=0; i<numOfGradation; i++){
-          colors.push(makeColor(i / (numOfGradation - 1)));
-        }
+      d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+      const makeColor = d3[`interpolate${d3ColorScheme}`];
+      for (let i = 0; i < numOfGradation; i++){
+        colors.push(makeColor(i / (numOfGradation - 1)));
       }
     }
 
@@ -95,7 +87,6 @@ export default class TestColorGenerator extends Stanza {
     colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
       return `<li style="background: ${colorScale(index * unit)}"></li>`
     }).join('');
-
   }
 
   // drawVennDiagram() {
