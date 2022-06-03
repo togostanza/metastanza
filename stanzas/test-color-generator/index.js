@@ -43,16 +43,36 @@ export default class TestColorGenerator extends Stanza {
     const numOfGradation = this.params['number-of-gradation'];
     const colorCirculation = this.params['type-of-color-circulation'];
     let d3ColorScheme = this.params['color-scheme'];
-    d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
     let colors = [];
-    if (d3ColorScheme === 'Custom') {
-      for (let i = 0; i < 6; i++) {
-        colors.push(
-          window.getComputedStyle(this.element).getPropertyValue(`--togostanza-series-${i}-color`).trim()
-        )
+    if (d3ColorScheme.indexOf("(") !== -1) {
+      d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
+    }
+    
+    if (d3ColorScheme.indexOf("Categorical-") !== -1){
+      d3ColorScheme= d3ColorScheme.replace("Categorical-", "");
+      if (d3ColorScheme === 'Custom') {
+        for (let i = 0; i < 6; i++) {
+          colors.push(
+            window.getComputedStyle(this.element).getPropertyValue(`--togostanza-series-${i}-color`).trim()
+          )
+        }
+      } else {
+        colors = [...d3[ `scheme${d3ColorScheme}` ]];
       }
     } else {
-      colors = [...d3[ `scheme${d3ColorScheme}` ]];
+      d3ColorScheme= d3ColorScheme.replace("Continuous-", "");
+      if (d3ColorScheme === 'Custom') {
+        for (let i = 0; i < 6; i++) {
+          colors.push(
+            window.getComputedStyle(this.element).getPropertyValue(`--togostanza-series-${i}-color`).trim()
+          )
+        }
+      } else {
+        const makeColor = d3[`interpolate${d3ColorScheme}`];
+        for (let i=0; i<numOfGradation; i++){
+          colors.push(makeColor(i / (numOfGradation - 1)));
+        }
+      }
     }
 
     let domain, colorScale;
@@ -71,8 +91,6 @@ export default class TestColorGenerator extends Stanza {
           .range(colors);
         break;
     }
-
-    console.log(d3.schemeBrBG)
 
     colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
       return `<li style="background: ${colorScale(index * unit)}"></li>`
