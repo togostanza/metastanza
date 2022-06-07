@@ -1,7 +1,7 @@
-import { s as select, A as creator, S as Stanza, d as defineStanzaElement } from './index-b5d248a6.js';
-import { l as loadData } from './load-data-496b5cc0.js';
+import { s as select, A as creator, S as Stanza, d as defineStanzaElement } from './index-7a53baaf.js';
+import { l as loadData } from './load-data-38f6c4c9.js';
 import { F as FAIcons } from './index.es-5d65738a.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-7f1da972.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-8dbcb124.js';
 import './dsv-a2b46273.js';
 
 function create(name) {

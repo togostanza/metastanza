@@ -1,4 +1,4 @@
-import { S as Stanza, s as select, d as defineStanzaElement } from './index-b5d248a6.js';
+import { S as Stanza, s as select, d as defineStanzaElement } from './index-7a53baaf.js';
 import { d as descending } from './descending-63ef45b8.js';
 import { s as sum } from './sum-44e7480e.js';
 import { t as tsv } from './dsv-a2b46273.js';
