@@ -68,10 +68,16 @@
       "stanza:description": "\"Custom\" uses user-defined colors"
     },
     {
-      "stanza:key": "number-of-colors",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Required if \"set\" is selected"
+      "stanza:key": "color-range",
+      "stanza:type": "string",
+      "stanza:example": "red,blue,yellow",
+      "stanza:description": "Color set"
+    },
+    {
+      "stanza:key": "color-domain",
+      "stanza:type": "string",
+      "stanza:example": "0,0.25,1",
+      "stanza:description": "Color range"
     }
   ],
   "stanza:menu-placement": "bottom-right",

@@ -1,8 +1,5 @@
 import Stanza from "togostanza/stanza";
-import loadData from "togostanza-utils/load-data";
-import Color from "color";
 import { ColorGenerator, getColorSeries } from "@/lib/ColorGenerator";
-import * as d3 from "d3";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -11,16 +8,8 @@ import {
   downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
-// import ToolTip from "@/lib/ToolTip";
-// import Legend from "@/lib/Legend";
 
 export default class TestColorGenerator extends Stanza {
-  // colorSeries;
-  // data;
-  // totals;
-  // dataLabels;
-  // numberOfData;
-  // venn;
 
   menu() {
     return [
@@ -34,8 +23,6 @@ export default class TestColorGenerator extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    this.colorSeries = getColorSeries(this);
-    console.log(this.colorSeries)
 
     this.renderTemplate({ template: "stanza.html.hbs" });
 
@@ -44,51 +31,53 @@ export default class TestColorGenerator extends Stanza {
     // get parameters
     const numOfGradation = this.params['number-of-gradation'];
     const colorCirculation = this.params['type-of-color-circulation'];
+    const colorDomain = this.params['color-domain'].split(',').map(pos => +pos);
+    const colorRange = this.params['color-range'].split(',');
+
     let d3ColorScheme = this.params['color-scheme'];
-    let colors = [];
+
+    let colors = [], colorGenerator;
+    // 括弧を取り去る
     if (d3ColorScheme.indexOf("(") !== -1) {
       d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
     }
-    
-    if (d3ColorScheme.indexOf("Categorical-") !== -1){
-      d3ColorScheme= d3ColorScheme.replace("Categorical-", "");
+
+    if (colorDomain.length && colorDomain.length === colorRange.length) {
+      colorGenerator = new ColorGenerator({
+        domain: colorDomain,
+        range: colorRange
+      }, colorCirculation, numOfGradation);
+    } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
+      // categorical
+      d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
       if (d3ColorScheme === 'Custom') {
-        for (let i = 0; i < 6; i++) {
-          colors.push(
-            window.getComputedStyle(this.element).getPropertyValue(`--togostanza-series-${i}-color`).trim()
-          )
-        }
+        colors = getColorSeries(this);
+        colorGenerator = new ColorGenerator(colors, colorCirculation, numOfGradation);
       } else {
-        colors = [...d3[ `scheme${d3ColorScheme}` ]];
+        colorGenerator = new ColorGenerator(`scheme${d3ColorScheme}`, colorCirculation, numOfGradation);
       }
     } else {
+      // continuous
       d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
-      const makeColor = d3[`interpolate${d3ColorScheme}`];
-      for (let i = 0; i < numOfGradation; i++){
-        colors.push(makeColor(i / (numOfGradation - 1)));
-      }
+      colorGenerator = new ColorGenerator(`interpolate${d3ColorScheme}`, colorCirculation, numOfGradation);
     }
 
-    let domain, colorScale;
-    const unit = 1 / colors.length;
-    switch(colorCirculation) {
+    switch (colorCirculation) {
       case 'circulate':
-        domain = [...Array(colors.length)].map((_, index) => index * unit);
-        colorScale = d3.scaleOrdinal()
-          .domain(domain)
-          .range(colors);
+        colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
+          return `<li data-pos="${index}" style="background: ${colorGenerator.get(index)}"></li>`
+        }).join('');
         break;
-      case 'interpolate':
-        domain = [...Array(colors.length)].map((_, index) =>  numOfGradation / colors.length * index * unit);
-        colorScale = d3.scaleLinear()
-          .domain(domain)
-          .range(colors);
+
+      case 'interpolate': {
+        const unit = 1 / (numOfGradation - 1);
+        colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
+          return `<li data-pos="${index * unit}" style="background: ${colorGenerator.get(index * unit)}"></li>`
+        }).join('');
+      }
         break;
     }
 
-    colorChips.innerHTML = [...Array(numOfGradation)].map((_, index) => {
-      return `<li style="background: ${colorScale(index * unit)}"></li>`
-    }).join('');
   }
 
   getColorSeries() {
