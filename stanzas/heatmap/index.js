@@ -23,7 +23,8 @@ export default class Heatmap extends Stanza {
 
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
 
     this.draw(root, data);

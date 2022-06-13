@@ -109,7 +109,8 @@ export default class Linechart extends Stanza {
 
     let values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
 
     function getRandomTrueFalse() {
