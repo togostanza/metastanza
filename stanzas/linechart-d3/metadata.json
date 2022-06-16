@@ -27,358 +27,449 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "x-axis-key",
-      "stanza:example": "chromosome",
-      "stanza:description": "Variable to be assigned as x axis value",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "y-axis-key",
-      "stanza:example": "count",
-      "stanza:description": "Variable to be assigned as y axis value",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "x-axis-data-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["number", "string"],
-      "stanza:example": "string",
-      "stanza:description": "Data type of x-axis",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "group-by",
-      "stanza:example": "category",
-      "stanza:description": "Variable to be assigned as group",
-      "stanza:required": true
-    },
-    {
-      "stanza:key": "error-key",
-      "stanza:type": "string",
-      "stanza:example": "error",
-      "stanza:description": "Error data key name",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "error-bar-width",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Error bar horizontal line width",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "x-axis-title",
-      "stanza:example": "chromosome",
-      "stanza:description": "X axis title",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "y-axis-title",
-      "stanza:example": "count",
-      "stanza:description": "Y axis title",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "custom-css-url",
+      "stanza:key": "custom_css_url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
       "stanza:required": false
     },
     {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 600,
-      "stanza:description": "Width"
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 400,
-      "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "legend",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Where to show the legend. 'none' for no legend"
-    },
-    {
-      "stanza:key": "xgrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X grid"
-    },
-    {
-      "stanza:key": "ygrid",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y grid"
-    },
-    {
-      "stanza:key": "xtick-size",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "X axis tick size"
-    },
-    {
-      "stanza:key": "ytick-size",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "Y axis tick size"
-    },
-    {
-      "stanza:key": "xticks-number",
-      "stanza:example": 5,
-      "stanza:description": "X axis ticks number \n (used only if x-adis-data-type is 'number')",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "yticks-number",
-      "stanza:example": 3,
-      "stanza:description": "Y axis ticks number",
+      "stanza:key": "axis-x-data_key",
+      "stanza:type": "text",
+      "stanza:example": "chromosome",
+      "stanza:description": "Variable to be assigned as x axis value",
       "stanza:required": true
     },
     {
-      "stanza:key": "xlabel-angle",
-      "stanza:example": -90,
-      "stanza:description": "X label angle (in degree)"
+      "stanza:key": "axis-x-hide",
+      "stanza:example": "boolean",
+      "stanza:description": "Hide the axis",
+      "stanza:required": false
     },
     {
-      "stanza:key": "ylabel-angle",
+      "stanza:key": "axis-x-title",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis title",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-title_padding",
       "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
+      "stanza:example": 5,
+      "stanza:description": "Axis title padding in px",
+      "stanza:required": false
     },
     {
-      "stanza:key": "xlabel-padding",
+      "stanza:key": "axis-x-ticks_show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show axis ticks",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-ticks_label_angle",
       "stanza:type": "number",
-      "stanza:example": 7,
-      "stanza:description": "Padding between X label and axis"
+      "stanza:example": 90,
+      "stanza:description": "Tick labels angle, in degrees",
+      "stanza:required": false
     },
     {
-      "stanza:key": "ylabel-padding",
-      "stanza:type": "number",
-      "stanza:example": 7,
-      "stanza:description": "Padding between Y label and tick"
+      "stanza:key": "axis-x-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "log", "ordinal", "time"],
+      "stanza:example": "ordinal",
+      "stanza:description": "Axis scale",
+      "stanza:required": false
     },
     {
-      "stanza:key": "xtitle-padding",
-      "stanza:type": "number",
-      "stanza:example": 25,
-      "stanza:description": "Padding between X title and label"
-    },
-    {
-      "stanza:key": "ytitle-padding",
-      "stanza:type": "number",
-      "stanza:example": 40,
-      "stanza:description": "Padding between Y title and label"
-    },
-    {
-      "stanza:key": "xaxis-placement",
+      "stanza:key": "axis-x-placement",
       "stanza:type": "single-choice",
       "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
-      "stanza:description": "X axis placement"
+      "stanza:example": "ordinal",
+      "stanza:description": "Axis placement",
+      "stanza:required": false
     },
     {
-      "stanza:key": "yaxis-placement",
+      "stanza:key": "axis-x-range_min",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis range min",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-range_max",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis range max",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-ticks_interval",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis ticks interval",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-ticks_interval_units",
       "stanza:type": "single-choice",
-      "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
-      "stanza:description": "Y axis placement"
+      "stanza:choice": [
+        "none",
+        "century",
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "millisecond"
+      ],
+      "stanza:example": "none",
+      "stanza:description": "Axis ticks interval units",
+      "stanza:required": false
     },
     {
-      "stanza:key": "ylabel-format",
-      "stanza:type": "string",
-      "stanza:example": ",.2r",
-      "stanza:description": "Y axis tick labels number format. See more format strings in d3.format() documentation"
+      "stanza:key": "axis-x-ticks_labels_format",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis ticks interval format, in d3.format string form",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-gridlines_interval",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "none",
+        "century",
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "millisecond"
+      ],
+      "stanza:example": "none",
+      "stanza:description": "Axis grid lines interval",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-x-gridlines_interval_units",
+      "stanza:type": "single-choice",
+      "stanza:example": "",
+      "stanza:description": "Axis grid lines interval units",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-data_key",
+      "stanza:type": "text",
+      "stanza:example": "chromosome",
+      "stanza:description": "Variable to be assigned as x axis value",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "axis-y-hide",
+      "stanza:example": "boolean",
+      "stanza:description": "Hide the axis",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-title",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis title",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-title_padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Axis title padding in px",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-ticks_show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show axis ticks",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-ticks_label_angle",
+      "stanza:type": "number",
+      "stanza:example": 90,
+      "stanza:description": "Tick labels angle, in degrees",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "log", "ordinal", "time"],
+      "stanza:example": "ordinal",
+      "stanza:description": "Axis scale",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top", "bottom"],
+      "stanza:example": "ordinal",
+      "stanza:description": "Axis placement",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-range_min",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis range min",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-range_max",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis range max",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-ticks_interval",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis ticks interval",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-ticks_interval_units",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "none",
+        "century",
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "millisecond"
+      ],
+      "stanza:example": "none",
+      "stanza:description": "Axis ticks interval units",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-ticks_labels_format",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Axis ticks interval format, in d3.format string form",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-gridlines_interval",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "none",
+        "century",
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "second",
+        "millisecond"
+      ],
+      "stanza:example": "none",
+      "stanza:description": "Axis grid lines interval",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-gridlines_interval_units",
+      "stanza:type": "single-choice",
+      "stanza:example": "",
+      "stanza:description": "Axis grid lines interval units",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "data_grouping-group_by-data_key",
+      "stanza:type": "text",
+      "stanza:example": "category",
+      "stanza:description": "data key to group by data series. All data points with wich includes that key will be considered as one data series",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "data_grouping-color-data_key",
+      "stanza:type": "text",
+      "stanza:example": "category",
+      "stanza:description": "Data key to map color to the data series. If includes hex color, that color will be used, if not - color from the ordinal scale from the theme colors will be used.",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "data_grouping-color-scheme",
+      "stanza:type": "single-choice",
+      "stanza:example": [
+        "Custom-Theme",
+        "Virdilis",
+        "Jet",
+        "Blues",
+        "Greens",
+        "Reds",
+        "Greys",
+        "Purples",
+        "Oranges"
+      ],
+      "stanza:description": "Data key to map color to the data series. If includes hex color, that color will be used, if not - color from the ordinal scale from the theme colors will be used.",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "error_bars-data_key",
+      "stanza:type": "text",
+      "stanza:example": "error",
+      "stanza:description": "Data key wich includes error data. Error data is array [min, max]. If no such data key, no error bars are shown",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "legend-show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show legend",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "legend-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
+      "stanza:example": "top-right",
+      "stanza:description": "Legend placement",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "legend-title",
+      "stanza:type": "text",
+      "stanza:example": "",
+      "stanza:description": "Legend title. If not set explicitly, shows a data grouoping data key. If set to empty string ('') no title will be shown.",
+      "stanza:required": false
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-series-0-color",
+      "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--togostanza-series-1-color",
+      "stanza:key": "--togostanza-theme-series_1_color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
       "stanza:description": "Group color 1"
     },
     {
-      "stanza:key": "--togostanza-series-2-color",
+      "stanza:key": "--togostanza-theme-series_2_color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
       "stanza:description": "Group color 2"
     },
     {
-      "stanza:key": "--togostanza-series-3-color",
+      "stanza:key": "--togostanza-theme-series_3_color",
       "stanza:type": "color",
       "stanza:default": "#F5DA64",
       "stanza:description": "Group color 3"
     },
     {
-      "stanza:key": "--togostanza-series-4-color",
+      "stanza:key": "--togostanza-theme-series_4_color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Group color 4"
     },
     {
-      "stanza:key": "--togostanza-series-5-color",
+      "stanza:key": "--togostanza-theme-series_5_color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-theme-background_color",
+      "stanza:type": "color",
+      "stanza:default": "",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-axis-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Axis color"
-    },
-    {
-      "stanza:key": "--togostanza-axis-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Axis width"
-    },
-    {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Chart lines width"
-    },
-    {
-      "stanza:key": "--togostanza-line-opacity",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Chart lines opacity"
-    },
-
-    {
-      "stanza:key": "--togostanza-grid-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Grid color"
-    },
-    {
-      "stanza:key": "--togostanza-grid-dash-length",
-      "stanza:type": "number",
-      "stanza:default": "",
-      "stanza:description": "Grid dash length (Blank for solid lines)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.1,
-      "stanza:description": "Grid opacity (0-1)"
-    },
-    {
-      "stanza:key": "--togostanza-grid-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Grid width"
-    },
-    {
-      "stanza:key": "--togostanza-tick-color",
+      "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Tick color"
+      "stanza:description": "Font color"
     },
     {
-      "stanza:key": "--togostanza-tick-length",
+      "stanza:key": "--togostanza-fonts-font_size_primary",
       "stanza:type": "number",
-      "stanza:default": 1.5,
-      "stanza:description": "Tick length (in pixel)"
+      "stanza:default": 12,
+      "stanza:description": "Primary font size"
     },
     {
-      "stanza:key": "--togostanza-tick-width",
+      "stanza:key": "--togostanza-fonts-font_size_secondary",
       "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Tick width (in pixel)"
+      "stanza:default": 9,
+      "stanza:description": "Secondary font size"
     },
     {
-      "stanza:key": "--togostanza-errorbar-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Errorbar line width"
-    },
-    {
-      "stanza:key": "--togostanza-errorbar-line-color",
-      "stanza:type": "color",
-      "stanza:default": "#333333",
-      "stanza:description": "Errorbar line color"
-    },
-    {
-      "stanza:key": "--togostanza-errorbar-line-opacity",
-      "stanza:type": "number",
-      "stanza:default": 0.4,
-      "stanza:description": "Errorbar line opacity"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Title font color"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-size",
-      "stanza:type": "number",
-      "stanza:default": 10,
-      "stanza:description": "Title font size"
-    },
-    {
-      "stanza:key": "--togostanza-title-font-weight",
+      "stanza:key": "--togostanza-outline-width",
       "stanza:type": "number",
       "stanza:default": 400,
-      "stanza:description": "Title font weight"
+      "stanza:description": "Togostanza element width"
     },
     {
-      "stanza:key": "--togostanza-label-font-color",
-      "stanza:type": "color",
-      "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-size",
+      "stanza:key": "--togostanza-outline-height",
       "stanza:type": "number",
-      "stanza:default": 10,
-      "stanza:description": "Label font size"
+      "stanza:default": 300,
+      "stanza:description": "Togostanza element height"
+    },
+    {
+      "stanza:key": "--togostanza-outline-padding",
+      "stanza:type": "number",
+      "stanza:default": 20,
+      "stanza:description": "Togostanza element inner padding"
     },
     {
       "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Border color for everything that have a border"
     },
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": 0,
+      "stanza:default": 0.5,
       "stanza:description": "Border width"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-axis-stroke_width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Axis width"
+    },
+    {
+      "stanza:key": "--togostanza-data_grouping-fixed_color",
       "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
+      "stanza:default": "",
+      "stanza:description": "Axis width"
+    },
+    {
+      "stanza:key": "--togostanza-error_bars-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Error bar stroke width "
+    },
+    {
+      "stanza:key": "--togostanza-error_bars-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.5,
+      "stanza:description": "Error bar stroke opacity "
     }
   ]
 }
