@@ -38,53 +38,51 @@ export default class TestColorGenerator extends Stanza {
     let d3ColorScheme = this.params['color-scheme'];
 
     let colors = [], colorGenerator;
-    const data = ['apple', 'orange', 'peach', 'apple', 'grape'];
-    // 括弧を取り去る
+    
     if (d3ColorScheme.indexOf("(") !== -1) {
       d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
     }
 
     if (colorCirculation === 'interpolate') {
       if (colorDomain.length !== 1 && colorRange.length !== 1 && colorDomain.length === colorRange.length) {
-        colorGenerator = new InterpolateColorGenerator({
-          domain: colorDomain,
-          range: colorRange
-        }, data);
+        colorGenerator = new InterpolateColorGenerator(colorRange, colorDomain);
       } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
         // categorical
         d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
         if (d3ColorScheme === 'Custom') {
           colors = getColorSeries(this);
-          colorGenerator = new InterpolateColorGenerator(colors, data);
-        } else {
-          colorGenerator = new InterpolateColorGenerator(`scheme${d3ColorScheme}`, data);
-        }
-      } else {
-        // continuous
-        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
-        colorGenerator = new InterpolateColorGenerator(`interpolate${d3ColorScheme}`, data);
-      }
-    } else {
-      if (colorDomain.length !== 1 && colorRange.length !== 1 && colorDomain.length === colorRange.length) {
-        colorGenerator = new CirculateColorGenerator(
-          colorRange, colorDomain, data,  NumOfMakeColor);
-      } else if (colorRange[0].length) {
-        colorGenerator = new CirculateColorGenerator(colorRange, undefined, data);
-      } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
-        // categorical
-        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
-        if (d3ColorScheme === 'Custom') {
-          colors = getColorSeries(this);
-          colorGenerator = new CirculateColorGenerator(colors,undefined, data);
+          colorGenerator = new InterpolateColorGenerator(colors,undefined);
         } else {
           const colors = getColorsWithD3PresetColor(`scheme${d3ColorScheme}`, numOfGradation);
-          colorGenerator = new CirculateColorGenerator(colors, data);
+          colorGenerator = new InterpolateColorGenerator(colors,undefined);
         }
       } else {
         // continuous
         d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
         const colors = getColorsWithD3PresetColor(`interpolate${d3ColorScheme}`, numOfGradation);
-        colorGenerator = new CirculateColorGenerator(colors, data);
+        colorGenerator = new InterpolateColorGenerator(colors,undefined);
+      }
+    } else {
+      if (colorDomain.length !== 1 && colorRange.length !== 1 && colorDomain.length === colorRange.length) {
+        colorGenerator = new CirculateColorGenerator(
+          colorRange, colorDomain, NumOfMakeColor);
+      } else if (colorRange[0].length) {
+        colorGenerator = new CirculateColorGenerator(colorRange, undefined);
+      } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
+        // categorical
+        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
+        if (d3ColorScheme === 'Custom') {
+          colors = getColorSeries(this);
+          colorGenerator = new CirculateColorGenerator(colors,undefined);
+        } else {
+          const colors = getColorsWithD3PresetColor(`scheme${d3ColorScheme}`, numOfGradation);
+          colorGenerator = new CirculateColorGenerator(colors,undefined);
+        }
+      } else {
+        // continuous
+        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+        const colors = getColorsWithD3PresetColor(`interpolate${d3ColorScheme}`, numOfGradation);
+        colorGenerator = new CirculateColorGenerator(colors,undefined);
       }
     }
 
