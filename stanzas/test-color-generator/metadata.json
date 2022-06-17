@@ -54,6 +54,12 @@
       "stanza:description": "Number of Gradation"
     },
     {
+      "stanza:key": "number-of-make-color",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Number of make color (Only circulate with range and domain)"
+    },
+    {
       "stanza:key": "type-of-color-circulation",
       "stanza:type": "single-choice",
       "stanza:choice": ["circulate", "interpolate"],

@@ -1,5 +1,5 @@
 import Stanza from "togostanza/stanza";
-import { ColorGenerator, getColorSeries } from "@/lib/ColorGenerator";
+import { InterpolateColorGenerator, CirculateColorGenerator, getColorSeries, getColorsWithD3PresetColor } from "@/lib/ColorGenerator";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -31,35 +31,61 @@ export default class TestColorGenerator extends Stanza {
     // get parameters
     const numOfGradation = this.params['number-of-gradation'];
     const colorCirculation = this.params['type-of-color-circulation'];
-    const colorDomain = this.params['color-domain'].split(',').map(pos => +pos);
+    const colorDomain = this.params['color-domain']? this.params['color-domain'].split(',').map(pos => +pos) : "";
     const colorRange = this.params['color-range'].split(',');
+    const NumOfMakeColor = this.params['number-of-make-color'];
 
     let d3ColorScheme = this.params['color-scheme'];
 
     let colors = [], colorGenerator;
+    const data = ['apple', 'orange', 'peach', 'apple', 'grape'];
     // 括弧を取り去る
     if (d3ColorScheme.indexOf("(") !== -1) {
       d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
     }
 
-    if (colorDomain.length && colorDomain.length === colorRange.length) {
-      colorGenerator = new ColorGenerator({
-        domain: colorDomain,
-        range: colorRange
-      }, colorCirculation, numOfGradation);
-    } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
-      // categorical
-      d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
-      if (d3ColorScheme === 'Custom') {
-        colors = getColorSeries(this);
-        colorGenerator = new ColorGenerator(colors, colorCirculation, numOfGradation);
+    if (colorCirculation === 'interpolate') {
+      if (colorDomain.length !== 1 && colorRange.length !== 1 && colorDomain.length === colorRange.length) {
+        colorGenerator = new InterpolateColorGenerator({
+          domain: colorDomain,
+          range: colorRange
+        }, data);
+      } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
+        // categorical
+        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
+        if (d3ColorScheme === 'Custom') {
+          colors = getColorSeries(this);
+          colorGenerator = new InterpolateColorGenerator(colors, data);
+        } else {
+          colorGenerator = new InterpolateColorGenerator(`scheme${d3ColorScheme}`, data);
+        }
       } else {
-        colorGenerator = new ColorGenerator(`scheme${d3ColorScheme}`, colorCirculation, numOfGradation);
+        // continuous
+        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+        colorGenerator = new InterpolateColorGenerator(`interpolate${d3ColorScheme}`, data);
       }
     } else {
-      // continuous
-      d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
-      colorGenerator = new ColorGenerator(`interpolate${d3ColorScheme}`, colorCirculation, numOfGradation);
+      if (colorDomain.length !== 1 && colorRange.length !== 1 && colorDomain.length === colorRange.length) {
+        colorGenerator = new CirculateColorGenerator(
+          colorRange, colorDomain, data,  NumOfMakeColor);
+      } else if (colorRange[0].length) {
+        colorGenerator = new CirculateColorGenerator(colorRange, undefined, data);
+      } else if (d3ColorScheme.indexOf("Categorical-") !== -1){
+        // categorical
+        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
+        if (d3ColorScheme === 'Custom') {
+          colors = getColorSeries(this);
+          colorGenerator = new CirculateColorGenerator(colors,undefined, data);
+        } else {
+          const colors = getColorsWithD3PresetColor(`scheme${d3ColorScheme}`, numOfGradation);
+          colorGenerator = new CirculateColorGenerator(colors, data);
+        }
+      } else {
+        // continuous
+        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+        const colors = getColorsWithD3PresetColor(`interpolate${d3ColorScheme}`, numOfGradation);
+        colorGenerator = new CirculateColorGenerator(colors, data);
+      }
     }
 
     switch (colorCirculation) {
@@ -89,6 +115,5 @@ export default class TestColorGenerator extends Stanza {
     }
     return series.map((variable) => getPropertyValue(variable).trim());
   }
-
 
 }
