@@ -1,0 +1,15 @@
+//TogoGenome Venn diagram
+
+text {
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+#color-chips {
+  list-style: none;
+  > li {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+  }
+}
