@@ -1,12 +1,9 @@
-import { s as select, A as creator, S as Stanza, d as defineStanzaElement } from './index-7a53baaf.js';
-import { l as loadData } from './load-data-38f6c4c9.js';
+import { S as Stanza, s as select, d as defineStanzaElement } from './transform-8254f1d1.js';
+import { l as loadData } from './load-data-c602553a.js';
 import { F as FAIcons } from './index.es-5d65738a.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-8dbcb124.js';
-import './dsv-a2b46273.js';
-
-function create(name) {
-  return select(creator(name).call(document.documentElement));
-}
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-235ca553.js';
+import { c as create } from './create-0dc4a35f.js';
+import './dsv-ac31b097.js';
 
 /* eslint-disable */
 /*****************************************************************************
