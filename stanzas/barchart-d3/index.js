@@ -125,7 +125,8 @@ export default class Barchart extends Stanza {
 
     const values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
 
     // TODO For now, artificially add 20% error and randomly add or not add it

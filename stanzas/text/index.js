@@ -5,6 +5,7 @@ import "katex/dist/katex";
 import renderMathInElement from "katex/dist/contrib/auto-render.mjs";
 
 import { appendCustomCss } from "togostanza-utils";
+import spinner from "togostanza-utils/spinner.png";
 
 export default class Text extends Stanza {
   constructor() {
@@ -50,9 +51,9 @@ export default class Text extends Stanza {
   }
 
   async render() {
-    this._dataset = await this._loadText(this.params["data-url"]);
-
     const main = this.root.querySelector("main");
+
+    this._dataset = await this._loadText(this.params["data-url"], main);
 
     const value = this._dataset;
     if (this._isMarkdownMode()) {
@@ -90,7 +91,39 @@ export default class Text extends Stanza {
     container.setAttribute(`style`, `width: ${width}px; height: ${height}px;`);
   }
 
-  async _loadText(url) {
-    return await fetch(url).then((res) => res.text());
+  async _loadText(url, main) {
+    const spinnerDiv = document.createElement("div");
+
+    Object.assign(spinnerDiv, {
+      className: "metastanza-loading-icon-div",
+      id: "metastanza-loading-icon-div",
+    });
+    spinnerDiv.style = `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    `;
+
+    const spinnerImg = document.createElement("img");
+    Object.assign(spinnerImg, {
+      className: "metastanza-loading-icon",
+      id: "metastanza-loading-icon",
+      src: spinner,
+    });
+
+    spinnerImg.style = `
+    width: 30px;
+    height: auto;
+    display: block;
+    `;
+
+    spinnerDiv.appendChild(spinnerImg);
+    main.appendChild(spinnerDiv);
+
+    const response = await fetch(url).then((res) => res.text());
+
+    main.removeChild(spinnerDiv);
+
+    return response;
   }
 }
