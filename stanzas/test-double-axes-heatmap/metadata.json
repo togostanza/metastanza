@@ -1,0 +1,204 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "test-double-axes-heatmap",
+  "stanza:label": "Test Double Axes Heatmap",
+  "stanza:definition": "Test Double Axes Heatmap MetaStanza",
+  "stanza:type": "Stanza",
+  "stanza:display": "Image",
+  "stanza:provider": "TogoStanza",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
+  "stanza:created": "2022-06-19",
+  "stanza:updated": "2022-06-19",
+  "stanza:parameter": [
+    {
+      "stanza:key": "data-url",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/3sets-data.json",
+      "stanza:description": "Data source URL",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:example": "json",
+      "stanza:description": "Data type",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "custom-css-url",
+      "stanza:example": "",
+      "stanza:description": "Stylesheet(css file) URL to override current style",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 800,
+      "stanza:description": "Width"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 380,
+      "stanza:description": "Height"
+    },
+    {
+      "stanza:key": "number-of-gradation",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Number of Gradation"
+    },
+    {
+      "stanza:key": "number-of-make-color",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Number of make color (Only circulate with range and domain)"
+    },
+    {
+      "stanza:key": "type-of-color-circulation",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["circulate", "interpolate"],
+      "stanza:example": "circulate",
+      "stanza:description": "How the color circulations (by categorical colors)"
+    },
+    {
+      "stanza:key": "color-scheme",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "Categorical-Custom (6)",
+        "Categorical-Category10 (10)",
+        "Categorical-Accent (8)",
+        "Categorical-Dark2 (8)",
+        "Categorical-Paired (12)",
+        "Categorical-Pastel1 (9)",
+        "Categorical-Pastel2 (8)",
+        "Categorical-Set1 (9)",
+        "Categorical-Set2 (8)",
+        "Categorical-Set3 (12)",
+        "Categorical-Tableau10 (10)",
+        "Continuous-BrBG",
+        "Continuous-PRGn",
+        "Continuous-PiYG",
+        "Continuous-PuOr",
+        "Continuous-RdBu",
+        "Continuous-RdGy",
+        "Continuous-RdYlBu",
+        "Continuous-RdYlGn",
+        "Continuous-Spectral",
+        "Continuous-Blues",
+        "Continuous-Greens",
+        "Continuous-Greys",
+        "Continuous-Oranges",
+        "Continuous-Purples",
+        "Continuous-Reds",
+        "Continuous-Turbo",
+        "Continuous-Viridis",
+        "Continuous-Inferno",
+        "Continuous-Magma",
+        "Continuous-Plasma",
+        "Continuous-Cividis",
+        "Continuous-Warm",
+        "Continuous-Cool",
+        "Continuous-CubehelixDefault",
+        "Continuous-BuGn",
+        "Continuous-BuPu",
+        "Continuous-GnBu",
+        "Continuous-OrRd",
+        "Continuous-PuBuGn",
+        "Continuous-PuBu",
+        "Continuous-PuRd",
+        "Continuous-RdPu",
+        "Continuous-YlGnBu",
+        "Continuous-YlGn",
+        "Continuous-YlOrBr",
+        "Continuous-YlOrRd",
+        "Continuous-Rainbow",
+        "Continuous-Sinebow"
+      ],
+      "stanza:example": "Categorical-Custom (6)",
+      "stanza:description": "\"Custom\" uses user-defined colors"
+    },
+    {
+      "stanza:key": "color-range",
+      "stanza:type": "string",
+      "stanza:example": "red,blue,yellow",
+      "stanza:description": "Color set"
+    },
+    {
+      "stanza:key": "color-domain",
+      "stanza:type": "string",
+      "stanza:example": "0,0.25,1",
+      "stanza:description": "Color range"
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-width",
+      "stanza:type": "number",
+      "stanza:default": 800,
+      "stanza:description": "Screen width"
+    }
+  ],
+  "stanza:incomingEvent": [],
+  "stanza:outgoingEvent": []
+}

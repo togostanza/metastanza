@@ -1,0 +1,27 @@
+//TogoGenome Venn diagram
+
+text {
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  fill: var(--togostanza-label-font-color);
+}
+
+#table {
+  border-collapse: collapse;
+  font-size: 10px;
+  white-space: nowrap;
+  tbody {
+    tr {
+      &:first-child {
+        border-top: solid 1px black
+      }
+      th, td {
+        padding: 2px 10px;
+      }
+      th {
+        padding-left: 2px;
+        text-align: left;
+        font-weight: normal;
+      }
+    }
+  }
+}
