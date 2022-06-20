@@ -1,6 +1,6 @@
 import { S as Stanza, d as defineStanzaElement } from './transform-8254f1d1.js';
 import { e as embed } from './vega-embed.module-45b0e22a.js';
-import { l as loadData } from './load-data-c602553a.js';
+import { l as loadData } from './load-data-8104e001.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem } from './index-235ca553.js';
 import './step-792b1fa5.js';
 import './manyBody-8a60e084.js';

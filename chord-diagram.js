@@ -1,15 +1,15 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-8254f1d1.js';
+import { l as loadData } from './load-data-8104e001.js';
 import { d as descending } from './descending-63ef45b8.js';
 import { s as sum } from './sum-44e7480e.js';
-import { t as tsv } from './dsv-ac31b097.js';
-import { j as json, r as ribbonArrow, c as chordDirected } from './json-67dffe36.js';
+import { r as ribbonArrow, c as chordDirected } from './ribbon-bbaf0468.js';
 import { a as arc$2 } from './arc-06a68a59.js';
+import './dsv-ac31b097.js';
 import './path-a78af922.js';
 import './constant-c49047a5.js';
 
 class ChordDiagram extends Stanza {
   async render() {
-
     // geometry
     // window.getComputedStyle(this.element).getPropertyValue('--width')
     const [width, height] = [this.params["width"], this.params["height"]];
@@ -23,26 +23,16 @@ class ChordDiagram extends Stanza {
     svg.attr("width", width).attr("height", height);
 
     // data
-    const data = await (() => {
-      // console.log(this.params["data-url"])
-      switch (this.params["data-type"]) {
-        case "json":
-          // return d3.json('./chord-diagram/assets/directed-graph-data.json', (data) => data);
-          return json(this.params["data-url"], (data) => data);
-        case "tsv":
-          return tsv(this.params["data-url"], (data) => data);
-      }
-      // switch (this.params["data-type"]) {
-      //   case "json":
-      //     return d3.json(this.params["data-url"], (data) => data);
-      //   case "tsv":
-      //     return d3.tsv(this.params["data-url"], (data) => data);
-      // }
-    })();
+    const data = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
-    // console.log(names)
+    console.log(data);
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));

@@ -1,5 +1,5 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-8254f1d1.js';
-import { l as loadData } from './load-data-c602553a.js';
+import { l as loadData } from './load-data-8104e001.js';
 import { L as Legend } from './Legend-8c0576c7.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-235ca553.js';
 import { g as group } from './group-4b725a8c.js';
@@ -115,7 +115,8 @@ class Linechart extends Stanza {
 
     let values = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
 
     function getRandomTrueFalse() {

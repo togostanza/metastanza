@@ -1,5 +1,5 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-8254f1d1.js';
-import { l as loadData } from './load-data-c602553a.js';
+import { l as loadData } from './load-data-8104e001.js';
 import { T as ToolTip } from './ToolTip-73555443.js';
 import { L as Legend } from './Legend-8c0576c7.js';
 import { b as band } from './band-12e2548c.js';
@@ -28,7 +28,8 @@ class Heatmap extends Stanza {
 
     const data = await loadData(
       this.params["data-url"],
-      this.params["data-type"]
+      this.params["data-type"],
+      this.root.querySelector("main")
     );
 
     this.draw(root, data);

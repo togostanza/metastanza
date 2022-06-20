@@ -1,5 +1,5 @@
 import { S as Stanza, d as defineStanzaElement } from './transform-8254f1d1.js';
-import { l as loadData } from './load-data-c602553a.js';
+import { l as loadData } from './load-data-8104e001.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-235ca553.js';
 import './dsv-ac31b097.js';
 

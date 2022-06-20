@@ -268,15 +268,5 @@ function ribbonArrow() {
   return ribbon(defaultArrowheadRadius);
 }
 
-function responseJson(response) {
-  if (!response.ok) throw new Error(response.status + " " + response.statusText);
-  if (response.status === 204 || response.status === 205) return;
-  return response.json();
-}
-
-function json(input, init) {
-  return fetch(input, init).then(responseJson);
-}
-
-export { chord as a, chordTranspose as b, chordDirected as c, ribbon$1 as d, json as j, ribbonArrow as r };
-//# sourceMappingURL=json-67dffe36.js.map
+export { chord as a, chordTranspose as b, chordDirected as c, ribbon$1 as d, ribbonArrow as r };
+//# sourceMappingURL=ribbon-bbaf0468.js.map

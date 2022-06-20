@@ -12,7 +12,7 @@ import { m as max$1 } from './max-2c042256.js';
 import { r as range } from './range-e15c6861.js';
 import { s as sum$1 } from './sum-44e7480e.js';
 import { c as axisTop, d as axisRight, a as axisBottom, b as axisLeft } from './axis-3dba94d9.js';
-import { a as chord, b as chordTranspose, c as chordDirected, d as ribbon, r as ribbonArrow, j as json } from './json-67dffe36.js';
+import { a as chord, b as chordTranspose, c as chordDirected, d as ribbon, r as ribbonArrow } from './ribbon-bbaf0468.js';
 import { e as constant$4, a as forceCenter, b as forceCollide, d as forceLink, c as forceManyBody, f as forceSimulation, q as quadtree } from './manyBody-8a60e084.js';
 import { h as hierarchy, N as Node, s as stratify, t as treemapDice } from './stratify-5205cf04.js';
 import { p as partition } from './partition-2c1b5971.js';
@@ -1992,6 +1992,16 @@ function image(input, init) {
     image.onload = function() { resolve(image); };
     image.src = input;
   });
+}
+
+function responseJson(response) {
+  if (!response.ok) throw new Error(response.status + " " + response.statusText);
+  if (response.status === 204 || response.status === 205) return;
+  return response.json();
+}
+
+function json(input, init) {
+  return fetch(input, init).then(responseJson);
 }
 
 function parser(type) {
