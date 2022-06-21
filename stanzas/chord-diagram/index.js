@@ -1,6 +1,12 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
+import {
+  InterpolateColorGenerator,
+  CirculateColorGenerator,
+  getColorSeries,
+  getColorsWithD3PresetColor,
+} from "@/lib/ColorGenerator";
 
 export default class ChordDiagram extends Stanza {
   async render() {
@@ -38,15 +44,70 @@ export default class ChordDiagram extends Stanza {
     // console.log(matrix)
 
     // prepare some D3 objects
-    const color = {
-      count: names.length,
-      hue(index) {
-        return (1 / this.count) * index;
-      },
-      hsl(index) {
-        return `hsl(${this.hue(index)}turn, 70%, 60%)`;
-      },
-    };
+    // const color = {
+    //   count: names.length,
+    //   hue(index) {
+    //     return (1 / this.count) * index;
+    //   },
+    //   hsl(index) {
+    //     return `hsl(${this.hue(index)}turn, 70%, 60%)`;
+    //   },
+    // };
+    const colorCirculation = this.params["type-of-color-circulation"];
+    let d3ColorScheme = this.params["color-scheme"];
+    let colors = [], colorGenerator;
+    if (d3ColorScheme.indexOf("(") !== -1) {
+      d3ColorScheme = d3ColorScheme.substr(0, d3ColorScheme.indexOf(" ("));
+    }
+    if (colorCirculation === "interpolate") {
+      if (d3ColorScheme.indexOf("Categorical-") !== -1) {
+        // categorical
+        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
+        if (d3ColorScheme === "Custom") {
+          colors = getColorSeries(this);
+          colorGenerator = new InterpolateColorGenerator(colors, undefined);
+        } else {
+          colors = getColorsWithD3PresetColor(
+            `scheme${d3ColorScheme}`,
+            names.length
+          );
+          colorGenerator = new InterpolateColorGenerator(colors, undefined);
+        }
+      } else {
+        // continuous
+        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+        colors = getColorsWithD3PresetColor(
+          `interpolate${d3ColorScheme}`,
+          names.length
+        );
+        colorGenerator = new InterpolateColorGenerator(colors, undefined);
+      }
+    } else {
+      if (d3ColorScheme.indexOf("Categorical-") !== -1) {
+        // categorical
+        d3ColorScheme = d3ColorScheme.replace("Categorical-", "");
+        if (d3ColorScheme === "Custom") {
+          colors = getColorSeries(this);
+          colorGenerator = new CirculateColorGenerator(colors, undefined);
+        } else {
+          colors = getColorsWithD3PresetColor(
+            `scheme${d3ColorScheme}`,
+            names.length
+          );
+          colorGenerator = new CirculateColorGenerator(colors, undefined);
+        }
+      } else {
+        // continuous
+        d3ColorScheme = d3ColorScheme.replace("Continuous-", "");
+        colors = getColorsWithD3PresetColor(
+          `interpolate${d3ColorScheme}`,
+          names.length
+        );
+        colorGenerator = new CirculateColorGenerator(colors, undefined);
+      }
+    }
+    console.log(colorGenerator)
+
 
     // const color = d3.scaleOrdinal(names, d3.schemeCategory10)
     const ribbon = d3
@@ -84,7 +145,15 @@ export default class ChordDiagram extends Stanza {
       .join("path")
       .attr("d", ribbon)
       // .attr('fill', d => color(names[d.target.index]))
-      .attr("fill", (d) => color.hsl(d.target.index))
+      // .attr("fill", (d) => color.hsl(d.target.index))
+      .attr("fill", (d) => {
+        switch (colorCirculation) {
+          case "circulate":
+            return colorGenerator.get(d.target.index);
+          case "interpolate":
+            return colorGenerator.get(d.target.index / names.length);
+        }
+      })
       .append("title")
       .text(
         (d) =>
@@ -104,7 +173,15 @@ export default class ChordDiagram extends Stanza {
           .append("path")
           .attr("d", arc)
           // .attr('fill', d => color(names[d.index]))
-          .attr("fill", (d) => color.hsl(d.index))
+          // .attr("fill", (d) => color.hsl(d.index))
+          .attr("fill", (d) => {
+            switch (colorCirculation) {
+              case "circulate":
+                return colorGenerator.get(d.index);
+              case "interpolate":
+                return colorGenerator.get(d.index / names.length);
+            }
+          })
           .attr("stroke", "#fff")
       )
       .call((g) =>
