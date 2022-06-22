@@ -1,0 +1,22 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+main {
+  font-family: var(--togostanza-font-family);
+}
+
+svg {
+  background-color: var(--togostanza-background-color);
+
+  .link {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1px;
+  }
+  text {
+    font-size: calc(var(--togostanza-font-size) * 1px);
+  }
+  circle {
+    stroke: ;
+  }
+}
