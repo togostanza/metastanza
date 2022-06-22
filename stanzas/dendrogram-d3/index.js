@@ -45,7 +45,7 @@ export default class Dendrogram extends Stanza {
     // Setting color scale
     const togostanzaColors = [];
     for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+      togostanzaColors.push(css(`--togostanza-theme-series_${i}_color`));
     }
 
     const color = d3.scaleOrdinal().range(togostanzaColors);

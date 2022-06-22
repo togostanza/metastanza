@@ -2,11 +2,11 @@
 @use "@/common.scss";
 
 main {
-  font-family: var(--togostanza-font-family);
+  font-family: var(--togostanza-fonts-font_family);
 }
 
 svg {
-  background-color: var(--togostanza-background-color);
+  background-color: var(--togostanza-theme-background_color);
 
   .link {
     fill: none;
@@ -14,9 +14,10 @@ svg {
     stroke-width: 1px;
   }
   text {
-    font-size: calc(var(--togostanza-font-size) * 1px);
+    font-size: calc(var(--togostanza-fonts-font_size_secondary) * 1px);
   }
   circle {
-    stroke: ;
+    stroke: var(--togostanza-border-color);
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
   }
 }
