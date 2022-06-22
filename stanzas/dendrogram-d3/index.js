@@ -1,6 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
+import ToolTip from "@/lib/ToolTip";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -29,6 +30,9 @@ export default class Dendrogram extends Stanza {
     //data
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
+    const labelMargin = !isNaN(parseFloat(this.params["node-label-margin"]))
+      ? this.params["node-label-margin"]
+      : 5;
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -41,6 +45,9 @@ export default class Dendrogram extends Stanza {
     );
 
     this._data = values;
+    const showToolTips =
+      !!this.params["tooltips-data_key"] &&
+      values.some((item) => item[this.params["tooltips-data_key"]]);
 
     // Setting color scale
     const togostanzaColors = [];
@@ -70,6 +77,9 @@ export default class Dendrogram extends Stanza {
       .append("svg")
       .attr("width", width)
       .attr("height", height);
+
+    this.tooltip = new ToolTip();
+    root.append(this.tooltip);
 
     const rootGroup = svg
       .append("text")
@@ -107,7 +117,7 @@ export default class Dendrogram extends Stanza {
 
     const tree = d3
       .tree()
-      .size([height, width - maxLabelWidth - rootLabelWidth - 8 * 2]);
+      .size([height, width - maxLabelWidth - rootLabelWidth - labelMargin * 2]);
 
     tree(denroot);
 
@@ -128,6 +138,12 @@ export default class Dendrogram extends Stanza {
         (d) => "node" + (d.children ? " node--internal" : " node--leaf")
       )
       .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
+    if (showToolTips) {
+      node.attr(
+        "data-tooltip",
+        (d) => d.data[this.params["tooltips-data_key"]]
+      );
+    }
 
     node
       .append("circle")
@@ -137,9 +153,9 @@ export default class Dendrogram extends Stanza {
     node
       .append("text")
       .attr("dy", 3)
-      .attr("x", (d) => (d.children ? -8 : 8))
+      .attr("x", (d) => (d.children ? -labelMargin : labelMargin))
       .style("text-anchor", (d) => (d.children ? "end" : "start"))
-      .text((d) => d.data.name);
+      .text((d) => d.data[this.params["node-label-data_key"]] || "");
 
     function diagonal(d) {
       return (
@@ -148,11 +164,11 @@ export default class Dendrogram extends Stanza {
         "," +
         d.x +
         "C" +
-        (d.parent.y + 100) +
+        (d.parent.y + 50) +
         "," +
         d.x +
         " " +
-        (d.parent.y + 100) +
+        (d.parent.y + 50) +
         "," +
         d.parent.x +
         " " +
@@ -160,6 +176,9 @@ export default class Dendrogram extends Stanza {
         "," +
         d.parent.x
       );
+    }
+    if (showToolTips) {
+      this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     }
   }
 }

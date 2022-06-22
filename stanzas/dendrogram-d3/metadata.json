@@ -32,7 +32,6 @@
       "stanza:description": "Custom CSS URL",
       "stanza:required": false
     },
-
     {
       "stanza:key": "node-label-data_key",
       "stanza:type": "text",
@@ -48,13 +47,12 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "tooltips-show",
-      "stanza:type": "boolean",
-      "stanza:example": "true",
-      "stanza:description": "Whether to show tooltips",
+      "stanza:key": "tooltips-data_key",
+      "stanza:type": "text",
+      "stanza:example": "name",
+      "stanza:description": "Data key to use as tooltip text",
       "stanza:required": false
     },
-
     {
       "stanza:key": "width",
       "stanza:type": "number",
@@ -106,7 +104,6 @@
       "stanza:default": "#F75976",
       "stanza:description": "Group color 5"
     },
-
     {
       "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",

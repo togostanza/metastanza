@@ -10,7 +10,7 @@ svg {
 
   .link {
     fill: none;
-    stroke: grey;
+    stroke: var(--togostanza-border-color);
     stroke-width: 1px;
   }
   text {
