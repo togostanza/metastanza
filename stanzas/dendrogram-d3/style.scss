@@ -11,7 +11,7 @@ svg {
   .link {
     fill: none;
     stroke: var(--togostanza-border-color);
-    stroke-width: 1px;
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
   }
   text {
     font-size: calc(var(--togostanza-fonts-font_size_secondary) * 1px);

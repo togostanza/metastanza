@@ -43,8 +43,8 @@ export default class Dendrogram extends Stanza {
       this.params["data-type"],
       this.root.querySelector("main")
     );
-
     this._data = values;
+
     const showToolTips =
       !!this.params["tooltips-data_key"] &&
       values.some((item) => item[this.params["tooltips-data_key"]]);
@@ -61,9 +61,7 @@ export default class Dendrogram extends Stanza {
     const el = this.root.getElementById("dendrogram-d3");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
-    if (existingSvg) {
-      existingSvg.remove();
-    }
+    existingSvg?.remove();
 
     const denroot = d3
       .stratify()
@@ -138,6 +136,7 @@ export default class Dendrogram extends Stanza {
         (d) => "node" + (d.children ? " node--internal" : " node--leaf")
       )
       .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
+
     if (showToolTips) {
       node.attr(
         "data-tooltip",
