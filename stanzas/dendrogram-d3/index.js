@@ -67,11 +67,11 @@ export default class Dendrogram extends Stanza {
       .stratify()
       .parentId((d) => d.parent)(values)
       .sort((a, b) => {
-        console.log(a);
         return a.data[this.params["node-label-data_key"]].localeCompare(
           b.data[this.params["node-label-data_key"]]
         );
       });
+    console.log(denroot);
 
     const svg = d3
       .select(el)
@@ -121,7 +121,7 @@ export default class Dendrogram extends Stanza {
       .size([height, width - maxLabelWidth - rootLabelWidth - labelMargin * 2]);
 
     tree(denroot);
-
+    console.log(denroot);
     g.selectAll(".link")
       .data(data)
       .enter()
@@ -138,7 +138,11 @@ export default class Dendrogram extends Stanza {
         "class",
         (d) => "node" + (d.children ? " node--internal" : " node--leaf")
       )
-      .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
+      .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")")
+      .on("click", (e, d) => {
+        // console.log("e", e);
+        // console.log("d", d);
+      });
 
     if (showToolTips) {
       node.attr(
