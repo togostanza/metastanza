@@ -66,8 +66,11 @@ export default class Dendrogram extends Stanza {
     const denroot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
-      .sort(function (a, b) {
-        return a.height - b.height || a.id.localeCompare(b.id);
+      .sort((a, b) => {
+        console.log(a);
+        return a.data[this.params["node-label-data_key"]].localeCompare(
+          b.data[this.params["node-label-data_key"]]
+        );
       });
 
     const svg = d3

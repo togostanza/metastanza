@@ -149,7 +149,7 @@
     {
       "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
-      "stanza:default": "#4E5059",
+      "stanza:default": "#AEB3BF",
       "stanza:description": "Border color for everything that have a border"
     },
     {
