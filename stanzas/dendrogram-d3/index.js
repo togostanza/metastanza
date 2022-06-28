@@ -96,22 +96,22 @@ export default class Dendrogram extends Stanza {
 
     const tempGroup = svg.append("g");
 
-    const nodesMap = new Map();
-    denroot.descendants().forEach((node) => {
-      nodesMap.set(node.id, node);
-    });
-
-    function toggleChildren(id) {
-      if (nodesMap.get(id).children) {
-        nodesMap.get(id)._children = nodesMap.get(id).children;
-        nodesMap.get(id).children = null;
-      } else if (nodesMap.get(id)._children) {
-        nodesMap.get(id).children = nodesMap.get(id)._children;
-        nodesMap.get(id)._children = null;
+    const toggle = (d) => {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
       }
-    }
+    };
 
-    const update = () => {
+    const tree = d3.tree();
+
+    denroot.x0 = height / 2;
+    denroot.y0 = 0;
+
+    const update = (source) => {
       const data = denroot.descendants().slice(1);
       const maxDepth = d3.max(data, (d) => d.depth);
       const labelsarray = [];
@@ -130,156 +130,109 @@ export default class Dendrogram extends Stanza {
       const maxLabelWidth = tempGroup.node().getBBox().width;
       tempGroup.remove();
 
-      const tree = d3
-        .tree()
-        .size([
-          height,
-          width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
-        ]);
+      tree.size([
+        height,
+        width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+      ]);
+
+      let i = 0;
 
       tree(denroot);
 
-      const linkUpdate = g.selectAll(".link").data(data, (d) => d.id);
+      const node = g
+        .selectAll(".node")
+        .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
-      const linkEnter = linkUpdate
-        .enter()
-        .append("path")
-        .attr("class", "link")
-        .attr("d", (d) => diagonalFlat(d));
-
-      const linkExit = linkUpdate.exit().remove();
-
-      linkEnter
-        .merge(linkUpdate)
-        .transition()
-        .attr("d", (d) => diagonal(d));
-
-      // const nodeUpdate = g
-      //   .selectAll(".node")
-      //   .data(denroot.descendants(), (d) => d.id);
-
-      // const nodeEnter = nodeUpdate
-      //   .enter()
-      //   .append("circle")
-      //   .attr("r", 0)
-      //   .attr("cy", (d) => (d.parent ? d.parent.x : d.x))
-      //   .attr("cx", (d) => (d.parent ? d.parent.y : d.y));
-
-      // const nodeExit = nodeUpdate
-      //   .exit()
-      //   .transition()
-      //   .attr("r", 0)
-      //   .attr("cy", (d) => (d.parent ? d.parent.x : d.x))
-      //   .attr("cx", (d) => (d.parent ? d.parent.y : d.y))
-      //   .remove();
-
-      // nodeEnter
-      //   .merge(nodeUpdate)
-      //   .attr("class", "node")
-      //   .attr("fill", "gray")
-      //   .on("click", (_, d) => {
-      //     toggleChildren(d.id);
-      //     update();
-      //   })
-      //   .transition()
-      //   .attr("r", 5)
-      //   .attr("cy", (d) => d.x)
-      //   .attr("cx", (d) => d.y);
-
-      const nodeUpdate = g
-        .selectAll("g.node")
-        .data(denroot.descendants(), (d) => d.id);
-
-      console.log(denroot.descendants());
-      const nodeEnter = nodeUpdate
+      const nodeEnter = node
         .enter()
         .append("g")
-        .on("click", (_, d) => {
-          toggleChildren(d.id);
-          update();
+        .attr("class", "node")
+        .attr("transform", "translate(" + source.y0 + "," + source.x0 + ")")
+        .on("click", (e, d) => {
+          toggle(d);
+          update(d);
         });
 
-      nodeEnter.append("text");
-      nodeEnter.append("circle");
+      nodeEnter
+        .append("circle")
+        .attr("r", 5)
+        .style("fill", (d) => (d._children ? "lightsteelblue" : "#fff"))
+        .attr("data-tooltip", (d) => d.data[this.params["tooltips-data_key"]]);
+
+      nodeEnter
+        .append("text")
+        .attr("x", (d) =>
+          d.children || d._children ? -labelMargin : labelMargin
+        )
+        .attr("dy", "3")
+        .attr("font-size", "50%")
+        .attr("text-anchor", (d) =>
+          d.children || d._children ? "end" : "start"
+        )
+        .text((d) => d.data.name)
+        .style("fill-opacity", 1e-6);
+
+      const nodeUpdate = nodeEnter.merge(node);
+      const duration = 500;
 
       nodeUpdate
-        .merge(nodeEnter)
+        .transition()
+        .duration(duration)
         .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
 
-      nodeUpdate.merge(nodeEnter).select("circle").attr("r", 5);
-
       nodeUpdate
-        .merge(nodeEnter)
-        .select("text")
-        .text((d) => d.data.name);
+        .select("circle")
+        .attr("r", 8)
+        .style("fill", (d) => (d._children ? "lightsteelblue" : "#fff"));
 
-      // mergedG.select("text").text((d) => d.data.name);
-      // mergedG.select("circle").attr("r", 5);
+      nodeUpdate.select("text").style("fill-opacity", 1);
 
-      nodeUpdate.exit().remove();
+      const nodeExit = node
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("transform", "translate(" + source.y + "," + source.x + ")")
+        .remove();
 
-      // if (showToolTips) {
-      //   node.attr(
-      //     "data-tooltip",
-      //     (d) => d.data[this.params["tooltips-data_key"]]
-      //   );
-      // }
+      nodeExit.select("circle").attr("r", 1e-6);
+      nodeExit.select("text").style("fill-opacity", 1e-6);
 
-      // node
-      //   .append("circle")
-      //   .attr("r", 4)
-      //   .attr("fill", (d) => color(d.depth));
+      const link = g
+        .selectAll(".link")
+        .data(denroot.links(), (d) => d.target.id);
 
-      // node
-      //   .append("text")
-      //   .attr("dy", 3)
-      //   .attr("x", (d) => (d.children ? -labelMargin : labelMargin))
-      //   .style("text-anchor", (d) => (d.children ? "end" : "start"))
-      //   .text((d) => d.data[this.params["node-label-data_key"]] || "");
+      const linkEnter = link
+        .enter()
+        .insert("path", "g")
+        .attr("class", "link")
+        .attr("d", d3.linkHorizontal().x(source.y0).y(source.x0));
+
+      const linkUpdate = linkEnter.merge(link);
+      linkUpdate
+        .transition()
+        .duration(duration)
+        .attr(
+          "d",
+          d3
+            .linkHorizontal()
+            .x((d) => d.y)
+            .y((d) => d.x)
+        );
+
+      link
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("d", d3.linkHorizontal().x(source.y).y(source.x))
+        .remove();
+
+      node.each((d) => {
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
     };
-    update();
+    update(denroot);
 
-    function diagonal(d) {
-      return (
-        "M" +
-        d.y +
-        "," +
-        d.x +
-        "C" +
-        (d.parent.y + 50) +
-        "," +
-        d.x +
-        " " +
-        (d.parent.y + 50) +
-        "," +
-        d.parent.x +
-        " " +
-        d.parent.y +
-        "," +
-        d.parent.x
-      );
-    }
-
-    function diagonalFlat(d) {
-      return (
-        "M" +
-        d.parent.y +
-        "," +
-        d.parent.x +
-        "C" +
-        (d.parent.y + 50) +
-        "," +
-        d.parent.x +
-        " " +
-        (d.parent.y + 50) +
-        "," +
-        d.parent.x +
-        " " +
-        d.parent.y +
-        "," +
-        d.parent.x
-      );
-    }
     if (showToolTips) {
       this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     }
