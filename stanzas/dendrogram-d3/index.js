@@ -71,7 +71,6 @@ export default class Dendrogram extends Stanza {
           b.data[this.params["node-label-data_key"]]
         );
       });
-    console.log(denroot);
 
     const svg = d3
       .select(el)
@@ -97,71 +96,148 @@ export default class Dendrogram extends Stanza {
 
     const tempGroup = svg.append("g");
 
-    const data = denroot.descendants().slice(1);
+    const nodesMap = new Map();
+    denroot.descendants().forEach((node) => {
+      nodesMap.set(node.id, node);
+    });
 
-    const maxDepth = d3.max(data, (d) => d.depth);
-    const labelsarray = [];
-    for (const n of data) {
-      if (n.depth === maxDepth) {
-        labelsarray.push(n.data.name);
+    function toggleChildren(id) {
+      if (nodesMap.get(id).children) {
+        nodesMap.get(id)._children = nodesMap.get(id).children;
+        nodesMap.get(id).children = null;
+      } else if (nodesMap.get(id)._children) {
+        nodesMap.get(id).children = nodesMap.get(id)._children;
+        nodesMap.get(id)._children = null;
       }
     }
 
-    tempGroup
-      .selectAll("text")
-      .data(labelsarray)
-      .enter()
-      .append("text")
-      .text((d) => d);
-    const maxLabelWidth = tempGroup.node().getBBox().width;
-    tempGroup.remove();
+    const update = () => {
+      const data = denroot.descendants().slice(1);
+      const maxDepth = d3.max(data, (d) => d.depth);
+      const labelsarray = [];
+      for (const n of data) {
+        if (n.depth === maxDepth) {
+          labelsarray.push(n.data.name);
+        }
+      }
 
-    const tree = d3
-      .tree()
-      .size([height, width - maxLabelWidth - rootLabelWidth - labelMargin * 2]);
+      tempGroup
+        .selectAll("text")
+        .data(labelsarray)
+        .enter()
+        .append("text")
+        .text((d) => d);
+      const maxLabelWidth = tempGroup.node().getBBox().width;
+      tempGroup.remove();
 
-    tree(denroot);
-    console.log(denroot);
-    g.selectAll(".link")
-      .data(data)
-      .enter()
-      .append("path")
-      .attr("class", "link")
-      .attr("d", (d) => diagonal(d));
+      const tree = d3
+        .tree()
+        .size([
+          height,
+          width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+        ]);
 
-    const node = g
-      .selectAll(".node")
-      .data(denroot.descendants())
-      .enter()
-      .append("g")
-      .attr(
-        "class",
-        (d) => "node" + (d.children ? " node--internal" : " node--leaf")
-      )
-      .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")")
-      .on("click", (e, d) => {
-        // console.log("e", e);
-        // console.log("d", d);
-      });
+      tree(denroot);
 
-    if (showToolTips) {
-      node.attr(
-        "data-tooltip",
-        (d) => d.data[this.params["tooltips-data_key"]]
-      );
-    }
+      const linkUpdate = g.selectAll(".link").data(data, (d) => d.id);
 
-    node
-      .append("circle")
-      .attr("r", 4)
-      .attr("fill", (d) => color(d.depth));
+      const linkEnter = linkUpdate
+        .enter()
+        .append("path")
+        .attr("class", "link")
+        .attr("d", (d) => diagonalFlat(d));
 
-    node
-      .append("text")
-      .attr("dy", 3)
-      .attr("x", (d) => (d.children ? -labelMargin : labelMargin))
-      .style("text-anchor", (d) => (d.children ? "end" : "start"))
-      .text((d) => d.data[this.params["node-label-data_key"]] || "");
+      const linkExit = linkUpdate.exit().remove();
+
+      linkEnter
+        .merge(linkUpdate)
+        .transition()
+        .attr("d", (d) => diagonal(d));
+
+      // const nodeUpdate = g
+      //   .selectAll(".node")
+      //   .data(denroot.descendants(), (d) => d.id);
+
+      // const nodeEnter = nodeUpdate
+      //   .enter()
+      //   .append("circle")
+      //   .attr("r", 0)
+      //   .attr("cy", (d) => (d.parent ? d.parent.x : d.x))
+      //   .attr("cx", (d) => (d.parent ? d.parent.y : d.y));
+
+      // const nodeExit = nodeUpdate
+      //   .exit()
+      //   .transition()
+      //   .attr("r", 0)
+      //   .attr("cy", (d) => (d.parent ? d.parent.x : d.x))
+      //   .attr("cx", (d) => (d.parent ? d.parent.y : d.y))
+      //   .remove();
+
+      // nodeEnter
+      //   .merge(nodeUpdate)
+      //   .attr("class", "node")
+      //   .attr("fill", "gray")
+      //   .on("click", (_, d) => {
+      //     toggleChildren(d.id);
+      //     update();
+      //   })
+      //   .transition()
+      //   .attr("r", 5)
+      //   .attr("cy", (d) => d.x)
+      //   .attr("cx", (d) => d.y);
+
+      const nodeUpdate = g
+        .selectAll("g.node")
+        .data(denroot.descendants(), (d) => d.id);
+
+      console.log(denroot.descendants());
+      const nodeEnter = nodeUpdate
+        .enter()
+        .append("g")
+        .on("click", (_, d) => {
+          toggleChildren(d.id);
+          update();
+        });
+
+      nodeEnter.append("text");
+      nodeEnter.append("circle");
+
+      nodeUpdate
+        .merge(nodeEnter)
+        .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
+
+      nodeUpdate.merge(nodeEnter).select("circle").attr("r", 5);
+
+      nodeUpdate
+        .merge(nodeEnter)
+        .select("text")
+        .text((d) => d.data.name);
+
+      // mergedG.select("text").text((d) => d.data.name);
+      // mergedG.select("circle").attr("r", 5);
+
+      nodeUpdate.exit().remove();
+
+      // if (showToolTips) {
+      //   node.attr(
+      //     "data-tooltip",
+      //     (d) => d.data[this.params["tooltips-data_key"]]
+      //   );
+      // }
+
+      // node
+      //   .append("circle")
+      //   .attr("r", 4)
+      //   .attr("fill", (d) => color(d.depth));
+
+      // node
+      //   .append("text")
+      //   .attr("dy", 3)
+      //   .attr("x", (d) => (d.children ? -labelMargin : labelMargin))
+      //   .style("text-anchor", (d) => (d.children ? "end" : "start"))
+      //   .text((d) => d.data[this.params["node-label-data_key"]] || "");
+    };
+    update();
 
     function diagonal(d) {
       return (
@@ -173,6 +249,27 @@ export default class Dendrogram extends Stanza {
         (d.parent.y + 50) +
         "," +
         d.x +
+        " " +
+        (d.parent.y + 50) +
+        "," +
+        d.parent.x +
+        " " +
+        d.parent.y +
+        "," +
+        d.parent.x
+      );
+    }
+
+    function diagonalFlat(d) {
+      return (
+        "M" +
+        d.parent.y +
+        "," +
+        d.parent.x +
+        "C" +
+        (d.parent.y + 50) +
+        "," +
+        d.parent.x +
         " " +
         (d.parent.y + 50) +
         "," +
