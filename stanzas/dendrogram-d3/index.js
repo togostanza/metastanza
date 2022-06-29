@@ -67,9 +67,16 @@ export default class Dendrogram extends Stanza {
       .stratify()
       .parentId((d) => d.parent)(values)
       .sort((a, b) => {
-        return a.data[this.params["node-label-data_key"]].localeCompare(
+        if (
+          a.data[this.params["node-label-data_key"]] &&
           b.data[this.params["node-label-data_key"]]
-        );
+        ) {
+          return a.data[this.params["node-label-data_key"]].localeCompare(
+            b.data[this.params["node-label-data_key"]]
+          );
+        } else {
+          return 0;
+        }
       });
 
     const svg = d3
@@ -85,7 +92,9 @@ export default class Dendrogram extends Stanza {
       .append("text")
       .attr("x", 5)
       .attr("y", 10)
-      .text(denroot.descendants()[0].data.name);
+      .text(
+        denroot.descendants()[0].data[this.params["node-label-data_key"]] || ""
+      );
 
     const rootLabelWidth = rootGroup.node().getBBox().width;
     rootGroup.remove();
@@ -95,6 +104,25 @@ export default class Dendrogram extends Stanza {
       .attr("transform", `translate(${rootLabelWidth + 8},0)`);
 
     const tempGroup = svg.append("g");
+
+    const data = denroot.descendants().slice(1);
+    const maxDepth = d3.max(data, (d) => d.depth);
+
+    const labelsarray = [];
+    for (const n of data) {
+      if (n.depth === maxDepth) {
+        labelsarray.push(n.data[this.params["node-label-data_key"]] || "");
+      }
+    }
+
+    tempGroup
+      .selectAll("text")
+      .data(labelsarray)
+      .enter()
+      .append("text")
+      .text((d) => d);
+    const maxLabelWidth = tempGroup.node().getBBox().width;
+    tempGroup.remove();
 
     const toggle = (d) => {
       if (d.children) {
@@ -112,24 +140,6 @@ export default class Dendrogram extends Stanza {
     denroot.y0 = 0;
 
     const update = (source) => {
-      const data = denroot.descendants().slice(1);
-      const maxDepth = d3.max(data, (d) => d.depth);
-      const labelsarray = [];
-      for (const n of data) {
-        if (n.depth === maxDepth) {
-          labelsarray.push(n.data.name);
-        }
-      }
-
-      tempGroup
-        .selectAll("text")
-        .data(labelsarray)
-        .enter()
-        .append("text")
-        .text((d) => d);
-      const maxLabelWidth = tempGroup.node().getBBox().width;
-      tempGroup.remove();
-
       tree.size([
         height,
         width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
@@ -155,7 +165,8 @@ export default class Dendrogram extends Stanza {
 
       nodeEnter
         .append("circle")
-        .attr("data-tooltip", (d) => d.data[this.params["tooltips-data_key"]]);
+        .attr("data-tooltip", (d) => d.data[this.params["tooltips-data_key"]])
+        .classed("with-children", (d) => d.children);
 
       nodeEnter
         .append("text")
@@ -166,7 +177,7 @@ export default class Dendrogram extends Stanza {
         .attr("text-anchor", (d) =>
           d.children || d._children ? "end" : "start"
         )
-        .text((d) => d.data.name);
+        .text((d) => d.data[this.params["node-label-data_key"]] || "");
 
       const nodeUpdate = nodeEnter.merge(node);
       const duration = 500;
@@ -179,8 +190,7 @@ export default class Dendrogram extends Stanza {
 
       nodeUpdate
         .select("circle")
-        .attr("r", 4)
-        // .attr("r", parseFloat(this.params["node_circle_radius"]))
+        .attr("r", parseFloat(this.params["node-circle-radius"]))
         .attr("fill", (d) => (d._children ? "#fff" : color(d.depth)));
 
       nodeUpdate.select("text").style("fill-opacity", 1);

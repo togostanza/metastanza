@@ -19,5 +19,9 @@ svg {
   circle {
     stroke: var(--togostanza-border-color);
     stroke-width: calc(var(--togostanza-border-width) * 1px);
+
+    &.with-children {
+      cursor: pointer;
+    }
   }
 }
