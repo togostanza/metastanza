@@ -155,8 +155,6 @@ export default class Dendrogram extends Stanza {
 
       nodeEnter
         .append("circle")
-        .attr("r", 5)
-        .style("fill", (d) => (d._children ? "lightsteelblue" : "#fff"))
         .attr("data-tooltip", (d) => d.data[this.params["tooltips-data_key"]]);
 
       nodeEnter
@@ -165,15 +163,14 @@ export default class Dendrogram extends Stanza {
           d.children || d._children ? -labelMargin : labelMargin
         )
         .attr("dy", "3")
-        .attr("font-size", "50%")
         .attr("text-anchor", (d) =>
           d.children || d._children ? "end" : "start"
         )
-        .text((d) => d.data.name)
-        .style("fill-opacity", 1e-6);
+        .text((d) => d.data.name);
 
       const nodeUpdate = nodeEnter.merge(node);
       const duration = 500;
+      // const duration = parseInt(this.params["transition_duration"]);
 
       nodeUpdate
         .transition()
@@ -182,20 +179,18 @@ export default class Dendrogram extends Stanza {
 
       nodeUpdate
         .select("circle")
-        .attr("r", 8)
-        .style("fill", (d) => (d._children ? "lightsteelblue" : "#fff"));
+        .attr("r", 4)
+        // .attr("r", parseFloat(this.params["node_circle_radius"]))
+        .attr("fill", (d) => (d._children ? "#fff" : color(d.depth)));
 
       nodeUpdate.select("text").style("fill-opacity", 1);
 
-      const nodeExit = node
+      node
         .exit()
         .transition()
         .duration(duration)
         .attr("transform", "translate(" + source.y + "," + source.x + ")")
         .remove();
-
-      nodeExit.select("circle").attr("r", 1e-6);
-      nodeExit.select("text").style("fill-opacity", 1e-6);
 
       const link = g
         .selectAll(".link")

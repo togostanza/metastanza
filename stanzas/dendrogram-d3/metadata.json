@@ -163,6 +163,18 @@
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "node_circle_radius",
+      "stanza:type": "number",
+      "stanza:default": 4,
+      "stanza:description": "node circle size"
+    },
+    {
+      "stanza:key": "transition_duration",
+      "stanza:type": "number",
+      "stanza:default": 500,
+      "stanza:description": "transition duration"
     }
   ]
 }
