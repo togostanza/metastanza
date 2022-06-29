@@ -47,9 +47,9 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-circle-radius",
+      "stanza:key": "node-size-fixed_size",
       "stanza:type": "number",
-      "stanza:example": 4,
+      "stanza:example": 8,
       "stanza:description": "node circle size in px",
       "stanza:required": false
     },
@@ -126,26 +126,8 @@
     {
       "stanza:key": "--togostanza-fonts-font_size_primary",
       "stanza:type": "number",
-      "stanza:default": 12,
-      "stanza:description": "Primary font size in px"
-    },
-    {
-      "stanza:key": "--togostanza-fonts-font_size_secondary",
-      "stanza:type": "number",
       "stanza:default": 9,
-      "stanza:description": "Secondary font size in px"
-    },
-    {
-      "stanza:key": "--togostanza-outline-width",
-      "stanza:type": "number",
-      "stanza:default": 600,
-      "stanza:description": "Width in px"
-    },
-    {
-      "stanza:key": "--togostanza-outline-height",
-      "stanza:type": "number",
-      "stanza:default": 1800,
-      "stanza:description": "Height in px"
+      "stanza:description": "Primary font size in px"
     },
     {
       "stanza:key": "--togostanza-outline-padding",

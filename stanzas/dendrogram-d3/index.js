@@ -181,7 +181,6 @@ export default class Dendrogram extends Stanza {
 
       const nodeUpdate = nodeEnter.merge(node);
       const duration = 500;
-      // const duration = parseInt(this.params["transition_duration"]);
 
       nodeUpdate
         .transition()
@@ -190,10 +189,8 @@ export default class Dendrogram extends Stanza {
 
       nodeUpdate
         .select("circle")
-        .attr("r", parseFloat(this.params["node-circle-radius"]))
+        .attr("r", parseFloat(this.params["node-size-fixed_size"] / 2))
         .attr("fill", (d) => (d._children ? "#fff" : color(d.depth)));
-
-      nodeUpdate.select("text").style("fill-opacity", 1);
 
       node
         .exit()
