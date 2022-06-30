@@ -101,11 +101,13 @@ export default class Linechart extends Stanza {
     const SVGWidth = width - MARGIN.left - MARGIN.right;
     const SVGHeight = height - MARGIN.top - MARGIN.bottom;
 
+    // Width and height of the chart
     const WIDTH =
       width - MARGIN.left - SVGMargin.left - MARGIN.right - SVGMargin.right;
     const HEIGHT =
       height - MARGIN.top - SVGMargin.top - MARGIN.bottom - SVGMargin.bottom;
 
+    // padding betsween chart and preview
     const PD = 20;
 
     const chartWidth = WIDTH;
@@ -129,6 +131,7 @@ export default class Linechart extends Stanza {
     } else {
       groupedData = new Map(["data", this._data]);
     }
+
     const groups = Array.from(groupedData.keys());
 
     this._groups = groups;
@@ -137,6 +140,7 @@ export default class Linechart extends Stanza {
     const color = d3.scaleOrdinal().domain(groups).range(togostanzaColors);
 
     const colorSym = Symbol("color");
+
     groupedData.forEach((d, key) => {
       d[colorSym] = color(key);
       d.show = true;
@@ -147,6 +151,14 @@ export default class Linechart extends Stanza {
       .append("svg")
       .attr("width", SVGWidth)
       .attr("height", SVGHeight);
+
+    svg
+      .append("defs")
+      .append("clipPath")
+      .attr("id", "clip")
+      .append("rect")
+      .attr("width", WIDTH)
+      .attr("height", HEIGHT);
 
     const graphArea = svg
       .append("g")
@@ -199,6 +211,85 @@ export default class Linechart extends Stanza {
         break;
     }
 
+    this._scaleX.range([0, chartWidth]);
+    this._scaleY.range([chartHeight, 0]);
+    this._previewScaleX.range([0, previewWidth]);
+    this._previewScaleY.range([previewHeight, 0]);
+
+    const line = d3
+      .line()
+      .x((d) => this._scaleX(d[xKeyName]))
+      .y((d) => this._scaleY(+d[yKeyName]));
+
+    const line2 = d3
+      .line()
+      .x((d) => {
+        console.log(
+          "this._previewScaleX(d[xKeyName])",
+          this._previewScaleX(d[xKeyName])
+        );
+        return this._previewScaleX(d[xKeyName]);
+      })
+      .y((d) => this._previewScaleY(+d[yKeyName]));
+
+    const brushed = (e) => {
+      const s = e.selection || this._previewScaleX.range();
+      const currentRange = this._scaleX.domain(
+        s.map(this._previewScaleX.invert, this._previewScaleX)
+      );
+      graphArea.select(".line").attr("d", line);
+      graphArea.select(".axis .x").call();
+      svg
+        .select(".zoom")
+        .call(
+          zoom.transform,
+          d3.zoomIdentity.scale(width / (s[1] - s[0])).translate(-s[0], 0)
+        );
+    };
+
+    const brush = d3
+      .brushX()
+      .extent([
+        [0, 0],
+        [previewWidth, previewHeight],
+      ])
+      .on("brush end", brushed);
+
+    const zoom = d3
+      .zoom()
+      .scaleExtent([1, Infinity])
+      .translateExtent([
+        [0, 0],
+        [WIDTH, HEIGHT],
+      ])
+      .extent([
+        [0, 0],
+        [WIDTH, HEIGHT],
+      ]);
+
+    const xAxis = d3.axisBottom(this._scaleX),
+      xAxis2 = d3.axisBottom(this._previewScaleX),
+      yAxis = d3.axisLeft(this._scaleY),
+      yAxis2 = d3.axisLeft(this._previewScaleY);
+
+    const graphXAxisG = graphArea
+      .append("g")
+      .attr("class", "axis x")
+      .attr("transform", `translate(0, ${chartHeight})`);
+
+    const graphYAxisG = graphArea.append("g").attr("class", "axis y");
+
+    const previewXAxisG = previewArea
+      .append("g")
+      .attr("class", "axis x")
+      .attr("transform", `translate(0, ${previewHeight})`)
+      .call(xAxis2);
+
+    const previewYAxisG = previewArea
+      .append("g")
+      .attr("class", "axis y")
+      .call(yAxis2);
+
     const update = (groupsToShow) => {
       this._currentData = groupsToShow.map((group) => {
         return {
@@ -208,272 +299,98 @@ export default class Linechart extends Stanza {
         };
       });
 
-      const xDataMax = d3.max(this._currentData, (d) =>
-        d3.max(d.values, (d) => +d[xKeyName])
-      );
-      const xDataMin = d3.min(this._currentData, (d) =>
-        d3.min(d.values, (d) => +d[xKeyName])
-      );
-      const yDataMax = d3.max(this._currentData, (d) =>
-        d3.max(d.values, (d) => +d[yKeyName])
-      );
-      const yDataMin = d3.min(this._currentData, (d) =>
-        d3.min(d.values, (d) => +d[yKeyName])
-      );
-
-      // get group with of maximum data points
-      const maxGroup = this._currentData.reduce((acc, cur) => {
-        return cur.values.length > acc.values.length ? cur : acc;
-      }, this._currentData[0]);
-
-      //get group with most unique this._currentData points
-      const maxUniqueGroup = this._currentData.reduce((acc, cur) => {
-        const cury = [...new Set(cur.values.map((d) => d[yKeyName]))];
-        const accy = [...new Set(acc.values.map((d) => d[yKeyName]))];
-        return cury.length > accy.length ? cur : acc;
-      }, this._currentData[0]);
-
-      this._xDomain =
-        xScale === "ordinal"
-          ? Object.values(maxGroup.values).map((d) => d[xKeyName])
-          : [xDataMin, xDataMax];
-
-      this._yDomain =
-        yScale === "ordinal"
-          ? Object.values(maxUniqueGroup.values).map((d) => d[yKeyName])
-          : [yDataMin, yDataMax];
-
-      this._scaleX.domain(this._xDomain).range([0, chartWidth]);
-      this._scaleY.domain(this._yDomain).range([chartHeight, 0]);
-
-      this._previewScaleX.domain(this._xDomain).range([0, previewWidth]);
-      this._previewScaleY.domain(this._yDomain).range([previewHeight, 0]);
-
-      const zoomWindowProps = new Proxy(
-        {
-          x: this._previewScaleX(this._xDomain[0]),
-          width:
-            this._previewScaleX(this._xDomain[1]) -
-            this._previewScaleX(this._xDomain[0]),
-        },
-        {
-          set: (target, prop, value) => {
-            Reflect.set(target, prop, value);
-
-            this._scaleX.domain(getXDomain(target));
-            this._scaleY.domain(getYDomain());
-
-            updateDomainAxis();
-            updateChart();
-            return true;
-          },
+      const getXDomain = () => {
+        const xDomain = this._currentData.map((d) =>
+          d.values.map((d) => d[xKeyName])
+        );
+        if (xScale === "ordinal") {
+          return [...new Set(xDomain.flat())];
+        } else {
+          return d3.extent(xDomain.flat());
         }
-      );
-
-      const xAxis = d3.axisBottom(this._scaleX);
-
-      const yAxis = d3
-        .axisLeft(this._scaleY)
-        .ticks(5)
-        .tickFormat((d) => d3.format(".2s")(d));
-
-      const previewXAxis = d3.axisBottom(this._previewScaleX);
-
-      const previewYAxis = d3
-        .axisLeft(this._previewScaleY)
-        .ticks(5)
-        .tickFormat((d) => d3.format(".2s")(d));
-
-      const xAxisGroup = graphArea
-        .append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0, ${chartHeight})`);
-
-      function updateDomainAxis() {
-        xAxisGroup.call(xAxis);
-      }
-
-      updateDomainAxis();
-
-      const yAxisGroup = graphArea
-        .append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-      const previewXAxisGroup = previewArea
-        .append("g")
-        .attr("class", "x axis")
-        .attr("transform", `translate(0, ${previewHeight})`)
-        .call(previewXAxis);
-
-      const previewYAxisGroup = previewArea
-        .append("g")
-        .attr("class", "y axis")
-        .call(previewYAxis);
-
-      const line = d3
-        .line()
-        .x((d) => this._scaleX(d[xKeyName]))
-        .y((d) => this._scaleY(+d[yKeyName]));
-
-      const previewLine = d3
-        .line()
-        .x((d) => this._previewScaleX(d[xKeyName]))
-        .y((d) => this._previewScaleY(+d[yKeyName]));
-
-      const lines = graphArea
-        .selectAll(".line")
-        .data(this._currentData, (d) => d.name)
-        .join("path")
-        .attr("class", "line")
-        .attr("stroke", (d) => {
-          return d.color;
-        })
-        .attr("stroke-width", 1)
-        .attr("fill", "none");
-
-      const updateChart = () => {
-        lines.attr("d", (d) => {
-          const vals = d.values.filter((v) =>
-            this._scaleX.domain().includes(v[xKeyName])
-          );
-
-          return line(vals);
-        });
       };
 
-      updateChart();
+      const getYDomain = () => {
+        // TODO make foe ordinal as well
+        const yDomain = this._currentData.map((d) =>
+          d.values.map((d) => +d[yKeyName])
+        );
+        return d3.extent(yDomain.flat());
+      };
 
-      const previewLines = previewArea
-        .selectAll(".line")
-        .data(this._currentData)
-        .join("path")
+      this._scaleX.domain(getXDomain());
+      this._scaleY.domain(getYDomain());
+      this._previewScaleX.domain(getXDomain());
+      this._previewScaleY.domain(getYDomain());
+
+      graphXAxisG.call(xAxis);
+      graphYAxisG.call(yAxis);
+
+      const linesUpdate = graphArea.selectAll(".line").data(this._currentData);
+
+      const linesEnter = linesUpdate
+        .enter()
+        .append("path")
         .attr("class", "line")
-        .attr("d", (d) => previewLine(d.values))
-        .attr("stroke", (d) => {
-          return d.color;
-        })
-        .attr("stroke-width", 0.5)
-        .attr("fill", "none");
+        .attr("d", (d) => line(d.values));
 
-      previewArea
-        .append("rect")
-        .attr("class", "zoom-window")
-        .attr("width", zoomWindowProps.width)
-        .attr("height", previewHeight)
-        .attr("x", zoomWindowProps.x)
-        .attr("fill", "green")
-        .attr("opacity", 0.2)
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .call(d3.drag().on("drag", drag));
+      linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
 
-      previewArea
-        .append("rect")
-        .attr("class", "zoom-window-right-border")
-        .attr("width", 5)
-        .attr("height", previewHeight / 3)
-        .attr("x", zoomWindowProps.x + zoomWindowProps.width - 2.5)
-        .attr("y", previewHeight / 3)
-        .attr("fill", "green")
-        .attr("opacity", 0.2)
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .call(d3.drag().on("drag", dragRightBorder));
+      const linesExit = linesUpdate.exit().remove();
 
-      previewArea
-        .append("rect")
-        .attr("class", "zoom-window-left-border")
-        .attr("width", 5)
-        .attr("height", previewHeight / 3)
-        .attr("x", zoomWindowProps.x - 2.5)
-        .attr("y", previewHeight / 3)
-        .attr("fill", "green")
-        .attr("opacity", 0.2)
-        .attr("stroke", "black")
-        .attr("stroke-width", 1)
-        .call(d3.drag().on("drag", dragLeftBorder));
+      const previewLinesUpdate = previewArea
+        .selectAll(".line")
+        .data(this._currentData);
 
-      function drag(e) {
-        const element = d3.select(this);
-        if (
-          zoomWindowProps.x + e.dx < 0 ||
-          zoomWindowProps.x + zoomWindowProps.width + e.dx > previewWidth
-        ) {
-          return;
-        }
-        zoomWindowProps.x += e.dx;
+      const previewLinesEnter = previewLinesUpdate
+        .enter()
+        .append("path")
+        .attr("class", "line")
+        .attr("d", (d) => line2(d.values));
 
-        element.attr("x", zoomWindowProps.x);
-        previewArea
-          .select(".zoom-window-left-border")
-          .attr("x", zoomWindowProps.x - 2.5);
-        previewArea
-          .select(".zoom-window-right-border")
-          .attr("x", zoomWindowProps.x + zoomWindowProps.width - 2.5);
-      }
+      previewLinesUpdate
+        .merge(previewLinesEnter)
+        .attr("stroke", (d) => d.color);
 
-      function dragRightBorder(e) {
-        const element = d3.select(this);
-        if (zoomWindowProps.x + zoomWindowProps.width + e.dx > previewWidth) {
-          return;
-        }
-        zoomWindowProps.width += e.dx;
-        element.attr("x", zoomWindowProps.x + zoomWindowProps.width - 2.5);
-        previewArea.select(".zoom-window").attr("width", zoomWindowProps.width);
-      }
-
-      function dragLeftBorder(e) {
-        const element = d3.select(this);
-        if (zoomWindowProps.x + e.dx < 0) {
-          return;
-        }
-        zoomWindowProps.width -= e.dx;
-        zoomWindowProps.x += e.dx;
-        element.attr("x", zoomWindowProps.x - 2.5);
-        previewArea
-          .select(".zoom-window")
-          .attr("width", zoomWindowProps.width)
-          .attr("x", zoomWindowProps.x);
-      }
+      const previewLinesExit = previewLinesUpdate.exit().remove();
     };
 
     update(groups);
 
-    const getXDomain = (target) => {
-      if (xScale === "ordinal") {
-        const dx1 = Math.floor(target.x / this._previewScaleX.step());
-        const dx2 = Math.floor(
-          (target.x + target.width) / this._previewScaleX.step()
-        );
+    // const getXDomain = (target) => {
+    //   if (xScale === "ordinal") {
+    //     const dx1 = Math.floor(target.x / this._previewScaleX.step());
+    //     const dx2 = Math.floor(
+    //       (target.x + target.width) / this._previewScaleX.step()
+    //     );
 
-        return this._xDomain.slice(dx1, dx2 + 1);
-      }
-    };
+    //     return this._xDomain.slice(dx1, dx2 + 1);
+    //   }
+    // };
 
-    const getYDomain = () => {
-      if (yScale === "linear") {
-        const domain = this._scaleX.domain();
-        const newYDomain = [
-          this._currentData[0].values[0][yKeyName],
-          this._currentData[0].values[1][yKeyName],
-        ];
+    // const getYDomain = () => {
+    //   if (yScale === "linear") {
+    //     const domain = this._scaleX.domain();
+    //     const newYDomain = [
+    //       this._currentData[0].values[0][yKeyName],
+    //       this._currentData[0].values[1][yKeyName],
+    //     ];
 
-        for (const data of this._currentData) {
-          const vals = data.values.filter((v) => domain.includes(v[xKeyName]));
-          const min = d3.min(vals, (d) => +d[yKeyName]);
-          const max = d3.max(vals, (d) => +d[yKeyName]);
-          if (min < newYDomain[0]) {
-            newYDomain[0] = min;
-          }
-          if (max > newYDomain[1]) {
-            newYDomain[1] = max;
-          }
-        }
+    //     for (const data of this._currentData) {
+    //       const vals = data.values.filter((v) => domain.includes(v[xKeyName]));
+    //       const min = d3.min(vals, (d) => +d[yKeyName]);
+    //       const max = d3.max(vals, (d) => +d[yKeyName]);
+    //       if (min < newYDomain[0]) {
+    //         newYDomain[0] = min;
+    //       }
+    //       if (max > newYDomain[1]) {
+    //         newYDomain[1] = max;
+    //       }
+    //     }
 
-        return newYDomain;
-      }
-    };
+    //     return newYDomain;
+    //   }
+    // };
 
     return;
     const showXGrid = this.params["xgrid"] === "true" ? true : false;
