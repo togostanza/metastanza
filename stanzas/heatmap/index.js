@@ -2,9 +2,8 @@ import Stanza from "togostanza/stanza";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
-
+import {getGradationColor} from "@/lib/ColorGenerator";
 import * as d3 from "d3";
-
 const tooltipHTML = ({ group, variable, value }) =>
   `<span><strong>${group},${variable}: </strong>${value}</span>`;
 
@@ -30,17 +29,24 @@ export default class Heatmap extends Stanza {
     this.draw(root, data);
   }
   async draw(el, dataset) {
+    // make colors
+    const getColorMin = this.params["gradation-color-min"];
+    const getColorMiddle = this.params["gradation-color-middle"];
+    const getColorMax = this.params["gradation-color-max"];
+    const myColor = getGradationColor(this, [getColorMin, getColorMiddle, getColorMax]);
+
     const tickSize = +this.css("--togostanza-tick-size") || 0;
     const xLabelAngle = this.params["x-label-angle"] || 0;
     const yLabelAngle = this.params["y-label-angle"] || 0;
+    const linewidthSize = +this.css("--togostanza-linewidth-size") || 0;
 
     // set the dimensions and margins of the graph
     const margin = {
       bottom: +this.css("--togostanza-font-size") + tickSize + 10,
       left: +this.css("--togostanza-font-size") + tickSize + 10,
     };
-    const width = this.params["width"] - margin.left,
-      height = this.params["height"] - margin.bottom;
+    const width = this.params["width"],
+      height = this.params["height"];
 
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
@@ -59,14 +65,14 @@ export default class Heatmap extends Stanza {
     const rows = [...new Set(dataset.map((d) => d.group))];
     const columns = [...new Set(dataset.map((d) => d.variable))];
 
-    const x = d3.scaleBand().domain(rows).range([0, width]).padding(0.01);
+    const x = d3.scaleBand().domain(rows).range([0, width - 10]);
 
     const xAxisGenerator = d3
       .axisBottom(x)
       .tickSizeOuter(0)
       .tickSizeInner(tickSize);
 
-    const y = d3.scaleBand().range([height, 0]).domain(columns).padding(0.01);
+    const y = d3.scaleBand().range([height, 10]).domain(columns);
     const yAxisGridGenerator = d3
       .axisLeft(y)
       .tickSizeOuter(0)
@@ -91,43 +97,37 @@ export default class Heatmap extends Stanza {
       .selectAll("text")
       .attr("transform", `rotate(${yLabelAngle})`);
 
-    if (!this.params["show-domains"]) {
-      svg.selectAll(".domain").remove();
-    }
+    svg.selectAll(".domain").remove();
     if (!this.params["show-tick-lines"]) {
       svg.selectAll(".tick line").remove();
     }
 
     graphArea.selectAll("text").attr("class", "text");
 
-    const myColor = d3
-      .scaleLinear()
-      .range([
-        this.css("--togostanza-series-0-color"),
-        this.css("--togostanza-series-1-color"),
-      ])
-      .domain([1, 100]);
+    // normalize
+    const values = [...new Set(dataset.map((d) => d.value))];
+    const normalize = (num) => {
+      return (num - Math.min(...values)) / (Math.max(...values) - Math.min(...values));
+    }
 
     graphArea
-      .selectAll()
-      .data(dataset, function (d) {
-        return d.group + ":" + d.variable;
-      })
-      .enter()
-      .append("rect")
-      .attr("x", (d) => x(d.group))
-      .attr("y", (d) => y(d.variable))
-      .attr("data-tooltip-html", true)
-      .attr("data-tooltip", (d) => tooltipHTML(d))
-      .attr("width", x.bandwidth())
-      .attr("height", y.bandwidth())
-      .attr("rx", this.css("--togostanza-border-radius"))
-      .attr("ry", this.css("--togostanza-border-radius"))
-      .style("fill", (d) => myColor(d.value))
-      .on("mouseover", mouseover)
-      .on("mouseleave", mouseleave);
-
-    const values = [...new Set(dataset.map((d) => d.value))];
+    .selectAll()
+    .data(dataset, function (d) {
+      return d.group + ":" + d.variabl
+    })
+    .enter()
+    .append("rect")
+    .attr("x", (d) => x(d.group))
+    .attr("y", (d) => y(d.variable))
+    .attr("data-tooltip-html", true)
+    .attr("data-tooltip", (d) => tooltipHTML(d))
+    .attr("width", x.bandwidth())
+    .attr("height", y.bandwidth())
+    .attr("rx", this.css("--togostanza-border-radius"))
+    .attr("ry", this.css("--togostanza-border-radius"))
+    .style("fill", (d) => myColor(normalize(d.value)))
+    .on("mouseover", mouseover)
+    .on("mouseleave", mouseleave);
 
     this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     this.legend.setup(
@@ -137,10 +137,16 @@ export default class Heatmap extends Stanza {
     );
 
     function mouseover() {
-      d3.select(this).classed("highlighted", true);
+      d3.select(this).classed("highlighted", true).raise();
+      if (!linewidthSize) {
+        d3.select(this).classed("highlighted", true).style("stroke-width", "1px").raise();
+      }
     }
     function mouseleave() {
       d3.select(this).classed("highlighted", false);
+      if (!linewidthSize) {
+        d3.select(this).classed("highlighted", false).style("stroke-width", "0px");
+      }
     }
   }
   // create legend objects based on min and max data values with number of steps as set by user in this.params
@@ -151,10 +157,10 @@ export default class Heatmap extends Stanza {
   ) {
     const [min, max] = [Math.min(...values), Math.max(...values)];
     return [...Array(steps).keys()].map((i) => {
-      const n = Math.round(min + i * ((max - min) / steps));
+      const n = Math.round(min + i * (Math.abs(max - min) / (steps - 1)));
       return {
         label: n,
-        color: color(n),
+        color: color((n - min) / (max - min)),
       };
     });
   }

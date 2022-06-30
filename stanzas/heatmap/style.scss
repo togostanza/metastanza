@@ -25,4 +25,8 @@ main {
   .highlighted {
     stroke: var(--togostanza-hover-border-color);
   }
+  rect {
+    stroke: var(--togostanza-linewidth-color);
+    stroke-width: calc(var(--togostanza-linewidth-size) * 1px);
+  }
 }

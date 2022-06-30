@@ -42,12 +42,6 @@
       "stanza:description": "Height"
     },
     {
-      "stanza:key": "show-domains",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Show domains"
-    },
-    {
       "stanza:key": "x-label-angle",
       "stanza:type": "number",
       "stanza:example": 0,
@@ -83,6 +77,24 @@
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "amount of groups for legend"
+    },
+    {
+      "stanza:key": "gradation-color-min",
+      "stanza:type": "string",
+      "stanza:example": "white",
+      "stanza:description": "Gradation color min"
+    },
+    {
+      "stanza:key": "gradation-color-middle",
+      "stanza:type": "string",
+      "stanza:example": "skyblue",
+      "stanza:description": "Gradation color middle"
+    },
+    {
+      "stanza:key": "gradation-color-max",
+      "stanza:type": "string",
+      "stanza:example": "blue",
+      "stanza:description": "Gradation color max"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -90,14 +102,38 @@
     {
       "stanza:key": "--togostanza-series-0-color",
       "stanza:type": "color",
-      "stanza:default": "#EDEDED",
-      "stanza:description": "Depth color 1"
+      "stanza:default": "#6590e6",
+      "stanza:description": "Depth color 0"
     },
     {
       "stanza:key": "--togostanza-series-1-color",
       "stanza:type": "color",
-      "stanza:default": "#256D80",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Depth color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
       "stanza:description": "Depth color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Depth color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Depth color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Depth color 5"
     },
     {
       "stanza:key": "--togostanza-font-family",
@@ -153,6 +189,18 @@
       "stanza:type": "color",
       "stanza:default": "#000000",
       "stanza:description": "Tick color"
+    },
+    {
+      "stanza:key": "--togostanza-linewidth-color",
+      "stanza:type": "color",
+      "stanza:default": "#000000",
+      "stanza:description": "linewidth color"
+    },
+    {
+      "stanza:key": "--togostanza-linewidth-size",
+      "stanza:type": "number",
+      "stanza:default": 0,
+      "stanza:description": "linewidth size"
     }
   ],
   "stanza:incomingEvent": [],
