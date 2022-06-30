@@ -218,54 +218,31 @@ export default class Linechart extends Stanza {
 
     const line = d3
       .line()
-      .x((d) => this._scaleX(d[xKeyName]))
-      .y((d) => this._scaleY(+d[yKeyName]));
+      .x((d) => {
+        return this._scaleX(d[xKeyName]);
+      })
+      .y((d) => {
+        return this._scaleY(+d[yKeyName]);
+      });
 
     const line2 = d3
       .line()
       .x((d) => {
-        console.log(
-          "this._previewScaleX(d[xKeyName])",
-          this._previewScaleX(d[xKeyName])
-        );
         return this._previewScaleX(d[xKeyName]);
       })
       .y((d) => this._previewScaleY(+d[yKeyName]));
 
-    const brushed = (e) => {
-      const s = e.selection || this._previewScaleX.range();
-      const currentRange = this._scaleX.domain(
-        s.map(this._previewScaleX.invert, this._previewScaleX)
-      );
-      graphArea.select(".line").attr("d", line);
-      graphArea.select(".axis .x").call();
-      svg
-        .select(".zoom")
-        .call(
-          zoom.transform,
-          d3.zoomIdentity.scale(width / (s[1] - s[0])).translate(-s[0], 0)
-        );
-    };
-
-    const brush = d3
-      .brushX()
-      .extent([
-        [0, 0],
-        [previewWidth, previewHeight],
-      ])
-      .on("brush end", brushed);
-
-    const zoom = d3
-      .zoom()
-      .scaleExtent([1, Infinity])
-      .translateExtent([
-        [0, 0],
-        [WIDTH, HEIGHT],
-      ])
-      .extent([
-        [0, 0],
-        [WIDTH, HEIGHT],
-      ]);
+    // const zoom = d3
+    //   .zoom()
+    //   .scaleExtent([1, Infinity])
+    //   .translateExtent([
+    //     [0, 0],
+    //     [WIDTH, HEIGHT],
+    //   ])
+    //   .extent([
+    //     [0, 0],
+    //     [WIDTH, HEIGHT],
+    //   ]);
 
     const xAxis = d3.axisBottom(this._scaleX),
       xAxis2 = d3.axisBottom(this._previewScaleX),
@@ -290,6 +267,8 @@ export default class Linechart extends Stanza {
       .attr("class", "axis y")
       .call(yAxis2);
 
+    previewArea.append("g").attr("class", "brush");
+
     const update = (groupsToShow) => {
       this._currentData = groupsToShow.map((group) => {
         return {
@@ -299,16 +278,20 @@ export default class Linechart extends Stanza {
         };
       });
 
-      const getXDomain = () => {
+      if (xScale === "ordinal") {
+        this._xDomain = [
+          ...new Set(
+            this._currentData
+              .map((d) => d.values.map((d) => d[xKeyName]))
+              .flat()
+          ),
+        ];
+      } else {
         const xDomain = this._currentData.map((d) =>
-          d.values.map((d) => d[xKeyName])
+          d.values.map((d) => +d[xKeyName])
         );
-        if (xScale === "ordinal") {
-          return [...new Set(xDomain.flat())];
-        } else {
-          return d3.extent(xDomain.flat());
-        }
-      };
+        this._xDomain = d3.extent(xDomain.flat());
+      }
 
       const getYDomain = () => {
         // TODO make foe ordinal as well
@@ -318,25 +301,10 @@ export default class Linechart extends Stanza {
         return d3.extent(yDomain.flat());
       };
 
-      this._scaleX.domain(getXDomain());
+      this._scaleX.domain(this._xDomain);
       this._scaleY.domain(getYDomain());
-      this._previewScaleX.domain(getXDomain());
+      this._previewScaleX.domain(this._xDomain);
       this._previewScaleY.domain(getYDomain());
-
-      graphXAxisG.call(xAxis);
-      graphYAxisG.call(yAxis);
-
-      const linesUpdate = graphArea.selectAll(".line").data(this._currentData);
-
-      const linesEnter = linesUpdate
-        .enter()
-        .append("path")
-        .attr("class", "line")
-        .attr("d", (d) => line(d.values));
-
-      linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
-
-      const linesExit = linesUpdate.exit().remove();
 
       const previewLinesUpdate = previewArea
         .selectAll(".line")
@@ -353,6 +321,65 @@ export default class Linechart extends Stanza {
         .attr("stroke", (d) => d.color);
 
       const previewLinesExit = previewLinesUpdate.exit().remove();
+
+      const brushed = (e) => {
+        const s = e.selection || this._previewScaleX.range();
+
+        const currentRange = [
+          Math.floor(s[0] / this._previewScaleX.step()),
+          Math.floor(s[1] / this._previewScaleX.step()),
+        ];
+
+        const newDomainX = this._xDomain.slice(
+          currentRange[0],
+          currentRange[1] + 1
+        );
+
+        const croppedData = this._currentData.map((d) => {
+          return {
+            ...d,
+            values: d.values.filter((v) => newDomainX.includes(v[xKeyName])),
+          };
+        });
+
+        this._scaleX.domain(newDomainX);
+        this._scaleY.domain(
+          d3.extent(
+            croppedData.map((d) => d.values.map((v) => +v[yKeyName])).flat()
+          )
+        );
+
+        updateRange(croppedData);
+      };
+
+      const updateRange = (data) => {
+        graphArea.selectAll(".line").remove();
+        const linesUpdate = graphArea.selectAll(".line").data(data);
+
+        const linesEnter = linesUpdate
+          .enter()
+          .append("path")
+          .attr("class", "line")
+          .attr("d", (d) => line(d.values));
+
+        linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
+        linesUpdate.exit().remove();
+
+        graphXAxisG.call(xAxis);
+        graphYAxisG.call(yAxis);
+      };
+
+      updateRange(this._currentData);
+
+      const brush = d3
+        .brushX()
+        .extent([
+          [0, 0],
+          [previewWidth, previewHeight],
+        ])
+        .on("brush end", brushed);
+
+      previewArea.call(brush).call(brush.move, this._scaleX.range());
     };
 
     update(groups);
