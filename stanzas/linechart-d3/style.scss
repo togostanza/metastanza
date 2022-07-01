@@ -17,6 +17,12 @@ svg {
     stroke: var(--togostanza-errorbar-line-color);
   }
 
+  .zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }
+
   .gridlines {
     & > .tick > line {
       stroke: var(--togostanza-grid-color);
