@@ -134,20 +134,26 @@ export default class Dendrogram extends Stanza {
       }
     };
 
-    const tree = d3.tree();
+    let glaphType = d3.tree();
+
+    if (this.params["glaph-type"] === "tree") {
+      glaphType = d3.tree();
+    } else {
+      glaphType = d3.cluster();
+    }
 
     denroot.x0 = height / 2;
     denroot.y0 = 0;
 
     const update = (source) => {
-      tree.size([
+      glaphType.size([
         height,
         width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
       ]);
 
       let i = 0;
 
-      tree(denroot);
+      glaphType(denroot);
 
       const node = g
         .selectAll(".node")

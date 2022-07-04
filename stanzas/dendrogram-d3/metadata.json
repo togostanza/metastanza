@@ -71,6 +71,13 @@
       "stanza:type": "number",
       "stanza:example": 1800,
       "stanza:description": "Height in px"
+    },
+    {
+      "stanza:key": "glaph-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["tree", "cluster"],
+      "stanza:example": "tree",
+      "stanza:description": "Glaph type"
     }
   ],
   "stanza:menu-placement": "bottom-right",
