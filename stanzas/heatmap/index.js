@@ -45,8 +45,8 @@ export default class Heatmap extends Stanza {
       bottom: +this.css("--togostanza-font-size_primary") + tickSize + 10,
       left: +this.css("--togostanza-font-size_primary") + tickSize + 10,
     };
-    const width = this.params["width"],
-      height = this.params["height"];
+    const width = +this.css("--togostanza-outline-width"),
+      height = +this.css("--togostanza-outline-height");
 
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
@@ -103,7 +103,6 @@ export default class Heatmap extends Stanza {
     if (!this.params["show-domains"]) {
       svg.selectAll(".domain").remove();
     }
-  
     if (!this.params["show-tick-lines"]) {
       svg.selectAll(".tick line").remove();
     }
