@@ -1,9 +1,9 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
+import loadData from "togostanza-utils/load-data";
 
 export default class ChordDiagram extends Stanza {
   async render() {
-
     // geometry
     // window.getComputedStyle(this.element).getPropertyValue('--width')
     const [width, height] = [this.params["width"], this.params["height"]];
@@ -17,26 +17,16 @@ export default class ChordDiagram extends Stanza {
     svg.attr("width", width).attr("height", height);
 
     // data
-    const data = await (() => {
-      // console.log(this.params["data-url"])
-      switch (this.params["data-type"]) {
-        case "json":
-          // return d3.json('./chord-diagram/assets/directed-graph-data.json', (data) => data);
-          return d3.json(this.params["data-url"], (data) => data);
-        case "tsv":
-          return d3.tsv(this.params["data-url"], (data) => data);
-      }
-      // switch (this.params["data-type"]) {
-      //   case "json":
-      //     return d3.json(this.params["data-url"], (data) => data);
-      //   case "tsv":
-      //     return d3.tsv(this.params["data-url"], (data) => data);
-      // }
-    })();
+    const data = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
-    // console.log(names)
+    console.log(data);
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
