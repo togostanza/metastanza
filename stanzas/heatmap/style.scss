@@ -16,7 +16,7 @@ main {
   .text {
     font-family: var(--togostanza-font-family);
     font-weight: var(--togostanza-font-weight);
-    font-size: calc(var(--togostanza-font-size) * 1px);
+    font-size: calc(var(--togostanza-font-size_primary) * 1px);
     color: var(--togostanza-font-color);
   }
   .cell {
@@ -26,7 +26,7 @@ main {
     stroke: var(--togostanza-hover-border-color);
   }
   rect {
-    stroke: var(--togostanza-linewidth-color);
-    stroke-width: calc(var(--togostanza-linewidth-size) * 1px);
+    stroke: var(--togostanza-border-color);
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
   }
 }

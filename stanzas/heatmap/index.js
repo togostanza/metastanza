@@ -38,12 +38,12 @@ export default class Heatmap extends Stanza {
     const tickSize = +this.css("--togostanza-tick-size") || 0;
     const xLabelAngle = this.params["x-label-angle"] || 0;
     const yLabelAngle = this.params["y-label-angle"] || 0;
-    const linewidthSize = +this.css("--togostanza-linewidth-size") || 0;
+    const borderWidth = +this.css("--togostanza-border-width") || 0;
 
     // set the dimensions and margins of the graph
     const margin = {
-      bottom: +this.css("--togostanza-font-size") + tickSize + 10,
-      left: +this.css("--togostanza-font-size") + tickSize + 10,
+      bottom: +this.css("--togostanza-font-size_primary") + tickSize + 10,
+      left: +this.css("--togostanza-font-size_primary") + tickSize + 10,
     };
     const width = this.params["width"],
       height = this.params["height"];
@@ -97,7 +97,10 @@ export default class Heatmap extends Stanza {
       .selectAll("text")
       .attr("transform", `rotate(${yLabelAngle})`);
 
-    svg.selectAll(".domain").remove();
+    if (!this.params["show-domains"]) {
+      svg.selectAll(".domain").remove();
+    }
+  
     if (!this.params["show-tick-lines"]) {
       svg.selectAll(".tick line").remove();
     }
@@ -138,13 +141,13 @@ export default class Heatmap extends Stanza {
 
     function mouseover() {
       d3.select(this).classed("highlighted", true).raise();
-      if (!linewidthSize) {
+      if (!borderWidth) {
         d3.select(this).classed("highlighted", true).style("stroke-width", "1px").raise();
       }
     }
     function mouseleave() {
       d3.select(this).classed("highlighted", false);
-      if (!linewidthSize) {
+      if (!borderWidth) {
         d3.select(this).classed("highlighted", false).style("stroke-width", "0px");
       }
     }
