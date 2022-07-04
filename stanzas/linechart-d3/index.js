@@ -82,12 +82,19 @@ export default class Linechart extends Stanza {
       "axis-y-title_padding"
     ).value;
 
-    this._data = this._data
-      .filter((d) => !isNaN(parseFloat(d[xKeyName])))
-      .map((d) => ({
-        ...d,
-        [xKeyName]: parseFloat(d[xKeyName]),
-      }));
+    if (root.querySelector("svg")) {
+      root.querySelector("svg").remove();
+    }
+
+    if (xScale === "linear") {
+      // try to parse data to numbers
+      this._data = this._data
+        .filter((d) => !isNaN(parseFloat(d[xKeyName])))
+        .map((d) => ({
+          ...d,
+          [xKeyName]: parseFloat(d[xKeyName]),
+        }));
+    }
 
     const { width, height } = root.getBoundingClientRect();
 
@@ -337,6 +344,23 @@ export default class Linechart extends Stanza {
 
       const previewLinesExit = previewLinesUpdate.exit().remove();
 
+      const interpolator = {};
+      if (xScale === "linear") {
+        this._currentData.forEach((d) => {
+          interpolator[d.name] = d3
+            .scaleLinear()
+            .domain(d.values.map((d) => +d[xKeyName]))
+            .range(d.values.map((d) => +d[yKeyName]));
+        });
+      } else if (xScale === "ordinal") {
+        this._currentData.forEach((d) => {
+          interpolator[d.name] = d3.piecewise(
+            d3.interpolate,
+            d.values.map((d) => this._scaleX(d[xKeyName]))
+          );
+        });
+      }
+
       const brushed = (e) => {
         const s = e.selection || this._previewScaleX.range();
 
@@ -370,23 +394,31 @@ export default class Linechart extends Stanza {
             s.map(this._previewScaleX.invert, this._previewScaleX)
           );
 
+          const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
           const croppedData = this._currentData.map((d) => {
             return {
               ...d,
               values: d.values.filter(
-                (v) =>
-                  this._scaleX.domain()[0] < +v[xKeyName] &&
-                  +v[xKeyName] < this._scaleX.domain()[1]
+                (v) => x0x1[0] <= +v[xKeyName] && +v[xKeyName] <= x0x1[1]
               ),
             };
           });
 
-          this._scaleY.domain(
-            d3.extent(
-              croppedData.map((d) => d.values).flat(),
-              (v) => +v[yKeyName]
-            )
-          );
+          const extents = [];
+
+          croppedData.forEach((data) => {
+            const values = data.values.map((v) => +v[yKeyName]);
+
+            extents.push(
+              d3.extent(
+                values.concat(x0x1.map((d) => interpolator[data.name](d)))
+              )
+            );
+          });
+
+          // filter all data to be in between x0 x1, and see domain inside it
+
+          this._scaleY.domain(d3.extent(extents.flat()));
 
           graphXAxisG.call(xAxis);
           graphYAxisG.call(yAxis);
