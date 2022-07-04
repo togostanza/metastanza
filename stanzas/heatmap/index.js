@@ -62,8 +62,11 @@ export default class Heatmap extends Stanza {
       .attr("class", "chart")
       .attr("transform", `translate(${margin.left}, 0 )`);
 
-    const rows = [...new Set(dataset.map((d) => d.group))];
-    const columns = [...new Set(dataset.map((d) => d.variable))];
+    const xDataKey = this.params["axis-x-data_key"];
+    const yDataKey = this.params["axis-y-data_key"];
+
+    const rows = [...new Set(dataset.map((d) => d[xDataKey]))];
+    const columns = [...new Set(dataset.map((d) => d[yDataKey]))];
 
     const x = d3.scaleBand().domain(rows).range([0, width - 10]);
 
