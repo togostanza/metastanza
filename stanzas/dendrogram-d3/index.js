@@ -134,20 +134,26 @@ export default class Dendrogram extends Stanza {
       }
     };
 
-    const tree = d3.tree();
+    let graphType = d3.tree();
+
+    if (this.params["graph-type"] === "tree") {
+      graphType = d3.tree();
+    } else {
+      graphType = d3.cluster();
+    }
 
     denroot.x0 = height / 2;
     denroot.y0 = 0;
 
     const update = (source) => {
-      tree.size([
+      graphType.size([
         height,
         width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
       ]);
 
       let i = 0;
 
-      tree(denroot);
+      graphType(denroot);
 
       const node = g
         .selectAll(".node")
