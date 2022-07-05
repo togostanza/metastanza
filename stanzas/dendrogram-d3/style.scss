@@ -1,0 +1,29 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+main {
+  font-family: var(--togostanza-fonts-font_family);
+  padding: calc(var(--togostanza-outline-padding) * 1px);
+}
+
+svg {
+  background-color: var(--togostanza-theme-background_color);
+
+  .link {
+    fill: none;
+    stroke: var(--togostanza-border-color);
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
+  }
+  text {
+    font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
+    fill-opacity: 1;
+  }
+  circle {
+    stroke: var(--togostanza-border-color);
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
+
+    &.with-children {
+      cursor: pointer;
+    }
+  }
+}
