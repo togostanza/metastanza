@@ -72,6 +72,18 @@
       "stanza:description": "Y axis title"
     },
     {
+      "stanza:key": "axis-x-title_padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "X axis title padding"
+    },
+    {
+      "stanza:key": "axis-y-title_padding",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Y axis title padding"
+    },
+    {
       "stanza:key": "x-label-angle",
       "stanza:type": "number",
       "stanza:example": 0,

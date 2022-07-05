@@ -135,20 +135,21 @@ export default class Heatmap extends Stanza {
     .on("mouseover", mouseover)
     .on("mouseleave", mouseleave);
 
-    const titleSpace = 20;
     const axisXTitle = this.params["axis-x-title"]? this.params["axis-x-title"] : xDataKey;
     const axisYTitle = this.params["axis-y-title"]? this.params["axis-y-title"] : yDataKey;
+    const axisXTitlePadding = this.params["axis-x-title_padding"];
+    const axisYTitlePadding = this.params["axis-y-title_padding"];
 
     graphArea
     .append("text")
     .attr("text-anchor", "middle")
-    .attr("transform", `translate(${(width/ 2)}, ${height + margin.bottom + titleSpace})`)
+    .attr("transform", `translate(${(width/ 2)}, ${height + margin.bottom + axisXTitlePadding})`)
     .text(axisXTitle);
 
     graphArea
     .append("text")
     .attr("text-anchor", "middle")
-    .attr("transform", `translate(-${margin.left + titleSpace}, ${height / 2})rotate(-90)`)
+    .attr("transform", `translate(-${margin.left + axisYTitlePadding}, ${height / 2})rotate(-90)`)
     .text(axisYTitle);
 
     graphArea.selectAll("text").attr("class", "text");
