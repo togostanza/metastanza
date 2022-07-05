@@ -238,7 +238,7 @@
     {
       "stanza:key": "axis-y-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["top", "bottom"],
+      "stanza:choice": ["left", "right"],
       "stanza:example": "left",
       "stanza:default": "left",
       "stanza:description": "Axis placement",
