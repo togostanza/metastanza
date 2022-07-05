@@ -1,0 +1,24 @@
+main {
+  font-family: var(--togostanza-fonts-font_family);
+  padding: calc(var(--togostanza-outline-padding) * 1px);
+}
+
+svg {
+  background-color: var(--togostanza-theme-background_color);
+}
+svg .link {
+  fill: none;
+  stroke: var(--togostanza-border-color);
+  stroke-width: calc(var(--togostanza-border-width) * 1px);
+}
+svg text {
+  font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
+  fill-opacity: 1;
+}
+svg circle {
+  stroke: var(--togostanza-border-color);
+  stroke-width: calc(var(--togostanza-border-width) * 1px);
+}
+svg circle.with-children {
+  cursor: pointer;
+}
