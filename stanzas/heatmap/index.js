@@ -106,8 +106,11 @@ export default class Heatmap extends Stanza {
     if (!this.params["axis-y-hide"]) {
       svg.select(".y-axis path").remove()
     }
-    if (!this.params["show-tick-lines"]) {
-      svg.selectAll(".tick line").remove();
+    if (!this.params["axis-x-ticks_hide"]) {
+      svg.selectAll(".x-axis .tick line").remove();
+    }
+    if (!this.params["axis-y-ticks_hide"]) {
+      svg.selectAll(".y-axis .tick line").remove();
     }
 
     // normalize

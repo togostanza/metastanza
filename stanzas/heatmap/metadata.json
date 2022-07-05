@@ -96,10 +96,16 @@
       "stanza:description": "Y label angle (in degree)"
     },
     {
-      "stanza:key": "show-tick-lines",
+      "stanza:key": "axis-x-ticks_hide",
       "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "Show tick lines"
+      "stanza:description": "Show axis x tick lines"
+    },
+    {
+      "stanza:key": "axis-y-ticks_hide",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show axis y tick lines"
     },
     {
       "stanza:key": "metastanza-menu-placement",
