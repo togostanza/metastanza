@@ -31,7 +31,7 @@ export default class Linechart extends Stanza {
 
     this._validatedParams = validateParams(this.metadata, this.params);
 
-    let values = await loadData(
+    const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
@@ -185,8 +185,6 @@ export default class Linechart extends Stanza {
         );
       });
     } else if (xScale === "time") {
-      console.log(Object.entries(groupedData));
-
       groupedData.forEach((val, key) => {
         groupedData.set(
           key,
@@ -277,7 +275,6 @@ export default class Linechart extends Stanza {
 
     const setXAxes = () => {
       xAxis = d3.axisBottom(this._scaleX);
-      console.log(this._scaleX.domain());
       xAxis2 = d3.axisBottom(this._previewScaleX);
     };
 
