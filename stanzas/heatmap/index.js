@@ -50,17 +50,19 @@ export default class Heatmap extends Stanza {
 
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
+    
+    const titleSpace = 20;
 
     const svg = d3
       .select(el)
       .append("svg")
-      .attr("width", width + margin.left + 30)
-      .attr("height", height + margin.bottom + 30);
+      .attr("width", width + margin.left + titleSpace)
+      .attr("height", height + margin.bottom + titleSpace);
 
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
-      .attr("transform", `translate(${margin.left + 30}, 0 )`);
+      .attr("transform", `translate(${margin.left + titleSpace}, 0 )`);
 
     const xDataKey = this.params["axis-x-data_key"];
     const yDataKey = this.params["axis-y-data_key"];
