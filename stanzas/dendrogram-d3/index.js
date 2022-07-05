@@ -2,6 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
+import { getColorSeries } from "@/lib/ColorGenerator";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -24,8 +25,6 @@ export default class Dendrogram extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //data
     const width = parseInt(this.params["width"]);
@@ -50,18 +49,12 @@ export default class Dendrogram extends Stanza {
       values.some((item) => item[this.params["tooltips-data_key"]]);
 
     // Setting color scale
-    const togostanzaColors = [];
-    for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(css(`--togostanza-theme-series_${i}_color`));
-    }
+    const togostanzaColors = getColorSeries(this);
 
     const color = d3.scaleOrdinal().range(togostanzaColors);
 
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("dendrogram-d3");
-
-    const existingSvg = root.getElementsByTagName("svg")[0];
-    existingSvg?.remove();
 
     const denroot = d3
       .stratify()
@@ -101,7 +94,10 @@ export default class Dendrogram extends Stanza {
 
     const g = svg
       .append("g")
-      .attr("transform", `translate(${rootLabelWidth + 8},0)`);
+      .attr(
+        "transform",
+        `translate(${rootLabelWidth + this.params["node-label-margin"]},0)`
+      );
 
     const tempGroup = svg.append("g");
 
@@ -163,7 +159,7 @@ export default class Dendrogram extends Stanza {
         .enter()
         .append("g")
         .attr("class", "node")
-        .attr("transform", "translate(" + source.y0 + "," + source.x0 + ")")
+        .attr("transform", `translate(${source.y0}, ${source.x0})`)
         .on("click", (e, d) => {
           toggle(d);
           update(d);
@@ -191,7 +187,7 @@ export default class Dendrogram extends Stanza {
       nodeUpdate
         .transition()
         .duration(duration)
-        .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
+        .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
 
       nodeUpdate
         .select("circle")
@@ -202,7 +198,7 @@ export default class Dendrogram extends Stanza {
         .exit()
         .transition()
         .duration(duration)
-        .attr("transform", "translate(" + source.y + "," + source.x + ")")
+        .attr("transform", `translate(${source.y}, ${source.x})`)
         .remove();
 
       const link = g
