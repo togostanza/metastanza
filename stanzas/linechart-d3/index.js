@@ -11,6 +11,7 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 import validateParams from "../../lib/validateParams";
+import { InternMap } from "d3";
 
 export default class Linechart extends Stanza {
   menu() {
@@ -57,13 +58,19 @@ export default class Linechart extends Stanza {
     const xAxisTitle = this._validatedParams.get("axis-x-title").value; //this.params["x-axis-title"] || "";
     const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
     const xTicksNumber = 5;
-    const xTicksInterval = this._validatedParams.get(
-      "axis-x-ticks_interval"
-    ).value;
+    const xTicksInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+    )
+      ? parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+      : null;
+
     const yTicksNumber = 3;
-    const yTicksInterval = this._validatedParams.get(
-      "axis-y-ticks_interval"
-    ).value;
+    const yTicksInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+    )
+      ? parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+      : null;
+
     const xScale = this._validatedParams.get("axis-x-scale").value;
     const yScale = this._validatedParams.get("axis-y-scale").value;
     const xRangeMin = this._validatedParams.get("axis-x-range_min").value;
@@ -75,11 +82,27 @@ export default class Linechart extends Stanza {
     const xAxisPlacement = this._validatedParams.get("axis-x-placement").value;
     const yAxisPlacement = this._validatedParams.get("axis-x-placement").value;
 
+    const xAxisTicksIntervalUnits = this._validatedParams.get(
+      "axis-x-ticks_interval_units"
+    ).value;
+
+    const yAxisTicksIntervalUnits = this._validatedParams.get(
+      "axis-y-ticks_interval_units"
+    ).value;
+
     const xTitlePadding = this._validatedParams.get(
       "axis-x-title_padding"
     ).value;
     const yTitlePadding = this._validatedParams.get(
       "axis-y-title_padding"
+    ).value;
+
+    const xAxisTicksFormat = this._validatedParams.get(
+      "axis-x-ticks_labels_format"
+    ).value;
+
+    const yAxisTicksFormat = this._validatedParams.get(
+      "axis-y-ticks_labels_format"
     ).value;
 
     if (root.querySelector("svg")) {
@@ -108,8 +131,8 @@ export default class Linechart extends Stanza {
     const SVGMargin = {
       top: 0,
       right: 0,
-      bottom: 0,
-      left: 0,
+      bottom: 20,
+      left: 24,
     };
 
     const SVGWidth = width - MARGIN.left - MARGIN.right;
@@ -145,10 +168,63 @@ export default class Linechart extends Stanza {
         return d[groupKeyName];
       });
     } else {
-      groupedData = new Map(["data", this._data]);
+      groupedData = new InternMap();
+      groupedData.set("data", this._data);
     }
 
     const groups = Array.from(groupedData.keys());
+
+    if (xScale === "linear") {
+      groupedData.forEach((val, key) => {
+        groupedData.set(
+          key,
+          val.map((d) => ({
+            ...d,
+            [xKeyName]: parseFloat(d[xKeyName]),
+          }))
+        );
+      });
+    } else if (xScale === "time") {
+      console.log(Object.entries(groupedData));
+
+      groupedData.forEach((val, key) => {
+        groupedData.set(
+          key,
+          val.map((d) => ({
+            ...d,
+            [xKeyName]: new Date(d[xKeyName]),
+          }))
+        );
+      });
+    }
+
+    if (yScale === "linear") {
+      for (const [key, val] in groupedData) {
+        groupedData.set(
+          key,
+          val.map((d) => ({
+            ...d,
+            [yKeyName]: parseFloat(d[yKeyName]),
+          }))
+        );
+      }
+    } else if (yScale === "time") {
+      for (const [key, val] in groupedData) {
+        groupedData.set(
+          key,
+          val.map((d) => ({
+            ...d,
+            [yKeyName]: new Date(d[yKeyName]),
+          }))
+        );
+      }
+    }
+
+    const xDDomain = Array.from(groupedData.values())
+      .map((d) => {
+        return d.map((dd) => dd[xKeyName]);
+      })
+      .flat();
 
     this._groups = groups;
     this._groupedData = groupedData;
@@ -189,42 +265,212 @@ export default class Linechart extends Stanza {
         `translate(${SVGMargin.left}, ${SVGMargin.top + chartHeight + PD})`
       );
 
-    switch (xScale) {
-      case "linear":
-        this._scaleX = d3.scaleLinear();
-        this._previewScaleX = d3.scaleLinear();
-        break;
-      case "ordinal":
-        this._scaleX = d3.scaleBand().paddingOuter(0);
-        this._previewScaleX = d3.scaleBand().paddingOuter(0);
-        break;
-      case "time":
-        this._scaleX = d3.scaleTime();
-        this._previewScaleX = d3.scaleTime();
-        break;
-      default:
-        this._scaleX = d3.scaleLinear();
-        this._previewScaleX = d3.scaleLinear();
-        break;
+    let xAxis, xAxis2, yAxis, yAxis2;
+
+    let xIntervalUnits, yIntervalUnits, xExtent, yExtent;
+
+    const setXAxes = () => {
+      xAxis = d3.axisBottom(this._scaleX);
+      xAxis2 = d3.axisBottom(this._previewScaleX);
+    };
+
+    const setYAxes = () => {
+      yAxis = d3.axisLeft(this._scaleY);
+      yAxis2 = d3.axisLeft(this._previewScaleY);
+    };
+
+    if (xScale === "linear") {
+      this._scaleX = d3.scaleLinear();
+      this._previewScaleX = d3.scaleLinear();
+      setXAxes();
+      try {
+        xAxis.tickFormat(d3.format(xAxisTicksFormat));
+        xAxis2.tickFormat(d3.format(xAxisTicksFormat));
+      } catch {
+        xAxis.tickFormat((d) => d);
+        xAxis2.tickFormat((d) => d);
+      }
+
+      if (xTicksInterval) {
+        xExtent = d3.extent(xDDomain, (d) => parseFloat(d));
+        const ticks = [];
+        for (let i = xExtent[0]; i <= xExtent[1]; i = i + xTicksInterval) {
+          ticks.push(i);
+        }
+        xAxis.tickValues(ticks);
+        xAxis2.tickValues(ticks);
+      } else {
+        xAxis.ticks(xTicksNumber);
+        xAxis2.ticks(xTicksNumber);
+      }
+    } else if (xScale === "ordinal") {
+      this._scaleX = d3.scaleBand().paddingOuter(0);
+      this._previewScaleX = d3.scaleBand().paddingOuter(0);
+      setXAxes();
+    } else if (xScale === "time") {
+      this._scaleX = d3.scaleTime();
+      this._previewScaleX = d3.scaleTime();
+      setXAxes();
+      try {
+        xAxis.tickFormat(d3.timeFormat(xAxisTicksFormat));
+        xAxis2.tickFormat(d3.timeFormat(xAxisTicksFormat));
+      } catch {
+        xAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
+        xAxis2.tickFormat(d3.timeFormat("%Y-%m-%d"));
+      }
+
+      switch (xAxisTicksIntervalUnits) {
+        case "second":
+          xIntervalUnits = d3.timeSeconds;
+          break;
+        case "minute":
+          xIntervalUnits = d3.timeMinutes;
+          break;
+        case "hour":
+          xIntervalUnits = d3.timeHours;
+          break;
+        case "day":
+          xIntervalUnits = d3.timeDays;
+          break;
+        case "week":
+          xIntervalUnits = d3.timeWeeks;
+          break;
+        case "month":
+          xIntervalUnits = d3.timeMonths;
+          break;
+        case "year":
+          xIntervalUnits = d3.timeYears;
+          break;
+        default:
+          break;
+      }
+
+      if (xTicksInterval) {
+        xAxis.ticks(xIntervalUnits(), xTicksInterval);
+        xAxis2.ticks(xIntervalUnits(), xTicksInterval);
+      } else {
+        xAxis.ticks(xTicksNumber);
+        xAxis2.ticks(xTicksNumber);
+      }
+    } else {
+      this._scaleX = d3.scaleLinear();
+      this._previewScaleX = d3.scaleLinear();
+      setXAxes();
+      try {
+        xAxis.tickFormat(d3.format(xAxisTicksFormat));
+        xAxis2.tickFormat(d3.format(xAxisTicksFormat));
+      } catch {
+        xAxis.tickFormat((d) => d);
+        xAxis2.tickFormat((d) => d);
+      }
+
+      xAxis.tickValues(
+        d3.ticks(
+          xExtent[0],
+          xExtent[1],
+          Math.abs(Math.floor((xExtent[1] - xExtent[0]) / xTicksInterval))
+        )
+      );
+      xAxis2.tickValues(
+        d3.ticks(
+          xExtent[0],
+          xExtent[1],
+          Math.abs(Math.floor((xExtent[1] - xExtent[0]) / xTicksInterval))
+        )
+      );
     }
 
-    switch (yScale) {
-      case "linear":
-        this._scaleY = d3.scaleLinear();
-        this._previewScaleY = d3.scaleLinear();
-        break;
-      case "ordinal":
-        this._scaleY = d3.scaleBand().paddingOuter(0);
-        this._previewScaleY = d3.scaleBand().paddingOuter(0);
-        break;
-      case "time":
-        this._scaleY = d3.scaleTime();
-        this._previewScaleY = d3.scaleTime();
-        break;
-      default:
-        this._scaleY = d3.scaleLinear();
-        this._previewScaleY = d3.scaleLinear();
-        break;
+    if (yScale === "linear") {
+      this._scaleY = d3.scaleLinear();
+      this._previewScaleY = d3.scaleLinear();
+      setYAxes();
+
+      try {
+        yAxis.tickFormat(d3.format(yAxisTicksFormat));
+        yAxis2.tickFormat(d3.format(yAxisTicksFormat));
+      } catch {
+        yAxis.tickFormat((d) => d);
+        yAxis2.tickFormat((d) => d);
+      }
+
+      yExtent = d3.extent(this._data, (d) => +d[yKeyName]);
+
+      if (yTicksInterval) {
+        yAxis.tickValues(
+          d3.ticks(
+            yExtent[0],
+            yExtent[1],
+            Math.abs(Math.floor((yExtent[1] - yExtent[0]) / yTicksInterval))
+          )
+        );
+
+        yAxis2.ticks(
+          d3.ticks(
+            yExtent[0],
+            yExtent[1],
+            Math.abs(Math.floor((yExtent[1] - yExtent[0]) / yTicksInterval))
+          )
+        );
+      } else {
+        yAxis.ticks(yTicksNumber);
+        yAxis2.ticks(yTicksNumber);
+      }
+    } else if (yScale === "ordinal") {
+      this._scaleY = d3.scaleBand().paddingOuter(0);
+      this._previewScaleY = d3.scaleBand().paddingOuter(0);
+      setYAxes();
+    } else if (yScale === "time") {
+      this._scaleY = d3.scaleTime();
+      this._previewScaleY = d3.scaleTime();
+      setYAxes();
+
+      try {
+        yAxis.tickFormat(d3.timeFormat(yAxisTicksFormat));
+        yAxis2.tickFormat(d3.timeFormat(yAxisTicksFormat));
+      } catch {
+        yAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
+        yAxis2.tickFormat(d3.timeFormat("%Y-%m-%d"));
+      }
+
+      switch (yAxisTicksIntervalUnits) {
+        case "second":
+          yIntervalUnits = d3.timeSeconds;
+          break;
+        case "minute":
+          yIntervalUnits = d3.timeMinutes;
+          break;
+        case "hour":
+          yIntervalUnits = d3.timeHours;
+          break;
+        case "day":
+          yIntervalUnits = d3.timeDays;
+          break;
+        case "week":
+          yIntervalUnits = d3.timeWeeks;
+          break;
+        case "month":
+          yIntervalUnits = d3.timeMonths;
+          break;
+        case "year":
+          yIntervalUnits = d3.timeYears;
+          break;
+        default:
+          break;
+      }
+
+      if (yTicksInterval) {
+        yAxis.ticks(yIntervalUnits, yTicksInterval);
+        yAxis2.ticks(yIntervalUnits, yTicksInterval);
+      } else {
+        yAxis.ticks(yTicksNumber);
+        yAxis2.ticks(yTicksNumber);
+      }
+    } else {
+      this._scaleY = d3.scaleLinear();
+      this._previewScaleY = d3.scaleLinear();
+      setYAxes();
+      yAxis.tickFormat(d3.format(yAxisTicksFormat));
+      yAxis2.tickFormat(d3.format(yAxisTicksFormat));
     }
 
     this._scaleX.range([0, chartWidth]);
@@ -237,6 +483,16 @@ export default class Linechart extends Stanza {
       .x((d) => {
         if (xScale === "ordinal") {
           return this._scaleX(d[xKeyName]) + this._scaleX.bandwidth() / 2;
+        } else if (xScale === "time") {
+          // if (!this._scaleX(new Date(d[xKeyName]))) {
+          //   console.log(
+          //     "this._scaleX(new Date(d[xKeyName]))",
+          //     this._scaleX(new Date(d[xKeyName]))
+          //   );
+          //   console.log(d);
+          // }
+
+          return this._scaleX(new Date(d[xKeyName]));
         }
 
         return this._scaleX(d[xKeyName]);
@@ -245,20 +501,25 @@ export default class Linechart extends Stanza {
         if (yScale === "ordinal") {
           return this._scaleY(d[yKeyName]) + this._scaleY.bandwidth() / 2;
         }
+
         return this._scaleY(+d[yKeyName]);
       });
 
     const line2 = d3
       .line()
       .x((d) => {
+        if (xScale === "ordinal") {
+          return (
+            this._previewScaleX(d[xKeyName]) +
+            this._previewScaleX.bandwidth() / 2
+          );
+        } else if (xScale === "time") {
+          return this._previewScaleX(new Date(d[xKeyName]));
+        }
+
         return this._previewScaleX(d[xKeyName]);
       })
       .y((d) => this._previewScaleY(+d[yKeyName]));
-
-    const xAxis = d3.axisBottom(this._scaleX),
-      xAxis2 = d3.axisBottom(this._previewScaleX),
-      yAxis = d3.axisLeft(this._scaleY),
-      yAxis2 = d3.axisLeft(this._previewScaleY);
 
     const graphXAxisG = graphArea
       .append("g")
@@ -298,6 +559,11 @@ export default class Linechart extends Stanza {
               .flat()
           ),
         ];
+      } else if (xScale === "time") {
+        const xDomain = this._currentData.map((d) =>
+          d.values.map((d) => new Date(d[xKeyName]))
+        );
+        this._xDomain = d3.extent(xDomain.flat());
       } else {
         const xDomain = this._currentData.map((d) =>
           d.values.map((d) => +d[xKeyName])
@@ -319,6 +585,7 @@ export default class Linechart extends Stanza {
           const yDomain = this._currentData.map((d) =>
             d.values.map((d) => +d[yKeyName])
           );
+
           return d3.extent(yDomain.flat());
         }
       };
@@ -345,19 +612,26 @@ export default class Linechart extends Stanza {
       const previewLinesExit = previewLinesUpdate.exit().remove();
 
       const interpolator = {};
-      if (xScale === "linear") {
+      if (xScale === "linear" && yScale === "linear") {
         this._currentData.forEach((d) => {
           interpolator[d.name] = d3
             .scaleLinear()
             .domain(d.values.map((d) => +d[xKeyName]))
             .range(d.values.map((d) => +d[yKeyName]));
         });
-      } else if (xScale === "ordinal") {
+      } else if (xScale === "ordinal" && yScale === "linear") {
         this._currentData.forEach((d) => {
-          interpolator[d.name] = d3.piecewise(
-            d3.interpolate,
-            d.values.map((d) => this._scaleX(d[xKeyName]))
-          );
+          interpolator[d.name] = d3
+            .scaleLinear()
+            .domain(this._xDomain)
+            .range(d.values.map((d) => +d[yKeyName]));
+        });
+      } else if (xScale === "time") {
+        this._currentData.forEach((d) => {
+          interpolator[d.name] = d3
+            .scaleTime()
+            .domain(this._xDomain)
+            .range(d.values.map((d) => d[yKeyName]));
         });
       }
 
@@ -389,12 +663,10 @@ export default class Linechart extends Stanza {
           );
 
           updateRange(croppedData);
-        } else {
-          this._scaleX.domain(
-            s.map(this._previewScaleX.invert, this._previewScaleX)
-          );
-
+        } else if (xScale === "linear") {
           const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
+          this._scaleX.domain(x0x1);
+
           const croppedData = this._currentData.map((d) => {
             return {
               ...d,
@@ -424,6 +696,44 @@ export default class Linechart extends Stanza {
           graphYAxisG.call(yAxis);
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.values));
+        } else if (xScale === "time") {
+          const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
+
+          this._scaleX.domain(x0x1);
+
+          const croppedData = this._currentData.map((d) => {
+            return {
+              ...d,
+              values: d.values.filter((v) => {
+                return x0x1[0] <= v[xKeyName] && v[xKeyName] <= x0x1[1];
+              }),
+            };
+          });
+
+          const extents = [];
+
+          croppedData.forEach((data) => {
+            const values = data.values.map((v) => +v[yKeyName]);
+
+            console.log("values", values);
+            extents.push(
+              d3.extent(
+                values.concat(x0x1.map((d) => interpolator[data.name](d)))
+              )
+            );
+          });
+
+          console.log(extents.flat());
+          // filter all data to be in between x0 x1, and see domain inside it
+
+          this._scaleY.domain(d3.extent(extents.flat()));
+
+          graphXAxisG.call(xAxis);
+          graphYAxisG.call(yAxis);
+
+          graphArea.selectAll(".line").attr("d", (d) => line(d.values));
+        } else {
+          throw new Error("Unsupported scale");
         }
       };
 
@@ -1118,70 +1428,6 @@ export default class Linechart extends Stanza {
       }
     };
     redrawSVG();
-  }
-
-  computeParams() {
-    const resultParams = new Map(this._validatedParams);
-    const getTickInterval = (axis) => {
-      const [dataMin, dataMax] = getRange(
-        this._data,
-        this._validatedParams.get(`axis-${axis}-data_key`)
-      );
-    };
-
-    const getRange = (axis) => {
-      const scale = this._validatedParams.get(`axis-${axis}-scale`);
-      const dataKey = this._validatedParams.get(`axis-${axis}-data_key`);
-      if (scale === "time") {
-        // if scale for this axis is time, parse it first
-        return d3.extent(this._data, (d) => Date.parse(d[dataKey]));
-      } else if (scale === "ordinal") {
-        // if the scale is ordinal set min and max to first and last elements
-        return [
-          this._data[0][dataKey],
-          this._data[this._data.length - 1][dataKey],
-        ];
-      }
-      return d3.extent(this._data, (d) => d[dataKey]);
-    };
-
-    const getAxisTitle = (axis) => {
-      const title = this._validatedParams.get(`axis-${axis}-title`);
-      if (title) {
-        return title;
-      }
-      return this._validatedParams.get(`axis-${axis}-data_key`);
-    };
-
-    for (const param of this._validatedParams) {
-      console.log(
-        "metadata",
-        this._metadataParamsMap.get(param[0])["stanza:computed"]
-      );
-      if (this._metadataParamsMap.get(param[0])["stanza:computed"]) {
-        switch (param[0]) {
-          case "axis-x-title":
-            resultParams.set(param[0], getAxisTitle("x"));
-            break;
-          case "axis-x-range_min":
-            resultParams.set(param[0], getRange("x")[0]);
-            break;
-          case "axis-x-range_max":
-            resultParams.set(param[0], getRange("x")[1]);
-            break;
-          case "axis-y-range_min":
-            resultParams.set(param[0], getRange("y")[0]);
-            break;
-          case "axis-y-range_max":
-            resultParams.set(param[0], getRange("y")[1]);
-            break;
-          default:
-            break;
-        }
-      }
-    }
-
-    return resultParams;
   }
 }
 

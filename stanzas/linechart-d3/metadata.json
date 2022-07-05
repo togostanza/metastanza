@@ -15,7 +15,8 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+      "stanza:example_old": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -23,13 +24,13 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
+      "stanza:example": "csv",
       "stanza:description": "Data type",
       "stanza:required": true
     },
 
     {
-      "stanza:key": "custom_css_url",
+      "stanza:key": "misc-custom_css_url",
       "stanza:type": "text",
       "stanza:example": "",
       "stanza:default": "",
@@ -39,7 +40,7 @@
     {
       "stanza:key": "axis-x-data_key",
       "stanza:type": "text",
-      "stanza:example": "chromosome",
+      "stanza:example": "Date",
       "stanza:description": "Variable to be assigned as x axis value",
       "stanza:required": true
     },
@@ -86,7 +87,7 @@
       "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "log", "ordinal", "time"],
-      "stanza:example": "ordinal",
+      "stanza:example": "time",
       "stanza:default": "linear",
       "stanza:description": "Axis scale",
       "stanza:required": false
@@ -146,7 +147,7 @@
     {
       "stanza:key": "axis-x-ticks_labels_format",
       "stanza:type": "text",
-      "stanza:example": "",
+      "stanza:example": "%B %d, %Y",
       "stanza:default": "",
       "stanza:description": "Axis ticks interval format, in d3.format string form",
       "stanza:required": false
@@ -181,7 +182,7 @@
     {
       "stanza:key": "axis-y-data_key",
       "stanza:type": "text",
-      "stanza:example": "count",
+      "stanza:example": "Temp",
       "stanza:description": "Variable to be assigned as y axis value",
       "stanza:required": true
     },
@@ -461,13 +462,13 @@
     {
       "stanza:key": "--togostanza-outline-width",
       "stanza:type": "text",
-      "stanza:default": "400px",
+      "stanza:default": "600px",
       "stanza:description": "Togostanza element width"
     },
     {
       "stanza:key": "--togostanza-outline-height",
       "stanza:type": "text",
-      "stanza:default": "300px",
+      "stanza:default": "400px",
       "stanza:description": "Togostanza element height"
     },
     {
