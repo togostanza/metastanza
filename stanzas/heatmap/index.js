@@ -51,17 +51,19 @@ export default class Heatmap extends Stanza {
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
     const titleSpace = 20;
+    const axisXTitlePadding = this.params["axis-x-title_padding"];
+    const axisYTitlePadding = this.params["axis-y-title_padding"];
 
     const svg = d3
       .select(el)
       .append("svg")
-      .attr("width", width + margin.left + titleSpace)
-      .attr("height", height + margin.bottom + titleSpace);
+      .attr("width", width + margin.left + titleSpace + axisYTitlePadding)
+      .attr("height", height + margin.bottom + titleSpace + axisXTitlePadding);
 
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
-      .attr("transform", `translate(${margin.left + titleSpace}, 0 )`);
+      .attr("transform", `translate(${margin.left + titleSpace + axisYTitlePadding}, 0)`);
 
     const xDataKey = this.params["axis-x-data_key"];
     const yDataKey = this.params["axis-y-data_key"];
@@ -70,7 +72,6 @@ export default class Heatmap extends Stanza {
     const columns = [...new Set(dataset.map((d) => d[yDataKey]))];
 
     const x = d3.scaleBand().domain(rows).range([0, width - 10]);
-
     const xAxisGenerator = d3
       .axisBottom(x)
       .tickSizeOuter(0)
@@ -81,6 +82,31 @@ export default class Heatmap extends Stanza {
       .axisLeft(y)
       .tickSizeOuter(0)
       .tickSizeInner(tickSize);
+
+    // normalize
+    const values = [...new Set(dataset.map((d) => d.value))];
+    const normalize = (num) => {
+      return (num - Math.min(...values)) / (Math.max(...values) - Math.min(...values));
+    }
+
+    graphArea
+    .selectAll()
+    .data(dataset, function (d) {
+      return d[xDataKey] + ":" + d[yDataKey]
+    })
+    .enter()
+    .append("rect")
+    .attr("x", (d) => x(d[xDataKey]))
+    .attr("y", (d) => y(d[yDataKey]))
+    .attr("data-tooltip-html", true)
+    .attr("data-tooltip", (d) => tooltipHTML(d))
+    .attr("width", x.bandwidth())
+    .attr("height", y.bandwidth())
+    .attr("rx", this.css("--togostanza-border-radius"))
+    .attr("ry", this.css("--togostanza-border-radius"))
+    .style("fill", (d) => myColor(normalize(d.value)))
+    .on("mouseover", mouseover)
+    .on("mouseleave", mouseleave);
 
     graphArea
       .append("g")
@@ -102,10 +128,10 @@ export default class Heatmap extends Stanza {
       .attr("transform", `rotate(${yLabelAngle})`);
 
     if (!this.params["axis-x-hide"]) {
-      svg.select(".x-axis path").remove()
+      svg.select(".x-axis path").remove();
     }
     if (!this.params["axis-y-hide"]) {
-      svg.select(".y-axis path").remove()
+      svg.select(".y-axis path").remove();
     }
     if (!this.params["axis-x-ticks_hide"]) {
       svg.selectAll(".x-axis .tick line").remove();
@@ -114,35 +140,8 @@ export default class Heatmap extends Stanza {
       svg.selectAll(".y-axis .tick line").remove();
     }
 
-    // normalize
-    const values = [...new Set(dataset.map((d) => d.value))];
-    const normalize = (num) => {
-      return (num - Math.min(...values)) / (Math.max(...values) - Math.min(...values));
-    }
-
-    graphArea
-    .selectAll()
-    .data(dataset, function (d) {
-      return d.group + ":" + d.variabl
-    })
-    .enter()
-    .append("rect")
-    .attr("x", (d) => x(d.group))
-    .attr("y", (d) => y(d.variable))
-    .attr("data-tooltip-html", true)
-    .attr("data-tooltip", (d) => tooltipHTML(d))
-    .attr("width", x.bandwidth())
-    .attr("height", y.bandwidth())
-    .attr("rx", this.css("--togostanza-border-radius"))
-    .attr("ry", this.css("--togostanza-border-radius"))
-    .style("fill", (d) => myColor(normalize(d.value)))
-    .on("mouseover", mouseover)
-    .on("mouseleave", mouseleave);
-
     const axisXTitle = this.params["axis-x-title"]? this.params["axis-x-title"] : xDataKey;
     const axisYTitle = this.params["axis-y-title"]? this.params["axis-y-title"] : yDataKey;
-    const axisXTitlePadding = this.params["axis-x-title_padding"];
-    const axisYTitlePadding = this.params["axis-y-title_padding"];
 
     graphArea
     .append("text")
@@ -175,6 +174,8 @@ export default class Heatmap extends Stanza {
       d3.select(this).classed("highlighted", false);
       if (!borderWidth) {
         d3.select(this).classed("highlighted", false).style("stroke-width", "0px");
+        graphArea.selectAll(".x-axis").raise();
+        graphArea.selectAll(".y-axis").raise();
       }
     }
   }

@@ -84,18 +84,6 @@
       "stanza:description": "Y axis title padding"
     },
     {
-      "stanza:key": "x-ticks_labels_angle",
-      "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "X ticks labels angle (in degree)"
-    },
-    {
-      "stanza:key": "y-ticks_labels_angle",
-      "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "Y ticks labels angle (in degree)"
-    },
-    {
       "stanza:key": "axis-x-ticks_hide",
       "stanza:type": "boolean",
       "stanza:example": true,
@@ -108,17 +96,86 @@
       "stanza:description": "Show axis y tick lines"
     },
     {
-      "stanza:key": "metastanza-menu-placement",
+      "stanza:key": "x-ticks_labels_angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "X ticks labels angle (in degree)"
+    },
+    {
+      "stanza:key": "y-ticks_labels_angle",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Y ticks labels angle (in degree)"
+    },
+    {
+      "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
-      "stanza:choice": [
-        "top-left",
-        "top-right",
-        "bottom-left",
-        "bottom-right",
-        "none"
-      ],
-      "stanza:example": "top-right",
-      "stanza:description": "Menu button placement"
+      "stanza:choice": ["linear", "log10", "ordinal"],
+      "stanza:example": "ordinal",
+      "stanza:description": "X scale"
+    },
+    {
+      "stanza:key": "axis-x-range_min",
+      "stanza:type": "number",
+      "stanza:description": "Axis range min"
+    },
+    {
+      "stanza:key": "axis-x-range_max",
+      "stanza:type": "number",
+      "stanza:description": "Axis range max"
+    },
+    {
+      "stanza:key": "axis-x-ticks_interval",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "Distance between neighbouring ticks. Ignore if ordinal scale"
+    },
+    {
+      "stanza:key": "axis-x-ticks_interval_units",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:example": "none",
+      "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
+    },
+    {
+      "stanza:key": "axis-x-ticks_labels_format",
+      "stanza:type": "text",
+      "stanza:description": "d3.format string. Ignore if ordinal scale"
+    },
+    {
+      "stanza:key": "axis-y-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "log10", "ordinal"],
+      "stanza:example": "ordinal",
+      "stanza:description": "Y scale"
+    },
+    {
+      "stanza:key": "axis-y-range_min",
+      "stanza:type": "number",
+      "stanza:description": "Axis range min"
+    },
+    {
+      "stanza:key": "axis-y-range_max",
+      "stanza:type": "number",
+      "stanza:description": "Axis range max"
+    },
+    {
+      "stanza:key": "axis-y-ticks_interval",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "Distance between neighbouring ticks. Ignore if ordinal scale"
+    },
+    {
+      "stanza:key": "axis-y-ticks_interval_units",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:example": "none",
+      "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
+    },
+    {
+      "stanza:key": "axis-y-ticks_labels_format",
+      "stanza:type": "text",
+      "stanza:description": "d3.format string. Ignore if ordinal scale"
     },
     {
       "stanza:key": "legend-groups",
