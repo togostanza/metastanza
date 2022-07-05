@@ -50,10 +50,26 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "show-domains",
+      "stanza:key": "axis-x-hide",
       "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "Show domains"
+      "stanza:description": "Show x-axis"
+    },
+    {
+      "stanza:key": "axis-y-hide",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show y-axis"
+    },
+    {
+      "stanza:key": "axis-x-title",
+      "stanza:type": "text",
+      "stanza:description": "X axis title"
+    },
+    {
+      "stanza:key": "axis-y-title",
+      "stanza:type": "text",
+      "stanza:description": "Y axis title"
     },
     {
       "stanza:key": "x-label-angle",
@@ -114,29 +130,22 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-font-color",
+      "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#000000",
       "stanza:description": "Title font color"
     },
     {
-      "stanza:key": "--togostanza-font-size_primary",
+      "stanza:key": "--togostanza-fonts-font_size_primary",
       "stanza:type": "number",
       "stanza:default": 12,
       "stanza:description": "Font size primary"
-    },
-    {
-      "stanza:key": "--togostanza-font-weight",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["normal", "bold", "lighter"],
-      "stanza:default": "normal",
-      "stanza:description": "Title font weight"
     },
     {
       "stanza:key": "--togostanza-outline-width",
@@ -149,6 +158,12 @@
       "stanza:type": "number",
       "stanza:default": 450,
       "stanza:description": "outline height"
+    },
+    {
+      "stanza:key": "--togostanza-outline-padding",
+      "stanza:type": "text",
+      "stanza:default": "20px",
+      "stanza:description": "outline padding"
     },
     {
       "stanza:key": "--togostanza-border-color",
@@ -193,40 +208,46 @@
       "stanza:description": "Tick color"
     },
     {
-      "stanza:key": "--togostanza-series-0-color",
+      "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Depth color 0"
     },
     {
-      "stanza:key": "--togostanza-series-1-color",
+      "stanza:key": "--togostanza-theme-series_1_color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
       "stanza:description": "Depth color 1"
     },
     {
-      "stanza:key": "--togostanza-series-2-color",
+      "stanza:key": "--togostanza-theme-series_2_color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
       "stanza:description": "Depth color 2"
     },
     {
-      "stanza:key": "--togostanza-series-3-color",
+      "stanza:key": "--togostanza-theme-series_3_color",
       "stanza:type": "color",
       "stanza:default": "#F5DA64",
       "stanza:description": "Depth color 3"
     },
     {
-      "stanza:key": "--togostanza-series-4-color",
+      "stanza:key": "--togostanza-theme-series_4_color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Depth color 4"
     },
     {
-      "stanza:key": "--togostanza-series-5-color",
+      "stanza:key": "--togostanza-theme-series_5_color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Depth color 5"
+    },
+    {
+      "stanza:key": "--togostanza-theme-background_color",
+      "stanza:type": "color",
+      "stanza:default": "#F8F9FA",
+      "stanza:description": "Background color"
     }
   ],
   "stanza:incomingEvent": [],

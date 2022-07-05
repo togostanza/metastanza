@@ -42,8 +42,8 @@ export default class Heatmap extends Stanza {
 
     // set the dimensions and margins of the graph
     const margin = {
-      bottom: +this.css("--togostanza-font-size_primary") + tickSize + 10,
-      left: +this.css("--togostanza-font-size_primary") + tickSize + 10,
+      bottom: +this.css("--togostanza-fonts-font_size_primary") + tickSize + 10,
+      left: +this.css("--togostanza-fonts-font_size_primary") + tickSize + 10,
     };
     const width = +this.css("--togostanza-outline-width"),
       height = +this.css("--togostanza-outline-height");
@@ -54,13 +54,13 @@ export default class Heatmap extends Stanza {
     const svg = d3
       .select(el)
       .append("svg")
-      .attr("width", width + margin.left)
-      .attr("height", height + margin.bottom);
+      .attr("width", width + margin.left + 30)
+      .attr("height", height + margin.bottom + 30);
 
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
-      .attr("transform", `translate(${margin.left}, 0 )`);
+      .attr("transform", `translate(${margin.left + 30}, 0 )`);
 
     const xDataKey = this.params["axis-x-data_key"];
     const yDataKey = this.params["axis-y-data_key"];
@@ -93,21 +93,22 @@ export default class Heatmap extends Stanza {
 
     graphArea
       .append("g")
-      .classed("class", "y-axis")
+      .attr("class", "y-axis")
       .transition()
       .duration(200)
       .call(yAxisGridGenerator)
       .selectAll("text")
       .attr("transform", `rotate(${yLabelAngle})`);
 
-    if (!this.params["show-domains"]) {
-      svg.selectAll(".domain").remove();
+    if (!this.params["axis-x-hide"]) {
+      svg.select(".x-axis path").remove()
+    }
+    if (!this.params["axis-y-hide"]) {
+      svg.select(".y-axis path").remove()
     }
     if (!this.params["show-tick-lines"]) {
       svg.selectAll(".tick line").remove();
     }
-
-    graphArea.selectAll("text").attr("class", "text");
 
     // normalize
     const values = [...new Set(dataset.map((d) => d.value))];
@@ -133,6 +134,24 @@ export default class Heatmap extends Stanza {
     .style("fill", (d) => myColor(normalize(d.value)))
     .on("mouseover", mouseover)
     .on("mouseleave", mouseleave);
+
+    const titleSpace = 20;
+    const axisXTitle = this.params["axis-x-title"]? this.params["axis-x-title"] : xDataKey;
+    const axisYTitle = this.params["axis-y-title"]? this.params["axis-y-title"] : yDataKey;
+
+    graphArea
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", `translate(${(width/ 2)}, ${height + margin.bottom + titleSpace})`)
+    .text(axisXTitle);
+
+    graphArea
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("transform", `translate(-${margin.left + titleSpace}, ${height / 2})rotate(-90)`)
+    .text(axisYTitle);
+
+    graphArea.selectAll("text").attr("class", "text");
 
     this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     this.legend.setup(
