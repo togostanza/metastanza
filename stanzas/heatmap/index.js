@@ -36,8 +36,8 @@ export default class Heatmap extends Stanza {
     const myColor = getGradationColor(this, [getColorMin, getColorMiddle, getColorMax]);
 
     const tickSize = +this.css("--togostanza-tick-size") || 0;
-    const xLabelAngle = this.params["x-label-angle"] || 0;
-    const yLabelAngle = this.params["y-label-angle"] || 0;
+    const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
+    const yLabelAngle = this.params["y-ticks_labels_angle"] || 0;
     const borderWidth = +this.css("--togostanza-border-width") || 0;
 
     // set the dimensions and margins of the graph
@@ -50,7 +50,6 @@ export default class Heatmap extends Stanza {
 
     // remove svg element whenthis.params updated
     d3.select(el).select("svg").remove();
-    
     const titleSpace = 20;
 
     const svg = d3

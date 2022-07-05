@@ -84,16 +84,16 @@
       "stanza:description": "Y axis title padding"
     },
     {
-      "stanza:key": "x-label-angle",
+      "stanza:key": "x-ticks_labels_angle",
       "stanza:type": "number",
       "stanza:example": 0,
-      "stanza:description": "X label angle (in degree)"
+      "stanza:description": "X ticks labels angle (in degree)"
     },
     {
-      "stanza:key": "y-label-angle",
+      "stanza:key": "y-ticks_labels_angle",
       "stanza:type": "number",
       "stanza:example": 0,
-      "stanza:description": "Y label angle (in degree)"
+      "stanza:description": "Y ticks labels angle (in degree)"
     },
     {
       "stanza:key": "axis-x-ticks_hide",
