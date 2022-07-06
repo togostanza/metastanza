@@ -83,8 +83,6 @@ export default class Dendrogram extends Stanza {
 
     const rootGroup = svg
       .append("text")
-      .attr("x", 5)
-      .attr("y", 10)
       .text(
         denroot.descendants()[0].data[this.params["node-label-data_key"]] || ""
       );
@@ -96,10 +94,8 @@ export default class Dendrogram extends Stanza {
       .append("g")
       .attr(
         "transform",
-        `translate(${rootLabelWidth + this.params["node-label-margin"]},0)`
+        `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
       );
-
-    const tempGroup = svg.append("g");
 
     const data = denroot.descendants().slice(1);
     const maxDepth = d3.max(data, (d) => d.depth);
@@ -111,6 +107,7 @@ export default class Dendrogram extends Stanza {
       }
     }
 
+    const tempGroup = svg.append("g");
     tempGroup
       .selectAll("text")
       .data(labelsarray)
@@ -158,7 +155,7 @@ export default class Dendrogram extends Stanza {
       const nodeEnter = node
         .enter()
         .append("g")
-        .attr("class", "node")
+        .classed("node", true)
         .attr("transform", `translate(${source.y0}, ${source.x0})`)
         .on("click", (e, d) => {
           toggle(d);
@@ -208,7 +205,7 @@ export default class Dendrogram extends Stanza {
       const linkEnter = link
         .enter()
         .insert("path", "g")
-        .attr("class", "link")
+        .classed("link", true)
         .attr("d", d3.linkHorizontal().x(source.y0).y(source.x0));
 
       const linkUpdate = linkEnter.merge(link);
