@@ -50,8 +50,15 @@
       "stanza:key": "node-size-fixed_size",
       "stanza:type": "number",
       "stanza:example": 8,
-      "stanza:description": "node circle size in px",
+      "stanza:description": "Node circle size in px",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-fixed_size_display",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["false", "true"],
+      "stanza:example": "false",
+      "stanza:description": "Display node size"
     },
     {
       "stanza:key": "tooltips-data_key",
