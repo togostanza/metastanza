@@ -77,6 +77,12 @@ export default class Dendrogram extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
+    if (this.params["graph-direction"] === "portrait") {
+      svg.attr("transform", `rotate(90)`);
+    } else {
+      svg.attr("transform", `rotate(0)`);
+    }
+
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 

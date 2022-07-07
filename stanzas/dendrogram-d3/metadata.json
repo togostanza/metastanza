@@ -80,6 +80,13 @@
       "stanza:description": "Height in px"
     },
     {
+      "stanza:key": "graph-direction",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["landscape", "portrait"],
+      "stanza:example": "landscape",
+      "stanza:description": "Graph direction"
+    },
+    {
       "stanza:key": "graph-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["tree", "cluster"],
