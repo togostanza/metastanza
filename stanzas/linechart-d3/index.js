@@ -25,6 +25,13 @@ export default class Linechart extends Stanza {
 
   async render() {
     this._hideError();
+
+    const existingLegend = this.root.querySelector("togostanza--legend2");
+
+    if (existingLegend) {
+      existingLegend.remove();
+    }
+
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
