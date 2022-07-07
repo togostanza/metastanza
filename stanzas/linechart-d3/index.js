@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-import Legend from "@/lib/Legend";
+import Legend2 from "@/lib/Legend2";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -60,6 +60,8 @@ export default class Linechart extends Stanza {
     const xAxisPlacement = this._validatedParams.get("axis-x-placement").value;
     const yAxisPlacement = this._validatedParams.get("axis-x-placement").value;
     const showLegend = this._validatedParams.get("legend-show").value;
+
+    const legendPosition = this._validatedParams.get("legend-placement").value;
 
     const xAxisTicksIntervalUnits = this._validatedParams.get(
       "axis-x-ticks_interval_units"
@@ -128,11 +130,6 @@ export default class Linechart extends Stanza {
 
     if (root.querySelector("svg")) {
       root.querySelector("svg").remove();
-    }
-
-    if (showLegend !== "none") {
-      this.legend = new Legend();
-      root.append(this.legend);
     }
 
     const { width, height } = root.getBoundingClientRect();
@@ -630,33 +627,6 @@ export default class Linechart extends Stanza {
 
       updateRange(this._currentData);
 
-      // if (showLegend !== "none") {
-      //   this.legend.setup();
-      //   groups.map((item, index) => {
-      //     return {
-      //       id: "" + index,
-      //       label: item,
-      //       color: color(item),
-      //       node: svg
-      //         .selectAll("g.bars-group rect")
-      //         .filter((d) => {
-      //           if (barPlacement === "stacked") {
-      //             return d.key === item;
-      //           }
-      //           return d[groupKeyName] === item;
-      //         })
-      //         .nodes(),
-      //     };
-      //   }),
-      //     this.root.querySelector("main"),
-      //     {
-      //       fadeoutNodes: svg.selectAll("g.bars-group rect").nodes(),
-      //       position: showLegend.split("-"),
-      //       fadeProp: "opacity",
-      //       showLeaders: false,
-      //     };
-      // }
-
       const brush = d3
         .brushX()
         .extent([
@@ -670,7 +640,42 @@ export default class Linechart extends Stanza {
 
     update();
 
-    return;
+    if (showLegend) {
+      this.legend = new Legend2(
+        this._groups.map((item, index) => {
+          return {
+            id: "" + index,
+            label: item,
+            color: this._groupByNameMap.get(item).color,
+            node: svg
+              .selectAll("path.line")
+              .filter((d) => d.group === item)
+              .nodes(),
+          };
+        }),
+        {
+          fadeoutNodes: svg.selectAll("path.line").nodes(),
+          position: legendPosition.split("-"),
+          fadeProp: "opacity",
+          showLeaders: false,
+        }
+      );
+      root.append(this.legend);
+
+      this.legend.addEventListener("legend-item-click", (e) => {
+        e.stopPropagation();
+
+        const group = e.detail.label;
+
+        this._groupedData.forEach((d) => {
+          if (d.group === group) {
+            d.show = !d.show;
+          }
+        });
+
+        update();
+      });
+    }
   }
 
   _renderError(error) {
