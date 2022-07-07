@@ -50,8 +50,7 @@ export default class Dendrogram extends Stanza {
 
     // Setting color scale
     const togostanzaColors = getColorSeries(this);
-
-    const color = d3.scaleOrdinal().range(togostanzaColors);
+    const color = togostanzaColors[0];
 
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("dendrogram-d3");
@@ -189,7 +188,9 @@ export default class Dendrogram extends Stanza {
       nodeUpdate
         .select("circle")
         .attr("r", parseFloat(this.params["node-size-fixed_size"] / 2))
-        .attr("fill", (d) => (d._children ? "#fff" : color(d.depth)));
+        .attr("fill", (d) =>
+          d._children ? "#fff" : d["data"]["color"] || color
+        );
 
       node
         .exit()
