@@ -52,6 +52,10 @@ export default class Linechart extends Stanza {
 
     const xScale = this._validatedParams.get("axis-x-scale").value;
     const yScale = this._validatedParams.get("axis-y-scale").value;
+    const axisType = {
+      x: xScale,
+      y: yScale,
+    };
     const xRangeMin = this._validatedParams.get("axis-x-range_min").value;
     const xRangeMax = this._validatedParams.get("axis-x-range_max").value;
     const yRangeMin = this._validatedParams.get("axis-y-range_min").value;
@@ -123,6 +127,8 @@ export default class Linechart extends Stanza {
     }
 
     this._data = values;
+
+    parseData.call(this);
 
     const root = this.root.querySelector("main");
 
@@ -197,17 +203,51 @@ export default class Linechart extends Stanza {
       }
     }
 
+    function cropData(axis, range) {
+      if (axisType[axis] === "ordinal") {
+        this._groupedData = this._groupedData
+          .map((d) => {
+            const localFrom = [
+              ...new Set(d.data.map((e) => e[axis])),
+            ].findIndex((e) => e === range[0]);
+            const localTo = [...new Set(d.data.map((e) => e[axis]))].findIndex(
+              (e) => e === range[range.length - 1]
+            );
+            return {
+              ...d,
+              data: d.data.slice(localFrom, localTo + 1),
+            };
+          })
+          .filter((d) => d && d.data.length > 0);
+      } else {
+        this._groupedData.forEach((d) => {
+          d.data = d.data.filter((v) => {
+            return range[0] <= v[axis] && v[axis] <= range[range.length - 1];
+          });
+        });
+
+        this._groupedData = this._groupedData.filter(
+          (group) => group.data.length > 0
+        );
+      }
+    }
+
+    function parseData() {
+      this._data.forEach((d) => {
+        d[xKeyName] = parseValue(d[xKeyName], xScale);
+        d[yKeyName] = parseValue(d[yKeyName], yScale);
+      });
+    }
+
     this._groups = [];
     this._groupByNameMap = new Map();
 
     if (groupKeyName && this._data.some((d) => d[groupKeyName])) {
       this._groupedData = this._data.reduce((acc, d) => {
         const group = d[groupKeyName];
-        const parsedX = parseValue(d[xKeyName], xScale);
-        const parsedY = parseValue(d[yKeyName], yScale);
         if (
           ignoreGroups.includes(group) ||
-          (xScale !== "ordinal" && (isNaN(parsedX) || isNaN(parsedY)))
+          (xScale !== "ordinal" && (isNaN(d[xKeyName]) || isNaN(d[yKeyName])))
         ) {
           return acc;
         }
@@ -217,13 +257,13 @@ export default class Linechart extends Stanza {
             group,
             color: color(group),
             show: true,
-            data: [{ x: parsedX, y: parsedY }],
+            data: [{ x: d[xKeyName], y: d[yKeyName] }],
           });
           this._groups.push(group);
           this._groupByNameMap.set(group, acc[acc.length - 1]);
         } else {
-          if (parsedX && parsedY) {
-            acc[groupIndex].data.push({ x: parsedX, y: parsedY });
+          if (d[xKeyName] && d[yKeyName]) {
+            acc[groupIndex].data.push({ x: d[xKeyName], y: d[yKeyName] });
           }
         }
         return acc;
@@ -236,10 +276,8 @@ export default class Linechart extends Stanza {
           show: true,
           data: this._data
             .map((d) => {
-              const parsedX = parseValue(d[xKeyName], xScale);
-              const parsedY = parseValue(d[yKeyName], yScale);
-              if (parsedX && parsedX) {
-                return { x: parsedX, y: parsedY };
+              if (d[yKeyName] && d[yKeyName]) {
+                return { x: d[xKeyName], y: d[yKeyName] };
               }
             })
             .filter((d) => d),
@@ -247,13 +285,26 @@ export default class Linechart extends Stanza {
       ];
     }
 
-    const xDDomain = this._groupedData
+    this._xDDomain = this._groupedData
       .map((d) => d.data.map((d) => d.x))
       .flat();
 
-    const yDDomain = this._groupedData
+    this._yDDomain = this._groupedData
       .map((d) => d.data.map((d) => d.y))
       .flat();
+
+    if (xRangeMin && xRangeMax) {
+      cropData.call(this, "x", [
+        parseValue(xRangeMin, xScale),
+        parseValue(xRangeMax, xScale),
+      ]);
+    }
+    if (yRangeMin && yRangeMax) {
+      cropData.call(this, "y", [
+        parseValue(yRangeMin, yScale),
+        parseValue(yRangeMax, yScale),
+      ]);
+    }
 
     const svg = d3
       .select(root)
@@ -314,7 +365,7 @@ export default class Linechart extends Stanza {
       }
 
       if (xTicksInterval) {
-        xExtent = d3.extent(xDDomain);
+        xExtent = d3.extent(this._xDDomain);
         const ticks = [];
         for (let i = xExtent[0]; i <= xExtent[1]; i = i + xTicksInterval) {
           ticks.push(i);
@@ -370,7 +421,7 @@ export default class Linechart extends Stanza {
       }
 
       if (yTicksInterval) {
-        yExtent = d3.extent(yDDomain);
+        yExtent = d3.extent(this._yDDomain);
         const ticks = [];
         for (let i = yExtent[0]; i <= yExtent[1]; i = i + yTicksInterval) {
           ticks.push(i);
