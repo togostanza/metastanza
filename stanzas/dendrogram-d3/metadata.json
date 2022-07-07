@@ -80,6 +80,13 @@
       "stanza:description": "Height in px"
     },
     {
+      "stanza:key": "graph-zooming",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["relative", "absolute"],
+      "stanza:example": "relative",
+      "stanza:description": "Graph zooming"
+    },
+    {
       "stanza:key": "graph-direction",
       "stanza:type": "single-choice",
       "stanza:choice": ["landscape", "portrait"],
