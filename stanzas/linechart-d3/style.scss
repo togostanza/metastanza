@@ -8,6 +8,19 @@
   padding: var(--togostanza-outline-padding);
 }
 
+.error {
+  color: var(--togostanza-theme-series_5_color);
+  box-sizing: border-box;
+  width: var(--togostanza-outline-width);
+  height: var(--togostanza-outline-height);
+  padding: var(--togostanza-outline-padding);
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(var(--togostanza-theme-background_color), 0.3);
+  backdrop-filter: blur(5px);
+}
+
 svg {
   font-family: var(--togostanza-fonts-font_family);
   background-color: var(--togostanza-background-color);

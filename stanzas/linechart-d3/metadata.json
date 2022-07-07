@@ -15,8 +15,9 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example_old": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example": "https://drive.google.com/uc?id=13ZJ1iAbZF_3w8hz-8sP8EiKfcDbyjFN1&authuser=0",
+      "stanza:example_old": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+      "stanza:example_old2": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -182,7 +183,7 @@
     {
       "stanza:key": "axis-y-data_key",
       "stanza:type": "text",
-      "stanza:example": "Temp",
+      "stanza:example": "count",
       "stanza:description": "Variable to be assigned as y axis value",
       "stanza:required": true
     },
@@ -229,7 +230,7 @@
     {
       "stanza:key": "axis-y-scale",
       "stanza:type": "single-choice",
-      "stanza:choice": ["linear", "log", "ordinal", "time"],
+      "stanza:choice": ["linear", "log"],
       "stanza:example": "linear",
       "stanza:default": "linear",
       "stanza:description": "Axis scale",
@@ -323,9 +324,17 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "data_grouping-group_by-data_key",
+      "stanza:key": "data_grouping-group_by_data_key",
       "stanza:type": "text",
       "stanza:example": "category",
+      "stanza:default": "",
+      "stanza:description": "Data key to group by data series. All data points wich includes that key will be considered as one data series. If not set, all points will be considered as of one data series.",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "data_grouping-ignore_groups",
+      "stanza:type": "text",
+      "stanza:example": "angle,Index",
       "stanza:default": "",
       "stanza:description": "Data key to group by data series. All data points wich includes that key will be considered as one data series. If not set, all points will be considered as of one data series.",
       "stanza:required": false

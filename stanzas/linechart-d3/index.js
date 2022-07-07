@@ -11,7 +11,6 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 import validateParams from "../../lib/validateParams";
-import { InternMap } from "d3";
 
 export default class Linechart extends Stanza {
   menu() {
@@ -25,36 +24,16 @@ export default class Linechart extends Stanza {
   }
 
   async render() {
+    this._hideError();
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     this._validatedParams = validateParams(this.metadata, this.params);
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"],
-      this.root.querySelector("main")
-    );
-
-    this._metadataParamsMap = new Map(
-      this.metadata["stanza:parameter"].map((param) => [
-        param["stanza:key"],
-        Object.fromEntries(
-          Object.entries(param).filter((key) => key[0] !== "stanza:key")
-        ),
-      ])
-    );
-
-    this._data = values;
-
-    const root = this.root.querySelector("main");
-
-    const el = this.root.getElementById("linechart-d3");
-
     //data
-    const xKeyName = this._validatedParams.get("axis-x-data_key").value;
-    const yKeyName = this._validatedParams.get("axis-y-data_key").value;
+    let xKeyName = this._validatedParams.get("axis-x-data_key").value;
+    let yKeyName = this._validatedParams.get("axis-y-data_key").value;
     const xAxisTitle = this._validatedParams.get("axis-x-title").value; //this.params["x-axis-title"] || "";
     const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
     const xTicksNumber = 5;
@@ -78,9 +57,9 @@ export default class Linechart extends Stanza {
     const yRangeMin = this._validatedParams.get("axis-y-range_min").value;
     const yRangeMax = this._validatedParams.get("axis-y-range_max").value;
     const errorKeyName = this._validatedParams.get("error_bars-data_key").value;
-    const showErrorBars = this._data.some((d) => d[errorKeyName] !== undefined);
     const xAxisPlacement = this._validatedParams.get("axis-x-placement").value;
     const yAxisPlacement = this._validatedParams.get("axis-x-placement").value;
+    const showLegend = this._validatedParams.get("legend-show").value;
 
     const xAxisTicksIntervalUnits = this._validatedParams.get(
       "axis-x-ticks_interval_units"
@@ -105,18 +84,55 @@ export default class Linechart extends Stanza {
       "axis-y-ticks_labels_format"
     ).value;
 
+    let groupKeyName = this._validatedParams.get(
+      "data_grouping-group_by_data_key"
+    ).value;
+
+    const ignoreGroups = this._validatedParams
+      .get("data_grouping-ignore_groups")
+      .value.split(",");
+
+    let values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+
+    if (
+      this.params["data-type"] === "csv" ||
+      this.params["data-type"] === "tsv"
+    ) {
+      const csvRegroup = [];
+      values.forEach((row) => {
+        for (const col of values.columns.slice(1)) {
+          if (col) {
+            csvRegroup.push({
+              column: col,
+              row: row[values.columns[0]],
+              value: row[col],
+            });
+          }
+        }
+      });
+      values = csvRegroup;
+      groupKeyName = "column";
+      xKeyName = "row";
+      yKeyName = "value";
+    }
+
+    this._data = values;
+
+    const root = this.root.querySelector("main");
+
+    const el = this.root.getElementById("linechart-d3");
+
     if (root.querySelector("svg")) {
       root.querySelector("svg").remove();
     }
 
-    if (xScale === "linear") {
-      // try to parse data to numbers
-      this._data = this._data
-        .filter((d) => !isNaN(parseFloat(d[xKeyName])))
-        .map((d) => ({
-          ...d,
-          [xKeyName]: parseFloat(d[xKeyName]),
-        }));
+    if (showLegend !== "none") {
+      this.legend = new Legend();
+      root.append(this.legend);
     }
 
     const { width, height } = root.getBoundingClientRect();
@@ -153,94 +169,94 @@ export default class Linechart extends Stanza {
     const previewWidth = WIDTH;
     const previewHeight = HEIGHT * 0.2 - PD / 2;
 
-    const groupKeyName = this._validatedParams.get(
-      "data_grouping-group_by-data_key"
-    ).value;
-
     const togostanzaColors = [];
+
     for (let i = 0; i < 6; i++) {
       togostanzaColors.push(css(`--togostanza-theme-series_${i}_color`));
     }
 
-    let groupedData;
+    const color = d3.scaleOrdinal().range(togostanzaColors);
+
+    function parseValue(value, scaleType) {
+      if (scaleType === "linear" || scaleType === "log") {
+        return parseFloat(value);
+      } else if (scaleType === "time") {
+        const parsedDate = new Date(value);
+        return parsedDate instanceof Date ? parsedDate : NaN;
+      } else {
+        return value;
+      }
+    }
+
+    function getScale(scaleType) {
+      if (scaleType === "linear") {
+        return d3.scaleLinear();
+      } else if (scaleType === "log") {
+        return d3.scaleLog();
+      } else if (scaleType === "time") {
+        return d3.scaleTime();
+      } else {
+        return d3.scaleBand();
+      }
+    }
+
+    this._groups = [];
+    this._groupByNameMap = new Map();
+
     if (groupKeyName && this._data.some((d) => d[groupKeyName])) {
-      groupedData = d3.group(this._data, (d) => {
-        return d[groupKeyName];
-      });
+      this._groupedData = this._data.reduce((acc, d) => {
+        const group = d[groupKeyName];
+        const parsedX = parseValue(d[xKeyName], xScale);
+        const parsedY = parseValue(d[yKeyName], yScale);
+        if (
+          ignoreGroups.includes(group) ||
+          (xScale !== "ordinal" && (isNaN(parsedX) || isNaN(parsedY)))
+        ) {
+          return acc;
+        }
+        const groupIndex = acc.findIndex((g) => g.group === group);
+        if (groupIndex === -1) {
+          acc.push({
+            group,
+            color: color(group),
+            show: true,
+            data: [{ x: parsedX, y: parsedY }],
+          });
+          this._groups.push(group);
+          this._groupByNameMap.set(group, acc[acc.length - 1]);
+        } else {
+          if (parsedX && parsedY) {
+            acc[groupIndex].data.push({ x: parsedX, y: parsedY });
+          }
+        }
+        return acc;
+      }, []);
     } else {
-      groupedData = new InternMap();
-      groupedData.set("data", this._data);
+      this._groupedData = [
+        {
+          group: "data",
+          color: color("data"),
+          show: true,
+          data: this._data
+            .map((d) => {
+              const parsedX = parseValue(d[xKeyName], xScale);
+              const parsedY = parseValue(d[yKeyName], yScale);
+              if (parsedX && parsedX) {
+                return { x: parsedX, y: parsedY };
+              }
+            })
+            .filter((d) => d),
+        },
+      ];
     }
 
-    const groups = Array.from(groupedData.keys());
-
-    if (xScale === "linear") {
-      groupedData.forEach((val, key) => {
-        groupedData.set(
-          key,
-          val.map((d) => ({
-            ...d,
-            [xKeyName]: parseFloat(d[xKeyName]),
-          }))
-        );
-      });
-    } else if (xScale === "time") {
-      groupedData.forEach((val, key) => {
-        groupedData.set(
-          key,
-          val.map((d) => ({
-            ...d,
-            [xKeyName]: new Date(d[xKeyName]),
-          }))
-        );
-      });
-    }
-
-    if (yScale === "linear") {
-      for (const [key, val] in groupedData) {
-        groupedData.set(
-          key,
-          val.map((d) => ({
-            ...d,
-            [yKeyName]: parseFloat(d[yKeyName]),
-          }))
-        );
-      }
-    } else if (yScale === "time") {
-      for (const [key, val] in groupedData) {
-        groupedData.set(
-          key,
-          val.map((d) => ({
-            ...d,
-            [yKeyName]: new Date(d[yKeyName]),
-          }))
-        );
-      }
-    }
-
-    const xDDomain = Array.from(groupedData.values())
-      .map((d) => {
-        return d.map((dd) => dd[xKeyName]);
-      })
+    const xDDomain = this._groupedData
+      .map((d) => d.data.map((d) => d.x))
       .flat();
 
-    const yDDomain = Array.from(groupedData.values())
-      .map((d) => {
-        return d.map((dd) => dd[yKeyName]);
-      })
+    const yDDomain = this._groupedData
+      .map((d) => d.data.map((d) => d.y))
       .flat();
-
-    this._groups = groups;
-    this._groupedData = groupedData;
-
-    const color = d3.scaleOrdinal().domain(groups).range(togostanzaColors);
-
-    const colorSym = Symbol("color");
-
-    groupedData.forEach((d, key) => {
-      d[colorSym] = color(key);
-      d.show = true;
-    });
 
     const svg = d3
       .select(root)
@@ -271,7 +287,7 @@ export default class Linechart extends Stanza {
 
     let xAxis, xAxis2, yAxis, yAxis2;
 
-    let xIntervalUnits, yIntervalUnits, xExtent, yExtent;
+    let xExtent, yExtent;
 
     const setXAxes = () => {
       xAxis = d3.axisBottom(this._scaleX);
@@ -283,10 +299,15 @@ export default class Linechart extends Stanza {
       yAxis2 = d3.axisLeft(this._previewScaleY);
     };
 
+    this._scaleX = getScale(xScale).range([0, chartWidth]);
+    this._scaleY = getScale(yScale).range([chartHeight, 0]);
+    this._previewScaleX = getScale(xScale).range([0, previewWidth]);
+    this._previewScaleY = getScale(yScale).range([previewHeight, 0]);
+
+    setXAxes();
+    setYAxes();
+
     if (xScale === "linear") {
-      this._scaleX = d3.scaleLinear();
-      this._previewScaleX = d3.scaleLinear();
-      setXAxes();
       try {
         xAxis.tickFormat(d3.format(xAxisTicksFormat));
         xAxis2.tickFormat(d3.format(xAxisTicksFormat));
@@ -296,7 +317,7 @@ export default class Linechart extends Stanza {
       }
 
       if (xTicksInterval) {
-        xExtent = d3.extent(xDDomain, (d) => parseFloat(d));
+        xExtent = d3.extent(xDDomain);
         const ticks = [];
         for (let i = xExtent[0]; i <= xExtent[1]; i = i + xTicksInterval) {
           ticks.push(i);
@@ -307,14 +328,14 @@ export default class Linechart extends Stanza {
         xAxis.ticks(xTicksNumber);
         xAxis2.ticks(xTicksNumber);
       }
-    } else if (xScale === "ordinal") {
-      this._scaleX = d3.scaleBand().paddingOuter(0);
-      this._previewScaleX = d3.scaleBand().paddingOuter(0);
-      setXAxes();
+      try {
+        xAxis.tickFormat(xAxisTicksFormat);
+        xAxis2.tickFormat(xAxisTicksFormat);
+      } catch {
+        xAxis.tickFormat((d) => d);
+        xAxis2.tickFormat((d) => d);
+      }
     } else if (xScale === "time") {
-      this._scaleX = d3.scaleTime();
-      this._previewScaleX = d3.scaleTime();
-      setXAxes();
       try {
         xAxis.tickFormat(d3.timeFormat(xAxisTicksFormat));
         xAxis2.tickFormat(d3.timeFormat(xAxisTicksFormat));
@@ -333,9 +354,6 @@ export default class Linechart extends Stanza {
         xAxis2.ticks(xTicksNumber);
       }
     } else {
-      this._scaleX = d3.scaleLinear();
-      this._previewScaleX = d3.scaleLinear();
-      setXAxes();
       try {
         xAxis.tickFormat(d3.format(xAxisTicksFormat));
         xAxis2.tickFormat(d3.format(xAxisTicksFormat));
@@ -343,28 +361,9 @@ export default class Linechart extends Stanza {
         xAxis.tickFormat((d) => d);
         xAxis2.tickFormat((d) => d);
       }
-
-      xAxis.tickValues(
-        d3.ticks(
-          xExtent[0],
-          xExtent[1],
-          Math.abs(Math.floor((xExtent[1] - xExtent[0]) / xTicksInterval))
-        )
-      );
-      xAxis2.tickValues(
-        d3.ticks(
-          xExtent[0],
-          xExtent[1],
-          Math.abs(Math.floor((xExtent[1] - xExtent[0]) / xTicksInterval))
-        )
-      );
     }
 
     if (yScale === "linear") {
-      this._scaleY = d3.scaleLinear();
-      this._previewScaleY = d3.scaleLinear();
-      setYAxes();
-
       try {
         yAxis.tickFormat(d3.format(yAxisTicksFormat));
         yAxis2.tickFormat(d3.format(yAxisTicksFormat));
@@ -374,7 +373,7 @@ export default class Linechart extends Stanza {
       }
 
       if (yTicksInterval) {
-        yExtent = d3.extent(yDDomain, (d) => parseFloat(d));
+        yExtent = d3.extent(yDDomain);
         const ticks = [];
         for (let i = yExtent[0]; i <= yExtent[1]; i = i + yTicksInterval) {
           ticks.push(i);
@@ -384,15 +383,7 @@ export default class Linechart extends Stanza {
         yAxis.ticks(yTicksNumber);
       }
       yAxis2.ticks(2);
-    } else if (yScale === "ordinal") {
-      this._scaleY = d3.scaleBand().paddingOuter(0);
-      this._previewScaleY = d3.scaleBand().paddingOuter(0);
-      setYAxes();
     } else if (yScale === "time") {
-      this._scaleY = d3.scaleTime();
-      this._previewScaleY = d3.scaleTime();
-      setYAxes();
-
       try {
         yAxis.tickFormat(d3.timeFormat(yAxisTicksFormat));
         yAxis2.tickFormat(d3.timeFormat(yAxisTicksFormat));
@@ -414,60 +405,35 @@ export default class Linechart extends Stanza {
       }
       yAxis2.ticks(2);
     } else {
-      this._scaleY = d3.scaleLinear();
-      this._previewScaleY = d3.scaleLinear();
-      setYAxes();
       yAxis.tickFormat(d3.format(yAxisTicksFormat));
       yAxis2.tickFormat(d3.format(yAxisTicksFormat));
     }
-
-    this._scaleX.range([0, chartWidth]);
-    this._scaleY.range([chartHeight, 0]);
-    this._previewScaleX.range([0, previewWidth]);
-    this._previewScaleY.range([previewHeight, 0]);
 
     const line = d3
       .line()
       .x((d) => {
         if (xScale === "ordinal") {
-          return this._scaleX(d[xKeyName]) + this._scaleX.bandwidth() / 2;
-        } else if (xScale === "time") {
-          // if (!this._scaleX(new Date(d[xKeyName]))) {
-          //   console.log(
-          //     "this._scaleX(new Date(d[xKeyName]))",
-          //     this._scaleX(new Date(d[xKeyName]))
-          //   );
-          //   console.log(d);
-          // }
-
-          return this._scaleX(new Date(d[xKeyName]));
+          return this._scaleX(d.x) + this._scaleX.bandwidth() / 2;
         }
-
-        return this._scaleX(d[xKeyName]);
+        return this._scaleX(d.x);
       })
       .y((d) => {
         if (yScale === "ordinal") {
-          return this._scaleY(d[yKeyName]) + this._scaleY.bandwidth() / 2;
+          return this._scaleY(d.y) + this._scaleY.bandwidth() / 2;
         }
 
-        return this._scaleY(+d[yKeyName]);
+        return this._scaleY(d.y);
       });
 
     const line2 = d3
       .line()
       .x((d) => {
         if (xScale === "ordinal") {
-          return (
-            this._previewScaleX(d[xKeyName]) +
-            this._previewScaleX.bandwidth() / 2
-          );
-        } else if (xScale === "time") {
-          return this._previewScaleX(new Date(d[xKeyName]));
+          return this._previewScaleX(d.x) + this._previewScaleX.bandwidth() / 2;
         }
-
-        return this._previewScaleX(d[xKeyName]);
+        return this._previewScaleX(d.x);
       })
-      .y((d) => this._previewScaleY(+d[yKeyName]));
+      .y((d) => this._previewScaleY(d.y));
 
     const graphXAxisG = graphArea
       .append("g")
@@ -487,33 +453,18 @@ export default class Linechart extends Stanza {
 
     previewArea.append("g").attr("class", "brush");
 
-    const update = (groupsToShow) => {
-      this._currentData = groupsToShow.map((group) => {
-        return {
-          values: [...groupedData.get(group)],
-          name: group,
-          color: groupedData.get(group)[colorSym],
-        };
-      });
+    const update = () => {
+      this._currentData = this._groupedData.filter((group) => group.show);
 
       const getXDomain = () => {
         if (xScale === "ordinal") {
           return [
             ...new Set(
-              this._currentData
-                .map((d) => d.values.map((d) => d[xKeyName]))
-                .flat()
+              this._currentData.map((d) => d.data.map((d) => d.x)).flat()
             ),
           ];
-        } else if (xScale === "time") {
-          const xDomain = this._currentData.map((d) =>
-            d.values.map((d) => new Date(d[xKeyName]))
-          );
-          return d3.extent(xDomain.flat());
         } else {
-          const xDomain = this._currentData.map((d) =>
-            d.values.map((d) => +d[xKeyName])
-          );
+          const xDomain = this._currentData.map((d) => d.data.map((d) => d.x));
           return d3.extent(xDomain.flat());
         }
       };
@@ -523,15 +474,11 @@ export default class Linechart extends Stanza {
         if (yScale === "ordinal") {
           return [
             ...new Set(
-              this._currentData
-                .map((d) => d.values.map((d) => d[yKeyName]))
-                .flat()
+              this._currentData.map((d) => d.data.map((d) => d.y)).flat()
             ),
           ];
         } else {
-          const yDomain = this._currentData.map((d) =>
-            d.values.map((d) => +d[yKeyName])
-          );
+          const yDomain = this._currentData.map((d) => d.data.map((d) => d.y));
 
           return d3.extent(yDomain.flat());
         }
@@ -550,7 +497,7 @@ export default class Linechart extends Stanza {
         .enter()
         .append("path")
         .attr("class", "line")
-        .attr("d", (d) => line2(d.values))
+        .attr("d", (d) => line2(d.data))
         .attr("clip-path", "url(#clip)");
 
       previewLinesUpdate
@@ -560,26 +507,39 @@ export default class Linechart extends Stanza {
       const previewLinesExit = previewLinesUpdate.exit().remove();
 
       const interpolator = {};
-      if (xScale === "linear" && yScale === "linear") {
+
+      if (xScale === "linear") {
         this._currentData.forEach((d) => {
-          interpolator[d.name] = d3
+          const domain = d.data.map((d) => d.x);
+          const range = d.data.map((d) => d.y);
+          if (
+            [...new Set(domain)].length < 2 ||
+            [...new Set(range)].length < 2
+          ) {
+            this._renderError(
+              "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+            );
+            return;
+          }
+
+          interpolator[d.group] = d3
             .scaleLinear()
-            .domain(d.values.map((d) => +d[xKeyName]))
-            .range(d.values.map((d) => +d[yKeyName]));
+            .domain(d.data.map((d) => d.x))
+            .range(d.data.map((d) => d.y));
         });
-      } else if (xScale === "ordinal" && yScale === "linear") {
+      } else if (xScale === "ordinal") {
         this._currentData.forEach((d) => {
           interpolator[d.name] = d3
             .scaleLinear()
-            .domain(getXDomain())
-            .range(d.values.map((d) => +d[yKeyName]));
+            .domain(d.data.map((d) => d.x))
+            .range(d.data.map((d) => d.y));
         });
       } else if (xScale === "time") {
         this._currentData.forEach((d) => {
           interpolator[d.name] = d3
             .scaleTime()
-            .domain(getXDomain())
-            .range(d.values.map((d) => d[yKeyName]));
+            .domain(d.data.map((d) => d.x))
+            .range(d.data.map((d) => d.y));
         });
       }
 
@@ -598,40 +558,39 @@ export default class Linechart extends Stanza {
 
           const croppedData = this._currentData.map((d) => {
             return {
-              ...d,
-              values: d.values.filter((v) => newDomainX.includes(v[xKeyName])),
+              group: d.group,
+              color: d.color,
+              show: d.show,
+              data: d.data.filter((v) => newDomainX.includes(v.x)),
             };
           });
 
           this._scaleX.domain(newDomainX);
           this._scaleY.domain(
-            d3.extent(
-              croppedData.map((d) => d.values.map((v) => +v[yKeyName])).flat()
-            )
+            d3.extent(croppedData.map((d) => d.data.map((v) => v.y)).flat())
           );
 
           updateRange(croppedData);
-        } else if (xScale === "linear") {
+        } else if (xScale === "linear" || xScale === "time") {
           const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
           this._scaleX.domain(x0x1);
-
           const croppedData = this._currentData.map((d) => {
             return {
-              ...d,
-              values: d.values.filter(
-                (v) => x0x1[0] <= +v[xKeyName] && +v[xKeyName] <= x0x1[1]
-              ),
+              group: d.group,
+              color: d.color,
+              show: d.show,
+              data: d.data.filter((v) => x0x1[0] <= v.x && v.x <= x0x1[1]),
             };
           });
 
           const extents = [];
 
-          croppedData.forEach((data) => {
-            const values = data.values.map((v) => +v[yKeyName]);
+          croppedData.forEach((d) => {
+            const values = d.data.map((v) => v.y);
 
             extents.push(
               d3.extent(
-                values.concat(x0x1.map((d) => interpolator[data.name](d)))
+                values.concat(x0x1.map((d) => interpolator[d.group](d)))
               )
             );
           });
@@ -643,41 +602,7 @@ export default class Linechart extends Stanza {
           graphXAxisG.call(xAxis);
           graphYAxisG.call(yAxis);
 
-          graphArea.selectAll(".line").attr("d", (d) => line(d.values));
-        } else if (xScale === "time") {
-          const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
-
-          this._scaleX.domain(x0x1);
-
-          const croppedData = this._currentData.map((d) => {
-            return {
-              ...d,
-              values: d.values.filter((v) => {
-                return x0x1[0] <= v[xKeyName] && v[xKeyName] <= x0x1[1];
-              }),
-            };
-          });
-
-          const extents = [];
-
-          croppedData.forEach((data) => {
-            const values = data.values.map((v) => +v[yKeyName]);
-
-            extents.push(
-              d3.extent(
-                values.concat(x0x1.map((d) => interpolator[data.name](d)))
-              )
-            );
-          });
-
-          // filter all data to be in between x0 x1, and see domain inside it
-
-          this._scaleY.domain(d3.extent(extents.flat()));
-
-          graphXAxisG.call(xAxis);
-          graphYAxisG.call(yAxis);
-
-          graphArea.selectAll(".line").attr("d", (d) => line(d.values));
+          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
         } else {
           throw new Error("Unsupported scale");
         }
@@ -691,7 +616,7 @@ export default class Linechart extends Stanza {
           .enter()
           .append("path")
           .attr("class", "line")
-          .attr("d", (d) => line(d.values))
+          .attr("d", (d) => line(d.data))
           .attr("clip-path", "url(#clip)");
 
         linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
@@ -705,6 +630,33 @@ export default class Linechart extends Stanza {
 
       updateRange(this._currentData);
 
+      // if (showLegend !== "none") {
+      //   this.legend.setup();
+      //   groups.map((item, index) => {
+      //     return {
+      //       id: "" + index,
+      //       label: item,
+      //       color: color(item),
+      //       node: svg
+      //         .selectAll("g.bars-group rect")
+      //         .filter((d) => {
+      //           if (barPlacement === "stacked") {
+      //             return d.key === item;
+      //           }
+      //           return d[groupKeyName] === item;
+      //         })
+      //         .nodes(),
+      //     };
+      //   }),
+      //     this.root.querySelector("main"),
+      //     {
+      //       fadeoutNodes: svg.selectAll("g.bars-group rect").nodes(),
+      //       position: showLegend.split("-"),
+      //       fadeProp: "opacity",
+      //       showLeaders: false,
+      //     };
+      // }
+
       const brush = d3
         .brushX()
         .extent([
@@ -716,9 +668,27 @@ export default class Linechart extends Stanza {
       previewArea.call(brush).call(brush.move, this._scaleX.range());
     };
 
-    update(groups);
+    update();
 
     return;
+  }
+
+  _renderError(error) {
+    const main = this.root.querySelector("main");
+    let errorDiv = main.querySelector(".error");
+    if (!errorDiv) {
+      errorDiv = document.createElement("div");
+      errorDiv.classList.add("error");
+      main.appendChild(errorDiv);
+    }
+    errorDiv.innerText = error;
+  }
+  _hideError() {
+    const main = this.root.querySelector("main");
+    const errorDiv = main.querySelector(".error");
+    if (errorDiv) {
+      errorDiv.remove();
+    }
   }
 }
 
