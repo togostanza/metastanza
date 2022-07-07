@@ -102,8 +102,6 @@ export default class Dendrogram extends Stanza {
         `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
       );
 
-    const gContent = g.append("g");
-
     const data = denroot.descendants().slice(1);
     const maxDepth = d3.max(data, (d) => d.depth);
 
@@ -155,7 +153,7 @@ export default class Dendrogram extends Stanza {
 
       graphType(denroot);
 
-      const node = gContent
+      const node = g
         .selectAll(".node")
         .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
@@ -207,7 +205,7 @@ export default class Dendrogram extends Stanza {
         .attr("transform", `translate(${source.y}, ${source.x})`)
         .remove();
 
-      const link = gContent
+      const link = g
         .selectAll(".link")
         .data(denroot.links(), (d) => d.target.id);
 
@@ -261,7 +259,7 @@ export default class Dendrogram extends Stanza {
     svg.call(zoom);
 
     function zoomed(e) {
-      gContent.attr("transform", e.transform);
+      g.attr("transform", e.transform);
     }
 
     if (showToolTips) {
