@@ -30,10 +30,10 @@ export default class Heatmap extends Stanza {
   }
   async draw(el, dataset) {
     // make colors
-    const getColorMin = this.params["gradation-color-min"];
-    const getColorMiddle = this.params["gradation-color-middle"];
-    const getColorMax = this.params["gradation-color-max"];
-    const myColor = getGradationColor(this, [getColorMin, getColorMiddle, getColorMax]);
+    const cellColorMin = this.params["cell-color-range_min"];
+    const cellColorMid = this.params["cell-color-range_mid"];
+    const cellColorMax = this.params["cell-color-range_max"];
+    const myColor = getGradationColor(this, [cellColorMin, cellColorMid, cellColorMax]);
 
     const tickSize = +this.css("--togostanza-tick-size") || 0;
     const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
@@ -84,7 +84,8 @@ export default class Heatmap extends Stanza {
       .tickSizeInner(tickSize);
 
     // normalize
-    const values = [...new Set(dataset.map((d) => d.value))];
+    const cellColorDataKey = this.params["cell-color-data_key"];
+    const values = [...new Set(dataset.map((d) => d[cellColorDataKey]))];
     const normalize = (num) => {
       return (num - Math.min(...values)) / (Math.max(...values) - Math.min(...values));
     }
@@ -104,7 +105,7 @@ export default class Heatmap extends Stanza {
     .attr("height", y.bandwidth())
     .attr("rx", this.css("--togostanza-border-radius"))
     .attr("ry", this.css("--togostanza-border-radius"))
-    .style("fill", (d) => myColor(normalize(d.value)))
+    .style("fill", (d) => myColor(normalize(d[cellColorDataKey])))
     .on("mouseover", mouseover)
     .on("mouseleave", mouseleave);
 

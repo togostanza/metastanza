@@ -178,28 +178,61 @@
       "stanza:description": "d3.format string. Ignore if ordinal scale"
     },
     {
+      "stanza:key": "tooltips-data_key",
+      "stanza:type": "text",
+      "stanza:description": "Data key to use as tooltip"
+    },
+    {
+      "stanza:key": "legend-show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Whether show the legend"
+    },
+    {
+      "stanza:key": "legend-placement",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["top-left","top-right","bottom-left","bottom-right"],
+      "stanza:example": "top-right",
+      "stanza:description": "Whether show the legend"
+    },
+    {
+      "stanza:key": "legend-title",
+      "stanza:type": "text",
+      "stanza:description": "Legend title"
+    },
+    {
       "stanza:key": "legend-groups",
       "stanza:type": "number",
       "stanza:example": 10,
-      "stanza:description": "amount of groups for legend"
+      "stanza:description": "Amount of groups for legend"
     },
     {
-      "stanza:key": "gradation-color-min",
-      "stanza:type": "string",
-      "stanza:example": "white",
-      "stanza:description": "Gradation color min"
+      "stanza:key": "cell-color-data_key",
+      "stanza:type": "text",
+      "stanza:example": "value",
+      "stanza:description": "Data key to color the data points"
     },
     {
-      "stanza:key": "gradation-color-middle",
-      "stanza:type": "string",
-      "stanza:example": "skyblue",
-      "stanza:description": "Gradation color middle"
+      "stanza:key": "cell-color-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "If value to be mapped to color is a number"
     },
     {
-      "stanza:key": "gradation-color-max",
-      "stanza:type": "string",
-      "stanza:example": "blue",
-      "stanza:description": "Gradation color max"
+      "stanza:key": "cell-color-range_min",
+      "stanza:type": "text",
+      "stanza:description": "Cell color range min"
+    },
+    {
+      "stanza:key": "cell-color-range_mid",
+      "stanza:type": "text",
+      "stanza:description": "Cell color range mid"
+    },
+    {
+      "stanza:key": "cell-color-range_max",
+      "stanza:type": "text",
+      "stanza:description": "Cell color range max"
     }
   ],
   "stanza:menu-placement": "bottom-right",
