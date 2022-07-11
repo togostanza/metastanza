@@ -140,7 +140,7 @@ export default class Dendrogram extends Stanza {
     denroot.y0 = 0;
 
     const getLinkFn = () => {
-      if (this.params["graph-direction"] === "portrait") {
+      if (this.params["graph-direction"] === "vertical") {
         return d3.linkVertical();
       } else {
         return d3.linkHorizontal();
@@ -155,7 +155,7 @@ export default class Dendrogram extends Stanza {
       let i = 0;
 
       graphType(denroot);
-      if (this.params["graph-direction"] === "portrait") {
+      if (this.params["graph-direction"] === "vertical") {
         denroot.descendants().forEach((node) => {
           const x0 = node.x0;
           const x = node.x;
@@ -194,6 +194,12 @@ export default class Dendrogram extends Stanza {
           d.children || d._children ? -labelMargin : labelMargin
         )
         .attr("dy", "3")
+        .attr(
+          "transform",
+          this.params["graph-direction"] === "vertical"
+            ? "rotate(90)"
+            : "rotate(0)"
+        )
         .attr("text-anchor", (d) =>
           d.children || d._children ? "end" : "start"
         )

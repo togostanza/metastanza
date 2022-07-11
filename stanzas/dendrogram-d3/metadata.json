@@ -109,8 +109,8 @@
     {
       "stanza:key": "graph-direction",
       "stanza:type": "single-choice",
-      "stanza:choice": ["landscape", "portrait"],
-      "stanza:example": "landscape",
+      "stanza:choice": ["horizontal", "vertical"],
+      "stanza:example": "horizontal",
       "stanza:description": "Graph direction"
     },
     {
