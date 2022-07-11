@@ -60,14 +60,18 @@ svg {
       stroke-width: var(--togostanza-axis-stroke_width);
     }
 
-    &.title text {
-      font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
-      fill: var(--togostanza-fonts-font_color);
-    }
-
     & > .tick > text {
       font-size: calc(var(--togostanza-fonts-font_size_secondary) * 1px);
       fill: var(--togostanza-fonts-font_color);
+    }
+  }
+
+  .axis-title-group {
+    text.title {
+      font-family: var(--togostanza-fonts-font_family);
+      font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
+
+      text-anchor: middle;
     }
   }
 

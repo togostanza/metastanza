@@ -28,10 +28,6 @@ export default class Linechart extends Stanza {
 
     const existingLegend = this.root.querySelector("togostanza--legend2");
 
-    if (existingLegend) {
-      existingLegend.remove();
-    }
-
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -43,6 +39,11 @@ export default class Linechart extends Stanza {
     let yKeyName = this._validatedParams.get("axis-y-data_key").value;
     const xAxisTitle = this._validatedParams.get("axis-x-title").value; //this.params["x-axis-title"] || "";
     const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
+    const hideXAxis = this._validatedParams.get("axis-x-hide").value;
+    const hideYAxis = this._validatedParams.get("axis-y-hide").value;
+    const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
+    const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
+
     const xTicksNumber = 5;
     const xTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
@@ -69,7 +70,7 @@ export default class Linechart extends Stanza {
     const yRangeMax = this._validatedParams.get("axis-y-range_max").value;
     const errorKeyName = this._validatedParams.get("error_bars-data_key").value;
     const xAxisPlacement = this._validatedParams.get("axis-x-placement").value;
-    const yAxisPlacement = this._validatedParams.get("axis-x-placement").value;
+    const yAxisPlacement = this._validatedParams.get("axis-y-placement").value;
     const showLegend = this._validatedParams.get("legend-show").value;
 
     const legendPosition = this._validatedParams.get("legend-placement").value;
@@ -171,11 +172,11 @@ export default class Linechart extends Stanza {
     // padding betsween chart and preview
     const PD = 20;
 
-    const chartWidth = WIDTH;
-    const chartHeight = HEIGHT * 0.8 - PD / 2;
+    let chartWidth = WIDTH;
+    let chartHeight = HEIGHT * 0.8 - PD / 2;
 
-    const previewWidth = WIDTH;
-    const previewHeight = HEIGHT * 0.2 - PD / 2;
+    let previewWidth = WIDTH;
+    let previewHeight = HEIGHT * 0.2 - PD / 2;
 
     const togostanzaColors = [];
 
@@ -330,12 +331,78 @@ export default class Linechart extends Stanza {
       .attr("class", "chart")
       .attr("transform", `translate(${SVGMargin.left}, ${SVGMargin.top})`);
 
+    const yAxisTitleGroup = graphArea
+      .append("g")
+      .attr("class", "axis-title-group y");
+
+    const xAxisTitleGroup = graphArea
+      .append("g")
+      .attr("class", "axis-title-group x");
+
+    //Add title to axes if they are not empty
+    let yTitleWidth = 0;
+    let xTitleHeight = 0;
+    if (yAxisTitle) {
+      const yTitle = yAxisTitleGroup
+        .append("text")
+        .text(yAxisTitle)
+        .attr("class", "title y")
+        .classed(yAxisPlacement, true)
+        .attr("y", chartHeight / 2)
+
+        .attr(
+          "dominant-baseline",
+          yAxisPlacement === "left" ? "hanging" : "auto"
+        )
+        .attr("transform", `rotate(-90, 0, ${chartHeight / 2})`);
+
+      yTitleWidth = yTitle.node().getBBox().height;
+    }
+
+    if (xAxisTitle) {
+      const xTitle = xAxisTitleGroup
+        .append("text")
+        .text(xAxisTitle)
+        .attr("class", "title x")
+        .classed(xAxisPlacement, true)
+        .attr(
+          "y",
+          xAxisPlacement === "top" ? -xTitlePadding || 0 : xTitlePadding || 0
+        )
+        .attr("x", chartWidth / 2)
+        .attr("text-anchor", "middle")
+        .attr(
+          "dominant-baseline",
+          xAxisPlacement === "top" ? "auto" : "hanging"
+        );
+
+      xTitleHeight = xTitle.node().getBBox().height;
+    }
+
+    xAxisTitleGroup.attr(
+      "transform",
+      `translate(${yTitleWidth + yTitlePadding},${
+        chartHeight - xTitlePadding - xTitleHeight
+      })`
+    );
+
+    chartWidth -= yTitleWidth + yTitlePadding;
+    chartHeight -= xTitleHeight + xTitlePadding;
+    previewWidth -= yTitleWidth + yTitlePadding;
+
+    const chartAreaGroup = graphArea
+      .append("g")
+      .attr("class", "chart-area")
+      .attr("transform", `translate(${yTitleWidth + yTitlePadding}, 0)`);
+
     const previewArea = svg
       .append("g")
       .attr("class", "preview")
       .attr(
         "transform",
-        `translate(${SVGMargin.left}, ${SVGMargin.top + chartHeight + PD})`
+        `translate(${SVGMargin.left + yTitleWidth + yTitlePadding}, ${
+          SVGMargin.top + chartHeight + xTitleHeight + xTitlePadding
+        })`
       );
 
     let xAxis, xAxis2, yAxis, yAxis2;
@@ -488,13 +555,15 @@ export default class Linechart extends Stanza {
       })
       .y((d) => this._previewScaleY(d.y));
 
-    const graphXAxisG = graphArea
+    const graphXAxisG = xAxisTitleGroup
       .append("g")
       .attr("class", "axis x")
-      .attr("clip-path", "url(#clip)")
-      .attr("transform", `translate(0, ${chartHeight})`);
+      .attr("clip-path", "url(#clip)");
 
-    const graphYAxisG = graphArea.append("g").attr("class", "axis y");
+    const graphYAxisG = yAxisTitleGroup
+      .append("g")
+      .attr("class", "axis y")
+      .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`);
 
     const previewXAxisG = previewArea
       .append("g")
@@ -574,7 +643,6 @@ export default class Linechart extends Stanza {
             );
             return;
           }
-
           interpolator[d.group] = d3
             .scaleLinear()
             .domain(d.data.map((d) => d.x))
@@ -589,11 +657,45 @@ export default class Linechart extends Stanza {
         });
       } else if (xScale === "time") {
         this._currentData.forEach((d) => {
+          const domain = d.data.map((d) => d.x);
+          const range = d.data.map((d) => d.y);
+          if (
+            [...new Set(domain)].length < 2 ||
+            [...new Set(range)].length < 2
+          ) {
+            this._renderError(
+              "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+            );
+            return;
+          }
           interpolator[d.group] = d3
             .scaleTime()
             .domain(d.data.map((d) => d.x))
             .range(d.data.map((d) => d.y));
         });
+      } else if (xScale === "log") {
+        this._currentData.forEach((d) => {
+          const domain = d.data.map((d) => d.x);
+          const range = d.data.map((d) => d.y);
+          if (
+            [...new Set(domain)].length < 2 ||
+            [...new Set(range)].length < 2
+          ) {
+            this._renderError(
+              "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+            );
+            return;
+          }
+          interpolator[d.group] = d3
+            .scaleLog()
+            .domain(d.data.map((d) => d.x))
+            .range(d.data.map((d) => d.y));
+        });
+      } else {
+        this._renderError(
+          "Unknown scale type. Probably wrong scale type was chosen."
+        );
+        return;
       }
 
       const brushed = (e) => {
@@ -644,16 +746,20 @@ export default class Linechart extends Stanza {
 
           this._scaleY.domain(d3.extent(extents.flat()));
 
-          graphXAxisG.call(xAxis);
-          graphYAxisG.call(yAxis);
+          if (!hideXAxis && !hideXAxisTicks) {
+            graphXAxisG.call(xAxis);
+          }
+          if (!hideYAxis && !hideYAxisTicks) {
+            graphYAxisG.call(yAxis);
+          }
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
         }
       };
 
       const updateRange = (data) => {
-        graphArea.selectAll(".line").remove();
-        const linesUpdate = graphArea.selectAll(".line").data(data);
+        chartAreaGroup.selectAll(".line").remove();
+        const linesUpdate = chartAreaGroup.selectAll(".line").data(data);
 
         const linesEnter = linesUpdate
           .enter()
@@ -669,6 +775,29 @@ export default class Linechart extends Stanza {
         graphYAxisG.call(yAxis);
         previewXAxisG.call(xAxis2);
         previewYAxisG.call(yAxis2);
+
+        if (hideXAxis) {
+          graphXAxisG.call(hideTicks);
+          graphXAxisG.call((g) => g.select(".domain").remove());
+          previewXAxisG.call(hideTicks);
+          previewXAxisG.call((g) => g.select(".domain").remove());
+          xAxisTitleGroup.call((g) => g.select(".text").remove());
+        }
+        if (hideYAxis) {
+          graphYAxisG.call(hideTicks);
+          graphYAxisG.call((g) => g.select(".domain").remove());
+          previewYAxisG.call(hideTicks);
+          previewYAxisG.call((g) => g.select(".domain").remove());
+          yAxisTitleGroup.call((g) => g.select(".text").remove());
+        }
+        if (hideXAxisTicks) {
+          graphXAxisG.call(hideTicks);
+          previewXAxisG.call(hideTicks);
+        }
+        if (hideYAxisTicks) {
+          graphYAxisG.call(hideTicks);
+          previewYAxisG.call(hideTicks);
+        }
       };
 
       updateRange(this._currentData);
@@ -686,7 +815,11 @@ export default class Linechart extends Stanza {
 
     update();
 
-    if (showLegend) {
+    function hideTicks(g) {
+      g.selectAll(".tick").remove();
+    }
+
+    if (showLegend && !existingLegend) {
       this.legend = new Legend2(
         this._groups.map((item, index) => {
           return {
