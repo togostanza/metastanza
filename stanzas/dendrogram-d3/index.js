@@ -296,26 +296,31 @@ export default class Dendrogram extends Stanza {
     };
     update(denroot);
 
+    const maxX = d3.max(data, (d) => d.y);
+    const maxY = d3.max(data, (d) => d.x);
+
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.5, 10])
+      .translateExtent([
+        [-maxX + maxX / 5, -maxY + maxY / 5],
+        [width + (maxX * 4) / 5, height + (maxY * 4) / 5],
+      ])
+      .on("zoom", (e) => {
+        zoomed(e);
+      });
+
     if (this.params["graph-zooming"] === "absolute") {
-      const maxX = d3.max(data, (d) => d.y);
-      const maxY = d3.max(data, (d) => d.x);
-
-      const zoom = d3
-        .zoom()
-        .scaleExtent([0.5, 10])
-        .translateExtent([
-          [-maxX + maxX / 5, -maxY + maxY / 5],
-          [width + (maxX * 4) / 5, height + (maxY * 4) / 5],
-        ])
-        .on("zoom", (e) => {
-          zoomed(e);
-        });
-
       svg.call(zoom);
+      svg.on("dblclick.zoom", resetted);
     }
 
     function zoomed(e) {
       gContent.attr("transform", e.transform);
+    }
+
+    function resetted() {
+      gContent.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
     }
 
     if (showToolTips) {
