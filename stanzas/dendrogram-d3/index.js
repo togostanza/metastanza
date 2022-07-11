@@ -30,7 +30,7 @@ export default class Dendrogram extends Stanza {
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
     const labelMargin = !isNaN(parseFloat(this.params["node-label-margin"]))
-      ? this.params["node-label-margin"]
+      ? parseFloat(this.params["node-label-margin"])
       : 5;
 
     this.renderTemplate({
@@ -77,12 +77,6 @@ export default class Dendrogram extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
-    if (this.params["graph-direction"] === "portrait") {
-      svg.attr("transform", `rotate(90)`);
-    } else {
-      svg.attr("transform", `rotate(0)`);
-    }
-
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
@@ -101,6 +95,8 @@ export default class Dendrogram extends Stanza {
         "transform",
         `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
       );
+
+    const gContent = g.append("g");
 
     const data = denroot.descendants().slice(1);
     const maxDepth = d3.max(data, (d) => d.depth);
@@ -143,6 +139,13 @@ export default class Dendrogram extends Stanza {
     denroot.x0 = height / 2;
     denroot.y0 = 0;
 
+    const getLinkFn = () => {
+      if (this.params["graph-direction"] === "portrait") {
+        return d3.linkVertical();
+      } else {
+        return d3.linkHorizontal();
+      }
+    };
     const update = (source) => {
       graphType.size([
         height,
@@ -152,8 +155,21 @@ export default class Dendrogram extends Stanza {
       let i = 0;
 
       graphType(denroot);
+      if (this.params["graph-direction"] === "portrait") {
+        denroot.descendants().forEach((node) => {
+          const x0 = node.x0;
+          const x = node.x;
+          const y0 = node.y0;
+          const y = node.y;
 
-      const node = g
+          node.x0 = y0;
+          node.x = y;
+          node.y0 = x0;
+          node.y = x;
+        });
+      }
+
+      const node = gContent
         .selectAll(".node")
         .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
@@ -205,7 +221,7 @@ export default class Dendrogram extends Stanza {
         .attr("transform", `translate(${source.y}, ${source.x})`)
         .remove();
 
-      const link = g
+      const link = gContent
         .selectAll(".link")
         .data(denroot.links(), (d) => d.target.id);
 
@@ -213,7 +229,7 @@ export default class Dendrogram extends Stanza {
         .enter()
         .insert("path", "g")
         .classed("link", true)
-        .attr("d", d3.linkHorizontal().x(source.y0).y(source.x0));
+        .attr("d", getLinkFn().x(source.y0).y(source.x0));
 
       const linkUpdate = linkEnter.merge(link);
       linkUpdate
@@ -221,8 +237,7 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr(
           "d",
-          d3
-            .linkHorizontal()
+          getLinkFn()
             .x((d) => d.y)
             .y((d) => d.x)
         );
@@ -231,7 +246,7 @@ export default class Dendrogram extends Stanza {
         .exit()
         .transition()
         .duration(duration)
-        .attr("d", d3.linkHorizontal().x(source.y).y(source.x))
+        .attr("d", getLinkFn().x(source.y).y(source.x))
         .remove();
 
       node.each((d) => {
@@ -258,7 +273,8 @@ export default class Dendrogram extends Stanza {
     svg.call(zoom);
 
     function zoomed(e) {
-      g.attr("transform", e.transform);
+      gContent.attr("transform", e.transform);
+      console.log(e.transform);
     }
 
     if (showToolTips) {
