@@ -71,6 +71,9 @@ export default class Dendrogram extends Stanza {
         }
       });
 
+    denroot.x0 = height / 2;
+    denroot.y0 = 0;
+
     const svg = d3
       .select(el)
       .append("svg")
@@ -128,6 +131,17 @@ export default class Dendrogram extends Stanza {
       }
     };
 
+    const nodeSizeMin = d3.min(data, (d) => d["data"]["size"]);
+    const nodeSizeMax = d3.max(data, (d) => d["data"]["size"]);
+
+    const nodeRadius = d3
+      .scaleSqrt()
+      .domain([nodeSizeMin, nodeSizeMax])
+      .range([
+        this.params["node-size-min_size"],
+        this.params["node-size-max_size"],
+      ]);
+
     let graphType = d3.tree();
 
     if (this.params["graph-type"] === "tree") {
@@ -136,8 +150,28 @@ export default class Dendrogram extends Stanza {
       graphType = d3.cluster();
     }
 
-    denroot.x0 = height / 2;
-    denroot.y0 = 0;
+    let nodeSizeSum = 0;
+    data.forEach((d) => {
+      if (!isNaN(d.data[this.params["node-size-data_key"]])) {
+        nodeSizeSum += d.data[this.params["node-size-data_key"]];
+      }
+    });
+
+    const spaceBetweenNode = nodeRadius(nodeSizeSum / data.length);
+
+    if (this.params["graph-zooming"] === "relative") {
+      graphType.size([
+        height,
+        width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+      ]);
+    } else {
+      graphType.nodeSize([
+        parseFloat(this.params["node-size-fixed_size"] / 2) + spaceBetweenNode,
+        this.params["node-layer_distance"],
+      ]);
+    }
+
+    graphType(denroot);
 
     const getLinkFn = () => {
       if (this.params["graph-direction"] === "vertical") {
@@ -146,28 +180,23 @@ export default class Dendrogram extends Stanza {
         return d3.linkHorizontal();
       }
     };
+
+    if (this.params["graph-direction"] === "vertical") {
+      denroot.descendants().forEach((node) => {
+        const x0 = node.x0;
+        const x = node.x;
+        const y0 = node.y0;
+        const y = node.y;
+
+        node.x0 = y0;
+        node.x = y;
+        node.y0 = x0;
+        node.y = x;
+      });
+    }
+
     const update = (source) => {
-      graphType.size([
-        height,
-        width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
-      ]);
-
       let i = 0;
-
-      graphType(denroot);
-      if (this.params["graph-direction"] === "vertical") {
-        denroot.descendants().forEach((node) => {
-          const x0 = node.x0;
-          const x = node.x;
-          const y0 = node.y0;
-          const y = node.y;
-
-          node.x0 = y0;
-          node.x = y;
-          node.y0 = x0;
-          node.y = x;
-        });
-      }
 
       const node = gContent
         .selectAll(".node")
@@ -213,22 +242,12 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
 
-      const nodeSizeMin = d3.min(data, (d) => d["data"]["size"]);
-      const nodeSizeMax = d3.max(data, (d) => d["data"]["size"]);
-
-      const nodeRadius = d3
-        .scaleSqrt()
-        .domain([nodeSizeMin, nodeSizeMax])
-        .range([
-          this.params["node-size-min_size"],
-          this.params["node-size-max_size"],
-        ]);
-
       nodeUpdate
         .select("circle")
         .attr("r", (d) =>
-          this.params["node-size-fixed_size_display"]
-            ? nodeRadius(d.data[this.params["node-size-fixed_size_key"]]) || 0
+          data.some((d) => d.data[this.params["node-size-data_key"]])
+            ? nodeRadius(d.data[this.params["node-size-data_key"]]) ||
+              nodeRadius(nodeSizeMin)
             : parseFloat(this.params["node-size-fixed_size"] / 2)
         )
         .attr("fill", (d) =>
@@ -277,21 +296,23 @@ export default class Dendrogram extends Stanza {
     };
     update(denroot);
 
-    const maxX = d3.max(data, (d) => d.y);
-    const maxY = d3.max(data, (d) => d.x);
+    if (this.params["graph-zooming"] === "absolute") {
+      const maxX = d3.max(data, (d) => d.y);
+      const maxY = d3.max(data, (d) => d.x);
 
-    const zoom = d3
-      .zoom()
-      .scaleExtent([0.5, 10])
-      .translateExtent([
-        [-maxX + maxX / 5, -maxY + maxY / 5],
-        [width + (maxX * 4) / 5, height + (maxY * 4) / 5],
-      ])
-      .on("zoom", (e) => {
-        zoomed(e);
-      });
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 10])
+        .translateExtent([
+          [-maxX + maxX / 5, -maxY + maxY / 5],
+          [width + (maxX * 4) / 5, height + (maxY * 4) / 5],
+        ])
+        .on("zoom", (e) => {
+          zoomed(e);
+        });
 
-    svg.call(zoom);
+      svg.call(zoom);
+    }
 
     function zoomed(e) {
       gContent.attr("transform", e.transform);
