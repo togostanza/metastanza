@@ -139,8 +139,6 @@ export default class Linechart extends Stanza {
 
     const root = this.root.querySelector("main");
 
-    const el = this.root.getElementById("linechart-d3");
-
     if (root.querySelector("svg")) {
       root.querySelector("svg").remove();
     }
@@ -584,14 +582,14 @@ export default class Linechart extends Stanza {
         });
       } else if (xScale === "ordinal") {
         this._currentData.forEach((d) => {
-          interpolator[d.name] = d3
+          interpolator[d.group] = d3
             .scaleLinear()
             .domain(d.data.map((d) => d.x))
             .range(d.data.map((d) => d.y));
         });
       } else if (xScale === "time") {
         this._currentData.forEach((d) => {
-          interpolator[d.name] = d3
+          interpolator[d.group] = d3
             .scaleTime()
             .domain(d.data.map((d) => d.x))
             .range(d.data.map((d) => d.y));
@@ -626,31 +624,23 @@ export default class Linechart extends Stanza {
           );
 
           updateRange(croppedData);
-        } else if (xScale === "linear" || xScale === "time") {
+        } else {
           const x0x1 = s.map(this._previewScaleX.invert, this._previewScaleX);
           this._scaleX.domain(x0x1);
-          const croppedData = this._currentData.map((d) => {
-            return {
-              group: d.group,
-              color: d.color,
-              show: d.show,
-              data: d.data.filter((v) => x0x1[0] <= v.x && v.x <= x0x1[1]),
-            };
-          });
 
           const extents = [];
 
-          croppedData.forEach((d) => {
-            const values = d.data.map((v) => v.y);
-
-            extents.push(
-              d3.extent(
-                values.concat(x0x1.map((d) => interpolator[d.group](d)))
-              )
+          this._currentData.forEach((d) => {
+            const ext = d3.extent(
+              d.data
+                .filter((v) => x0x1[0] < v.x && v.x < x0x1[1])
+                .map((v) => v.y)
             );
-          });
 
-          // filter all data to be in between x0 x1, and see domain inside it
+            ext.push(...x0x1.map((v) => interpolator[d.group](v)));
+
+            extents.push(d3.extent(ext));
+          });
 
           this._scaleY.domain(d3.extent(extents.flat()));
 
@@ -658,8 +648,6 @@ export default class Linechart extends Stanza {
           graphYAxisG.call(yAxis);
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
-        } else {
-          throw new Error("Unsupported scale");
         }
       };
 
