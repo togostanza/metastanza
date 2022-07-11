@@ -55,10 +55,30 @@
     },
     {
       "stanza:key": "node-size-fixed_size_display",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["false", "true"],
-      "stanza:example": "false",
+      "stanza:type": "boolean",
+      "stanza:example": false,
       "stanza:description": "Display node size"
+    },
+    {
+      "stanza:key": "node-size-fixed_size_key",
+      "stanza:type": "text",
+      "stanza:example": "size",
+      "stanza:description": "Data size in data to map",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-min_size",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "Minimum node circle size in px",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-max_size",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Maximum node circle size in px",
+      "stanza:required": false
     },
     {
       "stanza:key": "tooltips-data_key",

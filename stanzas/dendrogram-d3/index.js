@@ -207,9 +207,24 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
 
+      const nodeSizeMin = d3.min(data, (d) => d["data"]["size"]);
+      const nodeSizeMax = d3.max(data, (d) => d["data"]["size"]);
+
+      const nodeRadius = d3
+        .scaleSqrt()
+        .domain([nodeSizeMin, nodeSizeMax])
+        .range([
+          this.params["node-size-min_size"],
+          this.params["node-size-max_size"],
+        ]);
+
       nodeUpdate
         .select("circle")
-        .attr("r", parseFloat(this.params["node-size-fixed_size"] / 2))
+        .attr("r", (d) =>
+          this.params["node-size-fixed_size_display"]
+            ? nodeRadius(d.data[this.params["node-size-fixed_size_key"]]) || 0
+            : parseFloat(this.params["node-size-fixed_size"] / 2)
+        )
         .attr("fill", (d) =>
           d._children ? "#fff" : d["data"]["color"] || color
         );
@@ -274,7 +289,6 @@ export default class Dendrogram extends Stanza {
 
     function zoomed(e) {
       gContent.attr("transform", e.transform);
-      console.log(e.transform);
     }
 
     if (showToolTips) {
