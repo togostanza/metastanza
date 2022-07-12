@@ -206,7 +206,12 @@ export default class Dendrogram extends Stanza {
         .enter()
         .append("g")
         .classed("node", true)
-        .attr("transform", `translate(${source.y0}, ${source.x0})`)
+        .attr(
+          "transform",
+          this.params["graph-zooming"] === "relative"
+            ? `translate(${source.y0}, ${source.x0})`
+            : `translate(${source.y0}, ${source.x0 + height / 2})`
+        )
         .on("click", (e, d) => {
           toggle(d);
           update(d);
@@ -240,7 +245,11 @@ export default class Dendrogram extends Stanza {
       nodeUpdate
         .transition()
         .duration(duration)
-        .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
+        .attr("transform", (d) =>
+          this.params["graph-zooming"] === "relative"
+            ? `translate(${d.y}, ${d.x})`
+            : `translate(${d.y}, ${d.x + height / 2})`
+        );
 
       const isNodeSizeDataKey = data.some(
         (d) => d.data[this.params["node-size-data_key"]]
@@ -262,7 +271,12 @@ export default class Dendrogram extends Stanza {
         .exit()
         .transition()
         .duration(duration)
-        .attr("transform", `translate(${source.y}, ${source.x})`)
+        .attr(
+          "transform",
+          this.params["graph-zooming"] === "relative"
+            ? `translate(${source.y}, ${source.x})`
+            : `translate(${source.y}, ${source.x + height / 2})`
+        )
         .remove();
 
       const link = gContent
@@ -273,7 +287,14 @@ export default class Dendrogram extends Stanza {
         .enter()
         .insert("path", "g")
         .classed("link", true)
-        .attr("d", getLinkFn().x(source.y0).y(source.x0));
+        .attr(
+          "d",
+          this.params["graph-zooming"] === "relative"
+            ? getLinkFn().x(source.y0).y(source.x0)
+            : getLinkFn()
+                .x(source.y0)
+                .y(source.x0 + height / 2)
+        );
 
       const linkUpdate = linkEnter.merge(link);
       linkUpdate
@@ -281,16 +302,27 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr(
           "d",
-          getLinkFn()
-            .x((d) => d.y)
-            .y((d) => d.x)
+          this.params["graph-zooming"] === "relative"
+            ? getLinkFn()
+                .x((d) => d.y)
+                .y((d) => d.x)
+            : getLinkFn()
+                .x((d) => d.y)
+                .y((d) => d.x + height / 2)
         );
 
       link
         .exit()
         .transition()
         .duration(duration)
-        .attr("d", getLinkFn().x(source.y).y(source.x))
+        .attr(
+          "d",
+          this.params["graph-zooming"] === "relative"
+            ? getLinkFn().x(source.y).y(source.x)
+            : getLinkFn()
+                .x(source.y)
+                .y(source.x + height / 2)
+        )
         .remove();
 
       node.each((d) => {
