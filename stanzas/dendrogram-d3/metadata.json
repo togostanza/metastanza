@@ -119,6 +119,13 @@
       "stanza:choice": ["tree", "cluster"],
       "stanza:example": "tree",
       "stanza:description": "Graph type"
+    },
+    {
+      "stanza:key": "graph-path",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["curve", "straight"],
+      "stanza:example": "curve",
+      "stanza:description": "Graph path"
     }
   ],
   "stanza:menu-placement": "bottom-right",

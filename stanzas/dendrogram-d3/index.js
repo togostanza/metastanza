@@ -283,47 +283,140 @@ export default class Dendrogram extends Stanza {
         .selectAll(".link")
         .data(denroot.links(), (d) => d.target.id);
 
-      const linkEnter = link
-        .enter()
-        .insert("path", "g")
-        .classed("link", true)
-        .attr(
+      const linkEnter = link.enter().insert("path", "g").classed("link", true);
+
+      if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        linkEnter.attr("d", getLinkFn().x(source.y0).y(source.x0));
+      } else if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] !== "relative"
+      ) {
+        linkEnter.attr(
           "d",
-          this.params["graph-zooming"] === "relative"
-            ? getLinkFn().x(source.y0).y(source.x0)
-            : getLinkFn()
-                .x(source.y0)
-                .y(source.x0 + height / 2)
+          getLinkFn()
+            .x(source.y0)
+            .y(source.x0 + height / 2)
         );
+      } else if (
+        this.params["graph-path"] !== "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        linkEnter.attr("d", d3.link(d3.curveStep).x(source.y0).y(source.x0));
+      } else {
+        linkEnter.attr(
+          "d",
+          d3
+            .link(d3.curveStep)
+            .x(source.y0)
+            .y(source.x0 + height / 2)
+        );
+      }
 
       const linkUpdate = linkEnter.merge(link);
-      linkUpdate
-        .transition()
-        .duration(duration)
-        .attr(
-          "d",
-          this.params["graph-zooming"] === "relative"
-            ? getLinkFn()
-                .x((d) => d.y)
-                .y((d) => d.x)
-            : getLinkFn()
-                .x((d) => d.y)
-                .y((d) => d.x + height / 2)
-        );
 
-      link
-        .exit()
-        .transition()
-        .duration(duration)
-        .attr(
-          "d",
-          this.params["graph-zooming"] === "relative"
-            ? getLinkFn().x(source.y).y(source.x)
-            : getLinkFn()
-                .x(source.y)
-                .y(source.x + height / 2)
-        )
-        .remove();
+      if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        linkUpdate
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            getLinkFn()
+              .x((d) => d.y)
+              .y((d) => d.x)
+          );
+      } else if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] !== "relative"
+      ) {
+        linkUpdate
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            getLinkFn()
+              .x((d) => d.y)
+              .y((d) => d.x + height / 2)
+          );
+      } else if (
+        this.params["graph-path"] !== "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        linkUpdate
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            d3
+              .link(d3.curveStep)
+              .x((d) => d.y)
+              .y((d) => d.x)
+          );
+      } else {
+        linkUpdate
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            d3
+              .link(d3.curveStep)
+              .x((d) => d.y)
+              .y((d) => d.x + height / 2)
+          );
+      }
+
+      link.exit().transition().duration(duration).remove();
+
+      if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        link
+          .exit()
+          .transition()
+          .duration(duration)
+          .attr("d", getLinkFn().x(source.y).y(source.x));
+      } else if (
+        this.params["graph-path"] === "curve" &&
+        this.params["graph-zooming"] !== "relative"
+      ) {
+        link
+          .exit()
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            getLinkFn()
+              .x(source.y)
+              .y(source.x + height / 2)
+          );
+      } else if (
+        this.params["graph-path"] !== "curve" &&
+        this.params["graph-zooming"] === "relative"
+      ) {
+        link
+          .exit()
+          .transition()
+          .duration(duration)
+          .attr("d", d3.link(d3.curveStep).x(source.y).y(source.x));
+      } else {
+        link
+          .exit()
+          .transition()
+          .duration(duration)
+          .attr(
+            "d",
+            d3
+              .link(d3.curveStep)
+              .x(source.y)
+              .y(source.x + height / 2)
+          );
+      }
 
       node.each((d) => {
         d.x0 = d.x;
