@@ -242,10 +242,14 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
 
+      const isNodeSizeDataKey = data.some(
+        (d) => d.data[this.params["node-size-data_key"]]
+      );
+
       nodeUpdate
         .select("circle")
         .attr("r", (d) =>
-          data.some((d) => d.data[this.params["node-size-data_key"]])
+          isNodeSizeDataKey
             ? nodeRadius(d.data[this.params["node-size-data_key"]]) ||
               nodeRadius(nodeSizeMin)
             : parseFloat(this.params["node-size-fixed_size"] / 2)
