@@ -77,7 +77,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "axis-x-ticks_labels_angle",
+      "stanza:key": "axis-x-ticks_label_angle",
       "stanza:type": "number",
       "stanza:example": 90,
       "stanza:default": 0,
@@ -102,6 +102,15 @@
       "stanza:description": "Axis placement",
       "stanza:required": false
     },
+    {
+      "stanza:key": "axis-x-preview",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "X axis previev",
+      "stanza:required": false
+    },
+
     {
       "stanza:key": "axis-x-range_min",
       "stanza:type": "text",
@@ -243,6 +252,14 @@
       "stanza:example": "left",
       "stanza:default": "left",
       "stanza:description": "Axis placement",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "axis-y-preview",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "X axis previev",
       "stanza:required": false
     },
     {
