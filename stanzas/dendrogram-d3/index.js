@@ -273,7 +273,9 @@ export default class Dendrogram extends Stanza {
             : parseFloat(this.params["node-size-fixed_size"] / 2)
         )
         .attr("fill", (d) =>
-          d._children ? "#fff" : d["data"]["color"] || color
+          d._children
+            ? "#fff"
+            : d.data[this.params["node-color-data_key"]] || color
         );
 
       node

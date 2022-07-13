@@ -131,6 +131,13 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
+      "stanza:key": "node-color-data_key",
+      "stanza:type": "text",
+      "stanza:default": "color",
+      "stanza:description": "Data color in data to map",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
