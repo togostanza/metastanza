@@ -137,36 +137,6 @@
       "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--togostanza-theme-series_1_color",
-      "stanza:type": "color",
-      "stanza:default": "#3ac9b6",
-      "stanza:description": "Group color 1"
-    },
-    {
-      "stanza:key": "--togostanza-theme-series_2_color",
-      "stanza:type": "color",
-      "stanza:default": "#9ede2f",
-      "stanza:description": "Group color 2"
-    },
-    {
-      "stanza:key": "--togostanza-theme-series_3_color",
-      "stanza:type": "color",
-      "stanza:default": "#E6BB1A",
-      "stanza:description": "Group color 3"
-    },
-    {
-      "stanza:key": "--togostanza-theme-series_4_color",
-      "stanza:type": "color",
-      "stanza:default": "#F57F5B",
-      "stanza:description": "Group color 4"
-    },
-    {
-      "stanza:key": "--togostanza-theme-series_5_color",
-      "stanza:type": "color",
-      "stanza:default": "#F75976",
-      "stanza:description": "Group color 5"
-    },
-    {
       "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
