@@ -77,8 +77,14 @@ export default class Dendrogram extends Stanza {
     const svg = d3
       .select(el)
       .append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      .attr(
+        "width",
+        this.params["graph-direction"] === "horizontal" ? width : height
+      )
+      .attr(
+        "height",
+        this.params["graph-direction"] === "horizontal" ? height : width
+      );
 
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
@@ -96,7 +102,9 @@ export default class Dendrogram extends Stanza {
       .append("g")
       .attr(
         "transform",
-        `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
+        this.params["graph-direction"] === "horizontal"
+          ? `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
+          : `translate(0, ${rootLabelWidth + this.params["node-label-margin"]})`
       );
 
     const gContent = g.append("g");
