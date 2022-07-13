@@ -77,14 +77,8 @@ export default class Dendrogram extends Stanza {
     const svg = d3
       .select(el)
       .append("svg")
-      .attr(
-        "width",
-        this.params["graph-direction"] === "horizontal" ? width : height
-      )
-      .attr(
-        "height",
-        this.params["graph-direction"] === "horizontal" ? height : width
-      );
+      .attr("width", width)
+      .attr("height", height);
 
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
@@ -168,10 +162,17 @@ export default class Dendrogram extends Stanza {
     const spaceBetweenNode = nodeRadius(nodeSizeSum / data.length);
 
     if (this.params["graph-display_mode"] === "fix node size") {
-      graphType.size([
-        height,
-        width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
-      ]);
+      if (this.params["graph-direction"] === "horizontal") {
+        graphType.size([
+          height,
+          width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+        ]);
+      } else {
+        graphType.size([
+          width,
+          height - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+        ]);
+      }
     } else {
       graphType.nodeSize([
         parseFloat(this.params["node-size-fixed_size"] / 2) + spaceBetweenNode,
