@@ -140,14 +140,13 @@
       "stanza:type": "single-choice",
       "stanza:choice": [
         "none",
-        "century",
         "year",
         "month",
+        "week",
         "day",
         "hour",
         "minute",
-        "second",
-        "millisecond"
+        "second"
       ],
       "stanza:example": "none",
       "stanza:default": "none",

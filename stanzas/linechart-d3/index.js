@@ -71,10 +71,6 @@ export default class Linechart extends Stanza {
       x: xScale,
       y: yScale,
     };
-    // const xRangeMin = this._validatedParams.get("axis-x-range_min").value;
-    // const xRangeMax = this._validatedParams.get("axis-x-range_max").value;
-    // const yRangeMin = this._validatedParams.get("axis-y-range_min").value;
-    // const yRangeMax = this._validatedParams.get("axis-y-range_max").value;
 
     const showXPreview = this._validatedParams.get("axis-x-preview").value;
     const showYPreview = this._validatedParams.get("axis-y-preview").value;
@@ -187,8 +183,8 @@ export default class Linechart extends Stanza {
     let chartHeight = HEIGHT;
     let previewXWidth = WIDTH;
     let previewYHeight = HEIGHT;
-    let previewYWidth = WIDTH * 0.2 - PD / 2;
-    let previewXHeight = HEIGHT * 0.2 - PD / 2;
+    const previewYWidth = WIDTH * 0.2 - PD / 2;
+    const previewXHeight = HEIGHT * 0.2 - PD / 2;
 
     if (showXPreview) {
       chartHeight = HEIGHT * 0.8 - PD / 2;
@@ -327,14 +323,6 @@ export default class Linechart extends Stanza {
       .attr("width", SVGWidth)
       .attr("height", SVGHeight);
 
-    svg
-      .append("defs")
-      .append("clipPath")
-      .attr("id", "clip")
-      .append("rect")
-      .attr("width", WIDTH)
-      .attr("height", HEIGHT);
-
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
@@ -400,6 +388,14 @@ export default class Linechart extends Stanza {
     previewXWidth -= yTitleWidth + yTitlePadding;
     previewYHeight -= xTitleHeight + xTitlePadding;
 
+    svg
+      .append("defs")
+      .append("clipPath")
+      .attr("id", "clip")
+      .append("rect")
+      .attr("width", chartWidth)
+      .attr("height", chartHeight);
+
     const chartAreaGroup = graphArea
       .append("g")
       .attr("class", "chart-area")
@@ -407,6 +403,7 @@ export default class Linechart extends Stanza {
 
     let previewXArea;
     let previewYArea;
+
     if (showXPreview) {
       previewXArea = svg
         .append("g")
@@ -414,24 +411,36 @@ export default class Linechart extends Stanza {
         .attr(
           "transform",
           `translate(${SVGMargin.left + yTitleWidth + yTitlePadding}, ${
-            SVGMargin.top + chartHeight + xTitleHeight + xTitlePadding
+            SVGMargin.top + chartHeight + xTitleHeight + xTitlePadding + PD
           })`
         );
     }
+    if (showYPreview) {
+      previewYArea = svg
+        .append("g")
+        .attr("class", "preview")
+        .attr(
+          "transform",
+          `translate(${
+            SVGMargin.left + chartWidth + yTitleWidth + yTitlePadding + PD
+          }, ${SVGMargin.top})`
+        );
+    }
 
-    let xAxis, xAxis2, yAxis, yAxis2;
+    let xAxis, xAxisX, yAxis, yAxisX, yAxisY, xAxisY;
 
     let xExtent, yExtent;
 
     const setXAxes = () => {
       xAxis = d3.axisBottom(this._scaleX);
-      xAxis2 = d3.axisBottom(this._previewXScaleX);
+      xAxisX = d3.axisBottom(this._previewXScaleX);
+      xAxisY = d3.axisBottom(this._previewYScaleX);
     };
 
     const setYAxes = () => {
       yAxis = d3.axisLeft(this._scaleY);
-      yAxis2 = d3.axisLeft(this._previewXScaleY);
-      console.log("yAxis2.range()", previewXHeight);
+      yAxisX = d3.axisLeft(this._previewXScaleY);
+      yAxisY = d3.axisLeft(this._previewYScaleY);
     };
 
     this._scaleX = getScale(xScale).range([0, chartWidth]);
@@ -439,6 +448,8 @@ export default class Linechart extends Stanza {
 
     this._previewXScaleX = getScale(xScale).range([0, previewXWidth]);
     this._previewXScaleY = getScale(yScale).range([previewXHeight, 0]);
+    this._previewYScaleX = getScale(xScale).range([0, previewYWidth]);
+    this._previewYScaleY = getScale(yScale).range([previewYHeight, 0]);
 
     setXAxes();
     setYAxes();
@@ -446,10 +457,10 @@ export default class Linechart extends Stanza {
     if (xScale === "linear") {
       try {
         xAxis.tickFormat(d3.format(xAxisTicksFormat));
-        xAxis2.tickFormat(d3.format(xAxisTicksFormat));
+        xAxisX.tickFormat(d3.format(xAxisTicksFormat));
       } catch {
         xAxis.tickFormat((d) => d);
-        xAxis2.tickFormat((d) => d);
+        xAxisX.tickFormat((d) => d);
       }
 
       if (xTicksInterval) {
@@ -459,53 +470,57 @@ export default class Linechart extends Stanza {
           ticks.push(i);
         }
         xAxis.tickValues(ticks);
-        xAxis2.tickValues(ticks);
+        // xAxisX.tickValues(ticks);
       } else {
         xAxis.ticks(xTicksNumber);
-        xAxis2.ticks(xTicksNumber);
+        // xAxisX.ticks(xTicksNumber);
       }
       try {
         xAxis.tickFormat(xAxisTicksFormat);
-        xAxis2.tickFormat(xAxisTicksFormat);
+        xAxisX.tickFormat(xAxisTicksFormat);
       } catch {
         xAxis.tickFormat((d) => d);
-        xAxis2.tickFormat((d) => d);
+        xAxisX.tickFormat((d) => d);
       }
     } else if (xScale === "time") {
       try {
         xAxis.tickFormat(d3.timeFormat(xAxisTicksFormat));
-        xAxis2.tickFormat(d3.timeFormat(xAxisTicksFormat));
+        xAxisX.tickFormat(d3.timeFormat(xAxisTicksFormat));
       } catch {
         xAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
-        xAxis2.tickFormat(d3.timeFormat("%Y-%m-%d"));
+        xAxisX.tickFormat(d3.timeFormat("%Y-%m-%d"));
       }
 
-      if (xTicksInterval && xAxisTicksIntervalUnits) {
+      if (
+        xTicksInterval &&
+        xAxisTicksIntervalUnits &&
+        xAxisTicksIntervalUnits !== "none"
+      ) {
         const interval =
           intervalMap[xAxisTicksIntervalUnits]().every(xTicksInterval);
         xAxis.ticks(interval);
-        xAxis2.ticks(interval);
+        // xAxisX.ticks(interval);
       } else {
         xAxis.ticks(xTicksNumber);
-        xAxis2.ticks(xTicksNumber);
+        // xAxisX.ticks(xTicksNumber);
       }
     } else {
       try {
         xAxis.tickFormat(d3.format(xAxisTicksFormat));
-        xAxis2.tickFormat(d3.format(xAxisTicksFormat));
+        xAxisX.tickFormat(d3.format(xAxisTicksFormat));
       } catch {
         xAxis.tickFormat((d) => d);
-        xAxis2.tickFormat((d) => d);
+        xAxisX.tickFormat((d) => d);
       }
     }
 
     if (yScale === "linear") {
       try {
         yAxis.tickFormat(d3.format(yAxisTicksFormat));
-        yAxis2.tickFormat(d3.format(yAxisTicksFormat));
+        yAxisX.tickFormat(d3.format(yAxisTicksFormat));
       } catch {
         yAxis.tickFormat((d) => d);
-        yAxis2.tickFormat((d) => d);
+        yAxisX.tickFormat((d) => d);
       }
 
       if (yTicksInterval) {
@@ -518,31 +533,10 @@ export default class Linechart extends Stanza {
       } else {
         yAxis.ticks(yTicksNumber);
       }
-      yAxis2.ticks(2);
-    } else if (yScale === "time") {
-      try {
-        yAxis.tickFormat(d3.timeFormat(yAxisTicksFormat));
-        yAxis2.tickFormat(d3.timeFormat(yAxisTicksFormat));
-      } catch {
-        yAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
-        yAxis2.tickFormat(d3.timeFormat("%Y-%m-%d"));
-      }
-
-      if (
-        yTicksInterval &&
-        yAxisTicksIntervalUnits &&
-        yAxisTicksIntervalUnits !== "none"
-      ) {
-        yAxis.ticks(
-          intervalMap[yAxisTicksIntervalUnits]().every(yTicksInterval)
-        );
-      } else {
-        yAxis.ticks(yTicksNumber);
-      }
-      yAxis2.ticks(2);
+      yAxisX.ticks(2);
     } else {
       yAxis.tickFormat(d3.format(yAxisTicksFormat));
-      yAxis2.tickFormat(d3.format(yAxisTicksFormat));
+      yAxisX.tickFormat(d3.format(yAxisTicksFormat));
     }
 
     const line = d3
@@ -554,14 +548,10 @@ export default class Linechart extends Stanza {
         return this._scaleX(d.x);
       })
       .y((d) => {
-        if (yScale === "ordinal") {
-          return this._scaleY(d.y) + this._scaleY.bandwidth() / 2;
-        }
-
         return this._scaleY(d.y);
       });
 
-    const line2 = d3
+    const linePreviewX = d3
       .line()
       .x((d) => {
         if (xScale === "ordinal") {
@@ -572,6 +562,13 @@ export default class Linechart extends Stanza {
         return this._previewXScaleX(d.x);
       })
       .y((d) => this._previewXScaleY(d.y));
+
+    const linePreviewY = d3
+      .line()
+      .x((d) => this._previewYScaleX(d.x))
+      .y((d) => {
+        return this._previewYScaleY(d.y);
+      });
 
     const graphXAxisG = xAxisTitleGroup
       .append("g")
@@ -585,6 +582,8 @@ export default class Linechart extends Stanza {
 
     let previewXAxisXG;
     let previewXAxisYG;
+    let previewYAxisXG;
+    let previewYAxisYG;
     if (showXPreview) {
       previewXAxisXG = previewXArea
         .append("g")
@@ -593,7 +592,18 @@ export default class Linechart extends Stanza {
         .attr("clip-path", "url(#clip)");
 
       previewXAxisYG = previewXArea.append("g").attr("class", "axis y");
-      previewXArea.append("g").attr("class", "brush");
+      previewXArea.append("g").attr("class", "brushX");
+    }
+
+    if (showYPreview) {
+      previewYAxisXG = previewYArea
+        .append("g")
+        .attr("class", "axis x")
+        .attr("transform", `translate(${previewYHeight}, 0)`)
+        .attr("clip-path", "url(#clip)");
+
+      previewYAxisYG = previewYArea.append("g").attr("class", "axis y");
+      previewYArea.append("g").attr("class", "brushY");
     }
 
     const update = () => {
@@ -642,7 +652,29 @@ export default class Linechart extends Stanza {
           .enter()
           .append("path")
           .attr("class", "line")
-          .attr("d", (d) => line2(d.data))
+          .attr("d", (d) => linePreviewX(d.data))
+          .attr("clip-path", "url(#clip)");
+
+        previewLinesUpdate
+          .merge(previewLinesEnter)
+          .attr("stroke", (d) => d.color);
+
+        const previewLinesExit = previewLinesUpdate.exit().remove();
+      }
+
+      if (showYPreview) {
+        this._previewYScaleX.domain(getXDomain());
+        this._previewYScaleY.domain(getYDomain());
+
+        const previewLinesUpdate = previewYArea
+          .selectAll(".line")
+          .data(this._currentData);
+
+        const previewLinesEnter = previewLinesUpdate
+          .enter()
+          .append("path")
+          .attr("class", "line")
+          .attr("d", (d) => linePreviewY(d.data))
           .attr("clip-path", "url(#clip)");
 
         previewLinesUpdate
@@ -722,8 +754,14 @@ export default class Linechart extends Stanza {
         return;
       }
 
-      const brushed = (e) => {
+      const brushedX = (e) => {
         const s = e.selection || this._previewXScaleX.range();
+
+        previewXArea.select(".left").attr("width", s[0]);
+        previewXArea
+          .select(".right")
+          .attr("width", previewXWidth - s[1])
+          .attr("x", s[1]);
 
         if (xScale === "ordinal") {
           const currentRange = [
@@ -750,6 +788,7 @@ export default class Linechart extends Stanza {
           );
 
           updateRange(croppedData);
+          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
         } else {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
@@ -780,10 +819,35 @@ export default class Linechart extends Stanza {
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
         }
       };
+      const brushedY = (e) => {
+        const s = e.selection || this._previewYScaleY.range();
+
+        previewYArea.select(".top").attr("height", Math.min(...s));
+        previewYArea
+          .select(".bottom")
+          .attr("height", previewYHeight - Math.max(...s))
+          .attr("y", Math.max(...s));
+
+        const y0y1 = s.map(this._previewYScaleY.invert, this._previewYScaleY);
+
+        this._scaleY.domain(d3.extent(y0y1));
+
+        if (!hideXAxis && !hideXAxisTicks) {
+          graphXAxisG.call(xAxis).call(rotateXTickLabels);
+        }
+        if (!hideYAxis && !hideYAxisTicks) {
+          graphYAxisG.call(yAxis);
+        }
+
+        graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+      };
 
       const updateRange = (data) => {
-        chartAreaGroup.selectAll(".line").remove();
-        const linesUpdate = chartAreaGroup.selectAll(".line").data(data);
+        //chartAreaGroup.selectAll(".line").remove();
+
+        const linesUpdate = chartAreaGroup
+          .selectAll(".line")
+          .data(data, (d) => d.group);
 
         const linesEnter = linesUpdate
           .enter()
@@ -799,8 +863,13 @@ export default class Linechart extends Stanza {
         graphYAxisG.call(yAxis);
 
         if (showXPreview) {
-          previewXAxisXG.call(xAxis2).call(rotateXTickLabels);
-          previewXAxisYG.call(yAxis2);
+          previewXAxisXG.call(xAxisX).call(rotateXTickLabels);
+          previewXAxisYG.call(yAxisX);
+        }
+
+        if (showYPreview) {
+          previewYAxisXG.call(xAxisY).call(rotateXTickLabels);
+          previewYAxisYG.call(yAxisY);
         }
 
         if (hideXAxis) {
@@ -838,6 +907,7 @@ export default class Linechart extends Stanza {
       updateRange(this._currentData);
 
       let brushX;
+      let brushY;
 
       if (showXPreview) {
         brushX = d3
@@ -846,9 +916,43 @@ export default class Linechart extends Stanza {
             [0, 0],
             [previewXWidth, previewXHeight],
           ])
-          .on("brush end", brushed);
-
+          .on("brush end", brushedX);
+        previewXArea
+          .append("rect")
+          .attr("class", "non-selection left")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("height", previewXHeight);
+        previewXArea
+          .append("rect")
+          .attr("class", "non-selection right")
+          .attr("y", 0)
+          .attr("height", previewXHeight);
         previewXArea.call(brushX).call(brushX.move, this._scaleX.range());
+      }
+      if (showYPreview) {
+        brushY = d3
+          .brushY()
+          .extent([
+            [0, 0],
+            [previewYWidth, previewYHeight],
+          ])
+          .on("brush end", brushedY);
+
+        previewYArea
+          .append("rect")
+          .attr("class", "non-selection top")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", previewYWidth);
+
+        previewYArea
+          .append("rect")
+          .attr("class", "non-selection bottom")
+          .attr("x", 0)
+          .attr("width", previewYWidth);
+
+        previewYArea.call(brushY).call(brushY.move, this._scaleY.range());
       }
     };
 

@@ -36,6 +36,15 @@ svg {
     pointer-events: all;
   }
 
+  rect.selection {
+    fill: none;
+  }
+  rect.non-selection {
+    fill: #777;
+    fill-opacity: 0.2;
+    stroke: none;
+  }
+
   .gridlines {
     & > .tick > line {
       stroke: var(--togostanza-grid-color);
