@@ -94,11 +94,11 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "graph-zooming",
+      "stanza:key": "graph-display_mode",
       "stanza:type": "single-choice",
-      "stanza:choice": ["relative", "absolute"],
-      "stanza:example": "relative",
-      "stanza:description": "Graph zooming"
+      "stanza:choice": ["fix node size", "fix graph size"],
+      "stanza:example": "fix node size",
+      "stanza:description": "Graph display mode"
     },
     {
       "stanza:key": "node-layer_distance",

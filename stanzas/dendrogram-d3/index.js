@@ -159,7 +159,7 @@ export default class Dendrogram extends Stanza {
 
     const spaceBetweenNode = nodeRadius(nodeSizeSum / data.length);
 
-    if (this.params["graph-zooming"] === "relative") {
+    if (this.params["graph-display_mode"] === "fix node size") {
       graphType.size([
         height,
         width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
@@ -208,7 +208,7 @@ export default class Dendrogram extends Stanza {
         .classed("node", true)
         .attr(
           "transform",
-          this.params["graph-zooming"] === "relative"
+          this.params["graph-display_mode"] === "fix node size"
             ? `translate(${source.y0}, ${source.x0})`
             : `translate(${source.y0}, ${source.x0 + height / 2})`
         )
@@ -246,7 +246,7 @@ export default class Dendrogram extends Stanza {
         .transition()
         .duration(duration)
         .attr("transform", (d) =>
-          this.params["graph-zooming"] === "relative"
+          this.params["graph-display_mode"] === "fix node size"
             ? `translate(${d.y}, ${d.x})`
             : `translate(${d.y}, ${d.x + height / 2})`
         );
@@ -273,7 +273,7 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr(
           "transform",
-          this.params["graph-zooming"] === "relative"
+          this.params["graph-display_mode"] === "fix node size"
             ? `translate(${source.y}, ${source.x})`
             : `translate(${source.y}, ${source.x + height / 2})`
         )
@@ -287,12 +287,12 @@ export default class Dendrogram extends Stanza {
 
       if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         linkEnter.attr("d", getLinkFn().x(source.y0).y(source.x0));
       } else if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] !== "relative"
+        this.params["graph-display_mode"] !== "fix node size"
       ) {
         linkEnter.attr(
           "d",
@@ -302,7 +302,7 @@ export default class Dendrogram extends Stanza {
         );
       } else if (
         this.params["graph-path"] !== "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         linkEnter.attr("d", d3.link(d3.curveStep).x(source.y0).y(source.x0));
       } else {
@@ -319,7 +319,7 @@ export default class Dendrogram extends Stanza {
 
       if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         linkUpdate
           .transition()
@@ -332,7 +332,7 @@ export default class Dendrogram extends Stanza {
           );
       } else if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] !== "relative"
+        this.params["graph-display_mode"] !== "fix node size"
       ) {
         linkUpdate
           .transition()
@@ -345,7 +345,7 @@ export default class Dendrogram extends Stanza {
           );
       } else if (
         this.params["graph-path"] !== "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         linkUpdate
           .transition()
@@ -374,7 +374,7 @@ export default class Dendrogram extends Stanza {
 
       if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         link
           .exit()
@@ -383,7 +383,7 @@ export default class Dendrogram extends Stanza {
           .attr("d", getLinkFn().x(source.y).y(source.x));
       } else if (
         this.params["graph-path"] === "curve" &&
-        this.params["graph-zooming"] !== "relative"
+        this.params["graph-display_mode"] !== "fix node size"
       ) {
         link
           .exit()
@@ -397,7 +397,7 @@ export default class Dendrogram extends Stanza {
           );
       } else if (
         this.params["graph-path"] !== "curve" &&
-        this.params["graph-zooming"] === "relative"
+        this.params["graph-display_mode"] === "fix node size"
       ) {
         link
           .exit()
@@ -439,7 +439,7 @@ export default class Dendrogram extends Stanza {
         zoomed(e);
       });
 
-    if (this.params["graph-zooming"] === "absolute") {
+    if (this.params["graph-display_mode"] === "fix graph size") {
       svg.call(zoom);
       svg.on("dblclick.zoom", resetted);
     }
