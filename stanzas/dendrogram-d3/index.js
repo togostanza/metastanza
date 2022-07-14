@@ -346,11 +346,11 @@ export default class Dendrogram extends Stanza {
                 .x((d) => d.y)
                 .y((d) => d.x + height / 2)
             : (d) =>
-                `M${d.source.y},${d.source.x} L${d.source.y},${
-                  (d.target.x + d.source.x) / 2
-                }  L${d.target.y},${(d.target.x + d.source.x) / 2} L${
-                  d.target.y
-                },${d.target.x}`
+                `M${d.source.y},${d.source.x + height / 2} L${d.source.y},${
+                  (d.target.x + d.source.x) / 2 + height / 2
+                }  L${d.target.y},${
+                  (d.target.x + d.source.x) / 2 + height / 2
+                } L${d.target.y},${d.target.x + height / 2}`
         );
 
       link
