@@ -94,14 +94,22 @@ export default class Dendrogram extends Stanza {
       .attr(
         "transform",
         this.params["graph-direction"] === "horizontal"
-          ? `translate(${rootLabelWidth + this.params["node-label-margin"]}, 0)`
-          : `translate(0, ${rootLabelWidth + this.params["node-label-margin"]})`
+          ? `translate(${rootLabelWidth + this.params["node-label-margin"]}, ${
+              this.params["user-y-margin"]
+            })`
+          : `translate(${this.params["user-y-margin"]}, ${
+              rootLabelWidth + this.params["node-label-margin"]
+            })`
       );
 
     const gContent = g.append("g");
 
     const data = denroot.descendants().slice(1);
     const maxDepth = d3.max(data, (d) => d.depth);
+
+    const isNodeSizeDataKey = data.some(
+      (d) => d.data[this.params["node-size-data_key"]]
+    );
 
     const labelsarray = [];
     for (const n of data) {
@@ -141,38 +149,44 @@ export default class Dendrogram extends Stanza {
         this.params["node-size-max_size"],
       ]);
 
-    let graphType = d3.tree();
+    let nodeSizeSum = 0;
+    let num = 0;
+    data.forEach((d) => {
+      if (!isNaN(parseFloat(d.data[this.params["node-size-data_key"]]))) {
+        nodeSizeSum += nodeRadius(d.data[this.params["node-size-data_key"]]);
+        num++;
+      }
+    });
 
+    let spaceBetweenNode;
+    if (isNodeSizeDataKey) {
+      spaceBetweenNode = nodeSizeSum / num;
+    } else {
+      spaceBetweenNode = this.params["node-size-fixed_size"];
+    }
+
+    let graphType = d3.tree();
     if (this.params["graph-type"] === "tree") {
       graphType = d3.tree();
     } else {
       graphType = d3.cluster();
     }
 
-    let nodeSizeSum = 0;
-    data.forEach((d) => {
-      if (!isNaN(d.data[this.params["node-size-data_key"]])) {
-        nodeSizeSum += d.data[this.params["node-size-data_key"]];
-      }
-    });
-
-    const spaceBetweenNode = nodeRadius(nodeSizeSum / data.length);
-
     if (this.params["graph-display_mode"] === "fix node size") {
       if (this.params["graph-direction"] === "horizontal") {
         graphType.size([
-          height,
+          height - 2 * this.params["user-y-margin"],
           width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
         ]);
       } else {
         graphType.size([
-          width,
+          width - 2 * this.params["user-y-margin"],
           height - maxLabelWidth - rootLabelWidth - labelMargin * 2,
         ]);
       }
     } else {
       graphType.nodeSize([
-        parseFloat(this.params["node-size-fixed_size"] / 2) + spaceBetweenNode,
+        spaceBetweenNode * Math.E,
         this.params["node-layer_distance"],
       ]);
     }
@@ -268,10 +282,6 @@ export default class Dendrogram extends Stanza {
             ? `translate(${d.y}, ${d.x + height / 2})`
             : `translate(${d.y + width / 2}, ${d.x})`
         );
-
-      const isNodeSizeDataKey = data.some(
-        (d) => d.data[this.params["node-size-data_key"]]
-      );
 
       nodeUpdate
         .select("circle")
@@ -417,15 +427,23 @@ export default class Dendrogram extends Stanza {
     update(denroot);
 
     const maxX = d3.max(data, (d) => d.y);
+    const minX = d3.min(data, (d) => d.y);
     const maxY = d3.max(data, (d) => d.x);
+    const minY = d3.min(data, (d) => d.x);
+    const dataWidth = maxX - minX;
+    const dataHeight = maxY - minY;
 
     const zoom = d3
       .zoom()
       .scaleExtent([0.5, 10])
       .translateExtent([
-        [-maxX + maxX / 5, -maxY + maxY / 5],
-        [width + (maxX * 4) / 5, height + (maxY * 4) / 5],
+        [-dataWidth + dataWidth / 5, -dataHeight + dataHeight / 5],
+        [
+          width + dataWidth - dataWidth / 5,
+          height + dataHeight - dataHeight / 5,
+        ],
       ])
+
       .on("zoom", (e) => {
         zoomed(e);
       });

@@ -47,6 +47,13 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "user-y-margin",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Y margin in px",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "node-size-fixed_size",
       "stanza:type": "number",
       "stanza:example": 8,
