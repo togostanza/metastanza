@@ -71,9 +71,6 @@ export default class Dendrogram extends Stanza {
         }
       });
 
-    denroot.x0 = height / 2;
-    denroot.y0 = 0;
-
     const svg = d3
       .select(el)
       .append("svg")
@@ -181,6 +178,14 @@ export default class Dendrogram extends Stanza {
     }
 
     graphType(denroot);
+
+    if (this.params["graph-display_mode"] === "fix node size") {
+      denroot.x0 = data[0].parent.x;
+      denroot.y0 = 0;
+    } else {
+      denroot.x0 = 0;
+      denroot.y0 = 0;
+    }
 
     const getLinkFn = () => {
       if (this.params["graph-direction"] === "vertical") {
