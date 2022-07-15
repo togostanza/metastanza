@@ -224,35 +224,6 @@ export default class Linechart extends Stanza {
       }
     }
 
-    // function cropData(axis, range) {
-    //   if (axisType[axis] === "ordinal") {
-    //     this._groupedData = this._groupedData
-    //       .map((d) => {
-    //         const localFrom = [
-    //           ...new Set(d.data.map((e) => e[axis])),
-    //         ].findIndex((e) => e === range[0]);
-    //         const localTo = [...new Set(d.data.map((e) => e[axis]))].findIndex(
-    //           (e) => e === range[range.length - 1]
-    //         );
-    //         return {
-    //           ...d,
-    //           data: d.data.slice(localFrom, localTo + 1),
-    //         };
-    //       })
-    //       .filter((d) => d && d.data.length > 0);
-    //   } else {
-    //     this._groupedData.forEach((d) => {
-    //       d.data = d.data.filter((v) => {
-    //         return range[0] <= v[axis] && v[axis] <= range[range.length - 1];
-    //       });
-    //     });
-
-    //     this._groupedData = this._groupedData.filter(
-    //       (group) => group.data.length > 0
-    //     );
-    //   }
-    // }
-
     function parseData() {
       this._data.forEach((d) => {
         d[xKeyName] = parseValue(d[xKeyName], xScale);
@@ -431,12 +402,12 @@ export default class Linechart extends Stanza {
     const setXAxes = () => {
       xAxis = d3.axisBottom(this._scaleX);
       xAxisX = d3.axisBottom(this._previewXScaleX);
-      xAxisY = d3.axisBottom(this._previewYScaleX);
+      xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
     };
 
     const setYAxes = () => {
       yAxis = d3.axisLeft(this._scaleY);
-      yAxisX = d3.axisLeft(this._previewXScaleY);
+      yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
       yAxisY = d3.axisLeft(this._previewYScaleY);
     };
 
@@ -514,10 +485,8 @@ export default class Linechart extends Stanza {
     if (yScale === "linear") {
       try {
         yAxis.tickFormat(d3.format(yAxisTicksFormat));
-        yAxisX.tickFormat(d3.format(yAxisTicksFormat));
       } catch {
         yAxis.tickFormat((d) => d);
-        yAxisX.tickFormat((d) => d);
       }
 
       if (yTicksInterval) {
@@ -530,10 +499,8 @@ export default class Linechart extends Stanza {
       } else {
         yAxis.ticks(yTicksNumber);
       }
-      yAxisX.ticks(2);
     } else {
       yAxis.tickFormat(d3.format(yAxisTicksFormat));
-      yAxisX.tickFormat(d3.format(yAxisTicksFormat));
     }
 
     const line = d3
@@ -843,6 +810,10 @@ export default class Linechart extends Stanza {
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
       };
+      const errorG = chartAreaGroup
+        .append("g")
+        .classed("error-bars", true)
+        .attr("clip-path", "url(#clip)");
 
       const updateRange = (data) => {
         //chartAreaGroup.selectAll(".line").remove();
@@ -860,6 +831,38 @@ export default class Linechart extends Stanza {
 
         linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
         linesUpdate.exit().remove();
+
+        chartAreaGroup.call((g) => {
+          const lines = g.selectAll(".line");
+          lines.each((d) => {
+            const updateErrG = errorG.selectAll("g").data(d.data);
+
+            const enterErrG = updateErrG
+              .enter()
+              .append("g")
+              .attr("class", "error-bar")
+              .attr("transform", (d) => {
+                console.log(d);
+                return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
+              });
+
+            enterErrG
+              .append("line")
+              .attr("y1", (d) =>
+                Math.abs(this._scaleY(d.y * 1.1) - this._scaleY(d.y))
+              )
+              .attr(
+                "y2",
+                (d) => -Math.abs(this._scaleY(d.y * 1.1) - this._scaleY(d.y))
+              )
+              .attr("x1", 0)
+              .attr("x2", 0)
+              .attr("stroke", "black");
+            updateErrG.merge(enterErrG).attr("fill", (d) => d.color);
+
+            updateErrG.exit().remove();
+          });
+        });
 
         graphXAxisG.call(xAxis).call(rotateXTickLabels);
         graphYAxisG.call(yAxis);

@@ -25,9 +25,9 @@ svg {
   font-family: var(--togostanza-fonts-font_family);
   background-color: var(--togostanza-background-color);
 
-  .error-bar > line {
-    stroke-width: var(--togostanza-errorbar-line-width);
-    stroke: var(--togostanza-errorbar-line-color);
+  .error-bars > line {
+    stroke: var(--togostanza-theme-primary_color);
+    stroke-width: calc(var(--togostanza-error_bars-width) * 1px);
   }
 
   .zoom {
