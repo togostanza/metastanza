@@ -137,6 +137,7 @@ export default class Linechart extends Stanza {
       yKeyName = "value";
     }
 
+    /* eslint-disable-next-line */
     this._data = structuredClone(values);
 
     parseData.call(this);

@@ -107,7 +107,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:default": false,
-      "stanza:description": "X axis previev",
+      "stanza:description": "Show",
       "stanza:required": false
     },
 
@@ -258,7 +258,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:default": false,
-      "stanza:description": "X axis previev",
+      "stanza:description": "Show",
       "stanza:required": false
     },
     {
