@@ -103,8 +103,8 @@
     {
       "stanza:key": "graph-display_mode",
       "stanza:type": "single-choice",
-      "stanza:choice": ["fix node size", "fix graph size"],
-      "stanza:example": "fix node size",
+      "stanza:choice": ["fix graph size", "fix node size"],
+      "stanza:example": "fix graph size",
       "stanza:description": "Graph display mode"
     },
     {

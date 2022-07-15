@@ -172,7 +172,7 @@ export default class Dendrogram extends Stanza {
       graphType = d3.cluster();
     }
 
-    if (this.params["graph-display_mode"] === "fix node size") {
+    if (this.params["graph-display_mode"] === "fix graph size") {
       if (this.params["graph-direction"] === "horizontal") {
         graphType.size([
           height - 2 * this.params["user-y-margin"],
@@ -193,7 +193,7 @@ export default class Dendrogram extends Stanza {
 
     graphType(denroot);
 
-    if (this.params["graph-display_mode"] === "fix node size") {
+    if (this.params["graph-display_mode"] === "fix graph size") {
       denroot.x0 = data[0].parent.x;
       denroot.y0 = 0;
     } else {
@@ -236,7 +236,7 @@ export default class Dendrogram extends Stanza {
         .classed("node", true)
         .attr(
           "transform",
-          this.params["graph-display_mode"] === "fix node size"
+          this.params["graph-display_mode"] === "fix graph size"
             ? `translate(${source.y0}, ${source.x0})`
             : this.params["graph-direction"] === "horizontal"
             ? `translate(${source.y0}, ${source.x0 + height / 2})`
@@ -276,7 +276,7 @@ export default class Dendrogram extends Stanza {
         .transition()
         .duration(duration)
         .attr("transform", (d) =>
-          this.params["graph-display_mode"] === "fix node size"
+          this.params["graph-display_mode"] === "fix graph size"
             ? `translate(${d.y}, ${d.x})`
             : this.params["graph-direction"] === "horizontal"
             ? `translate(${d.y}, ${d.x + height / 2})`
@@ -303,7 +303,7 @@ export default class Dendrogram extends Stanza {
         .duration(duration)
         .attr(
           "transform",
-          this.params["graph-display_mode"] === "fix node size"
+          this.params["graph-display_mode"] === "fix graph size"
             ? `translate(${source.y}, ${source.x})`
             : this.params["graph-direction"] === "horizontal"
             ? `translate(${source.y}, ${source.x + height / 2})`
@@ -322,7 +322,7 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           this.params["graph-path"] === "curve"
-            ? this.params["graph-display_mode"] === "fix node size"
+            ? this.params["graph-display_mode"] === "fix graph size"
               ? getLinkFn().x(source.y0).y(source.x0)
               : this.params["graph-direction"] === "horizontal"
               ? getLinkFn()
@@ -331,7 +331,7 @@ export default class Dendrogram extends Stanza {
               : getLinkFn()
                   .x(source.y0 + width / 2)
                   .y(source.x0)
-            : this.params["graph-display_mode"] === "fix node size"
+            : this.params["graph-display_mode"] === "fix graph size"
             ? d3.link(d3.curveStep).x(source.y0).y(source.x0)
             : this.params["graph-direction"] === "horizontal"
             ? d3
@@ -351,7 +351,7 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           this.params["graph-path"] === "curve"
-            ? this.params["graph-display_mode"] === "fix node size"
+            ? this.params["graph-display_mode"] === "fix graph size"
               ? getLinkFn()
                   .x((d) => d.y)
                   .y((d) => d.x)
@@ -362,7 +362,7 @@ export default class Dendrogram extends Stanza {
               : getLinkFn()
                   .x((d) => d.y + width / 2)
                   .y((d) => d.x)
-            : this.params["graph-display_mode"] === "fix node size"
+            : this.params["graph-display_mode"] === "fix graph size"
             ? this.params["graph-direction"] === "horizontal"
               ? d3
                   .link(d3.curveStep)
@@ -396,7 +396,7 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           this.params["graph-path"] === "curve"
-            ? this.params["graph-display_mode"] === "fix node size"
+            ? this.params["graph-display_mode"] === "fix graph size"
               ? getLinkFn().x(source.y).y(source.x)
               : this.params["graph-direction"] === "horizontal"
               ? getLinkFn()
@@ -405,7 +405,7 @@ export default class Dendrogram extends Stanza {
               : getLinkFn()
                   .x(source.y + width / 2)
                   .y(source.x)
-            : this.params["graph-display_mode"] === "fix node size"
+            : this.params["graph-display_mode"] === "fix graph size"
             ? d3.link(d3.curveStep).x(source.y).y(source.x)
             : this.params["graph-direction"] === "horizontal"
             ? d3
@@ -448,7 +448,7 @@ export default class Dendrogram extends Stanza {
         zoomed(e);
       });
 
-    if (this.params["graph-display_mode"] === "fix graph size") {
+    if (this.params["graph-display_mode"] === "fix node size") {
       svg.call(zoom);
       svg.on("dblclick.zoom", resetted);
     }
