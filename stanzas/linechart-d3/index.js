@@ -67,10 +67,6 @@ export default class Linechart extends Stanza {
 
     const xScale = this._validatedParams.get("axis-x-scale").value;
     const yScale = this._validatedParams.get("axis-y-scale").value;
-    const axisType = {
-      x: xScale,
-      y: yScale,
-    };
 
     const showXPreview = this._validatedParams.get("axis-x-preview").value;
     const showYPreview = this._validatedParams.get("axis-y-preview").value;
@@ -141,7 +137,7 @@ export default class Linechart extends Stanza {
       yKeyName = "value";
     }
 
-    this._data = values;
+    this._data = structuredClone(values);
 
     parseData.call(this);
 
@@ -599,7 +595,7 @@ export default class Linechart extends Stanza {
       previewYAxisXG = previewYArea
         .append("g")
         .attr("class", "axis x")
-        .attr("transform", `translate(${previewYHeight}, 0)`)
+        .attr("transform", `translate(0, ${previewYHeight})`)
         .attr("clip-path", "url(#clip)");
 
       previewYAxisYG = previewYArea.append("g").attr("class", "axis y");
@@ -783,9 +779,12 @@ export default class Linechart extends Stanza {
           });
 
           this._scaleX.domain(newDomainX);
-          this._scaleY.domain(
-            d3.extent(croppedData.map((d) => d.data.map((v) => v.y)).flat())
-          );
+
+          if (!showYPreview) {
+            this._scaleY.domain(
+              d3.extent(croppedData.map((d) => d.data.map((v) => v.y)).flat())
+            );
+          }
 
           updateRange(croppedData);
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
@@ -793,21 +792,23 @@ export default class Linechart extends Stanza {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
 
-          const extents = [];
+          if (!showYPreview) {
+            const extents = [];
 
-          this._currentData.forEach((d) => {
-            const ext = d3.extent(
-              d.data
-                .filter((v) => x0x1[0] < v.x && v.x < x0x1[1])
-                .map((v) => v.y)
-            );
+            this._currentData.forEach((d) => {
+              const ext = d3.extent(
+                d.data
+                  .filter((v) => x0x1[0] < v.x && v.x < x0x1[1])
+                  .map((v) => v.y)
+              );
 
-            ext.push(...x0x1.map((v) => interpolator[d.group](v)));
+              ext.push(...x0x1.map((v) => interpolator[d.group](v)));
 
-            extents.push(d3.extent(ext));
-          });
+              extents.push(d3.extent(ext));
+            });
 
-          this._scaleY.domain(d3.extent(extents.flat()));
+            this._scaleY.domain(d3.extent(extents.flat()));
+          }
 
           if (!hideXAxis && !hideXAxisTicks) {
             graphXAxisG.call(xAxis).call(rotateXTickLabels);
