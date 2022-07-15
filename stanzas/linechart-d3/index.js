@@ -834,15 +834,20 @@ export default class Linechart extends Stanza {
 
         chartAreaGroup.call((g) => {
           const lines = g.selectAll(".line");
+
           lines.each((d) => {
-            const updateErrG = errorG.selectAll("g").data(d.data);
+            const ebg = errorG
+              .append("g")
+              .attr("class", "error-bar-group")
+              .attr("data-group", d.group);
+
+            const updateErrG = ebg.selectAll("g").data(d.data);
 
             const enterErrG = updateErrG
               .enter()
               .append("g")
               .attr("class", "error-bar")
               .attr("transform", (d) => {
-                console.log(d);
                 return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
               });
 

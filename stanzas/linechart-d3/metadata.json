@@ -15,9 +15,9 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example_old2": "https://drive.google.com/uc?id=13ZJ1iAbZF_3w8hz-8sP8EiKfcDbyjFN1&authuser=0",
+      "stanza:example": "https://drive.google.com/uc?id=13ZJ1iAbZF_3w8hz-8sP8EiKfcDbyjFN1&authuser=0",
       "stanza:example_old": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example_old2": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -25,7 +25,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
+      "stanza:example": "csv",
       "stanza:description": "Data type",
       "stanza:required": true
     },
