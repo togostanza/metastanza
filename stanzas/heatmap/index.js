@@ -71,13 +71,13 @@ export default class Heatmap extends Stanza {
     const rows = [...new Set(dataset.map((d) => d[xDataKey]))];
     const columns = [...new Set(dataset.map((d) => d[yDataKey]))];
 
-    const x = d3.scaleBand().domain(rows).range([0, width - 10]);
+    const x = d3.scaleBand().domain(rows.slice(this.params["axis-x-range_min"],this.params["axis-x-range_max"])).range([0, width - 10]);
     const xAxisGenerator = d3
       .axisBottom(x)
       .tickSizeOuter(0)
       .tickSizeInner(tickSize);
 
-    const y = d3.scaleBand().range([height, 10]).domain(columns);
+    const y = d3.scaleBand().range([height, 0]).domain(columns.slice(this.params["axis-y-range_min"],this.params["axis-y-range_max"]));
     const yAxisGridGenerator = d3
       .axisLeft(y)
       .tickSizeOuter(0)
