@@ -176,17 +176,17 @@ export default class Dendrogram extends Stanza {
       if (this.params["graph-direction"] === "horizontal") {
         graphType.size([
           height - 2 * this.params["user-y-margin"],
-          width - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+          width - rootLabelWidth - maxLabelWidth - labelMargin * 2,
         ]);
       } else {
         graphType.size([
           width - 2 * this.params["user-y-margin"],
-          height - maxLabelWidth - rootLabelWidth - labelMargin * 2,
+          height - rootLabelWidth - maxLabelWidth - labelMargin * 2,
         ]);
       }
     } else {
       graphType.nodeSize([
-        spaceBetweenNode * Math.E,
+        spaceBetweenNode * 2,
         this.params["node-layer_distance"],
       ]);
     }
@@ -289,7 +289,7 @@ export default class Dendrogram extends Stanza {
           isNodeSizeDataKey
             ? nodeRadius(d.data[this.params["node-size-data_key"]]) ||
               nodeRadius(nodeSizeMin)
-            : parseFloat(this.params["node-size-fixed_size"] / 2)
+            : parseFloat(this.params["node-size-fixed_size"])
         )
         .attr("fill", (d) =>
           d._children
@@ -438,10 +438,7 @@ export default class Dendrogram extends Stanza {
       .scaleExtent([0.5, 10])
       .translateExtent([
         [-dataWidth + dataWidth / 5, -dataHeight + dataHeight / 5],
-        [
-          width + dataWidth - dataWidth / 5,
-          height + dataHeight - dataHeight / 5,
-        ],
+        [dataWidth * 2 - dataWidth / 5, dataHeight * 2 - dataHeight / 5],
       ])
 
       .on("zoom", (e) => {
