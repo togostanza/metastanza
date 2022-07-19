@@ -2,6 +2,8 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import Legend2 from "@/lib/Legend2";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -247,6 +249,7 @@ export default class Linechart extends Stanza {
         if (groupIndex === -1) {
           acc.push({
             group,
+            id: uuidv4(),
             color: color(group),
             show: true,
             data: [{ x: d[xKeyName], y: d[yKeyName] }],
@@ -395,6 +398,8 @@ export default class Linechart extends Stanza {
         );
     }
 
+    const errorsGroup = chartAreaGroup.append("g").attr("class", "error-bars");
+
     let xAxis, xAxisX, yAxis, yAxisX, yAxisY, xAxisY;
 
     let xExtent, yExtent;
@@ -502,6 +507,20 @@ export default class Linechart extends Stanza {
     } else {
       yAxis.tickFormat(d3.format(yAxisTicksFormat));
     }
+
+    const errorVertical = (d) => {
+      if (xScale === "ordinal") {
+        return `M ${
+          this._scaleX(d.x) + this._scaleX.bandwidth() / 2
+        },${this._scaleY(d.y - 0.1 * d.y)} L ${
+          this._scaleX(d.x) + this._scaleX.bandwidth() / 2
+        },${this._scaleY(d.y + 0.1 * d.y)}`;
+      } else {
+        return `M ${this._scaleX(d.x)},${this._scaleY(
+          d.y - 0.1 * d.y
+        )} L ${this._scaleX(d.x)},${this._scaleY(d.y + 0.1 * d.y)}`;
+      }
+    };
 
     const line = d3
       .line()
@@ -756,6 +775,8 @@ export default class Linechart extends Stanza {
 
           updateRange(croppedData);
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+
+          errorsGroup.selectAll("path").attr("d", errorVertical);
         } else {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
@@ -786,6 +807,7 @@ export default class Linechart extends Stanza {
           }
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+          errorsGroup.selectAll("path").attr("d", errorVertical);
         }
       };
       const brushedY = (e) => {
@@ -809,17 +831,18 @@ export default class Linechart extends Stanza {
         }
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+        errorsGroup.selectAll("path").attr("d", errorVertical);
       };
-      const errorG = chartAreaGroup
-        .append("g")
-        .classed("error-bars", true)
-        .attr("clip-path", "url(#clip)");
 
       const updateRange = (data) => {
         //chartAreaGroup.selectAll(".line").remove();
 
         const linesUpdate = chartAreaGroup
           .selectAll(".line")
+          .data(data, (d) => d.group);
+
+        const errorUpdate = errorsGroup
+          .selectAll(".error")
           .data(data, (d) => d.group);
 
         const linesEnter = linesUpdate
@@ -829,45 +852,30 @@ export default class Linechart extends Stanza {
           .attr("d", (d) => line(d.data))
           .attr("clip-path", "url(#clip)");
 
+        const errorEnter = errorUpdate
+          .enter()
+          .append("g")
+          .attr("id", (d) => `error-${d.id}`);
+
+        errorEnter.each((d, i, nodes) => {
+          const thisGroup = d3.select(nodes[i]);
+
+          const errorBarUpdateG = thisGroup
+            .selectAll(".error-bar-g")
+            .data(d.data);
+
+          const errorBarEnterG = errorBarUpdateG.enter().append("g");
+          errorBarEnterG.append("path").attr("d", errorVertical);
+
+          errorBarUpdateG.exit().remove();
+        });
+
+        errorUpdate.merge(errorEnter).attr("stroke", "green");
+
+        errorUpdate.exit().remove();
+
         linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
         linesUpdate.exit().remove();
-
-        chartAreaGroup.call((g) => {
-          const lines = g.selectAll(".line");
-
-          lines.each((d) => {
-            const ebg = errorG
-              .append("g")
-              .attr("class", "error-bar-group")
-              .attr("data-group", d.group);
-
-            const updateErrG = ebg.selectAll("g").data(d.data);
-
-            const enterErrG = updateErrG
-              .enter()
-              .append("g")
-              .attr("class", "error-bar")
-              .attr("transform", (d) => {
-                return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
-              });
-
-            enterErrG
-              .append("line")
-              .attr("y1", (d) =>
-                Math.abs(this._scaleY(d.y * 1.1) - this._scaleY(d.y))
-              )
-              .attr(
-                "y2",
-                (d) => -Math.abs(this._scaleY(d.y * 1.1) - this._scaleY(d.y))
-              )
-              .attr("x1", 0)
-              .attr("x2", 0)
-              .attr("stroke", "black");
-            updateErrG.merge(enterErrG).attr("fill", (d) => d.color);
-
-            updateErrG.exit().remove();
-          });
-        });
 
         graphXAxisG.call(xAxis).call(rotateXTickLabels);
         graphYAxisG.call(yAxis);
