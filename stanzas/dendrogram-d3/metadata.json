@@ -68,7 +68,7 @@
       "stanza:key": "node-layer_distance",
       "stanza:type": "number",
       "stanza:example": 160,
-      "stanza:description": "Distance between nodes depth levels. Effective only if graph-fit_to_area_size is set to false"
+      "stanza:description": "Distance between nodes depth levels. Only valid if graph-fit_to_area_size is set to false."
     },
     {
       "stanza:key": "graph-align_leaf_nodes",
@@ -101,7 +101,7 @@
       "stanza:key": "node-size-data_key",
       "stanza:type": "text",
       "stanza:example": "size",
-      "stanza:description": "Set size on the circle of node based on the data key",
+      "stanza:description": "Sets the size of the node circle based on the data key. If not set, the sizes will be the same.",
       "stanza:required": false
     },
     {
@@ -122,14 +122,14 @@
       "stanza:key": "node-size-default",
       "stanza:type": "number",
       "stanza:example": 4,
-      "stanza:description": "Default node radius in px. Effective only if node-size-data_key is not present.",
+      "stanza:description": "Default node radius in px. Only valid if node-size-data_key does not exist.",
       "stanza:required": false
     },
     {
       "stanza:key": "node-color-data_key",
       "stanza:type": "text",
       "stanza:example": "color",
-      "stanza:description": "Set color on the node based on the data key",
+      "stanza:description": "Set color on the circle of node based on the data key. If not set, the color will be a single color.",
       "stanza:required": false
     },
     {
@@ -146,13 +146,13 @@
       "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
-      "stanza:description": "Group color 0"
+      "stanza:description": "Node circle color. Valid when node-color-data_key does not exist."
     },
     {
       "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#AEB3BF",
-      "stanza:description": "Border color for everything that have a border"
+      "stanza:description": "Path color"
     },
     {
       "stanza:key": "--togostanza-fonts-font_color",
