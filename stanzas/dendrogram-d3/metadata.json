@@ -33,6 +33,57 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": 600,
+      "stanza:description": "Width in px"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": 1800,
+      "stanza:description": "Height in px"
+    },
+    {
+      "stanza:key": "user-y-margin",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Y margin in px",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "graph-direction",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["horizontal", "vertical"],
+      "stanza:example": "horizontal",
+      "stanza:description": "Graph direction"
+    },
+    {
+      "stanza:key": "graph-fit_to_area_size",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "fit to area size"
+    },
+    {
+      "stanza:key": "node-layer_distance",
+      "stanza:type": "number",
+      "stanza:example": 160,
+      "stanza:description": "Distance between nodes depth levels. Effective only if graph-fit_to_area_size is set to false"
+    },
+    {
+      "stanza:key": "graph-align_leaf_nodes",
+      "stanza:type": "boolean",
+      "stanza:example": false,
+      "stanza:description": "align leaf nodes"
+    },
+    {
+      "stanza:key": "graph-path",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["curve", "straight"],
+      "stanza:example": "curve",
+      "stanza:description": "Graph path"
+    },
+    {
       "stanza:key": "node-label-data_key",
       "stanza:type": "text",
       "stanza:example": "name",
@@ -47,17 +98,24 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "user-y-margin",
-      "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "Y margin in px",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "node-size-data_key",
       "stanza:type": "text",
       "stanza:example": "size",
-      "stanza:description": "Data size in data to map",
+      "stanza:description": "Set size on the circle of node based on the data key",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-min_size",
+      "stanza:type": "number",
+      "stanza:example": 1,
+      "stanza:description": "Minimum node radius in px.",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-max_size",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Maximum node radius in px.",
       "stanza:required": false
     },
     {
@@ -68,17 +126,10 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-min_size",
-      "stanza:type": "number",
-      "stanza:example": 1,
-      "stanza:description": "Minimum node circle size in px",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "node-size-max_size",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Maximum node circle size in px",
+      "stanza:key": "node-color-data_key",
+      "stanza:type": "text",
+      "stanza:example": "color",
+      "stanza:description": "Set color on the node based on the data key",
       "stanza:required": false
     },
     {
@@ -87,61 +138,10 @@
       "stanza:example": "name",
       "stanza:description": "Data key to use as tooltip text",
       "stanza:required": false
-    },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 600,
-      "stanza:description": "Width in px"
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 1800,
-      "stanza:description": "Height in px"
-    },
-    {
-      "stanza:key": "graph-fit_to_size",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "fit to size"
-    },
-    {
-      "stanza:key": "node-layer_distance",
-      "stanza:type": "number",
-      "stanza:example": 160,
-      "stanza:description": "Node distance"
-    },
-    {
-      "stanza:key": "graph-direction",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["horizontal", "vertical"],
-      "stanza:example": "horizontal",
-      "stanza:description": "Graph direction"
-    },
-    {
-      "stanza:key": "graph-align_leaf_nodes",
-      "stanza:type": "boolean",
-      "stanza:example": false,
-      "stanza:description": "align leaf nodes"
-    },
-    {
-      "stanza:key": "graph-path",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["curve", "straight"],
-      "stanza:example": "curve",
-      "stanza:description": "Graph path"
     }
   ],
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
-    {
-      "stanza:key": "node-color-data_key",
-      "stanza:type": "text",
-      "stanza:default": "color",
-      "stanza:description": "Data color in data to map",
-      "stanza:required": false
-    },
     {
       "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
@@ -149,16 +149,28 @@
       "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--togostanza-fonts-font_family",
-      "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
-      "stanza:description": "Font family"
+      "stanza:key": "--togostanza-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#AEB3BF",
+      "stanza:description": "Border color for everything that have a border"
     },
     {
       "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Font color"
+    },
+    {
+      "stanza:key": "--togostanza-theme-background_color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    },
+    {
+      "stanza:key": "--togostanza-fonts-font_family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
     },
     {
       "stanza:key": "--togostanza-fonts-font_size_primary",
@@ -173,22 +185,10 @@
       "stanza:description": "Padding in px"
     },
     {
-      "stanza:key": "--togostanza-border-color",
-      "stanza:type": "color",
-      "stanza:default": "#AEB3BF",
-      "stanza:description": "Border color for everything that have a border"
-    },
-    {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
       "stanza:default": 0.5,
       "stanza:description": "Border width in px"
-    },
-    {
-      "stanza:key": "--togostanza-theme-background_color",
-      "stanza:type": "color",
-      "stanza:default": "rgba(255,255,255,0)",
-      "stanza:description": "Background color"
     }
   ]
 }
