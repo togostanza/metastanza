@@ -61,10 +61,10 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-fixed_size",
+      "stanza:key": "node-size-default",
       "stanza:type": "number",
-      "stanza:example": 8,
-      "stanza:description": "Node circle size in px",
+      "stanza:example": 4,
+      "stanza:description": "Default node radius in px. Effective only if node-size-data_key is not present.",
       "stanza:required": false
     },
     {

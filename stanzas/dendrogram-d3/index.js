@@ -162,7 +162,7 @@ export default class Dendrogram extends Stanza {
     if (isNodeSizeDataKey) {
       spaceBetweenNode = nodeSizeSum / num;
     } else {
-      spaceBetweenNode = this.params["node-size-fixed_size"];
+      spaceBetweenNode = this.params["node-size-default"];
     }
 
     let graphType = d3.tree();
@@ -186,7 +186,7 @@ export default class Dendrogram extends Stanza {
       }
     } else {
       graphType.nodeSize([
-        spaceBetweenNode * 2,
+        spaceBetweenNode * 4,
         this.params["node-layer_distance"],
       ]);
     }
@@ -289,7 +289,7 @@ export default class Dendrogram extends Stanza {
           isNodeSizeDataKey
             ? nodeRadius(d.data[this.params["node-size-data_key"]]) ||
               nodeRadius(nodeSizeMin)
-            : parseFloat(this.params["node-size-fixed_size"])
+            : parseFloat(this.params["node-size-default"])
         )
         .attr("fill", (d) =>
           d._children
