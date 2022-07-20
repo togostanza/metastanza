@@ -16,7 +16,7 @@ svg {
   }
   text {
     font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
-    fill-opacity: 1;
+    fill: var(--togostanza-fonts-font_color);
   }
   circle {
     stroke: var(--togostanza-border-color);
