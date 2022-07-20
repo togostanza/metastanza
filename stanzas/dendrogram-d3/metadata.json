@@ -54,17 +54,17 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-fixed_size",
-      "stanza:type": "number",
-      "stanza:example": 8,
-      "stanza:description": "Node circle size in px",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "node-size-data_key",
       "stanza:type": "text",
       "stanza:example": "size",
       "stanza:description": "Data size in data to map",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-size-fixed_size",
+      "stanza:type": "number",
+      "stanza:example": 8,
+      "stanza:description": "Node circle size in px",
       "stanza:required": false
     },
     {
@@ -101,11 +101,10 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "graph-display_mode",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["fix graph size", "fix node size"],
-      "stanza:example": "fix graph size",
-      "stanza:description": "Graph display mode"
+      "stanza:key": "graph-fit_to_size",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "fit to size"
     },
     {
       "stanza:key": "node-layer_distance",
