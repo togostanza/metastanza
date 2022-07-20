@@ -186,7 +186,7 @@ export default class Dendrogram extends Stanza {
       }
     } else {
       graphType.nodeSize([
-        spaceBetweenNode * 4,
+        spaceBetweenNode * 2 + this.params["node-space_between"],
         this.params["node-layer_distance"],
       ]);
     }
