@@ -120,11 +120,10 @@
       "stanza:description": "Graph direction"
     },
     {
-      "stanza:key": "graph-type",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["tree", "cluster"],
-      "stanza:example": "tree",
-      "stanza:description": "Graph type"
+      "stanza:key": "graph-align_leaf_nodes",
+      "stanza:type": "boolean",
+      "stanza:example": false,
+      "stanza:description": "align leaf nodes"
     },
     {
       "stanza:key": "graph-path",

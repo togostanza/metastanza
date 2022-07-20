@@ -166,10 +166,10 @@ export default class Dendrogram extends Stanza {
     }
 
     let graphType = d3.tree();
-    if (this.params["graph-type"] === "tree") {
-      graphType = d3.tree();
-    } else {
+    if (this.params["graph-align_leaf_nodes"]) {
       graphType = d3.cluster();
+    } else {
+      graphType = d3.tree();
     }
 
     if (this.params["graph-fit_to_size"]) {
