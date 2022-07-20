@@ -45,11 +45,10 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "user-y-margin",
-      "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:description": "Y margin in px",
-      "stanza:required": false
+      "stanza:key": "graph-padding",
+      "stanza:type": "text",
+      "stanza:example": "20px 20px",
+      "stanza:description": "Padding of a stanza. CSS padding-like text (10px 10px 10px 10px)"
     },
     {
       "stanza:key": "graph-direction",
@@ -62,7 +61,7 @@
       "stanza:key": "graph-fit_to_area_size",
       "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "fit to area size"
+      "stanza:description": "fit to the area size"
     },
     {
       "stanza:key": "node-space_between",
@@ -183,12 +182,6 @@
       "stanza:type": "number",
       "stanza:default": 9,
       "stanza:description": "Primary font size in px"
-    },
-    {
-      "stanza:key": "--togostanza-outline-padding",
-      "stanza:type": "number",
-      "stanza:default": 20,
-      "stanza:description": "Padding in px"
     },
     {
       "stanza:key": "--togostanza-border-width",

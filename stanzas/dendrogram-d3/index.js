@@ -33,6 +33,37 @@ export default class Dendrogram extends Stanza {
       ? parseFloat(this.params["node-label-margin"])
       : 5;
 
+    const padding = this.params["graph-padding"].trim().split(/\s+/);
+
+    let paddingLeft, paddingRight, paddingTop, paddingBottom;
+    switch (padding.length) {
+      case 1:
+        paddingLeft =
+          paddingRight =
+          paddingTop =
+          paddingBottom =
+            parseFloat(padding[0]) || 0;
+        break;
+      case 2:
+        paddingTop = paddingBottom = parseFloat(padding[0]) || 0;
+        paddingLeft = paddingRight = parseFloat(padding[1]) || 0;
+        break;
+      case 3:
+        paddingTop = parseFloat(padding[0]) || 0;
+        paddingLeft = paddingRight = parseFloat(padding[1]) || 0;
+        paddingBottom = parseFloat(padding[2]) || 0;
+        break;
+      case 4:
+        paddingTop = parseFloat(padding[0]) || 0;
+        paddingLeft = parseFloat(padding[1]) || 0;
+        paddingRight = parseFloat(padding[2]) || 0;
+        paddingBottom = parseFloat(padding[3]) || 0;
+        break;
+      default:
+        paddingLeft = paddingRight = paddingTop = paddingBottom = 0;
+        break;
+    }
+
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
@@ -54,6 +85,9 @@ export default class Dendrogram extends Stanza {
 
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("dendrogram-d3");
+
+    this.tooltip = new ToolTip();
+    root.append(this.tooltip);
 
     const denroot = d3
       .stratify()
@@ -77,9 +111,6 @@ export default class Dendrogram extends Stanza {
       .attr("width", width)
       .attr("height", height);
 
-    this.tooltip = new ToolTip();
-    root.append(this.tooltip);
-
     const rootGroup = svg
       .append("text")
       .text(
@@ -94,11 +125,11 @@ export default class Dendrogram extends Stanza {
       .attr(
         "transform",
         this.params["graph-direction"] === "horizontal"
-          ? `translate(${rootLabelWidth + this.params["node-label-margin"]}, ${
-              this.params["user-y-margin"]
-            })`
-          : `translate(${this.params["user-y-margin"]}, ${
-              rootLabelWidth + this.params["node-label-margin"]
+          ? `translate(${
+              rootLabelWidth + this.params["node-label-margin"] + paddingLeft
+            }, ${paddingTop})`
+          : `translate(${paddingLeft}, ${
+              rootLabelWidth + this.params["node-label-margin"] + paddingTop
             })`
       );
 
@@ -175,13 +206,23 @@ export default class Dendrogram extends Stanza {
     if (this.params["graph-fit_to_area_size"]) {
       if (this.params["graph-direction"] === "horizontal") {
         graphType.size([
-          height - 2 * this.params["user-y-margin"],
-          width - rootLabelWidth - maxLabelWidth - labelMargin * 2,
+          height - paddingTop - paddingBottom,
+          width -
+            rootLabelWidth -
+            maxLabelWidth -
+            labelMargin * 2 -
+            paddingRight -
+            paddingLeft,
         ]);
       } else {
         graphType.size([
-          width - 2 * this.params["user-y-margin"],
-          height - rootLabelWidth - maxLabelWidth - labelMargin * 2,
+          width - paddingTop - paddingBottom,
+          height -
+            rootLabelWidth -
+            maxLabelWidth -
+            labelMargin * 2 -
+            paddingRight -
+            paddingLeft,
         ]);
       }
     } else {
