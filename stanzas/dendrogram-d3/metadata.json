@@ -116,7 +116,7 @@
       "stanza:key": "node-color-data_key",
       "stanza:type": "text",
       "stanza:example": "color",
-      "stanza:description": "Set color on the circle of node based on the data key. If not set, the color will be a single color.",
+      "stanza:description": "Set color on the node circle based on the data key. If not set, the color will be a single color.",
       "stanza:required": false
     },
     {
@@ -134,6 +134,12 @@
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Node circle color. Valid when node-color-data_key does not exist."
+    },
+    {
+      "stanza:key": "--togostanza-theme-series_1_color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Node circle color when node is closed."
     },
     {
       "stanza:key": "--togostanza-border-color",
