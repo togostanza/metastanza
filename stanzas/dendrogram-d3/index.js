@@ -75,9 +75,6 @@ export default class Dendrogram extends Stanza {
     }
 
     const direction = this.params["graph-direction"];
-    const isGraphFitArea = this.params["graph-fit_to_area_size"];
-    const spaceBetweenNodes = this.params["node-space_between"];
-    const nodeLayerDistance = this.params["node-layer_distance"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const graphPath = this.params["graph-path"];
     const nodeKey = this.params["node-label-data_key"];
@@ -177,22 +174,6 @@ export default class Dendrogram extends Stanza {
       .domain([nodeSizeMin, nodeSizeMax])
       .range([minRangeNode, maxRangeNode]);
 
-    let nodeSizeSum = 0;
-    let num = 0;
-    data.forEach((d) => {
-      if (!isNaN(parseFloat(d.data[sizeKey]))) {
-        nodeSizeSum += nodeRadius(d.data[sizeKey]);
-        num++;
-      }
-    });
-
-    let spaceBetweenNode;
-    if (isNodeSizeDataKey) {
-      spaceBetweenNode = nodeSizeSum / num;
-    } else {
-      spaceBetweenNode = circleRadius;
-    }
-
     let graphType = d3.tree();
     if (isLeafNodesAlign) {
       graphType = d3.cluster();
@@ -200,44 +181,32 @@ export default class Dendrogram extends Stanza {
       graphType = d3.tree();
     }
 
-    if (isGraphFitArea) {
-      if (direction === "horizontal") {
-        graphType.size([
-          height - paddingTop - paddingBottom,
-          width -
-            rootLabelWidth -
-            maxLabelWidth -
-            labelMargin * 2 -
-            paddingRight -
-            paddingLeft,
-        ]);
-      } else {
-        graphType.size([
-          width - paddingTop - paddingBottom,
-          height -
-            rootLabelWidth -
-            maxLabelWidth -
-            labelMargin * 2 -
-            paddingRight -
-            paddingLeft,
-        ]);
-      }
+    if (direction === "horizontal") {
+      graphType.size([
+        height - paddingTop - paddingBottom,
+        width -
+          rootLabelWidth -
+          maxLabelWidth -
+          labelMargin * 2 -
+          paddingRight -
+          paddingLeft,
+      ]);
     } else {
-      graphType.nodeSize([
-        spaceBetweenNode * 2 + spaceBetweenNodes,
-        nodeLayerDistance,
+      graphType.size([
+        width - paddingTop - paddingBottom,
+        height -
+          rootLabelWidth -
+          maxLabelWidth -
+          labelMargin * 2 -
+          paddingRight -
+          paddingLeft,
       ]);
     }
 
     graphType(denroot);
 
-    if (isGraphFitArea) {
-      denroot.x0 = data[0].parent.x;
-      denroot.y0 = 0;
-    } else {
-      denroot.x0 = 0;
-      denroot.y0 = 0;
-    }
+    denroot.x0 = data[0].parent.x;
+    denroot.y0 = 0;
 
     const getLinkFn = () => {
       if (direction === "horizontal") {
@@ -272,14 +241,7 @@ export default class Dendrogram extends Stanza {
         .enter()
         .append("g")
         .classed("node", true)
-        .attr(
-          "transform",
-          isGraphFitArea
-            ? `translate(${source.y0}, ${source.x0})`
-            : direction === "horizontal"
-            ? `translate(${source.y0}, ${source.x0 + height / 2})`
-            : `translate(${source.y0 + width / 2}, ${source.x0})`
-        )
+        .attr("transform", `translate(${source.y0}, ${source.x0})`)
         .on("click", (e, d) => {
           toggle(d);
           update(d);
@@ -311,13 +273,7 @@ export default class Dendrogram extends Stanza {
       nodeUpdate
         .transition()
         .duration(duration)
-        .attr("transform", (d) =>
-          isGraphFitArea
-            ? `translate(${d.y}, ${d.x})`
-            : direction === "horizontal"
-            ? `translate(${d.y}, ${d.x + height / 2})`
-            : `translate(${d.y + width / 2}, ${d.x})`
-        );
+        .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
 
       nodeUpdate
         .select("circle")
@@ -334,14 +290,7 @@ export default class Dendrogram extends Stanza {
         .exit()
         .transition()
         .duration(duration)
-        .attr(
-          "transform",
-          isGraphFitArea
-            ? `translate(${source.y}, ${source.x})`
-            : direction === "horizontal"
-            ? `translate(${source.y}, ${source.x + height / 2})`
-            : `translate(${source.y + width / 2}, ${source.x})`
-        )
+        .attr("transform", `translate(${source.y}, ${source.x})`)
         .remove();
 
       const link = gContent
@@ -355,26 +304,8 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           graphPath === "curve"
-            ? isGraphFitArea
-              ? getLinkFn().x(source.y0).y(source.x0)
-              : direction === "horizontal"
-              ? getLinkFn()
-                  .x(source.y0)
-                  .y(source.x0 + height / 2)
-              : getLinkFn()
-                  .x(source.y0 + width / 2)
-                  .y(source.x0)
-            : isGraphFitArea
-            ? d3.link(d3.curveStep).x(source.y0).y(source.x0)
-            : direction === "horizontal"
-            ? d3
-                .link(d3.curveStep)
-                .x(source.y0)
-                .y(source.x0 + height / 2)
-            : d3
-                .link(d3.curveStep)
-                .x(source.y0 + width / 2)
-                .y(source.x0)
+            ? getLinkFn().x(source.y0).y(source.x0)
+            : d3.link(d3.curveStep).x(source.y0).y(source.x0)
         );
 
       const linkUpdate = linkEnter.merge(link);
@@ -384,42 +315,20 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           graphPath === "curve"
-            ? isGraphFitArea
-              ? getLinkFn()
-                  .x((d) => d.y)
-                  .y((d) => d.x)
-              : direction === "horizontal"
-              ? getLinkFn()
-                  .x((d) => d.y)
-                  .y((d) => d.x + height / 2)
-              : getLinkFn()
-                  .x((d) => d.y + width / 2)
-                  .y((d) => d.x)
-            : isGraphFitArea
-            ? direction === "horizontal"
-              ? d3
-                  .link(d3.curveStep)
-                  .x((d) => d.y)
-                  .y((d) => d.x)
-              : (d) =>
-                  `M${d.source.y},${d.source.x} L${d.source.y},${
-                    (d.target.x + d.source.x) / 2
-                  }  L${d.target.y},${(d.target.x + d.source.x) / 2} L${
-                    d.target.y
-                  },${d.target.x}`
+            ? getLinkFn()
+                .x((d) => d.y)
+                .y((d) => d.x)
             : direction === "horizontal"
             ? d3
                 .link(d3.curveStep)
                 .x((d) => d.y)
-                .y((d) => d.x + height / 2)
+                .y((d) => d.x)
             : (d) =>
-                `M${d.source.y + width / 2},${d.source.x} L${
-                  d.source.y + width / 2
-                },${(d.target.x + d.source.x) / 2}  L${
-                  d.target.y + width / 2
-                },${(d.target.x + d.source.x) / 2} L${d.target.y + width / 2},${
-                  d.target.x
-                }`
+                `M${d.source.y},${d.source.x} L${d.source.y},${
+                  (d.target.x + d.source.x) / 2
+                }  L${d.target.y},${(d.target.x + d.source.x) / 2} L${
+                  d.target.y
+                },${d.target.x}`
         );
 
       link
@@ -429,26 +338,8 @@ export default class Dendrogram extends Stanza {
         .attr(
           "d",
           graphPath === "curve"
-            ? isGraphFitArea
-              ? getLinkFn().x(source.y).y(source.x)
-              : direction === "horizontal"
-              ? getLinkFn()
-                  .x(source.y)
-                  .y(source.x + height / 2)
-              : getLinkFn()
-                  .x(source.y + width / 2)
-                  .y(source.x)
-            : isGraphFitArea
-            ? d3.link(d3.curveStep).x(source.y).y(source.x)
-            : direction === "horizontal"
-            ? d3
-                .link(d3.curveStep)
-                .x(source.y)
-                .y(source.x + height / 2)
-            : d3
-                .link(d3.curveStep)
-                .x(source.y + width / 2)
-                .y(source.x)
+            ? getLinkFn().x(source.y).y(source.x)
+            : d3.link(d3.curveStep).x(source.y).y(source.x)
         )
         .remove();
 
@@ -458,38 +349,6 @@ export default class Dendrogram extends Stanza {
       });
     };
     update(denroot);
-
-    const maxX = d3.max(data, (d) => d.y);
-    const minX = d3.min(data, (d) => d.y);
-    const maxY = d3.max(data, (d) => d.x);
-    const minY = d3.min(data, (d) => d.x);
-    const dataWidth = maxX - minX;
-    const dataHeight = maxY - minY;
-
-    const zoom = d3
-      .zoom()
-      .scaleExtent([0.5, 10])
-      .translateExtent([
-        [-dataWidth + dataWidth / 5, -dataHeight + dataHeight / 5],
-        [dataWidth * 2 - dataWidth / 5, dataHeight * 2 - dataHeight / 5],
-      ])
-
-      .on("zoom", (e) => {
-        zoomed(e);
-      });
-
-    if (!isGraphFitArea) {
-      svg.call(zoom);
-      svg.on("dblclick.zoom", resetted);
-    }
-
-    function zoomed(e) {
-      gContent.attr("transform", e.transform);
-    }
-
-    function resetted() {
-      gContent.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-    }
 
     if (showToolTips) {
       this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));

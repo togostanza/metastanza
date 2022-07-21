@@ -58,24 +58,6 @@
       "stanza:description": "Graph direction"
     },
     {
-      "stanza:key": "graph-fit_to_area_size",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "fit to the area size"
-    },
-    {
-      "stanza:key": "node-space_between",
-      "stanza:type": "number",
-      "stanza:example": 4,
-      "stanza:description": "Space between nodes. Only valid if graph-fit_to_area_size is set to false."
-    },
-    {
-      "stanza:key": "node-layer_distance",
-      "stanza:type": "number",
-      "stanza:example": 160,
-      "stanza:description": "Distance between nodes depth levels. Only valid if graph-fit_to_area_size is set to false."
-    },
-    {
       "stanza:key": "graph-align_leaf_nodes",
       "stanza:type": "boolean",
       "stanza:example": false,
