@@ -64,11 +64,11 @@
       "stanza:description": "align leaf nodes"
     },
     {
-      "stanza:key": "graph-path",
+      "stanza:key": "shape",
       "stanza:type": "single-choice",
       "stanza:choice": ["curve", "straight"],
       "stanza:example": "curve",
-      "stanza:description": "Graph path"
+      "stanza:description": "Graph shape"
     },
     {
       "stanza:key": "node-label-data_key",
@@ -137,7 +137,7 @@
     {
       "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
-      "stanza:default": "#AEB3BF",
+      "stanza:default": "#CDCDCD",
       "stanza:description": "Path color"
     },
     {
