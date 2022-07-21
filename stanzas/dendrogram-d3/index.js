@@ -81,9 +81,8 @@ export default class Dendrogram extends Stanza {
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
-    const minRangeNode = this.params["node-size-min_size"];
-    const maxRangeNode = this.params["node-size-max_size"];
-    const circleRadius = this.params["node-size-default"];
+    const minRadius = this.params["node-size-min"];
+    const maxRadius = this.params["node-size-max"];
     const colorKey = this.params["node-color-data_key"];
     const tooltipKey = this.params["tooltips-data_key"];
 
@@ -174,7 +173,7 @@ export default class Dendrogram extends Stanza {
     const nodeRadius = d3
       .scaleSqrt()
       .domain([nodeSizeMin, nodeSizeMax])
-      .range([minRangeNode, maxRangeNode]);
+      .range([minRadius, maxRadius]);
 
     let graphType = d3.tree();
     if (isLeafNodesAlign) {
@@ -282,7 +281,7 @@ export default class Dendrogram extends Stanza {
         .attr("r", (d) =>
           isNodeSizeDataKey
             ? nodeRadius(d.data[sizeKey]) || nodeRadius(nodeSizeMin)
-            : parseFloat(circleRadius)
+            : parseFloat((minRadius + maxRadius) / 2)
         )
         .attr("fill", (d) =>
           d._children ? closedNodeColor : d.data[colorKey] || color

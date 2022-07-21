@@ -92,24 +92,17 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-min_size",
+      "stanza:key": "node-size-min",
       "stanza:type": "number",
-      "stanza:example": 1,
+      "stanza:example": 4,
       "stanza:description": "Minimum node radius in px.",
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-max_size",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Maximum node radius in px.",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "node-size-default",
+      "stanza:key": "node-size-max",
       "stanza:type": "number",
       "stanza:example": 4,
-      "stanza:description": "Default node radius in px. Only valid if node-size-data_key does not exist.",
+      "stanza:description": "Maximum node radius in px.",
       "stanza:required": false
     },
     {
