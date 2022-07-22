@@ -45,12 +45,6 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "graph-padding",
-      "stanza:type": "text",
-      "stanza:example": "20px 20px",
-      "stanza:description": "Padding of a stanza. CSS padding-like text (10px 10px 10px 10px)"
-    },
-    {
       "stanza:key": "graph-direction",
       "stanza:type": "single-choice",
       "stanza:choice": ["horizontal", "vertical"],
