@@ -61,11 +61,6 @@ export default class Dendrogram extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    if (maxRadius * 2 >= width || maxRadius * 2 >= height) {
-      el.innerHTML = '<p>"node-size-max" is too big!</p>';
-      throw new Error('"node-size-max" is too big!');
-    }
-
     const denroot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
@@ -152,6 +147,26 @@ export default class Dendrogram extends Stanza {
         left: rootLabelWidth + labelMargin,
       }
     ) => {
+      if (direction === "horizontal") {
+        if (width - MARGIN.right - MARGIN.left < 0) {
+          el.innerHTML = "<p>width is too small!</p>";
+          throw new Error("width is too small!");
+        }
+      } else {
+        if (height - MARGIN.left - MARGIN.right < 0) {
+          el.innerHTML = "<p>height is too small!</p>";
+          throw new Error("height is too small!");
+        }
+      }
+
+      if (
+        Math.max(maxRadius, minRadius) * 2 >= width ||
+        Math.max(maxRadius, minRadius) * 2 >= height
+      ) {
+        el.innerHTML = "<p>node size is too big for width and height!</p>";
+        throw new Error("node size is too big for width and height!");
+      }
+
       g.attr(
         "transform",
         direction === "horizontal"
@@ -263,8 +278,16 @@ export default class Dendrogram extends Stanza {
       }
 
       const update = (source) => {
-        let i = 0;
+        if (
+          Math.max(maxRadius, minRadius) * 2 >= width ||
+          Math.max(maxRadius, minRadius) * 2 >= height
+        ) {
+          el.innerHTML =
+            '<p>"node-size-max" is too big for width and height!</p>';
+          throw new Error('"node-size-max" is too big for width and height!');
+        }
 
+        let i = 0;
         const node = gContent
           .selectAll(".node")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
@@ -298,7 +321,7 @@ export default class Dendrogram extends Stanza {
           .attr("dy", "3")
           .attr(
             "transform",
-            direction === "horizontal" ? "rotate(0)" : "rotate(270)"
+            direction === "horizontal" ? "rotate(0)" : "rotate(-90)"
           )
           .attr("text-anchor", (d) =>
             direction === "horizontal"
