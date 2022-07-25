@@ -287,15 +287,27 @@ export default class Dendrogram extends Stanza {
         nodeEnter
           .append("text")
           .attr("x", (d) =>
-            d.children || d._children ? -labelMargin : labelMargin
+            direction === "horizontal"
+              ? d.children || d._children
+                ? -labelMargin
+                : labelMargin
+              : d.children || d._children
+              ? labelMargin
+              : -labelMargin
           )
           .attr("dy", "3")
           .attr(
             "transform",
-            direction === "horizontal" ? "rotate(0)" : "rotate(90)"
+            direction === "horizontal" ? "rotate(0)" : "rotate(270)"
           )
           .attr("text-anchor", (d) =>
-            d.children || d._children ? "end" : "start"
+            direction === "horizontal"
+              ? d.children || d._children
+                ? "end"
+                : "start"
+              : d.children || d._children
+              ? "start"
+              : "end"
           )
           .text((d) => d.data[nodeKey] || "");
 
