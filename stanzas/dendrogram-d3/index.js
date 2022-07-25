@@ -25,7 +25,7 @@ export default class Dendrogram extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
+    // const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //data
     this.renderTemplate({
@@ -111,7 +111,6 @@ export default class Dendrogram extends Stanza {
     // Setting color scale
     const togostanzaColors = getColorSeries(this);
     const color = togostanzaColors[0];
-    const closedNodeColor = css("--togostanza-theme-series_1_color");
 
     const svg = d3
       .select(el)
@@ -350,7 +349,7 @@ export default class Dendrogram extends Stanza {
               : parseFloat(aveRadius)
           )
           .attr("fill", (d) =>
-            d._children ? closedNodeColor : d.data[colorKey] || color
+            d._children ? "#fff" : d.data[colorKey] || color
           );
 
         node
