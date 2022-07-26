@@ -50,8 +50,8 @@ export default class Dendrogram extends Stanza {
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
-    const minRadius = this.params["node-size-min"];
-    const maxRadius = this.params["node-size-max"];
+    const minRadius = this.params["node-size-min"] / 2;
+    const maxRadius = this.params["node-size-max"] / 2;
     const aveRadius = (minRadius + maxRadius) / 2;
     const colorKey = this.params["node-color-data_key"];
     const tooltipKey = this.params["tooltips-data_key"];
@@ -277,15 +277,6 @@ export default class Dendrogram extends Stanza {
       }
 
       const update = (source) => {
-        if (
-          Math.max(maxRadius, minRadius) * 2 >= width ||
-          Math.max(maxRadius, minRadius) * 2 >= height
-        ) {
-          el.innerHTML =
-            '<p>"node-size-max" is too big for width and height!</p>';
-          throw new Error('"node-size-max" is too big for width and height!');
-        }
-
         let i = 0;
         const node = gContent
           .selectAll(".node")

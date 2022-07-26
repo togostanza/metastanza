@@ -88,15 +88,15 @@
     {
       "stanza:key": "node-size-min",
       "stanza:type": "number",
-      "stanza:example": 4,
-      "stanza:description": "Minimum node radius in px.",
+      "stanza:example": 8,
+      "stanza:description": "Minimum node diameter in px",
       "stanza:required": false
     },
     {
       "stanza:key": "node-size-max",
       "stanza:type": "number",
-      "stanza:example": 4,
-      "stanza:description": "Maximum node radius in px.",
+      "stanza:example": 8,
+      "stanza:description": "Maximum node diameter in px",
       "stanza:required": false
     },
     {
