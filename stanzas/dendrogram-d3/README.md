@@ -12,9 +12,10 @@ Use following data format to vizualize the graph in this stanza:
   }
   {
     "id": 2,
-    "name": "A",
+    "name": "B",
     "parent": 1,
-    "size": 10
+    "size": 10,
+    "group":"a"
   },
   ...
 ]

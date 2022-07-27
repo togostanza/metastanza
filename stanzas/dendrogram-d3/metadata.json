@@ -14,7 +14,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://vega.github.io/vega/data/flare.json",
+      "stanza:example": "https://raw.githubusercontent.com/YukikoNoda/sample_JSON/main/db.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -102,7 +102,7 @@
     {
       "stanza:key": "node-color-data_key",
       "stanza:type": "text",
-      "stanza:example": "color",
+      "stanza:example": "group",
       "stanza:description": "Set color on the node circle based on the data key. If not set, the color will be a single color.",
       "stanza:required": false
     },
@@ -126,7 +126,31 @@
       "stanza:key": "--togostanza-theme-series_1_color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
-      "stanza:description": "Node circle color when node is closed."
+      "stanza:description": "Node circle color. Valid when node-color-data_key exists."
+    },
+    {
+      "stanza:key": "--togostanza-theme-series_2_color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Node circle color. Valid when node-color-data_key exists."
+    },
+    {
+      "stanza:key": "--togostanza-theme-series_3_color",
+      "stanza:type": "color",
+      "stanza:default": "#E6BB1A",
+      "stanza:description": "Node circle color. Valid when node-color-data_key exists."
+    },
+    {
+      "stanza:key": "--togostanza-theme-series_4_color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Node circle color. Valid when node-color-data_key exists."
+    },
+    {
+      "stanza:key": "--togostanza-theme-series_5_color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Node circle color. Valid when node-color-data_key exists."
     },
     {
       "stanza:key": "--togostanza-border-color",

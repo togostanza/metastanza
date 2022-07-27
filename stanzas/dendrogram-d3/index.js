@@ -110,7 +110,19 @@ export default class Dendrogram extends Stanza {
 
     // Setting color scale
     const togostanzaColors = getColorSeries(this);
-    const color = togostanzaColors[0];
+    const defaultColor = togostanzaColors[0];
+
+    const groupArray = [];
+    denroot
+      .descendants()
+      .forEach((d) =>
+        d.data[colorKey] ? groupArray.push(d.data[colorKey]) : ""
+      );
+
+    const groupColor = d3
+      .scaleOrdinal()
+      .domain(groupArray)
+      .range(togostanzaColors.slice(1, 6));
 
     const svg = d3
       .select(el)
@@ -295,6 +307,9 @@ export default class Dendrogram extends Stanza {
         nodeEnter
           .append("circle")
           .attr("data-tooltip", (d) => d.data[tooltipKey])
+          .attr("stroke", (d) =>
+            d.data[colorKey] ? groupColor(d.data[colorKey]) : defaultColor
+          )
           .classed("with-children", (d) => d.children);
 
         nodeEnter
@@ -340,7 +355,11 @@ export default class Dendrogram extends Stanza {
               : parseFloat(aveRadius)
           )
           .attr("fill", (d) =>
-            d._children ? "#fff" : d.data[colorKey] || color
+            d._children
+              ? "#fff"
+              : d.data[colorKey]
+              ? groupColor(d.data[colorKey])
+              : defaultColor
           );
 
         node
