@@ -46,7 +46,7 @@ export default class Dendrogram extends Stanza {
     const height = parseInt(this.params["height"]);
     const direction = this.params["graph-direction"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
-    const graphPath = this.params["shape"];
+    const shape = this.params["shape"];
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
@@ -86,16 +86,6 @@ export default class Dendrogram extends Stanza {
     const nodeSizeMin = d3.min(data, (d) => d.data[sizeKey]);
     const nodeSizeMax = d3.max(data, (d) => d.data[sizeKey]);
 
-    const toggle = (d) => {
-      if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
-      }
-    };
-
     const d3RadiusScale = d3
       .scaleSqrt()
       .domain([nodeSizeMin, nodeSizeMax])
@@ -106,6 +96,16 @@ export default class Dendrogram extends Stanza {
         return d3RadiusScale(size);
       }
       return d3RadiusScale(nodeSizeMin);
+    };
+
+    const toggle = (d) => {
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
     };
 
     // Setting color scale
@@ -179,7 +179,11 @@ export default class Dendrogram extends Stanza {
 
       g.attr(
         "transform",
-        direction === "horizontal"
+        shape === "radial"
+          ? `translate(${Math.min(width / 2, height / 2) + MARGIN.right}, ${
+              Math.min(width / 2, height / 2) + MARGIN.right
+            })`
+          : direction === "horizontal"
           ? `translate(${MARGIN.left}, ${MARGIN.top})`
           : `translate(${MARGIN.top}, ${MARGIN.left})`
       );
@@ -191,16 +195,24 @@ export default class Dendrogram extends Stanza {
         graphType = d3.tree();
       }
 
-      if (direction === "horizontal") {
-        graphType.size([
-          height - MARGIN.top - MARGIN.bottom,
-          width - MARGIN.left - MARGIN.right,
-        ]);
+      const separation = (a, b) => (a.parent === b.parent ? 1 : 2) / a.depth;
+
+      if (shape === "radial") {
+        graphType
+          .size([2 * Math.PI, Math.min(width / 2, height / 2)])
+          .separation(separation)(denroot);
       } else {
-        graphType.size([
-          width - MARGIN.top - MARGIN.bottom,
-          height - MARGIN.left - MARGIN.right,
-        ]);
+        if (direction === "horizontal") {
+          graphType.size([
+            height - MARGIN.top - MARGIN.bottom,
+            width - MARGIN.left - MARGIN.right,
+          ]);
+        } else {
+          graphType.size([
+            width - MARGIN.top - MARGIN.bottom,
+            height - MARGIN.left - MARGIN.right,
+          ]);
+        }
       }
 
       graphType(denroot);
@@ -236,7 +248,6 @@ export default class Dendrogram extends Stanza {
       const maxX = [];
 
       let deltas;
-
       if (direction === "horizontal") {
         denroot.descendants().forEach((d) => {
           minY.push(MARGIN.left + d.y - nodeRadius(d.data[sizeKey]));
@@ -293,11 +304,27 @@ export default class Dendrogram extends Stanza {
           .selectAll(".node")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
+        if (shape === "radial") {
+          node
+            .selectAll("a")
+            .join("a")
+            .attr(
+              "transform",
+              (d) =>
+                `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
+            );
+        }
+
         const nodeEnter = node
           .enter()
           .append("g")
           .classed("node", true)
-          .attr("transform", `translate(${source.y0}, ${source.x0})`)
+          .attr(
+            "transform",
+            `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
+              source.y0
+            }, ${source.x0})`
+          )
           .on("click", (e, d) => {
             toggle(d);
             update(d);
@@ -314,7 +341,11 @@ export default class Dendrogram extends Stanza {
         nodeEnter
           .append("text")
           .attr("x", (d) =>
-            direction === "horizontal"
+            shape === "radial"
+              ? d.x < Math.PI === !d.children
+                ? labelMargin
+                : -labelMargin
+              : direction === "horizontal"
               ? d.children || d._children
                 ? -labelMargin
                 : labelMargin
@@ -323,12 +354,19 @@ export default class Dendrogram extends Stanza {
               : -labelMargin
           )
           .attr("dy", "3")
-          .attr(
-            "transform",
-            direction === "horizontal" ? "rotate(0)" : "rotate(-90)"
+          .attr("transform", (d) =>
+            shape === "radial"
+              ? `rotate(${d.x >= Math.PI ? 180 : 0})`
+              : direction === "horizontal"
+              ? "rotate(0)"
+              : "rotate(-90)"
           )
           .attr("text-anchor", (d) =>
-            direction === "horizontal"
+            shape === "radial"
+              ? d.x < Math.PI === !d.children
+                ? "start"
+                : "end"
+              : direction === "horizontal"
               ? d.children || d._children
                 ? "end"
                 : "start"
@@ -344,7 +382,11 @@ export default class Dendrogram extends Stanza {
         nodeUpdate
           .transition()
           .duration(duration)
-          .attr("transform", (d) => `translate(${d.y}, ${d.x})`);
+          .attr("transform", (d) =>
+            shape === "radial"
+              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
+              : `translate(${d.y}, ${d.x})`
+          );
 
         nodeUpdate
           .select("circle")
@@ -365,7 +407,14 @@ export default class Dendrogram extends Stanza {
           .exit()
           .transition()
           .duration(duration)
-          .attr("transform", `translate(${source.y}, ${source.x})`)
+          .attr(
+            "transform",
+            shape === "radial"
+              ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
+                  source.y
+                }, ${source.x})`
+              : `translate(${source.y}, ${source.x})`
+          )
           .remove();
 
         const link = g
@@ -378,7 +427,9 @@ export default class Dendrogram extends Stanza {
           .classed("link", true)
           .attr(
             "d",
-            graphPath === "curve"
+            shape === "radial"
+              ? d3.linkRadial().angle(source.x).radius(source.y)
+              : shape === "curve"
               ? getLinkFn().x(source.y0).y(source.x0)
               : d3.link(d3.curveStep).x(source.y0).y(source.x0)
           );
@@ -389,7 +440,12 @@ export default class Dendrogram extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            graphPath === "curve"
+            shape === "radial"
+              ? d3
+                  .linkRadial()
+                  .angle((d) => d.x)
+                  .radius((d) => d.y)
+              : shape === "curve"
               ? getLinkFn()
                   .x((d) => d.y)
                   .y((d) => d.x)
@@ -412,7 +468,9 @@ export default class Dendrogram extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            graphPath === "curve"
+            shape === "radial"
+              ? d3.linkRadial().angle(source.x).radius(source.y)
+              : shape === "curve"
               ? getLinkFn().x(source.y).y(source.x)
               : d3.link(d3.curveStep).x(source.y).y(source.x)
           )
