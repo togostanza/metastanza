@@ -148,7 +148,6 @@ export default class Dendrogram extends Stanza {
     tempGroup.remove();
 
     const g = svg.append("g");
-    const gContent = g.append("g");
 
     const draw = (
       MARGIN = {
@@ -290,7 +289,7 @@ export default class Dendrogram extends Stanza {
 
       const update = (source) => {
         let i = 0;
-        const node = gContent
+        const node = g
           .selectAll(".node")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
@@ -369,7 +368,7 @@ export default class Dendrogram extends Stanza {
           .attr("transform", `translate(${source.y}, ${source.x})`)
           .remove();
 
-        const link = gContent
+        const link = g
           .selectAll(".link")
           .data(denroot.links(), (d) => d.target.id);
 
