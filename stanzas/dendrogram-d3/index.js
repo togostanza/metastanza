@@ -304,26 +304,17 @@ export default class Dendrogram extends Stanza {
           .selectAll(".node")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
-        if (shape === "radial") {
-          node
-            .selectAll("a")
-            .join("a")
-            .attr(
-              "transform",
-              (d) =>
-                `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
-            );
-        }
-
         const nodeEnter = node
           .enter()
           .append("g")
           .classed("node", true)
           .attr(
             "transform",
-            `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
-              source.y0
-            }, ${source.x0})`
+            shape === "radial"
+              ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
+                  source.y0
+                }, ${source.x0})`
+              : `translate(${source.y0}, ${source.x0})`
           )
           .on("click", (e, d) => {
             toggle(d);
