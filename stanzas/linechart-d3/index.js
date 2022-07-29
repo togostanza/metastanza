@@ -46,6 +46,8 @@ export default class Linechart extends Stanza {
     const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
     const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
 
+    const showPoints = this._validatedParams.get("points-show").value;
+
     const xTicksAngle = this._validatedParams.get(
       "axis-x-ticks_label_angle"
     ).value;
@@ -149,6 +151,9 @@ export default class Linechart extends Stanza {
     if (root.querySelector("svg")) {
       root.querySelector("svg").remove();
     }
+
+    // Data symbols
+    const symbolGenerator = d3.symbol().size(20).type(d3.symbolCircle);
 
     const { width, height } = root.getBoundingClientRect();
 
@@ -269,6 +274,7 @@ export default class Linechart extends Stanza {
           group: "data",
           color: color("data"),
           show: true,
+          id: uuidv4(),
           data: this._data
             .map((d) => {
               if (d[yKeyName] && d[yKeyName]) {
@@ -398,7 +404,10 @@ export default class Linechart extends Stanza {
         );
     }
 
-    const errorsGroup = chartAreaGroup.append("g").attr("class", "error-bars");
+    const errorsGroup = chartAreaGroup
+      .append("g")
+      .attr("class", "error-bars")
+      .attr("clip-path", "url(#clip)");
 
     let xAxis, xAxisX, yAxis, yAxisX, yAxisY, xAxisY;
 
@@ -508,18 +517,40 @@ export default class Linechart extends Stanza {
       yAxis.tickFormat(d3.format(yAxisTicksFormat));
     }
 
-    const errorVertical = (d) => {
+    const errorVertical = (d, error) => {
+      let delta = 0;
       if (xScale === "ordinal") {
-        return `M ${
-          this._scaleX(d.x) + this._scaleX.bandwidth() / 2
-        },${this._scaleY(d.y - 0.1 * d.y)} L ${
-          this._scaleX(d.x) + this._scaleX.bandwidth() / 2
-        },${this._scaleY(d.y + 0.1 * d.y)}`;
-      } else {
-        return `M ${this._scaleX(d.x)},${this._scaleY(
-          d.y - 0.1 * d.y
-        )} L ${this._scaleX(d.x)},${this._scaleY(d.y + 0.1 * d.y)}`;
+        delta = this._scaleX.bandwidth() / 2;
       }
+      return `M ${this._scaleX(d.x) + delta},${this._scaleY(error[0])} L ${
+        this._scaleX(d.x) + delta
+      },${this._scaleY(error[1])}`;
+    };
+
+    const errorHorizontalTop = (d, error) => {
+      const barWidth = 5;
+      let delta = 0;
+      if (xScale === "ordinal") {
+        delta = this._scaleX.bandwidth() / 2;
+      }
+      return `M ${this._scaleX(d.x) + delta - barWidth / 2},${this._scaleY(
+        error[1]
+      )} L ${this._scaleX(d.x) + delta + barWidth / 2},${this._scaleY(
+        error[1]
+      )}`;
+    };
+
+    const errorHorizontalBottom = (d, error) => {
+      const barWidth = 5;
+      let delta = 0;
+      if (xScale === "ordinal") {
+        delta = this._scaleX.bandwidth() / 2;
+      }
+      return `M ${this._scaleX(d.x) + delta - barWidth / 2},${this._scaleY(
+        error[0]
+      )} L ${this._scaleX(d.x) + delta + barWidth / 2},${this._scaleY(
+        error[0]
+      )}`;
     };
 
     const line = d3
@@ -758,9 +789,7 @@ export default class Linechart extends Stanza {
 
           const croppedData = this._currentData.map((d) => {
             return {
-              group: d.group,
-              color: d.color,
-              show: d.show,
+              ...d,
               data: d.data.filter((v) => newDomainX.includes(v.x)),
             };
           });
@@ -774,9 +803,28 @@ export default class Linechart extends Stanza {
           }
 
           updateRange(croppedData);
-          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
-          errorsGroup.selectAll("path").attr("d", errorVertical);
+          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+          graphArea
+            .selectAll(".symbol")
+            .attr(
+              "transform",
+              (d) =>
+                `translate(${
+                  this._scaleX(d.x) + this._scaleX.bandwidth() / 2
+                },${this._scaleY(d.y)})`
+            );
+          errorsGroup
+            .selectAll("path.error-bar-vertical")
+            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+
+          errorsGroup
+            .selectAll("path.error-bar-horizontal-top")
+            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+
+          errorsGroup
+            .selectAll("path.error-bar-horizontal-bottom")
+            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
         } else {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
@@ -807,7 +855,22 @@ export default class Linechart extends Stanza {
           }
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
-          errorsGroup.selectAll("path").attr("d", errorVertical);
+
+          graphArea.selectAll(".symbol").attr("transform", (d) => {
+            return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
+          });
+
+          errorsGroup
+            .selectAll("path.error-bar-vertical")
+            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+
+          errorsGroup
+            .selectAll("path.error-bar-horizontal-top")
+            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+
+          errorsGroup
+            .selectAll("path.error-bar-horizontal-bottom")
+            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
         }
       };
       const brushedY = (e) => {
@@ -831,7 +894,76 @@ export default class Linechart extends Stanza {
         }
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
-        errorsGroup.selectAll("path").attr("d", errorVertical);
+
+        errorsGroup
+          .selectAll("path.error-bar-vertical")
+          .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+
+        errorsGroup
+          .selectAll("path.error-bar-horizontal-top")
+          .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+
+        errorsGroup
+          .selectAll("path.error-bar-horizontal-bottom")
+          .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+
+        graphArea.selectAll(".symbol").attr("transform", (d) => {
+          if (xScale === "ordinal") {
+            return `translate(${
+              this._scaleX(d.x) + this._scaleX.bandwidth() / 2
+            }, ${this._scaleY(d.y)})`;
+          }
+          return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
+        });
+      };
+
+      const updateSymbols = (data) => {
+        console.log("update symbols", data);
+
+        const symUpdateG = chartAreaGroup
+          .selectAll(".symbol-group")
+          .data(data, (d) => d.id);
+
+        const symEnterG = symUpdateG.enter().append("g");
+
+        console.log("symUpdateG", symUpdateG);
+
+        const mergedSymbols = symUpdateG
+          .merge(symEnterG)
+          .attr("class", "symbol-group")
+          .attr("clip-path", "url(#clip)")
+          .attr("fill", (d) => d.color);
+
+        symUpdateG.exit().remove();
+
+        const symUpdate = mergedSymbols.selectAll(".symbol").data((d) => {
+          console.log("d.data", d.data);
+          return d.data;
+        });
+
+        console.log("this._scaleX domain", this._scaleX.domain());
+        console.log("this._scaleX range", this._scaleX.range());
+        console.log("this._scaleX range", this._scaleX.range());
+
+        const symEnter = symUpdate
+          .enter()
+          .append("g")
+          .attr("transform", (d) => {
+            if (xScale === "ordinal") {
+              return `translate(${
+                this._scaleX(d.x) + this._scaleX.bandwidth() / 2
+              },${this._scaleY(d.y)})`;
+            }
+            return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
+          });
+
+        symUpdate
+          .merge(symEnter)
+          .attr("class", "symbol")
+          .append("path")
+          .attr("d", symbolGenerator);
+
+        symUpdate.exit().remove();
       };
 
       const updateRange = (data) => {
@@ -839,11 +971,11 @@ export default class Linechart extends Stanza {
 
         const linesUpdate = chartAreaGroup
           .selectAll(".line")
-          .data(data, (d) => d.group);
+          .data(data, (d) => d.id);
 
         const errorUpdate = errorsGroup
           .selectAll(".error")
-          .data(data, (d) => d.group);
+          .data(data, (d) => d.id);
 
         const linesEnter = linesUpdate
           .enter()
@@ -855,7 +987,7 @@ export default class Linechart extends Stanza {
         const errorEnter = errorUpdate
           .enter()
           .append("g")
-          .attr("id", (d) => `error-${d.id}`);
+          .classed("error", true);
 
         errorEnter.each((d, i, nodes) => {
           const thisGroup = d3.select(nodes[i]);
@@ -864,11 +996,28 @@ export default class Linechart extends Stanza {
             .selectAll(".error-bar-g")
             .data(d.data);
 
-          const errorBarEnterG = errorBarUpdateG.enter().append("g");
-          errorBarEnterG.append("path").attr("d", errorVertical);
+          const errorBarEnterG = errorBarUpdateG
+            .enter()
+            .append("g")
+            .attr("class", "error-bar-g");
+
+          errorBarEnterG
+            .append("path")
+            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("class", "error-bar-vertical");
+          errorBarEnterG
+            .append("path")
+            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("class", "error-bar-horizontal-top");
+          errorBarEnterG
+            .append("path")
+            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("class", "error-bar-horizontal-bottom");
 
           errorBarUpdateG.exit().remove();
         });
+
+        updateSymbols(data);
 
         errorUpdate.merge(errorEnter).attr("stroke", "green");
 
@@ -999,7 +1148,11 @@ export default class Linechart extends Stanza {
       }
     }
 
-    if (showLegend && !existingLegend) {
+    if (showLegend) {
+      // if (existingLegend) {
+      //   existingLegend.remove();
+      // }
+
       this.legend = new Legend2(
         this._groups.map((item, index) => {
           return {

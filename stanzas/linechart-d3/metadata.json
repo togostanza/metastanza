@@ -39,6 +39,14 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "points-show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show data points",
+      "stanza:required": false,
+      "stanza:default": false
+    },
+    {
       "stanza:key": "axis-x-data_key",
       "stanza:type": "text",
       "stanza:example": "chromosome",
@@ -88,7 +96,7 @@
       "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "log", "ordinal", "time"],
-      "stanza:example": "ordinal",
+      "stanza:example": "time",
       "stanza:default": "linear",
       "stanza:description": "Axis scale",
       "stanza:required": false
