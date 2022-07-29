@@ -56,10 +56,23 @@ export default class Linechart extends Stanza {
     ).value;
 
     const xTicksNumber = 5;
+    const xGridNumber = 5;
     const xTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
     )
       ? parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+      : null;
+
+    const xGridInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-x-gridlines_interval").value)
+    )
+      ? parseFloat(this._validatedParams.get("axis-x-gridlines_interval").value)
+      : null;
+
+    const yGridInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-y-gridlines_interval").value)
+    )
+      ? parseFloat(this._validatedParams.get("axis-y-gridlines_interval").value)
       : null;
 
     const yTicksNumber = 3;
@@ -84,6 +97,10 @@ export default class Linechart extends Stanza {
 
     const xAxisTicksIntervalUnits = this._validatedParams.get(
       "axis-x-ticks_interval_units"
+    ).value;
+
+    const xAxisGridIntervalUnits = this._validatedParams.get(
+      "axis-x-gridlines_interval_units"
     ).value;
 
     const yAxisTicksIntervalUnits = this._validatedParams.get(
@@ -441,6 +458,15 @@ export default class Linechart extends Stanza {
     const yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
     const yAxisY = d3.axisLeft(this._previewYScaleY);
 
+    const xAxisGrid = d3
+      .axisBottom(this._scaleXGrid)
+      .tickSize(-chartHeight)
+      .tickFormat("");
+    const yAxisGrid = d3
+      .axisLeft(this._scaleYGrid)
+      .tickSize(-chartWidth)
+      .tickFormat("");
+
     //setXAxes();
     //setYAxes();
 
@@ -452,9 +478,19 @@ export default class Linechart extends Stanza {
         xAxis.tickFormat((d) => d);
         xAxisX.tickFormat((d) => d);
       }
+      xExtent = d3.extent(this._xDDomain);
+
+      if (xGridInterval) {
+        const ticks = [];
+        for (let i = xExtent[0]; i <= xExtent[1]; i = i + xGridInterval) {
+          ticks.push(i);
+        }
+        xAxisGrid.tickValues(ticks);
+      } else {
+        xAxisGrid.ticks(xGridNumber);
+      }
 
       if (xTicksInterval) {
-        xExtent = d3.extent(this._xDDomain);
         const ticks = [];
         for (let i = xExtent[0]; i <= xExtent[1]; i = i + xTicksInterval) {
           ticks.push(i);
@@ -479,6 +515,14 @@ export default class Linechart extends Stanza {
       } catch {
         xAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
         xAxisX.tickFormat(d3.timeFormat("%Y-%m-%d"));
+      }
+
+      if (xGridInterval && xAxisGridIntervalUnits) {
+        const interval =
+          intervalMap[xAxisGridIntervalUnits]().every(xGridInterval);
+        xAxisGrid.ticks(interval);
+      } else {
+        xAxisGrid.ticks(xGridNumber);
       }
 
       if (
@@ -511,8 +555,17 @@ export default class Linechart extends Stanza {
         yAxis.tickFormat((d) => d);
       }
 
+      yExtent = d3.extent(this._yDDomain);
+
+      if (yGridInterval) {
+        const ticks = [];
+        for (let i = yExtent[0]; i <= yExtent[1]; i = i + yGridInterval) {
+          ticks.push(i);
+        }
+        yAxisGrid.tickValues(ticks);
+      }
+
       if (yTicksInterval) {
-        yExtent = d3.extent(this._yDDomain);
         const ticks = [];
         for (let i = yExtent[0]; i <= yExtent[1]; i = i + yTicksInterval) {
           ticks.push(i);
@@ -598,9 +651,19 @@ export default class Linechart extends Stanza {
       .attr("class", "axis x")
       .attr("clip-path", "url(#clip)");
 
+    const graphXGridG = xAxisTitleGroup
+      .append("g")
+      .attr("class", "grid x")
+      .attr("clip-path", "url(#clip)");
+
     const graphYAxisG = yAxisTitleGroup
       .append("g")
       .attr("class", "axis y")
+      .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`);
+
+    const graphYGridG = yAxisTitleGroup
+      .append("g")
+      .attr("class", "grid y")
       .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`);
 
     let previewXAxisXG;
@@ -854,9 +917,11 @@ export default class Linechart extends Stanza {
 
           if (!hideXAxis && !hideXAxisTicks) {
             graphXAxisG.call(xAxis).call(rotateXTickLabels);
+            graphXGridG.call(xAxisGrid);
           }
           if (!hideYAxis && !hideYAxisTicks) {
             graphYAxisG.call(yAxis);
+            graphYGridG.call(yAxisGrid);
           }
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
@@ -882,12 +947,14 @@ export default class Linechart extends Stanza {
         const y0y1 = s.map(this._previewYScaleY.invert, this._previewYScaleY);
 
         this._scaleY.domain(d3.extent(y0y1));
+        this._scaleYGrid.domain(d3.extent(y0y1));
 
         if (!hideXAxis && !hideXAxisTicks) {
           graphXAxisG.call(xAxis).call(rotateXTickLabels);
         }
         if (!hideYAxis && !hideYAxisTicks) {
           graphYAxisG.call(yAxis);
+          graphYGridG.call(yAxisGrid);
         }
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));

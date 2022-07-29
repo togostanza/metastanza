@@ -322,9 +322,9 @@
     },
     {
       "stanza:key": "axis-y-gridlines_interval",
-      "stanza:type": "text",
-      "stanza:example": "none",
-      "stanza:default": "none",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:default": 5,
       "stanza:description": "Axis grid lines interval",
       "stanza:required": false
     },
