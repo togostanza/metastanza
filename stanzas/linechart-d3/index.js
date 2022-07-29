@@ -409,32 +409,40 @@ export default class Linechart extends Stanza {
       .attr("class", "error-bars")
       .attr("clip-path", "url(#clip)");
 
-    let xAxis, xAxisX, yAxis, yAxisX, yAxisY, xAxisY;
+    // let yAxis, yAxisX, yAxisY;
 
     let xExtent, yExtent;
 
-    const setXAxes = () => {
-      xAxis = d3.axisBottom(this._scaleX);
-      xAxisX = d3.axisBottom(this._previewXScaleX);
-      xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
-    };
+    // const setXAxes = () => {
+    //   xAxis = d3.axisBottom(this._scaleX);
+    //   xAxisX = d3.axisBottom(this._previewXScaleX);
+    //   xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
 
-    const setYAxes = () => {
-      yAxis = d3.axisLeft(this._scaleY);
-      yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
-      yAxisY = d3.axisLeft(this._previewYScaleY);
-    };
+    // };
+
+    // const setYAxes = () => {
+
+    // };
 
     this._scaleX = getScale(xScale).range([0, chartWidth]);
+    this._scaleXGrid = getScale(xScale).range([0, chartWidth]);
     this._scaleY = getScale(yScale).range([chartHeight, 0]);
+    this._scaleYGrid = getScale(yScale).range([chartHeight, 0]);
 
     this._previewXScaleX = getScale(xScale).range([0, previewXWidth]);
     this._previewXScaleY = getScale(yScale).range([previewXHeight, 0]);
     this._previewYScaleX = getScale(xScale).range([0, previewYWidth]);
     this._previewYScaleY = getScale(yScale).range([previewYHeight, 0]);
 
-    setXAxes();
-    setYAxes();
+    const xAxis = d3.axisBottom(this._scaleX);
+    const xAxisX = d3.axisBottom(this._previewXScaleX);
+    const xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
+    const yAxis = d3.axisLeft(this._scaleY);
+    const yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
+    const yAxisY = d3.axisLeft(this._previewYScaleY);
+
+    //setXAxes();
+    //setYAxes();
 
     if (xScale === "linear") {
       try {
@@ -522,9 +530,10 @@ export default class Linechart extends Stanza {
       if (xScale === "ordinal") {
         delta = this._scaleX.bandwidth() / 2;
       }
-      return `M ${this._scaleX(d.x) + delta},${this._scaleY(error[0])} L ${
-        this._scaleX(d.x) + delta
-      },${this._scaleY(error[1])}`;
+
+      return `M ${delta},${-Math.abs(
+        this._scaleY(d.y) - this._scaleY(error[1])
+      )} L ${delta},${Math.abs(this._scaleY(d.y) - this._scaleY(error[0]))}`;
     };
 
     const errorHorizontalTop = (d, error) => {
@@ -533,10 +542,10 @@ export default class Linechart extends Stanza {
       if (xScale === "ordinal") {
         delta = this._scaleX.bandwidth() / 2;
       }
-      return `M ${this._scaleX(d.x) + delta - barWidth / 2},${this._scaleY(
-        error[1]
-      )} L ${this._scaleX(d.x) + delta + barWidth / 2},${this._scaleY(
-        error[1]
+      return `M ${delta - barWidth / 2},${-Math.abs(
+        this._scaleY(d.y) - this._scaleY(error[1])
+      )} L ${delta + barWidth / 2},${-Math.abs(
+        this._scaleY(d.y) - this._scaleY(error[1])
       )}`;
     };
 
@@ -546,10 +555,10 @@ export default class Linechart extends Stanza {
       if (xScale === "ordinal") {
         delta = this._scaleX.bandwidth() / 2;
       }
-      return `M ${this._scaleX(d.x) + delta - barWidth / 2},${this._scaleY(
-        error[0]
-      )} L ${this._scaleX(d.x) + delta + barWidth / 2},${this._scaleY(
-        error[0]
+      return `M ${delta - barWidth / 2},${Math.abs(
+        this._scaleY(d.y) - this._scaleY(error[0])
+      )} L ${delta + barWidth / 2},${Math.abs(
+        this._scaleY(d.y) - this._scaleY(error[0])
       )}`;
     };
 
@@ -814,17 +823,13 @@ export default class Linechart extends Stanza {
                   this._scaleX(d.x) + this._scaleX.bandwidth() / 2
                 },${this._scaleY(d.y)})`
             );
-          errorsGroup
-            .selectAll("path.error-bar-vertical")
-            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
 
-          errorsGroup
-            .selectAll("path.error-bar-horizontal-top")
-            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+          graphArea.selectAll(".error-bar").attr("transform", (d) => {
+            const x = this._scaleX(d.x);
+            const y = this._scaleY(d.y);
 
-          errorsGroup
-            .selectAll("path.error-bar-horizontal-bottom")
-            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+            return `translate(${x},${y})`;
+          });
         } else {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
@@ -860,17 +865,9 @@ export default class Linechart extends Stanza {
             return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
           });
 
-          errorsGroup
-            .selectAll("path.error-bar-vertical")
-            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
-
-          errorsGroup
-            .selectAll("path.error-bar-horizontal-top")
-            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
-
-          errorsGroup
-            .selectAll("path.error-bar-horizontal-bottom")
-            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+          graphArea.selectAll(".error-bar").attr("transform", (d) => {
+            return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
+          });
         }
       };
       const brushedY = (e) => {
@@ -895,38 +892,40 @@ export default class Linechart extends Stanza {
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
-        errorsGroup
-          .selectAll("path.error-bar-vertical")
-          .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+        graphArea
+          .selectAll(".error-bar")
+          .attr("transform", (d) => {
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+            return `translate(${x},${y})`;
+          })
+          .each(function (d) {
+            const errorBarGroup = d3.select(this);
 
-        errorsGroup
-          .selectAll("path.error-bar-horizontal-top")
-          .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
-
-        errorsGroup
-          .selectAll("path.error-bar-horizontal-bottom")
-          .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+            errorBarGroup
+              .select(".vertical")
+              .attr("d", errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+            errorBarGroup
+              .select(".top")
+              .attr("d", errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+            errorBarGroup
+              .select(".bottom")
+              .attr("d", errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+          });
 
         graphArea.selectAll(".symbol").attr("transform", (d) => {
-          if (xScale === "ordinal") {
-            return `translate(${
-              this._scaleX(d.x) + this._scaleX.bandwidth() / 2
-            }, ${this._scaleY(d.y)})`;
-          }
-          return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
+          const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+          const y = this._scaleY(d.y);
+          return `translate(${x},${y})`;
         });
       };
 
       const updateSymbols = (data) => {
-        console.log("update symbols", data);
-
         const symUpdateG = chartAreaGroup
           .selectAll(".symbol-group")
           .data(data, (d) => d.id);
 
         const symEnterG = symUpdateG.enter().append("g");
-
-        console.log("symUpdateG", symUpdateG);
 
         const mergedSymbols = symUpdateG
           .merge(symEnterG)
@@ -937,13 +936,8 @@ export default class Linechart extends Stanza {
         symUpdateG.exit().remove();
 
         const symUpdate = mergedSymbols.selectAll(".symbol").data((d) => {
-          console.log("d.data", d.data);
           return d.data;
         });
-
-        console.log("this._scaleX domain", this._scaleX.domain());
-        console.log("this._scaleX range", this._scaleX.range());
-        console.log("this._scaleX range", this._scaleX.range());
 
         const symEnter = symUpdate
           .enter()
@@ -966,15 +960,56 @@ export default class Linechart extends Stanza {
         symUpdate.exit().remove();
       };
 
+      const updateErrors = (data) => {
+        console.log(
+          "unpdate errors this._scaleY.range()",
+          this._scaleY.range()
+        );
+        const errorUpdate = errorsGroup
+          .selectAll(".error")
+          .data(data, (d) => d.id);
+
+        const errorEnter = errorUpdate.enter().append("g");
+
+        const mergedErrors = errorUpdate
+          .merge(errorEnter)
+          .classed("error", true)
+          .attr("stroke", "green");
+
+        errorUpdate.exit().remove();
+
+        const errorBarUpdate = mergedErrors.selectAll(".error-bar").data(
+          (d) => {
+            return d.data;
+          },
+          (d) => d.x
+        );
+
+        const errorBarEnter = errorBarUpdate.enter().append("g");
+
+        errorBarEnter
+          .append("path")
+          .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]))
+          .attr("class", "vertical");
+        errorBarEnter
+          .append("path")
+          .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
+          .attr("class", "top");
+        errorBarEnter
+          .append("path")
+          .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
+          .attr("class", "bottom");
+
+        errorBarUpdate.merge(errorBarEnter).attr("class", "error-bar");
+
+        errorBarUpdate.exit().remove();
+      };
+
       const updateRange = (data) => {
         //chartAreaGroup.selectAll(".line").remove();
 
         const linesUpdate = chartAreaGroup
           .selectAll(".line")
-          .data(data, (d) => d.id);
-
-        const errorUpdate = errorsGroup
-          .selectAll(".error")
           .data(data, (d) => d.id);
 
         const linesEnter = linesUpdate
@@ -984,44 +1019,8 @@ export default class Linechart extends Stanza {
           .attr("d", (d) => line(d.data))
           .attr("clip-path", "url(#clip)");
 
-        const errorEnter = errorUpdate
-          .enter()
-          .append("g")
-          .classed("error", true);
-
-        errorEnter.each((d, i, nodes) => {
-          const thisGroup = d3.select(nodes[i]);
-
-          const errorBarUpdateG = thisGroup
-            .selectAll(".error-bar-g")
-            .data(d.data);
-
-          const errorBarEnterG = errorBarUpdateG
-            .enter()
-            .append("g")
-            .attr("class", "error-bar-g");
-
-          errorBarEnterG
-            .append("path")
-            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]))
-            .attr("class", "error-bar-vertical");
-          errorBarEnterG
-            .append("path")
-            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
-            .attr("class", "error-bar-horizontal-top");
-          errorBarEnterG
-            .append("path")
-            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
-            .attr("class", "error-bar-horizontal-bottom");
-
-          errorBarUpdateG.exit().remove();
-        });
-
         updateSymbols(data);
-
-        errorUpdate.merge(errorEnter).attr("stroke", "green");
-
-        errorUpdate.exit().remove();
+        updateErrors(data);
 
         linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
         linesUpdate.exit().remove();
