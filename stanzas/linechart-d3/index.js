@@ -51,6 +51,7 @@ export default class Linechart extends Stanza {
     const xTicksAngle = this._validatedParams.get(
       "axis-x-ticks_label_angle"
     ).value;
+
     const yTicksAngle = this._validatedParams.get(
       "axis-y-ticks_label_angle"
     ).value;
@@ -76,6 +77,7 @@ export default class Linechart extends Stanza {
       : null;
 
     const yTicksNumber = 3;
+    const yGridNumber = 3;
     const yTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
     )
@@ -129,6 +131,20 @@ export default class Linechart extends Stanza {
     const ignoreGroups = this._validatedParams
       .get("data_grouping-ignore_groups")
       .value.split(",");
+
+    const axisXRangeMin = this._validatedParams.get("axis-x-range_min").value;
+    const axisXRangeMax = this._validatedParams.get("axis-x-range_min").value;
+
+    const axisYRangeMin = this._validatedParams.get("axis-y-range_min").value;
+    const axisYRangeMax = this._validatedParams.get("axis-y-range_max").value;
+
+    if (
+      yScale === "log" &&
+      (parseFloat(axisYRangeMin) <= 0 || parseFloat(axisYRangeMin) <= 0)
+    ) {
+      this._renderError("Y axis range must be positive");
+      throw new Error("Y axis range must be positive");
+    }
 
     let values = await loadData(
       this.params["data-url"],
@@ -303,13 +319,45 @@ export default class Linechart extends Stanza {
       ];
     }
 
-    this._xDDomain = this._groupedData
-      .map((d) => d.data.map((d) => d.x))
-      .flat();
+    this._currentData = this._groupedData;
 
-    this._yDDomain = this._groupedData
-      .map((d) => d.data.map((d) => d.y))
-      .flat();
+    const getXDomain = () => {
+      if (xScale === "ordinal") {
+        return [
+          ...new Set(
+            this._currentData.map((d) => d.data.map((d) => d.x)).flat()
+          ),
+        ];
+      } else {
+        const xDomain = this._currentData.map((d) => d.data.map((d) => d.x));
+        return d3.extent(xDomain.flat());
+      }
+    };
+
+    // set y domain
+    const getYDomain = () => {
+      if (yScale === "ordinal") {
+        return [
+          ...new Set(
+            this._currentData.map((d) => d.data.map((d) => d.y)).flat()
+          ),
+        ];
+      } else {
+        const yDomain = this._currentData.map((d) => d.data.map((d) => d.y));
+
+        const extent = d3.extent(yDomain.flat());
+
+        return [
+          !isNaN(parseFloat(axisYRangeMin))
+            ? parseFloat(axisYRangeMin)
+            : extent[0],
+
+          !isNaN(parseFloat(axisYRangeMax))
+            ? parseFloat(axisYRangeMax)
+            : extent[1],
+        ];
+      }
+    };
 
     const svg = d3
       .select(root)
@@ -430,21 +478,8 @@ export default class Linechart extends Stanza {
 
     let xExtent, yExtent;
 
-    // const setXAxes = () => {
-    //   xAxis = d3.axisBottom(this._scaleX);
-    //   xAxisX = d3.axisBottom(this._previewXScaleX);
-    //   xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
-
-    // };
-
-    // const setYAxes = () => {
-
-    // };
-
     this._scaleX = getScale(xScale).range([0, chartWidth]);
-    this._scaleXGrid = getScale(xScale).range([0, chartWidth]);
     this._scaleY = getScale(yScale).range([chartHeight, 0]);
-    this._scaleYGrid = getScale(yScale).range([chartHeight, 0]);
 
     this._previewXScaleX = getScale(xScale).range([0, previewXWidth]);
     this._previewXScaleY = getScale(yScale).range([previewXHeight, 0]);
@@ -452,18 +487,19 @@ export default class Linechart extends Stanza {
     this._previewYScaleY = getScale(yScale).range([previewYHeight, 0]);
 
     const xAxis = d3.axisBottom(this._scaleX);
-    const xAxisX = d3.axisBottom(this._previewXScaleX);
+    const xAxisX = d3.axisBottom(this._previewXScaleX).tickValues([]);
     const xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
     const yAxis = d3.axisLeft(this._scaleY);
     const yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
-    const yAxisY = d3.axisLeft(this._previewYScaleY);
+    const yAxisY = d3.axisLeft(this._previewYScaleY).tickValues([]);
 
     const xAxisGrid = d3
-      .axisBottom(this._scaleXGrid)
+      .axisBottom(this._scaleX)
       .tickSize(-chartHeight)
       .tickFormat("");
+
     const yAxisGrid = d3
-      .axisLeft(this._scaleYGrid)
+      .axisLeft(this._scaleY)
       .tickSize(-chartWidth)
       .tickFormat("");
 
@@ -478,7 +514,7 @@ export default class Linechart extends Stanza {
         xAxis.tickFormat((d) => d);
         xAxisX.tickFormat((d) => d);
       }
-      xExtent = d3.extent(this._xDDomain);
+      xExtent = d3.extent(getXDomain());
 
       if (xGridInterval) {
         const ticks = [];
@@ -555,7 +591,7 @@ export default class Linechart extends Stanza {
         yAxis.tickFormat((d) => d);
       }
 
-      yExtent = d3.extent(this._yDDomain);
+      yExtent = d3.extent(getYDomain());
 
       if (yGridInterval) {
         const ticks = [];
@@ -563,6 +599,8 @@ export default class Linechart extends Stanza {
           ticks.push(i);
         }
         yAxisGrid.tickValues(ticks);
+      } else {
+        yAxisGrid.ticks(yGridNumber);
       }
 
       if (yTicksInterval) {
@@ -641,7 +679,14 @@ export default class Linechart extends Stanza {
 
     const linePreviewY = d3
       .line()
-      .x((d) => this._previewYScaleX(d.x))
+      .x((d) => {
+        if (xScale === "ordinal") {
+          return (
+            this._previewYScaleX(d.x) + this._previewYScaleX.bandwidth() / 2
+          );
+        }
+        return this._previewYScaleX(d.x);
+      })
       .y((d) => {
         return this._previewYScaleY(d.y);
       });
@@ -664,12 +709,14 @@ export default class Linechart extends Stanza {
     const graphYGridG = yAxisTitleGroup
       .append("g")
       .attr("class", "grid y")
-      .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`);
+      .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`)
+      .attr("clip-path", "url(#clip)");
 
     let previewXAxisXG;
     let previewXAxisYG;
     let previewYAxisXG;
     let previewYAxisYG;
+
     if (showXPreview) {
       previewXAxisXG = previewXArea
         .append("g")
@@ -694,34 +741,6 @@ export default class Linechart extends Stanza {
 
     const update = () => {
       this._currentData = this._groupedData.filter((group) => group.show);
-
-      const getXDomain = () => {
-        if (xScale === "ordinal") {
-          return [
-            ...new Set(
-              this._currentData.map((d) => d.data.map((d) => d.x)).flat()
-            ),
-          ];
-        } else {
-          const xDomain = this._currentData.map((d) => d.data.map((d) => d.x));
-          return d3.extent(xDomain.flat());
-        }
-      };
-
-      // set y domain
-      const getYDomain = () => {
-        if (yScale === "ordinal") {
-          return [
-            ...new Set(
-              this._currentData.map((d) => d.data.map((d) => d.y)).flat()
-            ),
-          ];
-        } else {
-          const yDomain = this._currentData.map((d) => d.data.map((d) => d.y));
-
-          return d3.extent(yDomain.flat());
-        }
-      };
 
       this._scaleX.domain(getXDomain());
       this._scaleY.domain(getYDomain());
@@ -935,6 +954,7 @@ export default class Linechart extends Stanza {
           });
         }
       };
+
       const brushedY = (e) => {
         const s = e.selection || this._previewYScaleY.range();
 
@@ -947,11 +967,11 @@ export default class Linechart extends Stanza {
         const y0y1 = s.map(this._previewYScaleY.invert, this._previewYScaleY);
 
         this._scaleY.domain(d3.extent(y0y1));
-        this._scaleYGrid.domain(d3.extent(y0y1));
 
         if (!hideXAxis && !hideXAxisTicks) {
           graphXAxisG.call(xAxis).call(rotateXTickLabels);
         }
+
         if (!hideYAxis && !hideYAxisTicks) {
           graphYAxisG.call(yAxis);
           graphYGridG.call(yAxisGrid);
@@ -1015,6 +1035,7 @@ export default class Linechart extends Stanza {
                 this._scaleX(d.x) + this._scaleX.bandwidth() / 2
               },${this._scaleY(d.y)})`;
             }
+
             return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
           });
 
@@ -1028,10 +1049,6 @@ export default class Linechart extends Stanza {
       };
 
       const updateErrors = (data) => {
-        console.log(
-          "unpdate errors this._scaleY.range()",
-          this._scaleY.range()
-        );
         const errorUpdate = errorsGroup
           .selectAll(".error")
           .data(data, (d) => d.id);
@@ -1258,17 +1275,18 @@ export default class Linechart extends Stanza {
 
   _renderError(error) {
     const main = this.root.querySelector("main");
-    let errorDiv = main.querySelector(".error");
+    let errorDiv = main.querySelector("div.error");
     if (!errorDiv) {
       errorDiv = document.createElement("div");
       errorDiv.classList.add("error");
       main.appendChild(errorDiv);
     }
     errorDiv.innerText = error;
+    console.log(errorDiv);
   }
   _hideError() {
     const main = this.root.querySelector("main");
-    const errorDiv = main.querySelector(".error");
+    const errorDiv = main.querySelector("div.error");
     if (errorDiv) {
       errorDiv.remove();
     }

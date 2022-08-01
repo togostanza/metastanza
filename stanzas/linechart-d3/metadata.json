@@ -130,7 +130,7 @@
     {
       "stanza:key": "axis-x-range_max",
       "stanza:type": "text",
-      "stanza:example": "",
+      "stanza:example": "0",
       "stanza:computed": true,
       "stanza:description": "Axis range max",
       "stanza:required": false
@@ -272,7 +272,7 @@
     {
       "stanza:key": "axis-y-range_min",
       "stanza:type": "text",
-      "stanza:example": "",
+      "stanza:example": "0",
       "stanza:computed": true,
       "stanza:description": "Axis range min",
       "stanza:required": false
@@ -280,7 +280,7 @@
     {
       "stanza:key": "axis-y-range_max",
       "stanza:type": "text",
-      "stanza:example": "",
+      "stanza:example": "10",
       "stanza:computed": true,
       "stanza:description": "Axis range max",
       "stanza:required": false
