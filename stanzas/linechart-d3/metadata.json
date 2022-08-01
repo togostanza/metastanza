@@ -15,7 +15,7 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example": "https://drive.google.com/uc?id=13ZJ1iAbZF_3w8hz-8sP8EiKfcDbyjFN1&authuser=0",
+      "stanza:example": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
       "stanza:example_old": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
       "stanza:example_old2": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
@@ -102,15 +102,6 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "axis-x-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["top", "bottom"],
-      "stanza:example": "bottom",
-      "stanza:default": "bottom",
-      "stanza:description": "Axis placement",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "axis-x-preview",
       "stanza:type": "boolean",
       "stanza:example": true,
@@ -167,6 +158,15 @@
       "stanza:example": "%B %d, %Y",
       "stanza:default": "",
       "stanza:description": "Axis ticks interval format, in d3.format string form",
+      "stanza:required": false
+    },
+
+    {
+      "stanza:key": "axis-x-show_gridlines",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:computed": true,
+      "stanza:description": "Axis grid lines interval",
       "stanza:required": false
     },
     {
@@ -253,15 +253,6 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "axis-y-placement",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["left", "right"],
-      "stanza:example": "left",
-      "stanza:default": "left",
-      "stanza:description": "Axis placement",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "axis-y-preview",
       "stanza:type": "boolean",
       "stanza:example": true,
@@ -321,6 +312,14 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "axis-y-show_gridlines",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:default": false,
+      "stanza:description": "Show/hide axis grid lines",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "axis-y-gridlines_interval",
       "stanza:type": "number",
       "stanza:example": 5,
@@ -328,37 +327,11 @@
       "stanza:description": "Axis grid lines interval",
       "stanza:required": false
     },
-    {
-      "stanza:key": "axis-y-gridlines_interval_units",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "century",
-        "year",
-        "month",
-        "day",
-        "hour",
-        "minute",
-        "second",
-        "millisecond"
-      ],
-      "stanza:example": "none",
-      "stanza:default": "none",
-      "stanza:description": "Axis grid lines interval units",
-      "stanza:required": false
-    },
+
     {
       "stanza:key": "data_grouping-group_by_data_key",
       "stanza:type": "text",
       "stanza:example": "category",
-      "stanza:default": "",
-      "stanza:description": "Data key to group by data series. All data points wich includes that key will be considered as one data series. If not set, all points will be considered as of one data series.",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "data_grouping-ignore_groups",
-      "stanza:type": "text",
-      "stanza:example": "angle,Index",
       "stanza:default": "",
       "stanza:description": "Data key to group by data series. All data points wich includes that key will be considered as one data series. If not set, all points will be considered as of one data series.",
       "stanza:required": false
