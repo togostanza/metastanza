@@ -63,10 +63,6 @@ export default class Linechart extends Stanza {
       "axis-x-ticks_label_angle"
     ).value;
 
-    const yTicksAngle = this._validatedParams.get(
-      "axis-y-ticks_label_angle"
-    ).value;
-
     const xTicksNumber = 5;
     const xGridNumber = xTicksNumber;
     const xTicksInterval = !isNaN(
@@ -1067,7 +1063,7 @@ export default class Linechart extends Stanza {
         const mergedErrors = errorUpdate
           .merge(errorEnter)
           .classed("error", true)
-          .attr("stroke", "green");
+          .attr("stroke", (d) => d.color);
 
         errorUpdate.exit().remove();
 
@@ -1084,6 +1080,7 @@ export default class Linechart extends Stanza {
           .append("path")
           .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]))
           .attr("class", "vertical");
+
         errorBarEnter
           .append("path")
           .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
@@ -1119,8 +1116,12 @@ export default class Linechart extends Stanza {
           .attr("d", (d) => line(d.data))
           .attr("clip-path", "url(#clip)");
 
-        updateSymbols(data);
-        updateErrors(data);
+        if (showPoints) {
+          updateSymbols(data);
+        }
+        if (showErrorBars) {
+          updateErrors(data);
+        }
 
         linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
         linesUpdate.exit().remove();

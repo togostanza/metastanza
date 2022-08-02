@@ -15,9 +15,9 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example_old": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
+      "stanza:example": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
       "stanza:example_old2": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example_old": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -25,7 +25,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "json",
+      "stanza:example": "csv",
       "stanza:description": "Data type",
       "stanza:required": true
     },
@@ -112,7 +112,7 @@
       "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "log", "ordinal", "time"],
-      "stanza:example": "ordinal",
+      "stanza:example": "time",
       "stanza:default": "linear",
       "stanza:description": "Axis scale",
       "stanza:required": false
@@ -182,7 +182,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:computed": true,
-      "stanza:description": "Axis grid lines interval",
+      "stanza:description": "Show grid lines",
       "stanza:required": false
     },
     {
@@ -224,14 +224,7 @@
       "stanza:description": "Hide axis ticks",
       "stanza:required": false
     },
-    {
-      "stanza:key": "axis-y-ticks_label_angle",
-      "stanza:type": "number",
-      "stanza:example": 90,
-      "stanza:default": 0,
-      "stanza:description": "Tick labels angle, in degrees",
-      "stanza:required": false
-    },
+
     {
       "stanza:key": "axis-y-scale",
       "stanza:type": "single-choice",
@@ -286,7 +279,7 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:default": false,
-      "stanza:description": "Show/hide axis grid lines",
+      "stanza:description": "Show grid lines",
       "stanza:required": false
     },
     {
