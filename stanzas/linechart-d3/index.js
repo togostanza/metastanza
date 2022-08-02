@@ -26,6 +26,8 @@ export default class Linechart extends Stanza {
     ];
   }
 
+  _initLegend() {}
+
   async render() {
     this._hideError();
 
@@ -903,6 +905,14 @@ export default class Linechart extends Stanza {
           }
         }
 
+        if (showXPreview) {
+          previewXArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+          previewXArea
+            .selectAll(".handle")
+            .attr("y", previewXHeight / 4)
+            .attr("height", previewXHeight / 2);
+        }
+
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
         if (showYGridlines) {
@@ -984,7 +994,31 @@ export default class Linechart extends Stanza {
           const y = this._scaleY(d.y);
           return `translate(${x},${y})`;
         });
+
+        if (showYPreview) {
+          previewYArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+          previewYArea
+            .selectAll(".handle")
+            .attr("x", previewYWidth / 4)
+            .attr("width", previewYWidth / 2);
+        }
       };
+
+      if (showXPreview) {
+        previewXArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+        previewXArea
+          .selectAll(".handle")
+          .attr("y", previewXHeight / 4)
+          .attr("height", previewXHeight / 2);
+      }
+
+      if (showYPreview) {
+        previewYArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+        previewYArea
+          .selectAll(".handle")
+          .attr("x", previewYWidth / 4)
+          .attr("width", previewYWidth / 2);
+      }
 
       const updateSymbols = (data) => {
         const symUpdateG = chartAreaGroup
@@ -1148,7 +1182,7 @@ export default class Linechart extends Stanza {
             [0, 0],
             [previewXWidth, previewXHeight],
           ])
-          .on("brush end", brushedX);
+          .on("start brush end", brushedX);
         previewXArea
           .append("rect")
           .attr("class", "non-selection left")
@@ -1169,7 +1203,7 @@ export default class Linechart extends Stanza {
             [0, 0],
             [previewYWidth, previewYHeight],
           ])
-          .on("brush end", brushedY);
+          .on("start brush end", brushedY);
 
         previewYArea
           .append("rect")
@@ -1213,45 +1247,58 @@ export default class Linechart extends Stanza {
       }
     }
 
-    if (showLegend) {
-      // if (existingLegend) {
-      //   existingLegend.remove();
-      // }
+    const legendListener = (e) => {
+      e.stopPropagation();
 
-      this.legend = new Legend2(
-        this._groups.map((item, index) => {
-          return {
-            id: "" + index,
-            label: item,
-            color: this._groupByNameMap.get(item).color,
-            node: svg
-              .selectAll("path.line")
-              .filter((d) => d.group === item)
-              .nodes(),
-          };
-        }),
-        {
-          fadeoutNodes: svg.selectAll("path.line").nodes(),
-          position: legendPosition.split("-"),
-          fadeProp: "opacity",
-          showLeaders: false,
+      const group = e.detail.label;
+
+      this._groupedData.forEach((d) => {
+        if (d.group === group) {
+          d.show = !d.show;
         }
-      );
-      root.append(this.legend);
-
-      this.legend.addEventListener("legend-item-click", (e) => {
-        e.stopPropagation();
-
-        const group = e.detail.label;
-
-        this._groupedData.forEach((d) => {
-          if (d.group === group) {
-            d.show = !d.show;
-          }
-        });
-
-        update();
       });
+
+      e.target.items = e.target.items.map((item) => {
+        return {
+          ...item,
+          toggled: item.label === group ? !item.toggled : item.toggled,
+        };
+      });
+
+      update();
+    };
+
+    if (showLegend) {
+      if (!this.legend) {
+        this.legend = new Legend2();
+
+        root.append(this.legend);
+
+        this.legend.addEventListener("legend-item-click", legendListener);
+      }
+      this.legend.removeEventListener("legend-item-click", legendListener);
+
+      this.legend.items = this._groups.map((item, index) => {
+        return {
+          id: "" + index,
+          label: item,
+          color: this._groupByNameMap.get(item).color,
+          node: svg
+            .selectAll("path.line")
+            .filter((d) => d.group === item)
+            .nodes(),
+          toggled: false,
+        };
+      });
+
+      this.legend.options = {
+        fadeoutNodes: svg.selectAll("path.line").nodes(),
+        position: legendPosition.split("-"),
+        fadeProp: "opacity",
+        showLeaders: false,
+      };
+
+      this.legend.addEventListener("legend-item-click", legendListener);
     }
   }
 

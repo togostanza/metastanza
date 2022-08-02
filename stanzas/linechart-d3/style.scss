@@ -55,6 +55,10 @@ svg {
     stroke: none;
   }
 
+  rect.handle {
+    fill: orange;
+  }
+
   .gridlines {
     & > .tick > line {
       stroke: var(--togostanza-grid-color);
