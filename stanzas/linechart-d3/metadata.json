@@ -15,9 +15,9 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
-      "stanza:example_old": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example_old2": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example_old": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
+      "stanza:example_old2": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -25,7 +25,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "csv",
+      "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
     },
@@ -39,12 +39,28 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "points-show",
+      "stanza:key": "chart-points-show",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Show data points",
       "stanza:required": false,
       "stanza:default": false
+    },
+    {
+      "stanza:key": "chart-error_bars-show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show error bars points",
+      "stanza:required": false,
+      "stanza:default": false
+    },
+    {
+      "stanza:key": "chart-error_bars-data_key",
+      "stanza:type": "text",
+      "stanza:example": "error",
+      "stanza:default": "",
+      "stanza:description": "Data key wich includes error data. Error data is array [min, max]. If no such data key, no error bars are shown",
+      "stanza:required": false
     },
     {
       "stanza:key": "axis-x-data_key",
@@ -96,7 +112,7 @@
       "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "log", "ordinal", "time"],
-      "stanza:example": "time",
+      "stanza:example": "ordinal",
       "stanza:default": "linear",
       "stanza:description": "Axis scale",
       "stanza:required": false
@@ -121,7 +137,7 @@
     {
       "stanza:key": "axis-x-range_max",
       "stanza:type": "text",
-      "stanza:example": "0",
+      "stanza:example": "",
       "stanza:computed": true,
       "stanza:description": "Axis range max",
       "stanza:required": false
@@ -131,7 +147,7 @@
       "stanza:type": "text",
       "stanza:example": "",
       "stanza:computed": true,
-      "stanza:description": "Axis ticks interval. If not set, show 5 ticks",
+      "stanza:description": "Axis ticks interval. If not set, show 5 ticks. If axis scale is ordinal, show all ticks",
       "stanza:required": false
     },
     {
@@ -167,33 +183,6 @@
       "stanza:example": true,
       "stanza:computed": true,
       "stanza:description": "Axis grid lines interval",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "axis-x-gridlines_interval",
-      "stanza:type": "number",
-      "stanza:example": 0,
-      "stanza:computed": true,
-      "stanza:description": "Axis grid lines interval",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "axis-x-gridlines_interval_units",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "century",
-        "year",
-        "month",
-        "day",
-        "hour",
-        "minute",
-        "second",
-        "millisecond"
-      ],
-      "stanza:example": "none",
-      "stanza:default": "none",
-      "stanza:description": "Axis grid lines interval units",
       "stanza:required": false
     },
     {
@@ -262,16 +251,16 @@
     },
     {
       "stanza:key": "axis-y-range_min",
-      "stanza:type": "text",
-      "stanza:example": "0",
+      "stanza:type": "number",
+      "stanza:example": null,
       "stanza:computed": true,
       "stanza:description": "Axis range min",
       "stanza:required": false
     },
     {
       "stanza:key": "axis-y-range_max",
-      "stanza:type": "text",
-      "stanza:example": "10",
+      "stanza:type": "number",
+      "stanza:example": null,
       "stanza:computed": true,
       "stanza:description": "Axis range max",
       "stanza:required": false
@@ -282,25 +271,6 @@
       "stanza:example": 0,
       "stanza:computed": true,
       "stanza:description": "Axis ticks interval. If bot set, show 5 ticks",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "axis-y-ticks_interval_units",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "none",
-        "century",
-        "year",
-        "month",
-        "day",
-        "hour",
-        "minute",
-        "second",
-        "millisecond"
-      ],
-      "stanza:example": "none",
-      "stanza:default": "none",
-      "stanza:description": "Axis ticks interval units",
       "stanza:required": false
     },
     {
@@ -319,15 +289,6 @@
       "stanza:description": "Show/hide axis grid lines",
       "stanza:required": false
     },
-    {
-      "stanza:key": "axis-y-gridlines_interval",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:default": 5,
-      "stanza:description": "Axis grid lines interval",
-      "stanza:required": false
-    },
-
     {
       "stanza:key": "data_grouping-group_by_data_key",
       "stanza:type": "text",
@@ -363,14 +324,7 @@
       "stanza:description": "Color scheme to use for the data series",
       "stanza:required": false
     },
-    {
-      "stanza:key": "error_bars-data_key",
-      "stanza:type": "text",
-      "stanza:example": "error",
-      "stanza:default": "",
-      "stanza:description": "Data key wich includes error data. Error data is array [min, max]. If no such data key, no error bars are shown",
-      "stanza:required": false
-    },
+
     {
       "stanza:key": "legend-show",
       "stanza:type": "boolean",

@@ -47,7 +47,15 @@ export default class Linechart extends Stanza {
     const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
     const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
 
-    const showPoints = this._validatedParams.get("points-show").value;
+    const showPoints = this._validatedParams.get("chart-points-show").value;
+
+    const showErrorBars = this._validatedParams.get(
+      "chart-error_bars-show"
+    ).value;
+
+    const errorKeyName = this._validatedParams.get(
+      "chart-error_bars-data_key"
+    ).value;
 
     const xTicksAngle = this._validatedParams.get(
       "axis-x-ticks_label_angle"
@@ -58,18 +66,14 @@ export default class Linechart extends Stanza {
     ).value;
 
     const xTicksNumber = 5;
-    const xGridNumber = 5;
+    const xGridNumber = xTicksNumber;
     const xTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
     )
       ? parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
       : null;
 
-    const xGridInterval = !isNaN(
-      parseFloat(this._validatedParams.get("axis-x-gridlines_interval").value)
-    )
-      ? parseFloat(this._validatedParams.get("axis-x-gridlines_interval").value)
-      : null;
+    const xGridInterval = xTicksInterval;
 
     const showYGridlines = this._validatedParams.get(
       "axis-y-show_gridlines"
@@ -79,19 +83,15 @@ export default class Linechart extends Stanza {
       "axis-x-show_gridlines"
     ).value;
 
-    const yGridInterval = !isNaN(
-      parseFloat(this._validatedParams.get("axis-y-gridlines_interval").value)
-    )
-      ? parseFloat(this._validatedParams.get("axis-y-gridlines_interval").value)
-      : null;
-
     const yTicksNumber = 3;
-    const yGridNumber = 3;
+    const yGridNumber = yTicksNumber;
     const yTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
     )
       ? parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
       : null;
+
+    const yGridInterval = yTicksInterval;
 
     this.xScale = this._validatedParams.get("axis-x-scale").value;
     this.yScale = this._validatedParams.get("axis-y-scale").value;
@@ -99,7 +99,6 @@ export default class Linechart extends Stanza {
     const showXPreview = this._validatedParams.get("axis-x-preview").value;
     const showYPreview = this._validatedParams.get("axis-y-preview").value;
 
-    const errorKeyName = this._validatedParams.get("error_bars-data_key").value;
     //const yAxisPlacement = this._validatedParams.get("axis-y-placement").value;
     const showLegend = this._validatedParams.get("legend-show").value;
 
@@ -109,9 +108,7 @@ export default class Linechart extends Stanza {
       "axis-x-ticks_interval_units"
     ).value;
 
-    const xAxisGridIntervalUnits = this._validatedParams.get(
-      "axis-x-gridlines_interval_units"
-    ).value;
+    const xAxisGridIntervalUnits = xAxisTicksIntervalUnits;
 
     const xTitlePadding = this._validatedParams.get(
       "axis-x-title_padding"
@@ -274,6 +271,8 @@ export default class Linechart extends Stanza {
     this._groups = [];
     this._groupByNameMap = new Map();
 
+    console.log("this._data", this._data);
+
     if (groupKeyName && this._data.some((d) => d[groupKeyName])) {
       this._groupedData = this._data.reduce((acc, d) => {
         const group = d[groupKeyName];
@@ -318,6 +317,8 @@ export default class Linechart extends Stanza {
         },
       ];
     }
+
+    console.log("this._groupedData", this._groupedData);
 
     this._currentData = this._groupedData;
 
@@ -616,38 +617,27 @@ export default class Linechart extends Stanza {
     }
 
     const errorVertical = (d, error) => {
-      let delta = 0;
-      if (this.xScale === "ordinal") {
-        delta = this._scaleX.bandwidth() / 2;
-      }
-
-      return `M ${delta},${-Math.abs(
+      return `M 0,${-Math.abs(
         this._scaleY(d.y) - this._scaleY(error[1])
-      )} L ${delta},${Math.abs(this._scaleY(d.y) - this._scaleY(error[0]))}`;
+      )} L 0,${Math.abs(this._scaleY(d.y) - this._scaleY(error[0]))}`;
     };
 
     const errorHorizontalTop = (d, error) => {
       const barWidth = 5;
-      let delta = 0;
-      if (this.xScale === "ordinal") {
-        delta = this._scaleX.bandwidth() / 2;
-      }
-      return `M ${delta - barWidth / 2},${-Math.abs(
+
+      return `M ${-barWidth / 2},${-Math.abs(
         this._scaleY(d.y) - this._scaleY(error[1])
-      )} L ${delta + barWidth / 2},${-Math.abs(
+      )} L ${barWidth / 2},${-Math.abs(
         this._scaleY(d.y) - this._scaleY(error[1])
       )}`;
     };
 
     const errorHorizontalBottom = (d, error) => {
       const barWidth = 5;
-      let delta = 0;
-      if (this.xScale === "ordinal") {
-        delta = this._scaleX.bandwidth() / 2;
-      }
-      return `M ${delta - barWidth / 2},${Math.abs(
+
+      return `M ${-barWidth / 2},${Math.abs(
         this._scaleY(d.y) - this._scaleY(error[0])
-      )} L ${delta + barWidth / 2},${Math.abs(
+      )} L ${barWidth / 2},${Math.abs(
         this._scaleY(d.y) - this._scaleY(error[0])
       )}`;
     };
@@ -890,24 +880,6 @@ export default class Linechart extends Stanza {
           }
 
           updateRange(croppedData);
-
-          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
-          graphArea
-            .selectAll(".symbol")
-            .attr(
-              "transform",
-              (d) =>
-                `translate(${
-                  this._scaleX(d.x) + this._scaleX.bandwidth() / 2
-                },${this._scaleY(d.y)})`
-            );
-
-          graphArea.selectAll(".error-bar").attr("transform", (d) => {
-            const x = this._scaleX(d.x);
-            const y = this._scaleY(d.y);
-
-            return `translate(${x},${y})`;
-          });
         } else {
           const x0x1 = s.map(this._previewXScaleX.invert, this._previewXScaleX);
           this._scaleX.domain(x0x1);
@@ -929,36 +901,44 @@ export default class Linechart extends Stanza {
 
             this._scaleY.domain(d3.extent(extents.flat()));
           }
+        }
 
-          if (!hideXAxis && !hideXAxisTicks) {
-            graphXAxisG.call(xAxis).call(rotateXTickLabels);
-          }
+        graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
-          if (showXGridlines) {
-            graphXGridG.call(xAxisGrid);
-          }
+        if (showYGridlines) {
+          graphYGridG.call(yAxisGrid);
+        }
 
-          if (!hideYAxis && !hideYAxisTicks) {
-            graphYAxisG.call(yAxis);
-          }
+        if (showXGridlines) {
+          graphXGridG.call(xAxisGrid);
+        }
 
-          if (showYGridlines) {
-            graphYGridG.call(yAxisGrid);
-          }
-
-          if (showXGridlines) {
-            graphXGridG.call(xAxisGrid);
-          }
-
-          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
-
-          graphArea.selectAll(".symbol").attr("transform", (d) => {
-            return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
-          });
-
+        if (showErrorBars) {
           graphArea.selectAll(".error-bar").attr("transform", (d) => {
-            return `translate(${this._scaleX(d.x)}, ${this._scaleY(d.y)})`;
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+
+            return `translate(${x},${y})`;
           });
+        }
+        if (showPoints) {
+          graphArea
+            .selectAll(".symbol")
+            .attr(
+              "transform",
+              (d) =>
+                `translate(${
+                  this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
+                },${this._scaleY(d.y)})`
+            );
+        }
+
+        if (!hideXAxis && !hideXAxisTicks) {
+          graphXAxisG.call(xAxis).call(rotateXTickLabels);
+        }
+
+        if (!hideYAxis && !hideYAxisTicks) {
+          graphYAxisG.call(yAxis);
         }
       };
 
@@ -993,26 +973,11 @@ export default class Linechart extends Stanza {
 
         graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
-        graphArea
-          .selectAll(".error-bar")
-          .attr("transform", (d) => {
-            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
-            const y = this._scaleY(d.y);
-            return `translate(${x},${y})`;
-          })
-          .each(function (d) {
-            const errorBarGroup = d3.select(this);
-
-            errorBarGroup
-              .select(".vertical")
-              .attr("d", errorVertical(d, [d.y * 0.9, d.y * 1.1]));
-            errorBarGroup
-              .select(".top")
-              .attr("d", errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
-            errorBarGroup
-              .select(".bottom")
-              .attr("d", errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
-          });
+        graphArea.selectAll(".error-bar").attr("transform", (d) => {
+          const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+          const y = this._scaleY(d.y);
+          return `translate(${x},${y})`;
+        });
 
         graphArea.selectAll(".symbol").attr("transform", (d) => {
           const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
@@ -1044,13 +1009,9 @@ export default class Linechart extends Stanza {
           .enter()
           .append("g")
           .attr("transform", (d) => {
-            if (this.xScale === "ordinal") {
-              return `translate(${
-                this._scaleX(d.x) + this._scaleX.bandwidth() / 2
-              },${this._scaleY(d.y)})`;
-            }
-
-            return `translate(${this._scaleX(d.x)},${this._scaleY(d.y)})`;
+            return `translate(${
+              this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
+            },${this._scaleY(d.y)})`;
           });
 
         symUpdate
@@ -1098,7 +1059,14 @@ export default class Linechart extends Stanza {
           .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
           .attr("class", "bottom");
 
-        errorBarUpdate.merge(errorBarEnter).attr("class", "error-bar");
+        errorBarUpdate
+          .merge(errorBarEnter)
+          .attr("class", "error-bar")
+          .attr("transform", (d) => {
+            return `translate(${
+              this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
+            },${this._scaleY(d.y)})`;
+          });
 
         errorBarUpdate.exit().remove();
       };
