@@ -61,7 +61,7 @@
       "stanza:key": "shape",
       "stanza:type": "single-choice",
       "stanza:choice": ["curve", "straight", "radial"],
-      "stanza:example": "radial",
+      "stanza:example": "curve",
       "stanza:description": "Graph shape"
     },
     {

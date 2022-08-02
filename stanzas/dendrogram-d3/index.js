@@ -180,9 +180,10 @@ export default class Dendrogram extends Stanza {
       g.attr(
         "transform",
         shape === "radial"
-          ? `translate(${Math.min(width / 2, height / 2) + MARGIN.right}, ${
-              Math.min(width / 2, height / 2) + MARGIN.right
-            })`
+          ? `translate(${Math.min(width / 2, height / 2)}, ${Math.min(
+              width / 2,
+              height / 2
+            )})`
           : direction === "horizontal"
           ? `translate(${MARGIN.left}, ${MARGIN.top})`
           : `translate(${MARGIN.top}, ${MARGIN.left})`
@@ -199,7 +200,7 @@ export default class Dendrogram extends Stanza {
 
       if (shape === "radial") {
         graphType
-          .size([2 * Math.PI, Math.min(width / 2, height / 2)])
+          .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
           .separation(separation)(denroot);
       } else {
         if (direction === "horizontal") {
