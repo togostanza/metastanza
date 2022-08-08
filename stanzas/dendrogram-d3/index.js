@@ -25,7 +25,6 @@ export default class Dendrogram extends Stanza {
 
   async render() {
     appendCustomCss(this, this.params["custom-css-url"]);
-    // const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
     //data
     this.renderTemplate({
@@ -54,6 +53,7 @@ export default class Dendrogram extends Stanza {
     const maxRadius = this.params["node-size-max"] / 2;
     const aveRadius = (minRadius + maxRadius) / 2;
     const colorKey = this.params["node-color-data_key"];
+    const colorGroup = this.params["node-color-group"];
     const tooltipKey = this.params["tooltips-data_key"];
 
     const showToolTips =
@@ -116,13 +116,25 @@ export default class Dendrogram extends Stanza {
     denroot
       .descendants()
       .forEach((d) =>
-        d.data[colorKey] ? groupArray.push(d.data[colorKey]) : ""
+        d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
       );
 
     const groupColor = d3
       .scaleOrdinal()
       .domain(groupArray)
       .range(togostanzaColors.slice(1, 6));
+
+    const setColor = (d) => {
+      if (d.data[colorKey]) {
+        return d.data[colorKey];
+      } else {
+        if (d.data[colorGroup]) {
+          return groupColor(d.data[colorGroup]);
+        } else {
+          return defaultColor;
+        }
+      }
+    };
 
     const svg = d3
       .select(el)
@@ -325,9 +337,7 @@ export default class Dendrogram extends Stanza {
         nodeEnter
           .append("circle")
           .attr("data-tooltip", (d) => d.data[tooltipKey])
-          .attr("stroke", (d) =>
-            d.data[colorKey] ? groupColor(d.data[colorKey]) : defaultColor
-          )
+          .attr("stroke", setColor)
           .classed("with-children", (d) => d.children);
 
         nodeEnter
@@ -387,13 +397,7 @@ export default class Dendrogram extends Stanza {
               ? nodeRadius(d.data[sizeKey])
               : parseFloat(aveRadius)
           )
-          .attr("fill", (d) =>
-            d._children
-              ? "#fff"
-              : d.data[colorKey]
-              ? groupColor(d.data[colorKey])
-              : defaultColor
-          );
+          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
 
         node
           .exit()

@@ -102,8 +102,15 @@
     {
       "stanza:key": "node-color-data_key",
       "stanza:type": "text",
+      "stanza:example": "color",
+      "stanza:description": "Set color on the node circle based on the data key.",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-color-group",
+      "stanza:type": "text",
       "stanza:example": "group",
-      "stanza:description": "Set color on the node circle based on the data key. If not set, the color will be a single color.",
+      "stanza:description": "Set color on the node circle based on the group.",
       "stanza:required": false
     },
     {
