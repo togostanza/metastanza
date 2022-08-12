@@ -208,7 +208,13 @@ export default class Dendrogram extends Stanza {
         graphType = d3.tree();
       }
 
-      const separation = (a, b) => (a.parent === b.parent ? 1 : 2) / a.depth;
+      const separation = (a, b) => {
+        if (isLeafNodesAlign) {
+          return a.parent === b.parent ? 1 : 2;
+        } else {
+          return (a.parent === b.parent ? 1 : 2) / a.depth;
+        }
+      };
 
       if (shape === "radial") {
         graphType
