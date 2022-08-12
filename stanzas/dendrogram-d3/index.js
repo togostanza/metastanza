@@ -269,10 +269,18 @@ export default class Dendrogram extends Stanza {
       let deltas;
       if (direction === "horizontal") {
         denroot.descendants().forEach((d) => {
-          minY.push(MARGIN.left + d.y - nodeRadius(d.data[sizeKey]));
-          minX.push(MARGIN.top + d.x - nodeRadius(d.data[sizeKey]));
-          maxY.push(MARGIN.left + d.y + nodeRadius(d.data[sizeKey]));
-          maxX.push(MARGIN.top + d.x + nodeRadius(d.data[sizeKey]));
+          minY.push(
+            MARGIN.left + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          minX.push(
+            MARGIN.top + d.x - (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          maxY.push(
+            MARGIN.left + d.y + (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          maxX.push(
+            MARGIN.top + d.x + (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
         });
         deltas = {
           top: Math.min(...minX),
@@ -282,10 +290,18 @@ export default class Dendrogram extends Stanza {
         };
       } else {
         denroot.descendants().forEach((d) => {
-          minY.push(MARGIN.top + d.y - nodeRadius(d.data[sizeKey]));
-          minX.push(MARGIN.left + d.x - nodeRadius(d.data[sizeKey]));
-          maxY.push(MARGIN.top + d.y + nodeRadius(d.data[sizeKey]));
-          maxX.push(MARGIN.left + d.x + nodeRadius(d.data[sizeKey]));
+          minY.push(
+            MARGIN.top + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          minX.push(
+            MARGIN.left + d.x - (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          maxY.push(
+            MARGIN.top + d.y + (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
+          maxX.push(
+            MARGIN.left + d.x + (nodeRadius(d.data[sizeKey]) || aveRadius)
+          );
         });
         deltas = {
           left: Math.min(...minX),
