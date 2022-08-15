@@ -54,6 +54,27 @@ export default class Dendrogram extends Stanza {
     const aveRadius = (minRadius + maxRadius) / 2;
     const colorKey = this.params["node-color-data_key"];
     const colorGroup = this.params["node-color-group"];
+    const colorMode = this.params["node-color-mix_blend_mode"];
+
+    let colorModeProperty;
+    let colorModeValue;
+    switch (colorMode) {
+      case "opacity":
+        colorModeProperty = "opacity";
+        colorModeValue = "0.5";
+        break;
+      case "multiply":
+        colorModeProperty = "mix-blend-mode";
+        colorModeValue = "multiply";
+        break;
+      case "screen":
+        colorModeProperty = "mix-blend-mode";
+        colorModeValue = "screen";
+        break;
+      default:
+        break;
+    }
+
     const tooltipKey = this.params["tooltips-data_key"];
 
     const showToolTips =
@@ -360,6 +381,7 @@ export default class Dendrogram extends Stanza {
           .append("circle")
           .attr("data-tooltip", (d) => d.data[tooltipKey])
           .attr("stroke", setColor)
+          .style(colorModeProperty, colorModeValue)
           .classed("with-children", (d) => d.children);
 
         nodeEnter

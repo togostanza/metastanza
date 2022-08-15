@@ -116,7 +116,7 @@
     {
       "stanza:key": "node-color-mix_blend_mode",
       "stanza:type": "single-choice",
-      "stanza:choice": ["normal", "opacity", "mulply", "screen"],
+      "stanza:choice": ["normal", "opacity", "multiply", "screen"],
       "stanza:example": "normal",
       "stanza:description": "Blend mode for overlaying nodes"
     },
