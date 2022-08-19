@@ -9,13 +9,20 @@ Use following data format to vizualize the graph in this stanza:
     "id": 1,
     "name": "A",
     "size": 100
-  }
+  },
   {
     "id": 2,
     "name": "B",
     "parent": 1,
     "size": 10,
     "group":"a"
+  },
+  {
+    "id": 3,
+    "name": "C",
+    "parent": 2,
+    "size": 20,
+    "color": "red"
   },
   ...
 ]
