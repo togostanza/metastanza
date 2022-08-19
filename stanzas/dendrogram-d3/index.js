@@ -369,7 +369,7 @@ export default class Dendrogram extends Stanza {
             shape === "radial"
               ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
-                }, ${source.x0})`
+                }, 0)`
               : `translate(${source.y0}, ${source.x0})`
           )
           .on("click", (e, d) => {
@@ -452,7 +452,7 @@ export default class Dendrogram extends Stanza {
             shape === "radial"
               ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
                   source.y
-                }, ${source.x})`
+                }, 0)`
               : `translate(${source.y}, ${source.x})`
           )
           .remove();
