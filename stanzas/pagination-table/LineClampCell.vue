@@ -3,14 +3,12 @@
   <input :id="id" type="checkbox" :name="id" />
   <label
     v-if="unescape"
-    :for="id"
     :style="`-webkit-line-clamp: ${lineClamp}`"
     class="label"
     v-html="value"
   ></label>
   <label
     v-else
-    :for="id"
     :style="`-webkit-line-clamp: ${lineClamp}`"
     class="label"
   >

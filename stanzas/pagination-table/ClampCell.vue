@@ -32,10 +32,10 @@
     <label
       v-if="unescape"
       class="label charClampOn"
-      @click="toggleClamp"
+      @click="toggleCharClamp"
       v-html="value"
     ></label>
-    <label v-else :for="id" class="label charClampOn">
+    <label v-else :for="id" class="label charClampOn" @click="toggleCharClamp">
       {{
         charClampOn && value.length > charClamp
           ? `${value.slice(0, charClamp)}…`
@@ -50,10 +50,10 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   props: {
-    // id: {
-    //   type: String,
-    //   default: null,
-    // },
+    id: {
+      type: String,
+      default: null,
+    },
     unescape: {
       type: Boolean,
       default: false,
@@ -75,11 +75,15 @@ export default defineComponent({
       default: null,
     },
   },
+  emits: ["toggleCharClampOn"],
   setup() {
     const isClamp = ref(true);
     const toggleClamp = () => isClamp.value = !isClamp.value;
-    return { isClamp, toggleClamp };
+    const toggleCharClamp = function() {
+      this.$emit('toggleCharClampOn');
+      this.toggleClamp();
+    }
+    return { isClamp, toggleClamp, toggleCharClamp };
   },
-  emits: ["toggleCharClampOn"],
 });
 </script>
