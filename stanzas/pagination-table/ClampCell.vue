@@ -35,7 +35,7 @@
       @click="toggleCharClamp"
       v-html="value"
     ></label>
-    <label v-else :for="id" class="label charClampOn" @click="toggleCharClamp">
+    <label v-else class="label charClampOn" @click="toggleCharClamp">
       {{
         charClampOn && value.length > charClamp
           ? `${value.slice(0, charClamp)}…`
@@ -50,10 +50,10 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   props: {
-    id: {
-      type: String,
-      default: null,
-    },
+    // id: {
+    //   type: String,
+    //   default: null,
+    // },
     unescape: {
       type: Boolean,
       default: false,
