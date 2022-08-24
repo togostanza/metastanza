@@ -227,7 +227,6 @@
                   v-else-if="cell.column.lineClamp || cell.column.charClamp"
                 >
                   <ClampCell
-                    :id="`${cell.column.id}_${row_index}`"
                     :line-clamp="cell.column.lineClamp"
                     :char-clamp="cell.column.charClamp"
                     :char-clamp-on="cell.charClampOn"

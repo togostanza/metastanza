@@ -1,37 +1,38 @@
 <!-- eslint-disable vue/no-mutating-props */ -->
 <!-- eslint-disable vue/no-v-html -->
 <template>
+  <span :data-is-clamp="isClamp"></span>
   <template v-if="lineClamp">
-    <input :id="id" type="checkbox" :name="id" class="lineClampOn" />
+    <!-- <input :id="id" type="checkbox" :name="id" class="lineClampOn" /> -->
     <label
       v-if="unescape"
-      :for="id"
       :style="lineClamp ? `-webkit-line-clamp: ${lineClamp}` : null"
       :class="['label', 'lineClampOn']"
+      @click="toggleClamp"
       v-html="value"
     ></label>
     <label
       v-else
-      :for="id"
       :style="lineClamp ? `-webkit-line-clamp: ${lineClamp}` : null"
       :class="['label', 'lineClampOn']"
+      @click="toggleClamp"
     >
       {{ value }}
     </label>
   </template>
   <template v-else>
-    <input
+    <!-- <input
       :id="id"
       :value="charClampOn"
       type="checkbox"
       :name="id"
       class="charClampOn"
       @change="$emit('toggleCharClampOn')"
-    />
+    /> -->
     <label
       v-if="unescape"
-      :for="id"
       class="label charClampOn"
+      @click="toggleClamp"
       v-html="value"
     ></label>
     <label v-else :for="id" class="label charClampOn">
@@ -45,14 +46,14 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   props: {
-    id: {
-      type: String,
-      default: null,
-    },
+    // id: {
+    //   type: String,
+    //   default: null,
+    // },
     unescape: {
       type: Boolean,
       default: false,
@@ -73,6 +74,11 @@ export default defineComponent({
       type: String,
       default: null,
     },
+  },
+  setup() {
+    const isClamp = ref(true);
+    const toggleClamp = () => isClamp.value = !isClamp.value;
+    return { isClamp, toggleClamp };
   },
   emits: ["toggleCharClampOn"],
 });

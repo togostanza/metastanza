@@ -380,7 +380,10 @@
                 input {
                   display: none;
                 }
-                input:checked ~ .label {
+                // input:checked ~ .label {
+                //   display: block;
+                // }
+                [data-is-clamp="false"] ~ .label {
                   display: block;
                 }
               }
