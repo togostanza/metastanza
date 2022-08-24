@@ -159,12 +159,12 @@
                 position: absolute;
                 top: calc(var(--togostanza-thead-font-size) + 16px);
                 left: 0;
+                z-index: 3;
                 &.lastCol {
                   left: auto;
                   right: 0;
                 }
                 > div.filterWindow {
-                  z-index: 3;
                   width: auto;
                   height: auto;
                   background-color: #ffffff;
