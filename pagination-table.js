@@ -129,13 +129,13 @@ const _hoisted_1$5 = {
   class: "paginationWrapper"
 };
 const _hoisted_2$5 = { class: "serialPagination" };
-const _hoisted_3$5 = {
+const _hoisted_3$4 = {
   ref: "paginationNumList",
   class: "paginationNumList"
 };
-const _hoisted_4$3 = ["onClick"];
-const _hoisted_5$3 = { class: "pageNumber" };
-const _hoisted_6$3 = /*#__PURE__*/createTextVNode(" Page ");
+const _hoisted_4$2 = ["onClick"];
+const _hoisted_5$2 = { class: "pageNumber" };
+const _hoisted_6$2 = /*#__PURE__*/createTextVNode(" Page ");
 const _hoisted_7$2 = ["value"];
 const _hoisted_8$1 = {
   ref: "canvas",
@@ -163,13 +163,13 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: _cache[1] || (_cache[1] = $event => (_ctx.updateCurrentPage(_ctx.currentPage - 1)))
             })
           ], 2 /* CLASS */),
-          createBaseVNode("ul", _hoisted_3$5, [
+          createBaseVNode("ul", _hoisted_3$4, [
             (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.surroundingPages, (page) => {
               return (openBlock(), createElementBlock("li", {
                 key: page,
                 class: normalizeClass(['pagination', { currentBtn: _ctx.currentPage === page }]),
                 onClick: $event => (_ctx.updateCurrentPage(page))
-              }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, _hoisted_4$3))
+              }, toDisplayString(page), 11 /* TEXT, CLASS, PROPS */, _hoisted_4$2))
             }), 128 /* KEYED_FRAGMENT */))
           ], 512 /* NEED_PATCH */),
           createBaseVNode("div", {
@@ -186,8 +186,8 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
               onClick: _cache[3] || (_cache[3] = $event => (_ctx.updateCurrentPage(_ctx.totalPages)))
             })
           ], 2 /* CLASS */),
-          createBaseVNode("div", _hoisted_5$3, [
-            _hoisted_6$3,
+          createBaseVNode("div", _hoisted_5$2, [
+            _hoisted_6$2,
             createBaseVNode("input", {
               value: _ctx.currentPage,
               type: "text",
@@ -239,8 +239,7 @@ var script$4 = defineComponent({
 });
 
 const _hoisted_1$4 = ["id", "name"];
-const _hoisted_2$4 = ["for", "innerHTML"];
-const _hoisted_3$4 = ["for"];
+const _hoisted_2$4 = ["innerHTML"];
 
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock(Fragment, null, [
@@ -252,17 +251,15 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
     (_ctx.unescape)
       ? (openBlock(), createElementBlock("label", {
           key: 0,
-          for: _ctx.id,
           style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`),
           class: "label",
           innerHTML: _ctx.value
         }, null, 12 /* STYLE, PROPS */, _hoisted_2$4))
       : (openBlock(), createElementBlock("label", {
           key: 1,
-          for: _ctx.id,
           style: normalizeStyle(`-webkit-line-clamp: ${_ctx.lineClamp}`),
           class: "label"
-        }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$4))
+        }, toDisplayString(_ctx.value), 5 /* TEXT, STYLE */))
   ], 64 /* STABLE_FRAGMENT */))
 }
 
@@ -274,10 +271,10 @@ var script$3 = defineComponent({
     LineClampCell: script$4,
   },
   props: {
-    id: {
-      type: String,
-      default: null,
-    },
+    // id: {
+    //   type: String,
+    //   default: null,
+    // },
     href: {
       type: String,
       default: null,
@@ -316,11 +313,10 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
           target: _ctx.target
         }, [
           createVNode(_component_LineClampCell, {
-            id: _ctx.id,
             "line-clamp": _ctx.lineClamp,
             unescape: _ctx.unescape,
             value: _ctx.value
-          }, null, 8 /* PROPS */, ["id", "line-clamp", "unescape", "value"])
+          }, null, 8 /* PROPS */, ["line-clamp", "unescape", "value"])
         ], 8 /* PROPS */, _hoisted_1$3))
       : createCommentVNode("v-if", true),
     createCommentVNode(" eslint-disable-next-line vue/no-v-html "),
@@ -339,10 +335,9 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
           (_ctx.lineClamp)
             ? (openBlock(), createBlock(_component_LineClampCell, {
                 key: 0,
-                id: _ctx.id,
                 "line-clamp": _ctx.lineClamp,
                 value: _ctx.value
-              }, null, 8 /* PROPS */, ["id", "line-clamp", "value"]))
+              }, null, 8 /* PROPS */, ["line-clamp", "value"]))
             : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
                 createTextVNode(toDisplayString(_ctx.value), 1 /* TEXT */)
               ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
@@ -355,10 +350,10 @@ script$3.__file = "stanzas/pagination-table/AnchorCell.vue";
 
 var script$2 = defineComponent({
   props: {
-    id: {
-      type: String,
-      default: null,
-    },
+    // id: {
+    //   type: String,
+    //   default: null,
+    // },
     unescape: {
       type: Boolean,
       default: false,
@@ -381,63 +376,60 @@ var script$2 = defineComponent({
     },
   },
   emits: ["toggleCharClampOn"],
+  setup() {
+    const isClamp = ref(true);
+    const toggleClamp = () => isClamp.value = !isClamp.value;
+    const toggleCharClamp = function() {
+      this.$emit('toggleCharClampOn');
+      this.toggleClamp();
+    };
+    return { isClamp, toggleClamp, toggleCharClamp };
+  },
 });
 
-const _hoisted_1$2 = ["id", "name"];
-const _hoisted_2$2 = ["for", "innerHTML"];
-const _hoisted_3$2 = ["for"];
-const _hoisted_4$2 = ["id", "value", "name"];
-const _hoisted_5$2 = ["for", "innerHTML"];
-const _hoisted_6$2 = ["for"];
+const _hoisted_1$2 = ["data-is-clamp"];
+const _hoisted_2$2 = ["innerHTML"];
+const _hoisted_3$2 = ["innerHTML"];
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return (_ctx.lineClamp)
-    ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-        createBaseVNode("input", {
-          id: _ctx.id,
-          type: "checkbox",
-          name: _ctx.id,
-          class: "lineClampOn"
-        }, null, 8 /* PROPS */, _hoisted_1$2),
-        (_ctx.unescape)
-          ? (openBlock(), createElementBlock("label", {
-              key: 0,
-              for: _ctx.id,
-              style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
-              class: normalizeClass(['label', 'lineClampOn']),
-              innerHTML: _ctx.value
-            }, null, 12 /* STYLE, PROPS */, _hoisted_2$2))
-          : (openBlock(), createElementBlock("label", {
-              key: 1,
-              for: _ctx.id,
-              style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
-              class: normalizeClass(['label', 'lineClampOn'])
-            }, toDisplayString(_ctx.value), 13 /* TEXT, STYLE, PROPS */, _hoisted_3$2))
-      ], 64 /* STABLE_FRAGMENT */))
-    : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-        createBaseVNode("input", {
-          id: _ctx.id,
-          value: _ctx.charClampOn,
-          type: "checkbox",
-          name: _ctx.id,
-          class: "charClampOn",
-          onChange: _cache[0] || (_cache[0] = $event => (_ctx.$emit('toggleCharClampOn')))
-        }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_4$2),
-        (_ctx.unescape)
-          ? (openBlock(), createElementBlock("label", {
-              key: 0,
-              for: _ctx.id,
-              class: "label charClampOn",
-              innerHTML: _ctx.value
-            }, null, 8 /* PROPS */, _hoisted_5$2))
-          : (openBlock(), createElementBlock("label", {
-              key: 1,
-              for: _ctx.id,
-              class: "label charClampOn"
-            }, toDisplayString(_ctx.charClampOn && _ctx.value.length > _ctx.charClamp
+  return (openBlock(), createElementBlock(Fragment, null, [
+    createBaseVNode("span", { "data-is-clamp": _ctx.isClamp }, null, 8 /* PROPS */, _hoisted_1$2),
+    (_ctx.lineClamp)
+      ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+          createCommentVNode(" <input :id=\"id\" type=\"checkbox\" :name=\"id\" class=\"lineClampOn\" /> "),
+          (_ctx.unescape)
+            ? (openBlock(), createElementBlock("label", {
+                key: 0,
+                style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
+                class: normalizeClass(['label', 'lineClampOn']),
+                onClick: _cache[0] || (_cache[0] = (...args) => (_ctx.toggleClamp && _ctx.toggleClamp(...args))),
+                innerHTML: _ctx.value
+              }, null, 12 /* STYLE, PROPS */, _hoisted_2$2))
+            : (openBlock(), createElementBlock("label", {
+                key: 1,
+                style: normalizeStyle(_ctx.lineClamp ? `-webkit-line-clamp: ${_ctx.lineClamp}` : null),
+                class: normalizeClass(['label', 'lineClampOn']),
+                onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.toggleClamp && _ctx.toggleClamp(...args)))
+              }, toDisplayString(_ctx.value), 5 /* TEXT, STYLE */))
+        ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+      : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
+          createCommentVNode(" <input\n      :id=\"id\"\n      :value=\"charClampOn\"\n      type=\"checkbox\"\n      :name=\"id\"\n      class=\"charClampOn\"\n      @change=\"$emit('toggleCharClampOn')\"\n    /> "),
+          (_ctx.unescape)
+            ? (openBlock(), createElementBlock("label", {
+                key: 0,
+                class: "label charClampOn",
+                onClick: _cache[2] || (_cache[2] = (...args) => (_ctx.toggleCharClamp && _ctx.toggleCharClamp(...args))),
+                innerHTML: _ctx.value
+              }, null, 8 /* PROPS */, _hoisted_3$2))
+            : (openBlock(), createElementBlock("label", {
+                key: 1,
+                class: "label charClampOn",
+                onClick: _cache[3] || (_cache[3] = (...args) => (_ctx.toggleCharClamp && _ctx.toggleCharClamp(...args)))
+              }, toDisplayString(_ctx.charClampOn && _ctx.value.length > _ctx.charClamp
           ? `${_ctx.value.slice(0, _ctx.charClamp)}…`
-          : _ctx.value), 9 /* TEXT, PROPS */, _hoisted_6$2))
-      ], 64 /* STABLE_FRAGMENT */))
+          : _ctx.value), 1 /* TEXT */))
+        ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+  ], 64 /* STABLE_FRAGMENT */))
 }
 
 script$2.render = render$2;
@@ -5198,7 +5190,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         (cell.href)
                           ? (openBlock(), createElementBlock("span", _hoisted_27, [
                               createVNode(_component_AnchorCell, {
-                                id: `${cell.column.id}_${row_index}`,
                                 href: cell.href,
                                 value: cell.value,
                                 target: 
@@ -5208,19 +5199,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                                 "line-clamp": cell.column.lineClamp,
                                 "char-clamp": cell.column.charClamp,
                                 "char-clamp-on": cell.column.charClampOn
-                              }, null, 8 /* PROPS */, ["id", "href", "value", "target", "unescape", "line-clamp", "char-clamp", "char-clamp-on"])
+                              }, null, 8 /* PROPS */, ["href", "value", "target", "unescape", "line-clamp", "char-clamp", "char-clamp-on"])
                             ]))
                           : (cell.column.lineClamp || cell.column.charClamp)
                             ? (openBlock(), createElementBlock("span", _hoisted_28, [
                                 createVNode(_component_ClampCell, {
-                                  id: `${cell.column.id}_${row_index}`,
                                   "line-clamp": cell.column.lineClamp,
                                   "char-clamp": cell.column.charClamp,
                                   "char-clamp-on": cell.charClampOn,
                                   unescape: cell.column.unescape,
                                   value: cell.value,
                                   onToggleCharClampOn: $event => (cell.charClampOn = !cell.charClampOn)
-                                }, null, 8 /* PROPS */, ["id", "line-clamp", "char-clamp", "char-clamp-on", "unescape", "value", "onToggleCharClampOn"])
+                                }, null, 8 /* PROPS */, ["line-clamp", "char-clamp", "char-clamp-on", "unescape", "value", "onToggleCharClampOn"])
                               ]))
                             : (cell.column.unescape)
                               ? (openBlock(), createElementBlock("span", {

@@ -510,13 +510,13 @@
   position: absolute;
   top: calc(var(--togostanza-thead-font-size) + 16px);
   left: 0;
+  z-index: 3;
 }
 .wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper.lastCol {
   left: auto;
   right: 0;
 }
 .wrapper > .tableOptionWrapper > .tableWrapper > table > thead > tr > th > .filterWrapper > div.filterWindow {
-  z-index: 3;
   width: auto;
   height: auto;
   background-color: #ffffff;
@@ -734,7 +734,7 @@
 .wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input {
   display: none;
 }
-.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span input:checked ~ .label {
+.wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr > td > span [data-is-clamp=false] ~ .label {
   display: block;
 }
 .wrapper > .tableOptionWrapper > .tableWrapper > table > tbody > tr:last-of-type > td {
