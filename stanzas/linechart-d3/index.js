@@ -972,24 +972,14 @@ export default class Linechart extends Stanza {
           }
 
           if (showErrorBars) {
-            graphArea.selectAll(".error-bar").attr("transform", (d) => {
-              const x =
-                this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
-              const y = this._scaleY(d.y);
-
-              return `translate(${x},${y})`;
-            });
+            graphArea
+              .selectAll(".error-bar")
+              .call(updateErrorTranslate.bind(this));
           }
           if (showPoints) {
             graphArea
               .selectAll(".symbol")
-              .attr(
-                "transform",
-                (d) =>
-                  `translate(${
-                    this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
-                  },${this._scaleY(d.y)})`
-              );
+              .call(updateSymbolTranslate.bind(this));
           }
 
           if (!hideXAxis && !hideXAxisTicks) {
@@ -1032,19 +1022,13 @@ export default class Linechart extends Stanza {
 
           graphArea.selectAll(".line").attr("d", (d) => line(d.data));
 
-          graphArea.selectAll(".error-bar").attr("transform", (d) => {
-            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
-            const y = this._scaleY(d.y);
-            return `translate(${x},${y})`;
-          });
+          graphArea
+            .selectAll(".error-bar")
+            .call(updateErrorTranslate.bind(this));
 
           graphArea.selectAll(".error-bar").call(updateErrorScale);
 
-          graphArea.selectAll(".symbol").attr("transform", (d) => {
-            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
-            const y = this._scaleY(d.y);
-            return `translate(${x},${y})`;
-          });
+          graphArea.selectAll(".symbol").call(updateSymbolTranslate.bind(this));
 
           if (showYPreview) {
             previewYArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
@@ -1108,14 +1092,30 @@ export default class Linechart extends Stanza {
           symUpdate.exit().remove();
         };
 
+        function updateErrorTranslate(nodes) {
+          nodes.attr("transform", (d) => {
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+            return `translate(${x},${y})`;
+          });
+        }
+
+        function updateSymbolTranslate(nodes) {
+          nodes.attr("transform", (d) => {
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+            return `translate(${x},${y})`;
+          });
+        }
+
         function updateErrorScale(nodes) {
           nodes.each(function (d) {
             const errorG = d3.select(this);
-            console.log("1");
+
             errorG
               .select("path.vertical")
               .attr("d", errorVertical(d, [d.y * 0.9, d.y * 1.1]));
-            console.log("2");
+
             errorG
               .select("path.top")
               .attr("d", errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
