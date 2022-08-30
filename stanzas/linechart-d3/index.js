@@ -281,7 +281,6 @@ export default class Linechart extends Stanza {
 
     const svg = d3.select(root).append("svg");
 
-    let legendWidth = 0;
     if (showLegend) {
       this.legend = new Legend2();
 
@@ -296,8 +295,6 @@ export default class Linechart extends Stanza {
           toggled: false,
         };
       });
-
-      //TODO insert after SVG stuff this.legend.addEventListener("legend-item-click", legendListener);
     } else {
       this.legend.removeEventListener(
         "legend-item-click",
@@ -603,7 +600,6 @@ export default class Linechart extends Stanza {
           ) {
             const interval =
               intervalMap[xAxisGridIntervalUnits]().every(xGridInterval);
-            console.log("interval", interval);
             xAxisGrid.ticks(interval);
           } else {
             xAxisGrid.ticks(xGridNumber);
@@ -1042,6 +1038,8 @@ export default class Linechart extends Stanza {
             return `translate(${x},${y})`;
           });
 
+          graphArea.selectAll(".error-bar").call(updateErrorScale);
+
           graphArea.selectAll(".symbol").attr("transform", (d) => {
             const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
             const y = this._scaleY(d.y);
@@ -1110,6 +1108,23 @@ export default class Linechart extends Stanza {
           symUpdate.exit().remove();
         };
 
+        function updateErrorScale(nodes) {
+          nodes.each(function (d) {
+            const errorG = d3.select(this);
+            console.log("1");
+            errorG
+              .select("path.vertical")
+              .attr("d", errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+            console.log("2");
+            errorG
+              .select("path.top")
+              .attr("d", errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+            errorG
+              .select("path.bottom")
+              .attr("d", errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+          });
+        }
+
         const updateErrors = (data) => {
           const errorUpdate = errorsGroup
             .selectAll(".error")
@@ -1142,6 +1157,7 @@ export default class Linechart extends Stanza {
             .append("path")
             .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
             .attr("class", "top");
+
           errorBarEnter
             .append("path")
             .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
