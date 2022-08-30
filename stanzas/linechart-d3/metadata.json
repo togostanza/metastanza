@@ -15,9 +15,9 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
+      "stanza:example_old": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
       "stanza:example_old2": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example_old": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
@@ -25,7 +25,7 @@
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
       "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
-      "stanza:example": "csv",
+      "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
     },
@@ -47,10 +47,18 @@
       "stanza:default": false
     },
     {
+      "stanza:key": "chart-points-size",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Data points size",
+      "stanza:required": false,
+      "stanza:default": 10
+    },
+    {
       "stanza:key": "chart-error_bars-show",
       "stanza:type": "boolean",
       "stanza:example": true,
-      "stanza:description": "Show error bars points",
+      "stanza:description": "Show error bars",
       "stanza:required": false,
       "stanza:default": false
     },
@@ -66,7 +74,7 @@
       "stanza:key": "axis-x-data_key",
       "stanza:type": "text",
       "stanza:example": "chromosome",
-      "stanza:description": "Variable to be assigned as x axis value. Ignored if data-type is CSV or TSV",
+      "stanza:description": "Variable to be assigned as x axis value.",
       "stanza:required": true
     },
     {
@@ -88,7 +96,7 @@
     {
       "stanza:key": "axis-x-title_padding",
       "stanza:type": "number",
-      "stanza:example": 20,
+      "stanza:example": 40,
       "stanza:default": 20,
       "stanza:description": "Axis title padding in px",
       "stanza:required": false
@@ -171,7 +179,7 @@
     {
       "stanza:key": "axis-x-ticks_labels_format",
       "stanza:type": "text",
-      "stanza:example": "%B %d, %Y",
+      "stanza:example": "%b %d",
       "stanza:default": "",
       "stanza:description": "Axis ticks interval format, in d3.format string form",
       "stanza:required": false
@@ -329,9 +337,9 @@
     {
       "stanza:key": "legend-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
-      "stanza:example": "top-right",
-      "stanza:default": "top-right",
+      "stanza:choice": ["left", "right", "bottom", "top"],
+      "stanza:example": "right",
+      "stanza:default": "right",
       "stanza:description": "Legend placement",
       "stanza:required": false
     },
@@ -431,13 +439,6 @@
       "stanza:description": "Togostanza element inner padding"
     },
     {
-      "stanza:key": "--togostanza-axis-x-title_padding",
-      "stanza:type": "text",
-      "stanza:default": "20px",
-      "stanza:description": "X axis title padding"
-    },
-
-    {
       "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
@@ -454,18 +455,6 @@
       "stanza:type": "number",
       "stanza:default": 1,
       "stanza:description": "Axis width"
-    },
-    {
-      "stanza:key": "--togostanza-data_grouping-fixed_color",
-      "stanza:type": "color",
-      "stanza:default": "",
-      "stanza:description": "Axis width"
-    },
-    {
-      "stanza:key": "--togostanza-error_bars-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Error bar stroke width "
     },
     {
       "stanza:key": "--togostanza-error_bars-opacity",

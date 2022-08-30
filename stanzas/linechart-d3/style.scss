@@ -3,9 +3,24 @@
 
 :scope main {
   box-sizing: border-box;
+  display: flex;
+  gap: 1rem;
   width: var(--togostanza-outline-width);
   height: var(--togostanza-outline-height);
   padding: var(--togostanza-outline-padding);
+}
+
+.legend-right {
+  flex-direction: row;
+}
+.legend-left {
+  flex-direction: row-reverse;
+}
+.legend-top {
+  flex-direction: column-reverse;
+}
+.legend-bottom {
+  flex-direction: column;
 }
 
 .error {
@@ -22,6 +37,10 @@
 }
 
 svg {
+  .error-bar {
+    opacity: var(--togostanza-error_bars-opacity);
+  }
+
   font-family: var(--togostanza-fonts-font_family);
   background-color: var(--togostanza-background-color);
 

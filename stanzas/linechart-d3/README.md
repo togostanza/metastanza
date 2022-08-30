@@ -2,7 +2,7 @@
 
 ### Data format
 
-If `data-type` is set to `json` or `sparql-results-json`, the data format is expected to be `"Long"`, i.e. an array of JSON objects:
+Data is expected to be in `"Long"` format, i.e. an array of JSON objects:
 
 ```json
 [
@@ -29,33 +29,6 @@ If `data-type` is set to `json` or `sparql-results-json`, the data format is exp
     ...
 ]
 ```
-
-If `data-type` is set to `csv` or `tsv`, the data format can be set either to `"Long"` or `"Wide"`.
-
-`"Long"` data format (in case of `csv`):
-
-```csv
-Date,count,group
-2016-01-01,1,A
-2016-01-01,3,B
-2016-01-02,2,A
-2016-01-02,12,B
-...
-```
-
-`"Wide"` data format:
-
-```csv
-Date,A,B
-2016-01-01,1,5
-2016-01-01,3,0
-2016-01-02,0,2
-2016-01-02,4,12
-...
-```
-
-In case of `"Wide"` format, the first column will be used as the x-axis and the remaining columns as the y-axes. Every column after the first one will be plotted as a separate line.
-In that case parameters `axis-x-data_key`, `axis-y-data_key`, `data_grouping-group_by_data_key`, `data_grouping-color-data_key` and `error_bars-data_key` will be ignored.
 
 ### Legend
 
