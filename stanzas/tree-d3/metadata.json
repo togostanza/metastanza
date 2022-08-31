@@ -45,13 +45,6 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "graph-direction",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["horizontal", "vertical"],
-      "stanza:example": "horizontal",
-      "stanza:description": "Graph direction"
-    },
-    {
       "stanza:key": "graph-align_leaf_nodes",
       "stanza:type": "boolean",
       "stanza:example": false,
@@ -60,8 +53,8 @@
     {
       "stanza:key": "layout",
       "stanza:type": "single-choice",
-      "stanza:choice": ["curve", "radial"],
-      "stanza:example": "curve",
+      "stanza:choice": ["horizontal", "vertical", "radial"],
+      "stanza:example": "horizontal",
       "stanza:description": "Tree layout"
     },
     {

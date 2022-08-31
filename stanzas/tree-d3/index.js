@@ -43,7 +43,6 @@ export default class Tree extends Stanza {
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    const direction = this.params["graph-direction"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
     const nodeKey = this.params["node-label-data_key"];
@@ -190,7 +189,7 @@ export default class Tree extends Stanza {
         left: rootLabelWidth + labelMargin,
       }
     ) => {
-      if (direction === "horizontal") {
+      if (layout === "horizontal") {
         if (width - MARGIN.right - MARGIN.left < 0) {
           el.innerHTML = "<p>width is too small!</p>";
           throw new Error("width is too small!");
@@ -217,7 +216,7 @@ export default class Tree extends Stanza {
               width / 2,
               height / 2
             )})`
-          : direction === "horizontal"
+          : layout === "horizontal"
           ? `translate(${MARGIN.left}, ${MARGIN.top})`
           : `translate(${MARGIN.top}, ${MARGIN.left})`
       );
@@ -242,7 +241,7 @@ export default class Tree extends Stanza {
           .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
           .separation(separation)(denroot);
       } else {
-        if (direction === "horizontal") {
+        if (layout === "horizontal") {
           graphType.size([
             height - MARGIN.top - MARGIN.bottom,
             width - MARGIN.left - MARGIN.right,
@@ -261,14 +260,14 @@ export default class Tree extends Stanza {
       denroot.y0 = 0;
 
       const getLinkFn = () => {
-        if (direction === "horizontal") {
+        if (layout === "horizontal") {
           return d3.linkHorizontal();
         } else {
           return d3.linkVertical();
         }
       };
 
-      if (direction === "vertical") {
+      if (layout === "vertical") {
         denroot.descendants().forEach((node) => {
           const x0 = node.x0;
           const x = node.x;
@@ -288,7 +287,7 @@ export default class Tree extends Stanza {
       const maxX = [];
 
       let deltas;
-      if (direction === "horizontal") {
+      if (layout === "horizontal") {
         denroot.descendants().forEach((d) => {
           minY.push(
             MARGIN.left + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
@@ -391,7 +390,7 @@ export default class Tree extends Stanza {
               ? d.x < Math.PI === !d.children
                 ? labelMargin
                 : -labelMargin
-              : direction === "horizontal"
+              : layout === "horizontal"
               ? d.children || d._children
                 ? -labelMargin
                 : labelMargin
@@ -403,7 +402,7 @@ export default class Tree extends Stanza {
           .attr("transform", (d) =>
             layout === "radial"
               ? `rotate(${d.x >= Math.PI ? 180 : 0})`
-              : direction === "horizontal"
+              : layout === "horizontal"
               ? "rotate(0)"
               : "rotate(-90)"
           )
@@ -412,7 +411,7 @@ export default class Tree extends Stanza {
               ? d.x < Math.PI === !d.children
                 ? "start"
                 : "end"
-              : direction === "horizontal"
+              : layout === "horizontal"
               ? d.children || d._children
                 ? "end"
                 : "start"
