@@ -45,7 +45,7 @@ export default class Tree extends Stanza {
     const height = parseInt(this.params["height"]);
     const direction = this.params["graph-direction"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
-    const shape = this.params["shape"];
+    const layout = this.params["layout"];
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
@@ -212,7 +212,7 @@ export default class Tree extends Stanza {
 
       g.attr(
         "transform",
-        shape === "radial"
+        layout === "radial"
           ? `translate(${Math.min(width / 2, height / 2)}, ${Math.min(
               width / 2,
               height / 2
@@ -237,7 +237,7 @@ export default class Tree extends Stanza {
         }
       };
 
-      if (shape === "radial") {
+      if (layout === "radial") {
         graphType
           .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
           .separation(separation)(denroot);
@@ -366,7 +366,7 @@ export default class Tree extends Stanza {
           .classed("node", true)
           .attr(
             "transform",
-            shape === "radial"
+            layout === "radial"
               ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
                 }, 0)`
@@ -387,7 +387,7 @@ export default class Tree extends Stanza {
         nodeEnter
           .append("text")
           .attr("x", (d) =>
-            shape === "radial"
+            layout === "radial"
               ? d.x < Math.PI === !d.children
                 ? labelMargin
                 : -labelMargin
@@ -401,14 +401,14 @@ export default class Tree extends Stanza {
           )
           .attr("dy", "3")
           .attr("transform", (d) =>
-            shape === "radial"
+            layout === "radial"
               ? `rotate(${d.x >= Math.PI ? 180 : 0})`
               : direction === "horizontal"
               ? "rotate(0)"
               : "rotate(-90)"
           )
           .attr("text-anchor", (d) =>
-            shape === "radial"
+            layout === "radial"
               ? d.x < Math.PI === !d.children
                 ? "start"
                 : "end"
@@ -429,7 +429,7 @@ export default class Tree extends Stanza {
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
-            shape === "radial"
+            layout === "radial"
               ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
               : `translate(${d.y}, ${d.x})`
           );
@@ -449,7 +449,7 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "transform",
-            shape === "radial"
+            layout === "radial"
               ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
                   source.y
                 }, 0)`
@@ -467,9 +467,9 @@ export default class Tree extends Stanza {
           .classed("link", true)
           .attr(
             "d",
-            shape === "radial"
+            layout === "radial"
               ? d3.linkRadial().angle(source.x).radius(source.y)
-              : shape === "curve"
+              : layout === "curve"
               ? getLinkFn().x(source.y0).y(source.x0)
               : d3.link(d3.curveStep).x(source.y0).y(source.x0)
           );
@@ -480,12 +480,12 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            shape === "radial"
+            layout === "radial"
               ? d3
                   .linkRadial()
                   .angle((d) => d.x)
                   .radius((d) => d.y)
-              : shape === "curve"
+              : layout === "curve"
               ? getLinkFn()
                   .x((d) => d.y)
                   .y((d) => d.x)
@@ -508,9 +508,9 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            shape === "radial"
+            layout === "radial"
               ? d3.linkRadial().angle(source.x).radius(source.y)
-              : shape === "curve"
+              : layout === "curve"
               ? getLinkFn().x(source.y).y(source.x)
               : d3.link(d3.curveStep).x(source.y).y(source.x)
           )
