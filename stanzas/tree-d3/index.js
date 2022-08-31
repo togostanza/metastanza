@@ -469,9 +469,7 @@ export default class Tree extends Stanza {
             "d",
             layout === "radial"
               ? d3.linkRadial().angle(source.x).radius(source.y)
-              : layout === "curve"
-              ? getLinkFn().x(source.y0).y(source.x0)
-              : d3.link(d3.curveStep).x(source.y0).y(source.x0)
+              : getLinkFn().x(source.y0).y(source.x0)
           );
 
         const linkUpdate = linkEnter.merge(link);
@@ -485,21 +483,9 @@ export default class Tree extends Stanza {
                   .linkRadial()
                   .angle((d) => d.x)
                   .radius((d) => d.y)
-              : layout === "curve"
-              ? getLinkFn()
+              : getLinkFn()
                   .x((d) => d.y)
                   .y((d) => d.x)
-              : direction === "horizontal"
-              ? d3
-                  .link(d3.curveStep)
-                  .x((d) => d.y)
-                  .y((d) => d.x)
-              : (d) =>
-                  `M${d.source.y},${d.source.x} L${d.source.y},${
-                    (d.target.x + d.source.x) / 2
-                  }  L${d.target.y},${(d.target.x + d.source.x) / 2} L${
-                    d.target.y
-                  },${d.target.x}`
           );
 
         link
@@ -510,9 +496,7 @@ export default class Tree extends Stanza {
             "d",
             layout === "radial"
               ? d3.linkRadial().angle(source.x).radius(source.y)
-              : layout === "curve"
-              ? getLinkFn().x(source.y).y(source.x)
-              : d3.link(d3.curveStep).x(source.y).y(source.x)
+              : getLinkFn().x(source.y).y(source.x)
           )
           .remove();
 

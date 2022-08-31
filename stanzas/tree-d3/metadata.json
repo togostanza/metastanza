@@ -60,7 +60,7 @@
     {
       "stanza:key": "layout",
       "stanza:type": "single-choice",
-      "stanza:choice": ["curve", "straight", "radial"],
+      "stanza:choice": ["curve", "radial"],
       "stanza:example": "curve",
       "stanza:description": "Tree layout"
     },
