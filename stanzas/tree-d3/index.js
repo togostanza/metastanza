@@ -12,14 +12,14 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
-export default class Dendrogram extends Stanza {
+export default class Tree extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "dendrogram"),
-      downloadPngMenuItem(this, "dendrogram"),
-      downloadJSONMenuItem(this, "dendrogram", this._data),
-      downloadCSVMenuItem(this, "dendrogram", this._data),
-      downloadTSVMenuItem(this, "dendrogram", this._data),
+      downloadSvgMenuItem(this, "tree"),
+      downloadPngMenuItem(this, "tree"),
+      downloadJSONMenuItem(this, "tree", this._data),
+      downloadCSVMenuItem(this, "tree", this._data),
+      downloadTSVMenuItem(this, "tree", this._data),
     ];
   }
 
@@ -39,7 +39,7 @@ export default class Dendrogram extends Stanza {
     this._data = values;
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("dendrogram-d3");
+    const el = this.root.getElementById("tree-d3");
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);

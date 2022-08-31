@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "dendrogram-d3",
-  "stanza:label": "Dendrogram-D3",
-  "stanza:definition": "Dendrogram-D3 MetaStanza",
+  "@id": "tree-d3",
+  "stanza:label": "Tree-D3",
+  "stanza:definition": "Tree-D3 MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
