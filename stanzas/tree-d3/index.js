@@ -52,14 +52,14 @@ export default class Tree extends Stanza {
     const minRadius = this.params["node-size-min"] / 2;
     const maxRadius = this.params["node-size-max"] / 2;
     const aveRadius = (minRadius + maxRadius) / 2;
-    const colorKey = this.params["node-color-data_key"];
-    const colorGroup = this.params["node-color-group"];
-    const colorMode = this.params["node-color-mix_blend_mode"];
+    const colorKey = this.params["color-data_key"];
+    const colorGroup = this.params["color-group"];
+    const colorMode = this.params["color-blend"];
 
     let colorModeProperty;
     let colorModeValue;
     switch (colorMode) {
-      case "opacity":
+      case "translucent":
         colorModeProperty = "opacity";
         colorModeValue = "0.5";
         break;

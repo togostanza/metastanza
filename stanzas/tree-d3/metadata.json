@@ -100,23 +100,23 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-color-data_key",
+      "stanza:key": "color-data_key",
       "stanza:type": "text",
       "stanza:example": "color",
       "stanza:description": "Set color on the node circle based on the data key.",
       "stanza:required": false
     },
     {
-      "stanza:key": "node-color-group",
+      "stanza:key": "color-group",
       "stanza:type": "text",
       "stanza:example": "group",
       "stanza:description": "Set color on the node circle based on the group.",
       "stanza:required": false
     },
     {
-      "stanza:key": "node-color-mix_blend_mode",
+      "stanza:key": "color-blend",
       "stanza:type": "single-choice",
-      "stanza:choice": ["normal", "opacity", "multiply", "screen"],
+      "stanza:choice": ["normal", "translucent", "multiply", "screen"],
       "stanza:example": "normal",
       "stanza:description": "Blend mode for overlaying nodes"
     },
