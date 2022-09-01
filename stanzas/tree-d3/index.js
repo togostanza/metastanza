@@ -24,7 +24,7 @@ export default class Tree extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["misc-custom_css_url"]);
 
     //data
     this.renderTemplate({
@@ -83,7 +83,15 @@ export default class Tree extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const sort = (a, b) => {
+    const orderNumber = (a, b) => {
+      if (a.data[orderKey] && b.data[orderKey]) {
+        return a.data[orderKey].localeCompare(b.data[orderKey]);
+      } else if (orderSort === "descending") {
+        return b.data[orderKey].localeCompare(a.data[orderKey]);
+      }
+    };
+
+    const reorder = (a, b) => {
       if (a.data[nodeKey] && b.data[nodeKey]) {
         if (orderSort === "ascending") {
           return a.data[nodeKey].localeCompare(b.data[nodeKey]);
@@ -96,7 +104,7 @@ export default class Tree extends Stanza {
     const denroot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
-      .sort(sort);
+      .sort(reorder);
     // .sort((a, b) => {
     //   if (a.data[nodeKey] && b.data[nodeKey]) {
     //     return a.data[nodeKey].localeCompare(b.data[nodeKey]);
