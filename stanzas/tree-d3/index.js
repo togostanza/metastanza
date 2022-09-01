@@ -94,9 +94,9 @@ export default class Tree extends Stanza {
     const reorder = (a, b) => {
       if (a.data[nodeKey] && b.data[nodeKey]) {
         if (orderSort === "ascending") {
-          return a.data[nodeKey].localeCompare(b.data[nodeKey]);
+          return a.data[nodeKey] > b.data[nodeKey] ? 1 : -1;
         } else if (orderSort === "descending") {
-          return b.data[nodeKey].localeCompare(a.data[nodeKey]);
+          return a.data[nodeKey] > b.data[nodeKey] ? -1 : 1;
         }
       }
     };
@@ -380,10 +380,6 @@ export default class Tree extends Stanza {
       const update = (source) => {
         let i = 0;
 
-        // const node = g
-        //   .selectAll(".node")
-        //   .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
-
         const nodeCirclesUpdate = gCircles
           .selectAll("g")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
@@ -472,70 +468,6 @@ export default class Tree extends Stanza {
           )
           .text((d) => d.data[nodeKey] || "");
 
-        // const nodeEnter =
-        //   .enter()
-        //   .append("g")
-        //   .classed("node", true)
-        //   .attr(
-        //     "transform",
-        //     layout === "radial"
-        //       ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
-        //           source.y0
-        //         }, 0)`
-        //       : `translate(${source.y0}, ${source.x0})`
-        //   )
-        //   .on("click", (e, d) => {
-        //     toggle(d);
-        //     update(d);
-        //   });
-
-        // nodeEnter
-        //   .append("circle")
-        //   .attr("data-tooltip", (d) => d.data[tooltipKey])
-        //   .attr("stroke", setColor)
-        //   .style(colorModeProperty, colorModeValue)
-        //   .classed("with-children", (d) => d.children);
-
-        // nodeEnter
-        //   .append("text")
-        //   .attr("x", (d) =>
-        //     layout === "radial"
-        //       ? d.x < Math.PI === !d.children
-        //         ? labelMargin
-        //         : -labelMargin
-        //       : layout === "horizontal"
-        //       ? d.children || d._children
-        //         ? -labelMargin
-        //         : labelMargin
-        //       : d.children || d._children
-        //       ? labelMargin
-        //       : -labelMargin
-        //   )
-        //   .attr("dy", "3")
-        //   .attr("transform", (d) =>
-        //     layout === "radial"
-        //       ? `rotate(${d.x >= Math.PI ? 180 : 0})`
-        //       : layout === "horizontal"
-        //       ? "rotate(0)"
-        //       : "rotate(-90)"
-        //   )
-        //   .attr("text-anchor", (d) =>
-        //     layout === "radial"
-        //       ? d.x < Math.PI === !d.children
-        //         ? "start"
-        //         : "end"
-        //       : layout === "horizontal"
-        //       ? d.children || d._children
-        //         ? "end"
-        //         : "start"
-        //       : d.children || d._children
-        //       ? "start"
-        //       : "end"
-        //   )
-        //   .text((d) => d.data[nodeKey] || "");
-
-        // const nodeUpdate = nodeEnter.merge(node);
-
         const duration = 500;
 
         nodeCirclesEnter
@@ -557,24 +489,6 @@ export default class Tree extends Stanza {
               ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
               : `translate(${d.y}, ${d.x})`
           );
-
-        // nodeUpdate
-        //   .transition()
-        //   .duration(duration)
-        //   .attr("transform", (d) =>
-        //     layout === "radial"
-        //       ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
-        //       : `translate(${d.y}, ${d.x})`
-        //   );
-
-        // nodeUpdate
-        //   .select("circle")
-        //   .attr("r", (d) =>
-        //     isNodeSizeDataKey
-        //       ? nodeRadius(d.data[sizeKey])
-        //       : parseFloat(aveRadius)
-        //   )
-        //   .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
 
         nodeCirclesUpdate
           .exit()
