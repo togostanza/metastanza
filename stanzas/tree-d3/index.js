@@ -202,6 +202,9 @@ export default class Tree extends Stanza {
 
     const g = svg.append("g");
 
+    const gCircles = g.append("g").attr("class", "circles");
+    const gLabels = g.append("g").attr("class", "labels");
+
     const draw = (
       MARGIN = {
         top: 0,
@@ -376,14 +379,18 @@ export default class Tree extends Stanza {
 
       const update = (source) => {
         let i = 0;
-        const node = g
-          .selectAll(".node")
+
+        // const node = g
+        //   .selectAll(".node")
+        //   .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
+
+        const nodeCirclesUpdate = gCircles
+          .selectAll("g")
           .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
 
-        const nodeEnter = node
+        const nodeCirclesEnter = nodeCirclesUpdate
           .enter()
           .append("g")
-          .classed("node", true)
           .attr(
             "transform",
             layout === "radial"
@@ -397,14 +404,37 @@ export default class Tree extends Stanza {
             update(d);
           });
 
-        nodeEnter
+        nodeCirclesEnter
           .append("circle")
           .attr("data-tooltip", (d) => d.data[tooltipKey])
           .attr("stroke", setColor)
           .style(colorModeProperty, colorModeValue)
-          .classed("with-children", (d) => d.children);
+          .classed("with-children", (d) => d.children)
+          .merge(nodeCirclesUpdate)
+          .attr("r", (d) =>
+            isNodeSizeDataKey
+              ? nodeRadius(d.data[sizeKey])
+              : parseFloat(aveRadius)
+          )
+          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
 
-        nodeEnter
+        const nodeLabelsUpdate = gLabels
+          .selectAll("g")
+          .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
+
+        const nodeLabelsEnter = nodeLabelsUpdate
+          .enter()
+          .append("g")
+          .attr(
+            "transform",
+            layout === "radial"
+              ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
+                  source.y0
+                }, 0)`
+              : `translate(${source.y0}, ${source.x0})`
+          );
+
+        nodeLabelsEnter
           .append("text")
           .attr("x", (d) =>
             layout === "radial"
@@ -442,10 +472,74 @@ export default class Tree extends Stanza {
           )
           .text((d) => d.data[nodeKey] || "");
 
-        const nodeUpdate = nodeEnter.merge(node);
+        // const nodeEnter =
+        //   .enter()
+        //   .append("g")
+        //   .classed("node", true)
+        //   .attr(
+        //     "transform",
+        //     layout === "radial"
+        //       ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
+        //           source.y0
+        //         }, 0)`
+        //       : `translate(${source.y0}, ${source.x0})`
+        //   )
+        //   .on("click", (e, d) => {
+        //     toggle(d);
+        //     update(d);
+        //   });
+
+        // nodeEnter
+        //   .append("circle")
+        //   .attr("data-tooltip", (d) => d.data[tooltipKey])
+        //   .attr("stroke", setColor)
+        //   .style(colorModeProperty, colorModeValue)
+        //   .classed("with-children", (d) => d.children);
+
+        // nodeEnter
+        //   .append("text")
+        //   .attr("x", (d) =>
+        //     layout === "radial"
+        //       ? d.x < Math.PI === !d.children
+        //         ? labelMargin
+        //         : -labelMargin
+        //       : layout === "horizontal"
+        //       ? d.children || d._children
+        //         ? -labelMargin
+        //         : labelMargin
+        //       : d.children || d._children
+        //       ? labelMargin
+        //       : -labelMargin
+        //   )
+        //   .attr("dy", "3")
+        //   .attr("transform", (d) =>
+        //     layout === "radial"
+        //       ? `rotate(${d.x >= Math.PI ? 180 : 0})`
+        //       : layout === "horizontal"
+        //       ? "rotate(0)"
+        //       : "rotate(-90)"
+        //   )
+        //   .attr("text-anchor", (d) =>
+        //     layout === "radial"
+        //       ? d.x < Math.PI === !d.children
+        //         ? "start"
+        //         : "end"
+        //       : layout === "horizontal"
+        //       ? d.children || d._children
+        //         ? "end"
+        //         : "start"
+        //       : d.children || d._children
+        //       ? "start"
+        //       : "end"
+        //   )
+        //   .text((d) => d.data[nodeKey] || "");
+
+        // const nodeUpdate = nodeEnter.merge(node);
+
         const duration = 500;
 
-        nodeUpdate
+        nodeCirclesEnter
+          .merge(nodeCirclesUpdate)
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
@@ -454,16 +548,49 @@ export default class Tree extends Stanza {
               : `translate(${d.y}, ${d.x})`
           );
 
-        nodeUpdate
-          .select("circle")
-          .attr("r", (d) =>
-            isNodeSizeDataKey
-              ? nodeRadius(d.data[sizeKey])
-              : parseFloat(aveRadius)
-          )
-          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+        nodeLabelsEnter
+          .merge(nodeLabelsUpdate)
+          .transition()
+          .duration(duration)
+          .attr("transform", (d) =>
+            layout === "radial"
+              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
+              : `translate(${d.y}, ${d.x})`
+          );
 
-        node
+        // nodeUpdate
+        //   .transition()
+        //   .duration(duration)
+        //   .attr("transform", (d) =>
+        //     layout === "radial"
+        //       ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
+        //       : `translate(${d.y}, ${d.x})`
+        //   );
+
+        // nodeUpdate
+        //   .select("circle")
+        //   .attr("r", (d) =>
+        //     isNodeSizeDataKey
+        //       ? nodeRadius(d.data[sizeKey])
+        //       : parseFloat(aveRadius)
+        //   )
+        //   .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+
+        nodeCirclesUpdate
+          .exit()
+          .transition()
+          .duration(duration)
+          .attr(
+            "transform",
+            layout === "radial"
+              ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
+                  source.y
+                }, 0)`
+              : `translate(${source.y}, ${source.x})`
+          )
+          .remove();
+
+        nodeLabelsUpdate
           .exit()
           .transition()
           .duration(duration)
@@ -520,7 +647,11 @@ export default class Tree extends Stanza {
           )
           .remove();
 
-        node.each((d) => {
+        nodeCirclesUpdate.each((d) => {
+          d.x0 = d.x;
+          d.y0 = d.y;
+        });
+        nodeLabelsUpdate.each((d) => {
           d.x0 = d.x;
           d.y0 = d.y;
         });
