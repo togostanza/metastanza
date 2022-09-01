@@ -43,8 +43,8 @@ export default class Tree extends Stanza {
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    const orderKey = parseInt(this.params["order-data_key"]);
-    const orderSort = parseInt(this.params["order-sort"]);
+    const orderKey = this.params["order-data_key"];
+    const orderSort = this.params["order-sort"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
     const nodeKey = this.params["node-label-data_key"];
@@ -83,16 +83,27 @@ export default class Tree extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    const sort = (a, b) => {
+      if (a.data[nodeKey] && b.data[nodeKey]) {
+        if (orderSort === "ascending") {
+          return a.data[nodeKey].localeCompare(b.data[nodeKey]);
+        } else if (orderSort === "descending") {
+          return b.data[nodeKey].localeCompare(a.data[nodeKey]);
+        }
+      }
+    };
+
     const denroot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
-      .sort((a, b) => {
-        if (a.data[nodeKey] && b.data[nodeKey]) {
-          return a.data[nodeKey].localeCompare(b.data[nodeKey]);
-        } else {
-          return 0;
-        }
-      });
+      .sort(sort);
+    // .sort((a, b) => {
+    //   if (a.data[nodeKey] && b.data[nodeKey]) {
+    //     return a.data[nodeKey].localeCompare(b.data[nodeKey]);
+    //   } else {
+    //     return 0;
+    //   }
+    // });
 
     const data = denroot.descendants().slice(1);
     const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
