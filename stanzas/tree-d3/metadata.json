@@ -54,8 +54,8 @@
     {
       "stanza:key": "order-sort",
       "stanza:type": "single-choice",
-      "stanza:choice": ["none", "ascending", "descending"],
-      "stanza:example": "none",
+      "stanza:choice": ["ascending", "descending"],
+      "stanza:example": "ascending",
       "stanza:description": "sorting order"
     },
     {
