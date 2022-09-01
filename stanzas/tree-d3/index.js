@@ -43,6 +43,8 @@ export default class Tree extends Stanza {
 
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
+    const orderKey = parseInt(this.params["order-data_key"]);
+    const orderSort = parseInt(this.params["order-sort"]);
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
     const nodeKey = this.params["node-label-data_key"];

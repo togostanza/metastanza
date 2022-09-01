@@ -45,6 +45,20 @@
       "stanza:description": "Height in px"
     },
     {
+      "stanza:key": "order-data_key",
+      "stanza:type": "text",
+      "stanza:example": "id",
+      "stanza:description": "sort data points by this data key",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "order-sort",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["none", "ascending", "descending"],
+      "stanza:example": "none",
+      "stanza:description": "sorting order"
+    },
+    {
       "stanza:key": "graph-align_leaf_nodes",
       "stanza:type": "boolean",
       "stanza:example": false,
