@@ -466,7 +466,13 @@ export default class Tree extends Stanza {
           );
 
         nodeLabelsEnter
-          .merge(nodeLabelsUpdate)
+          .attr("transform", (d) =>
+            layout === "radial"
+              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${source.y}, ${
+                  source.x
+                })`
+              : `translate(${source.y}, ${source.x})`
+          )
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
