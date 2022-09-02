@@ -790,11 +790,11 @@ export default class Linechart extends Stanza {
             .enter()
             .append("path")
             .attr("class", "line")
-            .attr("d", (d) => linePreviewX(d.data))
             .attr("clip-path", "url(#clip)");
 
           previewLinesUpdate
             .merge(previewLinesEnter)
+            .attr("d", (d) => linePreviewX(d.data))
             .attr("stroke", (d) => d.color);
 
           const previewLinesExit = previewLinesUpdate.exit().remove();
@@ -812,11 +812,11 @@ export default class Linechart extends Stanza {
             .enter()
             .append("path")
             .attr("class", "line")
-            .attr("d", (d) => linePreviewY(d.data))
             .attr("clip-path", "url(#clip)");
 
           previewLinesUpdate
             .merge(previewLinesEnter)
+            .attr("d", (d) => linePreviewY(d.data))
             .attr("stroke", (d) => d.color);
 
           const previewLinesExit = previewLinesUpdate.exit().remove();
@@ -1186,8 +1186,12 @@ export default class Linechart extends Stanza {
             .enter()
             .append("path")
             .attr("class", "line")
-            .attr("d", (d) => line(d.data))
             .attr("clip-path", "url(#clip)");
+
+          linesUpdate
+            .merge(linesEnter)
+            .attr("d", (d) => line(d.data))
+            .attr("stroke", (d) => d.color);
 
           if (showPoints) {
             updateSymbols(data);
@@ -1196,7 +1200,6 @@ export default class Linechart extends Stanza {
             updateErrors(data);
           }
 
-          linesUpdate.merge(linesEnter).attr("stroke", (d) => d.color);
           linesUpdate.exit().remove();
 
           graphXAxisG.call(xAxis).call(rotateXTickLabels);
