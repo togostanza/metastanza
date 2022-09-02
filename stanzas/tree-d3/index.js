@@ -83,10 +83,7 @@ export default class Tree extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const denroot = d3.stratify().parentId((d) => d.parent)(values);
-    const data = denroot.descendants().slice(1);
-
-    const orderNum = (a, b) => {
+    const reorder = (a, b) => {
       if (a.data[orderKey] && b.data[orderKey]) {
         if (orderSort === "ascending") {
           return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
@@ -95,23 +92,41 @@ export default class Tree extends Stanza {
         }
       }
     };
-    const orderAbc = (a, b) => {
-      if (a.data[nodeKey] && b.data[nodeKey]) {
-        if (orderSort === "ascending") {
-          return a.data[nodeKey] > b.data[nodeKey] ? 1 : -1;
-        } else if (orderSort === "descending") {
-          return a.data[nodeKey] > b.data[nodeKey] ? -1 : 1;
-        }
-      }
-    };
-    const reorder = () => {
-      if (data.some((d) => d.data[orderKey])) {
-        return orderNum;
-      } else {
-        return orderAbc;
-      }
-    };
-    denroot.sort(reorder());
+
+    const denroot = d3
+      .stratify()
+      .parentId((d) => d.parent)(values)
+      .sort(reorder);
+
+    // const denroot = d3.stratify().parentId((d) => d.parent)(values);
+    const data = denroot.descendants().slice(1);
+
+    // const orderNum = (a, b) => {
+    //   if (a.data[orderKey] && b.data[orderKey]) {
+    //     if (orderSort === "ascending") {
+    //       return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
+    //     } else if (orderSort === "descending") {
+    //       return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
+    //     }
+    //   }
+    // };
+    // const reorder = (a, b) => {
+    //   if (a.data[nodeKey] && b.data[nodeKey]) {
+    //     if (orderSort === "ascending") {
+    //       return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
+    //     } else if (orderSort === "descending") {
+    //       return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
+    //     }
+    //   }
+    // };
+    // const reorder = () => {
+    //   if (data.some((d) => d.data[orderKey])) {
+    //     return orderNum;
+    //   } else {
+    //     return orderAbc;
+    //   }
+    // };
+    // denroot.sort(reorder());
 
     const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
 
