@@ -535,6 +535,7 @@ export default class Linechart extends Stanza {
         .tickSize(-chartHeight)
         .tickFormat("");
 
+      console.log(chartHeight);
       const yAxisGrid = d3
         .axisLeft(this._scaleY)
         .tickSize(-chartWidth)
@@ -593,6 +594,7 @@ export default class Linechart extends Stanza {
         }
 
         if (showXGridlines) {
+          console.log("gridlines");
           if (
             xGridInterval &&
             xAxisGridIntervalUnits &&
@@ -644,8 +646,11 @@ export default class Linechart extends Stanza {
             for (let i = yExtent[0]; i <= yExtent[1]; i = i + yGridInterval) {
               ticks.push(i);
             }
+            console.log("ticks", ticks);
             yAxisGrid.tickValues(ticks);
+            console.log(yAxisGrid.tickValues());
           } else {
+            console.log("yGridNumber", yGridNumber);
             yAxisGrid.ticks(yGridNumber);
           }
         }
@@ -750,6 +755,7 @@ export default class Linechart extends Stanza {
       let previewYAxisXG;
       let previewYAxisYG;
 
+      // append preview if true
       if (showXPreview) {
         previewXAxisXG = previewXArea
           .append("g")
@@ -772,6 +778,7 @@ export default class Linechart extends Stanza {
         previewYArea.append("g").attr("class", "brushY");
       }
 
+      // update with new data (when toggling via legend)
       const update = () => {
         this._currentData = this._groupedData.filter((group) => group.show);
 
@@ -1245,6 +1252,13 @@ export default class Linechart extends Stanza {
               previewXAxisYG.call(hideTicks);
             }
           }
+          if (showYGridlines) {
+            graphYGridG.call(yAxisGrid);
+          }
+
+          if (showXGridlines) {
+            graphXGridG.call(xAxisGrid);
+          }
         };
 
         updateRange(this._currentData);
@@ -1253,6 +1267,7 @@ export default class Linechart extends Stanza {
         let brushY;
 
         if (showXPreview) {
+          console.log("previewXHeight", previewXHeight);
           brushX = d3
             .brushX()
             .extent([
