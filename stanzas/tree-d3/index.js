@@ -497,14 +497,22 @@ export default class Tree extends Stanza {
 
         nodeLabelsUpdate
           .exit()
+          .attr("transform", (d) =>
+            layout === "radial"
+              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
+              : `translate(${d.y}, ${d.x})`
+          )
           .transition()
           .duration(duration)
-          .attr(
-            "transform",
+          .attr("transform", (d) =>
             layout === "radial"
-              ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
-                  source.y
-                }, 0)`
+              ? source.y === 0
+                ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+                    source.y
+                  }, 0)`
+                : `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
+                    source.y
+                  }, 0)`
               : `translate(${source.y}, ${source.x})`
           )
           .remove();
