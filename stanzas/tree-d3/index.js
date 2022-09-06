@@ -102,10 +102,10 @@ export default class Tree extends Stanza {
     const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
 
     const maxDepth = d3.max(data, (d) => d.depth);
-    const labelsarray = [];
+    const labels = [];
     for (const n of data) {
       if (n.depth === maxDepth) {
-        labelsarray.push(n.data[nodeKey] || "");
+        labels.push(n.data[nodeKey] || "");
       }
     }
 
@@ -178,7 +178,7 @@ export default class Tree extends Stanza {
     const tempGroup = svg.append("g");
     tempGroup
       .selectAll("text")
-      .data(labelsarray)
+      .data(labels)
       .enter()
       .append("text")
       .text((d) => d);
