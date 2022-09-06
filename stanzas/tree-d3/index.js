@@ -238,11 +238,7 @@ export default class Tree extends Stanza {
       }
 
       const separation = (a, b) => {
-        if (isLeafNodesAlign) {
-          return a.parent === b.parent ? 1 : 2;
-        } else {
-          return (a.parent === b.parent ? 1 : 2) / a.depth;
-        }
+        return (a.parent === b.parent ? 1 : 2) / isLeafNodesAlign ? 1 : a.depth;
       };
 
       if (layout === "radial") {
