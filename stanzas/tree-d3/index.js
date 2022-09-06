@@ -249,18 +249,16 @@ export default class Tree extends Stanza {
         graphType
           .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
           .separation(separation)(treeRoot);
-      } else {
-        if (layout === "horizontal") {
-          graphType.size([
-            height - MARGIN.top - MARGIN.bottom,
-            width - MARGIN.left - MARGIN.right,
-          ]);
-        } else {
-          graphType.size([
-            width - MARGIN.top - MARGIN.bottom,
-            height - MARGIN.left - MARGIN.right,
-          ]);
-        }
+      } else if (layout === "horizontal") {
+        graphType.size([
+          height - MARGIN.top - MARGIN.bottom,
+          width - MARGIN.left - MARGIN.right,
+        ]);
+      } else if (layout === "vertical") {
+        graphType.size([
+          width - MARGIN.top - MARGIN.bottom,
+          height - MARGIN.left - MARGIN.right,
+        ]);
       }
 
       graphType(treeRoot);
