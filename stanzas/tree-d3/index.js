@@ -93,12 +93,12 @@ export default class Tree extends Stanza {
       }
     };
 
-    const denroot = d3
+    const treeRoot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
       .sort(reorder);
 
-    const data = denroot.descendants().slice(1);
+    const data = treeRoot.descendants().slice(1);
     const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
 
     const maxDepth = d3.max(data, (d) => d.depth);
@@ -139,7 +139,7 @@ export default class Tree extends Stanza {
     const defaultColor = togostanzaColors[0];
 
     const groupArray = [];
-    denroot
+    treeRoot
       .descendants()
       .forEach((d) =>
         d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
@@ -170,7 +170,7 @@ export default class Tree extends Stanza {
 
     const rootGroup = svg
       .append("text")
-      .text(denroot.descendants()[0].data[nodeKey] || "");
+      .text(treeRoot.descendants()[0].data[nodeKey] || "");
 
     const rootLabelWidth = rootGroup.node().getBBox().width;
     rootGroup.remove();
@@ -248,7 +248,7 @@ export default class Tree extends Stanza {
       if (layout === "radial") {
         graphType
           .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
-          .separation(separation)(denroot);
+          .separation(separation)(treeRoot);
       } else {
         if (layout === "horizontal") {
           graphType.size([
@@ -263,10 +263,10 @@ export default class Tree extends Stanza {
         }
       }
 
-      graphType(denroot);
+      graphType(treeRoot);
 
-      denroot.x0 = data[0].parent.x;
-      denroot.y0 = 0;
+      treeRoot.x0 = data[0].parent.x;
+      treeRoot.y0 = 0;
 
       const getLinkFn = () => {
         if (layout === "horizontal") {
@@ -277,7 +277,7 @@ export default class Tree extends Stanza {
       };
 
       if (layout === "vertical") {
-        denroot.descendants().forEach((node) => {
+        treeRoot.descendants().forEach((node) => {
           const x0 = node.x0;
           const x = node.x;
           const y0 = node.y0;
@@ -297,7 +297,7 @@ export default class Tree extends Stanza {
 
       let deltas;
       if (layout === "horizontal") {
-        denroot.descendants().forEach((d) => {
+        treeRoot.descendants().forEach((d) => {
           minY.push(
             MARGIN.left + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
           );
@@ -318,7 +318,7 @@ export default class Tree extends Stanza {
           right: width - Math.max(...maxY),
         };
       } else {
-        denroot.descendants().forEach((d) => {
+        treeRoot.descendants().forEach((d) => {
           minY.push(
             MARGIN.top + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
           );
@@ -367,7 +367,7 @@ export default class Tree extends Stanza {
 
         const nodeCirclesUpdate = gCircles
           .selectAll("g")
-          .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
+          .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
         const nodeCirclesEnter = nodeCirclesUpdate
           .enter()
@@ -401,7 +401,7 @@ export default class Tree extends Stanza {
 
         const nodeLabelsUpdate = gLabels
           .selectAll("g")
-          .data(denroot.descendants(), (d) => d.id || (d.id = ++i));
+          .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
         const nodeLabelsEnter = nodeLabelsUpdate
           .enter()
@@ -523,7 +523,7 @@ export default class Tree extends Stanza {
 
         const link = g
           .selectAll(".link")
-          .data(denroot.links(), (d) => d.target.id);
+          .data(treeRoot.links(), (d) => d.target.id);
 
         const linkEnter = link
           .enter()
@@ -573,7 +573,7 @@ export default class Tree extends Stanza {
           d.y0 = d.y;
         });
       };
-      update(denroot);
+      update(treeRoot);
     };
 
     draw();
