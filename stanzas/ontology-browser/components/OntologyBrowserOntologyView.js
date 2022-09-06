@@ -5,8 +5,6 @@ import { repeat } from "lit/directives/repeat.js";
 
 import "./OntologyBrowserColumn";
 
-import { cachedAxios } from "../utils";
-
 export class OntologyBrowserView extends LitElement {
   static styles = css`
   :host {
@@ -70,17 +68,6 @@ export class OntologyBrowserView extends LitElement {
       },
     };
   }
-
-  // set _id(id) {
-  //   if (this.data?.id !== id) {
-  //     this._loadingStarted();
-  //     //   this.API.get(id).then(({ data }) => {
-  //     //     this.data = data;
-
-  //     //     this._loadingEnded();
-  //     //   });
-  //   }
-  // }
 
   willUpdate(changedProperties) {
     if (changedProperties.has("data")) {
@@ -153,72 +140,9 @@ export class OntologyBrowserView extends LitElement {
     }
   }
 
-  // firstUpdated() {
-  //   // this.API.get(this._id).then(({ data }) => {
-  //   //   this.data = data;
-  //   // });
-
-  // }
-
-  _loadingStarted() {
-    this.dispatchEvent(
-      new CustomEvent("loading-started", { bubbles: true, composed: true })
-    );
-  }
-
-  _loadingEnded() {
-    this.dispatchEvent(
-      new CustomEvent("loading-ended", { bubbles: true, composed: true })
-    );
-  }
-
   _handleClick(e) {
     if (e.target?.role === "parents" || e.target?.role === "children") {
       this.scrolledRect = e.detail?.rect || null;
-
-      // this.updateComplete.then(() => {
-      //   if (e.detail.role === "children") {
-      //     this.movement = "left";
-
-      //     this._columns = ["_parents", "parents", "hero", "children"];
-      //   } else if (e.detail.role === "parents") {
-      //     this.movement = "right";
-
-      //     this._columns = ["parents", "hero", "children", "_children"];
-      //   }
-      // });
-
-      // this._loadingStarted();
-
-      // this.dispatchEvent(
-      //   new CustomEvent("disease-selected", {
-      //     detail: {
-      //       id: data.id,
-      //       label: data.label,
-      //       cui: data.cui,
-      //       role: e.target.role,
-      //     },
-      //     bubbles: true,
-      //     composed: true,
-      //   })
-      // );
-
-      // this.API.get(e.detail.id).then(({ data }) => {
-      //   //this._loadingEnded();
-      //   this.data = data;
-      //   this.updateComplete.then(() => {
-      //     if (e.detail.role === "children") {
-      //       this.movement = "left";
-
-      //       this._columns = ["_parents", "parents", "hero", "children"];
-      //     } else if (e.detail.role === "parents") {
-      //       this.movement = "right";
-
-      //       this._columns = ["parents", "hero", "children", "_children"];
-      //     }
-
-      //   });
-      // });
     }
   }
 

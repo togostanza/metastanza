@@ -1,8 +1,5 @@
 import { LitElement, html, css, nothing } from "lit";
 
-//import "./OntologyBrowserOntologyView.js";
-// import "./OntologyBrowserTextSearch.js";
-
 import { applyConstructor, cachedAxios, debounce } from "../utils.js";
 
 import "./OntologyBrowserOntologyView";
@@ -40,17 +37,6 @@ export class OntologyBrowser extends LitElement {
 
     this.API = new cachedAxios(this.apiEndpoint);
   }
-
-  // set ontologyBaseUrl(baseURL) {
-  //   this.ontologyAPI = new cachedAxios(baseURL);
-  //   this.ontologyViewer = new OntologyBrowserView(this.ontologyAPI);
-  //   //this.ontologyBrowser = new OntologyBrowserView(new cachedAxios(baseURL)).API
-  // }
-
-  // set textSearchUrl(baseURL) {
-  //   this.textSearchAPI = new cachedAxios(baseURL);
-  //   this.textSearch = new OntologyBrowserTextSearch("", this.textSearchAPI);
-  // }
 
   firstUpdated() {
     this._loadingStarted();
@@ -99,14 +85,6 @@ export class OntologyBrowser extends LitElement {
     }
   }
 
-  // _keyup(e) {
-  //   if (e.target && e.target.nodeName === "ontology-browser-text-search") {
-  //     this.value = e.target.value;
-  //   }
-  // }
-
-  // @new-suggestion-selected=${this._changeDiseaseEventHadnler}
-
   render() {
     return html`
       <!-- <ontology-browser-text-search
@@ -126,11 +104,6 @@ export class OntologyBrowser extends LitElement {
       </div>
     `;
   }
-
-  // // do not create shadow dom
-  // createRenderRoot() {
-  //   return this;
-  // }
 }
 
 customElements.define("ontology-browser", OntologyBrowser);
