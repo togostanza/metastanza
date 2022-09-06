@@ -272,10 +272,7 @@ export default class Tree extends Stanza {
 
       if (layout === "vertical") {
         treeRoot.descendants().forEach((node) => {
-          const x0 = node.x0;
-          const x = node.x;
-          const y0 = node.y0;
-          const y = node.y;
+          const { x0, x, y0, y } = node;
 
           node.x0 = y0;
           node.x = y;
