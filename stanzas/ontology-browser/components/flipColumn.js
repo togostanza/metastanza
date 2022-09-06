@@ -3,12 +3,16 @@ import { noChange, nothing } from "lit";
 
 const disconnectedRects = new Map();
 class Flip extends AsyncDirective {
-  parent;
-  element;
-  boundingRect;
-  id;
-  role = "";
-  parentRect = null;
+  constructor() {
+    super();
+
+    this.parent = undefined;
+    this.element = undefined;
+    this.boundingRect = undefined;
+    this.id = undefined;
+    this.role = "";
+    this.parentRect = null;
+  }
 
   render() {
     return nothing;
@@ -80,6 +84,7 @@ class Flip extends AsyncDirective {
 
     if (this.id === this.heroId) {
       previous = this.scrolledHeroRect;
+
       this.boundingRect = this.element.parentElement.getBoundingClientRect();
     } else {
       this.boundingRect = this.element.getBoundingClientRect();

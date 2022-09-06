@@ -18,8 +18,12 @@ export class OntologyBrowser extends LitElement {
 
   static styles = css`
     :host {
-      height: 300px;
+      display: block;
+      height: 100%;
       width: 100%;
+    }
+    .container {
+      height: 100%;
     }
   `;
 

@@ -1,5 +1,4 @@
 import Stanza from "togostanza/stanza";
-import loadData from "togostanza-utils/load-data";
 
 import { appendCustomCss } from "togostanza-utils";
 import { OntologyBrowser } from "./components/OntologyBrowser";
@@ -20,6 +19,8 @@ export default class Linechart extends Stanza {
 
     const root = this.root.querySelector("main");
 
-    this.ontologyViewer = new OntologyBrowser(root, params);
+    if (!this.ontologyViewer) {
+      this.ontologyViewer = new OntologyBrowser(root, params);
+    }
   }
 }

@@ -338,23 +338,24 @@ export class OntologyCard extends LitElement {
       duration: 500,
       easing: "ease-out",
     };
-
-    let animation = [
-      {
-        height: `${this.prevRect?.height || 0}px`,
-        overflow: "hidden",
-      },
-      {
-        height: `${this.cardRef?.value.getBoundingClientRect().height || 0}px`,
-      },
-    ];
-
     if (this.mode === "hero") {
+      let animation = [
+        {
+          height: `${this.prevRect?.height || 0}px`,
+          overflow: "hidden",
+        },
+        {
+          height: `${
+            this.cardRef?.value.getBoundingClientRect().height || 0
+          }px`,
+        },
+      ];
+
       animation[0].backgroundColor = this.defaultBgColor;
       animation[1].backgroundColor = this.selectedBgColor;
-    }
 
-    this.cardRef.value.animate(animation, animProps);
+      this.cardRef.value.animate(animation, animProps);
+    }
   }
 
   firstUpdated() {

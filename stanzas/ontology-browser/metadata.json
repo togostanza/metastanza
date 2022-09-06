@@ -127,6 +127,13 @@
       "stanza:default": 10,
       "stanza:description": "Label font size"
     },
+
+    {
+      "stanza:key": "--togostanza-outline-height",
+      "stanza:type": "text",
+      "stanza:default": "200px",
+      "stanza:description": "Stanza height"
+    },
     {
       "stanza:key": "--togostanza-node-border-color",
       "stanza:type": "color",
