@@ -1,0 +1,161 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "ontology-browser",
+  "stanza:label": "Ontology browser",
+  "stanza:definition": "Graphical ontology browser",
+  "stanza:license": "MIT",
+  "stanza:author": "DBCLS",
+  "stanza:address": "https://github.com/togostanza/metastanza",
+  "stanza:contributor": ["PENQE"],
+  "stanza:created": "2022-09-06",
+  "stanza:updated": "2022-09-06",
+  "stanza:parameter": [
+    {
+      "stanza:key": "api-endpoint",
+      "stanza:example": "https://togovar-dev.biosciencedbc.jp/api/inspect/disease",
+      "stanza:description": "Get node details and relations API endpoint",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "initial-id",
+      "stanza:example": "MONDO_0005709",
+      "stanza:description": "Node id to be shown at load time",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "node-id_path",
+      "stanza:example": "id",
+      "stanza:description": "Key with unique node id",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "node-label_path",
+      "stanza:example": "label",
+      "stanza:description": "JSON path to node label path, separated by dot '.' (e.g. 'details.label') ",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "node-details_path",
+      "stanza:type": "string",
+      "stanza:example": ".",
+      "stanza:description": "JSON path to node details data in API response, separated by dot '.' (e.g. 'data.details') ",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-details_show_keys",
+      "stanza:type": "string",
+      "stanza:example": "id,cui",
+      "stanza:description": "Show keys list, comma separated",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "node-parent_nodes",
+      "stanza:type": "string",
+      "stanza:example": "parents",
+      "stanza:description": "JSON path to node parents array, separated by dot '.' (e.g. 'data.relations.parents')",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "node-children_nodes",
+      "stanza:type": "string",
+      "stanza:example": "error",
+      "stanza:description": "Error data key name",
+      "stanza:required": false
+    }
+  ],
+  "stanza:menu-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--togostanza-series-0-color",
+      "stanza:type": "color",
+      "stanza:default": "#6590e6",
+      "stanza:description": "Group color 0"
+    },
+    {
+      "stanza:key": "--togostanza-series-1-color",
+      "stanza:type": "color",
+      "stanza:default": "#3ac9b6",
+      "stanza:description": "Group color 1"
+    },
+    {
+      "stanza:key": "--togostanza-series-2-color",
+      "stanza:type": "color",
+      "stanza:default": "#9ede2f",
+      "stanza:description": "Group color 2"
+    },
+    {
+      "stanza:key": "--togostanza-series-3-color",
+      "stanza:type": "color",
+      "stanza:default": "#F5DA64",
+      "stanza:description": "Group color 3"
+    },
+    {
+      "stanza:key": "--togostanza-series-4-color",
+      "stanza:type": "color",
+      "stanza:default": "#F57F5B",
+      "stanza:description": "Group color 4"
+    },
+    {
+      "stanza:key": "--togostanza-series-5-color",
+      "stanza:type": "color",
+      "stanza:default": "#F75976",
+      "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-font-family",
+      "stanza:type": "text",
+      "stanza:default": "Helvetica Neue",
+      "stanza:description": "Font family"
+    },
+    {
+      "stanza:key": "--togostanza-font-size",
+      "stanza:type": "text",
+      "stanza:default": "12px",
+      "stanza:description": "Font Size"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Label font color"
+    },
+    {
+      "stanza:key": "--togostanza-label-font-size",
+      "stanza:type": "number",
+      "stanza:default": 10,
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-node-border-color",
+      "stanza:type": "color",
+      "stanza:default": "#4E5059",
+      "stanza:description": "Border color"
+    },
+    {
+      "stanza:key": "--togostanza-node-border-color-selected",
+      "stanza:type": "color",
+      "stanza:default": "#374378",
+      "stanza:description": "Selected border color"
+    },
+    {
+      "stanza:key": "--togostanza-node-bg-color",
+      "stanza:type": "color",
+      "stanza:default": "#ffffff",
+      "stanza:description": "Node background color"
+    },
+    {
+      "stanza:key": "--togostanza-node-bg-color-selected",
+      "stanza:type": "color",
+      "stanza:default": "#fff6e0",
+      "stanza:description": "Selected node background color"
+    },
+    {
+      "stanza:key": "--togostanza-background-color",
+      "stanza:type": "color",
+      "stanza:default": "rgba(255,255,255,0)",
+      "stanza:description": "Background color"
+    }
+  ]
+}
