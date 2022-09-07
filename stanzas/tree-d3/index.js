@@ -24,23 +24,22 @@ export default class Tree extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this, this.params["misc-custom_css_url"]);
-
-    //data
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"],
-      this.root.querySelector("main")
-    );
-    this._data = values;
-
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("tree-d3");
 
+    //Define from params
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      root
+    );
+    this._data = values;
+
+    appendCustomCss(this, this.params["misc-custom_css_url"]);
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
     const orderKey = this.params["order-data_key"];
@@ -83,6 +82,7 @@ export default class Tree extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
+    //Sorting by user keywords
     const reorder = (a, b) => {
       if (a.data[orderKey] && b.data[orderKey]) {
         if (orderSort === "ascending") {
@@ -93,23 +93,14 @@ export default class Tree extends Stanza {
       }
     };
 
+    //Hierarchize data
     const treeRoot = d3
       .stratify()
       .parentId((d) => d.parent)(values)
       .sort(reorder);
 
     const treeDescendants = treeRoot.descendants();
-
     const data = treeDescendants.slice(1);
-    const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
-
-    const maxDepth = d3.max(data, (d) => d.depth);
-    const labels = [];
-    for (const n of data) {
-      if (n.depth === maxDepth) {
-        labels.push(n.data[nodeKey] || "");
-      }
-    }
 
     //Setting node size
     const nodeSizeMin = d3.min(data, (d) => d.data[sizeKey]);
@@ -127,6 +118,7 @@ export default class Tree extends Stanza {
       return d3RadiusScale(nodeSizeMin);
     };
 
+    //Toggle display/hide of children
     const toggle = (d) => {
       if (d.children) {
         d._children = d.children;
@@ -140,7 +132,6 @@ export default class Tree extends Stanza {
     // Setting color scale
     const togostanzaColors = getColorSeries(this);
     const defaultColor = togostanzaColors[0];
-
     const groupArray = [];
     treeDescendants.forEach((d) =>
       d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
@@ -163,19 +154,28 @@ export default class Tree extends Stanza {
       }
     };
 
+    //Setting svg area
     const svg = d3
       .select(el)
       .append("svg")
       .attr("width", width)
       .attr("height", height);
 
+    //Get width of root label
     const rootGroup = svg
       .append("text")
       .text(treeDescendants[0].data[nodeKey] || "");
-
     const rootLabelWidth = rootGroup.node().getBBox().width;
     rootGroup.remove();
 
+    //Get width of the largest label at the lowest level
+    const maxDepth = d3.max(data, (d) => d.depth);
+    const labels = [];
+    for (const n of data) {
+      if (n.depth === maxDepth) {
+        labels.push(n.data[nodeKey] || "");
+      }
+    }
     const tempGroup = svg.append("g");
     tempGroup
       .selectAll("text")
@@ -186,11 +186,12 @@ export default class Tree extends Stanza {
     const maxLabelWidth = tempGroup.node().getBBox().width;
     tempGroup.remove();
 
+    //Create each group
     const g = svg.append("g");
-
     const gCircles = g.append("g").attr("class", "circles");
     const gLabels = g.append("g").attr("class", "labels");
 
+    //Draw function
     const draw = (
       MARGIN = {
         top: 0,
@@ -199,6 +200,7 @@ export default class Tree extends Stanza {
         left: rootLabelWidth + labelMargin,
       }
     ) => {
+      //Error handling
       if (layout === "horizontal") {
         if (width - MARGIN.right - MARGIN.left < 0) {
           el.innerHTML = "<p>width is too small!</p>";
@@ -210,7 +212,6 @@ export default class Tree extends Stanza {
           throw new Error("height is too small!");
         }
       }
-
       if (
         Math.max(maxRadius, minRadius) * 2 >= width ||
         Math.max(maxRadius, minRadius) * 2 >= height
@@ -219,6 +220,7 @@ export default class Tree extends Stanza {
         throw new Error("node size is too big for width and height!");
       }
 
+      //Movement of drawing position
       g.attr(
         "transform",
         layout === "radial"
@@ -231,6 +233,7 @@ export default class Tree extends Stanza {
           : `translate(${MARGIN.top}, ${MARGIN.left})`
       );
 
+      //Align leaves or not
       let graphType = d3.tree();
       if (isLeafNodesAlign) {
         graphType = d3.cluster();
@@ -238,10 +241,12 @@ export default class Tree extends Stanza {
         graphType = d3.tree();
       }
 
+      //Gap between node
       const separation = (a, b) => {
         return (a.parent === b.parent ? 1 : 2) / isLeafNodesAlign ? 1 : a.depth;
       };
 
+      //Setting the graph size for each layout
       if (layout === "radial") {
         graphType
           .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
@@ -260,9 +265,11 @@ export default class Tree extends Stanza {
 
       graphType(treeRoot);
 
+      //Start position of drawing
       treeRoot.x0 = data[0].parent.x;
       treeRoot.y0 = 0;
 
+      //Setting the path for each direction
       const getLinkFn = () => {
         if (layout === "horizontal") {
           return d3.linkHorizontal();
@@ -282,14 +289,15 @@ export default class Tree extends Stanza {
         });
       }
 
+      //Setting the width of margin
       const minY = [],
         maxY = [],
         minX = [],
         maxX = [];
 
-      const circleRadius = [];
-      const aligns = [];
-      const depths = [];
+      const circleRadius = [],
+        aligns = [],
+        depths = [];
       treeDescendants.forEach((d) => {
         circleRadius.push(nodeRadius(d.data[sizeKey]) || aveRadius);
 
@@ -317,25 +325,7 @@ export default class Tree extends Stanza {
         }
       });
 
-      //Find the maximum value for each direction
-      const deltasFunction = () => {
-        if (layout === "horizontal") {
-          deltas = {
-            top: Math.min(...minX),
-            bottom: height - Math.max(...maxX),
-            left: Math.min(...minY),
-            right: width - Math.max(...maxY),
-          };
-        } else {
-          deltas = {
-            top: Math.min(...minY),
-            bottom: width - Math.max(...maxY),
-            left: Math.min(...minX),
-            right: height - Math.max(...maxX),
-          };
-        }
-      };
-
+      //Get all positions
       let deltas;
       treeDescendants.forEach((d, i) => {
         minX.push(aligns[i] - circleRadius[i]);
@@ -343,21 +333,33 @@ export default class Tree extends Stanza {
         maxX.push(aligns[i] + circleRadius[i]);
         maxY.push(depths[i] + circleRadius[i]);
       });
-      deltasFunction();
 
-      if (deltas.left < 0) {
-        MARGIN.left += Math.abs(deltas.left) + 1;
-      }
-      if (deltas.right < 0) {
-        MARGIN.right += Math.abs(deltas.right) + 1;
-      }
-      if (deltas.top < 0) {
-        MARGIN.top += Math.abs(deltas.top) + 1;
-      }
-      if (deltas.bottom < 0) {
-        MARGIN.bottom += Math.abs(deltas.bottom) + 1;
+      //Find each max/min value
+      if (layout === "horizontal") {
+        deltas = {
+          top: Math.min(...minX),
+          bottom: height - Math.max(...maxX),
+          left: Math.min(...minY),
+          right: width - Math.max(...maxY),
+        };
+      } else {
+        deltas = {
+          top: Math.min(...minY),
+          bottom: width - Math.max(...maxY),
+          left: Math.min(...minX),
+          right: height - Math.max(...maxX),
+        };
       }
 
+      // Update margin values
+      const directions = ["top", "bottom", "right", "left"];
+      for (const dir of directions) {
+        if (deltas[dir] < 0) {
+          MARGIN[dir] += Math.abs(deltas[dir]) + 1;
+        }
+      }
+
+      //Redraw
       if (
         deltas.top < 0 ||
         deltas.bottom < 0 ||
@@ -367,13 +369,16 @@ export default class Tree extends Stanza {
         draw(MARGIN);
       }
 
+      //Update graph values
       const update = (source) => {
         let i = 0;
 
+        //Drawing circles
         const nodeCirclesUpdate = gCircles
           .selectAll("g")
           .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
+        //Circle enter
         const nodeCirclesEnter = nodeCirclesUpdate
           .enter()
           .append("g")
@@ -390,24 +395,26 @@ export default class Tree extends Stanza {
             update(d);
           });
 
+        //Decorate circle
         nodeCirclesEnter
           .append("circle")
           .attr("data-tooltip", (d) => d.data[tooltipKey])
           .attr("stroke", setColor)
           .style(colorModeProperty, colorModeValue)
           .classed("with-children", (d) => d.children)
-          .merge(nodeCirclesUpdate)
           .attr("r", (d) =>
-            isNodeSizeDataKey
+            data.some((d) => d.data[sizeKey])
               ? nodeRadius(d.data[sizeKey])
               : parseFloat(aveRadius)
           )
           .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
 
+        //Drawing labels
         const nodeLabelsUpdate = gLabels
           .selectAll("g")
           .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
+        //Labels enter
         const nodeLabelsEnter = nodeLabelsUpdate
           .enter()
           .append("g")
@@ -420,6 +427,7 @@ export default class Tree extends Stanza {
               : `translate(${source.y0}, ${source.x0})`
           );
 
+        //Decorate labels
         nodeLabelsEnter
           .append("text")
           .attr("x", (d) =>
@@ -460,8 +468,8 @@ export default class Tree extends Stanza {
 
         const duration = 500;
 
+        //Circle transition
         nodeCirclesEnter
-          .merge(nodeCirclesUpdate)
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
@@ -470,6 +478,7 @@ export default class Tree extends Stanza {
               : `translate(${d.y}, ${d.x})`
           );
 
+        //Labels transition
         nodeLabelsEnter
           .attr("transform", (d) =>
             layout === "radial"
@@ -490,6 +499,7 @@ export default class Tree extends Stanza {
               : `translate(${d.y}, ${d.x})`
           );
 
+        //Circle exit
         nodeCirclesUpdate
           .exit()
           .transition()
@@ -504,6 +514,7 @@ export default class Tree extends Stanza {
           )
           .remove();
 
+        //Labels exit
         nodeLabelsUpdate
           .exit()
           .attr("transform", (d) =>
@@ -526,10 +537,12 @@ export default class Tree extends Stanza {
           )
           .remove();
 
+        //Drawing path
         const link = g
           .selectAll(".link")
           .data(treeRoot.links(), (d) => d.target.id);
 
+        //Path Enter
         const linkEnter = link
           .enter()
           .insert("path", "g")
@@ -541,7 +554,8 @@ export default class Tree extends Stanza {
               : getLinkFn().x(source.y0).y(source.x0)
           );
 
-        const linkUpdate = linkEnter.merge(link);
+        //Path transition
+        const linkUpdate = linkEnter;
         linkUpdate
           .transition()
           .duration(duration)
@@ -557,6 +571,7 @@ export default class Tree extends Stanza {
                   .y((d) => d.x)
           );
 
+        //Path exit
         link
           .exit()
           .transition()
@@ -569,11 +584,8 @@ export default class Tree extends Stanza {
           )
           .remove();
 
+        //Get current position for next action
         nodeCirclesUpdate.each((d) => {
-          d.x0 = d.x;
-          d.y0 = d.y;
-        });
-        nodeLabelsUpdate.each((d) => {
           d.x0 = d.x;
           d.y0 = d.y;
         });
@@ -581,6 +593,7 @@ export default class Tree extends Stanza {
       update(treeRoot);
     };
 
+    //Drawing
     draw();
 
     if (showToolTips) {
