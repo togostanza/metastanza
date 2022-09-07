@@ -18,11 +18,11 @@ export default class OntologyBrowserColumn extends LitElement {
     .column {
       height: 100%;
       flex-direction: column;
-
       position: relative;
       overflow-y: auto;
       overflow-x: hidden;
     }
+
     ontology-card {
       margin-top: 6px;
     }
@@ -46,7 +46,7 @@ export default class OntologyBrowserColumn extends LitElement {
   }
   constructor() {
     super();
-    this.nodes = [];
+    this.nodes = []; // array of nodes in children / parents, or [details]
     this.heroId = undefined;
     this.role = "";
     this.scrolledHeroRect = null;

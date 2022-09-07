@@ -2,7 +2,12 @@ import { LitElement, html, css, nothing } from "lit";
 
 import loaderPNG from "togostanza-utils/spinner.png";
 
-import { applyConstructor, cachedAxios, debounce } from "../utils.js";
+import {
+  applyConstructor,
+  cachedAxios,
+  debounce,
+  getByPath,
+} from "../utils.js";
 
 import "./OntologyBrowserOntologyView";
 
@@ -58,16 +63,51 @@ export class OntologyBrowser extends LitElement {
 
     applyConstructor.call(this, params);
 
+    console.log(params);
+
     this.API = new cachedAxios(this.apiEndpoint);
   }
 
   firstUpdated() {
     this._loadingStarted();
-    this.API.get(`?node=${this.initialId}`).then(({ data }) => {
+    //?node=
+    this.API.get(`${this.initialId}`).then(({ data }) => {
       this.diseaseId = this.initialId;
       this._loadingEnded();
-      this.data = { ...data, role: undefined };
+
+      this.data = {
+        role: undefined,
+        ...this._getDataObject(data),
+      };
+
+      // { ...data, role: undefined };
     });
+  }
+
+  _getDataObject(incomingData) {
+    return {
+      details: {
+        ...getByPath(incomingData, this.nodeDetails_path),
+        id: getByPath(incomingData, this.nodeId_path),
+        label: getByPath(incomingData, this.nodeLabel_path),
+      },
+      relations: {
+        children: getByPath(incomingData, this.nodeRelationsChildren_path).map(
+          (item) => ({
+            ...item,
+            id: item[this.nodeRelationsId_key],
+            label: item[this.nodeRelationsLabel_key],
+          })
+        ),
+        parents: getByPath(incomingData, this.nodeRelationsParents_path).map(
+          (item) => ({
+            ...item,
+            id: item[this.nodeRelationsId_key],
+            label: item[this.nodeRelationsLabel_key],
+          })
+        ),
+      },
+    };
   }
 
   _changeDiseaseEventHadnler(e) {
@@ -75,10 +115,14 @@ export class OntologyBrowser extends LitElement {
     this.diseaseId = e.detail.id;
     this._loadingStarted();
 
-    this.API.get(`?node=${this.diseaseId}`).then(({ data }) => {
+    this.API.get(`${this.diseaseId}`).then(({ data }) => {
       this._loadingEnded();
-      this.data = { ...data, role: e.detail.role };
+      //this.data = { ...data, role: e.detail.role };
 
+      this.data = {
+        role: e.detail.role,
+        ...this._getDataObject(data),
+      };
       //dispatch event to upper levels
       this.dispatchEvent(
         new CustomEvent("disease-selected", {
@@ -113,7 +157,7 @@ export class OntologyBrowser extends LitElement {
       <!-- <ontology-browser-text-search
         @input="${debounce(this._keyup, 300)}"
       ></ontology-browser-text-search> -->
-      <div class="container" }>
+      <div class="container">
         ${this.loading
           ? html`<div class="spinner">
               <img src="${loaderPNG}"></img>

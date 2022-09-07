@@ -69,7 +69,10 @@ export class OntologyBrowserView extends LitElement {
   willUpdate(changedProperties) {
     if (changedProperties.has("data")) {
       if (changedProperties.get("data")) {
-        if (this.data.id && changedProperties.get("data").id !== this.data.id) {
+        if (
+          this.data.details.id &&
+          changedProperties.get("data").id !== this.data.details.id
+        ) {
           // parents before update
           this.dataColumns._parents = changedProperties.get("data")
             ?.parents || [{ id: "dummy", label: "dummy" }];
@@ -94,13 +97,13 @@ export class OntologyBrowserView extends LitElement {
               this.dataColumns.hero = this.dataColumns._parents;
             }
           } else {
-            this.dataColumns.hero = [this.data];
+            this.dataColumns.hero = [this.data.details];
           }
 
           //parents after update
-          this.dataColumns.parents = this.data?.parents || [];
+          this.dataColumns.parents = this.data.relations?.parents || [];
           //children after update
-          this.dataColumns.children = this.data?.children || [];
+          this.dataColumns.children = this.data.relations?.children || [];
         }
       }
 
@@ -195,7 +198,9 @@ export class OntologyBrowserView extends LitElement {
                     ? this.dataColumns[column]
                     : [{ id: "dummy", label: "dummy" }]}"
                   ${ref(this.nodeRef)}
-                  .heroId="${column === "hero" ? this.data.id : undefined}"
+                  .heroId="${column === "hero"
+                    ? this.data.details?.id
+                    : undefined}"
                   .scrolledHeroRect="${this.scrolledRect}"
                   .animationOptions="${this.animationOptions}"
                 ></ontology-browser-column>

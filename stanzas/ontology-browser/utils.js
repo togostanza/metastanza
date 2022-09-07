@@ -48,7 +48,7 @@ export function debounce(func, ms = 1000) {
 
 export function getByPath(object, path) {
   const pathArr = path.split(".");
-  let res = object[path[0]];
+  let res = object[pathArr[0]];
   for (const path of pathArr.slice(1)) {
     if (!res) {
       return undefined;

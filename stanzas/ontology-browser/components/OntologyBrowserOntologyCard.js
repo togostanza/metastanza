@@ -19,6 +19,10 @@ export class OntologyCard extends LitElement {
         type: Object,
         state: true,
       },
+      content: {
+        type: Object,
+        state: true,
+      },
     };
   }
 
@@ -43,6 +47,7 @@ export class OntologyCard extends LitElement {
     this._leftCoinnector = createRef;
     this.leftConnectorClassName = "";
     this.rightConnectorClassName = "";
+    this.content = {};
   }
 
   static styles = css`
@@ -276,6 +281,7 @@ export class OntologyCard extends LitElement {
 
     h3 {
       display: inline;
+      margin: 0;
     }
     .card-container {
       display: flex;
@@ -308,6 +314,25 @@ export class OntologyCard extends LitElement {
       max-height: 10rem;
       overflow-y: auto;
     }
+
+    .hero-list {
+      padding-inline-start: 1rem;
+    }
+
+    .hero-list li {
+      font-size: 0.6rem;
+      margin-left: 0.5rem;
+    }
+
+    table td.key {
+      font-style: italic;
+    }
+
+    table td.data {
+      width: 5rem;
+      overflow: auto;
+      display: inline-block;
+    }
   `;
 
   willUpdate(prevParams) {
@@ -331,6 +356,8 @@ export class OntologyCard extends LitElement {
       this.leftConnectorClassName = "";
       this.rightConnectorClassName = "";
     }
+
+    console.log(this.data);
   }
 
   updated() {
@@ -379,7 +406,7 @@ export class OntologyCard extends LitElement {
             : ""} ${this.mode === "children" ? "children-arrow" : ""}"
         >
           <div class="ontology-card-header">
-            <h3>${this.data?.label || "..."}</h3>
+            <h3>${this.data.label || "..."}</h3>
             ${this.mode === "hero"
               ? html`
                   <div class="table-container">
@@ -391,7 +418,15 @@ export class OntologyCard extends LitElement {
                             return html`
                               <tr>
                                 <td class="key">${key}</td>
-                                <td class="data">${this.data[key]}</td>
+                                <td class="data">
+                                  ${this.data[key] instanceof Array
+                                    ? html`<ul class="hero-list">
+                                        ${this.data[key].map(
+                                          (item) => html`<li>${item}</li> `
+                                        )}
+                                      </ul>`
+                                    : this.data[key]}
+                                </td>
                               </tr>
                             `;
                           })}
