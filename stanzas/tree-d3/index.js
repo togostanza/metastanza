@@ -317,6 +317,7 @@ export default class Tree extends Stanza {
         }
       });
 
+      //Find the maximum value for each direction
       const deltasFunction = () => {
         if (layout === "horizontal") {
           deltas = {
@@ -336,23 +337,13 @@ export default class Tree extends Stanza {
       };
 
       let deltas;
-      if (layout === "horizontal") {
-        treeDescendants.forEach((d, i) => {
-          minY.push(depths[i] - circleRadius[i]);
-          minX.push(aligns[i] - circleRadius[i]);
-          maxY.push(depths[i] + circleRadius[i]);
-          maxX.push(aligns[i] + circleRadius[i]);
-        });
-        deltasFunction();
-      } else {
-        treeDescendants.forEach((d, i) => {
-          minY.push(depths[i] - circleRadius[i]);
-          minX.push(aligns[i] - circleRadius[i]);
-          maxY.push(depths[i] + circleRadius[i]);
-          maxX.push(aligns[i] + circleRadius[i]);
-        });
-        deltasFunction();
-      }
+      treeDescendants.forEach((d, i) => {
+        minX.push(aligns[i] - circleRadius[i]);
+        minY.push(depths[i] - circleRadius[i]);
+        maxX.push(aligns[i] + circleRadius[i]);
+        maxY.push(depths[i] + circleRadius[i]);
+      });
+      deltasFunction();
 
       if (deltas.left < 0) {
         MARGIN.left += Math.abs(deltas.left) + 1;
