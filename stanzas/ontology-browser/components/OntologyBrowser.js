@@ -1,5 +1,7 @@
 import { LitElement, html, css, nothing } from "lit";
 
+import loaderPNG from "togostanza-utils/spinner.png";
+
 import { applyConstructor, cachedAxios, debounce } from "../utils.js";
 
 import "./OntologyBrowserOntologyView";
@@ -22,8 +24,25 @@ export class OntologyBrowser extends LitElement {
       height: 100%;
       width: 100%;
     }
+
     .container {
       height: 100%;
+    }
+
+    .spinner {
+      z-index: 10;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .spinner > img {
+      display: block;
+      width: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   `;
 
@@ -94,10 +113,10 @@ export class OntologyBrowser extends LitElement {
       <!-- <ontology-browser-text-search
         @input="${debounce(this._keyup, 300)}"
       ></ontology-browser-text-search> -->
-      <div class="container">
+      <div class="container" }>
         ${this.loading
-          ? html`<div class="loading">
-              <span></span>
+          ? html`<div class="spinner">
+              <img src="${loaderPNG}"></img>
             </div>`
           : nothing}
 
