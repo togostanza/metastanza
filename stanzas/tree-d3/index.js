@@ -98,7 +98,9 @@ export default class Tree extends Stanza {
       .parentId((d) => d.parent)(values)
       .sort(reorder);
 
-    const data = treeRoot.descendants().slice(1);
+    const treeDescendants = treeRoot.descendants();
+
+    const data = treeDescendants.slice(1);
     const isNodeSizeDataKey = data.some((d) => d.data[sizeKey]);
 
     const maxDepth = d3.max(data, (d) => d.depth);
@@ -140,11 +142,9 @@ export default class Tree extends Stanza {
     const defaultColor = togostanzaColors[0];
 
     const groupArray = [];
-    treeRoot
-      .descendants()
-      .forEach((d) =>
-        d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
-      );
+    treeDescendants.forEach((d) =>
+      d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
+    );
 
     const groupColor = d3
       .scaleOrdinal()
@@ -171,7 +171,7 @@ export default class Tree extends Stanza {
 
     const rootGroup = svg
       .append("text")
-      .text(treeRoot.descendants()[0].data[nodeKey] || "");
+      .text(treeDescendants[0].data[nodeKey] || "");
 
     const rootLabelWidth = rootGroup.node().getBBox().width;
     rootGroup.remove();
@@ -272,7 +272,7 @@ export default class Tree extends Stanza {
       };
 
       if (layout === "vertical") {
-        treeRoot.descendants().forEach((node) => {
+        treeDescendants.forEach((node) => {
           const { x0, x, y0, y } = node;
 
           node.x0 = y0;
@@ -287,8 +287,11 @@ export default class Tree extends Stanza {
         minX = [],
         maxX = [];
 
-      treeRoot.descendants().forEach((d) => {
-        const circleRadius = nodeRadius(d.data[sizeKey]) || aveRadius;
+      const circleRadius = [];
+      const inlines = [];
+      const blocks = [];
+      treeDescendants.forEach((d) => {
+        circleRadius.push(nodeRadius(d.data[sizeKey]) || aveRadius);
 
         const Mapper = {
           horizontal: {
@@ -301,60 +304,54 @@ export default class Tree extends Stanza {
           },
         };
 
-        const setSpace = (direction) => {
-          if (layout === "horizontal") {
-            console.log(`horizontal:${Mapper.vertical[direction]}`);
-            return Mapper.horizontal[direction];
-          } else if (layout === "vertical") {
-            console.log(`vertical:${Mapper.vertical[direction]}`);
-            return Mapper.vertical[direction];
-          }
-        };
+        if (layout === "horizontal") {
+          return (
+            inlines.push(Mapper.horizontal["inline"]),
+            blocks.push(Mapper.horizontal["block"])
+          );
+        } else {
+          return (
+            inlines.push(Mapper.vertical["inline"]),
+            blocks.push(Mapper.vertical["block"])
+          );
+        }
       });
+
+      const deltasFunction = () => {
+        if (layout === "horizontal") {
+          deltas = {
+            top: Math.min(...minX),
+            bottom: height - Math.max(...maxX),
+            left: Math.min(...minY),
+            right: width - Math.max(...maxY),
+          };
+        } else {
+          deltas = {
+            top: Math.min(...minY),
+            bottom: width - Math.max(...maxY),
+            left: Math.min(...minX),
+            right: height - Math.max(...maxX),
+          };
+        }
+      };
 
       let deltas;
       if (layout === "horizontal") {
-        treeRoot.descendants().forEach((d) => {
-          minY.push(
-            MARGIN.left + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          minX.push(
-            MARGIN.top + d.x - (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          maxY.push(
-            MARGIN.left + d.y + (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          maxX.push(
-            MARGIN.top + d.x + (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
+        treeDescendants.forEach((d, i) => {
+          minY.push(inlines[i] - circleRadius[i]);
+          minX.push(blocks[i] - circleRadius[i]);
+          maxY.push(inlines[i] + circleRadius[i]);
+          maxX.push(blocks[i] + circleRadius[i]);
         });
-        deltas = {
-          top: Math.min(...minX),
-          bottom: height - Math.max(...maxX),
-          left: Math.min(...minY),
-          right: width - Math.max(...maxY),
-        };
+        deltasFunction();
       } else {
-        treeRoot.descendants().forEach((d) => {
-          minY.push(
-            MARGIN.top + d.y - (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          minX.push(
-            MARGIN.left + d.x - (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          maxY.push(
-            MARGIN.top + d.y + (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
-          maxX.push(
-            MARGIN.left + d.x + (nodeRadius(d.data[sizeKey]) || aveRadius)
-          );
+        treeDescendants.forEach((d, i) => {
+          minY.push(blocks[i] - circleRadius[i]);
+          minX.push(inlines[i] - circleRadius[i]);
+          maxY.push(blocks[i] + circleRadius[i]);
+          maxX.push(inlines[i] + circleRadius[i]);
         });
-        deltas = {
-          top: Math.min(...minY),
-          bottom: width - Math.max(...maxY),
-          left: Math.min(...minX),
-          right: height - Math.max(...maxX),
-        };
+        deltasFunction();
       }
 
       if (deltas.left < 0) {
