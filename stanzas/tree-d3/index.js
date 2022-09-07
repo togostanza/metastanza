@@ -109,6 +109,7 @@ export default class Tree extends Stanza {
       }
     }
 
+    //Setting node size
     const nodeSizeMin = d3.min(data, (d) => d.data[sizeKey]);
     const nodeSizeMax = d3.max(data, (d) => d.data[sizeKey]);
 
@@ -203,7 +204,7 @@ export default class Tree extends Stanza {
           el.innerHTML = "<p>width is too small!</p>";
           throw new Error("width is too small!");
         }
-      } else {
+      } else if (layout === "vertical") {
         if (height - MARGIN.left - MARGIN.right < 0) {
           el.innerHTML = "<p>height is too small!</p>";
           throw new Error("height is too small!");
@@ -281,10 +282,35 @@ export default class Tree extends Stanza {
         });
       }
 
-      const minY = [];
-      const maxY = [];
-      const minX = [];
-      const maxX = [];
+      const minY = [],
+        maxY = [],
+        minX = [],
+        maxX = [];
+
+      treeRoot.descendants().forEach((d) => {
+        const circleRadius = nodeRadius(d.data[sizeKey]) || aveRadius;
+
+        const Mapper = {
+          horizontal: {
+            inline: MARGIN.left + d.y,
+            block: MARGIN.top + d.x,
+          },
+          vertical: {
+            inline: MARGIN.left + d.x,
+            block: MARGIN.top + d.y,
+          },
+        };
+
+        const setSpace = (direction) => {
+          if (layout === "horizontal") {
+            console.log(`horizontal:${Mapper.vertical[direction]}`);
+            return Mapper.horizontal[direction];
+          } else if (layout === "vertical") {
+            console.log(`vertical:${Mapper.vertical[direction]}`);
+            return Mapper.vertical[direction];
+          }
+        };
+      });
 
       let deltas;
       if (layout === "horizontal") {
@@ -324,10 +350,10 @@ export default class Tree extends Stanza {
           );
         });
         deltas = {
-          left: Math.min(...minX),
-          right: height - Math.max(...maxX),
           top: Math.min(...minY),
           bottom: width - Math.max(...maxY),
+          left: Math.min(...minX),
+          right: height - Math.max(...maxX),
         };
       }
 
