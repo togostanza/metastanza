@@ -151,7 +151,7 @@
     {
       "stanza:key": "--togostanza-outline-height",
       "stanza:type": "text",
-      "stanza:default": "200px",
+      "stanza:default": "500px",
       "stanza:description": "Stanza height"
     },
     {
