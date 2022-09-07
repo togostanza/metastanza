@@ -288,31 +288,31 @@ export default class Tree extends Stanza {
         maxX = [];
 
       const circleRadius = [];
-      const inlines = [];
-      const blocks = [];
+      const aligns = [];
+      const depths = [];
       treeDescendants.forEach((d) => {
         circleRadius.push(nodeRadius(d.data[sizeKey]) || aveRadius);
 
         const Mapper = {
           horizontal: {
-            inline: MARGIN.left + d.y,
-            block: MARGIN.top + d.x,
+            alignmentDirection: MARGIN.top + d.x,
+            depthDirection: MARGIN.left + d.y,
           },
           vertical: {
-            inline: MARGIN.left + d.x,
-            block: MARGIN.top + d.y,
+            alignmentDirection: MARGIN.left + d.x,
+            depthDirection: MARGIN.top + d.y,
           },
         };
 
         if (layout === "horizontal") {
           return (
-            inlines.push(Mapper.horizontal["inline"]),
-            blocks.push(Mapper.horizontal["block"])
+            aligns.push(Mapper.horizontal["alignmentDirection"]),
+            depths.push(Mapper.horizontal["depthDirection"])
           );
         } else {
           return (
-            inlines.push(Mapper.vertical["inline"]),
-            blocks.push(Mapper.vertical["block"])
+            aligns.push(Mapper.vertical["alignmentDirection"]),
+            depths.push(Mapper.vertical["depthDirection"])
           );
         }
       });
@@ -338,18 +338,18 @@ export default class Tree extends Stanza {
       let deltas;
       if (layout === "horizontal") {
         treeDescendants.forEach((d, i) => {
-          minY.push(inlines[i] - circleRadius[i]);
-          minX.push(blocks[i] - circleRadius[i]);
-          maxY.push(inlines[i] + circleRadius[i]);
-          maxX.push(blocks[i] + circleRadius[i]);
+          minY.push(depths[i] - circleRadius[i]);
+          minX.push(aligns[i] - circleRadius[i]);
+          maxY.push(depths[i] + circleRadius[i]);
+          maxX.push(aligns[i] + circleRadius[i]);
         });
         deltasFunction();
       } else {
         treeDescendants.forEach((d, i) => {
-          minY.push(blocks[i] - circleRadius[i]);
-          minX.push(inlines[i] - circleRadius[i]);
-          maxY.push(blocks[i] + circleRadius[i]);
-          maxX.push(inlines[i] + circleRadius[i]);
+          minY.push(depths[i] - circleRadius[i]);
+          minX.push(aligns[i] - circleRadius[i]);
+          maxY.push(depths[i] + circleRadius[i]);
+          maxX.push(aligns[i] + circleRadius[i]);
         });
         deltasFunction();
       }
