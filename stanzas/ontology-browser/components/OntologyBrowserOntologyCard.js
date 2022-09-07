@@ -260,7 +260,7 @@ export class OntologyCard extends LitElement {
       background-color: #fff;
       cursor: pointer;
       position: relative;
-      width: min(80%, 20rem);
+      width: min(90%, 20rem);
       max-width: 30rem;
       box-sizing: border-box;
     }
@@ -283,6 +283,7 @@ export class OntologyCard extends LitElement {
       display: inline;
       margin: 0;
     }
+
     .card-container {
       display: flex;
       flex-direction: row;
@@ -299,6 +300,7 @@ export class OntologyCard extends LitElement {
       border-color: var(--selected-border-color);
       padding-left: 10px;
       padding-right: 10px;
+      max-height: 100%;
     }
 
     .hidden {
@@ -311,7 +313,6 @@ export class OntologyCard extends LitElement {
     }
 
     .table-container {
-      max-height: 10rem;
       overflow-y: auto;
     }
 
@@ -324,12 +325,17 @@ export class OntologyCard extends LitElement {
       margin-left: 0.5rem;
     }
 
+    table {
+      max-width: 10rem;
+    }
+
     table td.key {
+      vertical-align: top;
       font-style: italic;
+      font-size: 0.5rem;
     }
 
     table td.data {
-      width: 5rem;
       overflow: auto;
       display: inline-block;
     }
@@ -356,8 +362,6 @@ export class OntologyCard extends LitElement {
       this.leftConnectorClassName = "";
       this.rightConnectorClassName = "";
     }
-
-    console.log(this.data);
   }
 
   updated() {

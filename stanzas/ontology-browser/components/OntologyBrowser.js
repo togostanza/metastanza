@@ -20,6 +20,10 @@ export class OntologyBrowser extends LitElement {
       },
       data: { state: true },
       loading: { type: Boolean, state: true },
+      clickedRole: {
+        type: String,
+        status: true,
+      },
     };
   }
 
@@ -58,30 +62,39 @@ export class OntologyBrowser extends LitElement {
     element.append(this);
 
     this.data = [];
-    this.diseaseId = "";
-    this.loading = false;
-
-    applyConstructor.call(this, params);
-
-    console.log(params);
 
     this.API = new cachedAxios(this.apiEndpoint);
+    this.updateParams(params);
+  }
+
+  updateParams(params) {
+    this.loading = false;
+    this.clickedRole = undefined;
+    this.diseaseId = this.initialId;
+
+    applyConstructor.call(this, params);
+  }
+
+  willUpdate(changed) {
+    if (changed.has("diseaseId") && this.diseaseId) {
+      this.API.get(this._getURL(this.diseaseId))
+        .then(({ data }) => {
+          this._loadingEnded();
+
+          this.data = {
+            role: this.clickedRole,
+            ...this._getDataObject(data),
+          };
+        })
+        .catch((e) => {
+          console.error("API error");
+        });
+    }
   }
 
   firstUpdated() {
     this._loadingStarted();
-    //?node=
-    this.API.get(`${this.initialId}`).then(({ data }) => {
-      this.diseaseId = this.initialId;
-      this._loadingEnded();
-
-      this.data = {
-        role: undefined,
-        ...this._getDataObject(data),
-      };
-
-      // { ...data, role: undefined };
-    });
+    this.diseaseId = this.initialId;
   }
 
   _getDataObject(incomingData) {
@@ -110,22 +123,20 @@ export class OntologyBrowser extends LitElement {
     };
   }
 
+  _getURL(id) {
+    return this.apiEndpoint.replace("<>", id);
+  }
+
   _changeDiseaseEventHadnler(e) {
     e.stopPropagation();
     this.diseaseId = e.detail.id;
+    this.clickedRole = e.detail.role;
     this._loadingStarted();
 
-    this.API.get(`${this.diseaseId}`).then(({ data }) => {
-      this._loadingEnded();
-      //this.data = { ...data, role: e.detail.role };
-
-      this.data = {
-        role: e.detail.role,
-        ...this._getDataObject(data),
-      };
-      //dispatch event to upper levels
+    this.updateComplete.then(() => {
       this.dispatchEvent(
         new CustomEvent("disease-selected", {
+          // here we can pass any data to the event through this.data
           detail: {
             id: e.detail.id,
             label: e.detail.label,
@@ -136,6 +147,7 @@ export class OntologyBrowser extends LitElement {
         })
       );
     });
+    // });
   }
 
   _loadingStarted() {

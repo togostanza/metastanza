@@ -21,6 +21,8 @@ export default class Linechart extends Stanza {
 
     if (!this.ontologyViewer) {
       this.ontologyViewer = new OntologyBrowser(root, params);
+    } else {
+      this.ontologyViewer.updateParams(params);
     }
   }
 }

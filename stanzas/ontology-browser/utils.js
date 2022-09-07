@@ -8,7 +8,6 @@ export class cachedAxios {
    */
   constructor(baseURL, maxCacheSize = 100) {
     this.axios = axios.create({
-      baseURL,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -27,13 +26,17 @@ export class cachedAxios {
     if (this.cache.has(url)) {
       return Promise.resolve(this.cache.get(url));
     }
-    return this.axios.get(url).then(({ data }) => {
-      this.cache.set(url, { data });
+    return this.axios.get(url).then((res) => {
+      if (res.status !== 200) {
+        throw new Error(res.statusText);
+      }
+
+      this.cache.set(url, { data: res.data });
       if (this.cache.size > this.maxCacheSize) {
         const [first] = this.cache.keys();
         this.cache.delete(first);
       }
-      return { data };
+      return { data: res.data };
     });
   }
 }
@@ -47,6 +50,9 @@ export function debounce(func, ms = 1000) {
 }
 
 export function getByPath(object, path) {
+  if (!path) {
+    return object;
+  }
   const pathArr = path.split(".");
   let res = object[pathArr[0]];
   for (const path of pathArr.slice(1)) {

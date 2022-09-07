@@ -69,6 +69,7 @@ export class OntologyBrowserView extends LitElement {
   willUpdate(changedProperties) {
     if (changedProperties.has("data")) {
       if (changedProperties.get("data")) {
+        console.log("this.data.details", this.data.details);
         if (
           this.data.details.id &&
           changedProperties.get("data").id !== this.data.details.id
