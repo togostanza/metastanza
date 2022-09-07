@@ -16,13 +16,15 @@ export default class OntologyBrowserColumn extends LitElement {
     }
 
     .column {
-      display: flex;
       height: 100%;
       flex-direction: column;
-      gap: 6px;
+
       position: relative;
       overflow-y: auto;
       overflow-x: hidden;
+    }
+    ontology-card {
+      margin-top: 6px;
     }
 
     ontology-card:last-child {
