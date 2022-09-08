@@ -57,8 +57,10 @@ export function getByPath(object, path) {
   if (!path) {
     return object;
   }
+
   const pathArr = path.split(".");
   let res = object[pathArr[0]];
+
   for (const path of pathArr.slice(1)) {
     if (!res) {
       return undefined;
