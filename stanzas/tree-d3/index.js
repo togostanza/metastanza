@@ -12,6 +12,7 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
+//Stanza download menu contents
 export default class Tree extends Stanza {
   menu() {
     return [
@@ -275,16 +276,7 @@ export default class Tree extends Stanza {
       treeRoot.x0 = data[0].parent.x;
       treeRoot.y0 = 0;
 
-      //Setting the path for each direction
-      const getLinkFn = () => {
-        switch (layout) {
-          case HORIZONTAL:
-            return d3.linkHorizontal();
-          case VERTICAL:
-            return d3.linkVertical();
-        }
-      };
-
+      //Change values during vertical
       if (layout === VERTICAL) {
         treeDescendants.forEach((node) => {
           const { x0, x, y0, y } = node;
@@ -600,11 +592,13 @@ export default class Tree extends Stanza {
           .selectAll(".link")
           .data(treeRoot.links(), (d) => d.target.id);
 
-        const pathEnter = () => {
-          if (layout === RADIAL) {
-            d3.linkRadial().angle(source.x).radius(source.y);
-          } else {
-            getLinkFn().x(source.y0).y(source.x0);
+        //Setting the path for each direction
+        const getLinkFn = () => {
+          switch (layout) {
+            case HORIZONTAL:
+              return d3.linkHorizontal();
+            case VERTICAL:
+              return d3.linkVertical();
           }
         };
 
@@ -615,26 +609,9 @@ export default class Tree extends Stanza {
           .classed("link", true)
           .attr(
             "d",
-            pathEnter()
-            // () => {
-            //   if (layout === RADIAL) {
-            //     d3.linkRadial().angle(source.x).radius(source.y);
-            //   } else {
-            //     getLinkFn().x(source.y0).y(source.x0);
-            //   }
-            // switch (layout) {
-            //   case HORIZONTAL:
-            //   case VERTICAL:
-            //     getLinkFn().x(source.y0).y(source.x0);
-            //     break;
-            //   case RADIAL:
-            //     d3.linkRadial().angle(source.x).radius(source.y);
-            //     break;
-            // }
-            // }
-            // layout === RADIAL
-            //   ? d3.linkRadial().angle(source.x).radius(source.y)
-            //   : getLinkFn().x(source.y0).y(source.x0)
+            layout === RADIAL
+              ? d3.linkRadial().angle(source.x).radius(source.y)
+              : getLinkFn().x(source.y0).y(source.x0)
           );
 
         //Path transition
