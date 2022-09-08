@@ -191,5 +191,11 @@
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color"
     }
+  ],
+  "stanza:outgoingEvent": [
+    {
+      "stanza:key": "ontology-node-changed",
+      "stanza:description": "Being dispatched on change of the active node. `event.details` contains the info of that node."
+    }
   ]
 }
