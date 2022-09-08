@@ -44,8 +44,13 @@ export default class Tree extends Stanza {
     const height = parseInt(this.params["height"]);
     const orderKey = this.params["order-data_key"];
     const orderSort = this.params["order-sort"];
+    const ASCENDING = "ascending";
+    const DESCENDING = "descending";
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
+    const HORIZONTAL = "horizontal";
+    const VERTICAL = "vertical";
+    const RADIAL = "radial";
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
@@ -55,19 +60,22 @@ export default class Tree extends Stanza {
     const colorKey = this.params["color-data_key"];
     const colorGroup = this.params["color-group"];
     const colorMode = this.params["color-blend"];
+    const TRANSLUCENT = "translucent";
+    const MULTIPLY = "multiply";
+    const SCREEN = "screen";
 
     let colorModeProperty;
     let colorModeValue;
     switch (colorMode) {
-      case "translucent":
+      case TRANSLUCENT:
         colorModeProperty = "opacity";
         colorModeValue = "0.5";
         break;
-      case "multiply":
+      case MULTIPLY:
         colorModeProperty = "mix-blend-mode";
         colorModeValue = "multiply";
         break;
-      case "screen":
+      case SCREEN:
         colorModeProperty = "mix-blend-mode";
         colorModeValue = "screen";
         break;
@@ -76,7 +84,6 @@ export default class Tree extends Stanza {
     }
 
     const tooltipKey = this.params["tooltips-data_key"];
-
     const showToolTips =
       !!tooltipKey && values.some((item) => item[tooltipKey]);
     this.tooltip = new ToolTip();
@@ -85,10 +92,11 @@ export default class Tree extends Stanza {
     //Sorting by user keywords
     const reorder = (a, b) => {
       if (a.data[orderKey] && b.data[orderKey]) {
-        if (orderSort === "ascending") {
-          return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
-        } else if (orderSort === "descending") {
-          return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
+        switch (orderSort) {
+          case ASCENDING:
+            return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
+          case DESCENDING:
+            return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
         }
       }
     };
@@ -112,10 +120,7 @@ export default class Tree extends Stanza {
       .range([minRadius, maxRadius]);
 
     const nodeRadius = (size) => {
-      if (size) {
-        return d3RadiusScale(size);
-      }
-      return d3RadiusScale(nodeSizeMin);
+      return size ? d3RadiusScale(size) : d3RadiusScale(nodeSizeMin);
     };
 
     //Toggle display/hide of children
@@ -146,11 +151,9 @@ export default class Tree extends Stanza {
       if (d.data[colorKey]) {
         return d.data[colorKey];
       } else {
-        if (d.data[colorGroup]) {
-          return groupColor(d.data[colorGroup]);
-        } else {
-          return defaultColor;
-        }
+        return d.data[colorGroup]
+          ? groupColor(d.data[colorGroup])
+          : defaultColor;
       }
     };
 
@@ -172,9 +175,7 @@ export default class Tree extends Stanza {
     const maxDepth = d3.max(data, (d) => d.depth);
     const labels = [];
     for (const n of data) {
-      if (n.depth === maxDepth) {
-        labels.push(n.data[nodeKey] || "");
-      }
+      n.depth === maxDepth ? labels.push(n.data[nodeKey] || "") : "";
     }
     const tempGroup = svg.append("g");
     tempGroup
@@ -201,16 +202,19 @@ export default class Tree extends Stanza {
       }
     ) => {
       //Error handling
-      if (layout === "horizontal") {
-        if (width - MARGIN.right - MARGIN.left < 0) {
-          el.innerHTML = "<p>width is too small!</p>";
-          throw new Error("width is too small!");
-        }
-      } else if (layout === "vertical") {
-        if (height - MARGIN.left - MARGIN.right < 0) {
-          el.innerHTML = "<p>height is too small!</p>";
-          throw new Error("height is too small!");
-        }
+      switch (layout) {
+        case HORIZONTAL:
+          if (width - MARGIN.right - MARGIN.left < 0) {
+            el.innerHTML = "<p>width is too small!</p>";
+            throw new Error("width is too small!");
+          }
+          break;
+        case VERTICAL:
+          if (height - MARGIN.left - MARGIN.right < 0) {
+            el.innerHTML = "<p>height is too small!</p>";
+            throw new Error("height is too small!");
+          }
+          break;
       }
       if (
         Math.max(maxRadius, minRadius) * 2 >= width ||
@@ -235,11 +239,7 @@ export default class Tree extends Stanza {
 
       //Align leaves or not
       let graphType = d3.tree();
-      if (isLeafNodesAlign) {
-        graphType = d3.cluster();
-      } else {
-        graphType = d3.tree();
-      }
+      isLeafNodesAlign ? (graphType = d3.cluster()) : (graphType = d3.tree());
 
       //Gap between node
       const separation = (a, b) => {
@@ -247,20 +247,24 @@ export default class Tree extends Stanza {
       };
 
       //Setting the graph size for each layout
-      if (layout === "radial") {
-        graphType
-          .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
-          .separation(separation)(treeRoot);
-      } else if (layout === "horizontal") {
-        graphType.size([
-          height - MARGIN.top - MARGIN.bottom,
-          width - MARGIN.left - MARGIN.right,
-        ]);
-      } else if (layout === "vertical") {
-        graphType.size([
-          width - MARGIN.top - MARGIN.bottom,
-          height - MARGIN.left - MARGIN.right,
-        ]);
+      switch (layout) {
+        case HORIZONTAL:
+          graphType.size([
+            height - MARGIN.top - MARGIN.bottom,
+            width - MARGIN.left - MARGIN.right,
+          ]);
+          break;
+        case VERTICAL:
+          graphType.size([
+            width - MARGIN.top - MARGIN.bottom,
+            height - MARGIN.left - MARGIN.right,
+          ]);
+          break;
+        case RADIAL:
+          graphType
+            .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
+            .separation(separation)(treeRoot);
+          break;
       }
 
       graphType(treeRoot);
@@ -271,14 +275,15 @@ export default class Tree extends Stanza {
 
       //Setting the path for each direction
       const getLinkFn = () => {
-        if (layout === "horizontal") {
-          return d3.linkHorizontal();
-        } else {
-          return d3.linkVertical();
+        switch (layout) {
+          case HORIZONTAL:
+            return d3.linkHorizontal();
+          case VERTICAL:
+            return d3.linkVertical();
         }
       };
 
-      if (layout === "vertical") {
+      if (layout === VERTICAL) {
         treeDescendants.forEach((node) => {
           const { x0, x, y0, y } = node;
 
@@ -312,16 +317,19 @@ export default class Tree extends Stanza {
           },
         };
 
-        if (layout === "horizontal") {
-          return (
-            aligns.push(Mapper.horizontal["alignmentDirection"]),
-            depths.push(Mapper.horizontal["depthDirection"])
-          );
-        } else {
-          return (
-            aligns.push(Mapper.vertical["alignmentDirection"]),
-            depths.push(Mapper.vertical["depthDirection"])
-          );
+        switch (layout) {
+          case HORIZONTAL:
+            return (
+              aligns.push(Mapper.horizontal["alignmentDirection"]),
+              depths.push(Mapper.horizontal["depthDirection"])
+            );
+          case VERTICAL:
+            return (
+              aligns.push(Mapper.vertical["alignmentDirection"]),
+              depths.push(Mapper.vertical["depthDirection"])
+            );
+          default:
+            break;
         }
       });
 
@@ -335,38 +343,48 @@ export default class Tree extends Stanza {
       });
 
       //Find each max/min value
-      if (layout === "horizontal") {
-        deltas = {
-          top: Math.min(...minX),
-          bottom: height - Math.max(...maxX),
-          left: Math.min(...minY),
-          right: width - Math.max(...maxY),
-        };
-      } else {
-        deltas = {
-          top: Math.min(...minY),
-          bottom: width - Math.max(...maxY),
-          left: Math.min(...minX),
-          right: height - Math.max(...maxX),
-        };
+      switch (layout) {
+        case HORIZONTAL:
+          deltas = {
+            top: Math.min(...minX),
+            bottom: height - Math.max(...maxX),
+            left: Math.min(...minY),
+            right: width - Math.max(...maxY),
+          };
+          break;
+        case VERTICAL:
+          deltas = {
+            top: Math.min(...minY),
+            bottom: width - Math.max(...maxY),
+            left: Math.min(...minX),
+            right: height - Math.max(...maxX),
+          };
+          break;
+        default:
+          break;
       }
 
       // Update margin values
       const directions = ["top", "bottom", "right", "left"];
-      for (const dir of directions) {
-        if (deltas[dir] < 0) {
-          MARGIN[dir] += Math.abs(deltas[dir]) + 1;
-        }
-      }
+      switch (layout) {
+        case HORIZONTAL:
+        case VERTICAL:
+          for (const dir of directions) {
+            deltas[dir] < 0 ? (MARGIN[dir] += Math.abs(deltas[dir]) + 1) : "";
+          }
 
-      //Redraw
-      if (
-        deltas.top < 0 ||
-        deltas.bottom < 0 ||
-        deltas.left < 0 ||
-        deltas.right < 0
-      ) {
-        draw(MARGIN);
+          //Redraw
+          if (
+            deltas.top < 0 ||
+            deltas.bottom < 0 ||
+            deltas.left < 0 ||
+            deltas.right < 0
+          ) {
+            draw(MARGIN);
+          }
+          break;
+        default:
+          break;
       }
 
       //Update graph values
@@ -384,7 +402,7 @@ export default class Tree extends Stanza {
           .append("g")
           .attr(
             "transform",
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
                 }, 0)`
@@ -420,7 +438,7 @@ export default class Tree extends Stanza {
           .append("g")
           .attr(
             "transform",
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
                 }, 0)`
@@ -430,40 +448,34 @@ export default class Tree extends Stanza {
         //Decorate labels
         nodeLabelsEnter
           .append("text")
-          .attr("x", (d) =>
-            layout === "radial"
-              ? d.x < Math.PI === !d.children
-                ? labelMargin
-                : -labelMargin
-              : layout === "horizontal"
-              ? d.children || d._children
-                ? -labelMargin
-                : labelMargin
-              : d.children || d._children
-              ? labelMargin
-              : -labelMargin
-          )
+          .attr("x", (d) => {
+            if (layout === RADIAL) {
+              return d.x < Math.PI === !d.children ? labelMargin : -labelMargin;
+            } else if (layout === HORIZONTAL) {
+              return d.children || d._children ? -labelMargin : labelMargin;
+            } else if (layout === VERTICAL) {
+              return d.children || d._children ? labelMargin : -labelMargin;
+            }
+          })
           .attr("dy", "3")
-          .attr("transform", (d) =>
-            layout === "radial"
-              ? `rotate(${d.x >= Math.PI ? 180 : 0})`
-              : layout === "horizontal"
-              ? "rotate(0)"
-              : "rotate(-90)"
-          )
-          .attr("text-anchor", (d) =>
-            layout === "radial"
-              ? d.x < Math.PI === !d.children
-                ? "start"
-                : "end"
-              : layout === "horizontal"
-              ? d.children || d._children
-                ? "end"
-                : "start"
-              : d.children || d._children
-              ? "start"
-              : "end"
-          )
+          .attr("transform", (d) => {
+            if (layout === RADIAL) {
+              return `rotate(${d.x >= Math.PI ? 180 : 0})`;
+            } else if (layout === HORIZONTAL) {
+              return "rotate(0)";
+            } else if (layout === VERTICAL) {
+              return "rotate(-90)";
+            }
+          })
+          .attr("text-anchor", (d) => {
+            if (layout === RADIAL) {
+              return d.x < Math.PI === !d.children ? "start" : "end";
+            } else if (layout === HORIZONTAL) {
+              return d.children || d._children ? "end" : "start";
+            } else if (layout === VERTICAL) {
+              return d.children || d._children ? "start" : "end";
+            }
+          })
           .text((d) => d.data[nodeKey] || "");
 
         const duration = 500;
@@ -473,7 +485,7 @@ export default class Tree extends Stanza {
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
               : `translate(${d.y}, ${d.x})`
           );
@@ -494,7 +506,7 @@ export default class Tree extends Stanza {
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
               : `translate(${d.y}, ${d.x})`
           );
@@ -506,7 +518,7 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "transform",
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
                   source.y
                 }, 0)`
@@ -518,14 +530,14 @@ export default class Tree extends Stanza {
         nodeLabelsUpdate
           .exit()
           .attr("transform", (d) =>
-            layout === "radial"
+            layout === RADIAL
               ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
               : `translate(${d.y}, ${d.x})`
           )
           .transition()
           .duration(duration)
           .attr("transform", (d) =>
-            layout === "radial"
+            layout === RADIAL
               ? source.y === 0
                 ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
                     source.y
@@ -549,7 +561,7 @@ export default class Tree extends Stanza {
           .classed("link", true)
           .attr(
             "d",
-            layout === "radial"
+            layout === RADIAL
               ? d3.linkRadial().angle(source.x).radius(source.y)
               : getLinkFn().x(source.y0).y(source.x0)
           );
@@ -561,7 +573,7 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            layout === "radial"
+            layout === RADIAL
               ? d3
                   .linkRadial()
                   .angle((d) => d.x)
@@ -578,7 +590,7 @@ export default class Tree extends Stanza {
           .duration(duration)
           .attr(
             "d",
-            layout === "radial"
+            layout === RADIAL
               ? d3.linkRadial().angle(source.x).radius(source.y)
               : getLinkFn().x(source.y).y(source.x)
           )
