@@ -377,7 +377,7 @@ export class OntologyCard extends LitElement {
       easing: "ease-out",
     };
     if (this.mode === "hero") {
-      let animation = [
+      const animation = [
         {
           height: `${this.prevRect?.height || 0}px`,
           overflow: "hidden",
