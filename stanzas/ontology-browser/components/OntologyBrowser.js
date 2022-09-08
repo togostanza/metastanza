@@ -142,49 +142,46 @@ export class OntologyBrowser extends LitElement {
   }
 
   _getDataObject(incomingData) {
-    console.log("incomingData", incomingData);
     //validate
     const nodeIdVal = getByPath(incomingData, this.nodeId_path);
+    if (!nodeIdVal) {
+      throw new Error("Node id path is not valid");
+    }
     const nodeLabelVal = getByPath(incomingData, this.nodeLabel_path);
+    if (!nodeLabelVal) {
+      throw new Error("Node label path is not valid");
+    }
     const childrenArr = getByPath(
       incomingData,
       this.nodeRelationsChildren_path
     );
-    const parentsArr = getByPath(
-      incomingData,
-      this.nodeRelationsParents_path
-    ).map((item) => ({
-      ...item,
-      id: item[this.nodeRelationsId_key],
-      label: item[this.nodeRelationsLabel_key],
-    }));
 
-    const validRelationsArr =
-      ((childrenArr &&
-        childrenArr.some((item) => item[this.nodeRelationsId_key]) &&
-        childrenArr.some((item) => item[this.nodeRelationsLabel_key])) ||
-        childrenArr.length === 0) && // ignore if array is empty
-      ((parentsArr &&
-        parentsArr.some((item) => item[this.nodeRelationsId_key]) &&
-        parentsArr.some((item) => item[this.nodeRelationsLabel_key])) ||
-        parentsArr.length === 0); // ignore if array is empty
-
-    const validationItems = [
-      {
-        name: "Node id path",
-        value: nodeIdVal,
-      },
-      { name: "Node label path", value: nodeLabelVal },
-      {
-        name: "Node relations id or label path",
-        value: validRelationsArr,
-      },
-    ];
-
-    for (const item of validationItems) {
-      if (!item.value) {
-        throw new Error(`${item.name} is not valid`);
+    if (childrenArr instanceof Array) {
+      if (childrenArr.length > 0) {
+        if (!childrenArr.some((item) => item[this.nodeRelationsId_key])) {
+          throw new Error("Path to node children id is not valid ");
+        }
+        if (!childrenArr.some((item) => item[this.nodeRelationsLabel_key])) {
+          throw new Error("Path to node children label is not valid ");
+        }
       }
+    } else {
+      throw new Error("Path to node children is not valid ");
+    }
+
+    const parentsArr = getByPath(incomingData, this.nodeRelationsParents_path);
+
+    if (parentsArr instanceof Array) {
+      if (parentsArr.length > 0) {
+        if (!parentsArr.some((item) => item[this.nodeRelationsId_key])) {
+          throw new Error("Path to node children id is not valid ");
+        }
+        if (!parentsArr.some((item) => item[this.nodeRelationsLabel_key])) {
+          throw new Error("Path to node children label is not valid ");
+        }
+      }
+    } else {
+      throw new Error("Path to node parents is not valid ");
     }
 
     return {
@@ -194,8 +191,16 @@ export class OntologyBrowser extends LitElement {
         label: nodeLabelVal,
       },
       relations: {
-        children: childrenArr,
-        parents: parentsArr,
+        children: childrenArr.map((item) => ({
+          ...item,
+          id: item[this.nodeRelationsId_key],
+          label: item[this.nodeRelationsLabel_key],
+        })),
+        parents: parentsArr.map((item) => ({
+          ...item,
+          id: item[this.nodeRelationsId_key],
+          label: item[this.nodeRelationsLabel_key],
+        })),
       },
     };
   }
@@ -224,7 +229,6 @@ export class OntologyBrowser extends LitElement {
         })
       );
     });
-    // });
   }
 
   _loadingStarted() {
