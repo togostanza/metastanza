@@ -3,7 +3,6 @@
 
 main {
   font-family: var(--togostanza-fonts-font_family);
-  padding: calc(var(--togostanza-outline-padding) * 1px);
 }
 
 svg {
@@ -16,12 +15,9 @@ svg {
   }
   text {
     font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
-    fill-opacity: 1;
+    fill: var(--togostanza-fonts-font_color);
   }
   circle {
-    stroke: var(--togostanza-border-color);
-    stroke-width: calc(var(--togostanza-border-width) * 1px);
-
     &.with-children {
       cursor: pointer;
     }
