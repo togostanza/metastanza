@@ -13,16 +13,17 @@ export default class Linechart extends Stanza {
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    const params = Object.entries(this.params).map(([key, value]) => {
-      return { name: key, value };
-    });
+    // const params = Object.keys(this.params).map((key) => ({
+    //   name: key,
+    //   value: this.params[key],
+    // }));
 
     const root = this.root.querySelector("main");
 
     if (!this.ontologyViewer) {
-      this.ontologyViewer = new OntologyBrowser(root, params);
-    } else {
-      this.ontologyViewer.updateParams(params);
+      this.ontologyViewer = new OntologyBrowser(root);
     }
+
+    this.ontologyViewer.updateParams(this.params);
   }
 }

@@ -10,6 +10,7 @@ import {
 } from "../utils.js";
 
 import "./OntologyBrowserOntologyView";
+import "./OntologyBrowserError";
 
 export class OntologyBrowser extends LitElement {
   static get properties() {
@@ -20,6 +21,7 @@ export class OntologyBrowser extends LitElement {
       },
       data: { state: true },
       loading: { type: Boolean, state: true },
+      error: { type: Object, state: true },
       clickedRole: {
         type: String,
         status: true,
@@ -45,6 +47,14 @@ export class OntologyBrowser extends LitElement {
       height: 100%;
     }
 
+    ontology-error {
+      z-index: 11;
+    }
+
+    ontology-error::part(error-box) {
+      border: 1px solid blue;
+    }
+
     .spinner > img {
       display: block;
       width: 20px;
@@ -55,28 +65,48 @@ export class OntologyBrowser extends LitElement {
     }
   `;
 
-  constructor(element, params) {
+  constructor(element) {
     super();
     this._timer = null;
 
     element.append(this);
 
     this.data = [];
+    this.loading = false;
+    this.clickedRole = undefined;
+    this.diseaseId = undefined;
+    this.error = { message: "", isError: false };
 
-    this.API = new cachedAxios(this.apiEndpoint);
-    this.updateParams(params);
+    this.API = new cachedAxios();
   }
 
   updateParams(params) {
-    this.loading = false;
-    this.clickedRole = undefined;
-    this.diseaseId = this.initialId;
+    try {
+      this._validateParams(params);
 
-    applyConstructor.call(this, params);
+      applyConstructor.call(this, params);
+
+      this.error = { message: "", isError: false };
+
+      this.diseaseId = this.initialId;
+    } catch (error) {
+      this.error = { message: error.message, isError: true };
+    }
+  }
+
+  _validateParams(params) {
+    for (const key in params) {
+      if (key === "api-endpoint") {
+        if (!params[key].includes("<>")) {
+          throw new Error("Placeholder '<>' should be present in the API URL");
+        }
+      }
+    }
   }
 
   willUpdate(changed) {
     if (changed.has("diseaseId") && this.diseaseId) {
+      this.error = { message: "", isError: false };
       this.API.get(this._getURL(this.diseaseId))
         .then(({ data }) => {
           this._loadingEnded();
@@ -87,7 +117,8 @@ export class OntologyBrowser extends LitElement {
           };
         })
         .catch((e) => {
-          console.error("API error");
+          this.loading = false;
+          this.error = { message: e.message, isError: true };
         });
     }
   }
@@ -175,7 +206,11 @@ export class OntologyBrowser extends LitElement {
               <img src="${loaderPNG}"></img>
             </div>`
           : nothing}
-
+        ${this.error.isError
+          ? html`
+              <ontology-error message="${this.error.message}"> </ontology-error>
+            `
+          : nothing}
         <ontology-browser-view
           .data=${this.data}
           @column-click="${this._changeDiseaseEventHadnler}"

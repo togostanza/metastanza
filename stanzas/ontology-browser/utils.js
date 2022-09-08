@@ -6,7 +6,7 @@ export class cachedAxios {
    * @param {string} baseURL - base URL.
    * @param {number} maxCacheSize - maximum cache entries number. After reaching this treshold, oldest entries will be deleted from cache.
    */
-  constructor(baseURL, maxCacheSize = 100) {
+  constructor(maxCacheSize = 100) {
     this.axios = axios.create({
       headers: {
         "Content-Type": "application/json",
@@ -29,6 +29,10 @@ export class cachedAxios {
     return this.axios.get(url).then((res) => {
       if (res.status !== 200) {
         throw new Error(res.statusText);
+      }
+
+      if (Object.keys(res.data).length === 0) {
+        throw new Error("Empty response from API");
       }
 
       this.cache.set(url, { data: res.data });
@@ -80,10 +84,10 @@ export function mapJsonToProps(json) {
   return props;
 }
 
-export function applyConstructor(json) {
-  json.forEach((attr) => {
-    this[camelize(attr.name)] = attr.value || undefined;
-  });
+export function applyConstructor(params) {
+  for (const param in params) {
+    this[camelize(param)] = params[param] || undefined;
+  }
 }
 
 function getType(type) {
