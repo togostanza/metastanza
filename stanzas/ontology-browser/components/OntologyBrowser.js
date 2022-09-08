@@ -26,6 +26,10 @@ export class OntologyBrowser extends LitElement {
         type: String,
         status: true,
       },
+      apiEndPoint: {
+        type: String,
+        state: true,
+      },
     };
   }
 
@@ -75,6 +79,7 @@ export class OntologyBrowser extends LitElement {
     this.loading = false;
     this.clickedRole = undefined;
     this.diseaseId = undefined;
+    this.apiEndpoint = "";
     this.error = { message: "", isError: false };
 
     this.API = new cachedAxios();
@@ -104,22 +109,29 @@ export class OntologyBrowser extends LitElement {
     }
   }
 
-  willUpdate(changed) {
-    if (changed.has("diseaseId") && this.diseaseId) {
-      this.error = { message: "", isError: false };
-      this.API.get(this._getURL(this.diseaseId))
-        .then(({ data }) => {
-          this._loadingEnded();
+  _loadData() {
+    this.API.get(this._getURL(this.diseaseId))
+      .then(({ data }) => {
+        this.data = {
+          role: this.clickedRole,
+          ...this._getDataObject(data),
+        };
+      })
+      .catch((e) => {
+        this.error = { message: e.message, isError: true };
+      })
+      .finally(() => {
+        this._loadingEnded();
+      });
+  }
 
-          this.data = {
-            role: this.clickedRole,
-            ...this._getDataObject(data),
-          };
-        })
-        .catch((e) => {
-          this.loading = false;
-          this.error = { message: e.message, isError: true };
-        });
+  willUpdate(changed) {
+    if (
+      (changed.has("diseaseId") || changed.has("apiEndpoint")) &&
+      this.diseaseId
+    ) {
+      this.error = { message: "", isError: false };
+      this._loadData();
     }
   }
 
