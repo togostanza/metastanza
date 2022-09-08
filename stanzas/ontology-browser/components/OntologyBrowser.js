@@ -13,6 +13,40 @@ import "./OntologyBrowserOntologyView";
 import "./OntologyBrowserError";
 
 export class OntologyBrowser extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+
+      .container {
+        height: 100%;
+      }
+
+      .spinner {
+        z-index: 10;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      ontology-error {
+        z-index: 11;
+      }
+
+      .spinner > img {
+        display: block;
+        width: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    `;
+  }
+
   static get properties() {
     return {
       diseaseId: {
@@ -36,39 +70,6 @@ export class OntologyBrowser extends LitElement {
       },
     };
   }
-  /* eslint-disable */
-  static styles = css`
-    :host {
-      display: block;
-      height: 100%;
-      width: 100%;
-    }
-
-    .container {
-      height: 100%;
-    }
-
-    .spinner {
-      z-index: 10;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    ontology-error {
-      z-index: 11;
-    }
-
-    .spinner > img {
-      display: block;
-      width: 20px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  `;
-  /* eslint-enable */
 
   constructor(element) {
     super();

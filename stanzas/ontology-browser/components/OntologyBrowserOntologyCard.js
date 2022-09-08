@@ -2,56 +2,8 @@ import { LitElement, html, css, nothing } from "lit";
 import { ref, createRef } from "lit/directives/ref.js";
 
 export class OntologyCard extends LitElement {
-  static get properties() {
-    return {
-      data: { type: Object, state: true },
-      hidden: { type: Boolean, attribute: true },
-      id: { type: String, attribute: true, reflect: true },
-      mode: {
-        type: String,
-        state: true,
-      },
-      order: {
-        type: String,
-        state: true,
-      },
-      prevRect: {
-        type: Object,
-        state: true,
-      },
-      content: {
-        type: Object,
-        state: true,
-      },
-    };
-  }
-
-  shouldUpdate() {
-    if (this.data.id === "dummy") {
-      this.hidden = true;
-    } else {
-      this.hidden = false;
-    }
-    return true;
-  }
-
-  constructor() {
-    super();
-    this.data = {};
-    this.hidden = false;
-    this.mode = "";
-    this.order = "";
-    this.prevRect = { x: 0, y: 0, width: 0, height: 0 };
-    this._skipKeys = ["label", "children", "parents", "leaf", "root"];
-    this.cardRef = createRef();
-    this._leftCoinnector = createRef;
-    this.leftConnectorClassName = "";
-    this.rightConnectorClassName = "";
-    this.content = {};
-  }
-
-  /* eslint-disable */
-  static styles = css`
+  static get styles() {
+    return css`
     :host {
       display: block;
       position: relative;
@@ -345,7 +297,55 @@ export class OntologyCard extends LitElement {
       display: inline-block;
     }
   `;
-  /* eslint-enable */
+  }
+
+  static get properties() {
+    return {
+      data: { type: Object, state: true },
+      hidden: { type: Boolean, attribute: true },
+      id: { type: String, attribute: true, reflect: true },
+      mode: {
+        type: String,
+        state: true,
+      },
+      order: {
+        type: String,
+        state: true,
+      },
+      prevRect: {
+        type: Object,
+        state: true,
+      },
+      content: {
+        type: Object,
+        state: true,
+      },
+    };
+  }
+
+  shouldUpdate() {
+    if (this.data.id === "dummy") {
+      this.hidden = true;
+    } else {
+      this.hidden = false;
+    }
+    return true;
+  }
+
+  constructor() {
+    super();
+    this.data = {};
+    this.hidden = false;
+    this.mode = "";
+    this.order = "";
+    this.prevRect = { x: 0, y: 0, width: 0, height: 0 };
+    this._skipKeys = ["label", "children", "parents", "leaf", "root"];
+    this.cardRef = createRef();
+    this._leftCoinnector = createRef;
+    this.leftConnectorClassName = "";
+    this.rightConnectorClassName = "";
+    this.content = {};
+  }
 
   willUpdate(prevParams) {
     if (this.mode === "hero") {

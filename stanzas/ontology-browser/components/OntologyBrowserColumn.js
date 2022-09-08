@@ -7,32 +7,32 @@ import { flip } from "./flipColumn";
 import "./OntologyBrowserOntologyCard";
 
 export default class OntologyBrowserColumn extends LitElement {
-  /* eslint-disable */
-  static styles = css`
-    :host {
-      flex-grow: 1;
-      flex-basis: 0;
-      display: block;
-      position: relative;
-    }
+  static get styles() {
+    return css`
+      :host {
+        flex-grow: 1;
+        flex-basis: 0;
+        display: block;
+        position: relative;
+      }
 
-    .column {
-      height: 100%;
-      flex-direction: column;
-      position: relative;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
+      .column {
+        height: 100%;
+        flex-direction: column;
+        position: relative;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
 
-    ontology-card {
-      margin-top: 6px;
-    }
+      ontology-card {
+        margin-top: 6px;
+      }
 
-    ontology-card:last-child {
-      margin-bottom: 10px;
-    }
-  `;
-  /* eslint-enable */
+      ontology-card:last-child {
+        margin-bottom: 10px;
+      }
+    `;
+  }
 
   static get properties() {
     return {

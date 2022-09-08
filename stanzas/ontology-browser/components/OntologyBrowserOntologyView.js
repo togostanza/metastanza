@@ -6,27 +6,27 @@ import { repeat } from "lit/directives/repeat.js";
 import "./OntologyBrowserColumn";
 
 export class OntologyBrowserView extends LitElement {
-  /* eslint-disable */
-  static styles = css`
-    :host {
-      font-size: 10px;
-      display: block;
-      height: 100%;
-    }
+  static get styles() {
+    return css`
+      :host {
+        font-size: 10px;
+        display: block;
+        height: 100%;
+      }
 
-    .clip {
-      height: 100%;
-      overflow: hidden;
-      position: relative;
-    }
+      .clip {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+      }
 
-    .flex {
-      height: 100%;
-      display: flex;
-      flex-direction: row;
-    }
-  `;
-  /* eslint-enable */
+      .flex {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+      }
+    `;
+  }
 
   constructor() {
     super();
