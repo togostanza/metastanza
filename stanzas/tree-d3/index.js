@@ -12,6 +12,16 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
+//Declaring constants
+const ASCENDING = "ascending";
+const DESCENDING = "descending";
+const HORIZONTAL = "horizontal";
+const VERTICAL = "vertical";
+const RADIAL = "radial";
+const TRANSLUCENT = "translucent";
+const MULTIPLY = "multiply";
+const SCREEN = "screen";
+
 //Stanza download menu contents
 export default class Tree extends Stanza {
   menu() {
@@ -45,13 +55,8 @@ export default class Tree extends Stanza {
     const height = parseInt(this.params["height"]);
     const orderKey = this.params["order-data_key"];
     const orderSort = this.params["order-sort"];
-    const ASCENDING = "ascending";
-    const DESCENDING = "descending";
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
-    const HORIZONTAL = "horizontal";
-    const VERTICAL = "vertical";
-    const RADIAL = "radial";
     const nodeKey = this.params["node-label-data_key"];
     const labelMargin = this.params["node-label-margin"];
     const sizeKey = this.params["node-size-data_key"];
@@ -61,9 +66,6 @@ export default class Tree extends Stanza {
     const colorKey = this.params["color-data_key"];
     const colorGroup = this.params["color-group"];
     const colorMode = this.params["color-blend"];
-    const TRANSLUCENT = "translucent";
-    const MULTIPLY = "multiply";
-    const SCREEN = "screen";
 
     let colorModeProperty;
     let colorModeValue;
@@ -135,7 +137,7 @@ export default class Tree extends Stanza {
       }
     };
 
-    // Setting color scale
+    //Setting color scale
     const togostanzaColors = getColorSeries(this);
     const defaultColor = togostanzaColors[0];
     const groupArray = [];
@@ -178,15 +180,15 @@ export default class Tree extends Stanza {
     for (const n of data) {
       n.depth === maxDepth ? labels.push(n.data[nodeKey] || "") : "";
     }
-    const tempGroup = svg.append("g");
-    tempGroup
+    const maxLabelGroup = svg.append("g");
+    maxLabelGroup
       .selectAll("text")
       .data(labels)
       .enter()
       .append("text")
       .text((d) => d);
-    const maxLabelWidth = tempGroup.node().getBBox().width;
-    tempGroup.remove();
+    const maxLabelWidth = maxLabelGroup.node().getBBox().width;
+    maxLabelGroup.remove();
 
     //Create each group
     const g = svg.append("g");
@@ -195,7 +197,7 @@ export default class Tree extends Stanza {
 
     //Draw function
     const draw = (
-      MARGIN = {
+      margin = {
         top: 0,
         right: maxLabelWidth + labelMargin,
         bottom: 0,
@@ -205,13 +207,13 @@ export default class Tree extends Stanza {
       //Error handling
       switch (layout) {
         case HORIZONTAL:
-          if (width - MARGIN.right - MARGIN.left < 0) {
+          if (width - margin.right - margin.left < 0) {
             el.innerHTML = "<p>width is too small!</p>";
             throw new Error("width is too small!");
           }
           break;
         case VERTICAL:
-          if (height - MARGIN.left - MARGIN.right < 0) {
+          if (height - margin.left - margin.right < 0) {
             el.innerHTML = "<p>height is too small!</p>";
             throw new Error("height is too small!");
           }
@@ -229,9 +231,9 @@ export default class Tree extends Stanza {
       g.attr("transform", () => {
         switch (layout) {
           case HORIZONTAL:
-            return `translate(${MARGIN.left}, ${MARGIN.top})`;
+            return `translate(${margin.left}, ${margin.top})`;
           case VERTICAL:
-            return `translate(${MARGIN.top}, ${MARGIN.left})`;
+            return `translate(${margin.top}, ${margin.left})`;
           case RADIAL:
             return `translate(${Math.min(width / 2, height / 2)}, ${Math.min(
               width / 2,
@@ -253,19 +255,19 @@ export default class Tree extends Stanza {
       switch (layout) {
         case HORIZONTAL:
           graphType.size([
-            height - MARGIN.top - MARGIN.bottom,
-            width - MARGIN.left - MARGIN.right,
+            height - margin.top - margin.bottom,
+            width - margin.left - margin.right,
           ]);
           break;
         case VERTICAL:
           graphType.size([
-            width - MARGIN.top - MARGIN.bottom,
-            height - MARGIN.left - MARGIN.right,
+            width - margin.top - margin.bottom,
+            height - margin.left - margin.right,
           ]);
           break;
         case RADIAL:
           graphType
-            .size([2 * Math.PI, Math.min(width / 2, height / 2) - MARGIN.right])
+            .size([2 * Math.PI, Math.min(width / 2, height / 2) - margin.right])
             .separation(separation)(treeRoot);
           break;
       }
@@ -302,12 +304,12 @@ export default class Tree extends Stanza {
 
         const mapper = {
           horizontal: {
-            alignmentDirection: MARGIN.top + d.x,
-            depthDirection: MARGIN.left + d.y,
+            alignmentDirection: margin.top + d.x,
+            depthDirection: margin.left + d.y,
           },
           vertical: {
-            alignmentDirection: MARGIN.left + d.x,
-            depthDirection: MARGIN.top + d.y,
+            alignmentDirection: margin.left + d.x,
+            depthDirection: margin.top + d.y,
           },
         };
 
@@ -364,7 +366,7 @@ export default class Tree extends Stanza {
         case HORIZONTAL:
         case VERTICAL:
           for (const dir of directions) {
-            deltas[dir] < 0 ? (MARGIN[dir] += Math.abs(deltas[dir]) + 1) : "";
+            deltas[dir] < 0 ? (margin[dir] += Math.abs(deltas[dir]) + 1) : "";
           }
 
           //Redraw
@@ -374,7 +376,7 @@ export default class Tree extends Stanza {
             deltas.left < 0 ||
             deltas.right < 0
           ) {
-            draw(MARGIN);
+            draw(margin);
           }
           break;
         default:
