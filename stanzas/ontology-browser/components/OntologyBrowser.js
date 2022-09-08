@@ -59,10 +59,6 @@ export class OntologyBrowser extends LitElement {
       z-index: 11;
     }
 
-    ontology-error::part(error-box) {
-      border: 1px solid blue;
-    }
-
     .spinner > img {
       display: block;
       width: 20px;

@@ -7,6 +7,7 @@ Animated ontology browser wich can be used with almost any ontology API.
 #### `api-endpoint`
 
 API endpoint with placeholder (`<>`) for id.
+Node information will be fetched by replacing the placeholder with clicked node `id`.
 
 #### `initial-id`
 
@@ -45,3 +46,30 @@ List of data keys in the node details object (defined by `node-details_path`) to
 #### `node-relations-parents_path` and `node-relations-children_path`
 
 Path to arrays of node children and parents.
+
+#### `node-relations-id_key` and `node-relations-label_key`
+
+Key of id and label of the children / parents nodes inside the children/parents array item. No nested path is supported here.
+E.g. in case of this node data:
+
+```json
+{
+    "details": {
+        "id": "HP:0001168",
+        "name": "Short phalanx of finger",
+        ...
+    },
+    "relations": {
+        "children": [
+            {"ontologyId": "HP0000234", "name" : "Some disorder 1"},
+            {"ontologyId": "HP0000235", "name" : "Some disorder 2"}
+        ],
+        "parents": [
+            {"ontologyId": "HP0000233", "name" : "Some disorder 4"},
+        ]
+    }
+    ...
+}
+```
+
+`node-relations-id_key` should be set to `"ontologyId"` and `node-relations-label_key` should be set to `"name"`.
