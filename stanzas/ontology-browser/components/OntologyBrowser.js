@@ -30,6 +30,10 @@ export class OntologyBrowser extends LitElement {
         type: String,
         state: true,
       },
+      showKeys: {
+        type: Array,
+        state: true,
+      },
     };
   }
 
@@ -81,6 +85,7 @@ export class OntologyBrowser extends LitElement {
     this.diseaseId = undefined;
     this.apiEndpoint = "";
     this.error = { message: "", isError: false };
+    this.showKeys = ["id", "label"];
 
     this.API = new cachedAxios();
   }
@@ -90,6 +95,10 @@ export class OntologyBrowser extends LitElement {
       this._validateParams(params);
 
       applyConstructor.call(this, params);
+
+      this.showKeys = this.nodeDetails_show_keys
+        ? this.nodeDetails_show_keys.split(",").map((key) => key.trim())
+        : [];
 
       this.error = { message: "", isError: false };
 
@@ -189,6 +198,7 @@ export class OntologyBrowser extends LitElement {
         ...getByPath(incomingData, this.nodeDetails_path),
         id: nodeIdVal,
         label: nodeLabelVal,
+        showDetailsKeys: this.showKeys,
       },
       relations: {
         children: childrenArr.map((item) => ({

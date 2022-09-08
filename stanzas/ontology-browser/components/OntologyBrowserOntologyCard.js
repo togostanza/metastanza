@@ -416,24 +416,22 @@ export class OntologyCard extends LitElement {
                   <div class="table-container">
                     <table>
                       <tbody>
-                        ${Object.keys(this.data)
-                          .filter((key) => !this._skipKeys.includes(key))
-                          .map((key) => {
-                            return html`
-                              <tr>
-                                <td class="key">${key}</td>
-                                <td class="data">
-                                  ${this.data[key] instanceof Array
-                                    ? html`<ul class="hero-list">
-                                        ${this.data[key].map(
-                                          (item) => html`<li>${item}</li> `
-                                        )}
-                                      </ul>`
-                                    : this.data[key]}
-                                </td>
-                              </tr>
-                            `;
-                          })}
+                        ${this.data.showDetailsKeys?.map((key) => {
+                          return html`
+                            <tr>
+                              <td class="key">${key}</td>
+                              <td class="data">
+                                ${this.data[key] instanceof Array
+                                  ? html`<ul class="hero-list">
+                                      ${this.data[key].map(
+                                        (item) => html`<li>${item}</li> `
+                                      )}
+                                    </ul>`
+                                  : this.data[key]}
+                              </td>
+                            </tr>
+                          `;
+                        })}
                       </tbody>
                     </table>
                   </div>
