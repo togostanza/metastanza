@@ -225,17 +225,19 @@ export default class Tree extends Stanza {
       }
 
       //Movement of drawing position
-      g.attr(
-        "transform",
-        layout === "radial"
-          ? `translate(${Math.min(width / 2, height / 2)}, ${Math.min(
+      g.attr("transform", () => {
+        switch (layout) {
+          case HORIZONTAL:
+            return `translate(${MARGIN.left}, ${MARGIN.top})`;
+          case VERTICAL:
+            return `translate(${MARGIN.top}, ${MARGIN.left})`;
+          case RADIAL:
+            return `translate(${Math.min(width / 2, height / 2)}, ${Math.min(
               width / 2,
               height / 2
-            )})`
-          : layout === "horizontal"
-          ? `translate(${MARGIN.left}, ${MARGIN.top})`
-          : `translate(${MARGIN.top}, ${MARGIN.left})`
-      );
+            )})`;
+        }
+      });
 
       //Align leaves or not
       let graphType = d3.tree();
@@ -396,18 +398,21 @@ export default class Tree extends Stanza {
           .selectAll("g")
           .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
-        //Circle enter
+        //Generate new elements of circle
         const nodeCirclesEnter = nodeCirclesUpdate
           .enter()
           .append("g")
-          .attr(
-            "transform",
-            layout === RADIAL
-              ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
+          .attr("transform", () => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${source.y0}, ${source.x0})`;
+              case RADIAL:
+                return `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
-                }, 0)`
-              : `translate(${source.y0}, ${source.x0})`
-          )
+                }, 0)`;
+            }
+          })
           .on("click", (e, d) => {
             toggle(d);
             update(d);
@@ -432,48 +437,56 @@ export default class Tree extends Stanza {
           .selectAll("g")
           .data(treeRoot.descendants(), (d) => d.id || (d.id = ++i));
 
-        //Labels enter
+        //Generate new elements of Labels
         const nodeLabelsEnter = nodeLabelsUpdate
           .enter()
           .append("g")
-          .attr(
-            "transform",
-            layout === RADIAL
-              ? `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
+          .attr("transform", () => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${source.y0}, ${source.x0})`;
+              case RADIAL:
+                return `rotate(${(source.x0 * 180) / Math.PI - 90}) translate(${
                   source.y0
-                }, 0)`
-              : `translate(${source.y0}, ${source.x0})`
-          );
+                }, 0)`;
+            }
+          });
 
         //Decorate labels
         nodeLabelsEnter
           .append("text")
           .attr("x", (d) => {
-            if (layout === RADIAL) {
-              return d.x < Math.PI === !d.children ? labelMargin : -labelMargin;
-            } else if (layout === HORIZONTAL) {
-              return d.children || d._children ? -labelMargin : labelMargin;
-            } else if (layout === VERTICAL) {
-              return d.children || d._children ? labelMargin : -labelMargin;
+            switch (layout) {
+              case HORIZONTAL:
+                return d.children || d._children ? -labelMargin : labelMargin;
+              case VERTICAL:
+                return d.children || d._children ? labelMargin : -labelMargin;
+              case RADIAL:
+                return d.x < Math.PI === !d.children
+                  ? labelMargin
+                  : -labelMargin;
             }
           })
           .attr("dy", "3")
           .attr("transform", (d) => {
-            if (layout === RADIAL) {
-              return `rotate(${d.x >= Math.PI ? 180 : 0})`;
-            } else if (layout === HORIZONTAL) {
-              return "rotate(0)";
-            } else if (layout === VERTICAL) {
-              return "rotate(-90)";
+            switch (layout) {
+              case HORIZONTAL:
+                return "rotate(0)";
+              case VERTICAL:
+                return "rotate(-90)";
+              case RADIAL:
+                return `rotate(${d.x >= Math.PI ? 180 : 0})`;
             }
           })
           .attr("text-anchor", (d) => {
-            if (layout === RADIAL) {
-              return d.x < Math.PI === !d.children ? "start" : "end";
-            } else if (layout === HORIZONTAL) {
-              return d.children || d._children ? "end" : "start";
-            } else if (layout === VERTICAL) {
-              return d.children || d._children ? "start" : "end";
+            switch (layout) {
+              case HORIZONTAL:
+                return d.children || d._children ? "end" : "start";
+              case VERTICAL:
+                return d.children || d._children ? "start" : "end";
+              case RADIAL:
+                return d.x < Math.PI === !d.children ? "start" : "end";
             }
           })
           .text((d) => d.data[nodeKey] || "");
@@ -484,69 +497,102 @@ export default class Tree extends Stanza {
         nodeCirclesEnter
           .transition()
           .duration(duration)
-          .attr("transform", (d) =>
-            layout === RADIAL
-              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
-              : `translate(${d.y}, ${d.x})`
-          );
+          .attr("transform", (d) => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${d.y}, ${d.x})`;
+              case RADIAL:
+                return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+                  d.y
+                }, 0)`;
+            }
+          });
 
         //Labels transition
         nodeLabelsEnter
-          .attr("transform", (d) =>
-            layout === "radial"
-              ? source.y === 0
-                ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+          .attr("transform", (d) => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${source.y}, ${source.x})`;
+              case RADIAL:
+                if (source.y === 0) {
+                  return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
                     source.y
-                  }, ${source.x})`
-                : `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
-                    source.y
-                  }, ${source.x})`
-              : `translate(${source.y}, ${source.x})`
-          )
+                  }, ${source.x})`;
+                } else {
+                  return `rotate(${
+                    (source.x * 180) / Math.PI - 90
+                  }) translate(${source.y}, ${source.x})`;
+                }
+            }
+          })
           .transition()
           .duration(duration)
-          .attr("transform", (d) =>
-            layout === RADIAL
-              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
-              : `translate(${d.y}, ${d.x})`
-          );
+          .attr("transform", (d) => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${d.y}, ${d.x})`;
+              case RADIAL:
+                return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+                  d.y
+                }, 0)`;
+            }
+          });
 
-        //Circle exit
+        //Remove extra elements of circle
         nodeCirclesUpdate
           .exit()
           .transition()
           .duration(duration)
-          .attr(
-            "transform",
-            layout === RADIAL
-              ? `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
+          .attr("transform", () => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${source.y}, ${source.x})`;
+              case RADIAL:
+                return `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
                   source.y
-                }, 0)`
-              : `translate(${source.y}, ${source.x})`
-          )
+                }, 0)`;
+            }
+          })
           .remove();
 
-        //Labels exit
+        //Remove extra elements of Labels
         nodeLabelsUpdate
           .exit()
-          .attr("transform", (d) =>
-            layout === RADIAL
-              ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y}, 0)`
-              : `translate(${d.y}, ${d.x})`
-          )
+          .attr("transform", (d) => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${d.y}, ${d.x})`;
+              case RADIAL:
+                return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+                  d.y
+                }, 0)`;
+            }
+          })
           .transition()
           .duration(duration)
-          .attr("transform", (d) =>
-            layout === RADIAL
-              ? source.y === 0
-                ? `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
+          .attr("transform", (d) => {
+            switch (layout) {
+              case HORIZONTAL:
+              case VERTICAL:
+                return `translate(${source.y}, ${source.x})`;
+              case RADIAL:
+                if (source.y === 0) {
+                  return `rotate(${(d.x * 180) / Math.PI - 90}) translate(${
                     source.y
-                  }, 0)`
-                : `rotate(${(source.x * 180) / Math.PI - 90}) translate(${
-                    source.y
-                  }, 0)`
-              : `translate(${source.y}, ${source.x})`
-          )
+                  }, 0)`;
+                } else {
+                  return `rotate(${
+                    (source.x * 180) / Math.PI - 90
+                  }) translate(${source.y}, 0)`;
+                }
+            }
+          })
           .remove();
 
         //Drawing path
@@ -554,16 +600,41 @@ export default class Tree extends Stanza {
           .selectAll(".link")
           .data(treeRoot.links(), (d) => d.target.id);
 
-        //Path Enter
+        const pathEnter = () => {
+          if (layout === RADIAL) {
+            d3.linkRadial().angle(source.x).radius(source.y);
+          } else {
+            getLinkFn().x(source.y0).y(source.x0);
+          }
+        };
+
+        //Generate new elements of Path
         const linkEnter = link
           .enter()
           .insert("path", "g")
           .classed("link", true)
           .attr(
             "d",
-            layout === RADIAL
-              ? d3.linkRadial().angle(source.x).radius(source.y)
-              : getLinkFn().x(source.y0).y(source.x0)
+            pathEnter()
+            // () => {
+            //   if (layout === RADIAL) {
+            //     d3.linkRadial().angle(source.x).radius(source.y);
+            //   } else {
+            //     getLinkFn().x(source.y0).y(source.x0);
+            //   }
+            // switch (layout) {
+            //   case HORIZONTAL:
+            //   case VERTICAL:
+            //     getLinkFn().x(source.y0).y(source.x0);
+            //     break;
+            //   case RADIAL:
+            //     d3.linkRadial().angle(source.x).radius(source.y);
+            //     break;
+            // }
+            // }
+            // layout === RADIAL
+            //   ? d3.linkRadial().angle(source.x).radius(source.y)
+            //   : getLinkFn().x(source.y0).y(source.x0)
           );
 
         //Path transition
@@ -583,7 +654,7 @@ export default class Tree extends Stanza {
                   .y((d) => d.x)
           );
 
-        //Path exit
+        //Remove extra elements of path
         link
           .exit()
           .transition()
