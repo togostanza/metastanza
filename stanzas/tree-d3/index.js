@@ -300,7 +300,7 @@ export default class Tree extends Stanza {
       treeDescendants.forEach((d) => {
         circleRadius.push(nodeRadius(d.data[sizeKey]) || aveRadius);
 
-        const Mapper = {
+        const mapper = {
           horizontal: {
             alignmentDirection: MARGIN.top + d.x,
             depthDirection: MARGIN.left + d.y,
@@ -314,13 +314,13 @@ export default class Tree extends Stanza {
         switch (layout) {
           case HORIZONTAL:
             return (
-              aligns.push(Mapper.horizontal["alignmentDirection"]),
-              depths.push(Mapper.horizontal["depthDirection"])
+              aligns.push(mapper.horizontal["alignmentDirection"]),
+              depths.push(mapper.horizontal["depthDirection"])
             );
           case VERTICAL:
             return (
-              aligns.push(Mapper.vertical["alignmentDirection"]),
-              depths.push(Mapper.vertical["depthDirection"])
+              aligns.push(mapper.vertical["alignmentDirection"]),
+              depths.push(mapper.vertical["depthDirection"])
             );
           default:
             break;
