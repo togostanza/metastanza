@@ -53,11 +53,8 @@ export class OntologyCard extends LitElement {
   static styles = css`
     :host {
       display: block;
-      position: relative;
-      --connector-line: 1px solid #ccc;
-      --selected-bg-color: white;
+      position: relative;    
       --default-bg-color: white;
-      --selected-border-color: rgb(17, 127, 147);
     }
 
     .-hero-right:before {
@@ -66,7 +63,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -77,7 +74,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -88,7 +85,7 @@ export class OntologyCard extends LitElement {
       width: 0px;
       height: 0px;
       border: 8px solid transparent;
-      border-left: 8px solid #ccc;
+      border-left: 8px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       right: 0;
       transform: translate(50%, -50%) scaleY(0.5);
@@ -102,7 +99,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(100% - min(50%, 15px) + 5px);
-      border-left: var(--connector-line);
+      border-left: 1px solid var(--togostanza-node-border-color);
       bottom: -6px;
       box-sizing: border-box;
     }
@@ -113,7 +110,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -124,7 +121,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(min(50%, 15px) + 6px);
-      border-left: var(--connector-line);
+      border-left: 1px solid var(--togostanza-node-border-color);
       top: -6px;
       box-sizing: border-box;
     }
@@ -135,7 +132,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-top: var(--connector-line);
+      border-top:  1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -146,7 +143,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(100% + 14px);
-      border-left: var(--connector-line);
+      border-left: 1px solid var(--togostanza-node-border-color);
       top: -6px;
       box-sizing: border-box;
     }
@@ -157,7 +154,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -168,7 +165,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(100% - min(50%, 15px) + 5px);
-      border-right: var(--connector-line);
+      border-right: 1px solid var(--togostanza-node-border-color);
       bottom: -6px;
       right: 0;
       box-sizing: border-box;
@@ -180,7 +177,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -191,7 +188,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(min(50%, 15px) + 6px);
-      border-right: var(--connector-line);
+      border-right: 1px solid var(--togostanza-node-border-color);
       top: -6px;
       right: 0;
       box-sizing: border-box;
@@ -203,7 +200,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-top: var(--connector-line);
+      border-top: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -214,7 +211,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 1px;
       height: calc(100% + 14px);
-      border-right: var(--connector-line);
+      border-right: 1px solid var(--togostanza-node-border-color);
       top: -6px;
       right: 0;
       box-sizing: border-box;
@@ -226,7 +223,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -237,7 +234,7 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
@@ -248,21 +245,26 @@ export class OntologyCard extends LitElement {
       content: "";
       width: 100%;
       height: 1px;
-      border-bottom: var(--connector-line);
+      border-bottom: 1px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       box-sizing: border-box;
     }
 
     .ontology-card {
       padding: 6px;
-      border: 1px solid #ccc;
+      font-family: var(--togostanza-font-family);
+      border: 1px solid var(--togostanza-node-border-color);
       border-radius: 8px;
-      background-color: #fff;
+      background-color: var(--togostanza-node-bg-color);
       cursor: pointer;
       position: relative;
       width: min(90%, 20rem);
       max-width: 30rem;
       box-sizing: border-box;
+    }
+
+    .ontology-card:hover {
+      filter: brightness(0.98)
     }
 
     .children-arrow:before {
@@ -271,7 +273,7 @@ export class OntologyCard extends LitElement {
       width: 0px;
       height: 0px;
       border: 8px solid transparent;
-      border-left: 8px solid #ccc;
+      border-left: 8px solid var(--togostanza-node-border-color);
       top: min(50%, 15px);
       left: 0;
       transform: translate(-50%, -50%) scaleY(0.5);
@@ -282,6 +284,7 @@ export class OntologyCard extends LitElement {
     h3 {
       display: inline;
       margin: 0;
+      color: var(--togostanza-label-font-color);
     }
 
     .card-container {
@@ -296,12 +299,14 @@ export class OntologyCard extends LitElement {
     }
 
     .selected {
-      background-color: var(--selected-bg-color);
-      border-color: var(--selected-border-color);
+      background-color: var(--togostanza-node-bg-color-selected);
+      border-color: var(--togostanza-node-border-color-selected);
       padding-left: 10px;
       padding-right: 10px;
       max-height: 100%;
     }
+
+    
 
     .hidden {
       visibility: hidden;
@@ -326,6 +331,7 @@ export class OntologyCard extends LitElement {
     }
 
     table {
+      width: 100%
       max-width: 10rem;
     }
 
@@ -343,6 +349,7 @@ export class OntologyCard extends LitElement {
 
   willUpdate(prevParams) {
     if (this.mode === "hero") {
+      // do not display connection liner to right of hero node without children and to left of hero node without parents
       if (this.data.leaf) {
         this.leftConnectorClassName = "-hero-left";
       } else if (this.data.root) {
@@ -409,35 +416,33 @@ export class OntologyCard extends LitElement {
             ? "selected"
             : ""} ${this.mode === "children" ? "children-arrow" : ""}"
         >
-          <div class="ontology-card-header">
-            <h3>${this.data.label || "..."}</h3>
-            ${this.mode === "hero"
-              ? html`
-                  <div class="table-container">
-                    <table>
-                      <tbody>
-                        ${this.data.showDetailsKeys?.map((key) => {
-                          return html`
-                            <tr>
-                              <td class="key">${key}</td>
-                              <td class="data">
-                                ${this.data[key] instanceof Array
-                                  ? html`<ul class="hero-list">
-                                      ${this.data[key].map(
-                                        (item) => html`<li>${item}</li> `
-                                      )}
-                                    </ul>`
-                                  : this.data[key]}
-                              </td>
-                            </tr>
-                          `;
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                `
-              : nothing}
-          </div>
+          <h3>${this.data.label || "..."}</h3>
+          ${this.mode === "hero"
+            ? html`
+                <div class="table-container">
+                  <table>
+                    <tbody>
+                      ${this.data.showDetailsKeys?.map((key) => {
+                        return html`
+                          <tr>
+                            <td class="key">${key}</td>
+                            <td class="data">
+                              ${this.data[key] instanceof Array
+                                ? html`<ul class="hero-list">
+                                    ${this.data[key].map(
+                                      (item) => html`<li>${item}</li> `
+                                    )}
+                                  </ul>`
+                                : this.data[key]}
+                            </td>
+                          </tr>
+                        `;
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              `
+            : nothing}
         </div>
         <div class="connector ${this.rightConnectorClassName}"></div>
       </div>

@@ -70,11 +70,9 @@ export default class OntologyBrowserColumn extends LitElement {
         this.dispatchEvent(
           new CustomEvent("column-click", {
             detail: {
-              id: e.target.id,
               role: this.role,
               rect: e.target.getBoundingClientRect(),
-              label: this.idNodeMap.get(e.target.id).label,
-              cui: this.idNodeMap.get(e.target.id).cui,
+              ...this.idNodeMap.get(e.target.id),
             },
             bubbles: true,
             composed: true,

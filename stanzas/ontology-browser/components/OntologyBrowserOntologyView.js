@@ -97,7 +97,17 @@ export class OntologyBrowserView extends LitElement {
               this.dataColumns.hero = this.dataColumns._parents;
             }
           } else {
-            this.dataColumns.hero = [this.data.details];
+            this.dataColumns.hero = [
+              {
+                ...this.data.details,
+                leaf:
+                  !this.data.relations?.children ||
+                  !this.data.relations?.children.length,
+                root:
+                  !this.data.relations?.parents ||
+                  !this.data.relations?.parents.length,
+              },
+            ];
           }
 
           //parents after update

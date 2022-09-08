@@ -232,7 +232,7 @@ export class OntologyBrowser extends LitElement {
           detail: {
             id: e.detail.id,
             label: e.detail.label,
-            cui: e.detail.cui,
+            ...this.data,
           },
           bubbles: true,
           composed: true,

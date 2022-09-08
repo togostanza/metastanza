@@ -55,7 +55,7 @@
     {
       "stanza:key": "node-details_show_keys",
       "stanza:type": "string",
-      "stanza:example": "id,label",
+      "stanza:example": "definition, synonyms, xrefs",
       "stanza:description": "Show keys list, comma separated",
       "stanza:required": false
     },
@@ -164,13 +164,13 @@
     {
       "stanza:key": "--togostanza-node-border-color",
       "stanza:type": "color",
-      "stanza:default": "#4E5059",
+      "stanza:default": "#9b9ca1",
       "stanza:description": "Border color"
     },
     {
       "stanza:key": "--togostanza-node-border-color-selected",
       "stanza:type": "color",
-      "stanza:default": "#374378",
+      "stanza:default": "#1f9dad",
       "stanza:description": "Selected border color"
     },
     {
