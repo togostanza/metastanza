@@ -50,10 +50,11 @@ export class OntologyCard extends LitElement {
     this.content = {};
   }
 
+  /* eslint-disable */
   static styles = css`
     :host {
       display: block;
-      position: relative;    
+      position: relative;
       --default-bg-color: white;
     }
 
@@ -306,8 +307,6 @@ export class OntologyCard extends LitElement {
       max-height: 100%;
     }
 
-    
-
     .hidden {
       visibility: hidden;
     }
@@ -346,6 +345,7 @@ export class OntologyCard extends LitElement {
       display: inline-block;
     }
   `;
+  /* eslint-enable */
 
   willUpdate(prevParams) {
     if (this.mode === "hero") {

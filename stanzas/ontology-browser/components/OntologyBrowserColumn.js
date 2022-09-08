@@ -7,6 +7,7 @@ import { flip } from "./flipColumn";
 import "./OntologyBrowserOntologyCard";
 
 export default class OntologyBrowserColumn extends LitElement {
+  /* eslint-disable */
   static styles = css`
     :host {
       flex-grow: 1;
@@ -31,6 +32,7 @@ export default class OntologyBrowserColumn extends LitElement {
       margin-bottom: 10px;
     }
   `;
+  /* eslint-enable */
 
   static get properties() {
     return {

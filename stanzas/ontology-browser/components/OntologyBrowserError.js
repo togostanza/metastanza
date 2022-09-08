@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 
 class OntologyError extends LitElement {
+  /* eslint-disable */
   static styles = css`
     .error-wrapper {
       position: absolute;
@@ -26,6 +27,7 @@ class OntologyError extends LitElement {
       margin-top: 0.8rem;
     }
   `;
+  /* eslint-enable */
 
   static get properties() {
     return {

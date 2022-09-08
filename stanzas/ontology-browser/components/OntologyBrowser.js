@@ -36,7 +36,7 @@ export class OntologyBrowser extends LitElement {
       },
     };
   }
-
+  /* eslint-disable */
   static styles = css`
     :host {
       display: block;
@@ -68,6 +68,7 @@ export class OntologyBrowser extends LitElement {
       transform: translate(-50%, -50%);
     }
   `;
+  /* eslint-enable */
 
   constructor(element) {
     super();

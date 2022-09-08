@@ -6,6 +6,7 @@ import { repeat } from "lit/directives/repeat.js";
 import "./OntologyBrowserColumn";
 
 export class OntologyBrowserView extends LitElement {
+  /* eslint-disable */
   static styles = css`
     :host {
       font-size: 10px;
@@ -25,6 +26,7 @@ export class OntologyBrowserView extends LitElement {
       flex-direction: row;
     }
   `;
+  /* eslint-enable */
 
   constructor() {
     super();
