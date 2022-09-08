@@ -435,13 +435,6 @@ export class OntologyCard extends LitElement {
                       </tbody>
                     </table>
                   </div>
-                  ${!this.data.cui
-                    ? html`
-                        <p class="note">
-                          This disease cannot be added as a search condition
-                        </p>
-                      `
-                    : nothing}
                 `
               : nothing}
           </div>
