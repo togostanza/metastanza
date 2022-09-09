@@ -211,7 +211,7 @@ export class OntologyCard extends LitElement {
       background-color: var(--togostanza-node-bg-color);
       cursor: pointer;
       position: relative;
-      width: min(90%, 20rem);
+      width: min(85%, 20rem);
       max-width: 30rem;
       box-sizing: border-box;
     }

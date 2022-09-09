@@ -73,13 +73,13 @@ export class OntologyBrowserView extends LitElement {
       if (changedProperties.get("data")) {
         if (
           this.data.details.id &&
-          changedProperties.get("data").id !== this.data.details.id
+          changedProperties.get("data").details?.id !== this.data.details.id
         ) {
           // parents before update
-          this.dataColumns._parents = changedProperties.get("data")
+          this.dataColumns._parents = changedProperties.get("data").relations
             ?.parents || [{ id: "dummy", label: "dummy" }];
           // children before update
-          this.dataColumns._children = changedProperties.get("data")
+          this.dataColumns._children = changedProperties.get("data").relations
             ?.children || [{ id: "dummy", label: "dummy" }];
 
           if (this._columns.length === 4) {
