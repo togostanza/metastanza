@@ -2,7 +2,10 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-import { getColorSeries } from "@/lib/ColorGenerator";
+import {
+  getColorSeries,
+  StanzaCirculateColorGenerator,
+} from "@/lib/ColorGenerator";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -136,6 +139,14 @@ export default class Tree extends Stanza {
         d._children = null;
       }
     };
+
+    //Test
+    const stanzaColor = new StanzaCirculateColorGenerator(
+      this,
+      treeDescendants
+    );
+    console.log(stanzaColor.test());
+    console.log(stanzaColor.colorGenerator());
 
     //Setting color scale
     const togostanzaColors = getColorSeries(this);
