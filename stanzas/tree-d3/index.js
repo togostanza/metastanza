@@ -143,10 +143,11 @@ export default class Tree extends Stanza {
     //Test
     const stanzaColor = new StanzaCirculateColorGenerator(
       this,
-      treeDescendants
+      treeDescendants,
+      colorGroup
     );
-    console.log(stanzaColor.test());
-    console.log(stanzaColor.colorGenerator());
+    // console.log(stanzaColor.test());
+    console.log(stanzaColor.colorGenerator);
 
     //Setting color scale
     const togostanzaColors = getColorSeries(this);
