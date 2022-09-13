@@ -2,10 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
-import {
-  getColorSeries,
-  StanzaCirculateColorGenerator,
-} from "@/lib/ColorGenerator";
+import { StanzaCirculateColorGenerator } from "@/lib/ColorGenerator";
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -140,37 +137,14 @@ export default class Tree extends Stanza {
       }
     };
 
-    //Test
+    //Setting color scale
     const stanzaColor = new StanzaCirculateColorGenerator(
       this,
       treeDescendants,
-      colorGroup
+      colorGroup,
+      colorKey
     );
-    // console.log(stanzaColor.test());
-    console.log(stanzaColor.colorGenerator);
-
-    //Setting color scale
-    const togostanzaColors = getColorSeries(this);
-    const defaultColor = togostanzaColors[0];
-    const groupArray = [];
-    treeDescendants.forEach((d) =>
-      d.data[colorGroup] ? groupArray.push(d.data[colorGroup]) : ""
-    );
-
-    const groupColor = d3
-      .scaleOrdinal()
-      .domain(groupArray)
-      .range(togostanzaColors.slice(1, 6));
-
-    const setColor = (d) => {
-      if (d.data[colorKey]) {
-        return d.data[colorKey];
-      } else {
-        return d.data[colorGroup]
-          ? groupColor(d.data[colorGroup])
-          : defaultColor;
-      }
-    };
+    const setColor = stanzaColor.colorGenerator;
 
     //Setting svg area
     const svg = d3
