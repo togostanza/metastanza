@@ -2,7 +2,6 @@
 <template>
   <a v-if="unescape && lineClamp" :href="href" :target="target">
     <LineClampCell
-      :id="id"
       :line-clamp="lineClamp"
       :unescape="unescape"
       :value="value"
@@ -13,7 +12,7 @@
   </a>
   <a v-else :href="href" :target="target">
     <template v-if="lineClamp">
-      <LineClampCell :id="id" :line-clamp="lineClamp" :value="value" />
+      <LineClampCell :line-clamp="lineClamp" :value="value" />
     </template>
     <template v-else>
       {{ value }}
@@ -30,10 +29,10 @@ export default defineComponent({
     LineClampCell,
   },
   props: {
-    id: {
-      type: String,
-      default: null,
-    },
+    // id: {
+    //   type: String,
+    //   default: null,
+    // },
     href: {
       type: String,
       default: null,
