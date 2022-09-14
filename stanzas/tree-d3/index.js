@@ -22,8 +22,8 @@ const TRANSLUCENT = "translucent";
 const MULTIPLY = "multiply";
 const SCREEN = "screen";
 
-//Stanza download menu contents
 export default class Tree extends Stanza {
+  //Stanza download menu contents
   menu() {
     return [
       downloadSvgMenuItem(this, "tree"),
@@ -412,6 +412,12 @@ export default class Tree extends Stanza {
             update(d);
           });
 
+        //Update circle color when opening and closing
+        nodeCirclesUpdate
+          .filter((d) => d === source)
+          .select("circle")
+          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+
         //Decorate circle
         nodeCirclesEnter
           .append("circle")
@@ -424,7 +430,7 @@ export default class Tree extends Stanza {
               ? nodeRadius(d.data[sizeKey])
               : parseFloat(aveRadius)
           )
-          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+          .attr("fill", setColor);
 
         //Drawing labels
         const nodeLabelsUpdate = gLabels
