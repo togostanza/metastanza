@@ -11,6 +11,7 @@ import {
   downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
+import { StanzaColorGenerator } from "../../lib/ColorGenerator";
 
 //Declaring constants
 const ASCENDING = "ascending";
@@ -138,13 +139,12 @@ export default class Tree extends Stanza {
     };
 
     //Setting color scale
-    const generateColor = new StanzaCirculateColorGenerator(
+    const setColor = new StanzaCirculateColorGenerator(
       this,
       treeDescendants,
       colorGroup,
       colorKey
-    );
-    const setColor = generateColor.series;
+    ).series;
 
     //Setting svg area
     const svg = d3

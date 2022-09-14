@@ -3,7 +3,7 @@ import Stanza from "togostanza/stanza";
 import {
   InterpolateColorGenerator,
   CirculateColorGenerator,
-  StanzaInterpolateColorGenerator,
+  StanzaColorGenerator,
 } from "@/lib/ColorGenerator";
 import {
   downloadSvgMenuItem,
@@ -59,7 +59,7 @@ export default class TestColorGenerator extends Stanza {
     const SCHEME_IS_CATEGORICAL = d3ColorScheme.indexOf("Categorical-") !== -1;
     const SCHEME_IS_CONTINUOUS = d3ColorScheme.indexOf("Continuous-") !== -1;
     const CUSTOM = d3ColorScheme === "Custom";
-    const stanzaColors = new StanzaInterpolateColorGenerator(this).stanzaColor;
+    const stanzaColors = new StanzaColorGenerator(this).stanzaColor;
 
     const circulateColorGenerate = (prefix, pattern) => {
       d3ColorScheme = d3ColorScheme.replace(`${prefix}-`, "");
