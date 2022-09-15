@@ -11,7 +11,6 @@ import {
   downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
-import { StanzaColorGenerator } from "../../lib/ColorGenerator";
 
 //Declaring constants
 const ASCENDING = "ascending";
