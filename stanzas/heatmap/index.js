@@ -33,12 +33,11 @@ export default class Heatmap extends Stanza {
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
-    const generateColor = new StanzaInterpolateColorGenerator(this, [
+    const setColor = new StanzaInterpolateColorGenerator(this, [
       cellColorMin,
       cellColorMid,
       cellColorMax,
-    ]);
-    const setColor = generateColor.series;
+    ]).series;
 
     const tickSize = +this.css("--togostanza-tick-size") || 0;
     const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
