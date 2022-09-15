@@ -72,16 +72,10 @@
       "stanza:description": "Y axis title"
     },
     {
-      "stanza:key": "axis-x-title_padding",
+      "stanza:key": "axis-title_padding",
       "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "X axis title padding"
-    },
-    {
-      "stanza:key": "axis-y-title_padding",
-      "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "Y axis title padding"
+      "stanza:example": 10,
+      "stanza:description": "Axis title padding"
     },
     {
       "stanza:key": "axis-x-ticks_hide",
@@ -133,7 +127,18 @@
     {
       "stanza:key": "axis-x-ticks_interval_units",
       "stanza:type": "single-choice",
-      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:choice": [
+        "none",
+        "ms",
+        "s",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year",
+        "century"
+      ],
       "stanza:example": "none",
       "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
     },
@@ -168,7 +173,18 @@
     {
       "stanza:key": "axis-y-ticks_interval_units",
       "stanza:type": "single-choice",
-      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:choice": [
+        "none",
+        "ms",
+        "s",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year",
+        "century"
+      ],
       "stanza:example": "none",
       "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
     },
@@ -191,7 +207,7 @@
     {
       "stanza:key": "legend-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["top-left","top-right","bottom-left","bottom-right"],
+      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
       "stanza:example": "top-right",
       "stanza:description": "Whether show the legend"
     },

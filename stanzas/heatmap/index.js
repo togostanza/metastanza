@@ -11,6 +11,7 @@ export default class Heatmap extends Stanza {
   css(key) {
     return getComputedStyle(this.element).getPropertyValue(key);
   }
+
   async render() {
     const root = this.root.querySelector("main");
     if (!this.tooltip) {
@@ -29,7 +30,7 @@ export default class Heatmap extends Stanza {
     this.draw(root, data);
   }
   async draw(el, dataset) {
-    // make colors
+    // Create color series
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
@@ -44,32 +45,33 @@ export default class Heatmap extends Stanza {
     const yLabelAngle = this.params["y-ticks_labels_angle"] || 0;
     const borderWidth = +this.css("--togostanza-border-width") || 0;
 
+    const axisTitlePadding = this.params["axis-title_padding"];
+
     // set the dimensions and margins of the graph
-    const margin = {
-      bottom: +this.css("--togostanza-fonts-font_size_primary") + tickSize + 10,
-      left: +this.css("--togostanza-fonts-font_size_primary") + tickSize + 10,
-    };
+    const margin =
+      +this.css("--togostanza-fonts-font_size_primary") +
+      tickSize +
+      axisTitlePadding;
+
     const width = +this.css("--togostanza-outline-width"),
       height = +this.css("--togostanza-outline-height");
 
-    // remove svg element whenthis.params updated
+    // remove svg element when this.params updated
     d3.select(el).select("svg").remove();
     const titleSpace = 20;
-    const axisXTitlePadding = this.params["axis-x-title_padding"];
-    const axisYTitlePadding = this.params["axis-y-title_padding"];
 
     const svg = d3
       .select(el)
       .append("svg")
-      .attr("width", width + margin.left + titleSpace + axisYTitlePadding)
-      .attr("height", height + margin.bottom + titleSpace + axisXTitlePadding);
+      .attr("width", width + margin + titleSpace + axisTitlePadding)
+      .attr("height", height + margin + titleSpace + axisTitlePadding);
 
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
       .attr(
         "transform",
-        `translate(${margin.left + titleSpace + axisYTitlePadding}, 0)`
+        `translate(${margin + titleSpace + axisTitlePadding}, 0)`
       );
 
     const xDataKey = this.params["axis-x-data_key"];
@@ -87,6 +89,7 @@ export default class Heatmap extends Stanza {
         )
       )
       .range([0, width - 10]);
+
     const xAxisGenerator = d3
       .axisBottom(x)
       .tickSizeOuter(0)
@@ -179,7 +182,7 @@ export default class Heatmap extends Stanza {
       .attr("text-anchor", "middle")
       .attr(
         "transform",
-        `translate(${width / 2}, ${height + margin.bottom + axisXTitlePadding})`
+        `translate(${width / 2}, ${height + margin + axisTitlePadding})`
       )
       .text(axisXTitle);
 
@@ -188,9 +191,7 @@ export default class Heatmap extends Stanza {
       .attr("text-anchor", "middle")
       .attr(
         "transform",
-        `translate(-${margin.left + axisYTitlePadding}, ${
-          height / 2
-        })rotate(-90)`
+        `translate(-${margin + axisTitlePadding}, ${height / 2})rotate(-90)`
       )
       .text(axisYTitle);
 
