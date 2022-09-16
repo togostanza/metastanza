@@ -220,6 +220,10 @@ export class OntologyCard extends LitElement {
     .ontology-card:hover {
       filter: brightness(0.98)
     }
+    
+    .children-arrow {
+      overflow: visible;
+    }
 
     .children-arrow:before {
       position: absolute;

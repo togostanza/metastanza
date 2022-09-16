@@ -31,6 +31,10 @@ export default class OntologyBrowserColumn extends LitElement {
       ontology-card:last-child {
         margin-bottom: 10px;
       }
+
+      ontology-card:first-child {
+        margin-top: 0;
+      }
     `;
   }
 
