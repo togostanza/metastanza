@@ -122,7 +122,6 @@ class Flip extends AsyncDirective {
       ],
       this.options
     );
-    // }
   }
 
   remove() {
