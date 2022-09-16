@@ -214,6 +214,7 @@ export class OntologyCard extends LitElement {
       width: min(85%, 20rem);
       max-width: 30rem;
       box-sizing: border-box;
+      overflow: hidden;
     }
 
     .ontology-card:hover {

@@ -38,13 +38,12 @@ class Flip extends AsyncDirective {
     this.scrolledHeroRect = scrolledHeroRect;
 
     // for column wich became hero, remove all other nodes from it
+    // TODO not working for now
     if (
       this.role === "hero" &&
       this.id !== this.heroId &&
       this.id !== "dummy"
     ) {
-      // then remove the element from the DOM with animation
-
       disconnectedRects.set(this.id, part.getBoundingClientRect());
       this.remove();
     }
