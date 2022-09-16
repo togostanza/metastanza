@@ -13,14 +13,14 @@ import {
 } from "togostanza-utils";
 
 //Declaring constants
-const ASCENDING = "ascending";
-const DESCENDING = "descending";
-const HORIZONTAL = "horizontal";
-const VERTICAL = "vertical";
-const RADIAL = "radial";
-const TRANSLUCENT = "translucent";
-const MULTIPLY = "multiply";
-const SCREEN = "screen";
+const ASCENDING = "ascending",
+  DESCENDING = "descending",
+  HORIZONTAL = "horizontal",
+  VERTICAL = "vertical",
+  RADIAL = "radial",
+  TRANSLUCENT = "translucent",
+  MULTIPLY = "multiply",
+  SCREEN = "screen";
 
 export default class Tree extends Stanza {
   //Stanza download menu contents
@@ -51,24 +51,23 @@ export default class Tree extends Stanza {
     this._data = values;
 
     appendCustomCss(this, this.params["misc-custom_css_url"]);
-    const width = parseInt(this.params["width"]);
-    const height = parseInt(this.params["height"]);
-    const orderKey = this.params["sort-key"];
-    const orderSort = this.params["sort-order"];
-    const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
-    const layout = this.params["layout"];
-    const nodeKey = this.params["node-label-key"];
-    const labelMargin = this.params["node-label-margin"];
-    const sizeKey = this.params["node-size-key"];
-    const minRadius = this.params["node-size-min"] / 2;
-    const maxRadius = this.params["node-size-max"] / 2;
-    const aveRadius = (minRadius + maxRadius) / 2;
-    const colorKey = this.params["color-key"];
-    const colorGroup = this.params["color-group"];
-    const colorMode = this.params["color-blend"];
+    const width = parseInt(this.params["width"]),
+      height = parseInt(this.params["height"]),
+      sortKey = this.params["sort-key"],
+      sortOrder = this.params["sort-order"],
+      isLeafNodesAlign = this.params["graph-align_leaf_nodes"],
+      layout = this.params["layout"],
+      nodeKey = this.params["node-label-key"],
+      labelMargin = this.params["node-label-margin"],
+      sizeKey = this.params["node-size-key"],
+      minRadius = this.params["node-size-min"] / 2,
+      maxRadius = this.params["node-size-max"] / 2,
+      aveRadius = (minRadius + maxRadius) / 2,
+      colorKey = this.params["color-key"],
+      colorGroup = this.params["color-group"],
+      colorMode = this.params["color-blend"];
 
-    let colorModeProperty;
-    let colorModeValue;
+    let colorModeProperty, colorModeValue;
     switch (colorMode) {
       case TRANSLUCENT:
         colorModeProperty = "opacity";
@@ -93,13 +92,22 @@ export default class Tree extends Stanza {
     root.append(this.tooltip);
 
     //Sorting by user keywords
+    const orderSym = Symbol("order");
+    values.forEach((value, index) => {
+      value[orderSym] = index;
+    });
+
     const reorder = (a, b) => {
-      if (a.data[orderKey] && b.data[orderKey]) {
-        switch (orderSort) {
+      if (a.data[sortKey] && b.data[sortKey]) {
+        switch (sortOrder) {
           case ASCENDING:
-            return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
+            return a.data[sortKey] > b.data[sortKey] ? 1 : -1;
           case DESCENDING:
-            return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
+            return a.data[sortKey] > b.data[sortKey] ? -1 : 1;
+        }
+      } else {
+        if (sortOrder === DESCENDING) {
+          return b.data[orderSym] - a.data[orderSym];
         }
       }
     };
