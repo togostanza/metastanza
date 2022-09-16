@@ -62,6 +62,9 @@ export default class OntologyBrowserColumn extends LitElement {
         this.idNodeMap.set(node.id, node);
       });
     }
+    if (changed.has("heroId")) {
+      this.previousHeroId = changed.get("heroId");
+    }
   }
 
   _handleClick(e) {
@@ -112,6 +115,7 @@ export default class OntologyBrowserColumn extends LitElement {
                     ${flip({
                       id: node.id,
                       heroId: this.heroId,
+                      previousHeroId: this.previousHeroId,
                       role: this.role,
                       scrolledHeroRect: this.scrolledHeroRect,
                       options: this.animationOptions,

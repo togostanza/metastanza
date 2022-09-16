@@ -27,22 +27,29 @@ class Flip extends AsyncDirective {
         options = {},
         heroId = undefined,
         scrolledHeroRect = null,
+        //previousHeroId = undefined,
       } = {},
     ]
   ) {
     this.id = id;
     this.role = role;
     this.heroId = heroId;
+
     this.scrolledHeroRect = scrolledHeroRect;
 
-    if (this.role === "hero" && this.id !== this.heroId) {
+    // for column wich became hero, remove all other nodes from it
+    if (
+      this.role === "hero" &&
+      this.id !== this.heroId &&
+      this.id !== "dummy"
+    ) {
       // then remove the element from the DOM with animation
-      requestAnimationFrame(() => {
-        this.boundingRect = { y: 0, x: 0, width: 0, height: 0 };
-        this.remove();
-      });
+
+      disconnectedRects.set(this.id, part.getBoundingClientRect());
+      this.remove();
     }
 
+    // for new nodes in non-hero columns, slide them from 0 to their positions
     if (this.role !== "hero" && !disconnectedRects.has(this.id)) {
       disconnectedRects.set(this.id, { y: 0, x: 0, width: 0, height: 0 });
     }
@@ -59,6 +66,7 @@ class Flip extends AsyncDirective {
         this.element.parentElement ||
         this.element.getRootNode().querySelector(".column");
     }
+
     // memorize boundingRect before element updates
     if (this.boundingRect) {
       this.boundingRect = this.element.getBoundingClientRect();
@@ -84,11 +92,9 @@ class Flip extends AsyncDirective {
 
     if (this.id === this.heroId) {
       previous = this.scrolledHeroRect;
-
-      this.boundingRect = this.element.parentElement.getBoundingClientRect();
-    } else {
-      this.boundingRect = this.element.getBoundingClientRect();
     }
+
+    this.boundingRect = this.element.getBoundingClientRect();
 
     const deltaY = (previous?.y || 0) - (this.boundingRect?.y || 0);
 
@@ -109,13 +115,9 @@ class Flip extends AsyncDirective {
       [
         {
           transform: `translate(0, ${deltaY}px)`,
-          position: this.id === this.heroId ? "absolute" : "relative",
-          width: `${this.boundingRect.width}px`,
         },
         {
           transform: `translate(0,0)`,
-          position: this.id === this.heroId ? "absolute" : "relative",
-          width: `${this.boundingRect.width}px`,
         },
       ],
       this.options
@@ -149,6 +151,9 @@ class Flip extends AsyncDirective {
   }
 
   disconnected() {
+    if (this.role === "hero") {
+      this.remove();
+    }
     this.boundingRect = this.element.getBoundingClientRect();
     if (typeof this.id !== "undefined") {
       disconnectedRects.set(this.id, this.boundingRect);

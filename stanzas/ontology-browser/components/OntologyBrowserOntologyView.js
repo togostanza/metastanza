@@ -210,9 +210,7 @@ export class OntologyBrowserView extends LitElement {
                     ? this.dataColumns[column]
                     : [{ id: "dummy", label: "dummy" }]}"
                   ${ref(this.nodeRef)}
-                  .heroId="${column === "hero"
-                    ? this.data.details?.id
-                    : undefined}"
+                  .heroId="${this.data.details?.id}"
                   .scrolledHeroRect="${this.scrolledRect}"
                   .animationOptions="${this.animationOptions}"
                 ></ontology-browser-column>

@@ -204,7 +204,7 @@ export class OntologyCard extends LitElement {
     }
 
     .ontology-card {
-      padding: 6px;
+      padding: 10px;
       font-family: var(--togostanza-font-family);
       border: 1px solid var(--togostanza-node-border-color);
       border-radius: 8px;
@@ -254,18 +254,10 @@ export class OntologyCard extends LitElement {
     .selected {
       background-color: var(--togostanza-node-bg-color-selected);
       border-color: var(--togostanza-node-border-color-selected);
-      padding-left: 10px;
-      padding-right: 10px;
-      max-height: 100%;
     }
 
     .hidden {
       visibility: hidden;
-    }
-
-    p.note {
-      margin: 0;
-      color: #94928d;
     }
 
     .table-container {
@@ -284,6 +276,7 @@ export class OntologyCard extends LitElement {
     table {
       width: 100%
       max-width: 10rem;
+      table-layout: fixed;
     }
 
     table td.key {
