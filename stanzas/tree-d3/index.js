@@ -53,17 +53,17 @@ export default class Tree extends Stanza {
     appendCustomCss(this, this.params["misc-custom_css_url"]);
     const width = parseInt(this.params["width"]);
     const height = parseInt(this.params["height"]);
-    const orderKey = this.params["order-data_key"];
-    const orderSort = this.params["order-sort"];
+    const orderKey = this.params["sort-key"];
+    const orderSort = this.params["sort-order"];
     const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
     const layout = this.params["layout"];
-    const nodeKey = this.params["node-label-data_key"];
+    const nodeKey = this.params["node-label-key"];
     const labelMargin = this.params["node-label-margin"];
-    const sizeKey = this.params["node-size-data_key"];
+    const sizeKey = this.params["node-size-key"];
     const minRadius = this.params["node-size-min"] / 2;
     const maxRadius = this.params["node-size-max"] / 2;
     const aveRadius = (minRadius + maxRadius) / 2;
-    const colorKey = this.params["color-data_key"];
+    const colorKey = this.params["color-key"];
     const colorGroup = this.params["color-group"];
     const colorMode = this.params["color-blend"];
 

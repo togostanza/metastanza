@@ -45,14 +45,14 @@
       "stanza:description": "Height in px"
     },
     {
-      "stanza:key": "order-data_key",
+      "stanza:key": "sort-key",
       "stanza:type": "text",
       "stanza:example": "id",
       "stanza:description": "sort data points by this data key",
       "stanza:required": false
     },
     {
-      "stanza:key": "order-sort",
+      "stanza:key": "sort-order",
       "stanza:type": "single-choice",
       "stanza:choice": ["ascending", "descending"],
       "stanza:example": "ascending",
@@ -72,7 +72,7 @@
       "stanza:description": "Tree layout"
     },
     {
-      "stanza:key": "node-label-data_key",
+      "stanza:key": "node-label-key",
       "stanza:type": "text",
       "stanza:example": "name",
       "stanza:description": "Data key in data to map labels",
@@ -86,7 +86,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "node-size-data_key",
+      "stanza:key": "node-size-key",
       "stanza:type": "text",
       "stanza:example": "size",
       "stanza:description": "Sets the size of the node circle based on the data key. If not set, the sizes will be the same.",
@@ -107,7 +107,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "color-data_key",
+      "stanza:key": "color-key",
       "stanza:type": "text",
       "stanza:example": "color",
       "stanza:description": "Set color on the node circle based on the data key.",
