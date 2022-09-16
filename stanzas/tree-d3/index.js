@@ -138,12 +138,26 @@ export default class Tree extends Stanza {
     };
 
     //Setting color scale
-    const setColor = new StanzaCirculateColorGenerator(
+    const colorDatas = [];
+    treeDescendants.forEach((d) => {
+      colorDatas.push(d.data);
+    });
+
+    const colorGenerator = new StanzaCirculateColorGenerator(
       this,
-      treeDescendants,
-      colorGroup,
-      colorKey
+      colorDatas,
+      colorGroup
     ).series;
+
+    const setColor = (d) => {
+      if (d.data[colorKey]) {
+        return d.data[colorKey];
+      } else {
+        return d.data[colorGroup]
+          ? colorGenerator.colorScale(d.data[colorGroup])
+          : colorGenerator.defaultColor;
+      }
+    };
 
     //Setting svg area
     const svg = d3
