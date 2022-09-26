@@ -128,7 +128,7 @@
       "stanza:description": "Blend mode for overlaying nodes"
     },
     {
-      "stanza:key": "tooltips-data_key",
+      "stanza:key": "tooltips-key",
       "stanza:type": "text",
       "stanza:example": "name",
       "stanza:description": "Data key to use as tooltip text",
