@@ -1,6 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
+import { StanzaInterpolateColorGenerator } from "@/lib/ColorGenerator";
 
 export default class ChordDiagram extends Stanza {
   async render() {
@@ -11,6 +12,7 @@ export default class ChordDiagram extends Stanza {
     const outerRadius = innerRadius + 6;
     const formatValue = (x) => `${x.toFixed(0)}B`;
 
+    //Drawing area
     const _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.root.querySelector("main").append(_svg);
     const svg = d3.select(_svg);
@@ -23,10 +25,12 @@ export default class ChordDiagram extends Stanza {
       this.root.querySelector("main")
     );
 
+    //Create a unique array of data keys
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
-    console.log(data);
+
+    //Immediate function to create a matrix for values between source and target
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
@@ -35,25 +39,33 @@ export default class ChordDiagram extends Stanza {
       }
       return matrix;
     })();
-    // console.log(matrix)
 
     // prepare some D3 objects
-    const color = {
-      count: names.length,
-      hue(index) {
-        return (1 / this.count) * index;
-      },
-      hsl(index) {
-        return `hsl(${this.hue(index)}turn, 70%, 60%)`;
-      },
-    };
+    // const color = {
+    //   count: names.length,
+    //   hue(index) {
+    //     return (1 / this.count) * index;
+    //   },
+    //   hsl(index) {
+    //     return `hsl(${this.hue(index)}turn, 70%, 60%)`;
+    //   },
+    // };
 
     // const color = d3.scaleOrdinal(names, d3.schemeCategory10)
+
+    //ColorGenerator
+    const setColor = new StanzaInterpolateColorGenerator(names.length);
+
+    //Create arrow ribbon generator with radius and padding angle
     const ribbon = d3
       .ribbonArrow()
       .radius(innerRadius - this.params["edge-offset"])
       .padAngle(1 / innerRadius);
+
+    //Create outer arc generator
     const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+
+    //Generate directed chord with matrix
     const chord = d3
       .chordDirected()
       .padAngle(this.params["arcs-gap"] / innerRadius)
@@ -84,7 +96,8 @@ export default class ChordDiagram extends Stanza {
       .join("path")
       .attr("d", ribbon)
       // .attr('fill', d => color(names[d.target.index]))
-      .attr("fill", (d) => color.hsl(d.target.index))
+      // .attr("fill", (d) => color.hsl(d.target.index))
+      .attr("fill", (d) => setColor.series(d.target.index))
       .append("title")
       .text(
         (d) =>
@@ -104,7 +117,8 @@ export default class ChordDiagram extends Stanza {
           .append("path")
           .attr("d", arc)
           // .attr('fill', d => color(names[d.index]))
-          .attr("fill", (d) => color.hsl(d.index))
+          // .attr("fill", (d) => color.hsl(d.index))
+          .attr("fill", (d) => setColor.series(d.index))
           .attr("stroke", "#fff")
       )
       .call((g) =>

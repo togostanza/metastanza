@@ -2,7 +2,7 @@ import Stanza from "togostanza/stanza";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import Legend from "@/lib/Legend";
-import { StanzaInterpolateColorGenerator } from "@/lib/ColorGenerator";
+import { StanzaGradationColorGenerator } from "@/lib/ColorGenerator";
 import * as d3 from "d3";
 const tooltipHTML = ({ group, variable, value }) =>
   `<span><strong>${group},${variable}: </strong>${value}</span>`;
@@ -34,7 +34,7 @@ export default class Heatmap extends Stanza {
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
-    const setColor = new StanzaInterpolateColorGenerator(this, [
+    const setColor = new StanzaGradationColorGenerator(this, [
       cellColorMin,
       cellColorMid,
       cellColorMax,
