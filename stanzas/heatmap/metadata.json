@@ -36,14 +36,14 @@
       "stanza:description": "custom css to apply"
     },
     {
-      "stanza:key": "axis-x-data_key",
+      "stanza:key": "axis-x-key",
       "stanza:type": "text",
       "stanza:example": "group",
       "stanza:description": "What key in data to use",
       "stanza:required": true
     },
     {
-      "stanza:key": "axis-y-data_key",
+      "stanza:key": "axis-y-key",
       "stanza:type": "text",
       "stanza:example": "variable",
       "stanza:description": "What key in data to use",
@@ -109,16 +109,6 @@
       "stanza:description": "X scale"
     },
     {
-      "stanza:key": "axis-x-range_min",
-      "stanza:type": "number",
-      "stanza:description": "Axis range min"
-    },
-    {
-      "stanza:key": "axis-x-range_max",
-      "stanza:type": "number",
-      "stanza:description": "Axis range max"
-    },
-    {
       "stanza:key": "axis-x-ticks_interval",
       "stanza:type": "number",
       "stanza:example": 1,
@@ -153,16 +143,6 @@
       "stanza:choice": ["linear", "log10", "ordinal"],
       "stanza:example": "ordinal",
       "stanza:description": "Y scale"
-    },
-    {
-      "stanza:key": "axis-y-range_min",
-      "stanza:type": "number",
-      "stanza:description": "Axis range min"
-    },
-    {
-      "stanza:key": "axis-y-range_max",
-      "stanza:type": "number",
-      "stanza:description": "Axis range max"
     },
     {
       "stanza:key": "axis-y-ticks_interval",

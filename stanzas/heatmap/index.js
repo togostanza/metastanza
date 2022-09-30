@@ -40,32 +40,37 @@ export default class Heatmap extends Stanza {
       cellColorMax,
     ]).series;
 
+    const axisTitlePadding = this.params["axis-title_padding"];
     const tickSize = +this.css("--togostanza-tick-size") || 0;
-    const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
-    const yLabelAngle = this.params["y-ticks_labels_angle"] || 0;
     const borderWidth = +this.css("--togostanza-border-width") || 0;
 
-    const axisTitlePadding = this.params["axis-title_padding"];
-
-    // set the dimensions and margins of the graph
+    //Margin between graph and title
+    //現在は文字の大きさでmarginを考えているが、y軸後方のlabelの最大幅を考えるようにしたい、treeを参照する
     const margin =
       +this.css("--togostanza-fonts-font_size_primary") +
       tickSize +
       axisTitlePadding;
 
+    //Width and height of GRAPH without coordinates
     const width = +this.css("--togostanza-outline-width"),
       height = +this.css("--togostanza-outline-height");
 
-    // remove svg element when this.params updated
+    //Remove svg element when this.params updated
     d3.select(el).select("svg").remove();
+
+    //titleSpaceが固定値だから、変更したい。おそらく文字の大きさで幅を考えているからだと思われる。
+    //y軸方向の最大の長さのlabelを取得すれば、解決されると考えられる
     const titleSpace = 20;
 
+    //Drawing area
     const svg = d3
       .select(el)
       .append("svg")
       .attr("width", width + margin + titleSpace + axisTitlePadding)
       .attr("height", height + margin + titleSpace + axisTitlePadding);
 
+    //Graph area including title
+    //transrateが無い場合はx軸が左上のrectからになる。座標が描画されない
     const graphArea = svg
       .append("g")
       .attr("class", "chart")
@@ -74,36 +79,25 @@ export default class Heatmap extends Stanza {
         `translate(${margin + titleSpace + axisTitlePadding}, 0)`
       );
 
-    const xDataKey = this.params["axis-x-data_key"];
-    const yDataKey = this.params["axis-y-data_key"];
+    //Parameters
+    const xDataKey = this.params["axis-x-key"];
+    const yDataKey = this.params["axis-y-key"];
+    const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
+    const yLabelAngle = this.params["y-ticks_labels_angle"] || 0;
 
+    //Create a unique array of row and column labels
     const rows = [...new Set(dataset.map((d) => d[xDataKey]))];
     const columns = [...new Set(dataset.map((d) => d[yDataKey]))];
 
-    const x = d3
-      .scaleBand()
-      .domain(
-        rows.slice(
-          this.params["axis-x-range_min"],
-          this.params["axis-x-range_max"]
-        )
-      )
-      .range([0, width - 10]);
-
+    //Set the x-axis direction
+    const x = d3.scaleBand().domain(rows).range([0, width]);
     const xAxisGenerator = d3
       .axisBottom(x)
       .tickSizeOuter(0)
       .tickSizeInner(tickSize);
 
-    const y = d3
-      .scaleBand()
-      .range([height, 0])
-      .domain(
-        columns.slice(
-          this.params["axis-y-range_min"],
-          this.params["axis-y-range_max"]
-        )
-      );
+    //Set the y-axis direction
+    const y = d3.scaleBand().domain(columns).range([0, height]);
     const yAxisGridGenerator = d3
       .axisLeft(y)
       .tickSizeOuter(0)
