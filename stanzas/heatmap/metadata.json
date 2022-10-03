@@ -133,7 +133,18 @@
     {
       "stanza:key": "axis-x-ticks_interval_units",
       "stanza:type": "single-choice",
-      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:choice": [
+        "none",
+        "ms",
+        "s",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year",
+        "century"
+      ],
       "stanza:example": "none",
       "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
     },
@@ -168,7 +179,18 @@
     {
       "stanza:key": "axis-y-ticks_interval_units",
       "stanza:type": "single-choice",
-      "stanza:choice": ["none", "ms", "s", "minute", "hour", "day", "week", "month", "year", "century"],
+      "stanza:choice": [
+        "none",
+        "ms",
+        "s",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year",
+        "century"
+      ],
       "stanza:example": "none",
       "stanza:description": "Units of the distance between neighbouring ticks. Ignore if scale is other than time scale"
     },
@@ -191,7 +213,7 @@
     {
       "stanza:key": "legend-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["top-left","top-right","bottom-left","bottom-right"],
+      "stanza:choice": ["top-left", "top-right", "bottom-left", "bottom-right"],
       "stanza:example": "top-right",
       "stanza:description": "Whether show the legend"
     },
@@ -222,16 +244,19 @@
     {
       "stanza:key": "cell-color-range_min",
       "stanza:type": "text",
+      "stanza:example": "#6590e6",
       "stanza:description": "Cell color range min"
     },
     {
       "stanza:key": "cell-color-range_mid",
       "stanza:type": "text",
+      "stanza:example": "#ffffff",
       "stanza:description": "Cell color range mid"
     },
     {
       "stanza:key": "cell-color-range_max",
       "stanza:type": "text",
+      "stanza:example": "#F75976",
       "stanza:description": "Cell color range max"
     }
   ],
