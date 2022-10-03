@@ -147,14 +147,14 @@ export default class Tree extends Stanza {
       this,
       colorDatas,
       colorGroup
-    ).series;
+    );
 
     const setColor = (d) => {
       if (d.data[colorKey]) {
         return d.data[colorKey];
       } else {
         return d.data[colorGroup]
-          ? colorGenerator.colorScale(d.data[colorGroup])
+          ? colorGenerator.getColor(d.data[colorGroup])
           : colorGenerator.defaultColor;
       }
     };
