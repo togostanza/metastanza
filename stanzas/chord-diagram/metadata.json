@@ -69,37 +69,37 @@
       "stanza:description": "Font size"
     },
     {
-      "stanza:key": "--togostanza-series-0-color",
+      "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--togostanza-series-1-color",
+      "stanza:key": "--togostanza-theme-series_1_color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
       "stanza:description": "Group color 1"
     },
     {
-      "stanza:key": "--togostanza-series-2-color",
+      "stanza:key": "--togostanza-theme-series_2_color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
       "stanza:description": "Group color 2"
     },
     {
-      "stanza:key": "--togostanza-series-3-color",
+      "stanza:key": "--togostanza-theme-series_3_color",
       "stanza:type": "color",
       "stanza:default": "#F5DA64",
       "stanza:description": "Group color 3"
     },
     {
-      "stanza:key": "--togostanza-series-4-color",
+      "stanza:key": "--togostanza-theme-series_4_color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Group color 4"
     },
     {
-      "stanza:key": "--togostanza-series-5-color",
+      "stanza:key": "--togostanza-theme-series_5_color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Group color 5"
