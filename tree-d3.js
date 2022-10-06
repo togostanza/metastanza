@@ -32,17 +32,17 @@ import './basis-0dde91c7.js';
 import './stack-322237e7.js';
 
 //Declaring constants
-const ASCENDING = "ascending";
-const DESCENDING = "descending";
-const HORIZONTAL = "horizontal";
-const VERTICAL = "vertical";
-const RADIAL = "radial";
-const TRANSLUCENT = "translucent";
-const MULTIPLY = "multiply";
-const SCREEN = "screen";
+const ASCENDING = "ascending",
+  DESCENDING = "descending",
+  HORIZONTAL = "horizontal",
+  VERTICAL = "vertical",
+  RADIAL = "radial",
+  TRANSLUCENT = "translucent",
+  MULTIPLY = "multiply",
+  SCREEN = "screen";
 
-//Stanza download menu contents
 class Tree extends Stanza {
+  //Stanza download menu contents
   menu() {
     return [
       downloadSvgMenuItem(this, "tree"),
@@ -70,24 +70,23 @@ class Tree extends Stanza {
     this._data = values;
 
     appendCustomCss(this, this.params["misc-custom_css_url"]);
-    const width = parseInt(this.params["width"]);
-    const height = parseInt(this.params["height"]);
-    const orderKey = this.params["order-data_key"];
-    const orderSort = this.params["order-sort"];
-    const isLeafNodesAlign = this.params["graph-align_leaf_nodes"];
-    const layout = this.params["layout"];
-    const nodeKey = this.params["node-label-data_key"];
-    const labelMargin = this.params["node-label-margin"];
-    const sizeKey = this.params["node-size-data_key"];
-    const minRadius = this.params["node-size-min"] / 2;
-    const maxRadius = this.params["node-size-max"] / 2;
-    const aveRadius = (minRadius + maxRadius) / 2;
-    const colorKey = this.params["color-data_key"];
-    const colorGroup = this.params["color-group"];
-    const colorMode = this.params["color-blend"];
+    const width = parseInt(this.params["width"]),
+      height = parseInt(this.params["height"]),
+      sortKey = this.params["sort-key"],
+      sortOrder = this.params["sort-order"],
+      isLeafNodesAlign = this.params["graph-align_leaf_nodes"],
+      layout = this.params["layout"],
+      nodeKey = this.params["node-label-key"],
+      labelMargin = this.params["node-label-margin"],
+      sizeKey = this.params["node-size-key"],
+      minRadius = this.params["node-size-min"] / 2,
+      maxRadius = this.params["node-size-max"] / 2,
+      aveRadius = (minRadius + maxRadius) / 2,
+      colorKey = this.params["color-key"],
+      colorGroup = this.params["color-group"],
+      colorMode = this.params["color-blend"];
 
-    let colorModeProperty;
-    let colorModeValue;
+    let colorModeProperty, colorModeValue;
     switch (colorMode) {
       case TRANSLUCENT:
         colorModeProperty = "opacity";
@@ -110,13 +109,22 @@ class Tree extends Stanza {
     root.append(this.tooltip);
 
     //Sorting by user keywords
+    const orderSym = Symbol("order");
+    values.forEach((value, index) => {
+      value[orderSym] = index;
+    });
+
     const reorder = (a, b) => {
-      if (a.data[orderKey] && b.data[orderKey]) {
-        switch (orderSort) {
+      if (a.data[sortKey] && b.data[sortKey]) {
+        switch (sortOrder) {
           case ASCENDING:
-            return a.data[orderKey] > b.data[orderKey] ? 1 : -1;
+            return a.data[sortKey] > b.data[sortKey] ? 1 : -1;
           case DESCENDING:
-            return a.data[orderKey] > b.data[orderKey] ? -1 : 1;
+            return a.data[sortKey] > b.data[sortKey] ? -1 : 1;
+        }
+      } else {
+        if (sortOrder === DESCENDING) {
+          return b.data[orderSym] - a.data[orderSym];
         }
       }
     };
@@ -419,6 +427,12 @@ class Tree extends Stanza {
             update(d);
           });
 
+        //Update circle color when opening and closing
+        nodeCirclesUpdate
+          .filter((d) => d === source)
+          .select("circle")
+          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+
         //Decorate circle
         nodeCirclesEnter
           .append("circle")
@@ -431,7 +445,7 @@ class Tree extends Stanza {
               ? nodeRadius(d.data[sizeKey])
               : parseFloat(aveRadius)
           )
-          .attr("fill", (d) => (d._children ? "#fff" : setColor(d)));
+          .attr("fill", setColor);
 
         //Drawing labels
         const nodeLabelsUpdate = gLabels
@@ -729,14 +743,14 @@ var metadata = {
 		"stanza:description": "Height in px"
 	},
 	{
-		"stanza:key": "order-data_key",
+		"stanza:key": "sort-key",
 		"stanza:type": "text",
 		"stanza:example": "id",
 		"stanza:description": "sort data points by this data key",
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "order-sort",
+		"stanza:key": "sort-order",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
 			"ascending",
@@ -763,7 +777,7 @@ var metadata = {
 		"stanza:description": "Tree layout"
 	},
 	{
-		"stanza:key": "node-label-data_key",
+		"stanza:key": "node-label-key",
 		"stanza:type": "text",
 		"stanza:example": "name",
 		"stanza:description": "Data key in data to map labels",
@@ -777,7 +791,7 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "node-size-data_key",
+		"stanza:key": "node-size-key",
 		"stanza:type": "text",
 		"stanza:example": "size",
 		"stanza:description": "Sets the size of the node circle based on the data key. If not set, the sizes will be the same.",
@@ -798,7 +812,7 @@ var metadata = {
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "color-data_key",
+		"stanza:key": "color-key",
 		"stanza:type": "text",
 		"stanza:example": "color",
 		"stanza:description": "Set color on the node circle based on the data key.",
@@ -824,7 +838,7 @@ var metadata = {
 		"stanza:description": "Blend mode for overlaying nodes"
 	},
 	{
-		"stanza:key": "tooltips-data_key",
+		"stanza:key": "tooltips-key",
 		"stanza:type": "text",
 		"stanza:example": "name",
 		"stanza:description": "Data key to use as tooltip text",
