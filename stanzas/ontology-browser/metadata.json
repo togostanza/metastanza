@@ -90,6 +90,13 @@
       "stanza:example": "name",
       "stanza:description": "JSON path to node children array,  separated by dot '.' (e.g. 'data.relations.children')",
       "stanza:required": false
+    },
+    {
+      "stanza:key": "show_history",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Whether to show history of navigation",
+      "stanza:required": false
     }
   ],
   "stanza:menu-placement": "bottom-right",

@@ -293,11 +293,13 @@ export class OntologyBrowser extends LitElement {
       ></ontology-browser-text-search> -->
 
       <div class="container">
-        <ontology-browser-path
-          @history-clicked="${this._handleHistoryClick}"
-          .path=${this.pathArray}
-        >
-        </ontology-browser-path>
+        ${this.showHistory
+          ? html`<ontology-browser-path
+              @history-clicked="${this._handleHistoryClick}"
+              .path=${this.pathArray}
+            >
+            </ontology-browser-path>`
+          : nothing}
         ${this.loading
           ? html`<div class="spinner">
               <img src="${loaderPNG}"></img>
