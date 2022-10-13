@@ -71,7 +71,7 @@ export function getByPath(object, path) {
 }
 
 export function camelize(s) {
-  return s.replace(/-./g, (x) => x[1].toUpperCase());
+  return s.replace(/[-_]./g, (x) => x[1].toUpperCase());
 }
 
 export function mapJsonToProps(json) {

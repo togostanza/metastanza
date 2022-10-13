@@ -13,7 +13,7 @@
   "stanza:updated": "2022-09-06",
   "stanza:parameter": [
     {
-      "stanza:key": "api-endpoint",
+      "stanza:key": "api_endpoint",
       "type": "string",
       "stanza:example_old": "https://togovar.biosciencedbc.jp/api/inspect/disease?node=<>",
       "stanza:example": "https://hpo.jax.org/api/hpo/term/<>",
@@ -21,7 +21,7 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "initial-id",
+      "stanza:key": "initial_id",
       "type": "string",
       "stanza:example_old": "MONDO_0005709",
       "stanza:example": "HP:0001168",
@@ -95,63 +95,28 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-series-0-color",
-      "stanza:type": "color",
-      "stanza:default": "#6590e6",
-      "stanza:description": "Group color 0"
-    },
-    {
-      "stanza:key": "--togostanza-series-1-color",
-      "stanza:type": "color",
-      "stanza:default": "#3ac9b6",
-      "stanza:description": "Group color 1"
-    },
-    {
-      "stanza:key": "--togostanza-series-2-color",
-      "stanza:type": "color",
-      "stanza:default": "#9ede2f",
-      "stanza:description": "Group color 2"
-    },
-    {
-      "stanza:key": "--togostanza-series-3-color",
-      "stanza:type": "color",
-      "stanza:default": "#F5DA64",
-      "stanza:description": "Group color 3"
-    },
-    {
-      "stanza:key": "--togostanza-series-4-color",
-      "stanza:type": "color",
-      "stanza:default": "#F57F5B",
-      "stanza:description": "Group color 4"
-    },
-    {
-      "stanza:key": "--togostanza-series-5-color",
-      "stanza:type": "color",
-      "stanza:default": "#F75976",
-      "stanza:description": "Group color 5"
-    },
-    {
       "stanza:key": "--togostanza-font-family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
     },
+
     {
-      "stanza:key": "--togostanza-font-size",
-      "stanza:type": "text",
-      "stanza:default": "12px",
-      "stanza:description": "Font Size"
-    },
-    {
-      "stanza:key": "--togostanza-label-font-color",
+      "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
       "stanza:description": "Label font color"
     },
     {
-      "stanza:key": "--togostanza-label-font-size",
-      "stanza:type": "number",
-      "stanza:default": 10,
+      "stanza:key": "--togostanza-fonts-font_size_primary",
+      "stanza:type": "text",
+      "stanza:default": "10px",
+      "stanza:description": "Label font size"
+    },
+    {
+      "stanza:key": "--togostanza-fonts-font_size_secondary",
+      "stanza:type": "text",
+      "stanza:default": "8px",
       "stanza:description": "Label font size"
     },
 
@@ -162,13 +127,13 @@
       "stanza:description": "Stanza height"
     },
     {
-      "stanza:key": "--togostanza-node-border-color",
+      "stanza:key": "--togostanza-border-color",
       "stanza:type": "color",
       "stanza:default": "#9b9ca1",
       "stanza:description": "Border color"
     },
     {
-      "stanza:key": "--togostanza-node-border-color-selected",
+      "stanza:key": "--togostanza-border-color-selected",
       "stanza:type": "color",
       "stanza:default": "#1f9dad",
       "stanza:description": "Selected border color"

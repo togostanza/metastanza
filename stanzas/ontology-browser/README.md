@@ -4,12 +4,12 @@ Animated ontology browser wich can be used with almost any ontology API.
 
 ### Parameters
 
-#### `api-endpoint`
+#### `api_endpoint`
 
 API endpoint with placeholder (`<>`) for id.
 Node information will be fetched by replacing the placeholder with clicked node `id`.
 
-#### `initial-id`
+#### `initial_id`
 
 Initial node id to display at load time.
 

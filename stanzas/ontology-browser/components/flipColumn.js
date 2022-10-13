@@ -38,7 +38,7 @@ class Flip extends AsyncDirective {
     this.scrolledHeroRect = scrolledHeroRect;
 
     // for column wich became hero, remove all other nodes from it
-    // TODO not working for now
+    // TODO not working for now (deleting nodes with animation)
     if (
       this.role === "hero" &&
       this.id !== this.heroId &&
@@ -91,6 +91,9 @@ class Flip extends AsyncDirective {
 
     if (this.id === this.heroId) {
       previous = this.scrolledHeroRect;
+      this.boundingRect = this.element.parentElement.getBoundingClientRect();
+    } else {
+      this.boundingRect = this.element.getBoundingClientRect();
     }
 
     this.boundingRect = this.element.getBoundingClientRect();
@@ -151,6 +154,7 @@ class Flip extends AsyncDirective {
   disconnected() {
     if (this.role === "hero") {
       this.remove();
+      return;
     }
     this.boundingRect = this.element.getBoundingClientRect();
     if (typeof this.id !== "undefined") {

@@ -11,6 +11,7 @@ import {
 
 import "./OntologyBrowserOntologyView";
 import "./OntologyBrowserError";
+import "./OntologyBrowserPath.js";
 
 export class OntologyBrowser extends LitElement {
   static get styles() {
@@ -22,7 +23,9 @@ export class OntologyBrowser extends LitElement {
       }
 
       .container {
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
       }
 
       .spinner {
@@ -68,6 +71,14 @@ export class OntologyBrowser extends LitElement {
         type: Array,
         state: true,
       },
+      pathArray: {
+        type: Array,
+        state: true,
+      },
+      activeNode: {
+        type: Object,
+        state: true,
+      },
     };
   }
 
@@ -84,6 +95,10 @@ export class OntologyBrowser extends LitElement {
     this.apiEndpoint = "";
     this.error = { message: "", isError: false };
     this.showKeys = ["id", "label"];
+    this.pathArray = [];
+    this.activeNode = {};
+
+    this.historyClicked = false;
 
     this.API = new cachedAxios();
   }
@@ -94,8 +109,8 @@ export class OntologyBrowser extends LitElement {
 
       applyConstructor.call(this, params);
 
-      this.showKeys = this.nodeDetails_show_keys
-        ? this.nodeDetails_show_keys.split(",").map((key) => key.trim())
+      this.showKeys = this.nodeDetailsShowKeys
+        ? this.nodeDetailsShowKeys.split(",").map((key) => key.trim())
         : [];
 
       this.error = { message: "", isError: false };
@@ -123,6 +138,15 @@ export class OntologyBrowser extends LitElement {
           role: this.clickedRole,
           ...this._getDataObject(data),
         };
+
+        this.activeNode = {
+          id: this.data.details.id,
+          label: this.data.details.label,
+        };
+
+        if (!this.historyClicked) {
+          this.pathArray = [...this.pathArray, this.activeNode];
+        }
       })
       .catch((e) => {
         console.error(e);
@@ -134,6 +158,7 @@ export class OntologyBrowser extends LitElement {
   }
 
   willUpdate(changed) {
+    console.log("this.historyClicked", this.historyClicked);
     if (
       (changed.has("diseaseId") || changed.has("apiEndpoint")) &&
       this.diseaseId
@@ -141,34 +166,41 @@ export class OntologyBrowser extends LitElement {
       this.error = { message: "", isError: false };
       this._loadData();
     }
+    if (changed.has("pathArray")) {
+      if (this.pathArray.length > 10) {
+        this.pathArray = this.pathArray.slice(1);
+      }
+    }
   }
 
   firstUpdated() {
     this._loadingStarted();
     this.diseaseId = this.initialId;
   }
+  _handleHistoryClick({ detail: { id } }) {
+    this.historyClicked = true;
+    this.diseaseId = id;
+  }
 
   _getDataObject(incomingData) {
     //validate
-    const nodeIdVal = getByPath(incomingData, this.nodeId_path);
+    console.log(incomingData);
+    const nodeIdVal = getByPath(incomingData, this.nodeIdPath);
     if (!nodeIdVal) {
       throw new Error("Node id path is not valid");
     }
-    const nodeLabelVal = getByPath(incomingData, this.nodeLabel_path);
+    const nodeLabelVal = getByPath(incomingData, this.nodeLabelPath);
     if (!nodeLabelVal) {
       throw new Error("Node label path is not valid");
     }
-    const childrenArr = getByPath(
-      incomingData,
-      this.nodeRelationsChildren_path
-    );
+    const childrenArr = getByPath(incomingData, this.nodeRelationsChildrenPath);
 
     if (childrenArr instanceof Array) {
       if (childrenArr.length > 0) {
-        if (!childrenArr.some((item) => item[this.nodeRelationsId_key])) {
+        if (!childrenArr.some((item) => item[this.nodeRelationsIdKey])) {
           throw new Error("Path to node children id is not valid ");
         }
-        if (!childrenArr.some((item) => item[this.nodeRelationsLabel_key])) {
+        if (!childrenArr.some((item) => item[this.nodeRelationsLabelKey])) {
           throw new Error("Path to node children label is not valid ");
         }
       }
@@ -176,14 +208,14 @@ export class OntologyBrowser extends LitElement {
       throw new Error("Path to node children is not valid ");
     }
 
-    const parentsArr = getByPath(incomingData, this.nodeRelationsParents_path);
+    const parentsArr = getByPath(incomingData, this.nodeRelationsParentsPath);
 
     if (parentsArr instanceof Array) {
       if (parentsArr.length > 0) {
-        if (!parentsArr.some((item) => item[this.nodeRelationsId_key])) {
+        if (!parentsArr.some((item) => item[this.nodeRelationsIdKey])) {
           throw new Error("Path to node children id is not valid ");
         }
-        if (!parentsArr.some((item) => item[this.nodeRelationsLabel_key])) {
+        if (!parentsArr.some((item) => item[this.nodeRelationsLabelKey])) {
           throw new Error("Path to node children label is not valid ");
         }
       }
@@ -193,7 +225,7 @@ export class OntologyBrowser extends LitElement {
 
     return {
       details: {
-        ...getByPath(incomingData, this.nodeDetails_path),
+        ...getByPath(incomingData, this.nodeDetailsPath),
         id: nodeIdVal,
         label: nodeLabelVal,
         showDetailsKeys: this.showKeys,
@@ -201,13 +233,13 @@ export class OntologyBrowser extends LitElement {
       relations: {
         children: childrenArr.map((item) => ({
           ...item,
-          id: item[this.nodeRelationsId_key],
-          label: item[this.nodeRelationsLabel_key],
+          id: item[this.nodeRelationsIdKey],
+          label: item[this.nodeRelationsLabelKey],
         })),
         parents: parentsArr.map((item) => ({
           ...item,
-          id: item[this.nodeRelationsId_key],
-          label: item[this.nodeRelationsLabel_key],
+          id: item[this.nodeRelationsIdKey],
+          label: item[this.nodeRelationsLabelKey],
         })),
       },
     };
@@ -219,13 +251,14 @@ export class OntologyBrowser extends LitElement {
 
   _changeDiseaseEventHadnler(e) {
     e.stopPropagation();
+    this.historyClicked = false;
     this.diseaseId = e.detail.id;
     this.clickedRole = e.detail.role;
     this._loadingStarted();
 
     this.updateComplete.then(() => {
       this.dispatchEvent(
-        new CustomEvent("disease-selected", {
+        new CustomEvent("ontology-node-changed", {
           // here we can pass any data to the event through this.data
           detail: {
             id: e.detail.id,
@@ -258,7 +291,13 @@ export class OntologyBrowser extends LitElement {
       <!-- <ontology-browser-text-search
         @input="${debounce(this._keyup, 300)}"
       ></ontology-browser-text-search> -->
+
       <div class="container">
+        <ontology-browser-path
+          @history-clicked="${this._handleHistoryClick}"
+          .path=${this.pathArray}
+        >
+        </ontology-browser-path>
         ${this.loading
           ? html`<div class="spinner">
               <img src="${loaderPNG}"></img>

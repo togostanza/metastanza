@@ -18,22 +18,9 @@ export default class OntologyBrowserColumn extends LitElement {
 
       .column {
         height: 100%;
-        flex-direction: column;
         position: relative;
         overflow-y: auto;
         overflow-x: hidden;
-      }
-
-      ontology-card {
-        margin-top: 6px;
-      }
-
-      ontology-card:last-child {
-        margin-bottom: 10px;
-      }
-
-      ontology-card:first-child {
-        margin-top: 0;
       }
     `;
   }
