@@ -7,12 +7,23 @@ class OntologyPath extends LitElement {
     super();
     this.path = [];
     this._container = createRef();
+    this.selectedNodeId = "";
   }
 
   static get styles() {
     return css`
+      .container {
+        padding: 0.2em;
+        border-radius: 5px;
+        border: 1px solid var(--togostanza-border-color);
+      }
+
+      .path-header {
+        font-size: var(--togostanza-fonts-font_size_primary);
+        margin: 0;
+      }
+
       .path-container {
-        background-color: #ccc;
         white-space: nowrap;
         overflow-x: scroll;
         display: flex;
@@ -46,6 +57,7 @@ class OntologyPath extends LitElement {
   static get properties() {
     return {
       path: { type: Array, state: true },
+      selectedNodeId: { type: String, state: true },
     };
   }
 
@@ -73,19 +85,22 @@ class OntologyPath extends LitElement {
 
   render() {
     return html`
-      <div
-        class="path-container"
-        @click="${this._nodeClickHandler}"
-        ${ref(this._container)}
-      >
-        ${map(this.path, (node, i) => {
-          const id = `${node.id}-${i}`;
-          return html`<span
-            id="${id}"
-            class="node ${id === this.selectedNodeId && "-active"}"
-            >${node.label}</span
-          >`;
-        })}
+      <div class="container">
+        <h2 class="path-header">History</h2>
+        <div
+          class="path-container"
+          @click="${this._nodeClickHandler}"
+          ${ref(this._container)}
+        >
+          ${map(this.path, (node, i) => {
+            const id = `${node.id}-${i}`;
+            return html`<span
+              id="${id}"
+              class="node ${id === this.selectedNodeId ? "-active" : ""}"
+              >${node.label}</span
+            >`;
+          })}
+        </div>
       </div>
     `;
   }
