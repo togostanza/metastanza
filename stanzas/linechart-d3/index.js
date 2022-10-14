@@ -31,8 +31,6 @@ export default class Linechart extends Stanza {
   async render() {
     this._hideError();
 
-    //const existingLegend = this.root.querySelector("togostanza--legend2");
-
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -42,15 +40,13 @@ export default class Linechart extends Stanza {
     //data
     let xKeyName = this._validatedParams.get("axis-x-data_key").value;
     let yKeyName = this._validatedParams.get("axis-y-data_key").value;
-    const xAxisTitle = this._validatedParams.get("axis-x-title").value; //this.params["x-axis-title"] || "";
+    const xAxisTitle = this._validatedParams.get("axis-x-title").value;
     const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
     const hideXAxis = this._validatedParams.get("axis-x-hide").value;
     const hideYAxis = this._validatedParams.get("axis-y-hide").value;
     const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
     const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
-
     const showPoints = this._validatedParams.get("chart-points-show").value;
-
     const pointsSize = this._validatedParams.get("chart-points-size").value;
     const showErrorBars = this._validatedParams.get(
       "chart-error_bars-show"
@@ -101,10 +97,7 @@ export default class Linechart extends Stanza {
 
     const showXPreview = this._validatedParams.get("axis-x-preview").value;
     const showYPreview = this._validatedParams.get("axis-y-preview").value;
-
-    //const yAxisPlacement = this._validatedParams.get("axis-y-placement").value;
     const showLegend = this._validatedParams.get("legend-show").value;
-
     const legendPosition = this._validatedParams.get("legend-placement").value;
 
     const xAxisTicksIntervalUnits = this._validatedParams.get(
@@ -234,6 +227,7 @@ export default class Linechart extends Stanza {
     if (groupKeyName && this._data.some((d) => d[groupKeyName])) {
       this._groupedData = this._data.reduce((acc, d) => {
         const group = d[groupKeyName];
+
         if (
           this.xScale !== "ordinal" &&
           (isNaN(d[xKeyName]) || isNaN(d[yKeyName]))
@@ -247,13 +241,23 @@ export default class Linechart extends Stanza {
             id: uuidv4(),
             color: color(d[groupingColorKey]),
             show: true,
-            data: [{ x: d[xKeyName], y: d[yKeyName] }],
+            data: [
+              {
+                x: d[xKeyName],
+                y: d[yKeyName],
+                error: d[errorKeyName],
+              },
+            ],
           });
           this._groups.push(group);
           this._groupByNameMap.set(group, acc[acc.length - 1]);
         } else {
           if (d[xKeyName] && d[yKeyName]) {
-            acc[groupIndex].data.push({ x: d[xKeyName], y: d[yKeyName] });
+            acc[groupIndex].data.push({
+              x: d[xKeyName],
+              y: d[yKeyName],
+              error: d[errorKeyName],
+            });
           }
         }
         return acc;
@@ -268,7 +272,11 @@ export default class Linechart extends Stanza {
           data: this._data
             .map((d) => {
               if (d[yKeyName] && d[yKeyName]) {
-                return { x: d[xKeyName], y: d[yKeyName] };
+                return {
+                  x: d[xKeyName],
+                  y: d[yKeyName],
+                  error: d[errorKeyName],
+                };
               }
             })
             .filter((d) => d),
@@ -384,15 +392,15 @@ export default class Linechart extends Stanza {
         if (showErrorBars) {
           const mins = this._currentData.map((d) => {
             return d.data.map((d) => {
-              const error = [d.y * 0.9, d.y * 1.1];
-              return error[0];
+              // const error = d[errorKeyName];
+              return d.error[0];
             });
           });
 
           const maxs = this._currentData.map((d) => {
             return d.data.map((d) => {
-              const error = [d.y * 0.9, d.y * 1.1];
-              return error[1];
+              // const error = d[errorKeyName];
+              return d.error[1];
             });
           });
 
@@ -508,8 +516,6 @@ export default class Linechart extends Stanza {
         .append("g")
         .attr("class", "error-bars")
         .attr("clip-path", "url(#clip)");
-
-      // let yAxis, yAxisX, yAxisY;
 
       let xExtent, yExtent;
 
@@ -1105,16 +1111,12 @@ export default class Linechart extends Stanza {
           nodes.each(function (d) {
             const errorG = d3.select(this);
 
-            errorG
-              .select("path.vertical")
-              .attr("d", errorVertical(d, [d.y * 0.9, d.y * 1.1]));
+            errorG.select("path.vertical").attr("d", errorVertical(d, d.error));
 
-            errorG
-              .select("path.top")
-              .attr("d", errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]));
+            errorG.select("path.top").attr("d", errorHorizontalTop(d, d.error));
             errorG
               .select("path.bottom")
-              .attr("d", errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]));
+              .attr("d", errorHorizontalBottom(d, d.error));
           });
         }
 
@@ -1143,17 +1145,17 @@ export default class Linechart extends Stanza {
 
           errorBarEnter
             .append("path")
-            .attr("d", (d) => errorVertical(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("d", (d) => errorVertical(d, d.error))
             .attr("class", "vertical");
 
           errorBarEnter
             .append("path")
-            .attr("d", (d) => errorHorizontalTop(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("d", (d) => errorHorizontalTop(d, d.error))
             .attr("class", "top");
 
           errorBarEnter
             .append("path")
-            .attr("d", (d) => errorHorizontalBottom(d, [d.y * 0.9, d.y * 1.1]))
+            .attr("d", (d) => errorHorizontalBottom(d, d.error))
             .attr("class", "bottom");
 
           errorBarUpdate
