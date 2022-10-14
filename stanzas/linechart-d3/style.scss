@@ -8,6 +8,7 @@
   width: var(--togostanza-outline-width);
   height: var(--togostanza-outline-height);
   padding: var(--togostanza-outline-padding);
+  background-color: var(--togostanza-background-color);
 }
 
 .legend-right {
@@ -128,11 +129,6 @@ svg {
     stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
     opacity: var(--togostanza-errorbar-line-opacity);
   }
-}
-main {
-  background-color: var(--togostanza-background-color);
-  border: calc(var(--togostanza-border-width) * 1px) solid
-    var(--togostanza-border-color);
 }
 
 .-off {
