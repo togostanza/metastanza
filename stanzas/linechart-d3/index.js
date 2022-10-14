@@ -538,9 +538,6 @@ export default class Linechart extends Stanza {
         .tickSize(-chartWidth)
         .tickFormat("");
 
-      //setXAxes();
-      //setYAxes();
-
       if (this.xScale === "linear") {
         try {
           xAxis.tickFormat(d3.format(xAxisTicksFormat));
@@ -569,10 +566,8 @@ export default class Linechart extends Stanza {
             ticks.push(i);
           }
           xAxis.tickValues(ticks);
-          // xAxisX.tickValues(ticks);
         } else {
           xAxis.ticks(xTicksNumber);
-          // xAxisX.ticks(xTicksNumber);
         }
         try {
           xAxis.tickFormat(xAxisTicksFormat);
@@ -612,10 +607,8 @@ export default class Linechart extends Stanza {
           const interval =
             intervalMap[xAxisTicksIntervalUnits]().every(xTicksInterval);
           xAxis.ticks(interval);
-          // xAxisX.ticks(interval);
         } else {
           xAxis.ticks(xTicksNumber);
-          // xAxisX.ticks(xTicksNumber);
         }
       } else {
         try {
@@ -797,7 +790,7 @@ export default class Linechart extends Stanza {
             .attr("d", (d) => linePreviewX(d.data))
             .attr("stroke", (d) => d.color);
 
-          const previewLinesExit = previewLinesUpdate.exit().remove();
+          previewLinesUpdate.exit().remove();
         }
 
         if (showYPreview) {
@@ -819,7 +812,7 @@ export default class Linechart extends Stanza {
             .attr("d", (d) => linePreviewY(d.data))
             .attr("stroke", (d) => d.color);
 
-          const previewLinesExit = previewLinesUpdate.exit().remove();
+          previewLinesUpdate.exit().remove();
         }
 
         const interpolator = {};
@@ -1176,8 +1169,6 @@ export default class Linechart extends Stanza {
         };
 
         const updateRange = (data) => {
-          //chartAreaGroup.selectAll(".line").remove();
-
           const linesUpdate = chartAreaGroup
             .selectAll(".line")
             .data(data, (d) => d.id);
