@@ -132,9 +132,6 @@ export default class Linechart extends Stanza {
       "data_grouping-group_by_data_key"
     ).value;
 
-    const axisXRangeMin = this._validatedParams.get("axis-x-range_min").value;
-    const axisXRangeMax = this._validatedParams.get("axis-x-range_min").value;
-
     const axisYRangeMin = this._validatedParams.get("axis-y-range_min").value;
     const axisYRangeMax = this._validatedParams.get("axis-y-range_max").value;
 
@@ -303,6 +300,7 @@ export default class Linechart extends Stanza {
       this.legend.remove();
     }
 
+    // Add legend, after rendering, so we know its width
     requestAnimationFrame(() => {
       const legendRect = this.legend?.getBoundingClientRect();
       if (
@@ -535,7 +533,6 @@ export default class Linechart extends Stanza {
         .tickSize(-chartHeight)
         .tickFormat("");
 
-      console.log(chartHeight);
       const yAxisGrid = d3
         .axisLeft(this._scaleY)
         .tickSize(-chartWidth)
@@ -594,7 +591,6 @@ export default class Linechart extends Stanza {
         }
 
         if (showXGridlines) {
-          console.log("gridlines");
           if (
             xGridInterval &&
             xAxisGridIntervalUnits &&
@@ -646,11 +642,8 @@ export default class Linechart extends Stanza {
             for (let i = yExtent[0]; i <= yExtent[1]; i = i + yGridInterval) {
               ticks.push(i);
             }
-            console.log("ticks", ticks);
             yAxisGrid.tickValues(ticks);
-            console.log(yAxisGrid.tickValues());
           } else {
-            console.log("yGridNumber", yGridNumber);
             yAxisGrid.ticks(yGridNumber);
           }
         }
@@ -1267,7 +1260,6 @@ export default class Linechart extends Stanza {
         let brushY;
 
         if (showXPreview) {
-          console.log("previewXHeight", previewXHeight);
           brushX = d3
             .brushX()
             .extent([
