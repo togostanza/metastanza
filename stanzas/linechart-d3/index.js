@@ -994,10 +994,11 @@ export default class Linechart extends Stanza {
           const s = e.selection || this._previewYScaleY.range();
 
           previewYArea.select(".top").attr("height", Math.min(...s));
+
           previewYArea
             .select(".bottom")
-            .attr("height", previewYHeight - Math.max(...s))
-            .attr("y", Math.max(...s));
+            .attr("y", Math.max(...s))
+            .attr("height", previewYHeight - Math.max(...s));
 
           const y0y1 = s.map(this._previewYScaleY.invert, this._previewYScaleY);
 
@@ -1266,11 +1267,13 @@ export default class Linechart extends Stanza {
             .attr("x", 0)
             .attr("y", 0)
             .attr("height", previewXHeight);
+
           previewXArea
             .append("rect")
             .attr("class", "non-selection right")
             .attr("y", 0)
             .attr("height", previewXHeight);
+
           previewXArea.call(brushX).call(brushX.move, this._scaleX.range());
         }
         if (showYPreview) {
@@ -1295,7 +1298,12 @@ export default class Linechart extends Stanza {
             .attr("x", 0)
             .attr("width", previewYWidth);
 
-          previewYArea.call(brushY).call(brushY.move, this._scaleY.range());
+          previewYArea
+            .call(brushY)
+            .call(brushY.move, [
+              this._scaleY.range()[1],
+              this._scaleY.range()[0],
+            ]);
         }
       };
 
