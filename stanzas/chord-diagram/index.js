@@ -2,7 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 
-//Gradation
+// Circurate & Gradation
 import { getGradationColor } from "@/lib/ColorGenerator";
 //Interporate
 // import { StanzaInterpolateColorGenerator } from "@/lib/ColorGenerator";
@@ -57,12 +57,14 @@ export default class ChordDiagram extends Stanza {
 
     // const color = d3.scaleOrdinal(names, d3.schemeCategory10)
 
-    //ColorGenerator
-    //Gradation
+    //ColorGenerator---------------------------------
+    // Circurate & Gradation
     const setColor = getGradationColor(this);
 
     //Interporate
     // const setColor = StanzaInterpolateColorGenerator(names.length);
+
+    // --------------------------------------------------
 
     //Create arrow ribbon generator with radius and padding angle
     const ribbon = d3
