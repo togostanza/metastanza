@@ -2,10 +2,7 @@ import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 
-// Circurate & Gradation
-import { getGradationColor } from "@/lib/ColorGenerator";
-//Interporate
-// import { StanzaInterpolateColorGenerator } from "@/lib/ColorGenerator";
+import { StanzaInterpolateColorGenerator } from "@/lib/ColorGenerator";
 
 export default class ChordDiagram extends Stanza {
   async render() {
@@ -44,27 +41,7 @@ export default class ChordDiagram extends Stanza {
       return matrix;
     })();
 
-    // prepare some D3 objects
-    // const color = {
-    //   count: names.length,
-    //   hue(index) {
-    //     return (1 / this.count) * index;
-    //   },
-    //   hsl(index) {
-    //     return `hsl(${this.hue(index)}turn, 70%, 60%)`;
-    //   },
-    // };
-
-    // const color = d3.scaleOrdinal(names, d3.schemeCategory10)
-
-    //ColorGenerator---------------------------------
-    // Circurate & Gradation
-    const setColor = getGradationColor(this);
-
-    //Interporate
-    // const setColor = StanzaInterpolateColorGenerator(names.length);
-
-    // --------------------------------------------------
+    const setColor = StanzaInterpolateColorGenerator(this, names.length);
 
     //Create arrow ribbon generator with radius and padding angle
     const ribbon = d3
@@ -105,8 +82,6 @@ export default class ChordDiagram extends Stanza {
       .data(chords)
       .join("path")
       .attr("d", ribbon)
-      // .attr('fill', d => color(names[d.target.index]))
-      // .attr("fill", (d) => color.hsl(d.target.index))
       .attr("fill", (d) => setColor(d.target.index))
       .append("title")
       .text(
@@ -126,8 +101,6 @@ export default class ChordDiagram extends Stanza {
         g
           .append("path")
           .attr("d", arc)
-          // .attr('fill', d => color(names[d.index]))
-          // .attr("fill", (d) => color.hsl(d.index))
           .attr("fill", (d) => setColor(d.index))
           .attr("stroke", "#fff")
       )
