@@ -1,5 +1,11 @@
 import * as d3 from "d3";
 
+function straightLink(d) {
+  const start = { x: d.source.x, y: d.source.y };
+  const end = { x: d.target.x, y: d.target.y };
+  return `M ${start.x} ${start.y}, L ${end.x} ${end.y}`;
+}
+
 function rotatePoint(pivot, point, angle) {
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
@@ -14,7 +20,7 @@ function rotatePoint(pivot, point, angle) {
   point.y = pivot.y + newY;
 }
 
-function curvedLink(d) {
+function curvedLink(d, curveDir) {
   const start = { x: d.source.x, y: d.source.y };
   const end = { x: d.target.x, y: d.target.y };
 
@@ -32,12 +38,12 @@ function curvedLink(d) {
 
   rotatePoint(start, p1, -theta);
 
-  p1.y += L / 5;
+  p1.y += (L / 5) * curveDir;
 
   rotatePoint(start, p1, theta);
 
   return `M ${start.x} ${start.y}
-          S ${p1.x} ${p1.y}, ${end.x} ${end.y}`;
+            S ${p1.x} ${p1.y}, ${end.x} ${end.y}`;
 }
 
 export default function (
@@ -56,6 +62,14 @@ export default function (
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
+
+  function drawLink(d) {
+    if (d[symbols.isPairEdge]) {
+      return curvedLink(d, d[symbols.isPairEdge]);
+    } else {
+      return straightLink(d);
+    }
+  }
 
   const forceG = svg
     .append("g")
@@ -92,13 +106,13 @@ export default function (
     .selectAll("path")
     .data(edges)
     .join("path")
-    .attr("d", curvedLink)
+    .attr("d", drawLink)
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("class", "link");
 
   function updateLinks() {
-    links.attr("d", curvedLink);
+    links.attr("d", drawLink);
   }
   function updateNodes() {
     nodeGroups.attr("transform", (d) => {
