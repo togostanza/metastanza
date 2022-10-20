@@ -143,7 +143,7 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    const { prepNodes, prepEdges, symbols, groupHash } = prepareGraphData(
+    const { prepNodes, prepEdges, symbols } = prepareGraphData(
       nodes,
       edges,
       params
@@ -152,7 +152,6 @@ export default class ForceGraph extends Stanza {
     drawForceLayout(svg, prepNodes, prepEdges, {
       ...params,
       symbols,
-      groupHash,
     });
 
     if (tooltipParams.show) {

@@ -58,7 +58,6 @@ export default function (
     tooltipParams,
     highlightAdjEdges,
     symbols,
-    groupHash,
   }
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
