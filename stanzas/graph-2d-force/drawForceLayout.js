@@ -54,10 +54,11 @@ export default function (
     width,
     height,
     MARGIN,
-    symbols,
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
+    symbols,
+    groupHash,
   }
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
@@ -70,6 +71,38 @@ export default function (
       return straightLink(d);
     }
   }
+
+  const markerBoxWidth = 15;
+  const markerBoxHeight = 8;
+  const refX = markerBoxWidth;
+  const refY = markerBoxHeight / 2;
+
+  const arrowPoints = [
+    [0, 0],
+    [0, markerBoxHeight],
+    [markerBoxWidth, markerBoxHeight / 2],
+  ];
+
+  const edgeColors = [...new Set(edges.map((d) => d[symbols.edgeColorSym]))];
+
+  //add markers for every color
+  const defs = svg.append("defs");
+
+  defs
+    .selectAll("marker")
+    .data(edgeColors)
+    .join("marker")
+    .attr("id", (d) => `arrow-${d}`)
+    .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+    .attr("refX", refX)
+    .attr("refY", refY)
+    .attr("markerWidth", markerBoxWidth)
+    .attr("markerHeight", markerBoxHeight)
+    .attr("orient", "auto-start-reverse")
+    .append("path")
+    .attr("d", d3.line()(arrowPoints))
+    .attr("fill", (d) => d)
+    .attr("stroke", "none");
 
   const forceG = svg
     .append("g")
@@ -109,7 +142,8 @@ export default function (
     .attr("d", drawLink)
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
-    .attr("class", "link");
+    .attr("class", "link")
+    .attr("marker-end", (d) => `url(#arrow-${d[symbols.edgeColorSym]})`);
 
   function updateLinks() {
     links.attr("d", drawLink);

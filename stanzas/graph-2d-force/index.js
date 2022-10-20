@@ -67,7 +67,9 @@ export default class ForceGraph extends Stanza {
     // Setting color scale
     const togostanzaColors = [];
     for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+      togostanzaColors.push(
+        css(`--togostanza-series-${i}-color`).trim().toUpperCase()
+      );
     }
     const color = function () {
       return d3.scaleOrdinal().range(togostanzaColors);
@@ -141,13 +143,17 @@ export default class ForceGraph extends Stanza {
       tooltipParams,
     };
 
-    const { prepNodes, prepEdges, symbols } = prepareGraphData(
+    const { prepNodes, prepEdges, symbols, groupHash } = prepareGraphData(
       nodes,
       edges,
       params
     );
 
-    drawForceLayout(svg, prepNodes, prepEdges, { ...params, symbols });
+    drawForceLayout(svg, prepNodes, prepEdges, {
+      ...params,
+      symbols,
+      groupHash,
+    });
 
     if (tooltipParams.show) {
       this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
