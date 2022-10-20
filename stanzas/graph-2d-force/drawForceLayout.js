@@ -1,4 +1,45 @@
 import * as d3 from "d3";
+
+function rotatePoint(pivot, point, angle) {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  point.x -= pivot.x;
+  point.y -= pivot.y;
+
+  const newX = point.x * cos - point.y * sin;
+  const newY = point.x * sin + point.y * cos;
+
+  point.x = pivot.x + newX;
+  point.y = pivot.y + newY;
+}
+
+function curvedLink(d) {
+  const start = { x: d.source.x, y: d.source.y };
+  const end = { x: d.target.x, y: d.target.y };
+
+  const L = Math.sqrt(
+    (start.y - end.y) * (start.y - end.y) +
+      (start.x - end.x) * (start.x - end.x)
+  );
+
+  const theta = Math.atan((end.y - start.y) / (end.x - start.x));
+
+  const p1 = {
+    x: (start.x + end.x) / 2,
+    y: (start.y + end.y) / 2,
+  };
+
+  rotatePoint(start, p1, -theta);
+
+  p1.y += L / 5;
+
+  rotatePoint(start, p1, theta);
+
+  return `M ${start.x} ${start.y}
+          S ${p1.x} ${p1.y}, ${end.x} ${end.y}`;
+}
+
 export default function (
   svg,
   nodes,
@@ -48,19 +89,16 @@ export default function (
     .on("tick", ticked);
 
   const links = gLinks
-    .selectAll("line")
+    .selectAll("path")
     .data(edges)
-    .join("line")
+    .join("path")
+    .attr("d", curvedLink)
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("class", "link");
 
   function updateLinks() {
-    links
-      .attr("x1", (d) => d.source.x)
-      .attr("y1", (d) => d.source.y)
-      .attr("x2", (d) => d.target.x)
-      .attr("y2", (d) => d.target.y);
+    links.attr("d", curvedLink);
   }
   function updateNodes() {
     nodeGroups.attr("transform", (d) => {
