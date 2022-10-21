@@ -82,26 +82,45 @@ export default function (
     [markerBoxWidth, markerBoxHeight / 2],
   ];
 
-  const edgeColors = [...new Set(edges.map((d) => d[symbols.edgeColorSym]))];
+  const edgesColorsArr = edges.map((d) => d[symbols.edgeColorSym]);
 
-  //add markers for every color
+  const edgeColors = [...new Set(edgesColorsArr)];
+
   const defs = svg.append("defs");
 
-  defs
-    .selectAll("marker")
-    .data(edgeColors)
-    .join("marker")
-    .attr("id", (d) => `arrow-${d}`)
-    .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
-    .attr("refX", refX)
-    .attr("refY", refY)
-    .attr("markerWidth", markerBoxWidth)
-    .attr("markerHeight", markerBoxHeight)
-    .attr("orient", "auto-start-reverse")
-    .append("path")
-    .attr("d", d3.line()(arrowPoints))
-    .attr("fill", (d) => d)
-    .attr("stroke", "none");
+  if (!edgeColors[0] && edgeColors.length === 1) {
+    // color is fixed, add one marker with default color
+
+    defs
+      .append("marker")
+      .attr("id", "arrow-default")
+      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+      .attr("refX", refX)
+      .attr("refY", refY)
+      .attr("markerWidth", markerBoxWidth)
+      .attr("markerHeight", markerBoxHeight)
+      .attr("orient", "auto-start-reverse")
+      .append("path")
+      .attr("d", d3.line()(arrowPoints))
+      .attr("stroke", "none");
+  } else {
+    //add markers for every color
+    defs
+      .selectAll("marker")
+      .data(edgeColors)
+      .join("marker")
+      .attr("id", (d) => `arrow-${d}`)
+      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+      .attr("refX", refX)
+      .attr("refY", refY)
+      .attr("markerWidth", markerBoxWidth)
+      .attr("markerHeight", markerBoxHeight)
+      .attr("orient", "auto-start-reverse")
+      .append("path")
+      .attr("d", d3.line()(arrowPoints))
+      .attr("fill", (d) => d)
+      .attr("stroke", "none");
+  }
 
   const forceG = svg
     .append("g")
@@ -142,7 +161,10 @@ export default function (
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("class", "link")
-    .attr("marker-end", (d) => `url(#arrow-${d[symbols.edgeColorSym]})`);
+    .attr(
+      "marker-end",
+      (d) => `url(#arrow-${d[symbols.edgeColorSym] || "default"})`
+    );
 
   function updateLinks() {
     links.attr("d", drawLink);

@@ -45,9 +45,6 @@ export default class ForceGraph extends Stanza {
     const width = parseInt(css("--togostanza-outline-width"));
     const height = parseInt(css("--togostanza-outline-height"));
 
-    console.log(width);
-    console.log(height);
-
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
       dataKey: this.params["node-size-data-key"] || "",
