@@ -34,59 +34,19 @@ export default class ForceGraph extends Stanza {
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    //data
-
-    const width = parseInt(this.params["width"]);
-    const height = parseInt(this.params["height"]);
-
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
 
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"],
-      this.root.querySelector("main")
-    );
-
-    this._data = values;
-
-    const nodes = values.nodes;
-    const edges = values.links;
-
-    const MARGIN = {
-      TOP: this.params["padding"],
-      BOTTOM: this.params["padding"],
-      LEFT: this.params["padding"],
-      RIGHT: this.params["padding"],
-    };
-
-    // Setting color scale
-    const togostanzaColors = [];
-    for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(
-        css(`--togostanza-series-${i}-color`).trim().toUpperCase()
-      );
-    }
-    const color = function () {
-      return d3.scaleOrdinal().range(togostanzaColors);
-    };
-
     const root = this.root.querySelector("main");
     const el = this.root.getElementById("graph-2d-force");
 
-    const existingSvg = root.getElementsByTagName("svg")[0];
-    if (existingSvg) {
-      existingSvg.remove();
-    }
-    const svg = d3
-      .select(el)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
+    //data
+    const width = parseInt(css("--togostanza-outline-width"));
+    const height = parseInt(css("--togostanza-outline-height"));
 
-    this.tooltip = new ToolTip();
-    root.append(this.tooltip);
+    console.log(width);
+    console.log(height);
 
     const nodeSizeParams = {
       basedOn: this.params["node-size-based-on"] || "fixed",
@@ -118,12 +78,59 @@ export default class ForceGraph extends Stanza {
       dataKey: this.params["labels-data-key"],
     };
 
+    const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
+
+    const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
+
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+
+    this._data = values;
+
+    const nodes = values.nodes;
+    const edges = values.links;
+
     const tooltipParams = {
       dataKey: this.params["nodes-tooltip-data-key"],
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
-    const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
+    // Setting color scale
+    const togostanzaColors = [];
+
+    let i = 0;
+
+    let togoColor = css(`--togostanza-theme-series_${i}_color`)
+      .trim()
+      .toUpperCase();
+
+    while (togoColor) {
+      togostanzaColors.push(togoColor);
+      i++;
+      togoColor = css(`--togostanza-theme-series_${i}_color`)
+        .trim()
+        .toUpperCase();
+    }
+
+    const color = function () {
+      return d3.scaleOrdinal().range(togostanzaColors);
+    };
+
+    const existingSvg = root.getElementsByTagName("svg")[0];
+    if (existingSvg) {
+      existingSvg.remove();
+    }
+    const svg = d3
+      .select(el)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    this.tooltip = new ToolTip();
+    root.append(this.tooltip);
 
     const params = {
       MARGIN,
@@ -155,4 +162,40 @@ export default class ForceGraph extends Stanza {
       this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     }
   }
+}
+
+function getMarginsFromCSSString(str) {
+  const splitted = str.trim().split(/\W+/);
+
+  const res = {
+    TOP: 0,
+    RIGHT: 0,
+    BOTTOM: 0,
+    LEFT: 0,
+  };
+
+  switch (splitted.length) {
+    case 1:
+      res.TOP = res.RIGHT = res.BOTTOM = res.LEFT = parseInt(splitted[0]);
+      break;
+    case 2:
+      res.TOP = res.BOTTOM = parseInt(splitted[0]);
+      res.LEFT = res.RIGHT = parseInt(splitted[1]);
+      break;
+    case 3:
+      res.TOP = parseInt(splitted[0]);
+      res.LEFT = res.RIGHT = parseInt(splitted[1]);
+      res.BOTTOM = parseInt(splitted[2]);
+      break;
+    case 4:
+      res.TOP = parseInt(splitted[0]);
+      res.RIGHT = parseInt(splitted[1]);
+      res.BOTTOM = parseInt(splitted[2]);
+      res.LEFT = parseInt(splitted[3]);
+      break;
+    default:
+      break;
+  }
+
+  return res;
 }
