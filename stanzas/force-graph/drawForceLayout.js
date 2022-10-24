@@ -57,6 +57,7 @@ export default function (
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
+    edgeWidthParams,
     symbols,
   }
 ) {
@@ -88,38 +89,40 @@ export default function (
 
   const defs = svg.append("defs");
 
-  if (!edgeColors[0] && edgeColors.length === 1) {
-    // color is fixed, add one marker with default color
+  if (edgeWidthParams.showArrows) {
+    if (!edgeColors[0] && edgeColors.length === 1) {
+      // color is fixed, add one marker with default color
 
-    defs
-      .append("marker")
-      .attr("id", "arrow-default")
-      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
-      .attr("refX", refX)
-      .attr("refY", refY)
-      .attr("markerWidth", markerBoxWidth)
-      .attr("markerHeight", markerBoxHeight)
-      .attr("orient", "auto-start-reverse")
-      .append("path")
-      .attr("d", d3.line()(arrowPoints))
-      .attr("stroke", "none");
-  } else {
-    //add markers for every color
-    defs
-      .selectAll("marker")
-      .data(edgeColors)
-      .join("marker")
-      .attr("id", (d) => `arrow-${d}`)
-      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
-      .attr("refX", refX)
-      .attr("refY", refY)
-      .attr("markerWidth", markerBoxWidth)
-      .attr("markerHeight", markerBoxHeight)
-      .attr("orient", "auto-start-reverse")
-      .append("path")
-      .attr("d", d3.line()(arrowPoints))
-      .attr("fill", (d) => d)
-      .attr("stroke", "none");
+      defs
+        .append("marker")
+        .attr("id", "arrow-default")
+        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+        .attr("refX", refX)
+        .attr("refY", refY)
+        .attr("markerWidth", markerBoxWidth)
+        .attr("markerHeight", markerBoxHeight)
+        .attr("orient", "auto-start-reverse")
+        .append("path")
+        .attr("d", d3.line()(arrowPoints))
+        .attr("stroke", "none");
+    } else {
+      //add markers for every color
+      defs
+        .selectAll("marker")
+        .data(edgeColors)
+        .join("marker")
+        .attr("id", (d) => `arrow-${d}`)
+        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+        .attr("refX", refX)
+        .attr("refY", refY)
+        .attr("markerWidth", markerBoxWidth)
+        .attr("markerHeight", markerBoxHeight)
+        .attr("orient", "auto-start-reverse")
+        .append("path")
+        .attr("d", d3.line()(arrowPoints))
+        .attr("fill", (d) => d)
+        .attr("stroke", "none");
+    }
   }
 
   const forceG = svg

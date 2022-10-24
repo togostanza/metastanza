@@ -59,7 +59,7 @@
       "stanza:description": "Set color of the node  data key"
     },
     {
-      "stanza:key": "node-color-data-key",
+      "stanza:key": "node-color-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
@@ -72,28 +72,36 @@
       "stanza:description": "Set edge width  data key"
     },
     {
-      "stanza:key": "edge-width-data-key",
+      "stanza:key": "edge-width-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set width of the edge  data key"
     },
+
     {
-      "stanza:key": "edge-min-width",
+      "stanza:key": "edge-width-min",
       "stanza:type": "number",
       "stanza:example": 0.5,
       "stanza:description": "Minimum edge width in px"
     },
     {
-      "stanza:key": "edge-max-width",
+      "stanza:key": "edge-width-max",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Maximum edge width in px"
     },
     {
-      "stanza:key": "edge-fixed-width",
-      "stanza:type": "number",
-      "stanza:example": 0.5,
-      "stanza:description": "Fixed edge width in px"
+      "stanza:key": "edge-width-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "sqrt", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "Edge width scale"
+    },
+    {
+      "stanza:key": "edge-show_arrows",
+      "stanza:type": "boolean",
+      "stanza:example": "true",
+      "stanza:description": "Show/hide arrows"
     },
     {
       "stanza:key": "edge-color-based-on",

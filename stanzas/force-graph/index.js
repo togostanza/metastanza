@@ -3,7 +3,6 @@ import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
 import drawForceLayout from "./drawForceLayout";
-
 import prepareGraphData from "@/lib/prepareGraphData";
 
 import {
@@ -34,6 +33,12 @@ export default class ForceGraph extends Stanza {
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
+    const setFallbackVal = (param, defVal) => {
+      return isNaN(parseFloat(this.params[param]))
+        ? defVal
+        : this.params[param];
+    };
+
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
@@ -58,22 +63,22 @@ export default class ForceGraph extends Stanza {
 
     const nodeSizeParams = {
       dataKey: this.params["node-size-key"] || "",
-      minSize: this.params["node-size-min"],
+      minSize: setFallbackVal("node-size-min", 0),
       maxSize: this.params["node-size-max"],
-      scale: this.params["node-size-scale"],
+      scale: this.params["node-size-scale"] || "linear",
     };
 
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
-      dataKey: this.params["node-color-data-key"] || "",
+      dataKey: this.params["node-color-key"] || "",
     };
 
     const edgeWidthParams = {
-      basedOn: this.params["edge-width-based-on"] || "fixed",
-      dataKey: this.params["edge-width-data-key"] || "",
-      fixedWidth: this.params["edge-fixed-width"] || 1,
-      minWidth: this.params["edge-min-width"],
-      maxWidth: this.params["edge-max-width"],
+      dataKey: this.params["edge-width-key"] || "",
+      minWidth: setFallbackVal("edge-width-min", 1),
+      maxWidth: this.params["edge-width-max"],
+      scale: this.params["edge-width-scale"] || "linear",
+      showArrows: this.params["edge-show_arrows"],
     };
 
     const edgeColorParams = {
