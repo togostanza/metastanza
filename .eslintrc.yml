@@ -6,6 +6,7 @@ extends:
 env:
   browser: true
   es2021: true
+  "jest/globals": true
 
 parserOptions:
   sourceType: module

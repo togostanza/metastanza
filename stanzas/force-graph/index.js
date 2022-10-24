@@ -86,8 +86,8 @@ export default class ForceGraph extends Stanza {
     };
 
     const labelsParams = {
-      margin: this.params["labels-margin"],
-      dataKey: this.params["labels-data-key"],
+      margin: this.params["node-label-margin"],
+      dataKey: this.params["node-label-key"],
     };
 
     const highlightAdjEdges = this.params["highlight-adjacent-edges"];
@@ -95,8 +95,8 @@ export default class ForceGraph extends Stanza {
     const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
 
     const tooltipParams = {
-      dataKey: this.params["nodes-tooltip-data-key"],
-      show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
+      dataKey: this.params["node-tooltip-key"],
+      show: nodes.some((d) => d[this.params["node-tooltip-key"]]),
     };
 
     // Setting color scale

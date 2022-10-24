@@ -109,19 +109,19 @@
       "stanza:description": "Highlight adjacent edges on node mouse hover"
     },
     {
-      "stanza:key": "labels-data-key",
+      "stanza:key": "node-label-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Node labels data key. If empty, no labels will be shown"
     },
     {
-      "stanza:key": "labels-margin",
+      "stanza:key": "node-label-margin",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Node labels offset from node center, in px."
     },
     {
-      "stanza:key": "nodes-tooltip-data-key",
+      "stanza:key": "node-tooltip-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
