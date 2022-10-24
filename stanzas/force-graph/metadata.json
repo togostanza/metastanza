@@ -52,24 +52,10 @@
       "stanza:description": "Node radius scale"
     },
     {
-      "stanza:key": "node-color-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "data key",
-      "stanza:description": "Set color of the node  data key"
-    },
-    {
       "stanza:key": "node-color-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
-    },
-    {
-      "stanza:key": "edge-width-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
-      "stanza:description": "Set edge width  data key"
     },
     {
       "stanza:key": "edge-width-key",
