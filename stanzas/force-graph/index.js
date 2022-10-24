@@ -21,11 +21,11 @@ import {
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "graph-2d-force"),
-      downloadPngMenuItem(this, "graph-2d-force"),
-      downloadJSONMenuItem(this, "graph-2d-force", this._data),
-      downloadCSVMenuItem(this, "graph-2d-force", this._data),
-      downloadTSVMenuItem(this, "graph-2d-force", this._data),
+      downloadSvgMenuItem(this, "force-graph"),
+      downloadPngMenuItem(this, "force-graph"),
+      downloadJSONMenuItem(this, "force-graph", this._data),
+      downloadCSVMenuItem(this, "force-graph", this._data),
+      downloadTSVMenuItem(this, "force-graph", this._data),
     ];
   }
 
@@ -39,19 +39,30 @@ export default class ForceGraph extends Stanza {
     });
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("graph-2d-force");
+    const el = this.root.getElementById("force-graph");
 
     //data
     const width = parseInt(css("--togostanza-outline-width"));
     const height = parseInt(css("--togostanza-outline-height"));
 
+    const values = await loadData(
+      this.params["data-url"],
+      this.params["data-type"],
+      this.root.querySelector("main")
+    );
+
+    this._data = values;
+
+    const nodes = values.nodes;
+    const edges = values.links;
+
     const nodeSizeParams = {
-      basedOn: this.params["node-size-based-on"] || "fixed",
-      dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-fixed-size"] || 3,
-      minSize: this.params["node-min-size"],
-      maxSize: this.params["node-max-size"],
+      dataKey: this.params["node-size-key"] || "",
+      minSize: this.params["node-size-min"],
+      maxSize: this.params["node-size-max"],
+      scale: this.params["node-size-scale"],
     };
+
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
       dataKey: this.params["node-color-data-key"] || "",
@@ -78,17 +89,6 @@ export default class ForceGraph extends Stanza {
     const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
 
     const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
-
-    const values = await loadData(
-      this.params["data-url"],
-      this.params["data-type"],
-      this.root.querySelector("main")
-    );
-
-    this._data = values;
-
-    const nodes = values.nodes;
-    const edges = values.links;
 
     const tooltipParams = {
       dataKey: this.params["nodes-tooltip-data-key"],
