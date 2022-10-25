@@ -30,13 +30,13 @@
       "stanza:key": "node-size-key",
       "stanza:type": "string",
       "stanza:example": "",
-      "stanza:description": "Set size on the node based on data key"
+      "stanza:description": "Set size on the node based on data key, or fallback to value of node-size-min"
     },
     {
       "stanza:key": "node-size-min",
       "stanza:type": "number",
       "stanza:example": 3,
-      "stanza:description": "Minimum node radius in px"
+      "stanza:description": "Minimum node radius in px (fallback to 0)"
     },
     {
       "stanza:key": "node-size-max",
@@ -230,12 +230,6 @@
       "stanza:type": "text",
       "stanza:default": "20 30",
       "stanza:description": "Metastanza padding"
-    },
-    {
-      "stanza:key": "--togostanza-outline-height",
-      "stanza:type": "number",
-      "stanza:default": 800,
-      "stanza:description": "Metastanza height in px"
     },
     {
       "stanza:key": "--togostanza-theme-background-color",
