@@ -15,9 +15,8 @@
     {
       "stanza:key": "data-url",
       "stanza:type": "text",
-      "stanza:example_old": "https://drive.google.com/uc?id=19TL9qTGcHiDdZxMqtPLOsAj2_mGocP9u&authuser=0",
-      "stanza:example_old2": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
-      "stanza:example_old3": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+      "stanza:example_csv": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/daily-min-temperatures.csv",
+      "stanza:example_sparql": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
       "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/linechart-data-with-errors.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
@@ -40,39 +39,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "chart-points-show",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Show data points",
-      "stanza:required": false,
-      "stanza:default": false
-    },
-    {
-      "stanza:key": "chart-points-size",
-      "stanza:type": "number",
-      "stanza:example": 10,
-      "stanza:description": "Data points size",
-      "stanza:required": false,
-      "stanza:default": 10
-    },
-    {
-      "stanza:key": "chart-error_bars-show",
-      "stanza:type": "boolean",
-      "stanza:example": true,
-      "stanza:description": "Show error bars",
-      "stanza:required": false,
-      "stanza:default": false
-    },
-    {
-      "stanza:key": "chart-error_bars-data_key",
-      "stanza:type": "text",
-      "stanza:example": "error",
-      "stanza:default": "",
-      "stanza:description": "Data key wich includes error data. Error data is array [min, max]. If no such data key, no error bars are shown",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "axis-x-data_key",
+      "stanza:key": "axis-x-key",
       "stanza:type": "text",
       "stanza:example": "chromosome",
       "stanza:description": "Variable to be assigned as x axis value.",
@@ -118,6 +85,14 @@
       "stanza:required": false
     },
     {
+      "stanza:key": "axis-x-preview",
+      "stanza:type": "boolean",
+      "stanza:example": false,
+      "stanza:default": false,
+      "stanza:description": "Show",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "axis-x-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "log", "ordinal", "time"],
@@ -127,16 +102,8 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "axis-x-preview",
-      "stanza:type": "boolean",
-      "stanza:example": false,
-      "stanza:default": false,
-      "stanza:description": "Show",
-      "stanza:required": false
-    },
-    {
       "stanza:key": "axis-x-ticks_interval",
-      "stanza:type": "text",
+      "stanza:type": "number",
       "stanza:example": "",
       "stanza:computed": true,
       "stanza:description": "Axis ticks interval. If not set, show 5 ticks. If axis scale is ordinal, show all ticks",
@@ -178,7 +145,7 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "axis-y-data_key",
+      "stanza:key": "axis-y-key",
       "stanza:type": "text",
       "stanza:example": "count",
       "stanza:description": "Variable to be assigned as y axis value. Ignored if data-type is CSV of TSV",
@@ -274,7 +241,31 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "data_grouping-group_by_data_key",
+      "stanza:key": "points-show",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Show data points",
+      "stanza:required": false,
+      "stanza:default": false
+    },
+    {
+      "stanza:key": "points-size",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Data points size",
+      "stanza:required": false,
+      "stanza:default": 10
+    },
+    {
+      "stanza:key": "error_bars-key",
+      "stanza:type": "text",
+      "stanza:example": "error",
+      "stanza:default": "",
+      "stanza:description": "Data key wich includes error data. Error data is array [min, max]. If no such data key, no error bars are shown",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "group_by-key",
       "stanza:type": "text",
       "stanza:example": "category",
       "stanza:default": "",
@@ -282,30 +273,11 @@
       "stanza:required": false
     },
     {
-      "stanza:key": "data_grouping-color-data_key",
+      "stanza:key": "color_by-key",
       "stanza:type": "text",
       "stanza:example": "category",
       "stanza:default": "series",
       "stanza:description": "Data key to map color to the data series. If includes hex color, that color will be used, if not - color from the ordinal scale from the theme colors will be used.",
-      "stanza:required": false
-    },
-    {
-      "stanza:key": "data_grouping-color-scheme",
-      "stanza:type": "single-choice",
-      "stanza:choice": [
-        "Custom-Theme",
-        "Virdilis",
-        "Jet",
-        "Blues",
-        "Greens",
-        "Reds",
-        "Greys",
-        "Purples",
-        "Oranges"
-      ],
-      "stanza:example": "Custom-Theme",
-      "stanza:default": "Virdilis",
-      "stanza:description": "Color scheme to use for the data series",
       "stanza:required": false
     },
 

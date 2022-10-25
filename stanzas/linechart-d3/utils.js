@@ -11,6 +11,7 @@ export function parseValue(value, scaleType) {
   }
 }
 
+//TODO place adding error bars and other stuff to utils.
 export function addErrorBars(d, that) {
   const errorBarGroup = d3.select(this);
 

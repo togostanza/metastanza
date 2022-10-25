@@ -26,8 +26,6 @@ export default class Linechart extends Stanza {
     ];
   }
 
-  _initLegend() {}
-
   async render() {
     this._hideError();
 
@@ -38,38 +36,36 @@ export default class Linechart extends Stanza {
     this._validatedParams = validateParams(this.metadata, this.params);
 
     //data
-    let xKeyName = this._validatedParams.get("axis-x-data_key").value;
-    let yKeyName = this._validatedParams.get("axis-y-data_key").value;
+    let xKeyName = this._validatedParams.get("axis-x-key").value;
+    let yKeyName = this._validatedParams.get("axis-y-key").value;
     const xAxisTitle = this._validatedParams.get("axis-x-title").value;
     const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
     const hideXAxis = this._validatedParams.get("axis-x-hide").value;
     const hideYAxis = this._validatedParams.get("axis-y-hide").value;
     const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
     const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
-    const showPoints = this._validatedParams.get("chart-points-show").value;
-    const pointsSize = this._validatedParams.get("chart-points-size").value;
-    const showErrorBars = this._validatedParams.get(
-      "chart-error_bars-show"
-    ).value;
+    const showPoints = this._validatedParams.get("points-show").value;
+    const pointsSize = this._validatedParams.get("points-size").value;
+    // const showErrorBars = this._validatedParams.get(
+    //   "chart-error_bars-show"
+    // ).value;
 
-    const errorKeyName = this._validatedParams.get(
-      "chart-error_bars-data_key"
-    ).value;
+    const errorKeyName = this._validatedParams.get("error_bars-key").value;
 
     const xTicksAngle = this._validatedParams.get(
       "axis-x-ticks_label_angle"
     ).value;
 
-    const groupingColorKey = this._validatedParams.get(
-      "data_grouping-color-data_key"
-    ).value;
+    const groupingColorKey = this._validatedParams.get("color_by-key").value;
 
     const xTicksNumber = 5;
     const xGridNumber = xTicksNumber;
     const xTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
     )
-      ? parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+      ? Math.abs(
+          parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+        )
       : null;
 
     const xGridInterval = xTicksInterval;
@@ -87,7 +83,9 @@ export default class Linechart extends Stanza {
     const yTicksInterval = !isNaN(
       parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
     )
-      ? parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+      ? Math.abs(
+          parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+        )
       : null;
 
     const yGridInterval = yTicksInterval;
@@ -99,6 +97,7 @@ export default class Linechart extends Stanza {
     const showYPreview = this._validatedParams.get("axis-y-preview").value;
     const showLegend = this._validatedParams.get("legend-show").value;
     const legendPosition = this._validatedParams.get("legend-placement").value;
+    const legendTitle = this._validatedParams.get("legend-title").value;
 
     const xAxisTicksIntervalUnits = this._validatedParams.get(
       "axis-x-ticks_interval_units"
@@ -121,9 +120,7 @@ export default class Linechart extends Stanza {
       "axis-y-ticks_labels_format"
     ).value;
 
-    let groupKeyName = this._validatedParams.get(
-      "data_grouping-group_by_data_key"
-    ).value;
+    const groupKeyName = this._validatedParams.get("group_by-key").value;
 
     const axisYRangeMin = this._validatedParams.get("axis-y-range_min").value;
     const axisYRangeMax = this._validatedParams.get("axis-y-range_max").value;
@@ -136,38 +133,18 @@ export default class Linechart extends Stanza {
       throw new Error("Y axis range must be positive");
     }
 
-    let values = await loadData(
+    const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
 
-    if (
-      this.params["data-type"] === "csv" ||
-      this.params["data-type"] === "tsv"
-    ) {
-      const csvRegroup = [];
-      values.forEach((row) => {
-        for (const col of values.columns.slice(1)) {
-          if (col) {
-            csvRegroup.push({
-              column: col,
-              row: row[values.columns[0]],
-              value: row[col],
-            });
-          }
-        }
-      });
-      values = csvRegroup;
-      groupKeyName = "column";
-      xKeyName = "row";
-      yKeyName = "value";
-    }
-
     /* eslint-disable-next-line */
     this._data = structuredClone(values);
 
     parseData.call(this);
+
+    const showErrorBars = this._data.some((d) => d[errorKeyName]);
 
     const root = this.root.querySelector("main");
 
@@ -1352,6 +1329,7 @@ export default class Linechart extends Stanza {
         update();
       };
       if (showLegend) {
+        this.legend.title = legendTitle || null;
         this.legend.nodes = this._groups.map((item, index) => {
           return {
             id: "" + index,
