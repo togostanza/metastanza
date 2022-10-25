@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "hash-table",
-  "stanza:label": "Hash table",
-  "stanza:definition": "Hash table MetaStanza",
+  "@id": "key-value",
+  "stanza:label": "Key-value",
+  "stanza:definition": "Key-value table MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Enishi Tech"],
   "stanza:created": "2021-03-18",
-  "stanza:updated": "2021-03-18",
+  "stanza:updated": "2022-10-25",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
