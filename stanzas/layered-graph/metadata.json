@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "graph-3d-circle",
-  "stanza:label": "Graph 3D circle layout",
-  "stanza:definition": "Graph 3D Circle Layout MetaStanza",
+  "@id": "layered-graph",
+  "stanza:label": "Layered graph",
+  "stanza:definition": "Layered graph layed out in circles MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Einishi Tech"],
   "stanza:created": "2022-04-01",
-  "stanza:updated": "2022-04-01",
+  "stanza:updated": "2022-10-25",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -26,24 +26,7 @@
       "stanza:description": "Data type",
       "stanza:required": true
     },
-    {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 600,
-      "stanza:description": "Width in px"
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 1000,
-      "stanza:description": "Height in px"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Inner padding in px"
-    },
+
     {
       "stanza:key": "group-planes-sort-by",
       "stanza:type": "string",
@@ -231,6 +214,24 @@
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Group color 5"
+    },
+    {
+      "stanza:key": "--togostanza-outline-width",
+      "stanza:type": "number",
+      "stanza:default": 600,
+      "stanza:description": "Width in px"
+    },
+    {
+      "stanza:key": "--togostanza-outline-height",
+      "stanza:type": "number",
+      "stanza:default": 1000,
+      "stanza:description": "Height in px"
+    },
+    {
+      "stanza:key": "--togostanza-outline-padding",
+      "stanza:type": "number",
+      "stanza:example": 50,
+      "stanza:description": "Inner padding in px"
     },
     {
       "stanza:key": "--togostanza-default-node-color",

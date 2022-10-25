@@ -19,11 +19,11 @@ import {
 export default class ForceGraph extends Stanza {
   menu() {
     return [
-      downloadSvgMenuItem(this, "graph-3d-circle"),
-      downloadPngMenuItem(this, "graph-3d-circle"),
-      downloadJSONMenuItem(this, "graph-3d-circle", this._data),
-      downloadCSVMenuItem(this, "graph-3d-circle", this._data),
-      downloadTSVMenuItem(this, "graph-3d-circle", this._data),
+      downloadSvgMenuItem(this, "layered-graph"),
+      downloadPngMenuItem(this, "layered-graph"),
+      downloadJSONMenuItem(this, "layered-graph", this._data),
+      downloadCSVMenuItem(this, "layered-graph", this._data),
+      downloadTSVMenuItem(this, "layered-graph", this._data),
     ];
   }
 
@@ -34,8 +34,8 @@ export default class ForceGraph extends Stanza {
 
     //data
 
-    const width = parseInt(this.params["width"]);
-    const height = parseInt(this.params["height"]);
+    const width = parseInt(css("--togostanza-outline-width"));
+    const height = parseInt(css("--togostanza-outline-height"));
 
     this.renderTemplate({
       template: "stanza.html.hbs",
@@ -71,7 +71,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const root = this.root.querySelector("main");
-    const el = this.root.getElementById("graph-3d-circle");
+    const el = this.root.getElementById("layered-graph");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
