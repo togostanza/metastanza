@@ -17,7 +17,7 @@ export default class KeyValue extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["misc-custom_css_url"]);
 
     const dataset = (
       await loadData(
@@ -39,7 +39,7 @@ export default class KeyValue extends Stanza {
       });
       const label = column.label
         ? column.label
-        : this.params["format-key"] === "true"
+        : this.params["format_key"]
         ? datum_label.charAt(0).toUpperCase() +
           datum_label.substring(1).replace(/_/g, " ")
         : datum_label;
@@ -57,10 +57,5 @@ export default class KeyValue extends Stanza {
         values,
       },
     });
-
-    const main = this.root.querySelector("main");
-    main.parentNode.style.backgroundColor =
-      "var(--togostanza-background-color)";
-    main.parentNode.style.padding = `${this.params["padding"]}px`;
   }
 }
