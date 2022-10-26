@@ -258,6 +258,24 @@
       "stanza:type": "text",
       "stanza:example": "#F75976",
       "stanza:description": "Cell color range max"
+    },
+    {
+      "stanza:key": "cell-color-domain_min",
+      "stanza:type": "number",
+      "stanza:example": -50,
+      "stanza:description": "Cell color domain min"
+    },
+    {
+      "stanza:key": "cell-color-domain_mid",
+      "stanza:type": "number",
+      "stanza:example": 0,
+      "stanza:description": "Cell color domain mid"
+    },
+    {
+      "stanza:key": "cell-color-domain_max",
+      "stanza:type": "number",
+      "stanza:example": 100,
+      "stanza:description": "Cell color domain max"
     }
   ],
   "stanza:menu-placement": "bottom-right",

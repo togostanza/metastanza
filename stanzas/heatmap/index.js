@@ -33,11 +33,14 @@ export default class Heatmap extends Stanza {
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
-    const setColor = getGradationColor(this, [
-      cellColorMin,
-      cellColorMid,
-      cellColorMax,
-    ]);
+    const cellDomainMin = this.params["cell-color-domain_min"];
+    const cellDomainMid = this.params["cell-color-domain_mid"];
+    const cellDomainMax = this.params["cell-color-domain_max"];
+    const setColor = getGradationColor(
+      this,
+      [cellColorMin, cellColorMid, cellColorMax],
+      [cellDomainMin, cellDomainMid, cellDomainMax]
+    );
 
     const tickSize = +this.css("--togostanza-tick-size") || 0;
     const xLabelAngle = this.params["x-ticks_labels_angle"] || 0;
@@ -132,6 +135,7 @@ export default class Heatmap extends Stanza {
       .attr("rx", this.css("--togostanza-border-radius"))
       .attr("ry", this.css("--togostanza-border-radius"))
       .style("fill", (d) => setColor(normalize(d[cellColorDataKey])))
+      // .style("fill", (d) => setColor(d[cellColorDataKey]))
       .on("mouseover", mouseover)
       .on("mouseleave", mouseleave);
 
