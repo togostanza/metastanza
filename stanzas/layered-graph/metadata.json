@@ -53,38 +53,33 @@
       "stanza:example": "ascending",
       "stanza:description": "Nodes sorting order"
     },
+
     {
-      "stanza:key": "node-size-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
-      "stanza:required": true,
-      "stanza:description": "Set size of the node  data key"
-    },
-    {
-      "stanza:key": "node-size-data-key",
+      "stanza:key": "node-size-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set size on the node based on data key"
     },
     {
-      "stanza:key": "node-min-size",
+      "stanza:key": "node-size-min",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Minimum node radius in px"
     },
     {
-      "stanza:key": "node-max-size",
+      "stanza:key": "node-size-max",
       "stanza:type": "number",
       "stanza:example": 6,
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-fixed-size",
-      "stanza:type": "number",
-      "stanza:example": 3,
-      "stanza:description": "Fixed node radius in px"
+      "stanza:key": "nodes-size-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "sqrt", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "Node size scale"
     },
+
     {
       "stanza:key": "node-color-based-on",
       "stanza:type": "single-choice",
@@ -153,7 +148,7 @@
     },
 
     {
-      "stanza:key": "constant-radius",
+      "stanza:key": "group_planes-constant_radius",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Constant radius for all groups"

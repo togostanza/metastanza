@@ -29,37 +29,37 @@ export default class ForceGraph extends Stanza {
   }
 
   async render() {
-    const setFallbackVal = (param, defVal) => {
-      return isNaN(parseFloat(this.params[param]))
-        ? defVal
-        : this.params[param];
+    const setFallbackNumVal = (value, defVal) => {
+      return isNaN(parseFloat(value)) ? defVal : value;
     };
 
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
-    //data
-
-    const width = parseInt(css("--togostanza-outline-width"));
-    const height = parseInt(css("--togostanza-outline-height"));
-
     this.renderTemplate({
       template: "stanza.html.hbs",
     });
 
+    const root = this.root.querySelector("main");
+    const el = this.root.getElementById("layered-graph");
+
+    //data
     const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
+    this._data = values;
 
+    //params
+
+    const width = setFallbackNumVal(css("--togostanza-outline-width"), 200);
+    const height = setFallbackNumVal(css("--togostanza-outline-height"), 200);
     const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
 
     // Setting color scale
     const togostanzaColors = getColorSeries(this);
-
-    this._data = values;
 
     const nodes = values.nodes;
     const edges = values.links;
@@ -70,9 +70,6 @@ export default class ForceGraph extends Stanza {
     const color = function () {
       return d3.scaleOrdinal().range(togostanzaColors);
     };
-
-    const root = this.root.querySelector("main");
-    const el = this.root.getElementById("layered-graph");
 
     const existingSvg = root.getElementsByTagName("svg")[0];
     if (existingSvg) {
@@ -87,7 +84,7 @@ export default class ForceGraph extends Stanza {
     this.tooltip = new ToolTip();
     root.append(this.tooltip);
 
-    const constRarius = !!this.params["constant-radius"];
+    const constRarius = !!this.params["group_planes-constant_radius"];
 
     const groupPlaneColorParams = {
       basedOn: this.params["group-plane-color-based-on"],
@@ -105,12 +102,20 @@ export default class ForceGraph extends Stanza {
     };
 
     const nodeSizeParams = {
-      basedOn: this.params["node-size-based-on"] || "fixed",
-      dataKey: this.params["node-size-data-key"] || "",
-      fixedSize: this.params["node-fixed-size"] || 3,
-      minSize: this.params["node-min-size"],
-      maxSize: this.params["node-max-size"],
+      dataKey: this.params["node-size-key"] || "",
+      minSize: setFallbackNumVal("node-size-min", 0),
+      maxSize: this.params["node-size-max"],
+      scale: this.params["node-size-scale"] || "linear",
     };
+
+    // const nodeSizeParams = {
+    //   basedOn: this.params["node-size-based-on"] || "fixed",
+    //   dataKey: this.params["node-size-data-key"] || "",
+    //   fixedSize: this.params["node-fixed-size"] || 3,
+    //   minSize: this.params["node-min-size"],
+    //   maxSize: this.params["node-max-size"],
+    // };
+
     const nodeColorParams = {
       basedOn: this.params["node-color-based-on"] || "fixed",
       dataKey: this.params["node-color-data-key"] || "",
