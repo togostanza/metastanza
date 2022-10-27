@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { _3d } from "d3-3d";
 import loadData from "togostanza-utils/load-data";
 import ToolTip from "@/lib/ToolTip";
+import { getColorSeries } from "@/lib/ColorGenerator";
 import prepareGraphData, {
   get3DEdges,
   getGroupPlanes,
@@ -28,6 +29,12 @@ export default class ForceGraph extends Stanza {
   }
 
   async render() {
+    const setFallbackVal = (param, defVal) => {
+      return isNaN(parseFloat(this.params[param]))
+        ? defVal
+        : this.params[param];
+    };
+
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
@@ -47,25 +54,19 @@ export default class ForceGraph extends Stanza {
       this.root.querySelector("main")
     );
 
+    const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
+
+    // Setting color scale
+    const togostanzaColors = getColorSeries(this);
+
     this._data = values;
 
     const nodes = values.nodes;
     const edges = values.links;
 
-    const MARGIN = {
-      TOP: this.params["padding"],
-      BOTTOM: this.params["padding"],
-      LEFT: this.params["padding"],
-      RIGHT: this.params["padding"],
-    };
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
-    // Setting color scale
-    const togostanzaColors = [];
-    for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
-    }
     const color = function () {
       return d3.scaleOrdinal().range(togostanzaColors);
     };
@@ -572,4 +573,40 @@ export default class ForceGraph extends Stanza {
       this.tooltip.setup(el.querySelectorAll("[data-tooltip]"));
     }
   }
+}
+
+function getMarginsFromCSSString(str) {
+  const splitted = str.trim().split(/\W+/);
+
+  const res = {
+    TOP: 0,
+    RIGHT: 0,
+    BOTTOM: 0,
+    LEFT: 0,
+  };
+
+  switch (splitted.length) {
+    case 1:
+      res.TOP = res.RIGHT = res.BOTTOM = res.LEFT = parseInt(splitted[0]);
+      break;
+    case 2:
+      res.TOP = res.BOTTOM = parseInt(splitted[0]);
+      res.LEFT = res.RIGHT = parseInt(splitted[1]);
+      break;
+    case 3:
+      res.TOP = parseInt(splitted[0]);
+      res.LEFT = res.RIGHT = parseInt(splitted[1]);
+      res.BOTTOM = parseInt(splitted[2]);
+      break;
+    case 4:
+      res.TOP = parseInt(splitted[0]);
+      res.RIGHT = parseInt(splitted[1]);
+      res.BOTTOM = parseInt(splitted[2]);
+      res.LEFT = parseInt(splitted[3]);
+      break;
+    default:
+      break;
+  }
+
+  return res;
 }
