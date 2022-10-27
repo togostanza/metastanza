@@ -80,6 +80,7 @@
   ],
   "links": [
     { "source": "Napoleon", "target": "Myriel", "value": 1 },
+    { "source": "Myriel", "target": "Napoleon", "value": 1 },
     { "source": "Mlle.Baptistine", "target": "Myriel", "value": 8 },
     { "source": "Mme.Magloire", "target": "Myriel", "value": 10 },
     { "source": "Mme.Magloire", "target": "Mlle.Baptistine", "value": 6 },
@@ -93,6 +94,7 @@
     { "source": "Valjean", "target": "Mme.Magloire", "value": 3 },
     { "source": "Valjean", "target": "Mlle.Baptistine", "value": 3 },
     { "source": "Valjean", "target": "Myriel", "value": 5 },
+    { "source": "Myriel", "target": "Valjean", "value": 5 },
     { "source": "Marguerite", "target": "Valjean", "value": 1 },
     { "source": "Mme.deR", "target": "Valjean", "value": 1 },
     { "source": "Isabeau", "target": "Valjean", "value": 1 },
