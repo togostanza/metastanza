@@ -149,7 +149,6 @@ export default class Heatmap extends Stanza {
       .attr("height", y.bandwidth())
       .attr("rx", this.css("--togostanza-border-radius"))
       .attr("ry", this.css("--togostanza-border-radius"))
-      // .style("fill", (d) => setColor(normalize(d[cellColorDataKey])))
       .style("fill", (d) => setColor(d[cellColorDataKey]))
       .on("mouseover", mouseover)
       .on("mouseleave", mouseleave);
