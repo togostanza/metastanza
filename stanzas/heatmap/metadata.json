@@ -261,19 +261,19 @@
     },
     {
       "stanza:key": "cell-color-domain_min",
-      "stanza:type": "number",
+      "stanza:type": "text",
       "stanza:example": -50,
       "stanza:description": "Cell color domain min"
     },
     {
       "stanza:key": "cell-color-domain_mid",
-      "stanza:type": "number",
+      "stanza:type": "text",
       "stanza:example": 0,
       "stanza:description": "Cell color domain mid"
     },
     {
       "stanza:key": "cell-color-domain_max",
-      "stanza:type": "number",
+      "stanza:type": "text",
       "stanza:example": 100,
       "stanza:description": "Cell color domain max"
     }

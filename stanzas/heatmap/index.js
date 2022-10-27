@@ -26,6 +26,8 @@ export default class Heatmap extends Stanza {
       this.root.querySelector("main")
     );
 
+    //
+
     this.draw(root, data);
   }
   async draw(el, dataset) {
@@ -33,9 +35,22 @@ export default class Heatmap extends Stanza {
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
-    const cellDomainMin = this.params["cell-color-domain_min"];
-    const cellDomainMid = this.params["cell-color-domain_mid"];
-    const cellDomainMax = this.params["cell-color-domain_max"];
+    let cellDomainMin = this.params["cell-color-domain_min"];
+    let cellDomainMid = this.params["cell-color-domain_mid"];
+    let cellDomainMax = this.params["cell-color-domain_max"];
+    const cellColorDataKey = this.params["cell-color-data_key"];
+    const values = [...new Set(dataset.map((d) => d[cellColorDataKey]))];
+
+    if (isNaN(parseFloat(cellDomainMin))) {
+      cellDomainMin = Math.min(...values);
+    }
+    if (isNaN(parseFloat(cellDomainMax))) {
+      cellDomainMax = Math.max(...values);
+    }
+    if (isNaN(parseFloat(cellDomainMid))) {
+      cellDomainMid = (cellDomainMax + cellDomainMin) / 2;
+    }
+
     const setColor = getGradationColor(
       this,
       [cellColorMin, cellColorMid, cellColorMax],
@@ -61,6 +76,9 @@ export default class Heatmap extends Stanza {
     const axisXTitlePadding = this.params["axis-x-title_padding"];
     const axisYTitlePadding = this.params["axis-y-title_padding"];
 
+    const xDataKey = this.params["axis-x-data_key"];
+    const yDataKey = this.params["axis-y-data_key"];
+
     const svg = d3
       .select(el)
       .append("svg")
@@ -74,9 +92,6 @@ export default class Heatmap extends Stanza {
         "transform",
         `translate(${margin.left + titleSpace + axisYTitlePadding}, 0)`
       );
-
-    const xDataKey = this.params["axis-x-data_key"];
-    const yDataKey = this.params["axis-y-data_key"];
 
     const rows = [...new Set(dataset.map((d) => d[xDataKey]))];
     const columns = [...new Set(dataset.map((d) => d[yDataKey]))];
@@ -110,14 +125,14 @@ export default class Heatmap extends Stanza {
       .tickSizeInner(tickSize);
 
     // normalize
-    const cellColorDataKey = this.params["cell-color-data_key"];
-    const values = [...new Set(dataset.map((d) => d[cellColorDataKey]))];
-    const normalize = (num) => {
-      return (
-        (num - Math.min(...values)) /
-        (Math.max(...values) - Math.min(...values))
-      );
-    };
+
+    // console.log(values);
+    // const normalize = (num) => {
+    //   return (
+    //     (num - Math.min(...values)) /
+    //     (Math.max(...values) - Math.min(...values))
+    //   );
+    // };
 
     graphArea
       .selectAll()
@@ -134,8 +149,8 @@ export default class Heatmap extends Stanza {
       .attr("height", y.bandwidth())
       .attr("rx", this.css("--togostanza-border-radius"))
       .attr("ry", this.css("--togostanza-border-radius"))
-      .style("fill", (d) => setColor(normalize(d[cellColorDataKey])))
-      // .style("fill", (d) => setColor(d[cellColorDataKey]))
+      // .style("fill", (d) => setColor(normalize(d[cellColorDataKey])))
+      .style("fill", (d) => setColor(d[cellColorDataKey]))
       .on("mouseover", mouseover)
       .on("mouseleave", mouseleave);
 
@@ -238,7 +253,7 @@ export default class Heatmap extends Stanza {
       const n = Math.round(min + i * (Math.abs(max - min) / (steps - 1)));
       return {
         label: n,
-        color: color((n - min) / (max - min)),
+        color: color(n),
       };
     });
   }
