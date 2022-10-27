@@ -90,9 +90,9 @@
       "stanza:description": "Show/hide arrows"
     },
     {
-      "stanza:key": "edge-color-based-on",
+      "stanza:key": "edge-color-based_on",
       "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "source color", "target color", "fixed"],
+      "stanza:choice": ["data key", "source color", "target color"],
       "stanza:example": "source color",
       "stanza:description": "Set color of the edge based on this"
     },
@@ -103,7 +103,7 @@
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "highlight-adjacent-edges",
+      "stanza:key": "highlight_adjacent_edges",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight adjacent edges on node mouse hover"

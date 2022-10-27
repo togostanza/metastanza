@@ -81,7 +81,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const edgeColorParams = {
-      basedOn: this.params["edge-color-based-on"] || "fixed",
+      basedOn: this.params["edge-color-based_on"],
       dataKey: this.params["edge-color-key"] || "",
     };
 
@@ -90,7 +90,7 @@ export default class ForceGraph extends Stanza {
       dataKey: this.params["node-label-key"],
     };
 
-    const highlightAdjEdges = this.params["highlight-adjacent-edges"];
+    const highlightAdjEdges = this.params["highlight_adjacent_edges"];
 
     const MARGIN = getMarginsFromCSSString(css("--togostanza-outline-padding"));
 
