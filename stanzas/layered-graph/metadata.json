@@ -73,68 +73,59 @@
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "nodes-size-scale",
+      "stanza:key": "node-size-scale",
       "stanza:type": "single-choice",
       "stanza:choice": ["linear", "sqrt", "log10"],
       "stanza:example": "linear",
       "stanza:description": "Node size scale"
     },
-
     {
-      "stanza:key": "node-color-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "data key",
-      "stanza:default": "data key",
-      "stanza:description": "Set color of the node  data key"
-    },
-    {
-      "stanza:key": "node-color-data-key",
+      "stanza:key": "node-color-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
     },
     {
-      "stanza:key": "edge-width-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
-      "stanza:default": "fixed",
-      "stanza:description": "Set edge width  data key"
-    },
-    {
-      "stanza:key": "edge-width-data-key",
+      "stanza:key": "edge-width-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set width of the edge  data key"
     },
+
     {
-      "stanza:key": "edge-min-width",
+      "stanza:key": "edge-width-min",
       "stanza:type": "number",
       "stanza:example": 0.5,
       "stanza:description": "Minimum edge width in px"
     },
     {
-      "stanza:key": "edge-max-width",
+      "stanza:key": "edge-width-max",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Maximum edge width in px"
     },
     {
-      "stanza:key": "edge-fixed-width",
-      "stanza:type": "number",
-      "stanza:example": 0.5,
-      "stanza:description": "Fixed edge width in px"
+      "stanza:key": "edge-width-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "sqrt", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "Edge width scale"
     },
     {
-      "stanza:key": "edge-color-based-on",
+      "stanza:key": "edge-show_arrows",
+      "stanza:type": "boolean",
+      "stanza:example": "true",
+      "stanza:description": "Show/hide arrows"
+    },
+    {
+      "stanza:key": "edge-color-based_on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "source color", "target color", "fixed"],
       "stanza:example": "source color",
       "stanza:description": "Set color of the edge based on this"
     },
     {
-      "stanza:key": "edge-color-data-key",
+      "stanza:key": "edge-color-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set color of the edge based on this data key"
@@ -239,6 +230,12 @@
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"
+    },
+    {
+      "stanza:key": "--togostanza-edge-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.25,
+      "stanza:description": "Edge default opacity"
     },
     {
       "stanza:key": "--togostanza-default-plane-color",

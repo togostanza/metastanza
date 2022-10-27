@@ -30,7 +30,7 @@ export default class ForceGraph extends Stanza {
 
   async render() {
     const setFallbackNumVal = (value, defVal) => {
-      return isNaN(parseFloat(value)) ? defVal : value;
+      return isNaN(parseFloat(value)) ? defVal : parseFloat(value);
     };
 
     appendCustomCss(this, this.params["custom-css-url"]);
@@ -67,8 +67,8 @@ export default class ForceGraph extends Stanza {
     const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
     const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
 
-    const color = function () {
-      return d3.scaleOrdinal().range(togostanzaColors);
+    const color = function (type = "scaleOrdinal") {
+      return d3[type]().range(togostanzaColors);
     };
 
     const existingSvg = root.getElementsByTagName("svg")[0];
@@ -103,35 +103,26 @@ export default class ForceGraph extends Stanza {
 
     const nodeSizeParams = {
       dataKey: this.params["node-size-key"] || "",
-      minSize: setFallbackNumVal("node-size-min", 0),
-      maxSize: this.params["node-size-max"],
+      minSize: setFallbackNumVal(this.params["node-size-min"], 3),
+      maxSize: setFallbackNumVal(this.params["node-size-max"], 6),
       scale: this.params["node-size-scale"] || "linear",
     };
 
-    // const nodeSizeParams = {
-    //   basedOn: this.params["node-size-based-on"] || "fixed",
-    //   dataKey: this.params["node-size-data-key"] || "",
-    //   fixedSize: this.params["node-fixed-size"] || 3,
-    //   minSize: this.params["node-min-size"],
-    //   maxSize: this.params["node-max-size"],
-    // };
-
     const nodeColorParams = {
-      basedOn: this.params["node-color-based-on"] || "fixed",
-      dataKey: this.params["node-color-data-key"] || "",
+      dataKey: this.params["node-color-key"] || "",
     };
 
     const edgeWidthParams = {
-      basedOn: this.params["edge-width-based-on"] || "fixed",
-      dataKey: this.params["edge-width-data-key"] || "",
-      fixedWidth: this.params["edge-fixed-width"] || 1,
-      minWidth: this.params["edge-min-width"],
-      maxWidth: this.params["edge-max-width"],
+      dataKey: this.params["edge-width-key"] || "",
+      minWidth: setFallbackNumVal("edge-width-min", 1),
+      maxWidth: this.params["edge-width-max"],
+      scale: this.params["edge-width-scale"] || "linear",
+      showArrows: this.params["edge-show_arrows"],
     };
 
     const edgeColorParams = {
-      basedOn: this.params["edge-color-based-on"] || "fixed",
-      dataKey: this.params["edge-color-data-key"] || "",
+      basedOn: this.params["edge-color-based_on"],
+      dataKey: this.params["edge-color-key"] || "",
     };
 
     const tooltipParams = {

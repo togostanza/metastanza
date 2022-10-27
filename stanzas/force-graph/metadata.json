@@ -92,7 +92,7 @@
     {
       "stanza:key": "edge-color-based-on",
       "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "source color", "target color", "fixed"],
+      "stanza:choice": ["data key", "source color", "target color"],
       "stanza:example": "source color",
       "stanza:description": "Set color of the edge based on this"
     },

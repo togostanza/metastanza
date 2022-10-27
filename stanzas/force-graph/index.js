@@ -81,7 +81,7 @@ export default class ForceGraph extends Stanza {
     };
 
     const edgeColorParams = {
-      basedOn: this.params["edge-color-based-on"] || "fixed",
+      basedOn: this.params["edge-color-based-on"],
       dataKey: this.params["edge-color-data-key"] || "",
     };
 

@@ -43,7 +43,7 @@ svg {
 }
 
 .link {
-  stroke-opacity: 0.25;
+  stroke-opacity: var(--togostanza-edge-opacity);
   stroke-linecap: round;
   stroke-width: 1px;
   fill: none;
