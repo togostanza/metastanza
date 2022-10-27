@@ -30,7 +30,7 @@ svg > defs > #arrow-default > path {
 }
 
 .node {
-  fill: var(--togostanza-default-node-color);
+  fill: var(--togostanza-node-default_color);
   stroke: var(--togostanza-border-color);
   stroke-width: var(--togostanza-border-width);
 }
@@ -39,7 +39,7 @@ svg > defs > #arrow-default > path {
   stroke-opacity: var(--togostanza-edge-opacity);
   stroke-linecap: round;
   fill: none;
-  stroke: var(--togostanza-default-edge-color);
+  stroke: var(--togostanza-edge-default_color);
 }
 
 .active {

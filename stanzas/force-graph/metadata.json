@@ -166,13 +166,13 @@
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-default-node-color",
+      "stanza:key": "--togostanza-node-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Nodes default color"
     },
     {
-      "stanza:key": "--togostanza-default-edge-color",
+      "stanza:key": "--togostanza-edge-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"
