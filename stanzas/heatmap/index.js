@@ -26,8 +26,6 @@ export default class Heatmap extends Stanza {
       this.root.querySelector("main")
     );
 
-    //
-
     this.draw(root, data);
   }
   async draw(el, dataset) {
