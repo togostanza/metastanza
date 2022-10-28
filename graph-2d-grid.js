@@ -1,13 +1,12 @@
 import { s as select, S as Stanza, d as defineStanzaElement } from './transform-54fb0dda.js';
 import { l as loadData } from './load-data-fd48655e.js';
 import { T as ToolTip } from './ToolTip-1d0107ed.js';
-import { p as prepareGraphData } from './prepareGraphData-ada8446d.js';
+import { p as prepareGraphData } from './prepareGraphData-22bec080.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-29de360d.js';
 import { o as ordinal } from './ordinal-876d0728.js';
 import './dsv-ac31b097.js';
 import './extent-14a1e8e9.js';
-import './linear-96081af8.js';
-import './descending-63ef45b8.js';
+import './linear-b2e6363e.js';
 
 function drawGridLayout (
   svg,

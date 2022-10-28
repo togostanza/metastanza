@@ -1,4 +1,4 @@
-import { t as treemapDice, r as roundNode } from './stratify-5205cf04.js';
+import { t as treemapDice, r as roundNode } from './dice-7bdb0652.js';
 
 function partition() {
   var dx = 1,
@@ -51,4 +51,4 @@ function partition() {
 }
 
 export { partition as p };
-//# sourceMappingURL=partition-2c1b5971.js.map
+//# sourceMappingURL=partition-e955ad6c.js.map

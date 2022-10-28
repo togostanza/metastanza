@@ -1,19 +1,18 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-54fb0dda.js';
 import { l as loadData } from './load-data-fd48655e.js';
 import { T as ToolTip } from './ToolTip-1d0107ed.js';
-import { L as Legend } from './Legend-ed0a2d5c.js';
+import { L as Legend } from './Legend-780040d8.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-29de360d.js';
 import { m as max } from './max-2c042256.js';
 import { o as ordinal, f as format } from './ordinal-876d0728.js';
 import { b as band } from './band-e7ca2641.js';
-import { l as linear } from './linear-96081af8.js';
+import { l as linear } from './linear-b2e6363e.js';
 import { a as axisBottom, b as axisLeft } from './axis-3dba94d9.js';
 import { s as stack } from './stack-322237e7.js';
 import { g as group } from './group-b85b018d.js';
 import { e as extent } from './extent-14a1e8e9.js';
 import './dsv-ac31b097.js';
 import './range-e15c6861.js';
-import './descending-63ef45b8.js';
 import './array-80a7907a.js';
 import './constant-c49047a5.js';
 

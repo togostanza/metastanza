@@ -1,9 +1,16 @@
 import { i as interpolateNumber } from './transform-54fb0dda.js';
 import { e as exponent, a as interpolate$1, b as formatSpecifier, c as formatPrefix, f as format, i as initRange } from './ordinal-876d0728.js';
-import { d as descending } from './descending-63ef45b8.js';
 
 function ascending(a, b) {
   return a == null || b == null ? NaN : a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+}
+
+function descending(a, b) {
+  return a == null || b == null ? NaN
+    : b < a ? -1
+    : b > a ? 1
+    : b >= a ? 0
+    : NaN;
 }
 
 function bisector(f) {
@@ -385,5 +392,5 @@ function linear() {
   return linearish(scale);
 }
 
-export { precisionRound as a, bisector as b, precisionPrefix as c, ascending as d, bisectRight as e, bisect as f, tickFormat as g, bisectLeft as h, interpolateRound as i, numbers as j, number as k, linear as l, linearish as m, number$1 as n, transformer as o, precisionFixed as p, copy as q, ticks as r, identity as s, tickStep as t, continuous as u, tickIncrement as v, bisectCenter as w };
-//# sourceMappingURL=linear-96081af8.js.map
+export { precisionRound as a, bisector as b, precisionPrefix as c, ascending as d, bisectRight as e, bisect as f, tickFormat as g, bisectLeft as h, interpolateRound as i, numbers as j, number as k, linear as l, linearish as m, number$1 as n, transformer as o, precisionFixed as p, copy as q, ticks as r, continuous as s, tickStep as t, identity as u, descending as v, tickIncrement as w, bisectCenter as x };
+//# sourceMappingURL=linear-b2e6363e.js.map

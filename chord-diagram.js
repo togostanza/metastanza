@@ -1,10 +1,12 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-54fb0dda.js';
 import { l as loadData } from './load-data-fd48655e.js';
-import { d as descending } from './descending-63ef45b8.js';
+import { g as getStanzaInterpolateColor } from './ColorGenerator-f182a868.js';
+import { v as descending } from './linear-b2e6363e.js';
 import { s as sum } from './sum-44e7480e.js';
 import { r as ribbonArrow, c as chordDirected } from './ribbon-bbaf0468.js';
 import { a as arc$2 } from './arc-06a68a59.js';
 import './dsv-ac31b097.js';
+import './ordinal-876d0728.js';
 import './path-a78af922.js';
 import './constant-c49047a5.js';
 
@@ -17,6 +19,7 @@ class ChordDiagram extends Stanza {
     const outerRadius = innerRadius + 6;
     const formatValue = (x) => `${x.toFixed(0)}B`;
 
+    //Drawing area
     const _svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.root.querySelector("main").append(_svg);
     const svg = select(_svg);
@@ -29,10 +32,12 @@ class ChordDiagram extends Stanza {
       this.root.querySelector("main")
     );
 
+    //Create a unique array of data keys
     const names = Array.from(
       new Set(data.flatMap((d) => [d.source, d.target]))
     );
-    console.log(data);
+
+    //Immediate function to create a matrix for values between source and target
     const matrix = (() => {
       const index = new Map(names.map((name, i) => [name, i]));
       const matrix = Array.from(index, () => new Array(names.length).fill(0));
@@ -41,24 +46,18 @@ class ChordDiagram extends Stanza {
       }
       return matrix;
     })();
-    // console.log(matrix)
 
-    // prepare some D3 objects
-    const color = {
-      count: names.length,
-      hue(index) {
-        return (1 / this.count) * index;
-      },
-      hsl(index) {
-        return `hsl(${this.hue(index)}turn, 70%, 60%)`;
-      },
-    };
+    const setColor = getStanzaInterpolateColor(this, names.length);
 
-    // const color = d3.scaleOrdinal(names, d3.schemeCategory10)
+    //Create arrow ribbon generator with radius and padding angle
     const ribbon = ribbonArrow()
       .radius(innerRadius - this.params["edge-offset"])
       .padAngle(1 / innerRadius);
+
+    //Create outer arc generator
     const arc = arc$2().innerRadius(innerRadius).outerRadius(outerRadius);
+
+    //Generate directed chord with matrix
     const chord = chordDirected()
       .padAngle(this.params["arcs-gap"] / innerRadius)
       .sortSubgroups(descending)
@@ -87,8 +86,7 @@ class ChordDiagram extends Stanza {
       .data(chords)
       .join("path")
       .attr("d", ribbon)
-      // .attr('fill', d => color(names[d.target.index]))
-      .attr("fill", (d) => color.hsl(d.target.index))
+      .attr("fill", (d) => setColor(d.target.index))
       .append("title")
       .text(
         (d) =>
@@ -107,8 +105,7 @@ class ChordDiagram extends Stanza {
         g
           .append("path")
           .attr("d", arc)
-          // .attr('fill', d => color(names[d.index]))
-          .attr("fill", (d) => color.hsl(d.index))
+          .attr("fill", (d) => setColor(d.index))
           .attr("stroke", "#fff")
       )
       .call((g) =>
@@ -213,39 +210,39 @@ var metadata = {
 		"stanza:description": "Font size"
 	},
 	{
-		"stanza:key": "--togostanza-series-0-color",
+		"stanza:key": "--togostanza-theme-series_0_color",
 		"stanza:type": "color",
 		"stanza:default": "#6590e6",
 		"stanza:description": "Group color 0"
 	},
 	{
-		"stanza:key": "--togostanza-series-1-color",
+		"stanza:key": "--togostanza-theme-series_1_color",
 		"stanza:type": "color",
 		"stanza:default": "#3ac9b6",
 		"stanza:description": "Group color 1"
 	},
 	{
-		"stanza:key": "--togostanza-series-2-color",
+		"stanza:key": "--togostanza-theme-series_2_color",
 		"stanza:type": "color",
 		"stanza:default": "#9ede2f",
 		"stanza:description": "Group color 2"
 	},
 	{
-		"stanza:key": "--togostanza-series-3-color",
+		"stanza:key": "--togostanza-theme-series_3_color",
 		"stanza:type": "color",
 		"stanza:default": "#F5DA64",
 		"stanza:description": "Group color 3"
 	},
 	{
-		"stanza:key": "--togostanza-series-4-color",
+		"stanza:key": "--togostanza-theme-series_4_color",
 		"stanza:type": "color",
 		"stanza:default": "#F57F5B",
 		"stanza:description": "Group color 4"
 	},
 	{
-		"stanza:key": "--togostanza-series-5-color",
+		"stanza:key": "--togostanza-theme-series_5_color",
 		"stanza:type": "color",
-		"stanza:default": "#F75976",
+		"stanza:default": "#E472C6",
 		"stanza:description": "Group color 5"
 	},
 	{

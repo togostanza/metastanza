@@ -1,20 +1,20 @@
 import { S as Stanza, s as select, d as defineStanzaElement } from './transform-54fb0dda.js';
 import { l as loadData } from './load-data-fd48655e.js';
-import { L as Legend } from './Legend-ed0a2d5c.js';
+import { L as Legend } from './Legend-780040d8.js';
 import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-29de360d.js';
 import { g as group } from './group-b85b018d.js';
 import { o as ordinal, f as format } from './ordinal-876d0728.js';
 import { m as max } from './max-2c042256.js';
 import { m as min } from './min-4a3f8e4e.js';
-import { l as linear } from './linear-96081af8.js';
+import { l as linear } from './linear-b2e6363e.js';
 import { b as band } from './band-e7ca2641.js';
 import { a as axisBottom, b as axisLeft, c as axisTop, d as axisRight } from './axis-3dba94d9.js';
-import { l as line$2 } from './line-17666ef1.js';
+import { l as line$2 } from './line-5ff356a1.js';
 import './dsv-ac31b097.js';
-import './descending-63ef45b8.js';
 import './range-e15c6861.js';
 import './array-80a7907a.js';
 import './constant-c49047a5.js';
+import './point-7945b9d0.js';
 import './path-a78af922.js';
 
 class Linechart extends Stanza {

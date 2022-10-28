@@ -1,6 +1,6 @@
 import { b as color } from './transform-54fb0dda.js';
 import { e as extent } from './extent-14a1e8e9.js';
-import { l as linear } from './linear-96081af8.js';
+import { l as linear } from './linear-b2e6363e.js';
 
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
@@ -319,4 +319,4 @@ const getGroupPlanes = (groupHash, planeParams) => {
 };
 
 export { getGroupPlanes as a, get3DEdges as g, prepareGraphData as p };
-//# sourceMappingURL=prepareGraphData-ada8446d.js.map
+//# sourceMappingURL=prepareGraphData-22bec080.js.map

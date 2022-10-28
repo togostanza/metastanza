@@ -70,7 +70,7 @@ class Legend extends s {
                 <td>
                   <span
                     class="marker"
-                    style="background-color: ${item.color}"
+                    style="background-color: ${item.color}; outline: 1px black solid"
                   ></span
                   >${item.label}
                 </td>
@@ -101,7 +101,6 @@ class Legend extends s {
    * @param {string?} opt.fadeProp
    */
   setup(items, container, opt) {
-    console.log(container);
     this.items = items;
 
     this.render();
@@ -195,4 +194,4 @@ class Legend extends s {
 customElements.define("togostanza--legend", Legend);
 
 export { Legend as L };
-//# sourceMappingURL=Legend-ed0a2d5c.js.map
+//# sourceMappingURL=Legend-780040d8.js.map

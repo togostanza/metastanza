@@ -1,17 +1,20 @@
 import { R as Rgb, o as rgbConvert, p as define, q as extend, C as Color, t as brighter, u as darker, v as hue$1, n as hsl$2, w as nogamma, x as now, T as Timer } from './transform-54fb0dda.js';
 import { e as constant$1 } from './manyBody-67c659cf.js';
 import { r as range$1 } from './range-e15c6861.js';
-import { o as optional, N as Node$1, t as treemapDice } from './stratify-5205cf04.js';
-import { c as constant$2, d as constantZero, a as treemapSlice, s as squarifyRatio, p as phi } from './index-c54c7661.js';
-import { d as ascending, n as number$1, j as numbers, k as number$2, m as linearish, o as transformer$3, q as copy$1, r as ticks, s as identity$2, f as bisect, b as bisector, t as tickStep, u as continuous, i as interpolateRound } from './linear-96081af8.js';
+import { o as optional } from './stratify-7050dfd9.js';
+import { c as constant$2, d as constantZero, a as treemapSlice, s as squarifyRatio, p as phi } from './index-605eb048.js';
+import { t as treemapDice } from './dice-7bdb0652.js';
+import { d as ascending, n as number$1, j as numbers, k as number$2, m as linearish, o as transformer$3, q as copy$1, r as ticks, f as bisect, b as bisector, t as tickStep, s as continuous, u as identity$2, i as interpolateRound } from './linear-b2e6363e.js';
 import { a as interpolate$1, i as initRange, b as formatSpecifier, f as format, m as initInterpolator } from './ordinal-876d0728.js';
 import { m as max } from './max-2c042256.js';
 import { m as min } from './min-4a3f8e4e.js';
+import { a as powish } from './pow-a32fdfa5.js';
 import { a as array$1 } from './array-80a7907a.js';
 import { c as constant$3 } from './constant-c49047a5.js';
-import { l as line$2, c as curveLinear, x as x$1, y } from './line-17666ef1.js';
+import { l as line$2, c as curveLinear } from './line-5ff356a1.js';
+import { x as x$1, y } from './point-7945b9d0.js';
 import { p as path } from './path-a78af922.js';
-import { s as sqrt$2, m as min$1, t as tau$2, p as pi$1, b as sin$1, c as cos$1, e as epsilon$3 } from './arc-06a68a59.js';
+import { s as sqrt$1, m as min$1, t as tau$2, p as pi$1, b as sin$1, c as cos$1, e as epsilon$3 } from './arc-06a68a59.js';
 import { p as point$3, B as Basis } from './basis-0dde91c7.js';
 
 function variance(values, valueof) {
@@ -1768,7 +1771,7 @@ class Voronoi {
   }
 }
 
-const tau$1 = 2 * Math.PI, pow$2 = Math.pow;
+const tau$1 = 2 * Math.PI, pow$1 = Math.pow;
 
 function pointX(p) {
   return p[0];
@@ -1904,12 +1907,12 @@ class Delaunay {
     const {inedges, hull, _hullIndex, halfedges, triangles, points} = this;
     if (inedges[i] === -1 || !points.length) return (i + 1) % (points.length >> 1);
     let c = i;
-    let dc = pow$2(x - points[i * 2], 2) + pow$2(y - points[i * 2 + 1], 2);
+    let dc = pow$1(x - points[i * 2], 2) + pow$1(y - points[i * 2 + 1], 2);
     const e0 = inedges[i];
     let e = e0;
     do {
       let t = triangles[e];
-      const dt = pow$2(x - points[t * 2], 2) + pow$2(y - points[t * 2 + 1], 2);
+      const dt = pow$1(x - points[t * 2], 2) + pow$1(y - points[t * 2 + 1], 2);
       if (dt < dc) dc = dt, c = t;
       e = e % 3 === 2 ? e - 2 : e + 1;
       if (triangles[e] !== i) break; // bad triangulation
@@ -1917,7 +1920,7 @@ class Delaunay {
       if (e === -1) {
         e = hull[(_hullIndex[i] + 1) % hull.length];
         if (e !== t) {
-          if (pow$2(x - points[e * 2], 2) + pow$2(y - points[e * 2 + 1], 2) < dc) return e;
+          if (pow$1(x - points[e * 2], 2) + pow$1(y - points[e * 2 + 1], 2) < dc) return e;
         }
         break;
       }
@@ -2110,10 +2113,10 @@ var ceil = Math.ceil;
 var exp = Math.exp;
 var hypot = Math.hypot;
 var log$1 = Math.log;
-var pow$1 = Math.pow;
+var pow = Math.pow;
 var sin = Math.sin;
 var sign$1 = Math.sign || function(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; };
-var sqrt$1 = Math.sqrt;
+var sqrt = Math.sqrt;
 var tan = Math.tan;
 
 function acos(x) {
@@ -2300,7 +2303,7 @@ function cartesianScale(vector, k) {
 
 // TODO return d
 function cartesianNormalizeInPlace(d) {
-  var l = sqrt$1(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
+  var l = sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
   d[0] /= l, d[1] /= l, d[2] /= l;
 }
 
@@ -2534,7 +2537,7 @@ function centroidLinePoint(lambda, phi) {
       x = cosPhi * cos(lambda),
       y = cosPhi * sin(lambda),
       z = sin(phi),
-      w = atan2(sqrt$1((w = y0$4 * z - z0 * y) * w + (w = z0 * x - x0$4 * z) * w + (w = x0$4 * y - y0$4 * x) * w), x0$4 * x + y0$4 * y + z0 * z);
+      w = atan2(sqrt((w = y0$4 * z - z0 * y) * w + (w = z0 * x - x0$4 * z) * w + (w = x0$4 * y - y0$4 * x) * w), x0$4 * x + y0$4 * y + z0 * z);
   W1 += w;
   X1$1 += w * (x0$4 + (x0$4 = x));
   Y1$1 += w * (y0$4 + (y0$4 = y));
@@ -3316,7 +3319,7 @@ function clipCircle(radius) {
 
     if (t2 < 0) return;
 
-    var t = sqrt$1(t2),
+    var t = sqrt(t2),
         q = cartesianScale(u, (-w - t) / uu);
     cartesianAddInPlace(q, A);
     q = spherical(q);
@@ -3824,7 +3827,7 @@ function centroidPointFirstLine(x, y) {
 }
 
 function centroidPointLine(x, y) {
-  var dx = x - x0$1, dy = y - y0$1, z = sqrt$1(dx * dx + dy * dy);
+  var dx = x - x0$1, dy = y - y0$1, z = sqrt(dx * dx + dy * dy);
   X1 += z * (x0$1 + x) / 2;
   Y1 += z * (y0$1 + y) / 2;
   Z1 += z;
@@ -3851,7 +3854,7 @@ function centroidPointFirstRing(x, y) {
 function centroidPointRing(x, y) {
   var dx = x - x0$1,
       dy = y - y0$1,
-      z = sqrt$1(dx * dx + dy * dy);
+      z = sqrt(dx * dx + dy * dy);
 
   X1 += z * (x0$1 + x) / 2;
   Y1 += z * (y0$1 + y) / 2;
@@ -3945,7 +3948,7 @@ function lengthPointFirst(x, y) {
 
 function lengthPoint(x, y) {
   x0 -= x, y0 -= y;
-  lengthSum.add(sqrt$1(x0 * x0 + y0 * y0));
+  lengthSum.add(sqrt(x0 * x0 + y0 * y0));
   x0 = x, y0 = y;
 }
 
@@ -4162,7 +4165,7 @@ function resample$1(project, delta2) {
       var a = a0 + a1,
           b = b0 + b1,
           c = c0 + c1,
-          m = sqrt$1(a * a + b * b + c * c),
+          m = sqrt(a * a + b * b + c * c),
           phi2 = asin(c /= m),
           lambda2 = abs(abs(c) - 1) < epsilon || abs(lambda0 - lambda1) < epsilon ? (lambda0 + lambda1) / 2 : atan2(b, a),
           p = project(lambda2, phi2),
@@ -4361,7 +4364,7 @@ function projectionMutator(projectAt) {
   };
 
   projection.precision = function(_) {
-    return arguments.length ? (projectResample = resample(projectTransform, delta2 = _ * _), reset()) : sqrt$1(delta2);
+    return arguments.length ? (projectResample = resample(projectTransform, delta2 = _ * _), reset()) : sqrt(delta2);
   };
 
   projection.fitExtent = function(extent, object) {
@@ -4435,10 +4438,10 @@ function conicEqualAreaRaw(y0, y1) {
   // Are the parallels symmetrical around the Equator?
   if (abs(n) < epsilon) return cylindricalEqualAreaRaw(y0);
 
-  var c = 1 + sy0 * (2 * n - sy0), r0 = sqrt$1(c) / n;
+  var c = 1 + sy0 * (2 * n - sy0), r0 = sqrt(c) / n;
 
   function project(x, y) {
-    var r = sqrt$1(c - 2 * n * sin(y)) / n;
+    var r = sqrt(c - 2 * n * sin(y)) / n;
     return [r * sin(x *= n), r0 - r * cos(x)];
   }
 
@@ -4590,7 +4593,7 @@ function azimuthalRaw(scale) {
 
 function azimuthalInvert(angle) {
   return function(x, y) {
-    var z = sqrt$1(x * x + y * y),
+    var z = sqrt(x * x + y * y),
         c = angle(z),
         sc = sin(c),
         cc = cos(c);
@@ -4602,7 +4605,7 @@ function azimuthalInvert(angle) {
 }
 
 var azimuthalEqualAreaRaw = azimuthalRaw(function(cxcy) {
-  return sqrt$1(2 / (1 + cxcy));
+  return sqrt(2 / (1 + cxcy));
 });
 
 azimuthalEqualAreaRaw.invert = azimuthalInvert(function(z) {
@@ -4685,23 +4688,23 @@ function tany(y) {
 function conicConformalRaw(y0, y1) {
   var cy0 = cos(y0),
       n = y0 === y1 ? sin(y0) : log$1(cy0 / cos(y1)) / log$1(tany(y1) / tany(y0)),
-      f = cy0 * pow$1(tany(y0), n) / n;
+      f = cy0 * pow(tany(y0), n) / n;
 
   if (!n) return mercatorRaw;
 
   function project(x, y) {
     if (f > 0) { if (y < -halfPi + epsilon) y = -halfPi + epsilon; }
     else { if (y > halfPi - epsilon) y = halfPi - epsilon; }
-    var r = f / pow$1(tany(y), n);
+    var r = f / pow(tany(y), n);
     return [r * sin(n * x), f - r * cos(n * x)];
   }
 
   project.invert = function(x, y) {
-    var fy = f - y, r = sign$1(n) * sqrt$1(x * x + fy * fy),
+    var fy = f - y, r = sign$1(n) * sqrt(x * x + fy * fy),
       l = atan2(x, abs(fy)) * sign$1(fy);
     if (fy * n < 0)
       l -= pi * sign$1(x) * sign$1(fy);
-    return [l / n, 2 * atan(pow$1(f / r, 1 / n)) - halfPi];
+    return [l / n, 2 * atan(pow(f / r, 1 / n)) - halfPi];
   };
 
   return project;
@@ -4741,7 +4744,7 @@ function conicEquidistantRaw(y0, y1) {
         l = atan2(x, abs(gy)) * sign$1(gy);
     if (gy * n < 0)
       l -= pi * sign$1(x) * sign$1(gy);
-    return [l / n, g - sign$1(n) * sqrt$1(x * x + gy * gy)];
+    return [l / n, g - sign$1(n) * sqrt(x * x + gy * gy)];
   };
 
   return project;
@@ -4757,7 +4760,7 @@ var A1 = 1.340264,
     A2 = -0.081106,
     A3 = 0.000893,
     A4 = 0.003796,
-    M = sqrt$1(3) / 2,
+    M = sqrt(3) / 2,
     iterations = 12;
 
 function equalEarthRaw(lambda, phi) {
@@ -4956,91 +4959,6 @@ function geoTransverseMercator() {
 
   return rotate([0, 0, 90])
       .scale(159.155);
-}
-
-function defaultSeparation$1(a, b) {
-  return a.parent === b.parent ? 1 : 2;
-}
-
-function meanX(children) {
-  return children.reduce(meanXReduce, 0) / children.length;
-}
-
-function meanXReduce(x, c) {
-  return x + c.x;
-}
-
-function maxY(children) {
-  return 1 + children.reduce(maxYReduce, 0);
-}
-
-function maxYReduce(y, c) {
-  return Math.max(y, c.y);
-}
-
-function leafLeft(node) {
-  var children;
-  while (children = node.children) node = children[0];
-  return node;
-}
-
-function leafRight(node) {
-  var children;
-  while (children = node.children) node = children[children.length - 1];
-  return node;
-}
-
-function cluster() {
-  var separation = defaultSeparation$1,
-      dx = 1,
-      dy = 1,
-      nodeSize = false;
-
-  function cluster(root) {
-    var previousNode,
-        x = 0;
-
-    // First walk, computing the initial x & y values.
-    root.eachAfter(function(node) {
-      var children = node.children;
-      if (children) {
-        node.x = meanX(children);
-        node.y = maxY(children);
-      } else {
-        node.x = previousNode ? x += separation(node, previousNode) : 0;
-        node.y = 0;
-        previousNode = node;
-      }
-    });
-
-    var left = leafLeft(root),
-        right = leafRight(root),
-        x0 = left.x - separation(left, right) / 2,
-        x1 = right.x + separation(right, left) / 2;
-
-    // Second walk, normalizing x & y to the desired size.
-    return root.eachAfter(nodeSize ? function(node) {
-      node.x = (node.x - root.x) * dx;
-      node.y = (root.y - node.y) * dy;
-    } : function(node) {
-      node.x = (node.x - x0) / (x1 - x0) * dx;
-      node.y = (1 - (root.y ? node.y / root.y : 1)) * dy;
-    });
-  }
-
-  cluster.separation = function(x) {
-    return arguments.length ? (separation = x, cluster) : separation;
-  };
-
-  cluster.size = function(x) {
-    return arguments.length ? (nodeSize = false, dx = +x[0], dy = +x[1], cluster) : (nodeSize ? null : [dx, dy]);
-  };
-
-  cluster.nodeSize = function(x) {
-    return arguments.length ? (nodeSize = true, dx = +x[0], dy = +x[1], cluster) : (nodeSize ? [dx, dy] : null);
-  };
-
-  return cluster;
 }
 
 // https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use
@@ -5389,242 +5307,6 @@ function translateChild(k) {
   };
 }
 
-function defaultSeparation(a, b) {
-  return a.parent === b.parent ? 1 : 2;
-}
-
-// function radialSeparation(a, b) {
-//   return (a.parent === b.parent ? 1 : 2) / a.depth;
-// }
-
-// This function is used to traverse the left contour of a subtree (or
-// subforest). It returns the successor of v on this contour. This successor is
-// either given by the leftmost child of v or by the thread of v. The function
-// returns null if and only if v is on the highest level of its subtree.
-function nextLeft(v) {
-  var children = v.children;
-  return children ? children[0] : v.t;
-}
-
-// This function works analogously to nextLeft.
-function nextRight(v) {
-  var children = v.children;
-  return children ? children[children.length - 1] : v.t;
-}
-
-// Shifts the current subtree rooted at w+. This is done by increasing
-// prelim(w+) and mod(w+) by shift.
-function moveSubtree(wm, wp, shift) {
-  var change = shift / (wp.i - wm.i);
-  wp.c -= change;
-  wp.s += shift;
-  wm.c += change;
-  wp.z += shift;
-  wp.m += shift;
-}
-
-// All other shifts, applied to the smaller subtrees between w- and w+, are
-// performed by this function. To prepare the shifts, we have to adjust
-// change(w+), shift(w+), and change(w-).
-function executeShifts(v) {
-  var shift = 0,
-      change = 0,
-      children = v.children,
-      i = children.length,
-      w;
-  while (--i >= 0) {
-    w = children[i];
-    w.z += shift;
-    w.m += shift;
-    shift += w.s + (change += w.c);
-  }
-}
-
-// If vi-’s ancestor is a sibling of v, returns vi-’s ancestor. Otherwise,
-// returns the specified (default) ancestor.
-function nextAncestor(vim, v, ancestor) {
-  return vim.a.parent === v.parent ? vim.a : ancestor;
-}
-
-function TreeNode(node, i) {
-  this._ = node;
-  this.parent = null;
-  this.children = null;
-  this.A = null; // default ancestor
-  this.a = this; // ancestor
-  this.z = 0; // prelim
-  this.m = 0; // mod
-  this.c = 0; // change
-  this.s = 0; // shift
-  this.t = null; // thread
-  this.i = i; // number
-}
-
-TreeNode.prototype = Object.create(Node$1.prototype);
-
-function treeRoot(root) {
-  var tree = new TreeNode(root, 0),
-      node,
-      nodes = [tree],
-      child,
-      children,
-      i,
-      n;
-
-  while (node = nodes.pop()) {
-    if (children = node._.children) {
-      node.children = new Array(n = children.length);
-      for (i = n - 1; i >= 0; --i) {
-        nodes.push(child = node.children[i] = new TreeNode(children[i], i));
-        child.parent = node;
-      }
-    }
-  }
-
-  (tree.parent = new TreeNode(null, 0)).children = [tree];
-  return tree;
-}
-
-// Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
-function tree() {
-  var separation = defaultSeparation,
-      dx = 1,
-      dy = 1,
-      nodeSize = null;
-
-  function tree(root) {
-    var t = treeRoot(root);
-
-    // Compute the layout using Buchheim et al.’s algorithm.
-    t.eachAfter(firstWalk), t.parent.m = -t.z;
-    t.eachBefore(secondWalk);
-
-    // If a fixed node size is specified, scale x and y.
-    if (nodeSize) root.eachBefore(sizeNode);
-
-    // If a fixed tree size is specified, scale x and y based on the extent.
-    // Compute the left-most, right-most, and depth-most nodes for extents.
-    else {
-      var left = root,
-          right = root,
-          bottom = root;
-      root.eachBefore(function(node) {
-        if (node.x < left.x) left = node;
-        if (node.x > right.x) right = node;
-        if (node.depth > bottom.depth) bottom = node;
-      });
-      var s = left === right ? 1 : separation(left, right) / 2,
-          tx = s - left.x,
-          kx = dx / (right.x + s + tx),
-          ky = dy / (bottom.depth || 1);
-      root.eachBefore(function(node) {
-        node.x = (node.x + tx) * kx;
-        node.y = node.depth * ky;
-      });
-    }
-
-    return root;
-  }
-
-  // Computes a preliminary x-coordinate for v. Before that, FIRST WALK is
-  // applied recursively to the children of v, as well as the function
-  // APPORTION. After spacing out the children by calling EXECUTE SHIFTS, the
-  // node v is placed to the midpoint of its outermost children.
-  function firstWalk(v) {
-    var children = v.children,
-        siblings = v.parent.children,
-        w = v.i ? siblings[v.i - 1] : null;
-    if (children) {
-      executeShifts(v);
-      var midpoint = (children[0].z + children[children.length - 1].z) / 2;
-      if (w) {
-        v.z = w.z + separation(v._, w._);
-        v.m = v.z - midpoint;
-      } else {
-        v.z = midpoint;
-      }
-    } else if (w) {
-      v.z = w.z + separation(v._, w._);
-    }
-    v.parent.A = apportion(v, w, v.parent.A || siblings[0]);
-  }
-
-  // Computes all real x-coordinates by summing up the modifiers recursively.
-  function secondWalk(v) {
-    v._.x = v.z + v.parent.m;
-    v.m += v.parent.m;
-  }
-
-  // The core of the algorithm. Here, a new subtree is combined with the
-  // previous subtrees. Threads are used to traverse the inside and outside
-  // contours of the left and right subtree up to the highest common level. The
-  // vertices used for the traversals are vi+, vi-, vo-, and vo+, where the
-  // superscript o means outside and i means inside, the subscript - means left
-  // subtree and + means right subtree. For summing up the modifiers along the
-  // contour, we use respective variables si+, si-, so-, and so+. Whenever two
-  // nodes of the inside contours conflict, we compute the left one of the
-  // greatest uncommon ancestors using the function ANCESTOR and call MOVE
-  // SUBTREE to shift the subtree and prepare the shifts of smaller subtrees.
-  // Finally, we add a new thread (if necessary).
-  function apportion(v, w, ancestor) {
-    if (w) {
-      var vip = v,
-          vop = v,
-          vim = w,
-          vom = vip.parent.children[0],
-          sip = vip.m,
-          sop = vop.m,
-          sim = vim.m,
-          som = vom.m,
-          shift;
-      while (vim = nextRight(vim), vip = nextLeft(vip), vim && vip) {
-        vom = nextLeft(vom);
-        vop = nextRight(vop);
-        vop.a = v;
-        shift = vim.z + sim - vip.z - sip + separation(vim._, vip._);
-        if (shift > 0) {
-          moveSubtree(nextAncestor(vim, v, ancestor), v, shift);
-          sip += shift;
-          sop += shift;
-        }
-        sim += vim.m;
-        sip += vip.m;
-        som += vom.m;
-        sop += vop.m;
-      }
-      if (vim && !nextRight(vop)) {
-        vop.t = vim;
-        vop.m += sim - sop;
-      }
-      if (vip && !nextLeft(vom)) {
-        vom.t = vip;
-        vom.m += sip - som;
-        ancestor = v;
-      }
-    }
-    return ancestor;
-  }
-
-  function sizeNode(node) {
-    node.x *= dx;
-    node.y = node.depth * dy;
-  }
-
-  tree.separation = function(x) {
-    return arguments.length ? (separation = x, tree) : separation;
-  };
-
-  tree.size = function(x) {
-    return arguments.length ? (nodeSize = false, dx = +x[0], dy = +x[1], tree) : (nodeSize ? null : [dx, dy]);
-  };
-
-  tree.nodeSize = function(x) {
-    return arguments.length ? (nodeSize = true, dx = +x[0], dy = +x[1], tree) : (nodeSize ? [dx, dy] : null);
-  };
-
-  return tree;
-}
-
 function treemapBinary(parent, x0, y0, x1, y1) {
   var nodes = parent.children,
       i, n = nodes.length,
@@ -5919,53 +5601,6 @@ function symlog() {
   };
 
   return initRange.apply(scale, arguments);
-}
-
-function transformPow(exponent) {
-  return function(x) {
-    return x < 0 ? -Math.pow(-x, exponent) : Math.pow(x, exponent);
-  };
-}
-
-function transformSqrt(x) {
-  return x < 0 ? -Math.sqrt(-x) : Math.sqrt(x);
-}
-
-function transformSquare(x) {
-  return x < 0 ? -x * x : x * x;
-}
-
-function powish(transform) {
-  var scale = transform(identity$2, identity$2),
-      exponent = 1;
-
-  function rescale() {
-    return exponent === 1 ? transform(identity$2, identity$2)
-        : exponent === 0.5 ? transform(transformSqrt, transformSquare)
-        : transform(transformPow(exponent), transformPow(1 / exponent));
-  }
-
-  scale.exponent = function(_) {
-    return arguments.length ? (exponent = +_, rescale()) : exponent;
-  };
-
-  return linearish(scale);
-}
-
-function pow() {
-  var scale = powish(transformer$3());
-
-  scale.copy = function() {
-    return copy$1(scale, pow()).exponent(scale.exponent());
-  };
-
-  initRange.apply(scale, arguments);
-
-  return scale;
-}
-
-function sqrt() {
-  return pow.apply(null, arguments).exponent(0.5);
 }
 
 function quantile() {
@@ -7565,11 +7200,11 @@ function area$2(x0, y0, y1) {
   return area;
 }
 
-const sqrt3$2 = sqrt$2(3);
+const sqrt3$2 = sqrt$1(3);
 
 var asterisk = {
   draw(context, size) {
-    const r = sqrt$2(size + min$1(size / 28, 0.75)) * 0.59436;
+    const r = sqrt$1(size + min$1(size / 28, 0.75)) * 0.59436;
     const t = r / 2;
     const u = t * sqrt3$2;
     context.moveTo(0, r);
@@ -7583,7 +7218,7 @@ var asterisk = {
 
 var circle = {
   draw(context, size) {
-    const r = sqrt$2(size / pi$1);
+    const r = sqrt$1(size / pi$1);
     context.moveTo(r, 0);
     context.arc(0, 0, r, 0, tau$2);
   }
@@ -7591,7 +7226,7 @@ var circle = {
 
 var cross = {
   draw(context, size) {
-    const r = sqrt$2(size / 5) / 2;
+    const r = sqrt$1(size / 5) / 2;
     context.moveTo(-3 * r, -r);
     context.lineTo(-r, -r);
     context.lineTo(-r, -3 * r);
@@ -7608,12 +7243,12 @@ var cross = {
   }
 };
 
-const tan30 = sqrt$2(1 / 3);
+const tan30 = sqrt$1(1 / 3);
 const tan30_2 = tan30 * 2;
 
 var diamond = {
   draw(context, size) {
-    const y = sqrt$2(size / tan30_2);
+    const y = sqrt$1(size / tan30_2);
     const x = y * tan30;
     context.moveTo(0, -y);
     context.lineTo(x, 0);
@@ -7625,7 +7260,7 @@ var diamond = {
 
 var diamond2 = {
   draw(context, size) {
-    const r = sqrt$2(size) * 0.62625;
+    const r = sqrt$1(size) * 0.62625;
     context.moveTo(0, -r);
     context.lineTo(r, 0);
     context.lineTo(0, r);
@@ -7636,7 +7271,7 @@ var diamond2 = {
 
 var plus = {
   draw(context, size) {
-    const r = sqrt$2(size - min$1(size / 7, 2)) * 0.87559;
+    const r = sqrt$1(size - min$1(size / 7, 2)) * 0.87559;
     context.moveTo(-r, 0);
     context.lineTo(r, 0);
     context.moveTo(0, r);
@@ -7646,7 +7281,7 @@ var plus = {
 
 var square = {
   draw(context, size) {
-    const w = sqrt$2(size);
+    const w = sqrt$1(size);
     const x = -w / 2;
     context.rect(x, x, w, w);
   }
@@ -7654,7 +7289,7 @@ var square = {
 
 var square2 = {
   draw(context, size) {
-    const r = sqrt$2(size) * 0.4431;
+    const r = sqrt$1(size) * 0.4431;
     context.moveTo(r, r);
     context.lineTo(r, -r);
     context.lineTo(-r, -r);
@@ -7670,7 +7305,7 @@ const ky = -cos$1(tau$2 / 10) * kr;
 
 var star = {
   draw(context, size) {
-    const r = sqrt$2(size * ka);
+    const r = sqrt$1(size * ka);
     const x = kx * r;
     const y = ky * r;
     context.moveTo(0, -r);
@@ -7686,11 +7321,11 @@ var star = {
   }
 };
 
-const sqrt3$1 = sqrt$2(3);
+const sqrt3$1 = sqrt$1(3);
 
 var triangle = {
   draw(context, size) {
-    const y = -sqrt$2(size / (sqrt3$1 * 3));
+    const y = -sqrt$1(size / (sqrt3$1 * 3));
     context.moveTo(0, y * 2);
     context.lineTo(-sqrt3$1 * y, -y);
     context.lineTo(sqrt3$1 * y, -y);
@@ -7698,11 +7333,11 @@ var triangle = {
   }
 };
 
-const sqrt3 = sqrt$2(3);
+const sqrt3 = sqrt$1(3);
 
 var triangle2 = {
   draw(context, size) {
-    const s = sqrt$2(size) * 0.6824;
+    const s = sqrt$1(size) * 0.6824;
     const t = s  / 2;
     const u = (s * sqrt3) / 2; // cos(Math.PI / 6)
     context.moveTo(0, -s);
@@ -7713,13 +7348,13 @@ var triangle2 = {
 };
 
 const c = -0.5;
-const s = sqrt$2(3) / 2;
-const k = 1 / sqrt$2(12);
+const s = sqrt$1(3) / 2;
+const k = 1 / sqrt$1(12);
 const a = (k / 2 + 1) * 3;
 
 var wye = {
   draw(context, size) {
-    const r = sqrt$2(size / a);
+    const r = sqrt$1(size / a);
     const x0 = r / 2, y0 = r * k;
     const x1 = x0, y1 = r * k + r;
     const x2 = -x1, y2 = y1;
@@ -7738,7 +7373,7 @@ var wye = {
 
 var x = {
   draw(context, size) {
-    const r = sqrt$2(size - min$1(size / 6, 1.7)) * 0.6189;
+    const r = sqrt$1(size - min$1(size / 6, 1.7)) * 0.6189;
     context.moveTo(-r, -r);
     context.lineTo(r, r);
     context.moveTo(-r, r);
@@ -8576,5 +8211,5 @@ function stepAfter(context) {
   return new Step(context, 1);
 }
 
-export { quantile as $, timeFormat as A, timeParse as B, utcFormat as C, utcParse as D, formatLocale as E, quantileSorted as F, deviation as G, quantile$1 as H, median as I, mean as J, identity as K, log as L, pow as M, sqrt as N, symlog as O, time as P, utcTime as Q, sequential as R, sequentialLog as S, sequentialPow as T, sequentialSqrt as U, sequentialSymlog as V, diverging as W, divergingLog as X, divergingPow as Y, divergingSqrt as Z, divergingSymlog as _, hsl$1 as a, sqrt$1 as a$, quantize as a0, threshold as a1, area$2 as a2, Symbol$1 as a3, curveBasisClosed as a4, curveBasisOpen as a5, curveBundle as a6, curveCardinal as a7, curveCardinalOpen as a8, curveCardinalClosed as a9, geoStereographic as aA, geoTransverseMercator as aB, graticule as aC, forceX as aD, forceY as aE, pack as aF, tree as aG, cluster as aH, treemapBinary as aI, treemapSliceDice as aJ, treemapResquarify as aK, Delaunay as aL, permute as aM, geoBounds$1 as aN, geoCentroid$1 as aO, lab$1 as aP, hcl$2 as aQ, geoArea$1 as aR, interval as aS, sort as aT, ascendingDefined as aU, compareDefined as aV, clipRectangle as aW, Adder as aX, geoStream as aY, noop$1 as aZ, atan2 as a_, curveCatmullRom as aa, curveCatmullRomClosed as ab, curveCatmullRomOpen as ac, curveLinearClosed as ad, monotoneY as ae, monotoneX as af, curveNatural as ag, curveStep as ah, stepAfter as ai, stepBefore as aj, projection as ak, geoPath as al, geoAlbers as am, geoAlbersUsa as an, geoAzimuthalEqualArea as ao, geoAzimuthalEquidistant as ap, geoConicConformal as aq, geoConicEqualArea as ar, geoConicEquidistant as as, geoEqualEarth as at, geoEquirectangular as au, geoGnomonic as av, geoIdentity as aw, geoMercator as ax, geoNaturalEarth1 as ay, geoOrthographic as az, hslLong as b, mondays as b$, sin as b0, cos as b1, radians as b2, abs as b3, polygonContains as b4, epsilon2 as b5, degrees as b6, asin as b7, haversin as b8, cubehelix$2 as b9, rotation as bA, transform as bB, siblings as bC, enclose as bD, symbolsStroke as bE, symbolsFill as bF, asterisk as bG, circle as bH, cross as bI, diamond as bJ, diamond2 as bK, plus as bL, square as bM, square2 as bN, star as bO, triangle as bP, triangle2 as bQ, wye as bR, x as bS, newInterval as bT, milliseconds as bU, seconds as bV, minutes as bW, hours as bX, days as bY, sundays as bZ, monday as b_, fsum as ba, fcumsum as bb, merge as bc, quickselect as bd, variance as be, lch as bf, gray as bg, Voronoi as bh, geoCircle as bi, clipAntimeridian as bj, clipCircle as bk, graticule10 as bl, azimuthalEqualAreaRaw as bm, azimuthalEquidistantRaw as bn, conicConformalRaw as bo, conicEqualAreaRaw as bp, conicEquidistantRaw as bq, equalEarthRaw as br, equirectangularRaw as bs, gnomonicRaw as bt, projectionMutator as bu, mercatorRaw as bv, naturalEarth1Raw as bw, orthographicRaw as bx, stereographicRaw as by, transverseMercatorRaw as bz, hcl$1 as c, tuesday as c0, tuesdays as c1, wednesday as c2, wednesdays as c3, thursday as c4, thursdays as c5, friday as c6, fridays as c7, saturday as c8, saturdays as c9, months as ca, years as cb, utcMinutes as cc, utcHours as cd, utcDays as ce, utcSundays as cf, utcMonday as cg, utcMondays as ch, utcTuesday as ci, utcTuesdays as cj, utcWednesday as ck, utcWednesdays as cl, utcThursday as cm, utcThursdays as cn, utcFriday as co, utcFridays as cp, utcSaturday as cq, utcSaturdays as cr, utcMonths as cs, utcYears as ct, utcTicks as cu, utcTickInterval as cv, timeTicks as cw, timeTickInterval as cx, defaultLocale as cy, discrete as d, hclLong as e, cubehelix$1 as f, cubehelixLong as g, hue as h, interpolateZoom as i, timeMonth as j, timeDay as k, lab as l, timeHour as m, timeMinute as n, utcMillisecond as o, piecewise as p, quantize$1 as q, utcYear$1 as r, sunday as s, timeYear as t, utcSecond as u, utcMonth$1 as v, utcSunday as w, utcDay$1 as x, utcHour$1 as y, utcMinute$1 as z };
-//# sourceMappingURL=step-1a05dba1.js.map
+export { threshold as $, timeFormat as A, timeParse as B, utcFormat as C, utcParse as D, formatLocale as E, quantileSorted as F, deviation as G, quantile$1 as H, median as I, mean as J, identity as K, log as L, symlog as M, time as N, utcTime as O, sequential as P, sequentialLog as Q, sequentialPow as R, sequentialSqrt as S, sequentialSymlog as T, diverging as U, divergingLog as V, divergingPow as W, divergingSqrt as X, divergingSymlog as Y, quantile as Z, quantize as _, hsl$1 as a, abs as a$, area$2 as a0, Symbol$1 as a1, curveBasisClosed as a2, curveBasisOpen as a3, curveBundle as a4, curveCardinal as a5, curveCardinalOpen as a6, curveCardinalClosed as a7, curveCatmullRom as a8, curveCatmullRomClosed as a9, graticule as aA, forceX as aB, forceY as aC, pack as aD, treemapBinary as aE, treemapSliceDice as aF, treemapResquarify as aG, Delaunay as aH, permute as aI, geoBounds$1 as aJ, geoCentroid$1 as aK, lab$1 as aL, hcl$2 as aM, geoArea$1 as aN, interval as aO, sort as aP, ascendingDefined as aQ, compareDefined as aR, clipRectangle as aS, Adder as aT, geoStream as aU, noop$1 as aV, atan2 as aW, sqrt as aX, sin as aY, cos as aZ, radians as a_, curveCatmullRomOpen as aa, curveLinearClosed as ab, monotoneY as ac, monotoneX as ad, curveNatural as ae, curveStep as af, stepAfter as ag, stepBefore as ah, projection as ai, geoPath as aj, geoAlbers as ak, geoAlbersUsa as al, geoAzimuthalEqualArea as am, geoAzimuthalEquidistant as an, geoConicConformal as ao, geoConicEqualArea as ap, geoConicEquidistant as aq, geoEqualEarth as ar, geoEquirectangular as as, geoGnomonic as at, geoIdentity as au, geoMercator as av, geoNaturalEarth1 as aw, geoOrthographic as ax, geoStereographic as ay, geoTransverseMercator as az, hslLong as b, wednesdays as b$, polygonContains as b0, epsilon2 as b1, degrees as b2, asin as b3, haversin as b4, cubehelix$2 as b5, fsum as b6, fcumsum as b7, merge as b8, quickselect as b9, symbolsStroke as bA, symbolsFill as bB, asterisk as bC, circle as bD, cross as bE, diamond as bF, diamond2 as bG, plus as bH, square as bI, square2 as bJ, star as bK, triangle as bL, triangle2 as bM, wye as bN, x as bO, newInterval as bP, milliseconds as bQ, seconds as bR, minutes as bS, hours as bT, days as bU, sundays as bV, monday as bW, mondays as bX, tuesday as bY, tuesdays as bZ, wednesday as b_, variance as ba, lch as bb, gray as bc, Voronoi as bd, geoCircle as be, clipAntimeridian as bf, clipCircle as bg, graticule10 as bh, azimuthalEqualAreaRaw as bi, azimuthalEquidistantRaw as bj, conicConformalRaw as bk, conicEqualAreaRaw as bl, conicEquidistantRaw as bm, equalEarthRaw as bn, equirectangularRaw as bo, gnomonicRaw as bp, projectionMutator as bq, mercatorRaw as br, naturalEarth1Raw as bs, orthographicRaw as bt, stereographicRaw as bu, transverseMercatorRaw as bv, rotation as bw, transform as bx, siblings as by, enclose as bz, hcl$1 as c, thursday as c0, thursdays as c1, friday as c2, fridays as c3, saturday as c4, saturdays as c5, months as c6, years as c7, utcMinutes as c8, utcHours as c9, utcDays as ca, utcSundays as cb, utcMonday as cc, utcMondays as cd, utcTuesday as ce, utcTuesdays as cf, utcWednesday as cg, utcWednesdays as ch, utcThursday as ci, utcThursdays as cj, utcFriday as ck, utcFridays as cl, utcSaturday as cm, utcSaturdays as cn, utcMonths as co, utcYears as cp, utcTicks as cq, utcTickInterval as cr, timeTicks as cs, timeTickInterval as ct, defaultLocale as cu, discrete as d, hclLong as e, cubehelix$1 as f, cubehelixLong as g, hue as h, interpolateZoom as i, timeMonth as j, timeDay as k, lab as l, timeHour as m, timeMinute as n, utcMillisecond as o, piecewise as p, quantize$1 as q, utcYear$1 as r, sunday as s, timeYear as t, utcSecond as u, utcMonth$1 as v, utcSunday as w, utcDay$1 as x, utcHour$1 as y, utcMinute$1 as z };
+//# sourceMappingURL=step-f1b1e341.js.map

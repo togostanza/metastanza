@@ -1,5 +1,6 @@
 import { a as array } from './array-80a7907a.js';
 import { c as constant } from './constant-c49047a5.js';
+import { x, y } from './point-7945b9d0.js';
 import { p as path } from './path-a78af922.js';
 
 function Linear(context) {
@@ -32,14 +33,6 @@ Linear.prototype = {
 
 function curveLinear(context) {
   return new Linear(context);
-}
-
-function x(p) {
-  return p[0];
-}
-
-function y(p) {
-  return p[1];
 }
 
 function line$2(x$1, y$1) {
@@ -94,5 +87,5 @@ function line$2(x$1, y$1) {
   return line;
 }
 
-export { curveLinear as c, line$2 as l, x, y };
-//# sourceMappingURL=line-17666ef1.js.map
+export { curveLinear as c, line$2 as l };
+//# sourceMappingURL=line-5ff356a1.js.map
