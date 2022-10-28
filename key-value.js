@@ -3,7 +3,7 @@ import { l as loadData } from './load-data-fd48655e.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-29de360d.js';
 import './dsv-ac31b097.js';
 
-class HashTable extends Stanza {
+class KeyValue extends Stanza {
   menu() {
     return [
       downloadJSONMenuItem(this, "hashtable", this._data),
@@ -13,7 +13,7 @@ class HashTable extends Stanza {
   }
 
   async render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["misc-custom_css_url"]);
 
     const dataset = (
       await loadData(
@@ -35,7 +35,7 @@ class HashTable extends Stanza {
       });
       const label = column.label
         ? column.label
-        : this.params["format-key"] === "true"
+        : this.params["format_key"]
         ? datum_label.charAt(0).toUpperCase() +
           datum_label.substring(1).replace(/_/g, " ")
         : datum_label;
@@ -53,26 +53,21 @@ class HashTable extends Stanza {
         values,
       },
     });
-
-    const main = this.root.querySelector("main");
-    main.parentNode.style.backgroundColor =
-      "var(--togostanza-background-color)";
-    main.parentNode.style.padding = `${this.params["padding"]}px`;
   }
 }
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': HashTable
+  'default': KeyValue
 });
 
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "hash-table",
-	"stanza:label": "Hash table",
-	"stanza:definition": "Hash table MetaStanza",
+	"@id": "key-value",
+	"stanza:label": "Key-value",
+	"stanza:definition": "Key-value table MetaStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
 	"stanza:address": "https://github.com/togostanza/metastanza",
@@ -81,7 +76,7 @@ var metadata = {
 	"Enishi Tech"
 ],
 	"stanza:created": "2021-03-18",
-	"stanza:updated": "2021-03-18",
+	"stanza:updated": "2022-10-25",
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
@@ -103,16 +98,10 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "custom-css-url",
+		"stanza:key": "misc-custom_css_url",
 		"stanza:example": "",
-		"stanza:description": "Stylesheet(css file) URL to override current style",
+		"stanza:description": "Stylesheet(scss file) URL to override current style",
 		"stanza:required": false
-	},
-	{
-		"stanza:key": "padding",
-		"stanza:type": "number",
-		"stanza:example": 0,
-		"stanza:description": "Padding"
 	},
 	{
 		"stanza:key": "columns",
@@ -120,12 +109,8 @@ var metadata = {
 		"stanza:description": "Columns' options"
 	},
 	{
-		"stanza:key": "format-key",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"true",
-			"false"
-		],
+		"stanza:key": "format_key",
+		"stanza:type": "boolean",
 		"stanza:example": true,
 		"stanza:description": "Capitalize the acronym and convert underscore to blank"
 	}
@@ -133,49 +118,79 @@ var metadata = {
 	"stanza:menu-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--column-count",
+		"stanza:key": "--togostanza-outline-padding",
 		"stanza:type": "text",
-		"stanza:default": "1",
-		"stanza:description": "Column's count"
+		"stanza:default": "10px",
+		"stanza:description": "Stanza inside outline padding"
 	},
 	{
-		"stanza:key": "--togostanza-font-family",
+		"stanza:key": "--togostanza-border-color",
+		"stanza:type": "color",
+		"stanza:default": "#EEEEEE",
+		"stanza:description": "Stanza border color"
+	},
+	{
+		"stanza:key": "--togostanza-border-width",
+		"stanza:type": "text",
+		"stanza:default": "1px",
+		"stanza:description": "Stanza border width"
+	},
+	{
+		"stanza:key": "--togostanza-outline-padding",
+		"stanza:type": "text",
+		"stanza:default": "10px",
+		"stanza:description": "Stanza inside outline padding"
+	},
+	{
+		"stanza:key": "--togostanza-table-column_count",
+		"stanza:type": "number",
+		"stanza:default": 1,
+		"stanza:description": "Column count"
+	},
+	{
+		"stanza:key": "--togostanza-theme-background_color",
+		"stanza:type": "color",
+		"stanza:default": "rgba(255,255,255,0)",
+		"stanza:description": "Stanza background color"
+	},
+	{
+		"stanza:key": "--togostanza-fonts-font_family",
 		"stanza:type": "text",
 		"stanza:default": "Helvetica",
 		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--togostanza-table-border",
-		"stanza:type": "text",
-		"stanza:default": "1px solid #EEEEEE",
-		"stanza:description": "Table border"
-	},
-	{
-		"stanza:key": "--togostanza-table-shadow",
-		"stanza:type": "text",
-		"stanza:default": "1px 1px 3px 1px #EEEEEE",
-		"stanza:description": "Table shadow"
-	},
-	{
-		"stanza:key": "--table-background-color",
+		"stanza:key": "--togostanza-fonts-font_color",
 		"stanza:type": "color",
-		"stanza:default": "rgba(255,255,255,0)",
-		"stanza:description": "Background color of table"
+		"stanza:default": "#333333",
+		"stanza:description": "Font family"
 	},
 	{
-		"stanza:key": "--togostanza-tbody-border-bottom",
+		"stanza:key": "--togostanza-fonts-font_size_primary",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "Primary font size"
+	},
+	{
+		"stanza:key": "--togostanza-fonts-font_size_secondary",
+		"stanza:type": "text",
+		"stanza:default": "9px",
+		"stanza:description": "Secondary font size"
+	},
+	{
+		"stanza:key": "--togostanza-table-row-border_bottom",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #EEEEEE",
-		"stanza:description": "Border bottom of table body"
+		"stanza:description": "Rows delimiters' style"
 	},
 	{
-		"stanza:key": "--row-padding",
+		"stanza:key": "--togostanza-table-row-padding",
 		"stanza:type": "text",
 		"stanza:default": "5px",
 		"stanza:description": "Padding of row"
 	},
 	{
-		"stanza:key": "--key-width-percentage",
+		"stanza:key": "--togostanza-table-key-width_percentage",
 		"stanza:type": "text",
 		"stanza:default": "30%",
 		"stanza:description": "Percentage of key width"
@@ -197,24 +212,6 @@ var metadata = {
 		"stanza:type": "text",
 		"stanza:default": "400",
 		"stanza:description": "Font weight of key"
-	},
-	{
-		"stanza:key": "--togostanza-value-font-color",
-		"stanza:type": "color",
-		"stanza:default": "#333333",
-		"stanza:description": "Font color of value"
-	},
-	{
-		"stanza:key": "--togostanza-value-font-size",
-		"stanza:type": "text",
-		"stanza:default": "12px",
-		"stanza:description": "Font size of value"
-	},
-	{
-		"stanza:key": "--togostanza-value-font-weight",
-		"stanza:type": "text",
-		"stanza:default": "400",
-		"stanza:description": "Font weight of value"
 	},
 	{
 		"stanza:key": "--togostanza-background-color",
@@ -300,4 +297,4 @@ var templates = [
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=hash-table.js.map
+//# sourceMappingURL=key-value.js.map
