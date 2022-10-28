@@ -28,20 +28,20 @@
     },
 
     {
-      "stanza:key": "group-planes-sort-by",
+      "stanza:key": "group_planes-sort-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Sort group planes by this data key value"
     },
     {
-      "stanza:key": "group-planes-sort-order",
+      "stanza:key": "group_planes-sort-order",
       "stanza:type": "single-choice",
       "stanza:choice": ["ascending", "descending"],
       "stanza:example": "ascending",
       "stanza:description": "Group planes sorting order"
     },
     {
-      "stanza:key": "nodes-sort-by",
+      "stanza:key": "nodes-sort-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Sort nodes by this data key value"
@@ -131,10 +131,9 @@
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "group-plane-color-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
+      "stanza:key": "group_planes-color_plane",
+      "stanza:type": "boolean",
+      "stanza:example": false,
       "stanza:description": "Set color of the group planes based on this data key"
     },
 
@@ -145,19 +144,19 @@
       "stanza:description": "Constant radius for all groups"
     },
     {
-      "stanza:key": "highlight-adjacent-edges",
+      "stanza:key": "highlight-adjacent_edges",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight adjacent edges on node mouse hover"
     },
     {
-      "stanza:key": "highlight-group-planes",
+      "stanza:key": "highlight-group_planes",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight group planes on mouse hover"
     },
     {
-      "stanza:key": "nodes-tooltip-data-key",
+      "stanza:key": "tooltips-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
@@ -220,13 +219,13 @@
       "stanza:description": "Inner padding in px"
     },
     {
-      "stanza:key": "--togostanza-default-node-color",
+      "stanza:key": "--togostanza-node-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Nodes default color"
     },
     {
-      "stanza:key": "--togostanza-default-edge-color",
+      "stanza:key": "--togostanza-edge-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"
@@ -238,22 +237,28 @@
       "stanza:description": "Edge default opacity"
     },
     {
-      "stanza:key": "--togostanza-default-plane-color",
+      "stanza:key": "--togostanza-group_plane-default_color",
       "stanza:type": "color",
       "stanza:default": "#333333",
       "stanza:description": "Egdes default color"
     },
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
+      "stanza:default": "Helvetica Neue, sans-serif",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-border-color",
+      "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Font color"
+    },
+    {
+      "stanza:key": "--togostanza-fonts-font_size_primary",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Font family"
     },
     {
       "stanza:key": "--togostanza-border-width",
@@ -262,7 +267,7 @@
       "stanza:description": "Border width"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-theme-background_color",
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color"

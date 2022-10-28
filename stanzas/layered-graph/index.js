@@ -87,17 +87,17 @@ export default class ForceGraph extends Stanza {
     const constRarius = !!this.params["group_planes-constant_radius"];
 
     const groupPlaneColorParams = {
-      basedOn: this.params["group-plane-color-based-on"],
+      colorPlane: this.params["group_planes-color_plane"],
       // default fixed color by css
     };
 
     const groupsSortParams = {
-      sortBy: this.params["group-planes-sort-by"],
-      sortOrder: this.params["group-planes-sort-order"] || "ascending",
+      sortBy: this.params["group_planes-sort-key"],
+      sortOrder: this.params["group_planes-sort-order"] || "ascending",
     };
 
     const nodesSortParams = {
-      sortBy: this.params["nodes-sort-by"],
+      sortBy: this.params["nodes-sort-key"],
       sortOrder: this.params["nodes-sort-order"] || "ascending",
     };
 
@@ -126,12 +126,12 @@ export default class ForceGraph extends Stanza {
     };
 
     const tooltipParams = {
-      dataKey: this.params["nodes-tooltip-data-key"],
+      dataKey: this.params["tooltips-key"],
       show: nodes.some((d) => d[this.params["nodes-tooltip-data-key"]]),
     };
 
-    const highlightAdjEdges = this.params["highlight-adjacent-edges"] || false;
-    const highlightGroupPlanes = this.params["highlight-group-planes"] || false;
+    const highlightAdjEdges = this.params["highlight-adjacent_edges"] || false;
+    const highlightGroupPlanes = this.params["highlight-group_planes"] || false;
 
     const params = {
       MARGIN,

@@ -2,11 +2,11 @@
 @use "@/common.scss";
 
 main {
-  font-family: var(--togostanza-font-family);
+  font-family: var(--togostanza-fonts-font_family);
 }
 
 svg {
-  background-color: var(--togostanza-background-color);
+  background-color: var(--togostanza-theme-background_color);
 }
 
 .label,
@@ -21,13 +21,13 @@ svg {
 }
 
 .label {
-  font-size: calc(var(--togostanza-label-font-size) * 1px);
-  fill: var(--togostanza-label-font-color);
+  font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
+  fill: var(--togostanza-fonts-font_color);
 }
 
 .node {
-  fill: var(--togostanza-default-node-color);
-  stroke: var(--togostanza-border-color);
+  fill: var(--togostanza-node-default_color);
+
   stroke-width: var(--togostanza-border-width);
   &.active {
     opacity: 1;
@@ -47,7 +47,7 @@ svg {
   stroke-linecap: round;
   stroke-width: 1px;
   fill: none;
-  stroke: var(--togostanza-default-edge-color);
+  stroke: var(--togostanza-edge-default_color);
   pointer-events: none;
 
   &.dashed {
@@ -69,7 +69,7 @@ svg {
   stroke: var(--togostanza-border-color);
   stroke-linejoin: round;
   stroke-width: calc(var(--togostanza-border-width) * 1.5px);
-  fill: var(--togostanza-default-plane-color);
+  fill: var(--togostanza-group_plane-default_color);
   stroke-opacity: 0.2;
   &.active {
     stroke-opacity: 0.1;
