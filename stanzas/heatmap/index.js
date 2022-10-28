@@ -35,9 +35,9 @@ export default class Heatmap extends Stanza {
     const cellColorMin = this.params["cell-color-range_min"];
     const cellColorMid = this.params["cell-color-range_mid"];
     const cellColorMax = this.params["cell-color-range_max"];
-    let cellDomainMin = this.params["cell-color-domain_min"];
-    let cellDomainMid = this.params["cell-color-domain_mid"];
-    let cellDomainMax = this.params["cell-color-domain_max"];
+    let cellDomainMin = parseFloat(this.params["cell-color-domain_min"]);
+    let cellDomainMid = parseFloat(this.params["cell-color-domain_mid"]);
+    let cellDomainMax = parseFloat(this.params["cell-color-domain_max"]);
     const cellColorDataKey = this.params["cell-color-data_key"];
     const values = [...new Set(dataset.map((d) => d[cellColorDataKey]))];
 
