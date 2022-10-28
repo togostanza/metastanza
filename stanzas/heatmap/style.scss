@@ -2,10 +2,10 @@
 @use "@/common.scss";
 
 main {
-  padding: 1rem 2rem;
+  padding: var(--togostanza-outline-padding);
+  background-color: var(--togostanza-theme-background_color);
   .titles {
-    font-family: var(--togostanza-font-family);
-    font-weight: var(--togostanza-font-weight);
+    font-family: var(--togostanza-fonts-font_family);
   }
   .domain {
     color: var(--togostanza-domain-color);
@@ -14,15 +14,18 @@ main {
     color: var(--togostanza-tick-color);
   }
   .text {
-    font-family: var(--togostanza-font-family);
-    font-weight: var(--togostanza-font-weight);
-    font-size: calc(var(--togostanza-font-size) * 1px);
-    color: var(--togostanza-font-color);
+    font-family: var(--togostanza-fonts-font_family);
+    font-size: calc(var(--togostanza-fonts-font_size_primary) * 1px);
+    color: var(--togostanza-fonts-font_color);
   }
   .cell {
     border-radius: var(--togostanza-border-radius);
   }
   .highlighted {
     stroke: var(--togostanza-hover-border-color);
+  }
+  rect {
+    stroke: var(--togostanza-border-color);
+    stroke-width: calc(var(--togostanza-border-width) * 1px);
   }
 }
