@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "graph-3d-circle",
-  "stanza:label": "Graph 3D circle layout",
-  "stanza:definition": "Graph 3D Circle Layout MetaStanza",
+  "@id": "layered-graph",
+  "stanza:label": "Layered graph",
+  "stanza:definition": "Layered graph layed out in circles MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
   "stanza:contributor": ["PENQE", "Einishi Tech"],
   "stanza:created": "2022-04-01",
-  "stanza:updated": "2022-04-01",
+  "stanza:updated": "2022-10-25",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -26,39 +26,22 @@
       "stanza:description": "Data type",
       "stanza:required": true
     },
+
     {
-      "stanza:key": "width",
-      "stanza:type": "number",
-      "stanza:example": 600,
-      "stanza:description": "Width in px"
-    },
-    {
-      "stanza:key": "height",
-      "stanza:type": "number",
-      "stanza:example": 1000,
-      "stanza:description": "Height in px"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Inner padding in px"
-    },
-    {
-      "stanza:key": "group-planes-sort-by",
+      "stanza:key": "group_planes-sort-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Sort group planes by this data key value"
     },
     {
-      "stanza:key": "group-planes-sort-order",
+      "stanza:key": "group_planes-sort-order",
       "stanza:type": "single-choice",
       "stanza:choice": ["ascending", "descending"],
       "stanza:example": "ascending",
       "stanza:description": "Group planes sorting order"
     },
     {
-      "stanza:key": "nodes-sort-by",
+      "stanza:key": "nodes-sort-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Sort nodes by this data key value"
@@ -70,125 +53,110 @@
       "stanza:example": "ascending",
       "stanza:description": "Nodes sorting order"
     },
+
     {
-      "stanza:key": "node-size-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
-      "stanza:required": true,
-      "stanza:description": "Set size of the node  data key"
-    },
-    {
-      "stanza:key": "node-size-data-key",
+      "stanza:key": "node-size-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set size on the node based on data key"
     },
     {
-      "stanza:key": "node-min-size",
+      "stanza:key": "node-size-min",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Minimum node radius in px"
     },
     {
-      "stanza:key": "node-max-size",
+      "stanza:key": "node-size-max",
       "stanza:type": "number",
       "stanza:example": 6,
       "stanza:description": "Maximum node radius in px"
     },
     {
-      "stanza:key": "node-fixed-size",
-      "stanza:type": "number",
-      "stanza:example": 3,
-      "stanza:description": "Fixed node radius in px"
-    },
-    {
-      "stanza:key": "node-color-based-on",
+      "stanza:key": "node-size-scale",
       "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "data key",
-      "stanza:default": "data key",
-      "stanza:description": "Set color of the node  data key"
+      "stanza:choice": ["linear", "sqrt", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "Node size scale"
     },
     {
-      "stanza:key": "node-color-data-key",
+      "stanza:key": "node-color-key",
       "stanza:type": "string",
       "stanza:example": "group",
       "stanza:description": "Set color of the node based on data key"
     },
     {
-      "stanza:key": "edge-width-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
-      "stanza:default": "fixed",
-      "stanza:description": "Set edge width  data key"
-    },
-    {
-      "stanza:key": "edge-width-data-key",
+      "stanza:key": "edge-width-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set width of the edge  data key"
     },
+
     {
-      "stanza:key": "edge-min-width",
+      "stanza:key": "edge-width-min",
       "stanza:type": "number",
       "stanza:example": 0.5,
       "stanza:description": "Minimum edge width in px"
     },
     {
-      "stanza:key": "edge-max-width",
+      "stanza:key": "edge-width-max",
       "stanza:type": "number",
       "stanza:example": 3,
       "stanza:description": "Maximum edge width in px"
     },
     {
-      "stanza:key": "edge-fixed-width",
-      "stanza:type": "number",
-      "stanza:example": 0.5,
-      "stanza:description": "Fixed edge width in px"
+      "stanza:key": "edge-width-scale",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["linear", "sqrt", "log10"],
+      "stanza:example": "linear",
+      "stanza:description": "Edge width scale"
     },
     {
-      "stanza:key": "edge-color-based-on",
+      "stanza:key": "edge-show_arrows",
+      "stanza:type": "boolean",
+      "stanza:example": "true",
+      "stanza:description": "Show/hide arrows"
+    },
+    {
+      "stanza:key": "edge-color-based_on",
       "stanza:type": "single-choice",
       "stanza:choice": ["data key", "source color", "target color", "fixed"],
       "stanza:example": "source color",
       "stanza:description": "Set color of the edge based on this"
     },
     {
-      "stanza:key": "edge-color-data-key",
+      "stanza:key": "edge-color-key",
       "stanza:type": "string",
       "stanza:example": "value",
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "group-plane-color-based-on",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["data key", "fixed"],
-      "stanza:example": "fixed",
+      "stanza:key": "group_planes-color_plane",
+      "stanza:type": "boolean",
+      "stanza:example": false,
       "stanza:description": "Set color of the group planes based on this data key"
     },
 
     {
-      "stanza:key": "constant-radius",
+      "stanza:key": "group_planes-constant_radius",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Constant radius for all groups"
     },
     {
-      "stanza:key": "highlight-adjacent-edges",
+      "stanza:key": "highlight-adjacent_edges",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight adjacent edges on node mouse hover"
     },
     {
-      "stanza:key": "highlight-group-planes",
+      "stanza:key": "highlight-group_planes",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight group planes on mouse hover"
     },
     {
-      "stanza:key": "nodes-tooltip-data-key",
+      "stanza:key": "tooltips-key",
       "stanza:type": "string",
       "stanza:example": "id",
       "stanza:description": "Node tooltips data key. If empty, no tooltips will be shown"
@@ -197,70 +165,100 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-series-0-color",
+      "stanza:key": "--togostanza-theme-series_0_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Group color 0"
     },
     {
-      "stanza:key": "--togostanza-series-1-color",
+      "stanza:key": "--togostanza-theme-series_1_color",
       "stanza:type": "color",
       "stanza:default": "#3ac9b6",
       "stanza:description": "Group color 1"
     },
     {
-      "stanza:key": "--togostanza-series-2-color",
+      "stanza:key": "--togostanza-theme-series_2_color",
       "stanza:type": "color",
       "stanza:default": "#9ede2f",
       "stanza:description": "Group color 2"
     },
     {
-      "stanza:key": "--togostanza-series-3-color",
+      "stanza:key": "--togostanza-theme-series_3_color",
       "stanza:type": "color",
       "stanza:default": "#E6BB1A",
       "stanza:description": "Group color 3"
     },
     {
-      "stanza:key": "--togostanza-series-4-color",
+      "stanza:key": "--togostanza-theme-series_4_color",
       "stanza:type": "color",
       "stanza:default": "#F57F5B",
       "stanza:description": "Group color 4"
     },
     {
-      "stanza:key": "--togostanza-series-5-color",
+      "stanza:key": "--togostanza-theme-series_5_color",
       "stanza:type": "color",
       "stanza:default": "#F75976",
       "stanza:description": "Group color 5"
     },
     {
-      "stanza:key": "--togostanza-default-node-color",
+      "stanza:key": "--togostanza-outline-width",
+      "stanza:type": "number",
+      "stanza:default": 600,
+      "stanza:description": "Width in px"
+    },
+    {
+      "stanza:key": "--togostanza-outline-height",
+      "stanza:type": "number",
+      "stanza:default": 1000,
+      "stanza:description": "Height in px"
+    },
+    {
+      "stanza:key": "--togostanza-outline-padding",
+      "stanza:type": "text",
+      "stanza:default": "50",
+      "stanza:description": "Inner padding in px"
+    },
+    {
+      "stanza:key": "--togostanza-node-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Nodes default color"
     },
     {
-      "stanza:key": "--togostanza-default-edge-color",
+      "stanza:key": "--togostanza-edge-default_color",
       "stanza:type": "color",
       "stanza:default": "#6590e6",
       "stanza:description": "Egdes default color"
     },
     {
-      "stanza:key": "--togostanza-default-plane-color",
+      "stanza:key": "--togostanza-edge-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.25,
+      "stanza:description": "Edge default opacity"
+    },
+    {
+      "stanza:key": "--togostanza-group_plane-default_color",
       "stanza:type": "color",
       "stanza:default": "#333333",
       "stanza:description": "Egdes default color"
     },
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
-      "stanza:default": "Helvetica Neue",
+      "stanza:default": "Helvetica Neue, sans-serif",
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-border-color",
+      "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Border color"
+      "stanza:description": "Font color"
+    },
+    {
+      "stanza:key": "--togostanza-fonts-font_size_primary",
+      "stanza:type": "number",
+      "stanza:default": 12,
+      "stanza:description": "Font family"
     },
     {
       "stanza:key": "--togostanza-border-width",
@@ -269,7 +267,7 @@
       "stanza:description": "Border width"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-theme-background_color",
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color"

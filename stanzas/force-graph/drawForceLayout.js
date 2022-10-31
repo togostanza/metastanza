@@ -1,4 +1,51 @@
 import * as d3 from "d3";
+
+function straightLink(d) {
+  const start = { x: d.source.x, y: d.source.y };
+  const end = { x: d.target.x, y: d.target.y };
+  return `M ${start.x} ${start.y}, L ${end.x} ${end.y}`;
+}
+
+function rotatePoint(pivot, point, angle) {
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  point.x -= pivot.x;
+  point.y -= pivot.y;
+
+  const newX = point.x * cos - point.y * sin;
+  const newY = point.x * sin + point.y * cos;
+
+  point.x = pivot.x + newX;
+  point.y = pivot.y + newY;
+}
+
+function curvedLink(d, curveDir) {
+  const start = { x: d.source.x, y: d.source.y };
+  const end = { x: d.target.x, y: d.target.y };
+
+  const L = Math.sqrt(
+    (start.y - end.y) * (start.y - end.y) +
+      (start.x - end.x) * (start.x - end.x)
+  );
+
+  const theta = Math.atan((end.y - start.y) / (end.x - start.x));
+
+  const p1 = {
+    x: (start.x + end.x) / 2,
+    y: (start.y + end.y) / 2,
+  };
+
+  rotatePoint(start, p1, -theta);
+
+  p1.y += (L / 5) * curveDir;
+
+  rotatePoint(start, p1, theta);
+
+  return `M ${start.x} ${start.y}
+            S ${p1.x} ${p1.y}, ${end.x} ${end.y}`;
+}
+
 export default function (
   svg,
   nodes,
@@ -7,14 +54,76 @@ export default function (
     width,
     height,
     MARGIN,
-    symbols,
     labelsParams,
     tooltipParams,
     highlightAdjEdges,
+    edgeWidthParams,
+    symbols,
   }
 ) {
   const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
   const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
+
+  function drawLink(d) {
+    if (d[symbols.isPairEdge]) {
+      return curvedLink(d, d[symbols.isPairEdge]);
+    } else {
+      return straightLink(d);
+    }
+  }
+
+  const markerBoxWidth = 15;
+  const markerBoxHeight = 8;
+  const refX = markerBoxWidth;
+  const refY = markerBoxHeight / 2;
+
+  const arrowPoints = [
+    [0, 0],
+    [0, markerBoxHeight],
+    [markerBoxWidth, markerBoxHeight / 2],
+  ];
+
+  const edgesColorsArr = edges.map((d) => d[symbols.edgeColorSym]);
+
+  const edgeColors = [...new Set(edgesColorsArr)];
+
+  const defs = svg.append("defs");
+
+  if (edgeWidthParams.showArrows) {
+    if (!edgeColors[0] && edgeColors.length === 1) {
+      // color is fixed, add one marker with default color
+
+      defs
+        .append("marker")
+        .attr("id", "arrow-default")
+        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+        .attr("refX", refX)
+        .attr("refY", refY)
+        .attr("markerWidth", markerBoxWidth)
+        .attr("markerHeight", markerBoxHeight)
+        .attr("orient", "auto-start-reverse")
+        .append("path")
+        .attr("d", d3.line()(arrowPoints))
+        .attr("stroke", "none");
+    } else {
+      //add markers for every color
+      defs
+        .selectAll("marker")
+        .data(edgeColors)
+        .join("marker")
+        .attr("id", (d) => `arrow-${d}`)
+        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+        .attr("refX", refX)
+        .attr("refY", refY)
+        .attr("markerWidth", markerBoxWidth)
+        .attr("markerHeight", markerBoxHeight)
+        .attr("orient", "auto-start-reverse")
+        .append("path")
+        .attr("d", d3.line()(arrowPoints))
+        .attr("fill", (d) => d)
+        .attr("stroke", "none");
+    }
+  }
 
   const forceG = svg
     .append("g")
@@ -48,19 +157,20 @@ export default function (
     .on("tick", ticked);
 
   const links = gLinks
-    .selectAll("line")
+    .selectAll("path")
     .data(edges)
-    .join("line")
+    .join("path")
+    .attr("d", drawLink)
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
-    .attr("class", "link");
+    .attr("class", "link")
+    .attr(
+      "marker-end",
+      (d) => `url(#arrow-${d[symbols.edgeColorSym] || "default"})`
+    );
 
   function updateLinks() {
-    links
-      .attr("x1", (d) => d.source.x)
-      .attr("y1", (d) => d.source.y)
-      .attr("x2", (d) => d.target.x)
-      .attr("y2", (d) => d.target.y);
+    links.attr("d", drawLink);
   }
   function updateNodes() {
     nodeGroups.attr("transform", (d) => {
