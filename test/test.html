@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script
+      type="module"
+      src="http://localhost:8080/linechart-d3.js"
+      async
+    ></script>
+
+    <togostanza-linechart-d3
+      data-url="https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart"
+      data-type="json"
+      custom_css_url=""
+      axis-x-data_key="chromosome"
+      axis-x-title_padding="5"
+      axis-x-ticks_show
+      axis-x-ticks_label_angle="90"
+      axis-x-scale="linear"
+      axis-x-placement="bottom"
+      axis-x-range_min=""
+      axis-x-range_max=""
+      axis-x-ticks_interval=""
+      axis-x-ticks_interval_units="none"
+      axis-x-ticks_labels_format=""
+      axis-x-gridlines_interval="none"
+      axis-x-gridlines_interval_units=""
+      axis-y-data_key="count"
+      axis-y-hide="boolean"
+      axis-y-title=""
+      axis-y-ticks_show
+      axis-y-ticks_label_angle="90"
+      axis-y-scale="linear"
+      axis-y-placement="ordinal"
+      axis-y-ticks_labels_format=""
+      axis-y-gridlines_interval="none"
+      axis-y-gridlines_interval_units=""
+      data_grouping-group_by-data_key="category"
+      data_grouping-color-data_key="category"
+      data_grouping-color-scheme="Custom-Theme,Virdilis,Jet,Blues,Greens,Reds,Greys,Purples,Oranges"
+      error_bars-data_key="error"
+      legend-show
+      legend-placement="top-right"
+      legend-title=""
+    ></togostanza-linechart-d3>
+  </body>
+</html>

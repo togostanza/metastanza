@@ -1,7 +1,10 @@
 import Stanza from "togostanza/stanza";
 import * as d3 from "d3";
 import loadData from "togostanza-utils/load-data";
-import Legend from "@/lib/Legend";
+import Legend2 from "@/lib/Legend2";
+import { v4 as uuidv4 } from "uuid";
+import { parseValue } from "./utils";
+
 import {
   downloadSvgMenuItem,
   downloadPngMenuItem,
@@ -10,6 +13,7 @@ import {
   downloadTSVMenuItem,
   appendCustomCss,
 } from "togostanza-utils";
+import validateParams from "../../lib/validateParams";
 
 export default class Linechart extends Stanza {
   menu() {
@@ -23,797 +27,1356 @@ export default class Linechart extends Stanza {
   }
 
   async render() {
+    this._hideError();
+
     appendCustomCss(this, this.params["custom-css-url"]);
 
     const css = (key) => getComputedStyle(this.element).getPropertyValue(key);
 
+    this._validatedParams = validateParams(this.metadata, this.params);
+
     //data
-    const xKeyName = this.params["x-axis-key"];
-    const yKeyName = this.params["y-axis-key"];
-    const xAxisTitle = this.params["x-axis-title"] || "";
-    const yAxisTitle = this.params["y-axis-title"] || "";
-    const xTicksNumber = this.params["xticks-number"] || 5;
-    const yTicksNumber = this.params["yticks-number"] || 3;
-    const groupKeyName = this.params["group-by"];
-    const showXGrid = this.params["xgrid"] === "true" ? true : false;
-    const showYGrid = this.params["ygrid"] === "true" ? true : false;
-    const xLabelAngle =
-      parseInt(this.params["xlabel-angle"]) === 0
-        ? 0
-        : parseInt(this.params["xlabel-angle"]) || -90;
-    const yLabelAngle =
-      parseInt(this.params["ylabel-angle"]) === 0
-        ? 0
-        : parseInt(this.params["ylabel-angle"]) || 0;
+    const xKeyName = this._validatedParams.get("axis-x-key").value;
+    const yKeyName = this._validatedParams.get("axis-y-key").value;
+    const xAxisTitle = this._validatedParams.get("axis-x-title").value;
+    const yAxisTitle = this._validatedParams.get("axis-y-title").value || "";
+    const hideXAxis = this._validatedParams.get("axis-x-hide").value;
+    const hideYAxis = this._validatedParams.get("axis-y-hide").value;
+    const hideXAxisTicks = this._validatedParams.get("axis-x-ticks_hide").value;
+    const hideYAxisTicks = this._validatedParams.get("axis-y-ticks_hide").value;
+    const showPoints = this._validatedParams.get("points-show").value;
+    const pointsSize = this._validatedParams.get("points-size").value;
+    // const showErrorBars = this._validatedParams.get(
+    //   "chart-error_bars-show"
+    // ).value;
 
-    const xDataType = this.params["x-axis-data-type"] || "string";
-    const errorKeyName = this.params["error-key"];
-    const showErrorBars =
-      this.params["error-key"] !== "" || this.params["error-key"] !== undefined;
+    const errorKeyName = this._validatedParams.get("error_bars-key").value;
 
-    const errorBarWidth =
-      typeof this.params["error-bar-width"] !== "undefined"
-        ? this.params["error-bar-width"]
-        : 0.4;
-    const xLabelPadding =
-      parseInt(this.params["xlabel-padding"]) === 0
-        ? 0
-        : parseInt(this.params["xlabel-padding"]) || 7;
-    const yLabelPadding =
-      parseInt(this.params["ylabel-padding"]) === 0
-        ? 0
-        : parseInt(this.params["ylabel-padding"]) || 10;
+    const xTicksAngle = this._validatedParams.get(
+      "axis-x-ticks_label_angle"
+    ).value;
 
-    const ylabelFormat = this.params["ylabel-format"] || null;
+    const groupingColorKey = this._validatedParams.get("color_by-key").value;
 
-    const xAxisPlacement = this.params["xaxis-placement"] || "bottom";
-    const yAxisPlacement = this.params["yaxis-placement"] || "left";
+    const xTicksNumber = 5;
+    const xGridNumber = xTicksNumber;
+    const xTicksInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+    )
+      ? Math.abs(
+          parseFloat(this._validatedParams.get("axis-x-ticks_interval").value)
+        )
+      : null;
 
-    const xTitlePadding = this.params["xtitle-padding"] || 15;
-    const yTitlePadding = this.params["ytitle-padding"] || 15;
-    const xTickSize = parseInt(this.params["xtick-size"])
-      ? parseInt(this.params["xtick-size"])
-      : 0;
-    const yTickSize = parseInt(this.params["ytick-size"])
-      ? parseInt(this.params["ytick-size"])
-      : 0;
+    const xGridInterval = xTicksInterval;
 
-    const axisTitleFontSize =
-      parseInt(css("--togostanza-title-font-size")) || 10;
+    const showYGridlines = this._validatedParams.get(
+      "axis-y-show_gridlines"
+    ).value;
 
-    this.renderTemplate({
-      template: "stanza.html.hbs",
-    });
+    const showXGridlines = this._validatedParams.get(
+      "axis-x-show_gridlines"
+    ).value;
 
-    const legendShow = this.params["legend"] || "none";
+    const yTicksNumber = 3;
+    const yGridNumber = yTicksNumber;
+    const yTicksInterval = !isNaN(
+      parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+    )
+      ? Math.abs(
+          parseFloat(this._validatedParams.get("axis-y-ticks_interval").value)
+        )
+      : null;
 
-    const root = this.root.querySelector("main");
+    const yGridInterval = yTicksInterval;
 
-    // On change params rerender - Check if legend and svg already existing and remove them -
-    const existingLegend = this.root.querySelector("togostanza--legend");
-    if (existingLegend) {
-      existingLegend.remove();
+    this.xScale = this._validatedParams.get("axis-x-scale").value;
+    this.yScale = this._validatedParams.get("axis-y-scale").value;
+
+    const showXPreview = this._validatedParams.get("axis-x-preview").value;
+    const showYPreview = this._validatedParams.get("axis-y-preview").value;
+    const showLegend = this._validatedParams.get("legend-show").value;
+    const legendPosition = this._validatedParams.get("legend-placement").value;
+    const legendTitle = this._validatedParams.get("legend-title").value;
+
+    const xAxisTicksIntervalUnits = this._validatedParams.get(
+      "axis-x-ticks_interval_units"
+    ).value;
+
+    const xAxisGridIntervalUnits = xAxisTicksIntervalUnits;
+
+    const xTitlePadding = this._validatedParams.get(
+      "axis-x-title_padding"
+    ).value;
+    const yTitlePadding = this._validatedParams.get(
+      "axis-y-title_padding"
+    ).value;
+
+    const xAxisTicksFormat = this._validatedParams.get(
+      "axis-x-ticks_labels_format"
+    ).value;
+
+    const yAxisTicksFormat = this._validatedParams.get(
+      "axis-y-ticks_labels_format"
+    ).value;
+
+    const groupKeyName = this._validatedParams.get("group_by-key").value;
+
+    const axisYRangeMin = this._validatedParams.get("axis-y-range_min").value;
+    const axisYRangeMax = this._validatedParams.get("axis-y-range_max").value;
+
+    if (
+      this.yScale === "log" &&
+      (parseFloat(axisYRangeMin) <= 0 || parseFloat(axisYRangeMin) <= 0)
+    ) {
+      this._renderError("Y axis range must be positive");
+      throw new Error("Y axis range must be positive");
     }
-    const existingSVG = this.root.querySelector("svg");
-    if (existingSVG) {
-      existingSVG.remove();
-    }
-    // ====
 
-    // Add legend
-
-    if (legendShow !== "none") {
-      this.legend = new Legend();
-      root.append(this.legend);
-    }
-
-    let values = await loadData(
+    const values = await loadData(
       this.params["data-url"],
       this.params["data-type"],
       this.root.querySelector("main")
     );
 
-    function getRandomTrueFalse() {
-      return Math.random() >= 0.5;
+    /* eslint-disable-next-line */
+    this._data = structuredClone(values);
+
+    parseData.call(this);
+
+    const showErrorBars = this._data.some((d) => d[errorKeyName]);
+
+    const root = this.root.querySelector("main");
+
+    if (root.querySelector("svg")) {
+      root.querySelector("svg").remove();
     }
 
-    // TODO change data to include errors. For now, artificially add 20% error  and randomly add or not add it.
-    values.forEach((item) => {
-      if (getRandomTrueFalse()) {
-        item.error = item[yKeyName] * 0.2;
-      }
-    });
+    // Data symbols
+    const symbolGenerator = d3.symbol().size(pointsSize).type(d3.symbolCircle);
 
-    //Filter out all non-numeric x-axis values from data
-    if (xDataType === "number") {
-      values = values.filter((item) => !isNaN(item[xKeyName]));
-    }
+    const { width, height } = root.getBoundingClientRect();
 
-    // Check data
-    {
-      let error;
-      if (!values.some((val) => yKeyName in val || parseFloat(val[yKeyName]))) {
-        error = new Error(
-          "--togostanza-barchart ERROR: No y-axis key found in data"
-        );
-        console.error(error);
-        return error;
-      }
-      if (!values.some((val) => xKeyName in val || parseFloat(val[xKeyName]))) {
-        error = new Error(
-          "--togostanza-barchart ERROR: No x-axis key found in data"
-        );
-        console.error(error);
-        return error;
-      }
-    }
+    const MARGIN = {
+      top: parseFloat(getComputedStyle(root).paddingTop),
+      right: parseFloat(getComputedStyle(root).paddingRight),
+      bottom: parseFloat(getComputedStyle(root).paddingBottom),
+      left: parseFloat(getComputedStyle(root).paddingLeft),
+    };
 
-    //=========
-
-    this._data = values;
-
-    const categorizedData = d3.group(values, (d) => d[groupKeyName]);
-
-    const groups = [...categorizedData.keys()];
-
-    const toggleState = new Map(groups.map((_, index) => ["" + index, false]));
+    const SVGMargin = {
+      top: 10,
+      right: 10,
+      bottom: 20,
+      left: 24,
+    };
 
     const togostanzaColors = [];
+
     for (let i = 0; i < 6; i++) {
-      togostanzaColors.push(css(`--togostanza-series-${i}-color`));
+      togostanzaColors.push(css(`--togostanza-theme-series_${i}_color`));
     }
 
-    const color = d3.scaleOrdinal().domain(groups).range(togostanzaColors);
+    const color = d3.scaleOrdinal().range(togostanzaColors);
 
-    const width = parseInt(this.params["width"]);
-    const height = parseInt(this.params["height"]);
-
-    const el = this.root.getElementById("linechart-d3");
-
-    const svg = d3
-      .select(el)
-      .append("svg")
-      .attr("width", width)
-      .attr("height", height);
-
-    const redrawSVG = (
-      MARGIN = {
-        TOP:
-          xAxisPlacement === "top"
-            ? Math.max(60, xTitlePadding + 10 + xTickSize + axisTitleFontSize)
-            : 10,
-        BOTTOM:
-          xAxisPlacement === "top"
-            ? 10
-            : Math.max(60, xTitlePadding + xTickSize + 10 + axisTitleFontSize),
-        LEFT:
-          yAxisPlacement === "left"
-            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-            : 10,
-        RIGHT:
-          yAxisPlacement === "right"
-            ? Math.max(60, yTitlePadding + yTickSize + 10 + axisTitleFontSize)
-            : 10,
+    function getScale(scaleType) {
+      if (scaleType === "linear") {
+        return d3.scaleLinear();
+      } else if (scaleType === "log") {
+        return d3.scaleLog();
+      } else if (scaleType === "time") {
+        return d3.scaleTime();
+      } else {
+        return d3.scaleBand();
       }
-    ) => {
-      const existingChart = svg.select("g.chart");
-      if (!existingChart.empty()) {
-        existingChart
-          .transition()
-          .duration(200)
-          .attr("opacity", 0)
-          .on("end", () => {
-            existingChart.remove();
+    }
+
+    function parseData() {
+      this._data.forEach((d) => {
+        d[xKeyName] = parseValue(d[xKeyName], this.xScale);
+        d[yKeyName] = parseValue(d[yKeyName], this.yScale);
+      });
+    }
+
+    this._groups = [];
+    this._groupByNameMap = new Map();
+
+    if (groupKeyName && this._data.some((d) => d[groupKeyName])) {
+      this._groupedData = this._data.reduce((acc, d) => {
+        const group = d[groupKeyName];
+
+        if (
+          this.xScale !== "ordinal" &&
+          (isNaN(d[xKeyName]) || isNaN(d[yKeyName]))
+        ) {
+          return acc;
+        }
+        const groupIndex = acc.findIndex((g) => g.group === group);
+        if (groupIndex === -1) {
+          acc.push({
+            group,
+            id: uuidv4(),
+            color: color(d[groupingColorKey]),
+            show: true,
+            data: [
+              {
+                x: d[xKeyName],
+                y: d[yKeyName],
+                error: d[errorKeyName],
+              },
+            ],
           });
-      }
-
-      const HEIGHT = height - MARGIN.TOP - MARGIN.BOTTOM;
-      const WIDTH = width - MARGIN.LEFT - MARGIN.RIGHT;
-
-      const graphArea = svg.append("g").attr("class", "chart");
-
-      const linesArea = graphArea
-        .append("g")
-        .attr("class", "lines")
-        .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
-
-      const dataGroup = linesArea.append("g").attr("class", "data-lines");
-
-      const xAxisArea = graphArea.append("g").attr("class", "x axis");
-
-      const yAxisArea = graphArea.append("g").attr("class", "y axis");
-
-      const yTitleArea = graphArea.append("g").attr("class", "y axis title");
-
-      const xTitleArea = graphArea.append("g").attr("class", "x axis title");
-
-      if (xAxisPlacement === "top") {
-        xAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-
-        xTitleArea
-          .attr(
-            "transform",
-            `translate(0,${MARGIN.TOP - xTitlePadding - xTickSize})`
-          )
-          .attr("dominant-baseline", "bottom");
-      } else {
-        xAxisArea.attr(
-          "transform",
-          `translate(${MARGIN.LEFT},${HEIGHT + MARGIN.TOP})`
-        );
-        xTitleArea
-          .attr(
-            "transform",
-            `translate(0,${HEIGHT + MARGIN.TOP + xTickSize + xTitlePadding})`
-          )
-          .attr("dominant-baseline", "hanging");
-      }
-
-      if (yAxisPlacement === "right") {
-        yAxisArea.attr(
-          "transform",
-          `translate(${MARGIN.LEFT + WIDTH},${MARGIN.TOP})`
-        );
-        yTitleArea.attr(
-          "transform",
-          `translate(${MARGIN.LEFT + WIDTH + yTickSize + yTitlePadding},0)`
-        );
-      } else {
-        yAxisArea.attr("transform", `translate(${MARGIN.LEFT},${MARGIN.TOP})`);
-        yTitleArea.attr(
-          "transform",
-          `translate(${MARGIN.LEFT - yTickSize - yTitlePadding},0)`
-        );
-      }
-
-      yTitleArea
-        .append("text")
-        .text(yAxisTitle)
-        .attr("text-anchor", "middle")
-        .attr("transform", `rotate(-90)`)
-        .attr("x", -HEIGHT / 2 - MARGIN.TOP);
-
-      xTitleArea
-        .append("text")
-        .text(xAxisTitle)
-        .attr("text-anchor", "middle")
-        .attr("x", MARGIN.LEFT + WIDTH / 2);
-
-      const errorBarsGroup = linesArea
-        .append("g")
-        .attr("class", "error-bars-group");
-
-      const xAxisLabelsProps = getXTextLabelProps(
-        xLabelAngle,
-        xLabelPadding + xTickSize,
-        xAxisPlacement
-      );
-      const yAxisLabelsProps = getYTextLabelProps(
-        yLabelAngle,
-        yLabelPadding + yTickSize,
-        yAxisPlacement
-      );
-
-      // Axes preparation
-      let dataMax, dataMin;
-
-      dataMax = d3.max(
-        values,
-        (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
-      );
-      dataMin = d3.min(
-        values,
-        (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
-      );
-
-      let x;
-      if (xDataType === "number") {
-        const xAxisData = values.map((d) => +d[xKeyName]);
-        const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
-        x = d3.scaleLinear().domain(xDataMinMax).range([0, WIDTH]);
-      } else {
-        const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-        x = d3.scaleBand().domain(xAxisLabels).range([0, WIDTH]);
-      }
-
-      const y = d3.scaleLinear().domain([dataMin, dataMax]).range([HEIGHT, 0]);
-
-      const xAxisGridGenerator = d3
-        .axisBottom(x)
-        .tickSize(-HEIGHT)
-        .tickFormat("")
-        .ticks(xTicksNumber);
-
-      const yAxisGridGenerator = d3
-        .axisLeft(y)
-        .tickSize(-WIDTH)
-        .tickFormat("")
-        .ticks(yTicksNumber);
-
-      const xGridLines = linesArea
-        .append("g")
-        .attr("class", "x gridlines")
-        .attr("transform", "translate(0," + HEIGHT + ")");
-
-      const yGridLines = linesArea.append("g").attr("class", "y gridlines");
-
-      const update = (values) => {
-        const categorizedData = d3.group(values, (d) => d[groupKeyName]);
-
-        dataMax = d3.max(
-          values,
-          (d) => +d[yKeyName] + (parseFloat(d[errorKeyName]) || 0)
-        );
-        dataMin = d3.min(
-          values,
-          (d) => +d[yKeyName] - (parseFloat(d[errorKeyName]) || 0)
-        );
-
-        if (xDataType === "number") {
-          const xAxisData = values.map((d) => +d[xKeyName]);
-          const xDataMinMax = [d3.min(xAxisData), d3.max(xAxisData)];
-          x.domain(xDataMinMax);
+          this._groups.push(group);
+          this._groupByNameMap.set(group, acc[acc.length - 1]);
         } else {
-          const xAxisLabels = [...new Set(values.map((d) => d[xKeyName]))];
-          x.domain(xAxisLabels);
-        }
-
-        y.domain([dataMin, dataMax]);
-
-        let xAxisGenerator;
-
-        if (xAxisPlacement === "top") {
-          xAxisGenerator = d3.axisTop(x);
-        } else {
-          xAxisGenerator = d3.axisBottom(x);
-        }
-        xAxisGenerator.tickSizeOuter(0).tickSizeInner(xTickSize);
-
-        if (xDataType === "number") {
-          xAxisGenerator.ticks(xTicksNumber);
-        }
-
-        xAxisArea
-          .transition()
-          .duration(200)
-          .call(xAxisGenerator)
-          .selectAll("text")
-          .attr("text-anchor", xAxisLabelsProps.textAnchor)
-          .attr("alignment-baseline", xAxisLabelsProps.dominantBaseline)
-          .attr("y", xAxisLabelsProps.y)
-          .attr("x", xAxisLabelsProps.x)
-          .attr("dy", null)
-          .attr("transform", `rotate(${xLabelAngle})`)
-          .on("end", function (_, i, nodes) {
-            if (i === nodes.length - 1) {
-              check(xAxisArea.node().getBoundingClientRect());
-            }
-          });
-
-        function check(axisBBox) {
-          const svgBBox = svg.node().getBoundingClientRect();
-
-          const deltaLeftWidth = svgBBox.left - axisBBox.left;
-          const deltaRightWidth = axisBBox.right - svgBBox.right;
-          const deltaBottomHeight = axisBBox.bottom - svgBBox.bottom;
-          const deltaTopHeight = svgBBox.top - axisBBox.top;
-
-          if (
-            deltaLeftWidth > 0 ||
-            deltaRightWidth > 0 ||
-            deltaBottomHeight > 0 ||
-            deltaTopHeight > 0
-          ) {
-            MARGIN.LEFT =
-              deltaLeftWidth > 0
-                ? MARGIN.LEFT + deltaLeftWidth + 5
-                : MARGIN.LEFT;
-            MARGIN.RIGHT =
-              deltaRightWidth > 0
-                ? MARGIN.RIGHT + deltaRightWidth + 5
-                : MARGIN.RIGHT;
-            MARGIN.BOTTOM =
-              deltaBottomHeight > 0
-                ? MARGIN.BOTTOM + deltaBottomHeight + 5
-                : MARGIN.BOTTOM;
-            MARGIN.TOP =
-              deltaTopHeight > 0 ? MARGIN.TOP + deltaTopHeight + 5 : MARGIN.TOP;
-
-            redrawSVG(MARGIN);
+          if (d[xKeyName] && d[yKeyName]) {
+            acc[groupIndex].data.push({
+              x: d[xKeyName],
+              y: d[yKeyName],
+              error: d[errorKeyName],
+            });
           }
         }
+        return acc;
+      }, []);
+    } else {
+      this._groupedData = [
+        {
+          group: "data",
+          color: color("data"),
+          show: true,
+          id: uuidv4(),
+          data: this._data
+            .map((d) => {
+              if (d[yKeyName] && d[yKeyName]) {
+                return {
+                  x: d[xKeyName],
+                  y: d[yKeyName],
+                  error: d[errorKeyName],
+                };
+              }
+            })
+            .filter((d) => d),
+        },
+      ];
+    }
 
-        let yAxisGenerator;
+    const svg = d3.select(root).append("svg");
 
-        if (yAxisPlacement === "right") {
-          yAxisGenerator = d3.axisRight(y).tickSizeOuter(0);
+    if (showLegend) {
+      this.legend = new Legend2();
+
+      root.append(this.legend);
+      root.classList.add(`legend-${legendPosition}`);
+
+      this.legend.items = this._groups.map((item, index) => {
+        return {
+          id: "" + index,
+          label: item,
+          color: this._groupByNameMap.get(item).color,
+          toggled: false,
+        };
+      });
+    } else {
+      this.legend.removeEventListener(
+        "legend-item-click",
+        this._legendListener
+      );
+      this.legend.remove();
+    }
+
+    // Add legend, after rendering, so we know its width
+    requestAnimationFrame(() => {
+      const legendRect = this.legend?.getBoundingClientRect();
+      if (
+        this.legend &&
+        (legendPosition === "right" || legendPosition === "left")
+      ) {
+        legendRect.height = 0;
+      }
+      if (
+        this.legend &&
+        (legendPosition === "top" || legendPosition === "bottom")
+      ) {
+        legendRect.width = 0;
+      }
+
+      afterLegendRendered.bind(this)(legendRect);
+    });
+
+    function afterLegendRendered(legendRect) {
+      // render svg after we got legend width
+
+      const SVGWidth = width - MARGIN.left - MARGIN.right - legendRect.width;
+      const SVGHeight = height - MARGIN.top - MARGIN.bottom - legendRect.height;
+
+      // Width and height of the chart
+      const WIDTH =
+        width -
+        MARGIN.left -
+        SVGMargin.left -
+        MARGIN.right -
+        SVGMargin.right -
+        legendRect.width;
+      const HEIGHT =
+        height -
+        MARGIN.top -
+        SVGMargin.top -
+        MARGIN.bottom -
+        SVGMargin.bottom -
+        legendRect.height;
+
+      // padding betsween chart and preview
+      const PD = 20;
+
+      let chartWidth = WIDTH;
+      let chartHeight = HEIGHT;
+      let previewXWidth = WIDTH;
+      let previewYHeight = HEIGHT;
+      const previewYWidth = WIDTH * 0.2 - PD / 2;
+      const previewXHeight = HEIGHT * 0.2 - PD / 2;
+
+      if (showXPreview) {
+        chartHeight = HEIGHT * 0.8 - PD / 2;
+        previewYHeight = chartHeight;
+      }
+
+      if (showYPreview) {
+        chartWidth = WIDTH * 0.8 - PD / 2;
+        previewXWidth = chartWidth;
+      }
+
+      this._currentData = this._groupedData;
+
+      const getXDomain = () => {
+        if (this.xScale === "ordinal") {
+          return [
+            ...new Set(
+              this._currentData.map((d) => d.data.map((d) => d.x)).flat()
+            ),
+          ];
         } else {
-          yAxisGenerator = d3.axisLeft(y).tickSizeOuter(0);
-        }
-
-        yAxisGenerator
-          .ticks(yTicksNumber)
-          .tickFormat((d) => d3.format(ylabelFormat)(d))
-          .tickSizeInner(yTickSize);
-
-        yAxisArea
-          .transition()
-          .duration(200)
-          .call(yAxisGenerator)
-          .selectAll("text")
-          .attr("text-anchor", yAxisLabelsProps.textAnchor)
-          .attr("alignment-baseline", yAxisLabelsProps.dominantBaseline)
-          .attr("dy", null)
-          .attr("x", yAxisLabelsProps.x)
-          .attr("y", yAxisLabelsProps.y)
-          .attr("transform", `rotate(${yLabelAngle})`);
-
-        const g = dataGroup
-          .selectAll("path")
-          .data(categorizedData, (d) => d[0]);
-
-        g.exit().remove();
-
-        // update
-        g.transition()
-          .duration(200)
-          .attr("d", function (d) {
-            return d3
-              .line()
-              .x(function (d) {
-                if (xDataType === "number") {
-                  return x(d[xKeyName]);
-                } else {
-                  return x(d[xKeyName]) + x.bandwidth() / 2;
-                }
-              })
-              .y(function (d) {
-                return y(+d[yKeyName]);
-              })(d[1]);
-          });
-
-        // enter
-        g.enter()
-          .append("path")
-          .attr(
-            "id",
-            (d) => "data-" + groups.findIndex((item) => item === d[0])
-          )
-          .attr("class", "data-lines")
-          .attr("fill", "none")
-          .attr("stroke", function (d) {
-            return color(d[0]);
-          })
-          .attr("stroke-width", 1.5)
-          .attr("d", function (d) {
-            return d3
-              .line()
-              .x(function (d) {
-                if (xDataType === "number") {
-                  return x(d[xKeyName]);
-                } else {
-                  return x(d[xKeyName]) + x.bandwidth() / 2;
-                }
-              })
-              .y(function (d) {
-                return y(+d[yKeyName]);
-              })(d[1]);
-          });
-
-        if (showErrorBars) {
-          //Draw error bars
-          const barGroups = errorBarsGroup
-            .selectAll("g")
-            .data(
-              values,
-              (d) => `${d[groupKeyName]}-${d[yKeyName]}-${d[xKeyName]}`
-            );
-
-          const barGroupsEnter = barGroups
-            .enter()
-            .filter((d) => {
-              return (
-                d[errorKeyName] !== undefined &&
-                !isNaN(parseFloat(d[errorKeyName]))
-              );
-            })
-            .append("g")
-            .attr("class", "errorbar-group");
-
-          barGroupsEnter.append("line").attr("class", "errorbar vl");
-          barGroupsEnter.append("line").attr("class", "errorbar bl");
-          barGroupsEnter.append("line").attr("class", "errorbar tl");
-
-          barGroups
-            .merge(barGroupsEnter)
-            .select("line.errorbar.vl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-          barGroups
-            .merge(barGroupsEnter)
-            .select("line.errorbar.bl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) - errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-              }
-            })
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) + errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-          barGroups
-            .merge(barGroupsEnter)
-            .select("line.errorbar.tl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) - errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-              }
-            })
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) + errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-          barGroups.exit().remove();
-
-          barGroupsEnter
-            .select("line.errorbar-vl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]);
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2;
-              }
-            })
-            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-
-          barGroupsEnter
-            .select("line.errorbar-bl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) - errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-              }
-            })
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) + errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] - d[errorKeyName] / 2))
-            .attr("y2", (d) => y(+d[yKeyName] - d[errorKeyName] / 2));
-
-          barGroupsEnter
-            .select("line.errorbar-tl")
-            .attr("x1", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) - errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 - errorBarWidth / 2;
-              }
-            })
-            .attr("x2", (d) => {
-              if (xDataType === "number") {
-                return x(d[xKeyName]) + errorBarWidth / 2;
-              } else {
-                return x(d[xKeyName]) + x.bandwidth() / 2 + errorBarWidth / 2;
-              }
-            })
-            .attr("y1", (d) => y(+d[yKeyName] + d[errorKeyName] / 2))
-            .attr("y2", (d) => y(+d[yKeyName] + d[errorKeyName] / 2));
-        }
-
-        // Show/hide grid lines
-        if (showXGrid) {
-          xGridLines.transition().duration(200).call(xAxisGridGenerator);
-        }
-
-        if (showYGrid) {
-          yGridLines.transition().duration(200).call(yAxisGridGenerator);
-        }
-
-        // update legend
-        if (legendShow !== "none") {
-          this.legend.setup(
-            groups.map((item, index) => ({
-              id: "" + index,
-              label: item,
-              color: color(item),
-              node: this.root.querySelector(`svg #data-${index}`) || null,
-            })),
-            this.root.querySelector("main"),
-            {
-              fadeoutNodes: this.root.querySelectorAll("path.data-lines"),
-              position: legendShow.split("-"),
-              fadeProp: "stroke-opacity",
-            }
-          );
+          const xDomain = this._currentData.map((d) => d.data.map((d) => d.x));
+          return d3.extent(xDomain.flat());
         }
       };
 
-      update(values);
+      // set y domain
+      const getYDomain = () => {
+        const yDomain = this._currentData.map((d) => d.data.map((d) => d.y));
+        let extent = d3.extent(yDomain.flat());
 
-      if (legendShow !== "none") {
-        const legend = this.root
-          .querySelector("togostanza--legend")
-          .shadowRoot.querySelector(".legend > table > tbody");
+        if (showErrorBars) {
+          const mins = this._currentData.map((d) => {
+            return d.data.map((d) => {
+              // const error = d[errorKeyName];
+              return d.error[0];
+            });
+          });
 
-        // Set toggle behaviour
-        legend.addEventListener("click", (e) => {
-          const parentNode = e.target.parentNode;
-          if (parentNode.nodeName === "TR") {
-            const id = parentNode.dataset.id;
-            parentNode.style.opacity = toggleState.get("" + id) ? 1 : 0.5;
-            toggleState.set("" + id, !toggleState.get("" + id));
+          const maxs = this._currentData.map((d) => {
+            return d.data.map((d) => {
+              // const error = d[errorKeyName];
+              return d.error[1];
+            });
+          });
 
-            // filter out data wich was clicked
-            const newData = values.filter(
-              (item) =>
-                !toggleState.get("" + groups.indexOf(item[groupKeyName]))
+          extent = d3.extent([...mins.flat(), ...maxs.flat()]);
+        }
+
+        return [
+          !isNaN(parseFloat(axisYRangeMin))
+            ? parseFloat(axisYRangeMin)
+            : extent[0],
+
+          !isNaN(parseFloat(axisYRangeMax))
+            ? parseFloat(axisYRangeMax)
+            : extent[1],
+        ];
+      };
+
+      svg.attr("width", SVGWidth).attr("height", SVGHeight);
+
+      const graphArea = svg
+        .append("g")
+        .attr("class", "chart")
+        .attr("transform", `translate(${SVGMargin.left}, ${SVGMargin.top})`);
+
+      const yAxisTitleGroup = graphArea
+        .append("g")
+        .attr("class", "axis-title-group y");
+
+      const xAxisTitleGroup = graphArea
+        .append("g")
+        .attr("class", "axis-title-group x");
+
+      //Add title to axes if they are not empty
+      let yTitleWidth = 0;
+      let xTitleHeight = 0;
+      if (yAxisTitle) {
+        const yTitle = yAxisTitleGroup
+          .append("text")
+          .text(yAxisTitle)
+          .attr("class", "title y")
+          .attr("y", chartHeight / 2)
+          .attr("dominant-baseline", "hanging")
+          .attr("transform", `rotate(-90, 0, ${chartHeight / 2})`);
+
+        yTitleWidth = yTitle.node().getBBox().height;
+      }
+
+      if (xAxisTitle) {
+        const xTitle = xAxisTitleGroup
+          .append("text")
+          .text(xAxisTitle)
+          .attr("class", "title x")
+          .attr("y", xTitlePadding || 0)
+          .attr("x", chartWidth / 2)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "hanging");
+
+        xTitleHeight = xTitle.node().getBBox().height;
+      }
+
+      xAxisTitleGroup.attr(
+        "transform",
+        `translate(${yTitleWidth + yTitlePadding},${
+          chartHeight - xTitlePadding - xTitleHeight
+        })`
+      );
+
+      chartWidth -= yTitleWidth + yTitlePadding;
+      chartHeight -= xTitleHeight + xTitlePadding;
+      previewXWidth -= yTitleWidth + yTitlePadding;
+      previewYHeight -= xTitleHeight + xTitlePadding;
+
+      svg
+        .append("defs")
+        .append("clipPath")
+        .attr("id", "clip")
+        .append("rect")
+        .attr("width", chartWidth)
+        .attr("height", chartHeight);
+
+      const chartAreaGroup = graphArea
+        .append("g")
+        .attr("class", "chart-area")
+        .attr("transform", `translate(${yTitleWidth + yTitlePadding}, 0)`);
+
+      let previewXArea;
+      let previewYArea;
+
+      if (showXPreview) {
+        previewXArea = svg
+          .append("g")
+          .attr("class", "preview")
+          .attr(
+            "transform",
+            `translate(${SVGMargin.left + yTitleWidth + yTitlePadding}, ${
+              SVGMargin.top + chartHeight + xTitleHeight + xTitlePadding + PD
+            })`
+          );
+      }
+      if (showYPreview) {
+        previewYArea = svg
+          .append("g")
+          .attr("class", "preview")
+          .attr(
+            "transform",
+            `translate(${
+              SVGMargin.left + chartWidth + yTitleWidth + yTitlePadding + PD
+            }, ${SVGMargin.top})`
+          );
+      }
+
+      const errorsGroup = chartAreaGroup
+        .append("g")
+        .attr("class", "error-bars")
+        .attr("clip-path", "url(#clip)");
+
+      let xExtent, yExtent;
+
+      this._scaleX = getScale(this.xScale).range([0, chartWidth]);
+      this._scaleY = getScale(this.yScale).range([chartHeight, 0]);
+
+      this._previewXScaleX = getScale(this.xScale).range([0, previewXWidth]);
+      this._previewXScaleY = getScale(this.yScale).range([previewXHeight, 0]);
+      this._previewYScaleX = getScale(this.xScale).range([0, previewYWidth]);
+      this._previewYScaleY = getScale(this.yScale).range([previewYHeight, 0]);
+
+      const xAxis = d3.axisBottom(this._scaleX);
+      const xAxisX = d3.axisBottom(this._previewXScaleX).tickValues([]);
+      const xAxisY = d3.axisBottom(this._previewYScaleX).tickValues([]);
+      const yAxis = d3.axisLeft(this._scaleY);
+      const yAxisX = d3.axisLeft(this._previewXScaleY).tickValues([]);
+      const yAxisY = d3.axisLeft(this._previewYScaleY).tickValues([]);
+
+      const xAxisGrid = d3
+        .axisBottom(this._scaleX)
+        .tickSize(-chartHeight)
+        .tickFormat("");
+
+      const yAxisGrid = d3
+        .axisLeft(this._scaleY)
+        .tickSize(-chartWidth)
+        .tickFormat("");
+
+      if (this.xScale === "linear") {
+        try {
+          xAxis.tickFormat(d3.format(xAxisTicksFormat));
+          xAxisX.tickFormat(d3.format(xAxisTicksFormat));
+        } catch {
+          xAxis.tickFormat((d) => d);
+          xAxisX.tickFormat((d) => d);
+        }
+        xExtent = d3.extent(getXDomain());
+
+        if (showXGridlines) {
+          if (xGridInterval) {
+            const ticks = [];
+            for (let i = xExtent[0]; i <= xExtent[1]; i = i + xGridInterval) {
+              ticks.push(i);
+            }
+            xAxisGrid.tickValues(ticks);
+          } else {
+            xAxisGrid.ticks(xGridNumber);
+          }
+        }
+
+        if (xTicksInterval) {
+          const ticks = [];
+          for (let i = xExtent[0]; i <= xExtent[1]; i = i + xTicksInterval) {
+            ticks.push(i);
+          }
+          xAxis.tickValues(ticks);
+        } else {
+          xAxis.ticks(xTicksNumber);
+        }
+        try {
+          xAxis.tickFormat(xAxisTicksFormat);
+          xAxisX.tickFormat(xAxisTicksFormat);
+        } catch {
+          xAxis.tickFormat((d) => d);
+          xAxisX.tickFormat((d) => d);
+        }
+      } else if (this.xScale === "time") {
+        try {
+          xAxis.tickFormat(d3.timeFormat(xAxisTicksFormat));
+          xAxisX.tickFormat(d3.timeFormat(xAxisTicksFormat));
+        } catch {
+          xAxis.tickFormat(d3.timeFormat("%Y-%m-%d"));
+          xAxisX.tickFormat(d3.timeFormat("%Y-%m-%d"));
+        }
+
+        if (showXGridlines) {
+          if (
+            xGridInterval &&
+            xAxisGridIntervalUnits &&
+            xAxisGridIntervalUnits !== "none"
+          ) {
+            const interval =
+              intervalMap[xAxisGridIntervalUnits]().every(xGridInterval);
+            xAxisGrid.ticks(interval);
+          } else {
+            xAxisGrid.ticks(xGridNumber);
+          }
+        }
+
+        if (
+          xTicksInterval &&
+          xAxisTicksIntervalUnits &&
+          xAxisTicksIntervalUnits !== "none"
+        ) {
+          const interval =
+            intervalMap[xAxisTicksIntervalUnits]().every(xTicksInterval);
+          xAxis.ticks(interval);
+        } else {
+          xAxis.ticks(xTicksNumber);
+        }
+      } else {
+        try {
+          xAxis.tickFormat(d3.format(xAxisTicksFormat));
+          xAxisX.tickFormat(d3.format(xAxisTicksFormat));
+        } catch {
+          xAxis.tickFormat((d) => d);
+          xAxisX.tickFormat((d) => d);
+        }
+      }
+
+      if (this.yScale === "linear") {
+        try {
+          yAxis.tickFormat(d3.format(yAxisTicksFormat));
+        } catch {
+          yAxis.tickFormat((d) => d);
+        }
+
+        yExtent = d3.extent(getYDomain());
+
+        if (showYGridlines) {
+          if (yGridInterval) {
+            const ticks = [];
+            for (let i = yExtent[0]; i <= yExtent[1]; i = i + yGridInterval) {
+              ticks.push(i);
+            }
+            yAxisGrid.tickValues(ticks);
+          } else {
+            yAxisGrid.ticks(yGridNumber);
+          }
+        }
+
+        if (yTicksInterval) {
+          const ticks = [];
+          for (let i = yExtent[0]; i <= yExtent[1]; i = i + yTicksInterval) {
+            ticks.push(i);
+          }
+          yAxis.tickValues(ticks);
+        } else {
+          yAxis.ticks(yTicksNumber);
+        }
+      } else {
+        yAxis.tickFormat(d3.format(yAxisTicksFormat));
+      }
+
+      const errorVertical = (d, error) => {
+        return `M 0,${-Math.abs(
+          this._scaleY(d.y) - this._scaleY(error[1])
+        )} L 0,${Math.abs(this._scaleY(d.y) - this._scaleY(error[0]))}`;
+      };
+
+      const errorHorizontalTop = (d, error) => {
+        const barWidth = 5;
+
+        return `M ${-barWidth / 2},${-Math.abs(
+          this._scaleY(d.y) - this._scaleY(error[1])
+        )} L ${barWidth / 2},${-Math.abs(
+          this._scaleY(d.y) - this._scaleY(error[1])
+        )}`;
+      };
+
+      const errorHorizontalBottom = (d, error) => {
+        const barWidth = 5;
+
+        return `M ${-barWidth / 2},${Math.abs(
+          this._scaleY(d.y) - this._scaleY(error[0])
+        )} L ${barWidth / 2},${Math.abs(
+          this._scaleY(d.y) - this._scaleY(error[0])
+        )}`;
+      };
+
+      const line = d3
+        .line()
+        .x((d) => {
+          if (this.xScale === "ordinal") {
+            return this._scaleX(d.x) + this._scaleX.bandwidth() / 2;
+          }
+          return this._scaleX(d.x);
+        })
+        .y((d) => {
+          return this._scaleY(d.y);
+        });
+
+      const linePreviewX = d3
+        .line()
+        .x((d) => {
+          if (this.xScale === "ordinal") {
+            return (
+              this._previewXScaleX(d.x) + this._previewXScaleX.bandwidth() / 2
+            );
+          }
+          return this._previewXScaleX(d.x);
+        })
+        .y((d) => this._previewXScaleY(d.y));
+
+      const linePreviewY = d3
+        .line()
+        .x((d) => {
+          if (this.xScale === "ordinal") {
+            return (
+              this._previewYScaleX(d.x) + this._previewYScaleX.bandwidth() / 2
+            );
+          }
+          return this._previewYScaleX(d.x);
+        })
+        .y((d) => {
+          return this._previewYScaleY(d.y);
+        });
+
+      const graphXAxisG = xAxisTitleGroup
+        .append("g")
+        .attr("class", "axis x")
+        .attr("clip-path", "url(#clip)");
+
+      const graphXGridG = xAxisTitleGroup.append("g").attr("class", "grid x");
+
+      const graphYAxisG = yAxisTitleGroup
+        .append("g")
+        .attr("class", "axis y")
+        .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`);
+
+      const graphYGridG = yAxisTitleGroup
+        .append("g")
+        .attr("class", "grid y")
+        .attr("transform", `translate(${yTitlePadding + yTitleWidth}, 0)`)
+        .attr("clip-path", "url(#clip)");
+
+      let previewXAxisXG;
+      let previewXAxisYG;
+      let previewYAxisXG;
+      let previewYAxisYG;
+
+      // append preview if true
+      if (showXPreview) {
+        previewXAxisXG = previewXArea
+          .append("g")
+          .attr("class", "axis x")
+          .attr("transform", `translate(0, ${previewXHeight})`)
+          .attr("clip-path", "url(#clip)");
+
+        previewXAxisYG = previewXArea.append("g").attr("class", "axis y");
+        previewXArea.append("g").attr("class", "brushX");
+      }
+
+      if (showYPreview) {
+        previewYAxisXG = previewYArea
+          .append("g")
+          .attr("class", "axis x")
+          .attr("transform", `translate(0, ${previewYHeight})`)
+          .attr("clip-path", "url(#clip)");
+
+        previewYAxisYG = previewYArea.append("g").attr("class", "axis y");
+        previewYArea.append("g").attr("class", "brushY");
+      }
+
+      // update with new data (when toggling via legend)
+      const update = () => {
+        this._currentData = this._groupedData.filter((group) => group.show);
+
+        this._scaleX.domain(getXDomain());
+        this._scaleY.domain(getYDomain());
+
+        if (showXPreview) {
+          this._previewXScaleX.domain(getXDomain());
+          this._previewXScaleY.domain(getYDomain());
+
+          const previewLinesUpdate = previewXArea
+            .selectAll(".line")
+            .data(this._currentData);
+
+          const previewLinesEnter = previewLinesUpdate
+            .enter()
+            .append("path")
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip)");
+
+          previewLinesUpdate
+            .merge(previewLinesEnter)
+            .attr("d", (d) => linePreviewX(d.data))
+            .attr("stroke", (d) => d.color);
+
+          previewLinesUpdate.exit().remove();
+        }
+
+        if (showYPreview) {
+          this._previewYScaleX.domain(getXDomain());
+          this._previewYScaleY.domain(getYDomain());
+
+          const previewLinesUpdate = previewYArea
+            .selectAll(".line")
+            .data(this._currentData);
+
+          const previewLinesEnter = previewLinesUpdate
+            .enter()
+            .append("path")
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip)");
+
+          previewLinesUpdate
+            .merge(previewLinesEnter)
+            .attr("d", (d) => linePreviewY(d.data))
+            .attr("stroke", (d) => d.color);
+
+          previewLinesUpdate.exit().remove();
+        }
+
+        const interpolator = {};
+
+        if (this.xScale === "linear") {
+          this._currentData.forEach((d) => {
+            const domain = d.data.map((d) => d.x);
+            const range = d.data.map((d) => d.y);
+            if (
+              [...new Set(domain)].length < 2 ||
+              [...new Set(range)].length < 2
+            ) {
+              this._renderError(
+                "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+              );
+              return;
+            }
+            interpolator[d.group] = d3
+              .scaleLinear()
+              .domain(d.data.map((d) => d.x))
+              .range(d.data.map((d) => d.y));
+          });
+        } else if (this.xScale === "ordinal") {
+          this._currentData.forEach((d) => {
+            interpolator[d.group] = d3
+              .scaleLinear()
+              .domain(d.data.map((d) => d.x))
+              .range(d.data.map((d) => d.y));
+          });
+        } else if (this.xScale === "time") {
+          this._currentData.forEach((d) => {
+            const domain = d.data.map((d) => d.x);
+            const range = d.data.map((d) => d.y);
+            if (
+              [...new Set(domain)].length < 2 ||
+              [...new Set(range)].length < 2
+            ) {
+              this._renderError(
+                "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+              );
+              return;
+            }
+            interpolator[d.group] = d3
+              .scaleTime()
+              .domain(d.data.map((d) => d.x))
+              .range(d.data.map((d) => d.y));
+          });
+        } else if (this.xScale === "log") {
+          this._currentData.forEach((d) => {
+            const domain = d.data.map((d) => d.x);
+            const range = d.data.map((d) => d.y);
+            if (
+              [...new Set(domain)].length < 2 ||
+              [...new Set(range)].length < 2
+            ) {
+              this._renderError(
+                "Cannot interpolate with less than 2 points. Probably wrong scale type was chosen."
+              );
+              return;
+            }
+            interpolator[d.group] = d3
+              .scaleLog()
+              .domain(d.data.map((d) => d.x))
+              .range(d.data.map((d) => d.y));
+          });
+        } else {
+          this._renderError(
+            "Unknown scale type. Probably wrong scale type was chosen."
+          );
+          return;
+        }
+
+        const brushedX = (e) => {
+          const s = e.selection || this._previewXScaleX.range();
+
+          previewXArea.select(".left").attr("width", s[0]);
+          previewXArea
+            .select(".right")
+            .attr("width", previewXWidth - s[1])
+            .attr("x", s[1]);
+
+          if (this.xScale === "ordinal") {
+            const currentRange = [
+              Math.floor(s[0] / this._previewXScaleX.step()),
+              Math.floor(s[1] / this._previewXScaleX.step()),
+            ];
+            const newDomainX = getXDomain().slice(
+              currentRange[0],
+              currentRange[1] + 1
             );
 
-            update(newData);
+            const croppedData = this._currentData.map((d) => {
+              return {
+                ...d,
+                data: d.data.filter((v) => newDomainX.includes(v.x)),
+              };
+            });
+
+            this._scaleX.domain(newDomainX);
+
+            if (!showYPreview) {
+              this._scaleY.domain(
+                d3.extent(croppedData.map((d) => d.data.map((v) => v.y)).flat())
+              );
+            }
+
+            updateRange(croppedData);
+          } else {
+            const x0x1 = s.map(
+              this._previewXScaleX.invert,
+              this._previewXScaleX
+            );
+            this._scaleX.domain(x0x1);
+
+            if (!showYPreview) {
+              const extents = [];
+
+              this._currentData.forEach((d) => {
+                const ext = d3.extent(
+                  d.data
+                    .filter((v) => x0x1[0] < v.x && v.x < x0x1[1])
+                    .map((v) => v.y)
+                );
+
+                ext.push(...x0x1.map((v) => interpolator[d.group](v)));
+
+                extents.push(d3.extent(ext));
+              });
+
+              this._scaleY.domain(d3.extent(extents.flat()));
+            }
+          }
+
+          if (showXPreview) {
+            previewXArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+            previewXArea
+              .selectAll(".handle")
+              .attr("y", previewXHeight / 4)
+              .attr("height", previewXHeight / 2);
+          }
+
+          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+
+          if (showYGridlines) {
+            graphYGridG.call(yAxisGrid);
+          }
+
+          if (showXGridlines) {
+            graphXGridG.call(xAxisGrid);
+          }
+
+          if (showErrorBars) {
+            graphArea
+              .selectAll(".error-bar")
+              .call(updateErrorTranslate.bind(this));
+          }
+          if (showPoints) {
+            graphArea
+              .selectAll(".symbol")
+              .call(updateSymbolTranslate.bind(this));
+          }
+
+          if (!hideXAxis && !hideXAxisTicks) {
+            graphXAxisG.call(xAxis).call(rotateXTickLabels);
+          }
+
+          if (!hideYAxis && !hideYAxisTicks) {
+            graphYAxisG.call(yAxis);
+          }
+        };
+
+        const brushedY = (e) => {
+          const s = e.selection || this._previewYScaleY.range();
+
+          previewYArea.select(".top").attr("height", Math.min(...s));
+
+          previewYArea
+            .select(".bottom")
+            .attr("y", Math.max(...s))
+            .attr("height", previewYHeight - Math.max(...s));
+
+          const y0y1 = s.map(this._previewYScaleY.invert, this._previewYScaleY);
+
+          this._scaleY.domain(d3.extent(y0y1));
+
+          if (!hideXAxis && !hideXAxisTicks) {
+            graphXAxisG.call(xAxis).call(rotateXTickLabels);
+          }
+
+          if (!hideYAxis && !hideYAxisTicks) {
+            graphYAxisG.call(yAxis);
+          }
+
+          if (showYGridlines) {
+            graphYGridG.call(yAxisGrid);
+          }
+
+          if (showXGridlines) {
+            graphXGridG.call(xAxisGrid);
+          }
+
+          graphArea.selectAll(".line").attr("d", (d) => line(d.data));
+
+          graphArea
+            .selectAll(".error-bar")
+            .call(updateErrorTranslate.bind(this));
+
+          graphArea.selectAll(".error-bar").call(updateErrorScale);
+
+          graphArea.selectAll(".symbol").call(updateSymbolTranslate.bind(this));
+
+          if (showYPreview) {
+            previewYArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+            previewYArea
+              .selectAll(".handle")
+              .attr("x", previewYWidth / 4)
+              .attr("width", previewYWidth / 2);
+          }
+        };
+
+        if (showXPreview) {
+          previewXArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+          previewXArea
+            .selectAll(".handle")
+            .attr("y", previewXHeight / 4)
+            .attr("height", previewXHeight / 2);
+        }
+
+        if (showYPreview) {
+          previewYArea.selectAll(".handle").attr("rx", 2).attr("ry", 2);
+          previewYArea
+            .selectAll(".handle")
+            .attr("x", previewYWidth / 4)
+            .attr("width", previewYWidth / 2);
+        }
+
+        const updateSymbols = (data) => {
+          const symUpdateG = chartAreaGroup
+            .selectAll(".symbol-group")
+            .data(data, (d) => d.id);
+
+          const symEnterG = symUpdateG.enter().append("g");
+
+          const mergedSymbols = symUpdateG
+            .merge(symEnterG)
+            .attr("class", "symbol-group")
+            .attr("clip-path", "url(#clip)")
+            .attr("fill", (d) => d.color);
+
+          symUpdateG.exit().remove();
+
+          const symUpdate = mergedSymbols.selectAll(".symbol").data((d) => {
+            return d.data;
+          });
+
+          const symEnter = symUpdate
+            .enter()
+            .append("g")
+            .attr("transform", (d) => {
+              return `translate(${
+                this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
+              },${this._scaleY(d.y)})`;
+            });
+
+          symUpdate
+            .merge(symEnter)
+            .attr("class", "symbol")
+            .append("path")
+            .attr("d", symbolGenerator);
+
+          symUpdate.exit().remove();
+        };
+
+        function updateErrorTranslate(nodes) {
+          nodes.attr("transform", (d) => {
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+            return `translate(${x},${y})`;
+          });
+        }
+
+        function updateSymbolTranslate(nodes) {
+          nodes.attr("transform", (d) => {
+            const x = this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0);
+            const y = this._scaleY(d.y);
+            return `translate(${x},${y})`;
+          });
+        }
+
+        function updateErrorScale(nodes) {
+          nodes.each(function (d) {
+            const errorG = d3.select(this);
+
+            errorG.select("path.vertical").attr("d", errorVertical(d, d.error));
+
+            errorG.select("path.top").attr("d", errorHorizontalTop(d, d.error));
+            errorG
+              .select("path.bottom")
+              .attr("d", errorHorizontalBottom(d, d.error));
+          });
+        }
+
+        const updateErrors = (data) => {
+          const errorUpdate = errorsGroup
+            .selectAll(".error")
+            .data(data, (d) => d.id);
+
+          const errorEnter = errorUpdate.enter().append("g");
+
+          const mergedErrors = errorUpdate
+            .merge(errorEnter)
+            .classed("error", true)
+            .attr("stroke", (d) => d.color);
+
+          errorUpdate.exit().remove();
+
+          const errorBarUpdate = mergedErrors.selectAll(".error-bar").data(
+            (d) => {
+              return d.data;
+            },
+            (d) => d.x
+          );
+
+          const errorBarEnter = errorBarUpdate.enter().append("g");
+
+          errorBarEnter
+            .append("path")
+            .attr("d", (d) => errorVertical(d, d.error))
+            .attr("class", "vertical");
+
+          errorBarEnter
+            .append("path")
+            .attr("d", (d) => errorHorizontalTop(d, d.error))
+            .attr("class", "top");
+
+          errorBarEnter
+            .append("path")
+            .attr("d", (d) => errorHorizontalBottom(d, d.error))
+            .attr("class", "bottom");
+
+          errorBarUpdate
+            .merge(errorBarEnter)
+            .attr("class", "error-bar")
+            .attr("transform", (d) => {
+              return `translate(${
+                this._scaleX(d.x) + (this._scaleX.bandwidth?.() / 2 || 0)
+              },${this._scaleY(d.y)})`;
+            });
+
+          errorBarUpdate.exit().remove();
+        };
+
+        const updateRange = (data) => {
+          const linesUpdate = chartAreaGroup
+            .selectAll(".line")
+            .data(data, (d) => d.id);
+
+          const linesEnter = linesUpdate
+            .enter()
+            .append("path")
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip)");
+
+          linesUpdate
+            .merge(linesEnter)
+            .attr("d", (d) => line(d.data))
+            .attr("stroke", (d) => d.color);
+
+          if (showPoints) {
+            updateSymbols(data);
+          }
+          if (showErrorBars) {
+            updateErrors(data);
+          }
+
+          linesUpdate.exit().remove();
+
+          graphXAxisG.call(xAxis).call(rotateXTickLabels);
+          graphYAxisG.call(yAxis);
+
+          if (showXPreview) {
+            previewXAxisXG.call(xAxisX).call(rotateXTickLabels);
+            previewXAxisYG.call(yAxisX);
+          }
+
+          if (showYPreview) {
+            previewYAxisXG.call(xAxisY).call(rotateXTickLabels);
+            previewYAxisYG.call(yAxisY);
+          }
+
+          if (hideXAxis) {
+            graphXAxisG.call(hideTicks);
+            graphXAxisG.call((g) => g.select(".domain").remove());
+            if (showXPreview) {
+              previewXAxisXG.call(hideTicks);
+              previewXAxisXG.call((g) => g.select(".domain").remove());
+            }
+            xAxisTitleGroup.call((g) => g.select(".text").remove());
+          }
+          if (hideYAxis) {
+            graphYAxisG.call(hideTicks);
+            graphYAxisG.call((g) => g.select(".domain").remove());
+            if (showXPreview) {
+              previewXAxisYG.call(hideTicks);
+              previewXAxisYG.call((g) => g.select(".domain").remove());
+            }
+            yAxisTitleGroup.call((g) => g.select(".text").remove());
+          }
+          if (hideXAxisTicks) {
+            graphXAxisG.call(hideTicks);
+            if (showXPreview) {
+              previewXAxisXG.call(hideTicks);
+            }
+          }
+          if (hideYAxisTicks) {
+            graphYAxisG.call(hideTicks);
+            if (showXPreview) {
+              previewXAxisYG.call(hideTicks);
+            }
+          }
+          if (showYGridlines) {
+            graphYGridG.call(yAxisGrid);
+          }
+
+          if (showXGridlines) {
+            graphXGridG.call(xAxisGrid);
+          }
+        };
+
+        updateRange(this._currentData);
+
+        let brushX;
+        let brushY;
+
+        if (showXPreview) {
+          brushX = d3
+            .brushX()
+            .extent([
+              [0, 0],
+              [previewXWidth, previewXHeight],
+            ])
+            .on("start brush end", brushedX);
+          previewXArea
+            .append("rect")
+            .attr("class", "non-selection left")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("height", previewXHeight);
+
+          previewXArea
+            .append("rect")
+            .attr("class", "non-selection right")
+            .attr("y", 0)
+            .attr("height", previewXHeight);
+
+          previewXArea.call(brushX).call(brushX.move, this._scaleX.range());
+        }
+        if (showYPreview) {
+          brushY = d3
+            .brushY()
+            .extent([
+              [0, 0],
+              [previewYWidth, previewYHeight],
+            ])
+            .on("start brush end", brushedY);
+
+          previewYArea
+            .append("rect")
+            .attr("class", "non-selection top")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", previewYWidth);
+
+          previewYArea
+            .append("rect")
+            .attr("class", "non-selection bottom")
+            .attr("x", 0)
+            .attr("width", previewYWidth);
+
+          previewYArea
+            .call(brushY)
+            .call(brushY.move, [
+              this._scaleY.range()[1],
+              this._scaleY.range()[0],
+            ]);
+        }
+      };
+
+      update();
+
+      function hideTicks(g) {
+        g.selectAll(".tick").remove();
+      }
+
+      function rotateXTickLabels(g) {
+        if (xTicksAngle !== 0) {
+          const allTicks = g
+            .selectAll(".tick text")
+            .attr("y", 0)
+            .attr("dy", 0)
+            .attr(
+              "transform",
+              `translate(0, ${xAxis.tickSize() * 1.2}) rotate(${xTicksAngle})`
+            )
+            .attr("dominant-baseline", "middle");
+          if (xTicksAngle > 0) {
+            allTicks.attr("text-anchor", "start");
+          } else {
+            allTicks.attr("text-anchor", "end");
+          }
+        }
+      }
+      this._legendListener = (e) => {
+        e.stopPropagation();
+
+        const group = e.detail.label;
+
+        this._groupedData.forEach((d) => {
+          if (d.group === group) {
+            d.show = !d.show;
           }
         });
+
+        e.target.items = e.target.items.map((item) => {
+          return {
+            ...item,
+            toggled: item.label === group ? !item.toggled : item.toggled,
+          };
+        });
+
+        update();
+      };
+      if (showLegend) {
+        this.legend.title = legendTitle || null;
+        this.legend.nodes = this._groups.map((item, index) => {
+          return {
+            id: "" + index,
+            node: svg
+              .selectAll("path.line")
+              .filter((d) => d.group === item)
+              .nodes(),
+          };
+        });
+
+        this.legend.options = {
+          fadeoutNodes: svg.selectAll("path.line").nodes(),
+          position: legendPosition.split("-"),
+          fadeProp: "opacity",
+          showLeaders: false,
+        };
+
+        this.legend.addEventListener("legend-item-click", this._legendListener);
       }
-    };
-    redrawSVG();
+    }
+  }
+
+  _renderError(error) {
+    const main = this.root.querySelector("main");
+    let errorDiv = main.querySelector("div.error");
+    if (!errorDiv) {
+      errorDiv = document.createElement("div");
+      errorDiv.classList.add("error");
+      main.appendChild(errorDiv);
+    }
+    errorDiv.innerText = error;
+  }
+  _hideError() {
+    const main = this.root.querySelector("main");
+    const errorDiv = main.querySelector("div.error");
+    if (errorDiv) {
+      errorDiv.remove();
+    }
   }
 }
 
-function getXTextLabelProps(angle, xLabelsMarginUp, axisPlacement = "bottom") {
-  let textAnchor, dominantBaseline;
-  angle = parseInt(angle);
-  xLabelsMarginUp = parseInt(xLabelsMarginUp);
-
-  let sign = 1;
-  if (axisPlacement === "top") {
-    dominantBaseline = "bottom";
-    sign = -1;
-  } else {
-    dominantBaseline = "hanging";
-  }
-
-  const x = sign * xLabelsMarginUp * Math.sin((angle * Math.PI) / 180);
-  const y = sign * xLabelsMarginUp * Math.cos((angle * Math.PI) / 180);
-
-  switch (true) {
-    case angle < 0 && angle % 180 !== 0:
-      if (axisPlacement === "top") {
-        textAnchor = "start";
-      } else {
-        textAnchor = "end";
-      }
-      if (angle === -90) {
-        dominantBaseline = "central";
-      }
-      break;
-
-    case angle > 0 && angle % 180 !== 0:
-      if (axisPlacement === "top") {
-        textAnchor = "end";
-      } else {
-        textAnchor = "start";
-      }
-      if (angle === 90) {
-        dominantBaseline = "central";
-      }
-      break;
-    case angle === 0:
-      textAnchor = "middle";
-      break;
-    case angle % 180 === 0:
-      textAnchor = "middle";
-      dominantBaseline = "bottom";
-      break;
-    default:
-      break;
-  }
-
-  return {
-    x,
-    y,
-    textAnchor,
-    dominantBaseline,
-  };
-}
-function getYTextLabelProps(angle, yLabelsMarginRight, axisPlacement = "left") {
-  let textAnchor, dominantBaseline;
-  angle = parseInt(angle);
-  yLabelsMarginRight = parseInt(yLabelsMarginRight);
-
-  let sign = 1;
-
-  if (axisPlacement === "right") {
-    sign = -1;
-    dominantBaseline = "hanging";
-    textAnchor = "start";
-  } else {
-    dominantBaseline = "bottom";
-    textAnchor = "end";
-  }
-
-  const x = -sign * yLabelsMarginRight * Math.cos((angle * Math.PI) / 180);
-  const y = sign * yLabelsMarginRight * Math.sin((angle * Math.PI) / 180);
-
-  switch (true) {
-    case angle < 0 && angle % 180 !== 0:
-      if (axisPlacement === "right") {
-        dominantBaseline = "hanging";
-      } else {
-        dominantBaseline = "bottom";
-      }
-      if (angle === -90) {
-        textAnchor = "middle";
-      }
-      break;
-
-    case angle > 0 && angle % 180 !== 0:
-      if (axisPlacement === "right") {
-        dominantBaseline = "bottom";
-      } else {
-        dominantBaseline = "hanging";
-      }
-      if (angle === 90) {
-        textAnchor = "middle";
-      }
-      break;
-
-    case angle % 180 === 0:
-      if (angle > 0) {
-        textAnchor = "start";
-      }
-      dominantBaseline = "central";
-      break;
-    default:
-      break;
-  }
-
-  return {
-    x,
-    y,
-    textAnchor,
-    dominantBaseline,
-  };
-}
+const intervalMap = {
+  second: () => d3.utcSecond,
+  minute: () => d3.utcMinute,
+  hour: () => d3.utcHour,
+  day: () => d3.utcDay,
+  week: () => d3.utcWeek,
+  month: () => d3.utcMonth,
+  year: () => d3.utcYear,
+};
