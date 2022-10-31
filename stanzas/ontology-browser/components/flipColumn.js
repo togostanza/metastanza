@@ -27,7 +27,6 @@ class Flip extends AsyncDirective {
         options = {},
         heroId = undefined,
         scrolledHeroRect = null,
-        //previousHeroId = undefined,
       } = {},
     ]
   ) {

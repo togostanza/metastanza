@@ -261,8 +261,8 @@ export class OntologyCard extends LitElement {
     }
 
     .selected {
-      background-color: var(--togostanza-node-bg-color-selected);
-      border-color: var(--togostanza-border-color-selected);
+      background-color: var(--togostanza-node-bg-color_selected);
+      border-color: var(--togostanza-border-color_selected);
     }
 
     .hidden {

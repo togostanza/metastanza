@@ -102,7 +102,7 @@
   "stanza:menu-placement": "bottom-right",
   "stanza:style": [
     {
-      "stanza:key": "--togostanza-font-family",
+      "stanza:key": "--togostanza-fonts-font_family",
       "stanza:type": "text",
       "stanza:default": "Helvetica Neue",
       "stanza:description": "Font family"
@@ -112,26 +112,25 @@
       "stanza:key": "--togostanza-fonts-font_color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
-      "stanza:description": "Label font color"
+      "stanza:description": "Card font color"
     },
     {
       "stanza:key": "--togostanza-fonts-font_size_primary",
       "stanza:type": "text",
       "stanza:default": "10px",
-      "stanza:description": "Label font size"
+      "stanza:description": "Card title font size"
     },
     {
       "stanza:key": "--togostanza-fonts-font_size_secondary",
       "stanza:type": "text",
       "stanza:default": "8px",
-      "stanza:description": "Label font size"
+      "stanza:description": "Card contents font size"
     },
-
     {
       "stanza:key": "--togostanza-outline-height",
       "stanza:type": "text",
       "stanza:default": "500px",
-      "stanza:description": "Stanza height"
+      "stanza:description": "Stanza height. Width is always 100%, a la div with `display: block`"
     },
     {
       "stanza:key": "--togostanza-border-color",
@@ -140,7 +139,7 @@
       "stanza:description": "Border color"
     },
     {
-      "stanza:key": "--togostanza-border-color-selected",
+      "stanza:key": "--togostanza-border-color_selected",
       "stanza:type": "color",
       "stanza:default": "#1f9dad",
       "stanza:description": "Selected border color"
@@ -152,13 +151,13 @@
       "stanza:description": "Node background color"
     },
     {
-      "stanza:key": "--togostanza-node-bg-color-selected",
+      "stanza:key": "--togostanza-node-bg-color_selected",
       "stanza:type": "color",
       "stanza:default": "#fff6e0",
       "stanza:description": "Selected node background color"
     },
     {
-      "stanza:key": "--togostanza-background-color",
+      "stanza:key": "--togostanza-theme-background_color",
       "stanza:type": "color",
       "stanza:default": "rgba(255,255,255,0)",
       "stanza:description": "Background color"
