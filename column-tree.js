@@ -1,9 +1,9 @@
-import { S as Stanza, d as defineStanzaElement } from './transform-54fb0dda.js';
-import { d as defineComponent, c as createElementBlock, F as Fragment, r as renderList, n as normalizeClass, a as resolveComponent, o as openBlock, b as createBaseVNode, t as toDisplayString, e as createCommentVNode, f as createBlock, w as withDirectives, v as vShow, g as createTextVNode, h as toRefs, i as ref, j as reactive, k as watchEffect, l as computed, m as vModelText, p as createVNode, q as createApp } from './runtime-dom.esm-bundler-15d38398.js';
-import { l as loadData } from './load-data-fd48655e.js';
-import { l as library, F as FontAwesomeIcon } from './index.es-f30b9225.js';
-import { f as faChevronRight, a as faClipboard } from './index.es-5d65738a.js';
-import { f as appendCustomCss } from './index-29de360d.js';
+import { S as Stanza, d as defineStanzaElement } from './transform-0e5d4876.js';
+import { d as defineComponent, c as createElementBlock, F as Fragment, r as renderList, n as normalizeClass, o as openBlock, a as createBaseVNode, t as toDisplayString, b as createCommentVNode, e as createBlock, f as resolveComponent, w as withDirectives, v as vShow, g as createTextVNode, h as toRefs, i as ref, j as reactive, k as watchEffect, l as computed, m as vModelText, p as createVNode, q as createApp } from './runtime-dom.esm-bundler-f53c2341.js';
+import { l as loadData } from './load-data-ad9ea040.js';
+import { l as library$1, F as FontAwesomeIcon } from './index.es-7f8ef021.js';
+import { f as faChevronRight, a as faClipboard } from './index-c774cef2.js';
+import { f as appendCustomCss } from './index-75ea921b.js';
 import './dsv-ac31b097.js';
 
 var metadata = {
@@ -270,7 +270,7 @@ var metadata = {
 ]
 };
 
-library.add(faChevronRight, faClipboard);
+library$1.add(faChevronRight, faClipboard);
 var script$2 = defineComponent({
   components: {
     FontAwesomeIcon,
@@ -444,14 +444,13 @@ const _hoisted_5$1 = {
   key: 0,
   class: "value"
 };
-const _hoisted_6$1 = {
+const _hoisted_6 = {
   key: 0,
   class: "value"
 };
-const _hoisted_7$1 = /*#__PURE__*/createTextVNode(" Path : ");
-const _hoisted_8$1 = /*#__PURE__*/createBaseVNode("rp", null, "(", -1 /* HOISTED */);
-const _hoisted_9$1 = /*#__PURE__*/createBaseVNode("rp", null, ")", -1 /* HOISTED */);
-const _hoisted_10 = {
+const _hoisted_7 = /*#__PURE__*/createBaseVNode("rp", null, "(", -1 /* HOISTED */);
+const _hoisted_8 = /*#__PURE__*/createBaseVNode("rp", null, ")", -1 /* HOISTED */);
+const _hoisted_9 = {
   key: 0,
   class: "no-results"
 };
@@ -474,14 +473,14 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               : createCommentVNode("v-if", true)
           ], 2 /* CLASS */),
           (_ctx.showPath)
-            ? (openBlock(), createElementBlock("span", _hoisted_6$1, [
-                _hoisted_7$1,
+            ? (openBlock(), createElementBlock("span", _hoisted_6, [
+                createTextVNode(" Path : "),
                 (openBlock(true), createElementBlock(Fragment, null, renderList(node.path, (item, pathIndex) => {
                   return (openBlock(), createElementBlock("ruby", { key: pathIndex }, [
                     createTextVNode(toDisplayString(item.label) + "/", 1 /* TEXT */),
-                    _hoisted_8$1,
+                    _hoisted_7,
                     createBaseVNode("rt", null, toDisplayString(item.id), 1 /* TEXT */),
-                    _hoisted_9$1
+                    _hoisted_8
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]))
@@ -489,7 +488,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         ], 10 /* CLASS, PROPS */, _hoisted_3$1))
       }), 128 /* KEYED_FRAGMENT */)),
       (_ctx.data.length < 1)
-        ? (openBlock(), createElementBlock("li", _hoisted_10, toDisplayString(_ctx.valueObj.fallback), 1 /* TEXT */))
+        ? (openBlock(), createElementBlock("li", _hoisted_9, toDisplayString(_ctx.valueObj.fallback), 1 /* TEXT */))
         : createCommentVNode("v-if", true)
     ])
   ], 512 /* NEED_PATCH */)), [
@@ -642,19 +641,9 @@ var script = defineComponent({
 
 const _hoisted_1 = { id: "wrapper" };
 const _hoisted_2 = { key: 0 };
-const _hoisted_3 = /*#__PURE__*/createTextVNode("*When searching by path please use the ");
-const _hoisted_4 = /*#__PURE__*/createBaseVNode("em", null, "id", -1 /* HOISTED */);
-const _hoisted_5 = /*#__PURE__*/createTextVNode(" followed by a ");
-const _hoisted_6 = /*#__PURE__*/createBaseVNode("em", null, "/", -1 /* HOISTED */);
-const _hoisted_7 = /*#__PURE__*/createTextVNode(". E.G.: 1/2/3");
-const _hoisted_8 = [
-  _hoisted_3,
-  _hoisted_4,
-  _hoisted_5,
-  _hoisted_6,
-  _hoisted_7
-];
-const _hoisted_9 = { id: "tree" };
+const _hoisted_3 = /*#__PURE__*/createBaseVNode("em", null, "id", -1 /* HOISTED */);
+const _hoisted_4 = /*#__PURE__*/createBaseVNode("em", null, "/", -1 /* HOISTED */);
+const _hoisted_5 = { id: "tree" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_search_suggestions = resolveComponent("search-suggestions");
@@ -676,7 +665,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         [vModelText, _ctx.state.searchTerm]
       ]),
       (_ctx.state.showPathExplanation)
-        ? (openBlock(), createElementBlock("small", _hoisted_2, _hoisted_8))
+        ? (openBlock(), createElementBlock("small", _hoisted_2, [
+            createTextVNode("*When searching by path please use the "),
+            _hoisted_3,
+            createTextVNode(" followed by a "),
+            _hoisted_4,
+            createTextVNode(". E.G.: 1/2/3")
+          ]))
         : createCommentVNode("v-if", true),
       createVNode(_component_search_suggestions, {
         "show-suggestions": _ctx.state.showSuggestions,
@@ -690,7 +685,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onSelectNode: _ctx.selectNode
       }, null, 8 /* PROPS */, ["show-suggestions", "show-path", "search-input", "data", "keys", "value-obj", "show-border-nodes", "node-content-alignment", "onSelectNode"])
     ], 32 /* HYDRATE_EVENTS */),
-    createBaseVNode("div", _hoisted_9, [
+    createBaseVNode("div", _hoisted_5, [
       (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.state.columnData.filter(
           (col) => col?.length > 0
         ), (column, index) => {

@@ -1,9 +1,9 @@
-import { L as Selection, M as array$2, N as root$1, O as SCHEDULED, P as Transition, A as dispatch, s as select, Q as interrupt, r as rgbBasis, m as rgb, U as Transform, V as identity$3, b as color, n as hsl, W as cubicInOut, X as cubicIn, Y as cubicOut, g as basis, h as basisClosed, i as interpolateNumber, f as interpolateString, j as interpolateTransformCss, k as interpolateTransformSvg, e as interpolateRgb, l as rgbBasisClosed, B as creator, Z as matcher, _ as namespace, $ as namespaces, a0 as selection, a1 as selector, a2 as selectorAll, a3 as styleValue, a4 as defaultView, x as now, z as timer, a5 as timerFlush, a6 as timeout, a7 as transition, a8 as transform$1, S as Stanza, d as defineStanzaElement } from './transform-54fb0dda.js';
-import { I as InternMap, l as InternSet, a as interpolate$1, i as initRange, m as initInterpolator, p as defaultLocale, f as format, c as formatPrefix, j as formatLocale, b as formatSpecifier, F as FormatSpecifier, d as array$4, g as date, n as numberArray, h as object$1, o as ordinal, k as implicit } from './ordinal-876d0728.js';
-import { s as sourceEvent, p as pointer, a as dragDisable, y as yesdrag, d as drag } from './drag-b359a604.js';
-import { aP as sort, H as quantile, G as deviation, aQ as ascendingDefined, aR as compareDefined, aS as clipRectangle, aT as Adder, aU as geoStream, aV as noop$1, aW as atan2, aX as sqrt, aY as sin, aZ as cos, a_ as radians, a$ as abs$1, b0 as polygonContains, b1 as epsilon2, b2 as degrees, b3 as asin, b4 as haversin, C as utcFormat, D as utcParse, g as cubehelixLong, b5 as cubehelix$1, a0 as area$2, i as interpolateZoom, b6 as fsum, b7 as fcumsum, J as mean, I as median, b8 as merge, aI as permute, F as quantileSorted, b9 as quickselect, ba as variance, aL as lab, aM as hcl, bb as lch, bc as gray, aH as Delaunay, bd as Voronoi, aB as forceX, aC as forceY, aN as geoArea$1, aJ as geoBounds$1, aK as geoCentroid$1, be as geoCircle, bf as clipAntimeridian, bg as clipCircle, aA as graticule, bh as graticule10, aj as geoPath, ak as geoAlbers, al as geoAlbersUsa, am as geoAzimuthalEqualArea, bi as azimuthalEqualAreaRaw, an as geoAzimuthalEquidistant, bj as azimuthalEquidistantRaw, ao as geoConicConformal, bk as conicConformalRaw, ap as geoConicEqualArea, bl as conicEqualAreaRaw, aq as geoConicEquidistant, bm as conicEquidistantRaw, ar as geoEqualEarth, bn as equalEarthRaw, as as geoEquirectangular, bo as equirectangularRaw, at as geoGnomonic, bp as gnomonicRaw, au as geoIdentity, ai as projection, bq as projectionMutator, av as geoMercator, br as mercatorRaw, aw as geoNaturalEarth1, bs as naturalEarth1Raw, ax as geoOrthographic, bt as orthographicRaw, ay as geoStereographic, bu as stereographicRaw, az as geoTransverseMercator, bv as transverseMercatorRaw, bw as rotation, bx as transform, aD as pack, by as siblings, bz as enclose, aE as treemapBinary, aF as treemapSliceDice, aG as treemapResquarify, d as discrete, h as hue, a as hsl$1, b as hslLong, l as lab$1, c as hcl$1, e as hclLong, f as cubehelix$2, p as piecewise, q as quantize, K as identity$4, L as log, M as symlog, Z as quantile$1, _ as quantize$1, $ as threshold, N as time, O as utcTime, P as sequential, Q as sequentialLog, R as sequentialPow, S as sequentialSqrt, T as sequentialSymlog, U as diverging$1, V as divergingLog, W as divergingPow, X as divergingSqrt, Y as divergingSymlog, a1 as Symbol$1, bA as symbolsStroke, bB as symbolsFill, bC as asterisk, bD as circle, bE as cross$2, bF as diamond, bG as diamond2, bH as plus, bI as square$1, bJ as square2, bK as star, bL as triangle, bM as triangle2, bN as wye, bO as x, a2 as curveBasisClosed, a3 as curveBasisOpen, a4 as curveBundle, a7 as curveCardinalClosed, a6 as curveCardinalOpen, a5 as curveCardinal, a9 as curveCatmullRomClosed, aa as curveCatmullRomOpen, a8 as curveCatmullRom, ab as curveLinearClosed, ad as monotoneX, ac as monotoneY, ae as curveNatural, af as curveStep, ag as stepAfter, ah as stepBefore, bP as newInterval, o as utcMillisecond, bQ as milliseconds, u as utcSecond, bR as seconds, n as timeMinute, bS as minutes, m as timeHour, bT as hours, k as timeDay, bU as days, s as sunday, bV as sundays, bW as monday, bX as mondays, bY as tuesday, bZ as tuesdays, b_ as wednesday, b$ as wednesdays, c0 as thursday, c1 as thursdays, c2 as friday, c3 as fridays, c4 as saturday, c5 as saturdays, j as timeMonth, c6 as months, t as timeYear, c7 as years, z as utcMinute, c8 as utcMinutes, y as utcHour, c9 as utcHours, x as utcDay, ca as utcDays, w as utcSunday, cb as utcSundays, cc as utcMonday, cd as utcMondays, ce as utcTuesday, cf as utcTuesdays, cg as utcWednesday, ch as utcWednesdays, ci as utcThursday, cj as utcThursdays, ck as utcFriday, cl as utcFridays, cm as utcSaturday, cn as utcSaturdays, v as utcMonth, co as utcMonths, r as utcYear, cp as utcYears, cq as utcTicks, cr as utcTickInterval, cs as timeTicks, ct as timeTickInterval, cu as defaultLocale$1, A as timeFormat, B as timeParse, E as formatLocale$1, aO as interval } from './step-f1b1e341.js';
-import { d as ascending$2, w as tickIncrement, r as ticks, f as bisect, t as tickStep, s as continuous, m as linearish, k as number, u as identity$2, e as bisectRight, h as bisectLeft, x as bisectCenter, b as bisector, v as descending$2, p as precisionFixed, c as precisionPrefix, a as precisionRound, i as interpolateRound, l as linear$1, g as tickFormat } from './linear-b2e6363e.js';
-import { r as rollup, g as group, i as identity$1, f as flatGroup, a as flatRollup, b as groups, c as index, d as indexes, e as rollups } from './group-b85b018d.js';
+import { K as Selection, M as root$1, N as array$2, O as SCHEDULED, P as Transition, A as dispatch, Q as interrupt, s as select, r as rgbBasis, m as rgb, U as identity$3, V as Transform, b as color, n as hsl, W as cubicInOut, X as cubicIn, Y as cubicOut, g as basis, h as basisClosed, i as interpolateNumber, f as interpolateString, j as interpolateTransformCss, k as interpolateTransformSvg, e as interpolateRgb, l as rgbBasisClosed, B as creator, Z as matcher, _ as namespace, $ as namespaces, a0 as selection, a1 as selector, a2 as selectorAll, a3 as styleValue, a4 as defaultView, x as now, z as timer, a5 as timerFlush, a6 as timeout, a7 as transition, a8 as transform$1, S as Stanza, d as defineStanzaElement } from './transform-0e5d4876.js';
+import { I as InternMap, l as InternSet, a as interpolate$1, i as initRange, m as initInterpolator, p as defaultLocale, f as format, c as formatPrefix, j as formatLocale, b as formatSpecifier, F as FormatSpecifier, d as array$4, g as date, n as numberArray, h as object$1, o as ordinal, k as implicit } from './ordinal-e772a8c0.js';
+import { s as sourceEvent, p as pointer, a as dragDisable, y as yesdrag, d as drag } from './drag-3b5da954.js';
+import { aP as sort, H as quantile, G as deviation, aQ as ascendingDefined, aR as compareDefined, aS as minIndex, aT as maxIndex, aU as clipRectangle, aV as Adder, aW as geoStream, aX as noop$1, aY as atan2, aZ as sqrt, a_ as sin, a$ as cos, b0 as radians, b1 as abs$1, b2 as epsilon2, b3 as polygonContains, b4 as asin, b5 as haversin, b6 as degrees, C as utcFormat, D as utcParse, g as cubehelixLong, b7 as cubehelix$1, a0 as area$2, i as interpolateZoom, b8 as fsum, b9 as fcumsum, J as mean, I as median, ba as medianIndex, bb as merge, aI as permute, bc as quantileIndex, F as quantileSorted, bd as quickselect, be as greatest, bf as variance, aJ as lab, aK as hcl, bg as lch, bh as gray, aH as Delaunay, bi as Voronoi, aB as forceX, aC as forceY, aL as geoArea$1, aM as geoBounds$1, aN as geoCentroid$1, bj as geoCircle, bk as clipAntimeridian, bl as clipCircle, aA as graticule, bm as graticule10, aj as geoPath, ak as geoAlbers, al as geoAlbersUsa, am as geoAzimuthalEqualArea, bn as azimuthalEqualAreaRaw, an as geoAzimuthalEquidistant, bo as azimuthalEquidistantRaw, ao as geoConicConformal, bp as conicConformalRaw, ap as geoConicEqualArea, bq as conicEqualAreaRaw, aq as geoConicEquidistant, br as conicEquidistantRaw, ar as geoEqualEarth, bs as equalEarthRaw, as as geoEquirectangular, bt as equirectangularRaw, at as geoGnomonic, bu as gnomonicRaw, au as geoIdentity, ai as projection, bv as projectionMutator, av as geoMercator, bw as mercatorRaw, aw as geoNaturalEarth1, bx as naturalEarth1Raw, ax as geoOrthographic, by as orthographicRaw, ay as geoStereographic, bz as stereographicRaw, az as geoTransverseMercator, bA as transverseMercatorRaw, bB as rotation, bC as transform, aD as pack, bD as siblings, bE as enclose, aE as treemapBinary, aF as treemapSliceDice, aG as treemapResquarify, d as discrete, h as hue, a as hsl$1, b as hslLong, l as lab$1, c as hcl$1, e as hclLong, f as cubehelix$2, p as piecewise, q as quantize, K as identity$4, L as log, M as symlog, Z as quantile$1, _ as quantize$1, $ as threshold, N as time, O as utcTime, P as sequential, Q as sequentialLog, R as sequentialPow, S as sequentialSqrt, T as sequentialSymlog, U as diverging$1, V as divergingLog, W as divergingPow, X as divergingSqrt, Y as divergingSymlog, a1 as Symbol$1, bF as symbolsStroke, bG as symbolsFill, bH as asterisk, bI as circle, bJ as cross$2, bK as diamond, bL as diamond2, bM as plus, bN as square$1, bO as square2, bP as star, bQ as triangle, bR as triangle2, bS as wye, bT as x, a2 as curveBasisClosed, a3 as curveBasisOpen, a4 as curveBundle, a7 as curveCardinalClosed, a6 as curveCardinalOpen, a5 as curveCardinal, a9 as curveCatmullRomClosed, aa as curveCatmullRomOpen, a8 as curveCatmullRom, ab as curveLinearClosed, ad as monotoneX, ac as monotoneY, ae as curveNatural, af as curveStep, ag as stepAfter, ah as stepBefore, bU as newInterval, o as utcMillisecond, bV as milliseconds, u as utcSecond, bW as seconds, n as timeMinute, bX as minutes, m as timeHour, bY as hours, k as timeDay, bZ as days, s as sunday, b_ as sundays, b$ as monday, c0 as mondays, c1 as tuesday, c2 as tuesdays, c3 as wednesday, c4 as wednesdays, c5 as thursday, c6 as thursdays, c7 as friday, c8 as fridays, c9 as saturday, ca as saturdays, j as timeMonth, cb as months, t as timeYear, cc as years, z as utcMinute, cd as utcMinutes, y as utcHour, ce as utcHours, x as utcDay, cf as utcDays, w as utcSunday, cg as utcSundays, ch as utcMonday, ci as utcMondays, cj as utcTuesday, ck as utcTuesdays, cl as utcWednesday, cm as utcWednesdays, cn as utcThursday, co as utcThursdays, cp as utcFriday, cq as utcFridays, cr as utcSaturday, cs as utcSaturdays, v as utcMonth, ct as utcMonths, r as utcYear, cu as utcYears, cv as utcTicks, cw as utcTickInterval, cx as timeTicks, cy as timeTickInterval, cz as defaultLocale$1, A as timeFormat, B as timeParse, E as formatLocale$1, aO as interval } from './step-94a89c98.js';
+import { d as ascending$2, w as tickIncrement, r as ticks, g as bisect, t as tickStep, s as continuous, k as number, m as linearish, u as identity$2, e as bisectRight, h as bisectLeft, x as bisectCenter, b as bisector, v as descending$2, p as precisionFixed, c as precisionPrefix, a as precisionRound, i as interpolateRound, l as linear$1, f as tickFormat } from './linear-919165bc.js';
+import { r as rollup, g as group, i as identity$1, f as flatGroup, a as flatRollup, b as groups, c as index, d as indexes, e as rollups } from './group-a4e8b153.js';
 import { e as extent$1 } from './extent-14a1e8e9.js';
 import { m as min$1 } from './min-4a3f8e4e.js';
 import { a as text, d as dsvFormat, b as csvParse, e as csvParseRows, f as csvFormat, g as csvFormatBody, h as csvFormatRows, i as csvFormatRow, j as csvFormatValue, k as tsvParse, l as tsvParseRows, m as tsvFormat, n as tsvFormatBody, o as tsvFormatRows, p as tsvFormatRow, q as tsvFormatValue, r as dsv, c as csv, t as tsv } from './dsv-ac31b097.js';
@@ -12,15 +12,15 @@ import { r as range } from './range-e15c6861.js';
 import { s as sum$1 } from './sum-44e7480e.js';
 import { c as axisTop, d as axisRight, a as axisBottom, b as axisLeft } from './axis-3dba94d9.js';
 import { a as chord, b as chordTranspose, c as chordDirected, d as ribbon, r as ribbonArrow } from './ribbon-bbaf0468.js';
-import { e as constant$4, a as forceCenter, b as forceCollide, d as forceLink, c as forceManyBody, f as forceSimulation, q as quadtree } from './manyBody-67c659cf.js';
-import { c as cluster, t as tree, p as pow, s as sqrt$1 } from './pow-a32fdfa5.js';
+import { e as constant$4, a as forceCenter, b as forceCollide, d as forceLink, c as forceManyBody, f as forceSimulation, q as quadtree } from './manyBody-93e14d1c.js';
+import { c as cluster, t as tree, p as pow, s as sqrt$1 } from './pow-43a0d612.js';
 import { h as hierarchy, N as Node, s as stratify } from './stratify-7050dfd9.js';
 import { p as partition } from './partition-e955ad6c.js';
-import { t as treemap, a as treemapSlice, b as treemapSquarify } from './index-605eb048.js';
+import { t as treemap, a as treemapSlice, b as treemapSquarify } from './index-c76c1b89.js';
 import { t as treemapDice } from './dice-7bdb0652.js';
 import { p as path } from './path-a78af922.js';
-import { b as band, p as point } from './band-e7ca2641.js';
-import { c as create } from './create-2353c16e.js';
+import { b as band, p as point } from './band-644ecdd6.js';
+import { c as create } from './create-605ca259.js';
 import { t as tau$1, a as arc$2 } from './arc-06a68a59.js';
 import { c as curveLinear, l as line$2 } from './line-5ff356a1.js';
 import { a as array$3 } from './array-80a7907a.js';
@@ -28,9 +28,125 @@ import { c as constant$5 } from './constant-c49047a5.js';
 import { p as pointRadial, l as link, a as linkHorizontal, b as linkVertical, c as linkRadial, d as bumpX, e as bumpY } from './link-3796f00e.js';
 import { c as curveBasis } from './basis-0dde91c7.js';
 import { n as none, a as none$1, s as stack } from './stack-322237e7.js';
-import { S as StanzaColorGenerator, I as InterpolateColorGenerator, C as CirculateColorGenerator } from './ColorGenerator-f182a868.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-29de360d.js';
+import { S as StanzaColorGenerator, I as InterpolateColorGenerator, C as CirculateColorGenerator } from './ColorGenerator-697f5146.js';
+import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-75ea921b.js';
 import './point-7945b9d0.js';
+
+function blur(values, r) {
+  if (!((r = +r) >= 0)) throw new RangeError("invalid r");
+  let length = values.length;
+  if (!((length = Math.floor(length)) >= 0)) throw new RangeError("invalid length");
+  if (!length || !r) return values;
+  const blur = blurf(r);
+  const temp = values.slice();
+  blur(values, temp, 0, length, 1);
+  blur(temp, values, 0, length, 1);
+  blur(values, temp, 0, length, 1);
+  return values;
+}
+
+const blur2 = Blur2(blurf);
+
+const blurImage = Blur2(blurfImage);
+
+function Blur2(blur) {
+  return function(data, rx, ry = rx) {
+    if (!((rx = +rx) >= 0)) throw new RangeError("invalid rx");
+    if (!((ry = +ry) >= 0)) throw new RangeError("invalid ry");
+    let {data: values, width, height} = data;
+    if (!((width = Math.floor(width)) >= 0)) throw new RangeError("invalid width");
+    if (!((height = Math.floor(height !== undefined ? height : values.length / width)) >= 0)) throw new RangeError("invalid height");
+    if (!width || !height || (!rx && !ry)) return data;
+    const blurx = rx && blur(rx);
+    const blury = ry && blur(ry);
+    const temp = values.slice();
+    if (blurx && blury) {
+      blurh(blurx, temp, values, width, height);
+      blurh(blurx, values, temp, width, height);
+      blurh(blurx, temp, values, width, height);
+      blurv(blury, values, temp, width, height);
+      blurv(blury, temp, values, width, height);
+      blurv(blury, values, temp, width, height);
+    } else if (blurx) {
+      blurh(blurx, values, temp, width, height);
+      blurh(blurx, temp, values, width, height);
+      blurh(blurx, values, temp, width, height);
+    } else if (blury) {
+      blurv(blury, values, temp, width, height);
+      blurv(blury, temp, values, width, height);
+      blurv(blury, values, temp, width, height);
+    }
+    return data;
+  };
+}
+
+function blurh(blur, T, S, w, h) {
+  for (let y = 0, n = w * h; y < n;) {
+    blur(T, S, y, y += w, 1);
+  }
+}
+
+function blurv(blur, T, S, w, h) {
+  for (let x = 0, n = w * h; x < w; ++x) {
+    blur(T, S, x, x + n, w);
+  }
+}
+
+function blurfImage(radius) {
+  const blur = blurf(radius);
+  return (T, S, start, stop, step) => {
+    start <<= 2, stop <<= 2, step <<= 2;
+    blur(T, S, start + 0, stop + 0, step);
+    blur(T, S, start + 1, stop + 1, step);
+    blur(T, S, start + 2, stop + 2, step);
+    blur(T, S, start + 3, stop + 3, step);
+  };
+}
+
+// Given a target array T, a source array S, sets each value T[i] to the average
+// of {S[i - r], …, S[i], …, S[i + r]}, where r = ⌊radius⌋, start <= i < stop,
+// for each i, i + step, i + 2 * step, etc., and where S[j] is clamped between
+// S[start] (inclusive) and S[stop] (exclusive). If the given radius is not an
+// integer, S[i - r - 1] and S[i + r + 1] are added to the sum, each weighted
+// according to r - ⌊radius⌋.
+function blurf(radius) {
+  const radius0 = Math.floor(radius);
+  if (radius0 === radius) return bluri(radius);
+  const t = radius - radius0;
+  const w = 2 * radius + 1;
+  return (T, S, start, stop, step) => { // stop must be aligned!
+    if (!((stop -= step) >= start)) return; // inclusive stop
+    let sum = radius0 * S[start];
+    const s0 = step * radius0;
+    const s1 = s0 + step;
+    for (let i = start, j = start + s0; i < j; i += step) {
+      sum += S[Math.min(stop, i)];
+    }
+    for (let i = start, j = stop; i <= j; i += step) {
+      sum += S[Math.min(stop, i + s0)];
+      T[i] = (sum + t * (S[Math.max(start, i - s1)] + S[Math.min(stop, i + s1)])) / w;
+      sum -= S[Math.max(start, i - s0)];
+    }
+  };
+}
+
+// Like blurf, but optimized for integer radius.
+function bluri(radius) {
+  const w = 2 * radius + 1;
+  return (T, S, start, stop, step) => { // stop must be aligned!
+    if (!((stop -= step) >= start)) return; // inclusive stop
+    let sum = radius * S[start];
+    const s = step * radius;
+    for (let i = start, j = start + s; i < j; i += step) {
+      sum += S[Math.min(stop, i)];
+    }
+    for (let i = start, j = stop; i <= j; i += step) {
+      sum += S[Math.min(stop, i + s)];
+      T[i] = sum / w;
+      sum -= S[Math.max(start, i - s)];
+    }
+  };
+}
 
 function count(values, valueof) {
   let count = 0;
@@ -251,52 +367,6 @@ function thresholdScott(values, min, max) {
   return Math.ceil((max - min) * Math.cbrt(count(values)) / (3.49 * deviation(values)));
 }
 
-function maxIndex(values, valueof) {
-  let max;
-  let maxIndex = -1;
-  let index = -1;
-  if (valueof === undefined) {
-    for (const value of values) {
-      ++index;
-      if (value != null
-          && (max < value || (max === undefined && value >= value))) {
-        max = value, maxIndex = index;
-      }
-    }
-  } else {
-    for (let value of values) {
-      if ((value = valueof(value, ++index, values)) != null
-          && (max < value || (max === undefined && value >= value))) {
-        max = value, maxIndex = index;
-      }
-    }
-  }
-  return maxIndex;
-}
-
-function minIndex(values, valueof) {
-  let min;
-  let minIndex = -1;
-  let index = -1;
-  if (valueof === undefined) {
-    for (const value of values) {
-      ++index;
-      if (value != null
-          && (min > value || (min === undefined && value >= value))) {
-        min = value, minIndex = index;
-      }
-    }
-  } else {
-    for (let value of values) {
-      if ((value = valueof(value, ++index, values)) != null
-          && (min > value || (min === undefined && value >= value))) {
-        min = value, minIndex = index;
-      }
-    }
-  }
-  return minIndex;
-}
-
 function mode(values, valueof) {
   const counts = new InternMap();
   if (valueof === undefined) {
@@ -405,34 +475,6 @@ function leastIndex(values, compare = ascending$2) {
     }
   }
   return min;
-}
-
-function greatest(values, compare = ascending$2) {
-  let max;
-  let defined = false;
-  if (compare.length === 1) {
-    let maxValue;
-    for (const element of values) {
-      const value = compare(element);
-      if (defined
-          ? ascending$2(value, maxValue) > 0
-          : ascending$2(value, value) === 0) {
-        max = element;
-        maxValue = value;
-        defined = true;
-      }
-    }
-  } else {
-    for (const value of values) {
-      if (defined
-          ? compare(value, max) > 0
-          : compare(value, value) === 0) {
-        max = value;
-        defined = true;
-      }
-    }
-  }
-  return max;
 }
 
 function greatestIndex(values, compare = ascending$2) {
@@ -1595,7 +1637,7 @@ var cases = [
   []
 ];
 
-function contours() {
+function Contours() {
   var dx = 1,
       dy = 1,
       threshold = thresholdSturges,
@@ -1769,50 +1811,6 @@ function contours() {
   return contours;
 }
 
-// TODO Optimize edge cases.
-// TODO Optimize index calculation.
-// TODO Optimize arguments.
-function blurX(source, target, r) {
-  var n = source.width,
-      m = source.height,
-      w = (r << 1) + 1;
-  for (var j = 0; j < m; ++j) {
-    for (var i = 0, sr = 0; i < n + r; ++i) {
-      if (i < n) {
-        sr += source.data[i + j * n];
-      }
-      if (i >= r) {
-        if (i >= w) {
-          sr -= source.data[i - w + j * n];
-        }
-        target.data[i - r + j * n] = sr / Math.min(i + 1, n - 1 + w - i, w);
-      }
-    }
-  }
-}
-
-// TODO Optimize edge cases.
-// TODO Optimize index calculation.
-// TODO Optimize arguments.
-function blurY(source, target, r) {
-  var n = source.width,
-      m = source.height,
-      w = (r << 1) + 1;
-  for (var i = 0; i < n; ++i) {
-    for (var j = 0, sr = 0; j < m + r; ++j) {
-      if (j < m) {
-        sr += source.data[i + j * n];
-      }
-      if (j >= r) {
-        if (j >= w) {
-          sr -= source.data[i + (j - w) * n];
-        }
-        target.data[i + (j - r) * n] = sr / Math.min(j + 1, m - 1 + w - j, w);
-      }
-    }
-  }
-}
-
 function defaultX(d) {
   return d[0];
 }
@@ -1838,13 +1836,13 @@ function density() {
       m = (dy + o * 2) >> k, // grid height
       threshold = constant$1(20);
 
-  function density(data) {
-    var values0 = new Float32Array(n * m),
-        values1 = new Float32Array(n * m),
-        pow2k = Math.pow(2, -k);
+  function grid(data) {
+    var values = new Float32Array(n * m),
+        pow2k = Math.pow(2, -k),
+        i = -1;
 
-    data.forEach(function(d, i, data) {
-      var xi = (x(d, i, data) + o) * pow2k,
+    for (const d of data) {
+      var xi = (x(d, ++i, data) + o) * pow2k,
           yi = (y(d, i, data) + o) * pow2k,
           wi = +weight(d, i, data);
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
@@ -1852,40 +1850,49 @@ function density() {
             y0 = Math.floor(yi),
             xt = xi - x0 - 0.5,
             yt = yi - y0 - 0.5;
-        values0[x0 + y0 * n] += (1 - xt) * (1 - yt) * wi;
-        values0[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
-        values0[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
-        values0[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
+        values[x0 + y0 * n] += (1 - xt) * (1 - yt) * wi;
+        values[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
+        values[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
+        values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
       }
-    });
+    }
 
-    // TODO Optimize.
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
+    blur2({data: values, width: n, height: m}, r * pow2k);
+    return values;
+  }
 
-    var tz = threshold(values0);
+  function density(data) {
+    var values = grid(data),
+        tz = threshold(values),
+        pow4k = Math.pow(2, 2 * k);
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
-      var stop = max$1(values0);
-      tz = tickStep(0, stop, tz);
-      tz = range(0, Math.floor(stop / tz) * tz, tz);
-      tz.shift();
+      tz = ticks(Number.MIN_VALUE, max$1(values) / pow4k, tz);
     }
 
-    return contours()
-        .thresholds(tz)
+    return Contours()
         .size([n, m])
-      (values0)
-        .map(transform);
+        .thresholds(tz.map(d => d * pow4k))
+      (values)
+        .map((c, i) => (c.value = +tz[i], transform(c)));
   }
 
+  density.contours = function(data) {
+    var values = grid(data),
+        contours = Contours().size([n, m]),
+        pow4k = Math.pow(2, 2 * k),
+        contour = value => {
+          value = +value;
+          var c = transform(contours.contour(values, value * pow4k));
+          c.value = value; // preserve exact threshold value
+          return c;
+        };
+    Object.defineProperty(contour, "max", {get: () => max$1(values) / pow4k});
+    return contour;
+  };
+
   function transform(geometry) {
-    geometry.value *= Math.pow(2, -2 * k); // Density in points per square pixel.
     geometry.coordinates.forEach(transformPolygon);
     return geometry;
   }
@@ -1943,7 +1950,7 @@ function density() {
   density.bandwidth = function(_) {
     if (!arguments.length) return Math.sqrt(r * (r + 1));
     if (!((_ = +_) >= 0)) throw new Error("invalid bandwidth");
-    return r = Math.round((Math.sqrt(4 * _ * _ + 1) - 1) / 2), resize();
+    return r = (Math.sqrt(4 * _ * _ + 1) - 1) / 2, resize();
   };
 
   return density;
@@ -4038,6 +4045,9 @@ var d3 = /*#__PURE__*/Object.freeze({
   bisectCenter: bisectCenter,
   ascending: ascending$2,
   bisector: bisector,
+  blur: blur,
+  blur2: blur2,
+  blurImage: blurImage,
   count: count,
   cross: cross$1,
   cumsum: cumsum,
@@ -4065,6 +4075,7 @@ var d3 = /*#__PURE__*/Object.freeze({
   maxIndex: maxIndex,
   mean: mean,
   median: median,
+  medianIndex: medianIndex,
   merge: merge,
   min: min$1,
   minIndex: minIndex,
@@ -4073,6 +4084,7 @@ var d3 = /*#__PURE__*/Object.freeze({
   pairs: pairs,
   permute: permute,
   quantile: quantile,
+  quantileIndex: quantileIndex,
   quantileSorted: quantileSorted,
   quickselect: quickselect,
   range: range,
@@ -4127,7 +4139,7 @@ var d3 = /*#__PURE__*/Object.freeze({
   lch: lch,
   gray: gray,
   cubehelix: cubehelix$1,
-  contours: contours,
+  contours: Contours,
   contourDensity: density,
   Delaunay: Delaunay,
   Voronoi: Voronoi,

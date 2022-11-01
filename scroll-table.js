@@ -1,7 +1,7 @@
-import { S as Stanza, d as defineStanzaElement } from './transform-54fb0dda.js';
-import { f as appendCustomCss } from './index-29de360d.js';
-import { d as defineComponent, c as createElementBlock, b as createBaseVNode, B as normalizeStyle, t as toDisplayString, F as Fragment, o as openBlock, p as createVNode, e as createCommentVNode, f as createBlock, g as createTextVNode, a as resolveComponent, j as reactive, x as onMounted, i as ref, D as onRenderTriggered, r as renderList, n as normalizeClass, q as createApp } from './runtime-dom.esm-bundler-15d38398.js';
-import { l as loadData } from './load-data-fd48655e.js';
+import { S as Stanza, d as defineStanzaElement } from './transform-0e5d4876.js';
+import { f as appendCustomCss } from './index-75ea921b.js';
+import { d as defineComponent, c as createElementBlock, a as createBaseVNode, B as normalizeStyle, t as toDisplayString, F as Fragment, o as openBlock, p as createVNode, b as createCommentVNode, e as createBlock, g as createTextVNode, f as resolveComponent, j as reactive, x as onMounted, i as ref, D as onRenderTriggered, r as renderList, n as normalizeClass, q as createApp } from './runtime-dom.esm-bundler-f53c2341.js';
+import { l as loadData } from './load-data-ad9ea040.js';
 import './dsv-ac31b097.js';
 
 var script$2 = defineComponent({
@@ -130,7 +130,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
               }, null, 8 /* PROPS */, ["id", "line-clamp", "value"]))
             : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
                 createTextVNode(toDisplayString(_ctx.value), 1 /* TEXT */)
-              ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+              ], 64 /* STABLE_FRAGMENT */))
         ], 8 /* PROPS */, _hoisted_3$1))
   ], 64 /* STABLE_FRAGMENT */))
 }

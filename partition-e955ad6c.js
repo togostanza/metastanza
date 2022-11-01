@@ -1,4 +1,4 @@
-import { t as treemapDice, r as roundNode } from './dice-7bdb0652.js';
+import { r as roundNode, t as treemapDice } from './dice-7bdb0652.js';
 
 function partition() {
   var dx = 1,

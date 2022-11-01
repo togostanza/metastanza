@@ -1,1056 +1,1466 @@
-import { d as defineComponent, h as computed, a as createElementBlock, e as createBaseVNode, f as createCommentVNode, i as createTextVNode, t as toDisplayString, F as Fragment, b as renderList, n as normalizeClass, o as openBlock, j as ref, k as octicons, m as mergeProps, l as watch, p as createVNode, c as createBlock, q as normalizeProps, u as guardReactiveProps, v as resolveDynamicComponent, r as resolveComponent, s as script$4, w as withCtx, x as pushScopeId, y as popScopeId, z as n, g as createApp } from './Layout-721fca36.js';
+import { d as defineComponent, h as computed, a as createElementBlock, e as createBaseVNode, f as createCommentVNode, i as createTextVNode, t as toDisplayString, F as Fragment, b as renderList, n as normalizeClass, o as openBlock, j as ref, k as octicons, m as mergeProps, l as watch, p as createVNode, c as createBlock, q as normalizeProps, u as guardReactiveProps, v as resolveDynamicComponent, r as resolveComponent, s as script$4, w as withCtx, x as pushScopeId, y as popScopeId, z as n, g as createApp } from './Layout-58b40d5f.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 var tab = {exports: {}};
 
-var eventHandler = {exports: {}};
+var util = {exports: {}};
 
 /*!
-  * Bootstrap event-handler.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap index.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-})(commonjsGlobal, (function () {
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
+var hasRequiredUtil;
 
-  const getjQuery = () => {
-    const {
-      jQuery
-    } = window;
+function requireUtil () {
+	if (hasRequiredUtil) return util.exports;
+	hasRequiredUtil = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  factory(exports) ;
+		})(commonjsGlobal, (function (exports) {
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): util/index.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  const MAX_UID = 1000000;
+		  const MILLISECONDS_MULTIPLIER = 1000;
+		  const TRANSITION_END = 'transitionend'; // Shout-out Angus Croll (https://goo.gl/pxwQGp)
 
-    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
-      return jQuery;
-    }
+		  const toType = object => {
+		    if (object === null || object === undefined) {
+		      return `${object}`;
+		    }
 
-    return null;
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/event-handler.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
-  const stripNameRegex = /\..*/;
-  const stripUidRegex = /::\d+$/;
-  const eventRegistry = {}; // Events storage
-
-  let uidEvent = 1;
-  const customEvents = {
-    mouseenter: 'mouseover',
-    mouseleave: 'mouseout'
-  };
-  const customEventsRegex = /^(mouseenter|mouseleave)/i;
-  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
-  /**
-   * ------------------------------------------------------------------------
-   * Private methods
-   * ------------------------------------------------------------------------
-   */
-
-  function getUidEvent(element, uid) {
-    return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
-  }
-
-  function getEvent(element) {
-    const uid = getUidEvent(element);
-    element.uidEvent = uid;
-    eventRegistry[uid] = eventRegistry[uid] || {};
-    return eventRegistry[uid];
-  }
-
-  function bootstrapHandler(element, fn) {
-    return function handler(event) {
-      event.delegateTarget = element;
-
-      if (handler.oneOff) {
-        EventHandler.off(element, event.type, fn);
-      }
-
-      return fn.apply(element, [event]);
-    };
-  }
-
-  function bootstrapDelegationHandler(element, selector, fn) {
-    return function handler(event) {
-      const domElements = element.querySelectorAll(selector);
-
-      for (let {
-        target
-      } = event; target && target !== this; target = target.parentNode) {
-        for (let i = domElements.length; i--;) {
-          if (domElements[i] === target) {
-            event.delegateTarget = target;
-
-            if (handler.oneOff) {
-              EventHandler.off(element, event.type, selector, fn);
-            }
-
-            return fn.apply(target, [event]);
-          }
-        }
-      } // To please ESLint
+		    return Object.prototype.toString.call(object).match(/\s([a-z]+)/i)[1].toLowerCase();
+		  };
+		  /**
+		   * Public Util API
+		   */
 
 
-      return null;
-    };
-  }
+		  const getUID = prefix => {
+		    do {
+		      prefix += Math.floor(Math.random() * MAX_UID);
+		    } while (document.getElementById(prefix));
 
-  function findHandler(events, handler, delegationSelector = null) {
-    const uidEventList = Object.keys(events);
+		    return prefix;
+		  };
 
-    for (let i = 0, len = uidEventList.length; i < len; i++) {
-      const event = events[uidEventList[i]];
+		  const getSelector = element => {
+		    let selector = element.getAttribute('data-bs-target');
 
-      if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
-        return event;
-      }
-    }
+		    if (!selector || selector === '#') {
+		      let hrefAttribute = element.getAttribute('href'); // The only valid content that could double as a selector are IDs or classes,
+		      // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
+		      // `document.querySelector` will rightfully complain it is invalid.
+		      // See https://github.com/twbs/bootstrap/issues/32273
 
-    return null;
-  }
-
-  function normalizeParams(originalTypeEvent, handler, delegationFn) {
-    const delegation = typeof handler === 'string';
-    const originalHandler = delegation ? delegationFn : handler;
-    let typeEvent = getTypeEvent(originalTypeEvent);
-    const isNative = nativeEvents.has(typeEvent);
-
-    if (!isNative) {
-      typeEvent = originalTypeEvent;
-    }
-
-    return [delegation, originalHandler, typeEvent];
-  }
-
-  function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
-    if (typeof originalTypeEvent !== 'string' || !element) {
-      return;
-    }
-
-    if (!handler) {
-      handler = delegationFn;
-      delegationFn = null;
-    } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
-    // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+		      if (!hrefAttribute || !hrefAttribute.includes('#') && !hrefAttribute.startsWith('.')) {
+		        return null;
+		      } // Just in case some CMS puts out a full URL with the anchor appended
 
 
-    if (customEventsRegex.test(originalTypeEvent)) {
-      const wrapFn = fn => {
-        return function (event) {
-          if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
-            return fn.call(this, event);
-          }
-        };
-      };
+		      if (hrefAttribute.includes('#') && !hrefAttribute.startsWith('#')) {
+		        hrefAttribute = `#${hrefAttribute.split('#')[1]}`;
+		      }
 
-      if (delegationFn) {
-        delegationFn = wrapFn(delegationFn);
-      } else {
-        handler = wrapFn(handler);
-      }
-    }
+		      selector = hrefAttribute && hrefAttribute !== '#' ? hrefAttribute.trim() : null;
+		    }
 
-    const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
-    const events = getEvent(element);
-    const handlers = events[typeEvent] || (events[typeEvent] = {});
-    const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null);
+		    return selector;
+		  };
 
-    if (previousFn) {
-      previousFn.oneOff = previousFn.oneOff && oneOff;
-      return;
-    }
+		  const getSelectorFromElement = element => {
+		    const selector = getSelector(element);
 
-    const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''));
-    const fn = delegation ? bootstrapDelegationHandler(element, handler, delegationFn) : bootstrapHandler(element, handler);
-    fn.delegationSelector = delegation ? handler : null;
-    fn.originalHandler = originalHandler;
-    fn.oneOff = oneOff;
-    fn.uidEvent = uid;
-    handlers[uid] = fn;
-    element.addEventListener(typeEvent, fn, delegation);
-  }
+		    if (selector) {
+		      return document.querySelector(selector) ? selector : null;
+		    }
 
-  function removeHandler(element, events, typeEvent, handler, delegationSelector) {
-    const fn = findHandler(events[typeEvent], handler, delegationSelector);
+		    return null;
+		  };
 
-    if (!fn) {
-      return;
-    }
+		  const getElementFromSelector = element => {
+		    const selector = getSelector(element);
+		    return selector ? document.querySelector(selector) : null;
+		  };
 
-    element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
-    delete events[typeEvent][fn.uidEvent];
-  }
-
-  function removeNamespacedHandlers(element, events, typeEvent, namespace) {
-    const storeElementEvent = events[typeEvent] || {};
-    Object.keys(storeElementEvent).forEach(handlerKey => {
-      if (handlerKey.includes(namespace)) {
-        const event = storeElementEvent[handlerKey];
-        removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
-      }
-    });
-  }
-
-  function getTypeEvent(event) {
-    // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
-    event = event.replace(stripNameRegex, '');
-    return customEvents[event] || event;
-  }
-
-  const EventHandler = {
-    on(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, false);
-    },
-
-    one(element, event, handler, delegationFn) {
-      addHandler(element, event, handler, delegationFn, true);
-    },
-
-    off(element, originalTypeEvent, handler, delegationFn) {
-      if (typeof originalTypeEvent !== 'string' || !element) {
-        return;
-      }
-
-      const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
-      const inNamespace = typeEvent !== originalTypeEvent;
-      const events = getEvent(element);
-      const isNamespace = originalTypeEvent.startsWith('.');
-
-      if (typeof originalHandler !== 'undefined') {
-        // Simplest case: handler is passed, remove that listener ONLY.
-        if (!events || !events[typeEvent]) {
-          return;
-        }
-
-        removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null);
-        return;
-      }
-
-      if (isNamespace) {
-        Object.keys(events).forEach(elementEvent => {
-          removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
-        });
-      }
-
-      const storeElementEvent = events[typeEvent] || {};
-      Object.keys(storeElementEvent).forEach(keyHandlers => {
-        const handlerKey = keyHandlers.replace(stripUidRegex, '');
-
-        if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
-          const event = storeElementEvent[keyHandlers];
-          removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
-        }
-      });
-    },
-
-    trigger(element, event, args) {
-      if (typeof event !== 'string' || !element) {
-        return null;
-      }
-
-      const $ = getjQuery();
-      const typeEvent = getTypeEvent(event);
-      const inNamespace = event !== typeEvent;
-      const isNative = nativeEvents.has(typeEvent);
-      let jQueryEvent;
-      let bubbles = true;
-      let nativeDispatch = true;
-      let defaultPrevented = false;
-      let evt = null;
-
-      if (inNamespace && $) {
-        jQueryEvent = $.Event(event, args);
-        $(element).trigger(jQueryEvent);
-        bubbles = !jQueryEvent.isPropagationStopped();
-        nativeDispatch = !jQueryEvent.isImmediatePropagationStopped();
-        defaultPrevented = jQueryEvent.isDefaultPrevented();
-      }
-
-      if (isNative) {
-        evt = document.createEvent('HTMLEvents');
-        evt.initEvent(typeEvent, bubbles, true);
-      } else {
-        evt = new CustomEvent(event, {
-          bubbles,
-          cancelable: true
-        });
-      } // merge custom information in our event
+		  const getTransitionDurationFromElement = element => {
+		    if (!element) {
+		      return 0;
+		    } // Get transition-duration of the element
 
 
-      if (typeof args !== 'undefined') {
-        Object.keys(args).forEach(key => {
-          Object.defineProperty(evt, key, {
-            get() {
-              return args[key];
-            }
+		    let {
+		      transitionDuration,
+		      transitionDelay
+		    } = window.getComputedStyle(element);
+		    const floatTransitionDuration = Number.parseFloat(transitionDuration);
+		    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
 
-          });
-        });
-      }
+		    if (!floatTransitionDuration && !floatTransitionDelay) {
+		      return 0;
+		    } // If multiple durations are defined, take the first
 
-      if (defaultPrevented) {
-        evt.preventDefault();
-      }
 
-      if (nativeDispatch) {
-        element.dispatchEvent(evt);
-      }
+		    transitionDuration = transitionDuration.split(',')[0];
+		    transitionDelay = transitionDelay.split(',')[0];
+		    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
+		  };
 
-      if (evt.defaultPrevented && typeof jQueryEvent !== 'undefined') {
-        jQueryEvent.preventDefault();
-      }
+		  const triggerTransitionEnd = element => {
+		    element.dispatchEvent(new Event(TRANSITION_END));
+		  };
 
-      return evt;
-    }
+		  const isElement = object => {
+		    if (!object || typeof object !== 'object') {
+		      return false;
+		    }
 
-  };
+		    if (typeof object.jquery !== 'undefined') {
+		      object = object[0];
+		    }
 
-  return EventHandler;
+		    return typeof object.nodeType !== 'undefined';
+		  };
 
-}));
+		  const getElement = object => {
+		    // it's a jQuery object or a node element
+		    if (isElement(object)) {
+		      return object.jquery ? object[0] : object;
+		    }
 
-}(eventHandler));
+		    if (typeof object === 'string' && object.length > 0) {
+		      return document.querySelector(object);
+		    }
+
+		    return null;
+		  };
+
+		  const isVisible = element => {
+		    if (!isElement(element) || element.getClientRects().length === 0) {
+		      return false;
+		    }
+
+		    const elementIsVisible = getComputedStyle(element).getPropertyValue('visibility') === 'visible'; // Handle `details` element as its content may falsie appear visible when it is closed
+
+		    const closedDetails = element.closest('details:not([open])');
+
+		    if (!closedDetails) {
+		      return elementIsVisible;
+		    }
+
+		    if (closedDetails !== element) {
+		      const summary = element.closest('summary');
+
+		      if (summary && summary.parentNode !== closedDetails) {
+		        return false;
+		      }
+
+		      if (summary === null) {
+		        return false;
+		      }
+		    }
+
+		    return elementIsVisible;
+		  };
+
+		  const isDisabled = element => {
+		    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+		      return true;
+		    }
+
+		    if (element.classList.contains('disabled')) {
+		      return true;
+		    }
+
+		    if (typeof element.disabled !== 'undefined') {
+		      return element.disabled;
+		    }
+
+		    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
+		  };
+
+		  const findShadowRoot = element => {
+		    if (!document.documentElement.attachShadow) {
+		      return null;
+		    } // Can find the shadow root otherwise it'll return the document
+
+
+		    if (typeof element.getRootNode === 'function') {
+		      const root = element.getRootNode();
+		      return root instanceof ShadowRoot ? root : null;
+		    }
+
+		    if (element instanceof ShadowRoot) {
+		      return element;
+		    } // when we don't find a shadow root
+
+
+		    if (!element.parentNode) {
+		      return null;
+		    }
+
+		    return findShadowRoot(element.parentNode);
+		  };
+
+		  const noop = () => {};
+		  /**
+		   * Trick to restart an element's animation
+		   *
+		   * @param {HTMLElement} element
+		   * @return void
+		   *
+		   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
+		   */
+
+
+		  const reflow = element => {
+		    element.offsetHeight; // eslint-disable-line no-unused-expressions
+		  };
+
+		  const getjQuery = () => {
+		    if (window.jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
+		      return window.jQuery;
+		    }
+
+		    return null;
+		  };
+
+		  const DOMContentLoadedCallbacks = [];
+
+		  const onDOMContentLoaded = callback => {
+		    if (document.readyState === 'loading') {
+		      // add listener on the first call when the document is in loading state
+		      if (!DOMContentLoadedCallbacks.length) {
+		        document.addEventListener('DOMContentLoaded', () => {
+		          for (const callback of DOMContentLoadedCallbacks) {
+		            callback();
+		          }
+		        });
+		      }
+
+		      DOMContentLoadedCallbacks.push(callback);
+		    } else {
+		      callback();
+		    }
+		  };
+
+		  const isRTL = () => document.documentElement.dir === 'rtl';
+
+		  const defineJQueryPlugin = plugin => {
+		    onDOMContentLoaded(() => {
+		      const $ = getjQuery();
+		      /* istanbul ignore if */
+
+		      if ($) {
+		        const name = plugin.NAME;
+		        const JQUERY_NO_CONFLICT = $.fn[name];
+		        $.fn[name] = plugin.jQueryInterface;
+		        $.fn[name].Constructor = plugin;
+
+		        $.fn[name].noConflict = () => {
+		          $.fn[name] = JQUERY_NO_CONFLICT;
+		          return plugin.jQueryInterface;
+		        };
+		      }
+		    });
+		  };
+
+		  const execute = callback => {
+		    if (typeof callback === 'function') {
+		      callback();
+		    }
+		  };
+
+		  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+		    if (!waitForTransition) {
+		      execute(callback);
+		      return;
+		    }
+
+		    const durationPadding = 5;
+		    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
+		    let called = false;
+
+		    const handler = ({
+		      target
+		    }) => {
+		      if (target !== transitionElement) {
+		        return;
+		      }
+
+		      called = true;
+		      transitionElement.removeEventListener(TRANSITION_END, handler);
+		      execute(callback);
+		    };
+
+		    transitionElement.addEventListener(TRANSITION_END, handler);
+		    setTimeout(() => {
+		      if (!called) {
+		        triggerTransitionEnd(transitionElement);
+		      }
+		    }, emulatedDuration);
+		  };
+		  /**
+		   * Return the previous/next element of a list.
+		   *
+		   * @param {array} list    The list of elements
+		   * @param activeElement   The active element
+		   * @param shouldGetNext   Choose to get next or previous element
+		   * @param isCycleAllowed
+		   * @return {Element|elem} The proper element
+		   */
+
+
+		  const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed) => {
+		    const listLength = list.length;
+		    let index = list.indexOf(activeElement); // if the element does not exist in the list return an element
+		    // depending on the direction and if cycle is allowed
+
+		    if (index === -1) {
+		      return !shouldGetNext && isCycleAllowed ? list[listLength - 1] : list[0];
+		    }
+
+		    index += shouldGetNext ? 1 : -1;
+
+		    if (isCycleAllowed) {
+		      index = (index + listLength) % listLength;
+		    }
+
+		    return list[Math.max(0, Math.min(index, listLength - 1))];
+		  };
+
+		  exports.defineJQueryPlugin = defineJQueryPlugin;
+		  exports.execute = execute;
+		  exports.executeAfterTransition = executeAfterTransition;
+		  exports.findShadowRoot = findShadowRoot;
+		  exports.getElement = getElement;
+		  exports.getElementFromSelector = getElementFromSelector;
+		  exports.getNextActiveElement = getNextActiveElement;
+		  exports.getSelectorFromElement = getSelectorFromElement;
+		  exports.getTransitionDurationFromElement = getTransitionDurationFromElement;
+		  exports.getUID = getUID;
+		  exports.getjQuery = getjQuery;
+		  exports.isDisabled = isDisabled;
+		  exports.isElement = isElement;
+		  exports.isRTL = isRTL;
+		  exports.isVisible = isVisible;
+		  exports.noop = noop;
+		  exports.onDOMContentLoaded = onDOMContentLoaded;
+		  exports.reflow = reflow;
+		  exports.toType = toType;
+		  exports.triggerTransitionEnd = triggerTransitionEnd;
+
+		  Object.defineProperties(exports, { __esModule: { value: true }, [Symbol.toStringTag]: { value: 'Module' } });
+
+		}));
+		
+} (util, util.exports));
+	return util.exports;
+}
+
+var eventHandler = {exports: {}};
+
+/*!
+  * Bootstrap event-handler.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+var hasRequiredEventHandler;
+
+function requireEventHandler () {
+	if (hasRequiredEventHandler) return eventHandler.exports;
+	hasRequiredEventHandler = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory(requireUtil()) ;
+		})(commonjsGlobal, (function (index) {
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): dom/event-handler.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  /**
+		   * Constants
+		   */
+
+		  const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
+		  const stripNameRegex = /\..*/;
+		  const stripUidRegex = /::\d+$/;
+		  const eventRegistry = {}; // Events storage
+
+		  let uidEvent = 1;
+		  const customEvents = {
+		    mouseenter: 'mouseover',
+		    mouseleave: 'mouseout'
+		  };
+		  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
+		  /**
+		   * Private methods
+		   */
+
+		  function makeEventUid(element, uid) {
+		    return uid && `${uid}::${uidEvent++}` || element.uidEvent || uidEvent++;
+		  }
+
+		  function getElementEvents(element) {
+		    const uid = makeEventUid(element);
+		    element.uidEvent = uid;
+		    eventRegistry[uid] = eventRegistry[uid] || {};
+		    return eventRegistry[uid];
+		  }
+
+		  function bootstrapHandler(element, fn) {
+		    return function handler(event) {
+		      hydrateObj(event, {
+		        delegateTarget: element
+		      });
+
+		      if (handler.oneOff) {
+		        EventHandler.off(element, event.type, fn);
+		      }
+
+		      return fn.apply(element, [event]);
+		    };
+		  }
+
+		  function bootstrapDelegationHandler(element, selector, fn) {
+		    return function handler(event) {
+		      const domElements = element.querySelectorAll(selector);
+
+		      for (let {
+		        target
+		      } = event; target && target !== this; target = target.parentNode) {
+		        for (const domElement of domElements) {
+		          if (domElement !== target) {
+		            continue;
+		          }
+
+		          hydrateObj(event, {
+		            delegateTarget: target
+		          });
+
+		          if (handler.oneOff) {
+		            EventHandler.off(element, event.type, selector, fn);
+		          }
+
+		          return fn.apply(target, [event]);
+		        }
+		      }
+		    };
+		  }
+
+		  function findHandler(events, callable, delegationSelector = null) {
+		    return Object.values(events).find(event => event.callable === callable && event.delegationSelector === delegationSelector);
+		  }
+
+		  function normalizeParameters(originalTypeEvent, handler, delegationFunction) {
+		    const isDelegated = typeof handler === 'string'; // todo: tooltip passes `false` instead of selector, so we need to check
+
+		    const callable = isDelegated ? delegationFunction : handler || delegationFunction;
+		    let typeEvent = getTypeEvent(originalTypeEvent);
+
+		    if (!nativeEvents.has(typeEvent)) {
+		      typeEvent = originalTypeEvent;
+		    }
+
+		    return [isDelegated, callable, typeEvent];
+		  }
+
+		  function addHandler(element, originalTypeEvent, handler, delegationFunction, oneOff) {
+		    if (typeof originalTypeEvent !== 'string' || !element) {
+		      return;
+		    }
+
+		    let [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction); // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
+		    // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+
+		    if (originalTypeEvent in customEvents) {
+		      const wrapFunction = fn => {
+		        return function (event) {
+		          if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
+		            return fn.call(this, event);
+		          }
+		        };
+		      };
+
+		      callable = wrapFunction(callable);
+		    }
+
+		    const events = getElementEvents(element);
+		    const handlers = events[typeEvent] || (events[typeEvent] = {});
+		    const previousFunction = findHandler(handlers, callable, isDelegated ? handler : null);
+
+		    if (previousFunction) {
+		      previousFunction.oneOff = previousFunction.oneOff && oneOff;
+		      return;
+		    }
+
+		    const uid = makeEventUid(callable, originalTypeEvent.replace(namespaceRegex, ''));
+		    const fn = isDelegated ? bootstrapDelegationHandler(element, handler, callable) : bootstrapHandler(element, callable);
+		    fn.delegationSelector = isDelegated ? handler : null;
+		    fn.callable = callable;
+		    fn.oneOff = oneOff;
+		    fn.uidEvent = uid;
+		    handlers[uid] = fn;
+		    element.addEventListener(typeEvent, fn, isDelegated);
+		  }
+
+		  function removeHandler(element, events, typeEvent, handler, delegationSelector) {
+		    const fn = findHandler(events[typeEvent], handler, delegationSelector);
+
+		    if (!fn) {
+		      return;
+		    }
+
+		    element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
+		    delete events[typeEvent][fn.uidEvent];
+		  }
+
+		  function removeNamespacedHandlers(element, events, typeEvent, namespace) {
+		    const storeElementEvent = events[typeEvent] || {};
+
+		    for (const handlerKey of Object.keys(storeElementEvent)) {
+		      if (handlerKey.includes(namespace)) {
+		        const event = storeElementEvent[handlerKey];
+		        removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
+		      }
+		    }
+		  }
+
+		  function getTypeEvent(event) {
+		    // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
+		    event = event.replace(stripNameRegex, '');
+		    return customEvents[event] || event;
+		  }
+
+		  const EventHandler = {
+		    on(element, event, handler, delegationFunction) {
+		      addHandler(element, event, handler, delegationFunction, false);
+		    },
+
+		    one(element, event, handler, delegationFunction) {
+		      addHandler(element, event, handler, delegationFunction, true);
+		    },
+
+		    off(element, originalTypeEvent, handler, delegationFunction) {
+		      if (typeof originalTypeEvent !== 'string' || !element) {
+		        return;
+		      }
+
+		      const [isDelegated, callable, typeEvent] = normalizeParameters(originalTypeEvent, handler, delegationFunction);
+		      const inNamespace = typeEvent !== originalTypeEvent;
+		      const events = getElementEvents(element);
+		      const storeElementEvent = events[typeEvent] || {};
+		      const isNamespace = originalTypeEvent.startsWith('.');
+
+		      if (typeof callable !== 'undefined') {
+		        // Simplest case: handler is passed, remove that listener ONLY.
+		        if (!Object.keys(storeElementEvent).length) {
+		          return;
+		        }
+
+		        removeHandler(element, events, typeEvent, callable, isDelegated ? handler : null);
+		        return;
+		      }
+
+		      if (isNamespace) {
+		        for (const elementEvent of Object.keys(events)) {
+		          removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
+		        }
+		      }
+
+		      for (const keyHandlers of Object.keys(storeElementEvent)) {
+		        const handlerKey = keyHandlers.replace(stripUidRegex, '');
+
+		        if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
+		          const event = storeElementEvent[keyHandlers];
+		          removeHandler(element, events, typeEvent, event.callable, event.delegationSelector);
+		        }
+		      }
+		    },
+
+		    trigger(element, event, args) {
+		      if (typeof event !== 'string' || !element) {
+		        return null;
+		      }
+
+		      const $ = index.getjQuery();
+		      const typeEvent = getTypeEvent(event);
+		      const inNamespace = event !== typeEvent;
+		      let jQueryEvent = null;
+		      let bubbles = true;
+		      let nativeDispatch = true;
+		      let defaultPrevented = false;
+
+		      if (inNamespace && $) {
+		        jQueryEvent = $.Event(event, args);
+		        $(element).trigger(jQueryEvent);
+		        bubbles = !jQueryEvent.isPropagationStopped();
+		        nativeDispatch = !jQueryEvent.isImmediatePropagationStopped();
+		        defaultPrevented = jQueryEvent.isDefaultPrevented();
+		      }
+
+		      let evt = new Event(event, {
+		        bubbles,
+		        cancelable: true
+		      });
+		      evt = hydrateObj(evt, args);
+
+		      if (defaultPrevented) {
+		        evt.preventDefault();
+		      }
+
+		      if (nativeDispatch) {
+		        element.dispatchEvent(evt);
+		      }
+
+		      if (evt.defaultPrevented && jQueryEvent) {
+		        jQueryEvent.preventDefault();
+		      }
+
+		      return evt;
+		    }
+
+		  };
+
+		  function hydrateObj(obj, meta) {
+		    for (const [key, value] of Object.entries(meta || {})) {
+		      try {
+		        obj[key] = value;
+		      } catch (_unused) {
+		        Object.defineProperty(obj, key, {
+		          configurable: true,
+
+		          get() {
+		            return value;
+		          }
+
+		        });
+		      }
+		    }
+
+		    return obj;
+		  }
+
+		  return EventHandler;
+
+		}));
+		
+} (eventHandler));
+	return eventHandler.exports;
+}
 
 var selectorEngine = {exports: {}};
 
 /*!
-  * Bootstrap selector-engine.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap selector-engine.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-})(commonjsGlobal, (function () {
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
+var hasRequiredSelectorEngine;
 
-  const isElement = obj => {
-    if (!obj || typeof obj !== 'object') {
-      return false;
-    }
+function requireSelectorEngine () {
+	if (hasRequiredSelectorEngine) return selectorEngine.exports;
+	hasRequiredSelectorEngine = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory(requireUtil()) ;
+		})(commonjsGlobal, (function (index) {
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): dom/selector-engine.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  /**
+		   * Constants
+		   */
 
-    if (typeof obj.jquery !== 'undefined') {
-      obj = obj[0];
-    }
+		  const SelectorEngine = {
+		    find(selector, element = document.documentElement) {
+		      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
+		    },
 
-    return typeof obj.nodeType !== 'undefined';
-  };
+		    findOne(selector, element = document.documentElement) {
+		      return Element.prototype.querySelector.call(element, selector);
+		    },
 
-  const isVisible = element => {
-    if (!isElement(element) || element.getClientRects().length === 0) {
-      return false;
-    }
+		    children(element, selector) {
+		      return [].concat(...element.children).filter(child => child.matches(selector));
+		    },
 
-    return getComputedStyle(element).getPropertyValue('visibility') === 'visible';
-  };
+		    parents(element, selector) {
+		      const parents = [];
+		      let ancestor = element.parentNode.closest(selector);
 
-  const isDisabled = element => {
-    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
-      return true;
-    }
+		      while (ancestor) {
+		        parents.push(ancestor);
+		        ancestor = ancestor.parentNode.closest(selector);
+		      }
 
-    if (element.classList.contains('disabled')) {
-      return true;
-    }
+		      return parents;
+		    },
 
-    if (typeof element.disabled !== 'undefined') {
-      return element.disabled;
-    }
+		    prev(element, selector) {
+		      let previous = element.previousElementSibling;
 
-    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
-  };
+		      while (previous) {
+		        if (previous.matches(selector)) {
+		          return [previous];
+		        }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/selector-engine.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const NODE_TEXT = 3;
-  const SelectorEngine = {
-    find(selector, element = document.documentElement) {
-      return [].concat(...Element.prototype.querySelectorAll.call(element, selector));
-    },
+		        previous = previous.previousElementSibling;
+		      }
 
-    findOne(selector, element = document.documentElement) {
-      return Element.prototype.querySelector.call(element, selector);
-    },
+		      return [];
+		    },
 
-    children(element, selector) {
-      return [].concat(...element.children).filter(child => child.matches(selector));
-    },
+		    // TODO: this is now unused; remove later along with prev()
+		    next(element, selector) {
+		      let next = element.nextElementSibling;
 
-    parents(element, selector) {
-      const parents = [];
-      let ancestor = element.parentNode;
+		      while (next) {
+		        if (next.matches(selector)) {
+		          return [next];
+		        }
 
-      while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
-        if (ancestor.matches(selector)) {
-          parents.push(ancestor);
-        }
+		        next = next.nextElementSibling;
+		      }
 
-        ancestor = ancestor.parentNode;
-      }
+		      return [];
+		    },
 
-      return parents;
-    },
+		    focusableChildren(element) {
+		      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(',');
+		      return this.find(focusables, element).filter(el => !index.isDisabled(el) && index.isVisible(el));
+		    }
 
-    prev(element, selector) {
-      let previous = element.previousElementSibling;
+		  };
 
-      while (previous) {
-        if (previous.matches(selector)) {
-          return [previous];
-        }
+		  return SelectorEngine;
 
-        previous = previous.previousElementSibling;
-      }
-
-      return [];
-    },
-
-    next(element, selector) {
-      let next = element.nextElementSibling;
-
-      while (next) {
-        if (next.matches(selector)) {
-          return [next];
-        }
-
-        next = next.nextElementSibling;
-      }
-
-      return [];
-    },
-
-    focusableChildren(element) {
-      const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
-      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
-    }
-
-  };
-
-  return SelectorEngine;
-
-}));
-
-}(selectorEngine));
+		}));
+		
+} (selectorEngine));
+	return selectorEngine.exports;
+}
 
 var baseComponent = {exports: {}};
 
 var data = {exports: {}};
 
 /*!
-  * Bootstrap data.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap data.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory() ;
-})(commonjsGlobal, (function () {
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): dom/data.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
+var hasRequiredData;
 
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-  const elementMap = new Map();
-  const data = {
-    set(element, key, instance) {
-      if (!elementMap.has(element)) {
-        elementMap.set(element, new Map());
-      }
+function requireData () {
+	if (hasRequiredData) return data.exports;
+	hasRequiredData = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory() ;
+		})(commonjsGlobal, (function () {
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): dom/data.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
 
-      const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
-      // can be removed later when multiple key/instances are fine to be used
+		  /**
+		   * Constants
+		   */
+		  const elementMap = new Map();
+		  const data = {
+		    set(element, key, instance) {
+		      if (!elementMap.has(element)) {
+		        elementMap.set(element, new Map());
+		      }
 
-      if (!instanceMap.has(key) && instanceMap.size !== 0) {
-        // eslint-disable-next-line no-console
-        console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
-        return;
-      }
+		      const instanceMap = elementMap.get(element); // make it clear we only want one instance per element
+		      // can be removed later when multiple key/instances are fine to be used
 
-      instanceMap.set(key, instance);
-    },
+		      if (!instanceMap.has(key) && instanceMap.size !== 0) {
+		        // eslint-disable-next-line no-console
+		        console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`);
+		        return;
+		      }
 
-    get(element, key) {
-      if (elementMap.has(element)) {
-        return elementMap.get(element).get(key) || null;
-      }
+		      instanceMap.set(key, instance);
+		    },
 
-      return null;
-    },
+		    get(element, key) {
+		      if (elementMap.has(element)) {
+		        return elementMap.get(element).get(key) || null;
+		      }
 
-    remove(element, key) {
-      if (!elementMap.has(element)) {
-        return;
-      }
+		      return null;
+		    },
 
-      const instanceMap = elementMap.get(element);
-      instanceMap.delete(key); // free up element references if there are no instances left for an element
+		    remove(element, key) {
+		      if (!elementMap.has(element)) {
+		        return;
+		      }
 
-      if (instanceMap.size === 0) {
-        elementMap.delete(element);
-      }
-    }
+		      const instanceMap = elementMap.get(element);
+		      instanceMap.delete(key); // free up element references if there are no instances left for an element
 
-  };
+		      if (instanceMap.size === 0) {
+		        elementMap.delete(element);
+		      }
+		    }
 
-  return data;
+		  };
 
-}));
+		  return data;
 
-}(data));
+		}));
+		
+} (data));
+	return data.exports;
+}
+
+var config = {exports: {}};
+
+var manipulator = {exports: {}};
 
 /*!
-  * Bootstrap base-component.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap manipulator.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
-(function (module, exports) {
-(function (global, factory) {
-  module.exports = factory(data.exports, eventHandler.exports) ;
-})(commonjsGlobal, (function (Data, EventHandler) {
-  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+var hasRequiredManipulator;
 
-  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
-  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+function requireManipulator () {
+	if (hasRequiredManipulator) return manipulator.exports;
+	hasRequiredManipulator = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory() ;
+		})(commonjsGlobal, (function () {
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): dom/manipulator.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  function normalizeData(value) {
+		    if (value === 'true') {
+		      return true;
+		    }
 
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  const MILLISECONDS_MULTIPLIER = 1000;
-  const TRANSITION_END = 'transitionend'; // Shoutout AngusCroll (https://goo.gl/pxwQGp)
+		    if (value === 'false') {
+		      return false;
+		    }
 
-  const getTransitionDurationFromElement = element => {
-    if (!element) {
-      return 0;
-    } // Get transition-duration of the element
+		    if (value === Number(value).toString()) {
+		      return Number(value);
+		    }
 
+		    if (value === '' || value === 'null') {
+		      return null;
+		    }
 
-    let {
-      transitionDuration,
-      transitionDelay
-    } = window.getComputedStyle(element);
-    const floatTransitionDuration = Number.parseFloat(transitionDuration);
-    const floatTransitionDelay = Number.parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
+		    if (typeof value !== 'string') {
+		      return value;
+		    }
 
-    if (!floatTransitionDuration && !floatTransitionDelay) {
-      return 0;
-    } // If multiple durations are defined, take the first
+		    try {
+		      return JSON.parse(decodeURIComponent(value));
+		    } catch (_unused) {
+		      return value;
+		    }
+		  }
 
+		  function normalizeDataKey(key) {
+		    return key.replace(/[A-Z]/g, chr => `-${chr.toLowerCase()}`);
+		  }
 
-    transitionDuration = transitionDuration.split(',')[0];
-    transitionDelay = transitionDelay.split(',')[0];
-    return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER;
-  };
+		  const Manipulator = {
+		    setDataAttribute(element, key, value) {
+		      element.setAttribute(`data-bs-${normalizeDataKey(key)}`, value);
+		    },
 
-  const triggerTransitionEnd = element => {
-    element.dispatchEvent(new Event(TRANSITION_END));
-  };
+		    removeDataAttribute(element, key) {
+		      element.removeAttribute(`data-bs-${normalizeDataKey(key)}`);
+		    },
 
-  const isElement = obj => {
-    if (!obj || typeof obj !== 'object') {
-      return false;
-    }
+		    getDataAttributes(element) {
+		      if (!element) {
+		        return {};
+		      }
 
-    if (typeof obj.jquery !== 'undefined') {
-      obj = obj[0];
-    }
+		      const attributes = {};
+		      const bsKeys = Object.keys(element.dataset).filter(key => key.startsWith('bs') && !key.startsWith('bsConfig'));
 
-    return typeof obj.nodeType !== 'undefined';
-  };
+		      for (const key of bsKeys) {
+		        let pureKey = key.replace(/^bs/, '');
+		        pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length);
+		        attributes[pureKey] = normalizeData(element.dataset[key]);
+		      }
 
-  const getElement = obj => {
-    if (isElement(obj)) {
-      // it's a jQuery object or a node element
-      return obj.jquery ? obj[0] : obj;
-    }
+		      return attributes;
+		    },
 
-    if (typeof obj === 'string' && obj.length > 0) {
-      return document.querySelector(obj);
-    }
+		    getDataAttribute(element, key) {
+		      return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`));
+		    }
 
-    return null;
-  };
+		  };
 
-  const execute = callback => {
-    if (typeof callback === 'function') {
-      callback();
-    }
-  };
+		  return Manipulator;
 
-  const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
-    if (!waitForTransition) {
-      execute(callback);
-      return;
-    }
-
-    const durationPadding = 5;
-    const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding;
-    let called = false;
-
-    const handler = ({
-      target
-    }) => {
-      if (target !== transitionElement) {
-        return;
-      }
-
-      called = true;
-      transitionElement.removeEventListener(TRANSITION_END, handler);
-      execute(callback);
-    };
-
-    transitionElement.addEventListener(TRANSITION_END, handler);
-    setTimeout(() => {
-      if (!called) {
-        triggerTransitionEnd(transitionElement);
-      }
-    }, emulatedDuration);
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): base-component.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const VERSION = '5.1.3';
-
-  class BaseComponent {
-    constructor(element) {
-      element = getElement(element);
-
-      if (!element) {
-        return;
-      }
-
-      this._element = element;
-      Data__default.default.set(this._element, this.constructor.DATA_KEY, this);
-    }
-
-    dispose() {
-      Data__default.default.remove(this._element, this.constructor.DATA_KEY);
-      EventHandler__default.default.off(this._element, this.constructor.EVENT_KEY);
-      Object.getOwnPropertyNames(this).forEach(propertyName => {
-        this[propertyName] = null;
-      });
-    }
-
-    _queueCallback(callback, element, isAnimated = true) {
-      executeAfterTransition(callback, element, isAnimated);
-    }
-    /** Static */
-
-
-    static getInstance(element) {
-      return Data__default.default.get(getElement(element), this.DATA_KEY);
-    }
-
-    static getOrCreateInstance(element, config = {}) {
-      return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
-    }
-
-    static get VERSION() {
-      return VERSION;
-    }
-
-    static get NAME() {
-      throw new Error('You have to implement the static method "NAME", for each component!');
-    }
-
-    static get DATA_KEY() {
-      return `bs.${this.NAME}`;
-    }
-
-    static get EVENT_KEY() {
-      return `.${this.DATA_KEY}`;
-    }
-
-  }
-
-  return BaseComponent;
-
-}));
-
-}(baseComponent));
+		}));
+		
+} (manipulator));
+	return manipulator.exports;
+}
 
 /*!
-  * Bootstrap tab.js v5.1.3 (https://getbootstrap.com/)
-  * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Bootstrap config.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+var hasRequiredConfig;
+
+function requireConfig () {
+	if (hasRequiredConfig) return config.exports;
+	hasRequiredConfig = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory(requireUtil(), requireManipulator()) ;
+		})(commonjsGlobal, (function (index, Manipulator) {
+		  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+		  const Manipulator__default = /*#__PURE__*/_interopDefaultLegacy(Manipulator);
+
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): util/config.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  /**
+		   * Class definition
+		   */
+
+		  class Config {
+		    // Getters
+		    static get Default() {
+		      return {};
+		    }
+
+		    static get DefaultType() {
+		      return {};
+		    }
+
+		    static get NAME() {
+		      throw new Error('You have to implement the static method "NAME", for each component!');
+		    }
+
+		    _getConfig(config) {
+		      config = this._mergeConfigObj(config);
+		      config = this._configAfterMerge(config);
+
+		      this._typeCheckConfig(config);
+
+		      return config;
+		    }
+
+		    _configAfterMerge(config) {
+		      return config;
+		    }
+
+		    _mergeConfigObj(config, element) {
+		      const jsonConfig = index.isElement(element) ? Manipulator__default.default.getDataAttribute(element, 'config') : {}; // try to parse
+
+		      return { ...this.constructor.Default,
+		        ...(typeof jsonConfig === 'object' ? jsonConfig : {}),
+		        ...(index.isElement(element) ? Manipulator__default.default.getDataAttributes(element) : {}),
+		        ...(typeof config === 'object' ? config : {})
+		      };
+		    }
+
+		    _typeCheckConfig(config, configTypes = this.constructor.DefaultType) {
+		      for (const property of Object.keys(configTypes)) {
+		        const expectedTypes = configTypes[property];
+		        const value = config[property];
+		        const valueType = index.isElement(value) ? 'element' : index.toType(value);
+
+		        if (!new RegExp(expectedTypes).test(valueType)) {
+		          throw new TypeError(`${this.constructor.NAME.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
+		        }
+		      }
+		    }
+
+		  }
+
+		  return Config;
+
+		}));
+		
+} (config));
+	return config.exports;
+}
+
+/*!
+  * Bootstrap base-component.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+var hasRequiredBaseComponent;
+
+function requireBaseComponent () {
+	if (hasRequiredBaseComponent) return baseComponent.exports;
+	hasRequiredBaseComponent = 1;
+	(function (module, exports) {
+		(function (global, factory) {
+		  module.exports = factory(requireData(), requireUtil(), requireEventHandler(), requireConfig()) ;
+		})(commonjsGlobal, (function (Data, index, EventHandler, Config) {
+		  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+		  const Data__default = /*#__PURE__*/_interopDefaultLegacy(Data);
+		  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+		  const Config__default = /*#__PURE__*/_interopDefaultLegacy(Config);
+
+		  /**
+		   * --------------------------------------------------------------------------
+		   * Bootstrap (v5.2.2): base-component.js
+		   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+		   * --------------------------------------------------------------------------
+		   */
+		  /**
+		   * Constants
+		   */
+
+		  const VERSION = '5.2.2';
+		  /**
+		   * Class definition
+		   */
+
+		  class BaseComponent extends Config__default.default {
+		    constructor(element, config) {
+		      super();
+		      element = index.getElement(element);
+
+		      if (!element) {
+		        return;
+		      }
+
+		      this._element = element;
+		      this._config = this._getConfig(config);
+		      Data__default.default.set(this._element, this.constructor.DATA_KEY, this);
+		    } // Public
+
+
+		    dispose() {
+		      Data__default.default.remove(this._element, this.constructor.DATA_KEY);
+		      EventHandler__default.default.off(this._element, this.constructor.EVENT_KEY);
+
+		      for (const propertyName of Object.getOwnPropertyNames(this)) {
+		        this[propertyName] = null;
+		      }
+		    }
+
+		    _queueCallback(callback, element, isAnimated = true) {
+		      index.executeAfterTransition(callback, element, isAnimated);
+		    }
+
+		    _getConfig(config) {
+		      config = this._mergeConfigObj(config, this._element);
+		      config = this._configAfterMerge(config);
+
+		      this._typeCheckConfig(config);
+
+		      return config;
+		    } // Static
+
+
+		    static getInstance(element) {
+		      return Data__default.default.get(index.getElement(element), this.DATA_KEY);
+		    }
+
+		    static getOrCreateInstance(element, config = {}) {
+		      return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null);
+		    }
+
+		    static get VERSION() {
+		      return VERSION;
+		    }
+
+		    static get DATA_KEY() {
+		      return `bs.${this.NAME}`;
+		    }
+
+		    static get EVENT_KEY() {
+		      return `.${this.DATA_KEY}`;
+		    }
+
+		    static eventName(name) {
+		      return `${name}${this.EVENT_KEY}`;
+		    }
+
+		  }
+
+		  return BaseComponent;
+
+		}));
+		
+} (baseComponent));
+	return baseComponent.exports;
+}
+
+/*!
+  * Bootstrap tab.js v5.2.2 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
 (function (module, exports) {
-(function (global, factory) {
-  module.exports = factory(eventHandler.exports, selectorEngine.exports, baseComponent.exports) ;
-})(commonjsGlobal, (function (EventHandler, SelectorEngine, BaseComponent) {
-  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
-
-  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
-  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
-  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): util/index.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-
-  const getSelector = element => {
-    let selector = element.getAttribute('data-bs-target');
-
-    if (!selector || selector === '#') {
-      let hrefAttr = element.getAttribute('href'); // The only valid content that could double as a selector are IDs or classes,
-      // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
-      // `document.querySelector` will rightfully complain it is invalid.
-      // See https://github.com/twbs/bootstrap/issues/32273
-
-      if (!hrefAttr || !hrefAttr.includes('#') && !hrefAttr.startsWith('.')) {
-        return null;
-      } // Just in case some CMS puts out a full URL with the anchor appended
-
-
-      if (hrefAttr.includes('#') && !hrefAttr.startsWith('#')) {
-        hrefAttr = `#${hrefAttr.split('#')[1]}`;
-      }
-
-      selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : null;
-    }
-
-    return selector;
-  };
-
-  const getElementFromSelector = element => {
-    const selector = getSelector(element);
-    return selector ? document.querySelector(selector) : null;
-  };
-
-  const isDisabled = element => {
-    if (!element || element.nodeType !== Node.ELEMENT_NODE) {
-      return true;
-    }
-
-    if (element.classList.contains('disabled')) {
-      return true;
-    }
-
-    if (typeof element.disabled !== 'undefined') {
-      return element.disabled;
-    }
-
-    return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false';
-  };
-  /**
-   * Trick to restart an element's animation
-   *
-   * @param {HTMLElement} element
-   * @return void
-   *
-   * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
-   */
-
-
-  const reflow = element => {
-    // eslint-disable-next-line no-unused-expressions
-    element.offsetHeight;
-  };
-
-  const getjQuery = () => {
-    const {
-      jQuery
-    } = window;
-
-    if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
-      return jQuery;
-    }
-
-    return null;
-  };
-
-  const DOMContentLoadedCallbacks = [];
-
-  const onDOMContentLoaded = callback => {
-    if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
-      if (!DOMContentLoadedCallbacks.length) {
-        document.addEventListener('DOMContentLoaded', () => {
-          DOMContentLoadedCallbacks.forEach(callback => callback());
-        });
-      }
-
-      DOMContentLoadedCallbacks.push(callback);
-    } else {
-      callback();
-    }
-  };
-
-  const defineJQueryPlugin = plugin => {
-    onDOMContentLoaded(() => {
-      const $ = getjQuery();
-      /* istanbul ignore if */
-
-      if ($) {
-        const name = plugin.NAME;
-        const JQUERY_NO_CONFLICT = $.fn[name];
-        $.fn[name] = plugin.jQueryInterface;
-        $.fn[name].Constructor = plugin;
-
-        $.fn[name].noConflict = () => {
-          $.fn[name] = JQUERY_NO_CONFLICT;
-          return plugin.jQueryInterface;
-        };
-      }
-    });
-  };
-
-  /**
-   * --------------------------------------------------------------------------
-   * Bootstrap (v5.1.3): tab.js
-   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
-   * --------------------------------------------------------------------------
-   */
-  /**
-   * ------------------------------------------------------------------------
-   * Constants
-   * ------------------------------------------------------------------------
-   */
-
-  const NAME = 'tab';
-  const DATA_KEY = 'bs.tab';
-  const EVENT_KEY = `.${DATA_KEY}`;
-  const DATA_API_KEY = '.data-api';
-  const EVENT_HIDE = `hide${EVENT_KEY}`;
-  const EVENT_HIDDEN = `hidden${EVENT_KEY}`;
-  const EVENT_SHOW = `show${EVENT_KEY}`;
-  const EVENT_SHOWN = `shown${EVENT_KEY}`;
-  const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`;
-  const CLASS_NAME_DROPDOWN_MENU = 'dropdown-menu';
-  const CLASS_NAME_ACTIVE = 'active';
-  const CLASS_NAME_FADE = 'fade';
-  const CLASS_NAME_SHOW = 'show';
-  const SELECTOR_DROPDOWN = '.dropdown';
-  const SELECTOR_NAV_LIST_GROUP = '.nav, .list-group';
-  const SELECTOR_ACTIVE = '.active';
-  const SELECTOR_ACTIVE_UL = ':scope > li > .active';
-  const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]';
-  const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
-  const SELECTOR_DROPDOWN_ACTIVE_CHILD = ':scope > .dropdown-menu .active';
-  /**
-   * ------------------------------------------------------------------------
-   * Class Definition
-   * ------------------------------------------------------------------------
-   */
-
-  class Tab extends BaseComponent__default.default {
-    // Getters
-    static get NAME() {
-      return NAME;
-    } // Public
-
-
-    show() {
-      if (this._element.parentNode && this._element.parentNode.nodeType === Node.ELEMENT_NODE && this._element.classList.contains(CLASS_NAME_ACTIVE)) {
-        return;
-      }
-
-      let previous;
-      const target = getElementFromSelector(this._element);
-
-      const listElement = this._element.closest(SELECTOR_NAV_LIST_GROUP);
-
-      if (listElement) {
-        const itemSelector = listElement.nodeName === 'UL' || listElement.nodeName === 'OL' ? SELECTOR_ACTIVE_UL : SELECTOR_ACTIVE;
-        previous = SelectorEngine__default.default.find(itemSelector, listElement);
-        previous = previous[previous.length - 1];
-      }
-
-      const hideEvent = previous ? EventHandler__default.default.trigger(previous, EVENT_HIDE, {
-        relatedTarget: this._element
-      }) : null;
-      const showEvent = EventHandler__default.default.trigger(this._element, EVENT_SHOW, {
-        relatedTarget: previous
-      });
-
-      if (showEvent.defaultPrevented || hideEvent !== null && hideEvent.defaultPrevented) {
-        return;
-      }
-
-      this._activate(this._element, listElement);
-
-      const complete = () => {
-        EventHandler__default.default.trigger(previous, EVENT_HIDDEN, {
-          relatedTarget: this._element
-        });
-        EventHandler__default.default.trigger(this._element, EVENT_SHOWN, {
-          relatedTarget: previous
-        });
-      };
-
-      if (target) {
-        this._activate(target, target.parentNode, complete);
-      } else {
-        complete();
-      }
-    } // Private
-
-
-    _activate(element, container, callback) {
-      const activeElements = container && (container.nodeName === 'UL' || container.nodeName === 'OL') ? SelectorEngine__default.default.find(SELECTOR_ACTIVE_UL, container) : SelectorEngine__default.default.children(container, SELECTOR_ACTIVE);
-      const active = activeElements[0];
-      const isTransitioning = callback && active && active.classList.contains(CLASS_NAME_FADE);
-
-      const complete = () => this._transitionComplete(element, active, callback);
-
-      if (active && isTransitioning) {
-        active.classList.remove(CLASS_NAME_SHOW);
-
-        this._queueCallback(complete, element, true);
-      } else {
-        complete();
-      }
-    }
-
-    _transitionComplete(element, active, callback) {
-      if (active) {
-        active.classList.remove(CLASS_NAME_ACTIVE);
-        const dropdownChild = SelectorEngine__default.default.findOne(SELECTOR_DROPDOWN_ACTIVE_CHILD, active.parentNode);
-
-        if (dropdownChild) {
-          dropdownChild.classList.remove(CLASS_NAME_ACTIVE);
-        }
-
-        if (active.getAttribute('role') === 'tab') {
-          active.setAttribute('aria-selected', false);
-        }
-      }
-
-      element.classList.add(CLASS_NAME_ACTIVE);
-
-      if (element.getAttribute('role') === 'tab') {
-        element.setAttribute('aria-selected', true);
-      }
-
-      reflow(element);
-
-      if (element.classList.contains(CLASS_NAME_FADE)) {
-        element.classList.add(CLASS_NAME_SHOW);
-      }
-
-      let parent = element.parentNode;
-
-      if (parent && parent.nodeName === 'LI') {
-        parent = parent.parentNode;
-      }
-
-      if (parent && parent.classList.contains(CLASS_NAME_DROPDOWN_MENU)) {
-        const dropdownElement = element.closest(SELECTOR_DROPDOWN);
-
-        if (dropdownElement) {
-          SelectorEngine__default.default.find(SELECTOR_DROPDOWN_TOGGLE, dropdownElement).forEach(dropdown => dropdown.classList.add(CLASS_NAME_ACTIVE));
-        }
-
-        element.setAttribute('aria-expanded', true);
-      }
-
-      if (callback) {
-        callback();
-      }
-    } // Static
-
-
-    static jQueryInterface(config) {
-      return this.each(function () {
-        const data = Tab.getOrCreateInstance(this);
-
-        if (typeof config === 'string') {
-          if (typeof data[config] === 'undefined') {
-            throw new TypeError(`No method named "${config}"`);
-          }
-
-          data[config]();
-        }
-      });
-    }
-
-  }
-  /**
-   * ------------------------------------------------------------------------
-   * Data Api implementation
-   * ------------------------------------------------------------------------
-   */
-
-
-  EventHandler__default.default.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
-    if (['A', 'AREA'].includes(this.tagName)) {
-      event.preventDefault();
-    }
-
-    if (isDisabled(this)) {
-      return;
-    }
-
-    const data = Tab.getOrCreateInstance(this);
-    data.show();
-  });
-  /**
-   * ------------------------------------------------------------------------
-   * jQuery
-   * ------------------------------------------------------------------------
-   * add .Tab to jQuery only if jQuery is present
-   */
-
-  defineJQueryPlugin(Tab);
-
-  return Tab;
-
-}));
-
-}(tab));
+	(function (global, factory) {
+	  module.exports = factory(requireUtil(), requireEventHandler(), requireSelectorEngine(), requireBaseComponent()) ;
+	})(commonjsGlobal, (function (index, EventHandler, SelectorEngine, BaseComponent) {
+	  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+	  const EventHandler__default = /*#__PURE__*/_interopDefaultLegacy(EventHandler);
+	  const SelectorEngine__default = /*#__PURE__*/_interopDefaultLegacy(SelectorEngine);
+	  const BaseComponent__default = /*#__PURE__*/_interopDefaultLegacy(BaseComponent);
+
+	  /**
+	   * --------------------------------------------------------------------------
+	   * Bootstrap (v5.2.2): tab.js
+	   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+	   * --------------------------------------------------------------------------
+	   */
+	  /**
+	   * Constants
+	   */
+
+	  const NAME = 'tab';
+	  const DATA_KEY = 'bs.tab';
+	  const EVENT_KEY = `.${DATA_KEY}`;
+	  const EVENT_HIDE = `hide${EVENT_KEY}`;
+	  const EVENT_HIDDEN = `hidden${EVENT_KEY}`;
+	  const EVENT_SHOW = `show${EVENT_KEY}`;
+	  const EVENT_SHOWN = `shown${EVENT_KEY}`;
+	  const EVENT_CLICK_DATA_API = `click${EVENT_KEY}`;
+	  const EVENT_KEYDOWN = `keydown${EVENT_KEY}`;
+	  const EVENT_LOAD_DATA_API = `load${EVENT_KEY}`;
+	  const ARROW_LEFT_KEY = 'ArrowLeft';
+	  const ARROW_RIGHT_KEY = 'ArrowRight';
+	  const ARROW_UP_KEY = 'ArrowUp';
+	  const ARROW_DOWN_KEY = 'ArrowDown';
+	  const CLASS_NAME_ACTIVE = 'active';
+	  const CLASS_NAME_FADE = 'fade';
+	  const CLASS_NAME_SHOW = 'show';
+	  const CLASS_DROPDOWN = 'dropdown';
+	  const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
+	  const SELECTOR_DROPDOWN_MENU = '.dropdown-menu';
+	  const NOT_SELECTOR_DROPDOWN_TOGGLE = ':not(.dropdown-toggle)';
+	  const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]';
+	  const SELECTOR_OUTER = '.nav-item, .list-group-item';
+	  const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`;
+	  const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]'; // todo:v6: could be only `tab`
+
+	  const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`;
+	  const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="pill"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="list"]`;
+	  /**
+	   * Class definition
+	   */
+
+	  class Tab extends BaseComponent__default.default {
+	    constructor(element) {
+	      super(element);
+	      this._parent = this._element.closest(SELECTOR_TAB_PANEL);
+
+	      if (!this._parent) {
+	        return; // todo: should Throw exception on v6
+	        // throw new TypeError(`${element.outerHTML} has not a valid parent ${SELECTOR_INNER_ELEM}`)
+	      } // Set up initial aria attributes
+
+
+	      this._setInitialAttributes(this._parent, this._getChildren());
+
+	      EventHandler__default.default.on(this._element, EVENT_KEYDOWN, event => this._keydown(event));
+	    } // Getters
+
+
+	    static get NAME() {
+	      return NAME;
+	    } // Public
+
+
+	    show() {
+	      // Shows this elem and deactivate the active sibling if exists
+	      const innerElem = this._element;
+
+	      if (this._elemIsActive(innerElem)) {
+	        return;
+	      } // Search for active tab on same parent to deactivate it
+
+
+	      const active = this._getActiveElem();
+
+	      const hideEvent = active ? EventHandler__default.default.trigger(active, EVENT_HIDE, {
+	        relatedTarget: innerElem
+	      }) : null;
+	      const showEvent = EventHandler__default.default.trigger(innerElem, EVENT_SHOW, {
+	        relatedTarget: active
+	      });
+
+	      if (showEvent.defaultPrevented || hideEvent && hideEvent.defaultPrevented) {
+	        return;
+	      }
+
+	      this._deactivate(active, innerElem);
+
+	      this._activate(innerElem, active);
+	    } // Private
+
+
+	    _activate(element, relatedElem) {
+	      if (!element) {
+	        return;
+	      }
+
+	      element.classList.add(CLASS_NAME_ACTIVE);
+
+	      this._activate(index.getElementFromSelector(element)); // Search and activate/show the proper section
+
+
+	      const complete = () => {
+	        if (element.getAttribute('role') !== 'tab') {
+	          element.classList.add(CLASS_NAME_SHOW);
+	          return;
+	        }
+
+	        element.removeAttribute('tabindex');
+	        element.setAttribute('aria-selected', true);
+
+	        this._toggleDropDown(element, true);
+
+	        EventHandler__default.default.trigger(element, EVENT_SHOWN, {
+	          relatedTarget: relatedElem
+	        });
+	      };
+
+	      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE));
+	    }
+
+	    _deactivate(element, relatedElem) {
+	      if (!element) {
+	        return;
+	      }
+
+	      element.classList.remove(CLASS_NAME_ACTIVE);
+	      element.blur();
+
+	      this._deactivate(index.getElementFromSelector(element)); // Search and deactivate the shown section too
+
+
+	      const complete = () => {
+	        if (element.getAttribute('role') !== 'tab') {
+	          element.classList.remove(CLASS_NAME_SHOW);
+	          return;
+	        }
+
+	        element.setAttribute('aria-selected', false);
+	        element.setAttribute('tabindex', '-1');
+
+	        this._toggleDropDown(element, false);
+
+	        EventHandler__default.default.trigger(element, EVENT_HIDDEN, {
+	          relatedTarget: relatedElem
+	        });
+	      };
+
+	      this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE));
+	    }
+
+	    _keydown(event) {
+	      if (![ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ARROW_DOWN_KEY].includes(event.key)) {
+	        return;
+	      }
+
+	      event.stopPropagation(); // stopPropagation/preventDefault both added to support up/down keys without scrolling the page
+
+	      event.preventDefault();
+	      const isNext = [ARROW_RIGHT_KEY, ARROW_DOWN_KEY].includes(event.key);
+	      const nextActiveElement = index.getNextActiveElement(this._getChildren().filter(element => !index.isDisabled(element)), event.target, isNext, true);
+
+	      if (nextActiveElement) {
+	        nextActiveElement.focus({
+	          preventScroll: true
+	        });
+	        Tab.getOrCreateInstance(nextActiveElement).show();
+	      }
+	    }
+
+	    _getChildren() {
+	      // collection of inner elements
+	      return SelectorEngine__default.default.find(SELECTOR_INNER_ELEM, this._parent);
+	    }
+
+	    _getActiveElem() {
+	      return this._getChildren().find(child => this._elemIsActive(child)) || null;
+	    }
+
+	    _setInitialAttributes(parent, children) {
+	      this._setAttributeIfNotExists(parent, 'role', 'tablist');
+
+	      for (const child of children) {
+	        this._setInitialAttributesOnChild(child);
+	      }
+	    }
+
+	    _setInitialAttributesOnChild(child) {
+	      child = this._getInnerElement(child);
+
+	      const isActive = this._elemIsActive(child);
+
+	      const outerElem = this._getOuterElement(child);
+
+	      child.setAttribute('aria-selected', isActive);
+
+	      if (outerElem !== child) {
+	        this._setAttributeIfNotExists(outerElem, 'role', 'presentation');
+	      }
+
+	      if (!isActive) {
+	        child.setAttribute('tabindex', '-1');
+	      }
+
+	      this._setAttributeIfNotExists(child, 'role', 'tab'); // set attributes to the related panel too
+
+
+	      this._setInitialAttributesOnTargetPanel(child);
+	    }
+
+	    _setInitialAttributesOnTargetPanel(child) {
+	      const target = index.getElementFromSelector(child);
+
+	      if (!target) {
+	        return;
+	      }
+
+	      this._setAttributeIfNotExists(target, 'role', 'tabpanel');
+
+	      if (child.id) {
+	        this._setAttributeIfNotExists(target, 'aria-labelledby', `#${child.id}`);
+	      }
+	    }
+
+	    _toggleDropDown(element, open) {
+	      const outerElem = this._getOuterElement(element);
+
+	      if (!outerElem.classList.contains(CLASS_DROPDOWN)) {
+	        return;
+	      }
+
+	      const toggle = (selector, className) => {
+	        const element = SelectorEngine__default.default.findOne(selector, outerElem);
+
+	        if (element) {
+	          element.classList.toggle(className, open);
+	        }
+	      };
+
+	      toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE);
+	      toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW);
+	      outerElem.setAttribute('aria-expanded', open);
+	    }
+
+	    _setAttributeIfNotExists(element, attribute, value) {
+	      if (!element.hasAttribute(attribute)) {
+	        element.setAttribute(attribute, value);
+	      }
+	    }
+
+	    _elemIsActive(elem) {
+	      return elem.classList.contains(CLASS_NAME_ACTIVE);
+	    } // Try to get the inner element (usually the .nav-link)
+
+
+	    _getInnerElement(elem) {
+	      return elem.matches(SELECTOR_INNER_ELEM) ? elem : SelectorEngine__default.default.findOne(SELECTOR_INNER_ELEM, elem);
+	    } // Try to get the outer element (usually the .nav-item)
+
+
+	    _getOuterElement(elem) {
+	      return elem.closest(SELECTOR_OUTER) || elem;
+	    } // Static
+
+
+	    static jQueryInterface(config) {
+	      return this.each(function () {
+	        const data = Tab.getOrCreateInstance(this);
+
+	        if (typeof config !== 'string') {
+	          return;
+	        }
+
+	        if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
+	          throw new TypeError(`No method named "${config}"`);
+	        }
+
+	        data[config]();
+	      });
+	    }
+
+	  }
+	  /**
+	   * Data API implementation
+	   */
+
+
+	  EventHandler__default.default.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+	    if (['A', 'AREA'].includes(this.tagName)) {
+	      event.preventDefault();
+	    }
+
+	    if (index.isDisabled(this)) {
+	      return;
+	    }
+
+	    Tab.getOrCreateInstance(this).show();
+	  });
+	  /**
+	   * Initialize on focus
+	   */
+
+	  EventHandler__default.default.on(window, EVENT_LOAD_DATA_API, () => {
+	    for (const element of SelectorEngine__default.default.find(SELECTOR_DATA_TOGGLE_ACTIVE)) {
+	      Tab.getOrCreateInstance(element);
+	    }
+	  });
+	  /**
+	   * jQuery
+	   */
+
+	  index.defineJQueryPlugin(Tab);
+
+	  return Tab;
+
+	}));
+	
+} (tab));
 
 var script$3 = defineComponent({
   props: [
@@ -1072,8 +1482,8 @@ var script$3 = defineComponent({
 });
 
 const _hoisted_1$3 = { class: "form-label d-flex" };
-const _hoisted_2$3 = { class: "me-auto" };
-const _hoisted_3$3 = {
+const _hoisted_2$2 = { class: "me-auto" };
+const _hoisted_3$2 = {
   key: 0,
   class: "text-danger"
 };
@@ -1094,9 +1504,9 @@ const _hoisted_13$1 = {
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock(Fragment, null, [
     createBaseVNode("label", _hoisted_1$3, [
-      createBaseVNode("span", _hoisted_2$3, [
+      createBaseVNode("span", _hoisted_2$2, [
         (_ctx.required)
-          ? (openBlock(), createElementBlock("span", _hoisted_3$3, "*"))
+          ? (openBlock(), createElementBlock("span", _hoisted_3$2, "*"))
           : createCommentVNode("v-if", true),
         createTextVNode(" " + toDisplayString(_ctx.name), 1 /* TEXT */)
       ]),
@@ -1563,8 +1973,6 @@ var script$2 = defineComponent({
 });
 
 const _hoisted_1$2 = ["innerHTML"];
-const _hoisted_2$2 = /*#__PURE__*/createTextVNode(" Copied ");
-const _hoisted_3$2 = /*#__PURE__*/createTextVNode(" Copy to clipboard ");
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createElementBlock("button", mergeProps({
@@ -1576,11 +1984,11 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
           createBaseVNode("span", {
             innerHTML: _ctx.checkIcon.toSVG({height: 19})
           }, null, 8 /* PROPS */, _hoisted_1$2),
-          _hoisted_2$2
+          createTextVNode(" Copied ")
         ], 64 /* STABLE_FRAGMENT */))
       : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-          _hoisted_3$2
-        ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+          createTextVNode(" Copy to clipboard ")
+        ], 64 /* STABLE_FRAGMENT */))
   ], 16 /* FULL_PROPS */))
 }
 
@@ -1719,69 +2127,69 @@ var exception = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
+	exports.__esModule = true;
+	var errorProps = ['description', 'fileName', 'lineNumber', 'endLineNumber', 'message', 'name', 'number', 'stack'];
 
-function Exception(message, node) {
-  var loc = node && node.loc,
-      line = undefined,
-      endLineNumber = undefined,
-      column = undefined,
-      endColumn = undefined;
+	function Exception(message, node) {
+	  var loc = node && node.loc,
+	      line = undefined,
+	      endLineNumber = undefined,
+	      column = undefined,
+	      endColumn = undefined;
 
-  if (loc) {
-    line = loc.start.line;
-    endLineNumber = loc.end.line;
-    column = loc.start.column;
-    endColumn = loc.end.column;
+	  if (loc) {
+	    line = loc.start.line;
+	    endLineNumber = loc.end.line;
+	    column = loc.start.column;
+	    endColumn = loc.end.column;
 
-    message += ' - ' + line + ':' + column;
-  }
+	    message += ' - ' + line + ':' + column;
+	  }
 
-  var tmp = Error.prototype.constructor.call(this, message);
+	  var tmp = Error.prototype.constructor.call(this, message);
 
-  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
-  for (var idx = 0; idx < errorProps.length; idx++) {
-    this[errorProps[idx]] = tmp[errorProps[idx]];
-  }
+	  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
+	  for (var idx = 0; idx < errorProps.length; idx++) {
+	    this[errorProps[idx]] = tmp[errorProps[idx]];
+	  }
 
-  /* istanbul ignore else */
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, Exception);
-  }
+	  /* istanbul ignore else */
+	  if (Error.captureStackTrace) {
+	    Error.captureStackTrace(this, Exception);
+	  }
 
-  try {
-    if (loc) {
-      this.lineNumber = line;
-      this.endLineNumber = endLineNumber;
+	  try {
+	    if (loc) {
+	      this.lineNumber = line;
+	      this.endLineNumber = endLineNumber;
 
-      // Work around issue under safari where we can't directly set the column value
-      /* istanbul ignore next */
-      if (Object.defineProperty) {
-        Object.defineProperty(this, 'column', {
-          value: column,
-          enumerable: true
-        });
-        Object.defineProperty(this, 'endColumn', {
-          value: endColumn,
-          enumerable: true
-        });
-      } else {
-        this.column = column;
-        this.endColumn = endColumn;
-      }
-    }
-  } catch (nop) {
-    /* Ignore if the browser is very particular */
-  }
-}
+	      // Work around issue under safari where we can't directly set the column value
+	      /* istanbul ignore next */
+	      if (Object.defineProperty) {
+	        Object.defineProperty(this, 'column', {
+	          value: column,
+	          enumerable: true
+	        });
+	        Object.defineProperty(this, 'endColumn', {
+	          value: endColumn,
+	          enumerable: true
+	        });
+	      } else {
+	        this.column = column;
+	        this.endColumn = endColumn;
+	      }
+	    }
+	  } catch (nop) {
+	    /* Ignore if the browser is very particular */
+	  }
+	}
 
-Exception.prototype = new Error();
+	Exception.prototype = new Error();
 
-exports['default'] = Exception;
-module.exports = exports['default'];
-
-}(exception, exception.exports));
+	exports['default'] = Exception;
+	module.exports = exports['default'];
+	
+} (exception, exception.exports));
 
 var helpers = {};
 
@@ -1789,328 +2197,328 @@ var blockHelperMissing = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-var _utils = utils;
+	var _utils = utils;
 
-exports['default'] = function (instance) {
-  instance.registerHelper('blockHelperMissing', function (context, options) {
-    var inverse = options.inverse,
-        fn = options.fn;
+	exports['default'] = function (instance) {
+	  instance.registerHelper('blockHelperMissing', function (context, options) {
+	    var inverse = options.inverse,
+	        fn = options.fn;
 
-    if (context === true) {
-      return fn(this);
-    } else if (context === false || context == null) {
-      return inverse(this);
-    } else if (_utils.isArray(context)) {
-      if (context.length > 0) {
-        if (options.ids) {
-          options.ids = [options.name];
-        }
+	    if (context === true) {
+	      return fn(this);
+	    } else if (context === false || context == null) {
+	      return inverse(this);
+	    } else if (_utils.isArray(context)) {
+	      if (context.length > 0) {
+	        if (options.ids) {
+	          options.ids = [options.name];
+	        }
 
-        return instance.helpers.each(context, options);
-      } else {
-        return inverse(this);
-      }
-    } else {
-      if (options.data && options.ids) {
-        var data = _utils.createFrame(options.data);
-        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.name);
-        options = { data: data };
-      }
+	        return instance.helpers.each(context, options);
+	      } else {
+	        return inverse(this);
+	      }
+	    } else {
+	      if (options.data && options.ids) {
+	        var data = _utils.createFrame(options.data);
+	        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.name);
+	        options = { data: data };
+	      }
 
-      return fn(context, options);
-    }
-  });
-};
+	      return fn(context, options);
+	    }
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(blockHelperMissing, blockHelperMissing.exports));
+	module.exports = exports['default'];
+	
+} (blockHelperMissing, blockHelperMissing.exports));
 
 var each = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-// istanbul ignore next
+	exports.__esModule = true;
+	// istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _utils = utils;
+	var _utils = utils;
 
-var _exception = exception.exports;
+	var _exception = exception.exports;
 
-var _exception2 = _interopRequireDefault(_exception);
+	var _exception2 = _interopRequireDefault(_exception);
 
-exports['default'] = function (instance) {
-  instance.registerHelper('each', function (context, options) {
-    if (!options) {
-      throw new _exception2['default']('Must pass iterator to #each');
-    }
+	exports['default'] = function (instance) {
+	  instance.registerHelper('each', function (context, options) {
+	    if (!options) {
+	      throw new _exception2['default']('Must pass iterator to #each');
+	    }
 
-    var fn = options.fn,
-        inverse = options.inverse,
-        i = 0,
-        ret = '',
-        data = undefined,
-        contextPath = undefined;
+	    var fn = options.fn,
+	        inverse = options.inverse,
+	        i = 0,
+	        ret = '',
+	        data = undefined,
+	        contextPath = undefined;
 
-    if (options.data && options.ids) {
-      contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
-    }
+	    if (options.data && options.ids) {
+	      contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]) + '.';
+	    }
 
-    if (_utils.isFunction(context)) {
-      context = context.call(this);
-    }
+	    if (_utils.isFunction(context)) {
+	      context = context.call(this);
+	    }
 
-    if (options.data) {
-      data = _utils.createFrame(options.data);
-    }
+	    if (options.data) {
+	      data = _utils.createFrame(options.data);
+	    }
 
-    function execIteration(field, index, last) {
-      if (data) {
-        data.key = field;
-        data.index = index;
-        data.first = index === 0;
-        data.last = !!last;
+	    function execIteration(field, index, last) {
+	      if (data) {
+	        data.key = field;
+	        data.index = index;
+	        data.first = index === 0;
+	        data.last = !!last;
 
-        if (contextPath) {
-          data.contextPath = contextPath + field;
-        }
-      }
+	        if (contextPath) {
+	          data.contextPath = contextPath + field;
+	        }
+	      }
 
-      ret = ret + fn(context[field], {
-        data: data,
-        blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
-      });
-    }
+	      ret = ret + fn(context[field], {
+	        data: data,
+	        blockParams: _utils.blockParams([context[field], field], [contextPath + field, null])
+	      });
+	    }
 
-    if (context && typeof context === 'object') {
-      if (_utils.isArray(context)) {
-        for (var j = context.length; i < j; i++) {
-          if (i in context) {
-            execIteration(i, i, i === context.length - 1);
-          }
-        }
-      } else if (commonjsGlobal.Symbol && context[commonjsGlobal.Symbol.iterator]) {
-        var newContext = [];
-        var iterator = context[commonjsGlobal.Symbol.iterator]();
-        for (var it = iterator.next(); !it.done; it = iterator.next()) {
-          newContext.push(it.value);
-        }
-        context = newContext;
-        for (var j = context.length; i < j; i++) {
-          execIteration(i, i, i === context.length - 1);
-        }
-      } else {
-        (function () {
-          var priorKey = undefined;
+	    if (context && typeof context === 'object') {
+	      if (_utils.isArray(context)) {
+	        for (var j = context.length; i < j; i++) {
+	          if (i in context) {
+	            execIteration(i, i, i === context.length - 1);
+	          }
+	        }
+	      } else if (commonjsGlobal.Symbol && context[commonjsGlobal.Symbol.iterator]) {
+	        var newContext = [];
+	        var iterator = context[commonjsGlobal.Symbol.iterator]();
+	        for (var it = iterator.next(); !it.done; it = iterator.next()) {
+	          newContext.push(it.value);
+	        }
+	        context = newContext;
+	        for (var j = context.length; i < j; i++) {
+	          execIteration(i, i, i === context.length - 1);
+	        }
+	      } else {
+	        (function () {
+	          var priorKey = undefined;
 
-          Object.keys(context).forEach(function (key) {
-            // We're running the iterations one step out of sync so we can detect
-            // the last iteration without have to scan the object twice and create
-            // an itermediate keys array.
-            if (priorKey !== undefined) {
-              execIteration(priorKey, i - 1);
-            }
-            priorKey = key;
-            i++;
-          });
-          if (priorKey !== undefined) {
-            execIteration(priorKey, i - 1, true);
-          }
-        })();
-      }
-    }
+	          Object.keys(context).forEach(function (key) {
+	            // We're running the iterations one step out of sync so we can detect
+	            // the last iteration without have to scan the object twice and create
+	            // an itermediate keys array.
+	            if (priorKey !== undefined) {
+	              execIteration(priorKey, i - 1);
+	            }
+	            priorKey = key;
+	            i++;
+	          });
+	          if (priorKey !== undefined) {
+	            execIteration(priorKey, i - 1, true);
+	          }
+	        })();
+	      }
+	    }
 
-    if (i === 0) {
-      ret = inverse(this);
-    }
+	    if (i === 0) {
+	      ret = inverse(this);
+	    }
 
-    return ret;
-  });
-};
+	    return ret;
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(each, each.exports));
+	module.exports = exports['default'];
+	
+} (each, each.exports));
 
 var helperMissing = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-// istanbul ignore next
+	exports.__esModule = true;
+	// istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _exception = exception.exports;
+	var _exception = exception.exports;
 
-var _exception2 = _interopRequireDefault(_exception);
+	var _exception2 = _interopRequireDefault(_exception);
 
-exports['default'] = function (instance) {
-  instance.registerHelper('helperMissing', function () /* [args, ]options */{
-    if (arguments.length === 1) {
-      // A missing field in a {{foo}} construct.
-      return undefined;
-    } else {
-      // Someone is actually trying to call something, blow up.
-      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
-    }
-  });
-};
+	exports['default'] = function (instance) {
+	  instance.registerHelper('helperMissing', function () /* [args, ]options */{
+	    if (arguments.length === 1) {
+	      // A missing field in a {{foo}} construct.
+	      return undefined;
+	    } else {
+	      // Someone is actually trying to call something, blow up.
+	      throw new _exception2['default']('Missing helper: "' + arguments[arguments.length - 1].name + '"');
+	    }
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(helperMissing, helperMissing.exports));
+	module.exports = exports['default'];
+	
+} (helperMissing, helperMissing.exports));
 
 var _if = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-// istanbul ignore next
+	exports.__esModule = true;
+	// istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _utils = utils;
+	var _utils = utils;
 
-var _exception = exception.exports;
+	var _exception = exception.exports;
 
-var _exception2 = _interopRequireDefault(_exception);
+	var _exception2 = _interopRequireDefault(_exception);
 
-exports['default'] = function (instance) {
-  instance.registerHelper('if', function (conditional, options) {
-    if (arguments.length != 2) {
-      throw new _exception2['default']('#if requires exactly one argument');
-    }
-    if (_utils.isFunction(conditional)) {
-      conditional = conditional.call(this);
-    }
+	exports['default'] = function (instance) {
+	  instance.registerHelper('if', function (conditional, options) {
+	    if (arguments.length != 2) {
+	      throw new _exception2['default']('#if requires exactly one argument');
+	    }
+	    if (_utils.isFunction(conditional)) {
+	      conditional = conditional.call(this);
+	    }
 
-    // Default behavior is to render the positive path if the value is truthy and not empty.
-    // The `includeZero` option may be set to treat the condtional as purely not empty based on the
-    // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
-    if (!options.hash.includeZero && !conditional || _utils.isEmpty(conditional)) {
-      return options.inverse(this);
-    } else {
-      return options.fn(this);
-    }
-  });
+	    // Default behavior is to render the positive path if the value is truthy and not empty.
+	    // The `includeZero` option may be set to treat the condtional as purely not empty based on the
+	    // behavior of isEmpty. Effectively this determines if 0 is handled by the positive path or negative.
+	    if (!options.hash.includeZero && !conditional || _utils.isEmpty(conditional)) {
+	      return options.inverse(this);
+	    } else {
+	      return options.fn(this);
+	    }
+	  });
 
-  instance.registerHelper('unless', function (conditional, options) {
-    if (arguments.length != 2) {
-      throw new _exception2['default']('#unless requires exactly one argument');
-    }
-    return instance.helpers['if'].call(this, conditional, {
-      fn: options.inverse,
-      inverse: options.fn,
-      hash: options.hash
-    });
-  });
-};
+	  instance.registerHelper('unless', function (conditional, options) {
+	    if (arguments.length != 2) {
+	      throw new _exception2['default']('#unless requires exactly one argument');
+	    }
+	    return instance.helpers['if'].call(this, conditional, {
+	      fn: options.inverse,
+	      inverse: options.fn,
+	      hash: options.hash
+	    });
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(_if, _if.exports));
+	module.exports = exports['default'];
+	
+} (_if, _if.exports));
 
 var log$1 = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-exports['default'] = function (instance) {
-  instance.registerHelper('log', function () /* message, options */{
-    var args = [undefined],
-        options = arguments[arguments.length - 1];
-    for (var i = 0; i < arguments.length - 1; i++) {
-      args.push(arguments[i]);
-    }
+	exports['default'] = function (instance) {
+	  instance.registerHelper('log', function () /* message, options */{
+	    var args = [undefined],
+	        options = arguments[arguments.length - 1];
+	    for (var i = 0; i < arguments.length - 1; i++) {
+	      args.push(arguments[i]);
+	    }
 
-    var level = 1;
-    if (options.hash.level != null) {
-      level = options.hash.level;
-    } else if (options.data && options.data.level != null) {
-      level = options.data.level;
-    }
-    args[0] = level;
+	    var level = 1;
+	    if (options.hash.level != null) {
+	      level = options.hash.level;
+	    } else if (options.data && options.data.level != null) {
+	      level = options.data.level;
+	    }
+	    args[0] = level;
 
-    instance.log.apply(instance, args);
-  });
-};
+	    instance.log.apply(instance, args);
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(log$1, log$1.exports));
+	module.exports = exports['default'];
+	
+} (log$1, log$1.exports));
 
 var lookup = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-exports['default'] = function (instance) {
-  instance.registerHelper('lookup', function (obj, field, options) {
-    if (!obj) {
-      // Note for 5.0: Change to "obj == null" in 5.0
-      return obj;
-    }
-    return options.lookupProperty(obj, field);
-  });
-};
+	exports['default'] = function (instance) {
+	  instance.registerHelper('lookup', function (obj, field, options) {
+	    if (!obj) {
+	      // Note for 5.0: Change to "obj == null" in 5.0
+	      return obj;
+	    }
+	    return options.lookupProperty(obj, field);
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(lookup, lookup.exports));
+	module.exports = exports['default'];
+	
+} (lookup, lookup.exports));
 
 var _with = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-// istanbul ignore next
+	exports.__esModule = true;
+	// istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _utils = utils;
+	var _utils = utils;
 
-var _exception = exception.exports;
+	var _exception = exception.exports;
 
-var _exception2 = _interopRequireDefault(_exception);
+	var _exception2 = _interopRequireDefault(_exception);
 
-exports['default'] = function (instance) {
-  instance.registerHelper('with', function (context, options) {
-    if (arguments.length != 2) {
-      throw new _exception2['default']('#with requires exactly one argument');
-    }
-    if (_utils.isFunction(context)) {
-      context = context.call(this);
-    }
+	exports['default'] = function (instance) {
+	  instance.registerHelper('with', function (context, options) {
+	    if (arguments.length != 2) {
+	      throw new _exception2['default']('#with requires exactly one argument');
+	    }
+	    if (_utils.isFunction(context)) {
+	      context = context.call(this);
+	    }
 
-    var fn = options.fn;
+	    var fn = options.fn;
 
-    if (!_utils.isEmpty(context)) {
-      var data = options.data;
-      if (options.data && options.ids) {
-        data = _utils.createFrame(options.data);
-        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]);
-      }
+	    if (!_utils.isEmpty(context)) {
+	      var data = options.data;
+	      if (options.data && options.ids) {
+	        data = _utils.createFrame(options.data);
+	        data.contextPath = _utils.appendContextPath(options.data.contextPath, options.ids[0]);
+	      }
 
-      return fn(context, {
-        data: data,
-        blockParams: _utils.blockParams([context], [data && data.contextPath])
-      });
-    } else {
-      return options.inverse(this);
-    }
-  });
-};
+	      return fn(context, {
+	        data: data,
+	        blockParams: _utils.blockParams([context], [data && data.contextPath])
+	      });
+	    } else {
+	      return options.inverse(this);
+	    }
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(_with, _with.exports));
+	module.exports = exports['default'];
+	
+} (_with, _with.exports));
 
 helpers.__esModule = true;
 helpers.registerDefaultHelpers = registerDefaultHelpers;
@@ -2172,34 +2580,34 @@ var inline = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-var _utils = utils;
+	var _utils = utils;
 
-exports['default'] = function (instance) {
-  instance.registerDecorator('inline', function (fn, props, container, options) {
-    var ret = fn;
-    if (!props.partials) {
-      props.partials = {};
-      ret = function (context, options) {
-        // Create a new partials stack frame prior to exec.
-        var original = container.partials;
-        container.partials = _utils.extend({}, original, props.partials);
-        var ret = fn(context, options);
-        container.partials = original;
-        return ret;
-      };
-    }
+	exports['default'] = function (instance) {
+	  instance.registerDecorator('inline', function (fn, props, container, options) {
+	    var ret = fn;
+	    if (!props.partials) {
+	      props.partials = {};
+	      ret = function (context, options) {
+	        // Create a new partials stack frame prior to exec.
+	        var original = container.partials;
+	        container.partials = _utils.extend({}, original, props.partials);
+	        var ret = fn(context, options);
+	        container.partials = original;
+	        return ret;
+	      };
+	    }
 
-    props.partials[options.args[0]] = options.fn;
+	    props.partials[options.args[0]] = options.fn;
 
-    return ret;
-  });
-};
+	    return ret;
+	  });
+	};
 
-module.exports = exports['default'];
-
-}(inline, inline.exports));
+	module.exports = exports['default'];
+	
+} (inline, inline.exports));
 
 decorators.__esModule = true;
 decorators.registerDefaultDecorators = registerDefaultDecorators;
@@ -2219,52 +2627,52 @@ var logger$1 = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-var _utils = utils;
+	var _utils = utils;
 
-var logger = {
-  methodMap: ['debug', 'info', 'warn', 'error'],
-  level: 'info',
+	var logger = {
+	  methodMap: ['debug', 'info', 'warn', 'error'],
+	  level: 'info',
 
-  // Maps a given level value to the `methodMap` indexes above.
-  lookupLevel: function lookupLevel(level) {
-    if (typeof level === 'string') {
-      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
-      if (levelMap >= 0) {
-        level = levelMap;
-      } else {
-        level = parseInt(level, 10);
-      }
-    }
+	  // Maps a given level value to the `methodMap` indexes above.
+	  lookupLevel: function lookupLevel(level) {
+	    if (typeof level === 'string') {
+	      var levelMap = _utils.indexOf(logger.methodMap, level.toLowerCase());
+	      if (levelMap >= 0) {
+	        level = levelMap;
+	      } else {
+	        level = parseInt(level, 10);
+	      }
+	    }
 
-    return level;
-  },
+	    return level;
+	  },
 
-  // Can be overridden in the host environment
-  log: function log(level) {
-    level = logger.lookupLevel(level);
+	  // Can be overridden in the host environment
+	  log: function log(level) {
+	    level = logger.lookupLevel(level);
 
-    if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
-      var method = logger.methodMap[level];
-      // eslint-disable-next-line no-console
-      if (!console[method]) {
-        method = 'log';
-      }
+	    if (typeof console !== 'undefined' && logger.lookupLevel(logger.level) <= level) {
+	      var method = logger.methodMap[level];
+	      // eslint-disable-next-line no-console
+	      if (!console[method]) {
+	        method = 'log';
+	      }
 
-      for (var _len = arguments.length, message = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        message[_key - 1] = arguments[_key];
-      }
+	      for (var _len = arguments.length, message = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        message[_key - 1] = arguments[_key];
+	      }
 
-      console[method].apply(console, message); // eslint-disable-line no-console
-    }
-  }
-};
+	      console[method].apply(console, message); // eslint-disable-line no-console
+	    }
+	  }
+	};
 
-exports['default'] = logger;
-module.exports = exports['default'];
-
-}(logger$1, logger$1.exports));
+	exports['default'] = logger;
+	module.exports = exports['default'];
+	
+} (logger$1, logger$1.exports));
 
 var protoAccess = {};
 
@@ -2479,19 +2887,19 @@ var safeString = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
-function SafeString(string) {
-  this.string = string;
-}
+	exports.__esModule = true;
+	function SafeString(string) {
+	  this.string = string;
+	}
 
-SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
-  return '' + this.string;
-};
+	SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
+	  return '' + this.string;
+	};
 
-exports['default'] = SafeString;
-module.exports = exports['default'];
-
-}(safeString, safeString.exports));
+	exports['default'] = SafeString;
+	module.exports = exports['default'];
+	
+} (safeString, safeString.exports));
 
 var runtime$1 = {};
 
@@ -2888,92 +3296,92 @@ var noConflict = {exports: {}};
 
 (function (module, exports) {
 
-exports.__esModule = true;
+	exports.__esModule = true;
 
-exports['default'] = function (Handlebars) {
-  /* istanbul ignore next */
-  var root = typeof commonjsGlobal !== 'undefined' ? commonjsGlobal : window,
-      $Handlebars = root.Handlebars;
-  /* istanbul ignore next */
-  Handlebars.noConflict = function () {
-    if (root.Handlebars === Handlebars) {
-      root.Handlebars = $Handlebars;
-    }
-    return Handlebars;
-  };
-};
+	exports['default'] = function (Handlebars) {
+	  /* istanbul ignore next */
+	  var root = typeof commonjsGlobal !== 'undefined' ? commonjsGlobal : window,
+	      $Handlebars = root.Handlebars;
+	  /* istanbul ignore next */
+	  Handlebars.noConflict = function () {
+	    if (root.Handlebars === Handlebars) {
+	      root.Handlebars = $Handlebars;
+	    }
+	    return Handlebars;
+	  };
+	};
 
-module.exports = exports['default'];
-
-}(noConflict, noConflict.exports));
+	module.exports = exports['default'];
+	
+} (noConflict, noConflict.exports));
 
 (function (module, exports) {
 
-exports.__esModule = true;
-// istanbul ignore next
+	exports.__esModule = true;
+	// istanbul ignore next
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-// istanbul ignore next
+	// istanbul ignore next
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
-var _handlebarsBase = base;
+	var _handlebarsBase = base;
 
-var base$1 = _interopRequireWildcard(_handlebarsBase);
+	var base$1 = _interopRequireWildcard(_handlebarsBase);
 
-// Each of these augment the Handlebars object. No need to setup here.
-// (This is done to easily share code between commonjs and browse envs)
+	// Each of these augment the Handlebars object. No need to setup here.
+	// (This is done to easily share code between commonjs and browse envs)
 
-var _handlebarsSafeString = safeString.exports;
+	var _handlebarsSafeString = safeString.exports;
 
-var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
+	var _handlebarsSafeString2 = _interopRequireDefault(_handlebarsSafeString);
 
-var _handlebarsException = exception.exports;
+	var _handlebarsException = exception.exports;
 
-var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
+	var _handlebarsException2 = _interopRequireDefault(_handlebarsException);
 
-var _handlebarsUtils = utils;
+	var _handlebarsUtils = utils;
 
-var Utils = _interopRequireWildcard(_handlebarsUtils);
+	var Utils = _interopRequireWildcard(_handlebarsUtils);
 
-var _handlebarsRuntime = runtime$1;
+	var _handlebarsRuntime = runtime$1;
 
-var runtime = _interopRequireWildcard(_handlebarsRuntime);
+	var runtime = _interopRequireWildcard(_handlebarsRuntime);
 
-var _handlebarsNoConflict = noConflict.exports;
+	var _handlebarsNoConflict = noConflict.exports;
 
-var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
+	var _handlebarsNoConflict2 = _interopRequireDefault(_handlebarsNoConflict);
 
-// For compatibility and usage outside of module systems, make the Handlebars object a namespace
-function create() {
-  var hb = new base$1.HandlebarsEnvironment();
+	// For compatibility and usage outside of module systems, make the Handlebars object a namespace
+	function create() {
+	  var hb = new base$1.HandlebarsEnvironment();
 
-  Utils.extend(hb, base$1);
-  hb.SafeString = _handlebarsSafeString2['default'];
-  hb.Exception = _handlebarsException2['default'];
-  hb.Utils = Utils;
-  hb.escapeExpression = Utils.escapeExpression;
+	  Utils.extend(hb, base$1);
+	  hb.SafeString = _handlebarsSafeString2['default'];
+	  hb.Exception = _handlebarsException2['default'];
+	  hb.Utils = Utils;
+	  hb.escapeExpression = Utils.escapeExpression;
 
-  hb.VM = runtime;
-  hb.template = function (spec) {
-    return runtime.template(spec, hb);
-  };
+	  hb.VM = runtime;
+	  hb.template = function (spec) {
+	    return runtime.template(spec, hb);
+	  };
 
-  return hb;
-}
+	  return hb;
+	}
 
-var inst = create();
-inst.create = create;
+	var inst = create();
+	inst.create = create;
 
-_handlebarsNoConflict2['default'](inst);
+	_handlebarsNoConflict2['default'](inst);
 
-inst['default'] = inst;
+	inst['default'] = inst;
 
-exports['default'] = inst;
-module.exports = exports['default'];
-
-}(handlebars_runtime, handlebars_runtime.exports));
+	exports['default'] = inst;
+	module.exports = exports['default'];
+	
+} (handlebars_runtime, handlebars_runtime.exports));
 
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
@@ -3433,49 +3841,48 @@ const _hoisted_12 = {
   key: 0,
   class: "list-unstyled mb-0"
 };
-const _hoisted_13 = /*#__PURE__*/createTextVNode(" - ");
-const _hoisted_14 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "License", -1 /* HOISTED */));
-const _hoisted_15 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Created", -1 /* HOISTED */));
-const _hoisted_16 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Updated", -1 /* HOISTED */));
-const _hoisted_17 = { class: "text-end" };
-const _hoisted_18 = ["href"];
-const _hoisted_19 = ["innerHTML"];
-const _hoisted_20 = {
+const _hoisted_13 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "License", -1 /* HOISTED */));
+const _hoisted_14 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Created", -1 /* HOISTED */));
+const _hoisted_15 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("th", null, "Updated", -1 /* HOISTED */));
+const _hoisted_16 = { class: "text-end" };
+const _hoisted_17 = ["href"];
+const _hoisted_18 = ["innerHTML"];
+const _hoisted_19 = {
   class: "tab-pane",
   id: "customize",
   role: "tabpanel"
 };
-const _hoisted_21 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */));
-const _hoisted_22 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
-const _hoisted_23 = { class: "col" };
-const _hoisted_24 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */));
-const _hoisted_25 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */));
-const _hoisted_26 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
-const _hoisted_27 = {
+const _hoisted_20 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Parameters", -1 /* HOISTED */));
+const _hoisted_21 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
+const _hoisted_22 = { class: "col" };
+const _hoisted_23 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "mt-4 mb-3" }, null, -1 /* HOISTED */));
+const _hoisted_24 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Styles", -1 /* HOISTED */));
+const _hoisted_25 = { class: "row row-cols-1 row-cols-sm-2 row-cols-lg-1 row-cols-xl-2 gx-4 gy-3" };
+const _hoisted_26 = {
   key: 0,
   class: "fst-italic"
 };
-const _hoisted_28 = {
+const _hoisted_27 = {
   class: "tab-pane",
   id: "event",
   role: "tabpanel"
 };
-const _hoisted_29 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */));
-const _hoisted_30 = { class: "row row-cols-2" };
-const _hoisted_31 = { class: "text-muted" };
-const _hoisted_32 = {
+const _hoisted_28 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Outgoing Events", -1 /* HOISTED */));
+const _hoisted_29 = { class: "row row-cols-2" };
+const _hoisted_30 = { class: "text-muted" };
+const _hoisted_31 = {
   key: 0,
   class: "fst-italic"
 };
-const _hoisted_33 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */));
-const _hoisted_34 = { class: "row row-cols-2" };
-const _hoisted_35 = { class: "text-muted" };
-const _hoisted_36 = {
+const _hoisted_32 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("h2", { class: "my-3" }, "Incoming Events", -1 /* HOISTED */));
+const _hoisted_33 = { class: "row row-cols-2" };
+const _hoisted_34 = { class: "text-muted" };
+const _hoisted_35 = {
   key: 1,
   class: "fst-italic"
 };
-const _hoisted_37 = { class: "col-lg-6" };
-const _hoisted_38 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */));
+const _hoisted_36 = { class: "col-lg-6" };
+const _hoisted_37 = /*#__PURE__*/ _withScopeId(() => /*#__PURE__*/createBaseVNode("hr", { class: "d-lg-none mb-4" }, null, -1 /* HOISTED */));
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_FormField = resolveComponent("FormField");
@@ -3512,38 +3919,38 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             }), 128 /* KEYED_FRAGMENT */))
                           ]))
                         : (openBlock(), createElementBlock(Fragment, { key: 1 }, [
-                            _hoisted_13
-                          ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
+                            createTextVNode(" - ")
+                          ], 64 /* STABLE_FRAGMENT */))
                     ])
                   ]),
                   createBaseVNode("tr", null, [
-                    _hoisted_14,
+                    _hoisted_13,
                     createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:license'] || '-'), 1 /* TEXT */)
                   ]),
                   createBaseVNode("tr", null, [
-                    _hoisted_15,
+                    _hoisted_14,
                     createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:created'] || '-'), 1 /* TEXT */)
                   ]),
                   createBaseVNode("tr", null, [
-                    _hoisted_16,
+                    _hoisted_15,
                     createBaseVNode("td", null, toDisplayString(_ctx.metadata['stanza:updated'] || '-'), 1 /* TEXT */)
                   ])
                 ])
               ]),
-              createBaseVNode("div", _hoisted_17, [
+              createBaseVNode("div", _hoisted_16, [
                 createBaseVNode("a", {
                   href: `./${_ctx.metadata['@id']}/metadata.json`
-                }, "Download JSON", 8 /* PROPS */, _hoisted_18)
+                }, "Download JSON", 8 /* PROPS */, _hoisted_17)
               ]),
               createBaseVNode("div", {
                 innerHTML: _ctx.readme,
                 class: "mt-4"
-              }, null, 8 /* PROPS */, _hoisted_19)
+              }, null, 8 /* PROPS */, _hoisted_18)
             ]),
-            createBaseVNode("div", _hoisted_20, [
+            createBaseVNode("div", _hoisted_19, [
               createBaseVNode("section", null, [
-                _hoisted_21,
-                createBaseVNode("div", _hoisted_22, [
+                _hoisted_20,
+                createBaseVNode("div", _hoisted_21, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.paramFields, ({ param, input }) => {
                     return (openBlock(), createElementBlock("div", {
                       key: param['stanza:key'],
@@ -3559,7 +3966,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       }, null, 8 /* PROPS */, ["input", "name", "type", "choices", "required", "help-text"])
                     ]))
                   }), 128 /* KEYED_FRAGMENT */)),
-                  createBaseVNode("div", _hoisted_23, [
+                  createBaseVNode("div", _hoisted_22, [
                     createVNode(_component_FormField, {
                       input: _ctx.menuPlacement,
                       name: "togostanza-menu-placement",
@@ -3576,10 +3983,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   ])
                 ])
               ]),
-              _hoisted_24,
+              _hoisted_23,
               createBaseVNode("section", null, [
-                _hoisted_25,
-                createBaseVNode("div", _hoisted_26, [
+                _hoisted_24,
+                createBaseVNode("div", _hoisted_25, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.styleFields, ({ style, input }) => {
                     return (openBlock(), createElementBlock("div", {
                       key: style['stanza:key'],
@@ -3596,46 +4003,46 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                   }), 128 /* KEYED_FRAGMENT */))
                 ]),
                 (_ctx.styleFields.length === 0)
-                  ? (openBlock(), createElementBlock("p", _hoisted_27, " No styles defined. "))
+                  ? (openBlock(), createElementBlock("p", _hoisted_26, " No styles defined. "))
                   : createCommentVNode("v-if", true)
               ])
             ]),
-            createBaseVNode("div", _hoisted_28, [
-              _hoisted_29,
-              createBaseVNode("div", _hoisted_30, [
+            createBaseVNode("div", _hoisted_27, [
+              _hoisted_28,
+              createBaseVNode("div", _hoisted_29, [
                 (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.outgoingEvents, ({ name, description }) => {
                   return (openBlock(), createElementBlock("div", {
                     key: name,
                     class: "col"
                   }, [
                     createBaseVNode("div", null, toDisplayString(name), 1 /* TEXT */),
-                    createBaseVNode("div", _hoisted_31, toDisplayString(description), 1 /* TEXT */)
+                    createBaseVNode("div", _hoisted_30, toDisplayString(description), 1 /* TEXT */)
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]),
               (_ctx.outgoingEvents.length === 0)
-                ? (openBlock(), createElementBlock("p", _hoisted_32, " No events defined. "))
+                ? (openBlock(), createElementBlock("p", _hoisted_31, " No events defined. "))
                 : createCommentVNode("v-if", true),
-              _hoisted_33,
-              createBaseVNode("div", _hoisted_34, [
+              _hoisted_32,
+              createBaseVNode("div", _hoisted_33, [
                 (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.incomingEvents, ({ name, description }) => {
                   return (openBlock(), createElementBlock("div", {
                     key: name,
                     class: "col"
                   }, [
                     createBaseVNode("div", null, toDisplayString(name), 1 /* TEXT */),
-                    createBaseVNode("div", _hoisted_35, toDisplayString(description), 1 /* TEXT */)
+                    createBaseVNode("div", _hoisted_34, toDisplayString(description), 1 /* TEXT */)
                   ]))
                 }), 128 /* KEYED_FRAGMENT */))
               ]),
               (_ctx.incomingEvents.length === 0)
-                ? (openBlock(), createElementBlock("p", _hoisted_36, " No events defined. "))
+                ? (openBlock(), createElementBlock("p", _hoisted_35, " No events defined. "))
                 : createCommentVNode("v-if", true)
             ])
           ])
         ]),
-        createBaseVNode("div", _hoisted_37, [
-          _hoisted_38,
+        createBaseVNode("div", _hoisted_36, [
+          _hoisted_37,
           createVNode(_component_StanzaPreviewer, {
             metadata: _ctx.metadata,
             params: _ctx.params,
