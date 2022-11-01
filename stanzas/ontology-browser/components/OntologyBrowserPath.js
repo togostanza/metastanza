@@ -33,7 +33,7 @@ class OntologyPath extends LitElement {
         gap: 0.2em;
         align-items: center;
         justify-content: flex-start;
-        height: 2em;
+        height: 4rem;
         max-width: calc(100% - (100% / 3 - 30rem));
         width: calc(100% - (100% / 3 - min(85% / 3, 20rem)));
       }
@@ -43,6 +43,41 @@ class OntologyPath extends LitElement {
         display: inline-block;
         font-size: var(--togostanza-fonts-font_size_secondary);
         padding: 0 0.6em;
+        width: 10em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .node-container {
+        display: block;
+        position: relative;
+        margin-right: -3em;
+        transform: rotate(340deg);
+      }
+
+      .node-container:before {
+        content: "";
+        display: block;
+        width: 5px;
+        height: 5px;
+        border: 1px solid var(--togostanza-border-color);
+        position: absolute;
+        border-radius: 50%;
+        bottom: 0;
+      }
+
+      .node-container + .node-container:after {
+        content: "";
+        display: block;
+        width: 2.35em;
+        height: 1px;
+        border-bottom: 1px solid var(--togostanza-border-color);
+        transform: rotate(200deg);
+        transform-origin: left bottom;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: 0.25em;
       }
 
       .node:hover {
@@ -95,11 +130,14 @@ class OntologyPath extends LitElement {
         >
           ${map(this.path, (node, i) => {
             const id = `${node.id}-${i}`;
-            return html`<span
-              id="${id}"
-              class="node ${id === this.selectedNodeId ? "-active" : ""}"
-              >${node.label}</span
-            >`;
+            return html`<span class="node-container">
+              <span
+                id="${id}"
+                class="node ${id === this.selectedNodeId ? "-active" : ""}"
+                title="${node.label}"
+                >${node.label}</span
+              >
+            </span>`;
           })}
         </div>
       </div>
