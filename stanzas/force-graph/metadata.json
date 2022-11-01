@@ -67,13 +67,13 @@
     {
       "stanza:key": "edge-width-min",
       "stanza:type": "number",
-      "stanza:example": 0.5,
+      "stanza:example": 1,
       "stanza:description": "Minimum edge width in px"
     },
     {
       "stanza:key": "edge-width-max",
       "stanza:type": "number",
-      "stanza:example": 3,
+      "stanza:example": 1,
       "stanza:description": "Maximum edge width in px"
     },
     {
@@ -103,7 +103,7 @@
       "stanza:description": "Set color of the edge based on this data key"
     },
     {
-      "stanza:key": "highlight-adjacent_edges",
+      "stanza:key": "highlight_adjacent_edges",
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Highlight adjacent edges on node mouse hover"

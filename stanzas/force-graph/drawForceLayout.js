@@ -72,8 +72,8 @@ export default function (
     }
   }
 
-  const markerBoxWidth = 15;
-  const markerBoxHeight = 8;
+  const markerBoxWidth = 8;
+  const markerBoxHeight = 4;
   const refX = markerBoxWidth;
   const refY = markerBoxHeight / 2;
 
@@ -83,46 +83,45 @@ export default function (
     [markerBoxWidth, markerBoxHeight / 2],
   ];
 
-  const edgesColorsArr = edges.map((d) => d[symbols.edgeColorSym]);
+  //const edgesColorsArr = edges.map((d) => d[symbols.edgeColorSym]);
 
-  const edgeColors = [...new Set(edgesColorsArr)];
-
-  const defs = svg.append("defs");
+  //const edgeColors = [...new Set(edgesColorsArr)];
 
   if (edgeWidthParams.showArrows) {
-    if (!edgeColors[0] && edgeColors.length === 1) {
-      // color is fixed, add one marker with default color
+    const defs = svg.append("defs");
 
-      defs
-        .append("marker")
-        .attr("id", "arrow-default")
-        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
-        .attr("refX", refX)
-        .attr("refY", refY)
-        .attr("markerWidth", markerBoxWidth)
-        .attr("markerHeight", markerBoxHeight)
-        .attr("orient", "auto-start-reverse")
-        .append("path")
-        .attr("d", d3.line()(arrowPoints))
-        .attr("stroke", "none");
-    } else {
-      //add markers for every color
-      defs
-        .selectAll("marker")
-        .data(edgeColors)
-        .join("marker")
-        .attr("id", (d) => `arrow-${d}`)
-        .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
-        .attr("refX", refX)
-        .attr("refY", refY)
-        .attr("markerWidth", markerBoxWidth)
-        .attr("markerHeight", markerBoxHeight)
-        .attr("orient", "auto-start-reverse")
-        .append("path")
-        .attr("d", d3.line()(arrowPoints))
-        .attr("fill", (d) => d)
-        .attr("stroke", "none");
-    }
+    const defsD = defs.selectAll("marker").data(edges);
+
+    defsD
+      .enter()
+      .append("marker")
+      .attr(
+        "id",
+        (d) => d[symbols.idSym] // edge id
+      )
+      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+      .attr("refX", (d) => refX + d[symbols.targetNodeSym][symbols.nodeSizeSym])
+      .attr("refY", refY)
+      .attr("markerWidth", markerBoxWidth)
+      .attr("markerHeight", markerBoxHeight)
+      .attr("orient", "auto-start-reverse")
+      .append("path")
+      .attr("d", d3.line()(arrowPoints))
+      .attr("stroke", "none")
+      .attr("fill", (d) => d[symbols.edgeColorSym]);
+
+    defs
+      .append("marker")
+      .attr("id", "arrow-default")
+      .attr("viewBox", [0, 0, markerBoxWidth, markerBoxHeight])
+      .attr("refX", refX)
+      .attr("refY", refY)
+      .attr("markerWidth", markerBoxWidth)
+      .attr("markerHeight", markerBoxHeight)
+      .attr("orient", "auto-start-reverse")
+      .append("path")
+      .attr("d", d3.line()(arrowPoints))
+      .attr("stroke", "none");
   }
 
   const forceG = svg
@@ -164,10 +163,7 @@ export default function (
     .style("stroke-width", (d) => d[symbols.edgeWidthSym])
     .style("stroke", (d) => d[symbols.edgeColorSym])
     .attr("class", "link")
-    .attr(
-      "marker-end",
-      (d) => `url(#arrow-${d[symbols.edgeColorSym] || "default"})`
-    );
+    .attr("marker-end", (d) => `url(#${d[symbols.idSym] || "default"})`);
 
   function updateLinks() {
     links.attr("d", drawLink);
