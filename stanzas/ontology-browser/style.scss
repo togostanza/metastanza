@@ -1,6 +1,10 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
 @use "@/common.scss";
 
+:host {
+  --history-height: 100px;
+}
+
 main {
   background-color: var(--togostanza-theme-background_color);
   height: var(--togostanza-outline-height);

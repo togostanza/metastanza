@@ -287,10 +287,6 @@ export class OntologyBrowser extends LitElement {
 
   render() {
     return html`
-      <!-- <ontology-browser-text-search
-        @input="${debounce(this._keyup, 300)}"
-      ></ontology-browser-text-search> -->
-
       <div class="container">
         ${this.showHistory
           ? html`<ontology-browser-path

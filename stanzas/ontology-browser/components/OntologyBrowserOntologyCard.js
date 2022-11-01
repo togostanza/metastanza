@@ -35,7 +35,7 @@ export class OntologyCard extends LitElement {
       box-sizing: border-box;
     }
 
-    .-hero-left:after {
+    .-hero-left-1:after {
       position: absolute;
       content: "";
       width: 0px;
@@ -229,7 +229,7 @@ export class OntologyCard extends LitElement {
       overflow: visible;
     }
 
-    .children-arrow:before {
+    .children-arrow-1:before {
       position: absolute;
       content: "";
       width: 0px;

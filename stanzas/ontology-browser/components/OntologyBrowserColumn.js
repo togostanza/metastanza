@@ -21,6 +21,9 @@ export default class OntologyBrowserColumn extends LitElement {
         position: relative;
         overflow-y: auto;
         overflow-x: hidden;
+        max-height: calc(
+          var(--togostanza-outline-height) - var(--history-height)
+        );
       }
     `;
   }
