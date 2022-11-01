@@ -80,30 +80,30 @@ svg {
   }
 
   .gridlines {
-    & > .tick > line {
+    > .tick > line {
       stroke: var(--togostanza-grid-color);
       opacity: var(--togostanza-grid-opacity);
       stroke-width: var(--togostanza-grid-width);
       stroke-dasharray: var(--togostanza-grid-dash-length),
         var(--togostanza-grid-dash-length);
     }
-    & > path.domain {
+    > path.domain {
       display: none;
     }
   }
 
   .axis {
-    & > .tick > line {
+    > .tick > line {
       stroke: var(--togostanza-border-color);
       stroke-width: var(--togostanza-axis-stroke_width);
     }
 
-    & > path {
+    > path {
       stroke: var(--togostanza-border-color);
       stroke-width: var(--togostanza-axis-stroke_width);
     }
 
-    & > .tick > text {
+    > .tick > text {
       font-size: calc(var(--togostanza-fonts-font_size_secondary) * 1px);
       fill: var(--togostanza-fonts-font_color);
     }
