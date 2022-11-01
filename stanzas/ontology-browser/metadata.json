@@ -21,6 +21,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "misc-custom_css_url",
+      "type": "string",
+      "stanza:example": "",
+      "stanza:description": "URL of custom CSS",
+      "stanza:required": false
+    },
+    {
       "stanza:key": "initial_id",
       "type": "string",
       "stanza:example_old": "MONDO_0005709",
@@ -96,6 +103,13 @@
       "stanza:type": "boolean",
       "stanza:example": true,
       "stanza:description": "Whether to show history of navigation",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "edge-show_arrows",
+      "stanza:type": "boolean",
+      "stanza:example": true,
+      "stanza:description": "Whether to show  arrows on links",
       "stanza:required": false
     }
   ],

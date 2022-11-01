@@ -9,7 +9,7 @@ export default class Linechart extends Stanza {
   }
 
   render() {
-    appendCustomCss(this, this.params["custom-css-url"]);
+    appendCustomCss(this, this.params["misc-custom_css_url"]);
 
     const root = this.root.querySelector("main");
 
