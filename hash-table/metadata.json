@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "hash-map",
-  "stanza:label": "Hash map",
-  "stanza:definition": "Hash map table MetaStanza",
+  "@id": "hash-table",
+  "stanza:label": "Hash table",
+  "stanza:definition": "Hash table MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",

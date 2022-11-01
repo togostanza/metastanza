@@ -70,9 +70,9 @@ var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
-	"@id": "hash-map",
-	"stanza:label": "Hash map",
-	"stanza:definition": "Hash map table MetaStanza",
+	"@id": "hash-table",
+	"stanza:label": "Hash table",
+	"stanza:definition": "Hash table MetaStanza",
 	"stanza:license": "MIT",
 	"stanza:author": "DBCLS",
 	"stanza:address": "https://github.com/togostanza/metastanza",
@@ -300,4 +300,4 @@ var templates = [
 const url = import.meta.url.replace(/\?.*$/, '');
 
 defineStanzaElement({stanzaModule, metadata, templates, url});
-//# sourceMappingURL=hash-map.js.map
+//# sourceMappingURL=hash-table.js.map
