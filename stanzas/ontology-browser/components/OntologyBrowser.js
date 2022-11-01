@@ -184,7 +184,6 @@ export class OntologyBrowser extends LitElement {
 
   _getDataObject(incomingData) {
     //validate
-    console.log(incomingData);
     const nodeIdVal = getByPath(incomingData, this.nodeIdPath);
     if (!nodeIdVal) {
       throw new Error("Node id path is not valid");
