@@ -39,9 +39,6 @@ class OntologyPath extends LitElement {
       }
 
       .node {
-        background-color: var(--togostanza-node-bg-color);
-        border-radius: 5px;
-        border: 1px solid var(--togostanza-border-color);
         cursor: pointer;
         display: inline-block;
         font-size: var(--togostanza-fonts-font_size_secondary);
@@ -53,8 +50,7 @@ class OntologyPath extends LitElement {
       }
 
       .-active {
-        background-color: var(--togostanza-node-bg-color_selected);
-        border-color: var(--togostanza-border-color_selected);
+        font-weight: bold;
       }
     `;
   }
