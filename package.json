@@ -19,7 +19,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/vue-fontawesome": "^3.0.0-1",
-    "@rollup/plugin-replace": "^3.0.0",
+    "@rollup/plugin-replace": "^5.0.1",
     "@vue/compiler-sfc": "^3.2.11",
     "@vueform/slider": "^1.0.3",
     "axios": "^1.1.3",
