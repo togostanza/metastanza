@@ -41,7 +41,7 @@
     "lodash.zip": "^4.2.0",
     "rollup-plugin-vue": "^6.0.0",
     "sprintf-js": "^1.1.2",
-    "togostanza": "^3.0.0-beta.41",
+    "togostanza": "^3.0.0-beta.42",
     "togostanza-utils": "github:togostanza/togostanza-utils",
     "uuid": "^8.3.2",
     "vega": "^5.19.1",
