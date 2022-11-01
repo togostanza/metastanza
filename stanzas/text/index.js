@@ -1,7 +1,7 @@
 import Stanza from "togostanza/stanza";
 import * as commonmark from "commonmark";
 import hljs from "highlight.js";
-import "katex/dist/katex";
+import "katex/dist/katex.mjs";
 import renderMathInElement from "katex/dist/contrib/auto-render.mjs";
 
 import { appendCustomCss } from "togostanza-utils";
@@ -12,7 +12,7 @@ export default class Text extends Stanza {
     super(...arguments);
 
     this.importWebFontCSS(
-      "https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"
+      "https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css"
     );
   }
 
@@ -69,6 +69,7 @@ export default class Text extends Stanza {
       main.querySelectorAll("pre code").forEach((el) => {
         hljs.highlightElement(el);
       });
+      console.log("MATH", main);
       renderMathInElement(main);
     } else {
       const text = this._dataset;
