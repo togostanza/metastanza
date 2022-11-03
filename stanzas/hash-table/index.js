@@ -7,7 +7,7 @@ import {
   appendCustomCss,
 } from "togostanza-utils";
 
-export default class KeyValue extends Stanza {
+export default class HashTable extends Stanza {
   menu() {
     return [
       downloadJSONMenuItem(this, "hashtable", this._data),
