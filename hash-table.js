@@ -3,7 +3,7 @@ import { l as loadData } from './load-data-ad9ea040.js';
 import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-75ea921b.js';
 import './dsv-ac31b097.js';
 
-class KeyValue extends Stanza {
+class HashTable extends Stanza {
   menu() {
     return [
       downloadJSONMenuItem(this, "hashtable", this._data),
@@ -63,7 +63,7 @@ class KeyValue extends Stanza {
 
 var stanzaModule = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  'default': KeyValue
+  'default': HashTable
 });
 
 var metadata = {
@@ -81,7 +81,7 @@ var metadata = {
 	"Enishi Tech"
 ],
 	"stanza:created": "2021-03-18",
-	"stanza:updated": "2022-10-25",
+	"stanza:updated": "2021-03-18",
 	"stanza:parameter": [
 	{
 		"stanza:key": "data-url",
