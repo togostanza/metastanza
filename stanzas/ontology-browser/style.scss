@@ -1,7 +1,0 @@
-// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use "@/common.scss";
-
-main {
-  background-color: var(--togostanza-background-color);
-  height: var(--togostanza-outline-height);
-}
