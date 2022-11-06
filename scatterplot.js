@@ -1,28 +1,6 @@
-import { S as Stanza, d as defineStanzaElement } from './transform-0e5d4876.js';
-import { e as embed } from './vega-embed.module-107ee7fa.js';
-import { l as loadData } from './load-data-ad9ea040.js';
-import { d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-75ea921b.js';
-import './step-94a89c98.js';
-import './manyBody-93e14d1c.js';
-import './range-e15c6861.js';
-import './stratify-7050dfd9.js';
-import './index-c76c1b89.js';
-import './dice-7bdb0652.js';
-import './linear-919165bc.js';
-import './ordinal-e772a8c0.js';
-import './max-2c042256.js';
-import './min-4a3f8e4e.js';
-import './pow-43a0d612.js';
-import './array-80a7907a.js';
-import './constant-c49047a5.js';
-import './line-5ff356a1.js';
-import './point-7945b9d0.js';
-import './path-a78af922.js';
-import './arc-06a68a59.js';
-import './basis-0dde91c7.js';
-import './dsv-ac31b097.js';
-import './sum-44e7480e.js';
-import './partition-e955ad6c.js';
+import { S as Stanza, d as downloadSvgMenuItem, a as downloadPngMenuItem, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, g as defineStanzaElement } from './index-bfc9b220.js';
+import { e as embed } from './vega-embed.module-5dd81423.js';
+import { l as loadData } from './load-data-98db05cd.js';
 
 function applyFilter(data, filter) {
   return data.filter((record) =>

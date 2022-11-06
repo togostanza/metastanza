@@ -1,7 +1,5 @@
-import { S as Stanza, d as defineStanzaElement } from './transform-0e5d4876.js';
-import { l as loadData } from './load-data-ad9ea040.js';
-import { b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss } from './index-75ea921b.js';
-import './dsv-ac31b097.js';
+import { S as Stanza, b as downloadJSONMenuItem, c as downloadCSVMenuItem, e as downloadTSVMenuItem, f as appendCustomCss, g as defineStanzaElement } from './index-bfc9b220.js';
+import { l as loadData } from './load-data-98db05cd.js';
 
 class HashTable extends Stanza {
   menu() {
