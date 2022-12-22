@@ -718,7 +718,7 @@ function createColumnState(columnDef, values) {
     return {
       ...baseProps,
       parseValue(val) {
-        if (columnDef["sprintf"]) {
+        if (columnDef["sprintf"] && !isNaN(+val)) {
           return formattedValue(columnDef["sprintf"], val);
         } else {
           return String(val);
