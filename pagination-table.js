@@ -8406,13 +8406,13 @@ function createColumnState(columnDef, values) {
 
     const search = (val) => {
       const q = query.value;
-      return q ? val.includes(q) : true;
+      return q ? (val.toLowerCase()).includes(q.toLowerCase()) : true;
     };
 
     return {
       ...baseProps,
       parseValue(val) {
-        if (columnDef["sprintf"]) {
+        if (columnDef["sprintf"] && !isNaN(+val)) {
           return formattedValue(columnDef["sprintf"], val);
         } else {
           return String(val);
@@ -8438,7 +8438,7 @@ function searchByAllColumns(row, query) {
     return true;
   }
 
-  return row.some(({ value }) => String(value).includes(query));
+  return row.some(({ value }) => String(value).toLowerCase().includes(query.toLowerCase()));
 }
 
 function searchByEachColumn(row) {
