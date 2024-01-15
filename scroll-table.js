@@ -1,6 +1,6 @@
-import { S as Stanza, f as appendCustomCss, g as defineStanzaElement } from './index-f95f22d4.js';
+import { S as Stanza, f as appendCustomCss, g as defineStanzaElement } from './index-30c3ca2a.js';
 import { e as defineComponent, g as createElementBlock, i as createBaseVNode, u as normalizeStyle, p as toDisplayString, F as Fragment, d as openBlock, j as createVNode, q as createCommentVNode, b as createBlock, l as createTextVNode, s as resolveComponent, x as reactive, o as onMounted, r as ref, z as onRenderTriggered, k as renderList, n as normalizeClass, E as createApp } from './runtime-dom.esm-bundler-29a485e3.js';
-import { l as loadData } from './load-data-28096e17.js';
+import { l as loadData } from './load-data-e62ae391.js';
 
 var script$2 = defineComponent({
   props: {
