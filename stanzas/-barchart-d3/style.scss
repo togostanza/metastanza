@@ -1,0 +1,62 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+.legend .label text {
+  color: black;
+  font-size: 0.5em;
+}
+
+svg {
+  .gridlines {
+    & > .tick > line {
+      stroke: var(--togostanza-grid-color);
+      opacity: var(--togostanza-grid-opacity);
+      stroke-width: var(--togostanza-grid-width);
+      stroke-dasharray: var(--togostanza-grid-dash-length),
+        var(--togostanza-grid-dash-length);
+    }
+    & > path.domain {
+      display: none;
+    }
+  }
+
+  .bars rect {
+    stroke-width: var(--togostanza-bars-border-width);
+    stroke: var(--togostanza-bars-border-color);
+  }
+
+  .axis {
+    & > .tick > line {
+      stroke: var(--togostanza-tick-color);
+      stroke-width: var(--togostanza-tick-width);
+    }
+
+    & > .tick > text {
+      font-size: calc(var(--togostanza-label-font-size) * 1px);
+      fill: var(--togostanza-label-font-color);
+    }
+
+    & > path {
+      stroke: var(--togostanza-axis-color);
+      stroke-width: var(--togostanza-axis-width);
+    }
+
+    &.title text {
+      font-size: calc(var(--togostanza-title-font-size) * 1px);
+      font-weight: var(--togostanza-title-font-weight);
+      fill: var(--togostanza-title-font-color);
+    }
+  }
+
+  line.error-bar-line {
+    stroke: var(--togostanza-errorbar-line-color);
+    stroke-width: calc(var(--togostanza-errorbar-line-width) * 1px);
+    opacity: var(--togostanza-errorbar-line-opacity);
+  }
+}
+
+main {
+  background-color: var(--togostanza-background-color);
+  border: calc(var(--togostanza-border-width) * 1px) solid
+    var(--togostanza-border-color);
+}

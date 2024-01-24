@@ -1,0 +1,168 @@
+// Load the repository-wide global style here. The actual file is located at ../common.scss for details.
+@use "@/common.scss";
+
+main {
+  padding: 1rem 2rem;
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  font-family: var(--togostanza-label-font-family);
+}
+
+#breadcrumbs {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  > .popup {
+    position: absolute;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.8;
+    height: 1rem;
+    width: 4rem;
+    font-size: 10px;
+    background-color: var(--togostanza-label-background-color-hover);
+    color: var(--togostanza-label-font-color-hover);
+  }
+}
+
+#app-breadcrumbs {
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: inline-flex;
+  height: fit-content;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 0.5em;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--togostanza-scrollbar-color);
+    border-radius: 0.1em;
+    &:hover {
+      background: var(--togostanza-scrollbar-color-hover);
+    }
+  }
+}
+
+#app-copy-button {
+  cursor: pointer;
+  display: inline-flex;
+  background-color: var(--togostanza-background-color);
+  border: 1px solid var(--togostanza-border-color);
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  > svg.copy-icon {
+    height: 0.75rem;
+  }
+  &:hover {
+    color: var(--togostanza-label-font-color-hover);
+    background-color: var(--togostanza-label-background-color-hover);
+    > svg.copy-icon {
+      fill: var(--togostanza-label-font-color-hover);
+    }
+  }
+}
+
+.breadcrumb {
+  > svg {
+    cursor: pointer;
+    text {
+      fill: var(--togostanza-label-font-color);
+    }
+
+    &:hover {
+      path {
+        fill: var(--togostanza-label-background-color-hover);
+      }
+      text {
+        fill: var(--togostanza-label-font-color-hover);
+      }
+      svg path {
+        fill: var(--togostanza-label-font-color-hover);
+      }
+    }
+  }
+}
+
+.breadcrumb-path {
+  stroke: var(--togostanza-border-color);
+  stroke-width: calc(var(--togostanza-border-width) * 1px);
+  fill: var(--togostanza-background-color);
+}
+
+.breadcrumb-path-hover {
+  fill: var(--togostanza-label-background-color-hover);
+}
+.breadcrumb-label-hover {
+  fill: var(--togostanza-label-font-color-hover) !important;
+}
+
+.menu-triangle {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  position: absolute;
+  transform: translateX(-50%) rotate(45deg);
+  background-color: var(--togostanza-background-color);
+  border: 1px solid var(--togostanza-border-color);
+  z-index: -1;
+}
+
+.menu-triangle-overlay {
+  margin-top: 6px;
+  z-index: 1;
+  border: none;
+}
+
+.breadcrumb-menu-container {
+  cursor: pointer;
+  justify-content: flex-end;
+  flex-direction: column;
+  position: absolute;
+  top: calc(100% - 1px);
+  z-index: 999;
+}
+
+.breadcrumb-menu {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: var(--togostanza-background-color);
+  border: 1px solid var(--togostanza-border-color);
+  max-height: 20rem;
+  min-width: 8rem;
+  max-width: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem;
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--togostanza-scrollbar-color);
+    border-radius: 0.1rem;
+    &:hover {
+      background: var(--togostanza-scrollbar-color-hover);
+    }
+  }
+}
+
+.breadcrumb-menu-item {
+  z-index: 2;
+  font-family: var(--togostanza-label-font-family);
+  font-size: calc(var(--togostanza-label-font-size) * 1px);
+  color: var(--togostanza-label-font-color);
+  padding: 0.2rem;
+  width: 100%;
+  line-height: 0.9rem;
+}
+
+.breadcrumb-menu-item:hover {
+  color: var(--togostanza-label-font-color-hover);
+  background-color: var(--togostanza-label-background-color-hover);
+}

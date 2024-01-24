@@ -2,15 +2,15 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "-linechart",
-  "stanza:label": "Linechart",
-  "stanza:definition": "Linechart MetaStanza",
+  "@id": "-linechart-d3",
+  "stanza:label": "🔨 Linechart-D3",
+  "stanza:definition": "Linechart-D3 MetaStanza",
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
-  "stanza:contributor": ["PENQE", "Enishi Tech"],
-  "stanza:created": "2020-11-07",
-  "stanza:updated": "2020-11-07",
+  "stanza:contributor": ["PENQE"],
+  "stanza:created": "2021-01-06",
+  "stanza:updated": "2021-01-06",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
@@ -27,39 +27,55 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "category",
+      "stanza:key": "x-axis-key",
       "stanza:example": "chromosome",
-      "stanza:description": "Variable to be assigned as category",
+      "stanza:description": "Variable to be assigned as x axis value",
       "stanza:required": true
     },
     {
-      "stanza:key": "value",
+      "stanza:key": "y-axis-key",
       "stanza:example": "count",
-      "stanza:description": "Variable to be assigned as value",
+      "stanza:description": "Variable to be assigned as y axis value",
       "stanza:required": true
+    },
+    {
+      "stanza:key": "x-axis-data-type",
+      "stanza:type": "single-choice",
+      "stanza:choice": ["number", "string"],
+      "stanza:example": "string",
+      "stanza:description": "Data type of x-axis",
+      "stanza:required": false
     },
     {
       "stanza:key": "group-by",
       "stanza:example": "category",
       "stanza:description": "Variable to be assigned as group",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "error-key",
+      "stanza:type": "string",
+      "stanza:example": "error",
+      "stanza:description": "Error data key name",
       "stanza:required": false
     },
     {
-      "stanza:key": "category-title",
-      "stanza:example": "",
-      "stanza:description": "Title for category variable (In case of blank, 'category' variable name will be assigned)",
+      "stanza:key": "error-bar-width",
+      "stanza:type": "number",
+      "stanza:example": 10,
+      "stanza:description": "Error bar horizontal line width",
       "stanza:required": false
     },
     {
-      "stanza:key": "value-title",
-      "stanza:example": "",
-      "stanza:description": "Title for value variable (In case of blank, 'value' variable name will be assigned)",
+      "stanza:key": "x-axis-title",
+      "stanza:example": "chromosome",
+      "stanza:description": "X axis title",
       "stanza:required": false
     },
     {
-      "stanza:key": "legend-title",
-      "stanza:example": "",
-      "stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group' variable name will be assigned)",
+      "stanza:key": "y-axis-title",
+      "stanza:example": "count",
+      "stanza:description": "Y axis title",
       "stanza:required": false
     },
     {
@@ -71,27 +87,27 @@
     {
       "stanza:key": "width",
       "stanza:type": "number",
-      "stanza:example": 400,
+      "stanza:example": 600,
       "stanza:description": "Width"
     },
     {
       "stanza:key": "height",
       "stanza:type": "number",
-      "stanza:example": 200,
+      "stanza:example": 400,
       "stanza:description": "Height"
-    },
-    {
-      "stanza:key": "padding",
-      "stanza:type": "number",
-      "stanza:example": 50,
-      "stanza:description": "Padding"
     },
     {
       "stanza:key": "legend",
       "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show legend"
+      "stanza:choice": [
+        "none",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ],
+      "stanza:example": "top-right",
+      "stanza:description": "Where to show the legend. 'none' for no legend"
     },
     {
       "stanza:key": "xgrid",
@@ -108,22 +124,32 @@
       "stanza:description": "Show Y grid"
     },
     {
-      "stanza:key": "xtick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": false,
-      "stanza:description": "Show X tick"
+      "stanza:key": "xtick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "X axis tick size"
     },
     {
-      "stanza:key": "ytick",
-      "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
-      "stanza:example": true,
-      "stanza:description": "Show Y tick"
+      "stanza:key": "ytick-size",
+      "stanza:type": "number",
+      "stanza:example": 5,
+      "stanza:description": "Y axis tick size"
+    },
+    {
+      "stanza:key": "xticks-number",
+      "stanza:example": 5,
+      "stanza:description": "X axis ticks number \n (used only if x-adis-data-type is 'number')",
+      "stanza:required": false
+    },
+    {
+      "stanza:key": "yticks-number",
+      "stanza:example": 3,
+      "stanza:description": "Y axis ticks number",
+      "stanza:required": true
     },
     {
       "stanza:key": "xlabel-angle",
-      "stanza:example": 0,
+      "stanza:example": -90,
       "stanza:description": "X label angle (in degree)"
     },
     {
@@ -135,25 +161,25 @@
     {
       "stanza:key": "xlabel-padding",
       "stanza:type": "number",
-      "stanza:example": 5,
-      "stanza:description": "Padding between X label and tick"
+      "stanza:example": 7,
+      "stanza:description": "Padding between X label and axis"
     },
     {
       "stanza:key": "ylabel-padding",
       "stanza:type": "number",
-      "stanza:example": 5,
+      "stanza:example": 7,
       "stanza:description": "Padding between Y label and tick"
     },
     {
       "stanza:key": "xtitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 25,
       "stanza:description": "Padding between X title and label"
     },
     {
       "stanza:key": "ytitle-padding",
       "stanza:type": "number",
-      "stanza:example": 10,
+      "stanza:example": 40,
       "stanza:description": "Padding between Y title and label"
     },
     {
@@ -169,6 +195,12 @@
       "stanza:choice": ["left", "right"],
       "stanza:example": "left",
       "stanza:description": "Y axis placement"
+    },
+    {
+      "stanza:key": "ylabel-format",
+      "stanza:type": "string",
+      "stanza:example": ",.2r",
+      "stanza:description": "Y axis tick labels number format. See more format strings in d3.format() documentation"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -216,12 +248,6 @@
       "stanza:description": "Font family"
     },
     {
-      "stanza:key": "--togostanza-line-width",
-      "stanza:type": "number",
-      "stanza:default": 1,
-      "stanza:description": "Line width"
-    },
-    {
       "stanza:key": "--togostanza-axis-color",
       "stanza:type": "color",
       "stanza:default": "#333333",
@@ -233,6 +259,19 @@
       "stanza:default": 1,
       "stanza:description": "Axis width"
     },
+    {
+      "stanza:key": "--togostanza-line-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Chart lines width"
+    },
+    {
+      "stanza:key": "--togostanza-line-opacity",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Chart lines opacity"
+    },
+
     {
       "stanza:key": "--togostanza-grid-color",
       "stanza:type": "color",
@@ -276,6 +315,24 @@
       "stanza:description": "Tick width (in pixel)"
     },
     {
+      "stanza:key": "--togostanza-errorbar-line-width",
+      "stanza:type": "number",
+      "stanza:default": 1,
+      "stanza:description": "Errorbar line width"
+    },
+    {
+      "stanza:key": "--togostanza-errorbar-line-color",
+      "stanza:type": "color",
+      "stanza:default": "#333333",
+      "stanza:description": "Errorbar line color"
+    },
+    {
+      "stanza:key": "--togostanza-errorbar-line-opacity",
+      "stanza:type": "number",
+      "stanza:default": 0.4,
+      "stanza:description": "Errorbar line opacity"
+    },
+    {
       "stanza:key": "--togostanza-title-font-color",
       "stanza:type": "color",
       "stanza:default": "#4E5059",
@@ -314,7 +371,7 @@
     {
       "stanza:key": "--togostanza-border-width",
       "stanza:type": "number",
-      "stanza:default": 0.5,
+      "stanza:default": 0,
       "stanza:description": "Border width"
     },
     {
