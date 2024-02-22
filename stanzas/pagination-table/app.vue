@@ -245,6 +245,9 @@
             </tr>
           </tbody>
         </table>
+        <div v-if="filteredRows && filteredRows.length === 0" class="noData">
+          No data found.
+        </div>
       </div>
     </div>
     <SliderPagination
@@ -607,6 +610,7 @@ export default defineComponent({
       sliderPagination,
       pageSizeOption,
       state,
+      filteredRows,
       totalPages,
       rowsInCurrentPage,
       isModalShowing,
