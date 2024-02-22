@@ -245,7 +245,7 @@
             </tr>
           </tbody>
         </table>
-        <div v-if="filteredRows && filteredRows.length === 0" class="noData">
+        <div v-if="filteredRows && filteredRows.length === 0" class="no-data">
           {{ fallbackMessage }}
         </div>
       </div>

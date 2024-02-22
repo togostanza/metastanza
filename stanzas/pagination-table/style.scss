@@ -536,3 +536,10 @@
 .modal_bg-leave-active {
   transition: opacity 0.4s;
 }
+
+.no-data {
+  text-align: center;
+  font-size: var(--togostanza-control-font-size);
+  color: var(--togostanza-control-font-color);
+  padding-top: 1em;
+}
