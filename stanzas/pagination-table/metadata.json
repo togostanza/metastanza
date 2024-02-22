@@ -8,20 +8,28 @@
   "stanza:license": "MIT",
   "stanza:author": "DBCLS",
   "stanza:address": "https://github.com/togostanza/metastanza",
-  "stanza:contributor": ["PENQE", "Enishi Tech"],
+  "stanza:contributor": [
+    "PENQE",
+    "Enishi Tech"
+  ],
   "stanza:created": "2020-12-09",
   "stanza:updated": "2020-12-09",
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/pagination-table.disease-gwas.json",
+      "stanza:example": "https://grch38.togovar.org/sparqlist/api/variant_gwas?tgv_id=tgv181286513",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },
     {
       "stanza:key": "data-type",
       "stanza:type": "single-choice",
-      "stanza:choice": ["json", "tsv", "csv", "sparql-results-json"],
+      "stanza:choice": [
+        "json",
+        "tsv",
+        "csv",
+        "sparql-results-json"
+      ],
       "stanza:example": "json",
       "stanza:description": "Data type",
       "stanza:required": true
@@ -59,7 +67,10 @@
     {
       "stanza:key": "page-slider",
       "stanza:type": "single-choice",
-      "stanza:choice": ["true", "false"],
+      "stanza:choice": [
+        "true",
+        "false"
+      ],
       "stanza:example": true,
       "stanza:description": "Show page slider"
     },
@@ -73,6 +84,12 @@
       "stanza:type": "boolean",
       "stanza:example": false,
       "stanza:description": "Show axis selector button"
+    },
+    {
+      "stanza:key": "fallback-message",
+      "stanza:type": "text",
+      "stanza:example": "No data found.",
+      "stanza:description": "Message displayed when there are zero data"
     }
   ],
   "stanza:menu-placement": "bottom-right",
@@ -260,14 +277,21 @@
     {
       "stanza:key": "--togostanza-vertical-pagination-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["column", "column-reverse"],
+      "stanza:choice": [
+        "column",
+        "column-reverse"
+      ],
       "stanza:default": "column-reverse",
       "stanza:description": "Vertical pacement of pagination"
     },
     {
       "stanza:key": "--togostanza-horizonal-pagination-placement",
       "stanza:type": "single-choice",
-      "stanza:choice": ["left", "center", "right"],
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
       "stanza:default": "center",
       "stanza:description": "Horizonal placement of pagination"
     },
