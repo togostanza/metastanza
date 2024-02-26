@@ -7761,8 +7761,9 @@ var metadata = {
 		"stanza:description": "Show axis selector button"
 	},
 	{
-		"stanza:key": "no-data-message",
+		"stanza:key": "no_data_message",
 		"stanza:type": "text",
+		"stanza:default": "No data",
 		"stanza:example": "No data found.",
 		"stanza:description": "Message displayed when there are zero data"
 	}
@@ -8051,7 +8052,7 @@ var script = defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    const noDataMessage = ref(params.noDataMessage);
+    const noDataMessage = ref(params.no_data_message);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -8416,7 +8417,7 @@ function createColumnState(columnDef, values) {
 
     const search = (val) => {
       const q = query.value;
-      return q ? (val.toLowerCase()).includes(q.toLowerCase()) : true;
+      return q ? val.toLowerCase().includes(q.toLowerCase()) : true;
     };
 
     return {
@@ -8448,7 +8449,9 @@ function searchByAllColumns(row, query) {
     return true;
   }
 
-  return row.some(({ value }) => String(value).toLowerCase().includes(query.toLowerCase()));
+  return row.some(({ value }) =>
+    String(value).toLowerCase().includes(query.toLowerCase())
+  );
 }
 
 function searchByEachColumn(row) {
