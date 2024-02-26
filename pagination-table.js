@@ -7759,6 +7759,12 @@ var metadata = {
 		"stanza:type": "boolean",
 		"stanza:example": false,
 		"stanza:description": "Show axis selector button"
+	},
+	{
+		"stanza:key": "no-data-message",
+		"stanza:type": "text",
+		"stanza:example": "No data found.",
+		"stanza:description": "Message displayed when there are zero data"
 	}
 ],
 	"stanza:menu-placement": "bottom-right",
@@ -8045,6 +8051,8 @@ var script = defineComponent({
       axisSelectorActiveColumn: null,
     });
 
+    const noDataMessage = ref(params.noDataMessage);
+
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
       let filtered = state.allRows.filter((row) => {
@@ -8296,9 +8304,11 @@ var script = defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
+      noDataMessage,
       sliderPagination,
       pageSizeOption,
       state,
+      filteredRows,
       totalPages,
       rowsInCurrentPage,
       isModalShowing,
@@ -8484,6 +8494,10 @@ const _hoisted_25 = { key: 0 };
 const _hoisted_26 = { key: 1 };
 const _hoisted_27 = ["innerHTML"];
 const _hoisted_28 = { key: 3 };
+const _hoisted_29 = {
+  key: 1,
+  class: "no-data"
+};
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_font_awesome_icon = resolveComponent("font-awesome-icon");
@@ -8790,6 +8804,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 }), 128 /* KEYED_FRAGMENT */))
               ])
             ]))
+          : createCommentVNode("v-if", true),
+        (_ctx.filteredRows && _ctx.filteredRows.length === 0)
+          ? (openBlock(), createElementBlock("div", _hoisted_29, toDisplayString(_ctx.noDataMessage), 1 /* TEXT */))
           : createCommentVNode("v-if", true)
       ], 4 /* STYLE */)
     ]),
