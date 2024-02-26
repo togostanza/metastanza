@@ -17,7 +17,7 @@
   "stanza:parameter": [
     {
       "stanza:key": "data-url",
-      "stanza:example": "https://grch38.togovar.org/sparqlist/api/variant_gwas?tgv_id=tgv181286513",
+      "stanza:example": "https://raw.githubusercontent.com/togostanza/togostanza-data/main/samples/json/pagination-table.disease-gwas.json",
       "stanza:description": "Data source URL",
       "stanza:required": true
     },

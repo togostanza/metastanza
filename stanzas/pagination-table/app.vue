@@ -356,7 +356,6 @@ export default defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    console.log(params);
     const fallbackMessage = ref(params.fallbackMessage);
 
     const filteredRows = computed(() => {
