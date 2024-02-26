@@ -246,7 +246,7 @@
           </tbody>
         </table>
         <div v-if="filteredRows && filteredRows.length === 0" class="no-data">
-          {{ fallbackMessage }}
+          {{ noDataMessage }}
         </div>
       </div>
     </div>
@@ -356,7 +356,7 @@ export default defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    const fallbackMessage = ref(params.fallbackMessage);
+    const noDataMessage = ref(params.noDataMessage);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -609,7 +609,7 @@ export default defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
-      fallbackMessage,
+      noDataMessage,
       sliderPagination,
       pageSizeOption,
       state,

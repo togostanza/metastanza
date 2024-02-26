@@ -86,7 +86,7 @@
       "stanza:description": "Show axis selector button"
     },
     {
-      "stanza:key": "fallback-message",
+      "stanza:key": "no-data-message",
       "stanza:type": "text",
       "stanza:example": "No data found.",
       "stanza:description": "Message displayed when there are zero data"
