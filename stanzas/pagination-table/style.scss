@@ -1,5 +1,5 @@
 // Load the repository-wide global style here. The actual file is located at ../common.scss for details.
-@use '@/common.scss';
+@use "@/common.scss";
 @import "./@vueform/slider/themes/default";
 
 // The following is just an example. Feel free to modify it.
@@ -538,4 +538,11 @@
 .modal_bg-enter-active,
 .modal_bg-leave-active {
   transition: opacity 0.4s;
+}
+
+.no-data {
+  text-align: center;
+  font-size: var(--togostanza-control-font-size);
+  color: var(--togostanza-control-font-color);
+  padding-top: 1em;
 }

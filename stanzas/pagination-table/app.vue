@@ -243,6 +243,9 @@
             </tr>
           </tbody>
         </table>
+        <div v-if="filteredRows && filteredRows.length === 0" class="no-data">
+          {{ noDataMessage }}
+        </div>
       </div>
     </div>
     <SliderPagination
@@ -350,6 +353,8 @@ export default defineComponent({
 
       axisSelectorActiveColumn: null,
     });
+
+    const noDataMessage = ref(params.noDataMessage);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -602,9 +607,11 @@ export default defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
+      noDataMessage,
       sliderPagination,
       pageSizeOption,
       state,
+      filteredRows,
       totalPages,
       rowsInCurrentPage,
       isModalShowing,
