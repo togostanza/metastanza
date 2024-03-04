@@ -546,3 +546,7 @@
   color: var(--togostanza-control-font-color);
   padding-top: 1em;
 }
+
+togostanza--menu {
+  z-index: 10000;
+}
