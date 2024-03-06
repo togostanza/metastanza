@@ -27,6 +27,13 @@
       "stanza:required": true
     },
     {
+      "stanza:key": "data-unavailable",
+      "stanza:type": "text",
+      "stanza:default": "No data",
+      "stanza:example": "No data found.",
+      "stanza:description": "Message displayed when there are zero data"
+    },
+    {
       "stanza:key": "custom-css-url",
       "stanza:example": "",
       "stanza:description": "Stylesheet(css file) URL to override current style",
@@ -73,13 +80,6 @@
       "stanza:type": "boolean",
       "stanza:example": false,
       "stanza:description": "Show axis selector button"
-    },
-    {
-      "stanza:key": "no_data_message",
-      "stanza:type": "text",
-      "stanza:default": "No data",
-      "stanza:example": "No data found.",
-      "stanza:description": "Message displayed when there are zero data"
     }
   ],
   "stanza:menu-placement": "bottom-right",
