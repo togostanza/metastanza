@@ -7710,6 +7710,13 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
+		"stanza:key": "data-unavailable",
+		"stanza:type": "text",
+		"stanza:default": "No data",
+		"stanza:example": "No data found.",
+		"stanza:description": "Message displayed when there are zero data"
+	},
+	{
 		"stanza:key": "custom-css-url",
 		"stanza:example": "",
 		"stanza:description": "Stylesheet(css file) URL to override current style",
@@ -7759,13 +7766,6 @@ var metadata = {
 		"stanza:type": "boolean",
 		"stanza:example": false,
 		"stanza:description": "Show axis selector button"
-	},
-	{
-		"stanza:key": "no_data_message",
-		"stanza:type": "text",
-		"stanza:default": "No data",
-		"stanza:example": "No data found.",
-		"stanza:description": "Message displayed when there are zero data"
 	}
 ],
 	"stanza:menu-placement": "bottom-right",
@@ -8052,7 +8052,7 @@ var script = defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    const noDataMessage = ref(params.no_data_message);
+    const dataUnavailable = ref(params.dataUnavailable);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -8305,7 +8305,7 @@ var script = defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
-      noDataMessage,
+      dataUnavailable,
       sliderPagination,
       pageSizeOption,
       state,
@@ -8809,7 +8809,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ]))
           : createCommentVNode("v-if", true),
         (_ctx.filteredRows && _ctx.filteredRows.length === 0)
-          ? (openBlock(), createElementBlock("div", _hoisted_29, toDisplayString(_ctx.noDataMessage), 1 /* TEXT */))
+          ? (openBlock(), createElementBlock("div", _hoisted_29, toDisplayString(_ctx.dataUnavailable), 1 /* TEXT */))
           : createCommentVNode("v-if", true)
       ], 4 /* STYLE */)
     ]),
