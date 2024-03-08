@@ -27,7 +27,7 @@
       "stanza:required": true
     },
     {
-      "stanza:key": "data-unavailable",
+      "stanza:key": "data-unavailable_message",
       "stanza:type": "text",
       "stanza:default": "No data",
       "stanza:example": "No data found.",
