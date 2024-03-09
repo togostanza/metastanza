@@ -244,7 +244,7 @@
           </tbody>
         </table>
         <div v-if="filteredRows && filteredRows.length === 0" class="no-data">
-          {{ dataUnavailable }}
+          {{ dataUnavailableMessage }}
         </div>
       </div>
     </div>
@@ -354,7 +354,7 @@ export default defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    const dataUnavailable = ref(params.dataUnavailable);
+    const dataUnavailableMessage = ref(params.dataUnavailable_message);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -607,7 +607,7 @@ export default defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
-      dataUnavailable,
+      dataUnavailableMessage,
       sliderPagination,
       pageSizeOption,
       state,
