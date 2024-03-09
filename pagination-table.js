@@ -7710,7 +7710,7 @@ var metadata = {
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "data-unavailable",
+		"stanza:key": "data-unavailable_message",
 		"stanza:type": "text",
 		"stanza:default": "No data",
 		"stanza:example": "No data found.",
@@ -8052,7 +8052,7 @@ var script = defineComponent({
       axisSelectorActiveColumn: null,
     });
 
-    const dataUnavailable = ref(params.dataUnavailable);
+    const dataUnavailableMessage = ref(params.dataUnavailable_message);
 
     const filteredRows = computed(() => {
       const queryForAllColumns = state.queryForAllColumns;
@@ -8305,7 +8305,7 @@ var script = defineComponent({
 
     return {
       width: params.width ? params.width + "px" : "100%",
-      dataUnavailable,
+      dataUnavailableMessage,
       sliderPagination,
       pageSizeOption,
       state,
@@ -8809,7 +8809,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
             ]))
           : createCommentVNode("v-if", true),
         (_ctx.filteredRows && _ctx.filteredRows.length === 0)
-          ? (openBlock(), createElementBlock("div", _hoisted_29, toDisplayString(_ctx.dataUnavailable), 1 /* TEXT */))
+          ? (openBlock(), createElementBlock("div", _hoisted_29, toDisplayString(_ctx.dataUnavailableMessage), 1 /* TEXT */))
           : createCommentVNode("v-if", true)
       ], 4 /* STYLE */)
     ]),
